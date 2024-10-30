@@ -1,2 +1,4 @@
-It's a bootcamp management project designed with react js + tailwind + flowbite 
-server side is done with node js + express js + mongodb
+# Bootcamp Management Project
+
+It's a bootcamp management project designed with React JS + Tailwind CSS + Flowbite  
+Server side is done with Node.js + Express.js + MongoDB
