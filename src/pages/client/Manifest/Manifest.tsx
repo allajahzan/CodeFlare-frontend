@@ -32,7 +32,7 @@ function Manifest() {
                 <div style={style} className='w-full'>
                     <div className='flex items-start fixed top-24 '>
                         <img className='w-8' src={manifest} alt="" />
-                        <p className='text-black font-medium text-lg tracking-wider ml-3 uppercase underline underline-offset-4'>Manifest</p>
+                        <p className='text-black font-bold text-lg tracking-wider ml-3 uppercase underline underline-offset-4'>Manifest</p>
                     </div>
                     <div className='flex flex-col h-full'>
                         <div className='sticky top-0 z-10 bg-white w-full flex justify-center pb-1'>
@@ -42,13 +42,13 @@ function Manifest() {
                         </div>
 
                         <div className='h-auto overflow-x-auto'>
-                            <div className='grid grid-cols-1 sm:grid-cols-2 gap-4 w-full'>
+                            <div className='grid grid-cols-1 sm:grid-cols-2 w-full'>
                                 <TextField label='Full Name' text='Ahsan allaj pk' />
                                 <TextField label='Gender' text='Male' />
                                 <TextField label='Email Address' text='ahsanallajpk@gmail.com' />
                                 <TextField label='Mobile Number' text='7034661353' />
                                 <div className='m-2 col-span-1 sm:col-span-2 relative'>
-                                    <textarea readOnly id='address' className='resize-none grid-cols-1 w-full p-4 bg-transparent border-2 border-black border-opacity-20 font-medium rounded-lg outline-none' rows={2} value={'Padinjare Kottayil(H), Chalipparamb, Chelembra PO'} autoComplete='off'></textarea>
+                                    <textarea readOnly id='address' className='resize-none grid-cols-1 w-full p-4 bg-transparent border-2 border-black border-opacity-20 rounded-lg outline-none' rows={2} value={'Padinjare Kottayil(H), Chalipparamb, Chelembra PO'} autoComplete='off'></textarea>
                                     <label htmlFor={'address'} className='absolute -top-3 left-3 bg-white p-1 px-2 font-medium text-xs text-gray-500'>Address</label>
                                 </div>
                                 <TextField label='Pincode' text='673634' />

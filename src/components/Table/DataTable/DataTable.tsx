@@ -14,7 +14,7 @@ function DataTable() {
                 {/* Table Rows */}
                 <div className="flex-1 overflow-y-auto">
                     <div className="flex flex-col gap-2">
-                        {[1, 2, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4].map((_, index) => (
+                        {[1, 2, 3].map((_, index) => (
                             <Body key={index} index={index} />
                         ))}
                     </div>

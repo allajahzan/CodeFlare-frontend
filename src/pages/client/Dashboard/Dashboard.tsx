@@ -1,5 +1,4 @@
 import Navbar from '../../../components/Navbar/Navbar'
-import './Dashboard.css'
 import SideBar from '../../../components/SideBar/SideBar'
 import dashboard from '../../../assets/dashboard.svg'
 import { useLayoutEffect, useState } from 'react';
@@ -32,7 +31,7 @@ function Dashboard() {
         <div style={style} className='w-full'>
           <div className='flex items-start fixed top-24 '>
             <img className='w-8' src={dashboard} alt="" />
-            <p className='text-black font-medium text-lg tracking-wider ml-3 uppercase underline underline-offset-4'>Dashboard</p>
+            <p className='text-black font-bold text-lg tracking-wider ml-3 uppercase underline underline-offset-4'>Dashboard</p>
           </div>
 
         </div>

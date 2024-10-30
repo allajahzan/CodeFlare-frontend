@@ -83,8 +83,8 @@ function SideBar() {
             <div className='flex p-5 bg-gray-100'>
                 <img className='w-8' src={user} alt="" />
                 <div className='ml-5'>
-                    <p className='font-medium'>Ahsan allaj pk</p>
-                    <p className='font-medium'>MERN Stack</p>
+                    <p style={{fontSize:'15.5px'}} className='font-bold'>Ahsan allaj pk</p>
+                    <p style={{fontSize:'15.5px'}} className='font-bold'>MERN Stack</p>
                 </div>
             </div>
         </div>

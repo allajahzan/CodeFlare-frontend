@@ -32,7 +32,7 @@ function Reviews() {
         <div style={style} className='w-full'>
           <div className='flex items-start fixed top-24 '>
             <img className='w-8' src={review} alt="" />
-            <p className='text-black font-medium text-lg tracking-wider ml-3 uppercase underline underline-offset-4'>Reviews</p>
+            <p className='text-black font-bold text-lg tracking-wider ml-3 uppercase underline underline-offset-4'>Reviews</p>
           </div>
           <DataTable />
         </div>

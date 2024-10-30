@@ -57,7 +57,7 @@ function LeaveModal({ openModal, setOpenModal }: propsType) {
                                 <label htmlFor="reason" className="absolute -top-2 left-2 bg-white text-gray-500 text-xs font-medium px-2">Reason</label>
                             </div>
                             <div className="w-full flex gap-2 justify-center">
-                                <button onClick={() => { setOpenModal(!openModal); setLeaveType('') }} className="p-2 py-2 px-8 rounded-md bg-gray-200 text-black shadow-lg font-medium">Cancel</button>
+                                <button onClick={() => { setOpenModal(!openModal); setLeaveType('') }} className="p-2 py-2 px-8 rounded-md bg-gray-200 text-black font-medium">Cancel</button>
                                 <button type={'submit'} className="p-2 py-2 px-8 rounded-md bg-black text-white shadow-lg font-medium">Submit</button>
                             </div>
                         </form>

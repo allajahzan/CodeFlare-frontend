@@ -32,7 +32,7 @@ function LeetCode() {
                 <div style={style} className='w-full'>
                     <div className='flex items-start fixed top-24 '>
                         <img className='w-8' src={leetcode} alt="" />
-                        <p className='text-black font-medium text-lg tracking-wider ml-3 uppercase underline underline-offset-4'>Leetcode</p>
+                        <p className='text-black font-bold text-lg tracking-wider ml-3 uppercase underline underline-offset-4'>Leetcode</p>
                     </div>
                     <DataTable />
                 </div>

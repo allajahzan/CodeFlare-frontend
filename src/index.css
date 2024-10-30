@@ -6,6 +6,10 @@ html{
     scrollbar-width: none;
 }
 
+body{
+    font-family: 'Lato', sans-serif;
+}
+
 ::-webkit-scrollbar {
     width: 6px; 
     height: 6px;
