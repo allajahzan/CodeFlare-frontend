@@ -1,7 +1,8 @@
 import { useSelector } from 'react-redux';
-import Header from '../DataTable/Header';
-import Body from './Body';
 import { stateType } from '../../../redux/store';
+import Header from './Header';
+import Body from './Body';
+
 
 function DataTable() {
     const isSmall = useSelector((state: stateType) => state.isSmall)

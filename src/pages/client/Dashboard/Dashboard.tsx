@@ -1,4 +1,4 @@
-import Navbar from '../../../components/Navbar/Navbar'
+import Navbar from '../../../components/Navbar/Navbar';
 import SideBar from '../../../components/SideBar/SideBar'
 import dashboard from '../../../assets/dashboard.svg'
 import { useLayoutEffect, useState } from 'react';
