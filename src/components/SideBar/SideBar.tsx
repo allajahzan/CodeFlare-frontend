@@ -24,7 +24,7 @@ function SideBar() {
     const item = (useLocation().pathname)
 
     const handleSideBarItems = (event: React.MouseEvent<HTMLDivElement>) => {
-        navigate(`/${(event.currentTarget.children[1] as HTMLParagraphElement).innerHTML.toLocaleLowerCase()}`)
+        navigate(`/student/${(event.currentTarget.children[1] as HTMLParagraphElement).innerHTML.toLocaleLowerCase()}`)
         isSmall ? dispatch(sideBarAction(!isSideBar)) : ''
     }
 
@@ -71,13 +71,13 @@ function SideBar() {
     return (
         <div style={style} className='w-[300px] h-full fixed z-20 left-0 shadow-xl flex flex-col justify-between sidebar bg-white'>
             <div className='overflow-auto overflow-x-hidden'>
-                <SideBarItem color={item === '/dashboard' ? 'bg-gray-100' : ''} image={dashboard} text='Dashboard' handleSideBarItems={handleSideBarItems} />
-                <SideBarItem color={item === '/reviews' ? 'bg-gray-100' : ''} image={review} text='Reviews' handleSideBarItems={handleSideBarItems} />
+                <SideBarItem color={item === '/student/dashboard' ? 'bg-gray-100' : ''} image={dashboard} text='Dashboard' handleSideBarItems={handleSideBarItems} />
+                <SideBarItem color={item === '/student/reviews' ? 'bg-gray-100' : ''} image={review} text='Reviews' handleSideBarItems={handleSideBarItems} />
                 <SideBarItem color={item === '' ? 'bg-gray-100' : ''} image={task} text='Tasks' handleSideBarItems={handleSideBarItems} />
-                <SideBarItem color={item === '/leetcode' ? 'bg-gray-100' : ''} image={leetcode} text='Leetcode' handleSideBarItems={handleSideBarItems} />
-                <SideBarItem color={item === '/leaves' ? 'bg-gray-100' : ''} image={leave} text='Leaves' handleSideBarItems={handleSideBarItems} />
-                <SideBarItem color={item === '/invoice' ? 'bg-gray-100' : ''} image={invoice} text='Invoice' handleSideBarItems={handleSideBarItems} />
-                <SideBarItem color={item === '/manifest' ? 'bg-gray-100' : ''} image={manifest} text='Manifest' handleSideBarItems={handleSideBarItems} />
+                <SideBarItem color={item === '/student/leetcode' ? 'bg-gray-100' : ''} image={leetcode} text='Leetcode' handleSideBarItems={handleSideBarItems} />
+                <SideBarItem color={item === '/student/leaves' ? 'bg-gray-100' : ''} image={leave} text='Leaves' handleSideBarItems={handleSideBarItems} />
+                <SideBarItem color={item === '/student/invoice' ? 'bg-gray-100' : ''} image={invoice} text='Invoice' handleSideBarItems={handleSideBarItems} />
+                <SideBarItem color={item === '/student/manifest' ? 'bg-gray-100' : ''} image={manifest} text='Manifest' handleSideBarItems={handleSideBarItems} />
                 <SideBarItem color={item === '' ? 'bg-gray-100' : ''} image={logout} text='Logout' />
             </div>
             <div className='flex p-5 bg-gray-100'>

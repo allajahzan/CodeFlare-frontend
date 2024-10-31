@@ -6,6 +6,7 @@ import LeetCode from './pages/client/Leetcode/Leetcode'
 import Invoice from './pages/client/Invoice/Invoice'
 import Manifest from './pages/client/Manifest/Manifest'
 import Leave from './pages/client/Leave/Leave'
+import Login from './pages/client/Login/Login'
 
 function App() {
 
@@ -23,14 +24,15 @@ function UserRoutes() {
   return (
     <>
       <Routes>
-        <Route path='/' element={<Navigate to={'/dashboard'} />} />
-        <Route path='*' element={<Navigate to={'/dashboard'} />} />
-        <Route path='dashboard' element={<Dashboard />} />
-        <Route path='reviews' element={<Reviews />} />
-        <Route path='leetcode' element={<LeetCode />} />
-        <Route path='invoice' element={<Invoice />} />
-        <Route path='manifest' element={<Manifest />} />
-        <Route path='leaves' element={<Leave />} />
+        <Route path='/' element={<Navigate to={'student/login'} />} />
+        <Route path='*' element={<Navigate to={'student/login'} />} />
+        <Route path='student/login' element={<Login />} />
+        <Route path='student/dashboard' element={<Dashboard />} />
+        <Route path='student/reviews' element={<Reviews />} />
+        <Route path='student/leetcode' element={<LeetCode />} />
+        <Route path='student/invoice' element={<Invoice />} />
+        <Route path='student/manifest' element={<Manifest />} />
+        <Route path='student/leaves' element={<Leave />} />
       </Routes>
     </>
   )
