@@ -1,5 +1,5 @@
 import Navbar from '../../../components/Navbar/Navbar'
-import SideBar from '../../../components/SideBar/SideBar'
+import SideBar from '../../../components/SideBar/Student/SideBar'
 import invoice from '../../../assets/invoice.svg'
 import InvoiceTable from '../../../components/Table/InvoiceTable/InvoiceTable'
 import { useLayoutEffect, useState } from 'react'

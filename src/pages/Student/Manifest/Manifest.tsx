@@ -1,5 +1,5 @@
 import Navbar from '../../../components/Navbar/Navbar'
-import SideBar from '../../../components/SideBar/SideBar'
+import SideBar from '../../../components/SideBar/Student/SideBar'
 import manifest from '../../../assets/manifest.svg'
 import TextField from '../../../components/TextField/TextField'
 import { useLayoutEffect, useState } from 'react';

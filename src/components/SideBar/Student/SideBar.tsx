@@ -1,17 +1,17 @@
-import dashboard from '../../assets/dashboard.svg'
-import leave from '../../assets/leave.svg'
-import review from '../../assets/review.svg'
-import task from '../../assets/task.svg'
-import manifest from '../../assets/manifest.svg'
-import logout from '../../assets/logout.svg'
-import invoice from '../../assets/invoice.svg'
-import leetcode from '../../assets/leetcode.svg'
-import user from '../../assets/user.svg'
-import SideBarItem from './SideBarItem'
+import dashboard from '../../../assets/dashboard.svg'
+import leave from '../../../assets/leave.svg'
+import review from '../../../assets/review.svg'
+import task from '../../../assets/task.svg'
+import manifest from '../../../assets/manifest.svg'
+import logout from '../../../assets/logout.svg'
+import invoice from '../../../assets/invoice.svg'
+import leetcode from '../../../assets/leetcode.svg'
+import user from '../../../assets/user.svg'
+import SideBarItem from '../SideBarItem'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useLayoutEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { stateType, resizeAction, sideBarAction } from '../../redux/store'
+import { stateType, resizeAction, sideBarAction } from '../../../redux/store'
 import './SideBar.css'
 
 function SideBar() {
@@ -83,8 +83,8 @@ function SideBar() {
             <div className='flex p-5 bg-gray-100'>
                 <img className='w-8' src={user} alt="" />
                 <div className='ml-5'>
-                    <p style={{fontSize:'15.5px'}} className='font-bold'>Ahsan allaj pk</p>
-                    <p style={{fontSize:'15.5px'}} className='font-bold'>MERN Stack</p>
+                    <p style={{ fontSize: '15.5px' }} className='font-bold'>Ahsan allaj pk</p>
+                    <p style={{ fontSize: '15.5px' }} className='font-bold'>MERN Stack</p>
                 </div>
             </div>
         </div>

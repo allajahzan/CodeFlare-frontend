@@ -1,5 +1,5 @@
 import Navbar from '../../../components/Navbar/Navbar'
-import SideBar from '../../../components/SideBar/SideBar'
+import SideBar from '../../../components/SideBar/Student/SideBar'
 import DataTable from '../../../components/Table/DataTable/DataTable'
 import leetcode from '../../../assets/leetcode.svg'
 import { useLayoutEffect, useState } from 'react'

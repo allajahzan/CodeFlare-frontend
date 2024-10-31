@@ -1,5 +1,5 @@
 import Navbar from '../../../components/Navbar/Navbar'
-import SideBar from '../../../components/SideBar/SideBar'
+import SideBar from '../../../components/SideBar/Student/SideBar'
 import leave from '../../../assets/leave.svg'
 import { useLayoutEffect, useState } from 'react'
 import { useSelector } from 'react-redux'

@@ -1,12 +1,11 @@
-import Navbar from '../../../components/Navbar/Navbar'
-import SideBar from '../../../components/SideBar/SideBar'
-import DataTable from '../../../components/Table/DataTable/DataTable'
-import review from '../../../assets/review.svg'
+import Navbar from '../../../components/Navbar/Navbar';
+import SideBar from '../../../components/SideBar/Student/SideBar'
+import dashboard from '../../../assets/dashboard.svg'
 import { useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { stateType } from '../../../redux/store';
 
-function Reviews() {
+function Dashboard() {
 
   const [style, setStyle] = useState<React.CSSProperties>({
     padding: '20px',
@@ -31,10 +30,10 @@ function Reviews() {
         <SideBar />
         <div style={style} className='w-full'>
           <div className='flex items-start fixed top-24 '>
-            <img className='w-8' src={review} alt="" />
-            <p className='text-black font-bold text-lg tracking-wider ml-3 uppercase underline underline-offset-4'>Reviews</p>
+            <img className='w-8' src={dashboard} alt="" />
+            <p className='text-black font-bold text-lg tracking-wider ml-3 uppercase underline underline-offset-4'>Dashboard</p>
           </div>
-          <DataTable />
+
         </div>
       </div>
 
@@ -42,4 +41,4 @@ function Reviews() {
   )
 }
 
-export default Reviews
+export default Dashboard

@@ -29,3 +29,9 @@ body{
 ::-webkit-scrollbar-thumb:hover {
     background: #dcdcdc; 
 }
+
+div, img, h1, p {
+    outline: none; 
+    -webkit-user-drag: none; 
+    user-select: none; 
+}
