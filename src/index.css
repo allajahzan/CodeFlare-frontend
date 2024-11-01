@@ -30,7 +30,7 @@ body{
     background: #dcdcdc; 
 }
 
-div, img, h1, p {
+div, img, h1, p , input, button, h2 ,label{
     outline: none; 
     -webkit-user-drag: none; 
     user-select: none; 

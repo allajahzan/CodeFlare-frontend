@@ -16,12 +16,12 @@ function Login() {
             </div>
             <div className='flex flex-col 2 items-center justify-center space-y-6 relative -top-10 w-full px-5'>
                 <p className='font-bold text-xl uppercase'>Student login</p>
-                <form action="" className='w-full sm:w-[350px] relative flex flex-col space-y-4 transition-all duration-300 ease-in-out'>
+                <form action="" className='w-full sm:w-[400px] relative flex flex-col space-y-4 transition-all duration-300 ease-in-out'>
                     <div className='flex relative '>
-                        <img className='absolute left-3 top-2.5 w-8' src={email} alt="" />
+                        <img className='absolute left-3 top-3 w-7' src={email} alt="" />
                         <input type="text" placeholder='Email ID' className='p-3 pl-14 px-4 w-full rounded-lg border-2 border-black border-opacity-20 outline-none' />
                     </div>
-                    <button className='w-full p-3 px-8 rounded-md bg-black text-white shadow-lg font-medium'>Login</button>
+                    <button className='w-full p-3 px-8 rounded-md bg-black text-white shadow-lg font-medium uppercase'>Login</button>
                 </form>
             </div>
             <div className=' p-2 pb-5 sm:p-5 flex items-center'>

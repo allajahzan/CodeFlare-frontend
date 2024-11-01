@@ -8,6 +8,7 @@ import Invoice from './pages/Student/Invoice/Invoice'
 import Manifest from './pages/Student/Manifest/Manifest'
 import Leave from './pages/Student/Leave/Leave'
 import Login from './pages/Student/Login/Login'
+import OngoingStudents from './pages/Counsellor/Students/OngoingStudents/OngoingStudents'
 
 function App() {
 
@@ -46,6 +47,7 @@ function AdminRoutes() {
         <Route path='' element={<Navigate to={'login'} />} />
         <Route path='*' element={<Navigate to={'dashboard'} />} />
         <Route path='dashboard' element={<DashboardCounsellor/>} />
+        <Route path='ongoingStudents' element={<OngoingStudents/>} />
       </Routes>
     </>
   )

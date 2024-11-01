@@ -1,5 +1,6 @@
 import dashboard from '../../../assets/dashboard.svg'
 import hub from '../../../assets/hub.svg'
+import studentsMore from '../../../assets/studentsMore.svg'
 import students from '../../../assets/students.svg'
 import critical from '../../../assets/criticalStudents.svg'
 import held from '../../../assets/heldStudents.svg'
@@ -32,8 +33,18 @@ function SideBar() {
 
     // handle side bar item navigation
     const handleSideBarItems = (event: React.MouseEvent<HTMLDivElement>) => {
-        navigate(`/counsellor/${(event.currentTarget.children[1] as HTMLParagraphElement).innerHTML.toLocaleLowerCase()}`)
-        isSmall ? dispatch(sideBarAction(!isSideBar)) : ''
+        const text = (event.currentTarget.querySelector('p') as HTMLParagraphElement)?.innerHTML.toLowerCase();
+
+        if (text) {
+            if (text.split(' ').length == 2)
+                navigate(`/counsellor/${(text.split(' ')[0] + text.split(' ')[1]).toLowerCase()}`);
+            else
+                navigate(`/counsellor/${text}`)
+        }
+
+        if (isSmall) {
+            dispatch(sideBarAction(!isSideBar));
+        }
     }
 
     // handle student drop down
@@ -105,7 +116,7 @@ function SideBar() {
                     <SideBarItem color={item === '/counsellor/leaves' ? 'bg-gray-100' : ''} image={hub} text='Hub details' handleSideBarItems={handleSideBarItems} />
                 </div>
                 <div className='relative z-10 bg-white'>
-                    <SideBarItem showStudentDropDown={showStudentDropDown} color={showStudentDropDown ? 'bg-gray-100' : ''} image={students} text='Students' handleSideBarItems={handlStudentDropDown} />
+                    <SideBarItem showStudentDropDown={showStudentDropDown} color={showStudentDropDown ? 'bg-gray-100' : ''} image={studentsMore} text='Students' handleSideBarItems={handlStudentDropDown} />
                 </div>
                 <div style={styleStudentDropDown} className='flex flex-col border-b-2'>
                     <SideBarItem color={item === '' ? 'bg-gray-100' : ''} image={students} text='Ongoing Students' handleSideBarItems={handleSideBarItems} />
@@ -126,8 +137,8 @@ function SideBar() {
             <div className='flex p-5 bg-gray-100'>
                 <img className='w-8' src={user} alt="" />
                 <div className='ml-5'>
-                    <p style={{ fontSize: '15.5px' }} className='font-bold'>Ahsan allaj pk</p>
-                    <p style={{ fontSize: '15.5px' }} className='font-bold'>MERN Stack</p>
+                    <p style={{ fontSize: '15.5px' }} className='font-bold'>Vidhul</p>
+                    <p style={{ fontSize: '15.5px' }} className='font-bold'>Counsellor</p>
                 </div>
             </div>
         </div>

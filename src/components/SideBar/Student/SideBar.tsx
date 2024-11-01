@@ -24,8 +24,15 @@ function SideBar() {
     const item = (useLocation().pathname)
 
     const handleSideBarItems = (event: React.MouseEvent<HTMLDivElement>) => {
-        navigate(`/student/${(event.currentTarget.children[1] as HTMLParagraphElement).innerHTML.toLocaleLowerCase()}`)
-        isSmall ? dispatch(sideBarAction(!isSideBar)) : ''
+        const text = (event.currentTarget.querySelector('p') as HTMLParagraphElement)?.innerHTML.toLowerCase();
+
+        if (text) {
+            navigate(`/student/${text}`);
+        }
+
+        if (isSmall) {
+            dispatch(sideBarAction(!isSideBar));
+        }
     }
 
     useLayoutEffect(() => {
