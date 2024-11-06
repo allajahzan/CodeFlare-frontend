@@ -11,23 +11,21 @@ body{
 }
 
 ::-webkit-scrollbar {
-    width: 6px; 
-    height: 6px;
-    scrollbar-width: none;
+    width: 10px;  
+    height: 10px; 
 }
 
 ::-webkit-scrollbar-track {
-    background: transparent; 
+    background: transparent;
+    margin: 2px; 
+    border-radius: 6px; 
 }
 
 ::-webkit-scrollbar-thumb {
-    scrollbar-width: thin;
-    background: #dcdcdc;
+    background: #ebe9e9;
     border-radius: 200px; 
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #dcdcdc; 
+    border: 3px solid transparent; 
+    background-clip: padding-box; 
 }
 
 div, img, h1, p , input, button, h2 ,label{
