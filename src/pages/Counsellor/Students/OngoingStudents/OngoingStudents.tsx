@@ -50,9 +50,9 @@ function OngoingStudents() {
     }, [isSmall]);
 
     useLayoutEffect(() => {
-        setBatches(['BCK 188', 'BCK 189'])
-        setWeeks(['Week 23', 'Week 24'])
-        setDomains(['MERN Stack', 'MEAN Stack', 'Python Django', '.Net', 'Flutter'])
+        setBatches(['All Batches', 'BCK 188', 'BCK 189'])
+        setWeeks(['All Weeks', 'Week 23', 'Week 24'])
+        setDomains(['All Domains', 'MERN Stack', 'MEAN Stack', 'Python Django', '.Net', 'Flutter'])
     }, [])
 
     return (
@@ -61,9 +61,14 @@ function OngoingStudents() {
             <SideBar />
             <div style={style} className='w-full flex flex-col gap-y-4'>
 
-                <div className='flex items-start'>
-                    <img className='w-8' src={students} alt="" />
-                    <p className='text-black font-bold text-lg tracking-wider ml-3 uppercase underline underline-offset-4'>Ongoing students</p>
+                <div className="relative">
+                    <div className='flex items-start'>
+                        <img className='w-8' src={students} alt="" />
+                        <p className='text-black font-bold text-lg tracking-wider ml-3 uppercase underline underline-offset-4'>Ongoing students</p>
+                    </div>
+                    <div className="absolute right-0 top-0">
+                        <input placeholder="Search" type="text" className="p-2 bg-transparent border-2 border-black border-opacity-20 font-medium rounded-lg" />
+                    </div>
                 </div>
 
                 <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-2">

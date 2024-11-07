@@ -10,7 +10,6 @@ function LeetCode() {
 
     const [style, setStyle] = useState<React.CSSProperties>({
         padding: '20px',
-        paddingLeft: '320px',
         paddingTop: '96px',
         transition: 'all 0.3s ease-in-out',
     });
