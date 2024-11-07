@@ -13,7 +13,7 @@ function OngoingStudents() {
     const [style, setStyle] = useState<React.CSSProperties>({
         padding: '20px',
         paddingLeft: '320px',
-        paddingTop: '215px',
+        paddingTop: '96px',
         transition: 'all 0.3s ease-in-out',
     });
     const [isOpenBatchDropDown, setIsOpenBatchDropDown] = useState(false);
@@ -59,32 +59,31 @@ function OngoingStudents() {
         <div className='flex h-[100vh]'>
             <Navbar />
             <SideBar />
-            <div style={style} className='w-full space-y-2.5 sm:space-y-0'>
-                <div style={isSmall ? { width: 'calc(100% - 40px)' } : { width: 'calc(100% - 340px)' }} className='flex-col items-center fixed top-24'>
-                    <div className='flex justify-between'>
-                        <div className='flex items-start'>
-                            <img className='w-8' src={students} alt="" />
-                            <p className='text-black font-bold text-lg tracking-wider ml-3 uppercase underline underline-offset-4'>Ongoing students</p>
-                        </div>
-                    </div>
-                    <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-2 py-4">
-                        {/* batch drop down */}
-                        <DropDown datas={batches as string[]} selectedItem={selectedBatch} setStateVariable1={setIsOpenBatchDropDown} setStateVariable2={setIsOpenWeekDropDown} setStateVariable3={setIsOpenDomainDropDown} stateVariable={isOpenBatchDropDown} handleFunction={handleBatch} />
-                        {/* week drop down */}
-                        <DropDown datas={weeks as string[]} selectedItem={selectedWeek} setStateVariable1={setIsOpenWeekDropDown} setStateVariable2={setIsOpenBatchDropDown} setStateVariable3={setIsOpenDomainDropDown} stateVariable={isOpenWeekDropDown} handleFunction={handleWeek} />
-                        {/* week drop down */}
-                        <DropDown datas={domain as string[]} selectedItem={selectedDomain} setStateVariable1={setIsOpenDomainDropDown} setStateVariable2={setIsOpenWeekDropDown} setStateVariable3={setIsOpenBatchDropDown} stateVariable={isOpenDomainDropDown} handleFunction={handleDomain} />
-                    </div>
+            <div style={style} className='w-full flex flex-col gap-y-4'>
+
+                <div className='flex items-start'>
+                    <img className='w-8' src={students} alt="" />
+                    <p className='text-black font-bold text-lg tracking-wider ml-3 uppercase underline underline-offset-4'>Ongoing students</p>
                 </div>
 
-                <div className='overflow-x-auto h-full pt-24 sm:pt-0'>
-                    <div className='flex flex-col h-full' style={isSmall ? { minWidth: '1000px' } : {}}>
-                        <div className="sticky top-0 -z-10 bg-white">
-                            <Header />
-                        </div>
+                <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-2">
+                    {/* batch drop down */}
+                    <DropDown datas={batches as string[]} selectedItem={selectedBatch} setStateVariable1={setIsOpenBatchDropDown} setStateVariable2={setIsOpenWeekDropDown} setStateVariable3={setIsOpenDomainDropDown} stateVariable={isOpenBatchDropDown} handleFunction={handleBatch} />
+                    {/* week drop down */}
+                    <DropDown datas={weeks as string[]} selectedItem={selectedWeek} setStateVariable1={setIsOpenWeekDropDown} setStateVariable2={setIsOpenBatchDropDown} setStateVariable3={setIsOpenDomainDropDown} stateVariable={isOpenWeekDropDown} handleFunction={handleWeek} />
+                    {/* week drop down */}
+                    <DropDown datas={domain as string[]} selectedItem={selectedDomain} setStateVariable1={setIsOpenDomainDropDown} setStateVariable2={setIsOpenWeekDropDown} setStateVariable3={setIsOpenBatchDropDown} stateVariable={isOpenDomainDropDown} handleFunction={handleDomain} />
+                </div>
+
+                <div className='overflow-x-auto flex-grow'>
+                    <div className='flex flex-col h-full rounded-lg' style={isSmall ? { minWidth: '1000px' } : {}}>
+
                         {/* Table Rows */}
                         <div className="flex-1 overflow-y-auto">
-                            <div className="flex flex-col gap-2">
+                            <div className="sticky top-0 -z-10 bg-white">
+                                <Header />
+                            </div>
+                            <div className="flex flex-col gap-2 relative -z-20">
                                 {[1, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, index) => (
                                     <Body key={index} index={index} />
                                 ))}

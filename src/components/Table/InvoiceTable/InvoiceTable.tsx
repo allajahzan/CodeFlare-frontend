@@ -6,7 +6,7 @@ import { stateType } from '../../../redux/store';
 function InvoiceTable() {
     const isSmall = useSelector((state: stateType) => state.isSmall)
     return (
-        <div className='overflow-x-auto  h-full'>
+        <div className='overflow-x-auto h-full'>
             <div className='flex flex-col h-full' style={isSmall ? { minWidth: '1000px' } : {}}>
                 {/* Table Rows */}
                 <div className="flex-1 overflow-y-auto">

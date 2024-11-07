@@ -2,11 +2,11 @@ import Cell from '../Cell'
 
 function Body({ index }: { index: number }) {
 
-    const color = index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-200'
+    const color = index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-100'
 
     return (
         <div className={`flex justify-between items-center p-4 rounded-lg ${color}`}>
-            <div className='w-[800px] flex justify-start'><p style={{ color: color }} className=''>{index}</p ></div>
+            <div className='w-[500px] flex justify-start'><p style={{ color: color }} className=''>{index}</p ></div>
             <div className='w-full flex justify-start'><p style={{ color: color }} className='w-[180px]  text-ellipsis overflow-hidden whitespace-nowrap'>{'Calicut Monthly Rent 2024'}</p ></div>
             <Cell text={'03-10-2024'} color='black' />
             <Cell text={'12-10-2024'} color='black' />

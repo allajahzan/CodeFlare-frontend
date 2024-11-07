@@ -26,7 +26,8 @@ function Navbar() {
     return (
         <div className={`w-full p-5 fixed z-50 shadow-lg flex justify-between items-center bg-white`}>
             {isSmall && <img onClick={handleSideBar} className='w-10 cursor-pointer' src={menu} alt="" />}
-            <img className='w-40' src={logo} alt="" />
+            {/* <img className='w-40' src={logo} alt="" /> */}
+            <h1 className='text-4xl'>LOGO</h1>
             <img onClick={handleTheme} className='w-7 cursor-pointer' src={icon === 'light' ? light : dark} alt="" />
         </div>
     )

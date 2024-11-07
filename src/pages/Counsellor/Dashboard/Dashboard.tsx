@@ -11,7 +11,7 @@ function Dashboard() {
   const [style, setStyle] = useState<React.CSSProperties>({
     padding: '20px',
     paddingLeft: '320px',
-    paddingTop: '140px',
+    paddingTop: '96px',
     transition: 'all 0.3s ease-in-out',
   });
 
@@ -28,13 +28,15 @@ function Dashboard() {
     <div>
       <Navbar />
       <SideBar />
-      <div style={style} className='w-full'>
-        <div className='flex items-start fixed top-24 '>
-          <img className='w-8' src={dashboard} alt="" />
-          <p className='text-black font-bold text-lg tracking-wider ml-3 uppercase underline underline-offset-4'>Dashboard</p>
+      <div style={style} className='w-full flex flex-col gap-y-4'>
+        <div className='flex justify-between'>
+          <div className='flex items-start'>
+            <img className='w-8' src={dashboard} alt="" />
+            <p className='text-black font-bold text-lg tracking-wider ml-3 uppercase underline underline-offset-4'>Dashboard</p>
+          </div>
         </div>
 
-        <div className="p-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2">
           <CountCard count={120} text="Total Students" />
           <CountCard count={120} text="Held Students" />
           <CountCard count={120} text="Students In Quality" />
@@ -44,9 +46,7 @@ function Dashboard() {
           <CountCard count={120} text="Terminated Students" />
         </div>
 
-        <div className="p-2 grid grid-cols-1 sm:grid-cols-3">
 
-        </div>
 
       </div>
     </div>

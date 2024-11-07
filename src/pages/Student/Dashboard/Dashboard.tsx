@@ -10,7 +10,7 @@ function Dashboard() {
   const [style, setStyle] = useState<React.CSSProperties>({
     padding: '20px',
     paddingLeft: '320px',
-    paddingTop: '140px',
+    paddingTop: '96px',
     transition: 'all 0.3s ease-in-out',
   });
 
@@ -28,12 +28,11 @@ function Dashboard() {
       <Navbar />
       <div className='flex h-[100vh]'>
         <SideBar />
-        <div style={style} className='w-full'>
-          <div className='flex items-start fixed top-24 '>
+        <div style={style} className='w-full flex flex-col gap-y-4'>
+          <div className='flex items-start'>
             <img className='w-8' src={dashboard} alt="" />
             <p className='text-black font-bold text-lg tracking-wider ml-3 uppercase underline underline-offset-4'>Dashboard</p>
           </div>
-
         </div>
       </div>
 

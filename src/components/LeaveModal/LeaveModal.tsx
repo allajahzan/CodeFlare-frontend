@@ -1,5 +1,6 @@
 import { Modal } from "flowbite-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import DropDown from "../DropDowns/Counsellor/DropDown";
 
 interface propsType {
     openModal: boolean,
@@ -8,10 +9,48 @@ interface propsType {
 
 function LeaveModal({ openModal, setOpenModal }: propsType) {
 
-    const [leaveType, setLeaveType] = useState<string>('')
-    const onChangeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setLeaveType(event.target.value)
+    const [absenceTypes, setAbsenceTypes] = useState<string[]>([])
+    const [leaveTypes, setLeaveTypes] = useState<string[]>([])
+    const [partailAbsenceTypes, setPartialAbsenceTypes] = useState<string[]>([])
+    const [selectedAbsenceType, setAbsenceType] = useState<string>('Abscence Type')
+    const [selectedLeaveType, setLeaveType] = useState<string>('Leave Type')
+    const [selectedPartialAbsenceType, setPartialAbsenceType] = useState<string>('Partial Abscence Type')
+    const [isDropDown1Open, setDropDown1] = useState<boolean>(false)
+    const [isDropDown2Open, setDropDown2] = useState<boolean>(false)
+    const [isDropDown3Open, setDropDown3] = useState<boolean>(false)
+
+    const onChangeSelect1 = (text: string) => {
+        setAbsenceType(text)
+        setDropDown1(false)
+        setLeaveType('Leave Type')
+        setPartialAbsenceType('Partial Abscence Type')
     }
+
+    const onChangeSelect2 = (text: string) => {
+        setLeaveType(text)
+        setDropDown2(false)
+    }
+
+    const onChangeSelect3 = (text: string) => {
+        setPartialAbsenceType(text)
+        setDropDown3(false)
+    }
+
+    const handleCloseModa = () => {
+        setOpenModal(!openModal)
+        setAbsenceType('Abscence Type')
+        setLeaveType('Leave Type')
+        setPartialAbsenceType('Partial Abscence Type')
+        setDropDown1(false)
+        setDropDown2(false)
+        setDropDown3(false)
+    }
+
+    useEffect(() => {
+        setAbsenceTypes(['Partial Absence', 'Leave'])
+        setPartialAbsenceTypes(['Late Coming', 'Early Leaving'])
+        setLeaveTypes(['Half Day', 'Full Day'])
+    }, [])
 
     return (
         <>
@@ -36,28 +75,16 @@ function LeaveModal({ openModal, setOpenModal }: propsType) {
                     <div className="space-y-6 flex flex-col items-center justify-center">
                         <h1 className="text-lg text-black font-medium uppercase tracking-wider">Apply Leave</h1>
                         <form className="flex flex-col gap-4 w-full" action="">
-                            <select name="field1" onChange={onChangeSelect} className="p-2 sm:p-3 bg-transparent border-2 border-black border-opacity-20 font-medium rounded-lg outline-none cursor-pointer" required>
-                                <option value="" hidden>Abscence Type</option>
-                                <option value="Partial Absence">Partial Absence</option>
-                                <option value="Leave">Leave</option>
-                            </select>
-                            {leaveType === 'Partial Absence' ? <select name="field2" className="p-2 sm:p-3 bg-transparent border-2 border-black border-opacity-20 font-medium rounded-lg outline-none cursor-pointer" required>
-                                <option value="" hidden>Partial Abscence Type</option>
-                                <option value="">Late Coming</option>
-                                <option value="">Early Leaving</option>
-                            </select> : ''}
-                            {leaveType === 'Leave' ? <select name="field3" className="p-2 sm:p-3 bg-transparent border-2 border-black border-opacity-20 font-medium rounded-lg outline-none cursor-pointer" required>
-                                <option value="" hidden>Leave Type</option>
-                                <option value="">Half Day</option>
-                                <option value="">Full Day</option>
-                            </select> : ''}
+                            <DropDown datas={absenceTypes} selectedItem={selectedAbsenceType} setStateVariable1={setDropDown1} setStateVariable2={setDropDown2} setStateVariable3={setDropDown3} stateVariable={isDropDown1Open} handleFunction={onChangeSelect1} />
+                            {selectedAbsenceType === 'Leave' ? <DropDown datas={leaveTypes} selectedItem={selectedLeaveType} setStateVariable1={setDropDown2} stateVariable={isDropDown2Open} handleFunction={onChangeSelect2} /> : ''}
+                            {selectedAbsenceType === 'Partial Absence' ? <DropDown datas={partailAbsenceTypes} selectedItem={selectedPartialAbsenceType} setStateVariable1={setDropDown3} stateVariable={isDropDown3Open} handleFunction={onChangeSelect3} /> : ''}
                             <input name="field4" className="p-2 sm:p-3 bg-transparent border-2 border-black border-opacity-20 font-medium rounded-lg outline-none cursor-pointer" type="date" required />
                             <div className="relative w-full">
                                 <textarea id="reason" className="block p-2 sm:p-3 bg-transparent border-2 border-black border-opacity-20 font-medium rounded-lg outline-none w-full text-base resize-none" rows={5} required></textarea>
                                 <label htmlFor="reason" className="absolute -top-2 left-2 bg-white text-gray-500 text-xs font-medium px-2">Reason</label>
                             </div>
                             <div className="w-full flex gap-2 justify-center">
-                                <button onClick={() => { setOpenModal(!openModal); setLeaveType('') }} className="p-2 py-2 px-8 rounded-md bg-gray-200 text-black font-medium">Cancel</button>
+                                <button onClick={handleCloseModa} className="p-2 py-2 px-8 rounded-md bg-gray-200 text-black font-medium">Cancel</button>
                                 <button type={'submit'} className="p-2 py-2 px-8 rounded-md bg-black text-white shadow-lg font-medium">Submit</button>
                             </div>
                         </form>

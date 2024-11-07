@@ -12,7 +12,8 @@ function Login() {
     return (
         <div id='allaj' key={1} className="h-screen w-full flex flex-col items-center justify-between">
             <div className='p-5'>
-                <img className='w-40' src={logo} alt="" />
+                {/* <img className='w-40' src={logo} alt="" /> */}
+                <h1 className='text-4xl'>LOGO</h1>
             </div>
             <div className='flex flex-col 2 items-center justify-center space-y-6 relative -top-10 w-full px-5'>
                 <p className='font-bold text-xl uppercase'>Student login</p>
