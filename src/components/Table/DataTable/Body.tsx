@@ -1,6 +1,6 @@
 function Body({ index }: { index: number }) {
 
-    const color = index % 2 === 0 ? 'bg-gray-100' : 'bg-gray-100'
+    const color = index % 2 === 0 ? 'bg-white' : 'bg-white'
 
     return (
         <div className={`flex justify-between items-center p-4 rounded-lg ${color}`}>

@@ -12,7 +12,6 @@ function OngoingStudents() {
 
     const [style, setStyle] = useState<React.CSSProperties>({
         padding: '20px',
-        paddingLeft: '320px',
         paddingTop: '96px',
         transition: 'all 0.3s ease-in-out',
     });
@@ -59,16 +58,10 @@ function OngoingStudents() {
         <div className='flex h-[100vh]'>
             <Navbar />
             <SideBar />
-            <div style={style} className='w-full flex flex-col gap-y-4'>
-
-                <div className="relative">
-                    <div className='flex items-start'>
-                        <img className='w-8' src={students} alt="" />
-                        <p className='text-black font-bold text-lg tracking-wider ml-3 uppercase underline underline-offset-4'>Ongoing students</p>
-                    </div>
-                    <div className="absolute right-0 top-0">
-                        <input placeholder="Search" type="text" className="p-2 bg-transparent border-2 border-black border-opacity-20 font-medium rounded-lg" />
-                    </div>
+            <div style={style} className='w-full flex flex-col gap-y-3'>
+                <div className='flex items-start'>
+                    <img className='w-8' src={students} alt="" />
+                    <p className='text-black font-bold text-lg tracking-wider ml-3 uppercase underline underline-offset-4'>Ongoing students</p>
                 </div>
 
                 <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -80,9 +73,12 @@ function OngoingStudents() {
                     <DropDown datas={domain as string[]} selectedItem={selectedDomain} setStateVariable1={setIsOpenDomainDropDown} setStateVariable2={setIsOpenWeekDropDown} setStateVariable3={setIsOpenBatchDropDown} stateVariable={isOpenDomainDropDown} handleFunction={handleDomain} />
                 </div>
 
+                <div className="w-full">
+                    <input placeholder="Search students" name="search students" type="text" className="w-full p-3 bg-transparent border-2 border-black border-opacity-20 font-medium rounded-lg" />
+                </div>
+
                 <div className='overflow-x-auto flex-grow'>
                     <div className='flex flex-col h-full rounded-lg' style={isSmall ? { minWidth: '1000px' } : {}}>
-
                         {/* Table Rows */}
                         <div className="flex-1 overflow-y-auto">
                             <div className="sticky top-0 -z-10 bg-white">
@@ -90,7 +86,7 @@ function OngoingStudents() {
                             </div>
                             <div className="flex flex-col gap-2 relative -z-20">
                                 {[1, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, index) => (
-                                    <Body key={index} index={index} />
+                                    <Body key={index} index={index + 1} />
                                 ))}
                             </div>
                         </div>

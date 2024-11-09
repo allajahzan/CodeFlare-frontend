@@ -7,7 +7,8 @@ interface actionType {
 
 export interface stateType {
     isSmall: boolean,
-    isSideBar: boolean
+    isSideBar: boolean,
+    isShrink: boolean
 }
 
 // reducer function for sideBarVisibility
@@ -26,9 +27,19 @@ const isSmall = (prevState: boolean = false, action: actionType) => {
     return prevState;
 }
 
+// reducer function for shrink
+const isShrink = (prevState: boolean = localStorage.getItem('isSideBarShriked') === "true" ? true : false, action: actionType) => {
+    if (action.type === 'shrink') {
+        return action.payload;
+    }
+    return prevState;
+}
+
+
 const appReducer = combineReducers({
     isSideBar,
-    isSmall
+    isSmall,
+    isShrink
 })
 
 const store = createStore(appReducer);
@@ -51,8 +62,17 @@ function resizeAction(payload: boolean) {
     }
 }
 
+// action for resize
+function shrinkAction(payload: boolean) {
+    return {
+        type: 'shrink',
+        payload: payload
+    }
+}
+
 export {
     store,
     resizeAction,
-    sideBarAction
+    sideBarAction,
+    shrinkAction
 }

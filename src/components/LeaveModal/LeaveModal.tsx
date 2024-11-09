@@ -73,19 +73,19 @@ function LeaveModal({ openModal, setOpenModal }: propsType) {
             }} show={openModal} onClose={() => setOpenModal(false)}>
                 <Modal.Body>
                     <div className="space-y-6 flex flex-col items-center justify-center">
-                        <h1 className="text-lg text-black font-medium uppercase tracking-wider">Apply Leave</h1>
+                        <h1 className="text-lg text-black font-extrabold uppercase tracking-wider">Apply Leave</h1>
                         <form className="flex flex-col gap-4 w-full" action="">
                             <DropDown datas={absenceTypes} selectedItem={selectedAbsenceType} setStateVariable1={setDropDown1} setStateVariable2={setDropDown2} setStateVariable3={setDropDown3} stateVariable={isDropDown1Open} handleFunction={onChangeSelect1} />
                             {selectedAbsenceType === 'Leave' ? <DropDown datas={leaveTypes} selectedItem={selectedLeaveType} setStateVariable1={setDropDown2} stateVariable={isDropDown2Open} handleFunction={onChangeSelect2} /> : ''}
                             {selectedAbsenceType === 'Partial Absence' ? <DropDown datas={partailAbsenceTypes} selectedItem={selectedPartialAbsenceType} setStateVariable1={setDropDown3} stateVariable={isDropDown3Open} handleFunction={onChangeSelect3} /> : ''}
                             <input name="field4" className="p-2 sm:p-3 bg-transparent border-2 border-black border-opacity-20 font-medium rounded-lg outline-none cursor-pointer" type="date" required />
                             <div className="relative w-full">
-                                <textarea id="reason" className="block p-2 sm:p-3 bg-transparent border-2 border-black border-opacity-20 font-medium rounded-lg outline-none w-full text-base resize-none" rows={5} required></textarea>
-                                <label htmlFor="reason" className="absolute -top-2 left-2 bg-white text-gray-500 text-xs font-medium px-2">Reason</label>
+                                <textarea id="reason" className="block p-2 sm:p-3 bg-transparent border-2 border-black border-opacity-20 font-medium rounded-lg outline-none w-full resize-none" rows={5} required></textarea>
+                                <label htmlFor="reason" className="absolute -top-2 left-2 bg-white text-gray-500 text-xs font-extrabold px-2">Reason</label>
                             </div>
                             <div className="w-full flex gap-2 justify-center">
-                                <button onClick={handleCloseModa} className="p-2 py-2 px-8 rounded-md bg-gray-200 text-black font-medium">Cancel</button>
-                                <button type={'submit'} className="p-2 py-2 px-8 rounded-md bg-black text-white shadow-lg font-medium">Submit</button>
+                                <button onClick={handleCloseModa} className="p-2 py-2 px-8 rounded-md bg-gray-200 text-black font-extrabold tracking-wider uppercase">Cancel</button>
+                                <button type={'submit'} className="p-2 py-2 px-8 rounded-md bg-black text-white shadow-lg font-extrabold tracking-wider uppercase">Submit</button>
                             </div>
                         </form>
 
