@@ -127,7 +127,7 @@ function SideBar() {
         <div style={style} className={`h-full fixed top-0 left-0 flex flex-col justify-between ${isSmall ? 'bg-white shadow-xl z-30' : 'bg-white z-20'}`}>
             <div className='p-5 pr-4 flex fixed z-50 bg-white top-0 w-full items-center justify-between shadow-sm'>
                 {/* <img className='w-32' src={logo} alt="" /> */}
-                {!isShrinkSideBarCounsellor && <h1 className='text-2xl overflow-hidden'>LOGO</h1>}
+                {!isShrinkSideBarCounsellor && <h1 className='text-2xl overflow-hidden font-extrabold'>BootCamp</h1>}
                 <img onClick={isSideBarCounsellor && isSmall ? handleSideBar : handleShrink} className='w-8 cursor-pointer' src={isSideBarCounsellor && isSmall ? close : menu} alt="" />
             </div>
             <div style={{ marginTop: '72px', marginBottom: '82px' }} className='overflow-auto overflow-x-hidden relative'>
@@ -154,11 +154,11 @@ function SideBar() {
                     <SideBarItem color={item === '' ? 'bg-gray-100' : ''} image={logout} text='Logout' />
                 </div>
             </div>
-            <div title={isShrinkSideBarCounsellor ? `Ahsan allaj pk MERNStack` : ''} style={isShrinkSideBarCounsellor ? { padding: '25px 18px' } : { padding: '18px 18px' }} className='flex fixed z-50 bottom-0  w-full items-center bg-gray-100 overflow-hidden'>
+            <div title={isShrinkSideBarCounsellor ? `Vidhul Counsellor` : ''} style={isShrinkSideBarCounsellor ? { padding: '25.3px 18px' } : { padding: '18px 18px' }} className='flex fixed z-50 bottom-0 w-full items-center bg-white overflow-hidden'>
                 <img className='w-8' src={user} alt="" />
                 <div className='ml-5 flex flex-col gap-1 text-nowrap'>
-                    {!isShrinkSideBarCounsellor && <p style={{ fontSize: '15.2px' }} className='font-extrabold'>Ahsan allaj pk</p>}
-                    {!isShrinkSideBarCounsellor && <p style={{ fontSize: '13.2px' }} className='font-extrabold'>MERN Stack</p>}
+                    {!isShrinkSideBarCounsellor && <p style={{ fontSize: '15.2px' }} className='font-extrabold'>Vidhul</p>}
+                    {!isShrinkSideBarCounsellor && <p style={{ fontSize: '13.2px' }} className='font-extrabold'>Counsellor</p>}
                 </div>
             </div>
         </div>

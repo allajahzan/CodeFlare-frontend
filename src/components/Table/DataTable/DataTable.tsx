@@ -1,13 +1,10 @@
-import { useSelector } from 'react-redux';
-import { stateType } from '../../../redux/store';
 import Header from './Header';
 import Body from './Body';
 
 function DataTable() {
-    const isSmall = useSelector((state: stateType) => state.isSmall)
     return (
         <div className='overflow-x-auto h-full'>
-            <div className='flex flex-col h-full' style={isSmall ? { minWidth: '1000px' } : {}}>
+            <div className='flex flex-col h-full' style={{ minWidth: '1000px' }}>
                
                 {/* Table Rows */}
                 <div className="flex-1 overflow-y-auto">

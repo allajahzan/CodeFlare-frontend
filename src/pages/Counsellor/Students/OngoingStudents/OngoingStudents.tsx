@@ -84,7 +84,7 @@ function OngoingStudents() {
                         </div>
 
                         <div className='overflow-x-auto flex-grow'>
-                            <div className='flex flex-col h-full rounded-lg' style={isSmall ? { minWidth: '1000px' } : {}}>
+                            <div className='flex flex-col h-full rounded-lg' style={{ minWidth: '1000px' }}>
                                 {/* Table Rows */}
                                 <div className="flex-1 overflow-y-auto">
                                     <div className="sticky top-0 -z-10 bg-white">

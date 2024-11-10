@@ -13,7 +13,7 @@ function Login() {
         <div id='allaj' key={1} className="h-screen w-full flex flex-col items-center justify-between">
             <div className='p-5'>
                 {/* <img className='w-40' src={logo} alt="" /> */}
-                <h1 className='text-4xl'>LOGO</h1>
+                <h1 className='text-4xl'>BootCamp</h1>
             </div>
             <div className='flex flex-col 2 items-center justify-center space-y-6 relative -top-10 w-full px-5'>
                 <p className='font-extrabold tracking-wider text-lg uppercase'>Student login</p>

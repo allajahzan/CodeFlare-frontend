@@ -104,10 +104,10 @@ function SideBar() {
         <div style={style} className={`h-full fixed top-0 left-0 flex flex-col justify-between ${isSmall ? 'bg-white shadow-xl z-30' : 'bg-white z-20'}`}>
             <div className='p-5 pr-4 flex fixed z-50 bg-white top-0 w-full items-center justify-between shadow-sm'>
                 {/* <img className='w-32' src={logo} alt="" /> */}
-                {!isShrinkSideBarStudent && <h1 className='text-2xl overflow-hidden'>LOGO</h1>}
+                {!isShrinkSideBarStudent && <h1 className='text-2xl overflow-hidden font-extrabold'>BootCamp</h1>}
                 <img onClick={isSideBarStudent && isSmall ? handleSideBar : handleShrink} className='w-8 cursor-pointer' src={isSideBarStudent && isSmall ? close : menu} alt="" />
             </div>
-            <div style={{ marginTop: '72px' }} className='overflow-auto overflow-x-hidden relative'>
+            <div style={{ marginTop: '72px', marginBottom: '82px' }} className='overflow-auto overflow-x-hidden relative'>
 
                 <SideBarItem color={item === '/student/dashboard' ? 'bg-gray-100' : ''} image={dashboard} text='Dashboard' handleSideBarItems={handleSideBarItems} />
                 <SideBarItem color={item === '/student/reviews' ? 'bg-gray-100' : ''} image={review} text='Reviews' handleSideBarItems={handleSideBarItems} />
@@ -118,7 +118,7 @@ function SideBar() {
                 <SideBarItem color={item === '/student/manifest' ? 'bg-gray-100' : ''} image={manifest} text='Manifest' handleSideBarItems={handleSideBarItems} />
                 <SideBarItem color={item === '' ? 'bg-gray-100' : ''} image={logout} text='Logout' />
             </div>
-            <div title={isShrinkSideBarStudent ? `Ahsan allaj pk MERNStack` : ''} style={isShrinkSideBarStudent ? { padding: '25.3px 18px' } : { padding: '18px 18px' }} className='flex fixed z-50 bottom-0  w-full items-center bg-gray-100 overflow-hidden'>
+            <div title={isShrinkSideBarStudent ? `Ahsan allaj pk MERNStack` : ''} style={isShrinkSideBarStudent ? { padding: '25.3px 18px' } : { padding: '18px 18px' }} className='flex fixed z-50 bottom-0 w-full items-center bg-white overflow-hidden'>
                 <img className='w-8' src={user} alt="" />
                 <div className='ml-5 flex flex-col gap-1 text-nowrap'>
                     {!isShrinkSideBarStudent && <p style={{ fontSize: '15.2px' }} className='font-extrabold'>Ahsan allaj pk</p>}
