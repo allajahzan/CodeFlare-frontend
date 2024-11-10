@@ -17,8 +17,8 @@ function LeetCode() {
     useLayoutEffect(() => {
         setStyle(prevStyle => ({
             ...prevStyle,
-            paddingTop: isShrinkSideBarStudent ? isSmall ? '0px' : '0px' : isSmall ? '0px' : '20px',
-            paddingLeft: isShrinkSideBarStudent ? isSmall ? '0px' : '68px' : isSmall ? '0px' : '250px'
+            paddingTop: isShrinkSideBarStudent ? isSmall ? '70px' : '0px' : isSmall ? '70px' : '20px',
+            paddingLeft: isShrinkSideBarStudent ? isSmall ? '20px' : '68px' : isSmall ? '20px' : '250px'
         }));
     }, [isShrinkSideBarStudent, isSmall])
 
@@ -28,10 +28,11 @@ function LeetCode() {
             <div className='flex h-[100vh]'>
                 <SideBar />
                 <div style={style} className='w-full'>
-                    <div style={{ borderWidth: isSmall ? '0px' : '6px 0px 0px 6px', boxShadow: '0.01rem 0.05rem 1rem 0.2rem #eeeeee', backgroundColor: '#f5f5f5', padding: '20px', paddingTop: isSmall ? '14px' : '20px' }}
-                        className='w-full h-full flex flex-col gap-y-4 border-white rounded-tl-lg  relative z-20'>
 
-                        <ContentHeadingInSmallSize />
+                    <ContentHeadingInSmallSize />
+
+                    <div style={{ borderWidth: '6px 0px 0px 6px', boxShadow: '0.01rem 0.05rem 1rem 0.2rem #eeeeee', backgroundColor: '#f5f5f5', padding: '20px' }}
+                        className='w-full h-full flex flex-col gap-y-4 border-white rounded-tl-lg  relative z-20'>
 
                         <div className='flex justify-between items-start relative'>
                             <ContentHeading image={leetcode} text='Leetcode' />

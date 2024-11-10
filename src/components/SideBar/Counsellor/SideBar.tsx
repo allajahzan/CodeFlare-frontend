@@ -125,9 +125,9 @@ function SideBar() {
 
     return (
         <div style={style} className={`h-full fixed top-0 left-0 flex flex-col justify-between ${isSmall ? 'bg-white shadow-xl z-30' : 'bg-white z-20'}`}>
-            <div className='p-5 pr-4 flex fixed z-50 bg-white top-0 w-full items-center justify-between shadow-sm'>
+            <div className='p-5 pr-4 flex fixed z-50 bg-white top-0 w-full items-center justify-between'>
                 {/* <img className='w-32' src={logo} alt="" /> */}
-                {!isShrinkSideBarCounsellor && <h1 className='text-2xl overflow-hidden font-extrabold'>BootCamp</h1>}
+                {!isShrinkSideBarCounsellor && <h1 className='text-xl overflow-hidden font-extrabold'>BootCamp</h1>}
                 <img onClick={isSideBarCounsellor && isSmall ? handleSideBar : handleShrink} className='w-8 cursor-pointer' src={isSideBarCounsellor && isSmall ? close : menu} alt="" />
             </div>
             <div style={{ marginTop: '72px', marginBottom: '82px' }} className='overflow-auto overflow-x-hidden relative'>
