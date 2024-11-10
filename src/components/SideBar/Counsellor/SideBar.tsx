@@ -18,18 +18,18 @@ import SideBarItem from '../Counsellor/SideBarItem'
 import { useLocation, useNavigate } from 'react-router-dom'
 import React, { useLayoutEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { stateType, resizeAction, shrinkSideBarCounsellorAction, sideBarCounsellorAction } from '../../../redux/store'
+import { stateType, resizeAction, shrinkSideBarCounsellorAction, sideBarCounsellorAction, showStudentDropDownAction } from '../../../redux/store'
 import './SideBar.css'
 
 function SideBar() {
 
     const [style, setStyle] = useState<React.CSSProperties>({})
-    const [showStudentDropDown, setStudentDropDown] = useState<boolean>(false)
     const [styleStudentDropDown, setStudentDropDownStyle] = useState<React.CSSProperties>({ opacity: 0 })
     const [styleBelongItems, setStyleBelowItems] = useState<React.CSSProperties>({})
     const isSmall = useSelector((state: stateType) => state.isSmall)
     const isSideBarCounsellor = useSelector((state: stateType) => state.isSideBarCounsellor)
     const isShrinkSideBarCounsellor = useSelector((state: stateType) => state.isShrinkSideBarCounsellor)
+    const isStudentDropDownShow = useSelector((state: stateType) => state.isStudentDropDownShow)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const item = (useLocation().pathname)
@@ -46,20 +46,21 @@ function SideBar() {
     }
 
     const handlStudentDropDown = () => {
-        setStudentDropDown(!showStudentDropDown)
+        dispatch(showStudentDropDownAction(!isStudentDropDownShow))
+        localStorage.setItem('isStudentDropDownShow', `${!isStudentDropDownShow}`)
     }
 
     useLayoutEffect(() => {
         setStudentDropDownStyle({
-            opacity: showStudentDropDown ? 1 : 0,
+            opacity: isStudentDropDownShow ? 1 : 0,
             transition: 'all 0.3s ease-in-out',
-            transform: showStudentDropDown ? 'translateY(0%)' : 'translateY(-100%)',
+            transform: isStudentDropDownShow ? 'translateY(0%)' : 'translateY(-100%)',
         })
         setStyleBelowItems({
             transition: 'all 0.3s ease-in-out',
-            marginTop: showStudentDropDown ? '0px' : '-340px'
+            marginTop: isStudentDropDownShow ? '0px' : '-340px'
         })
-    }, [showStudentDropDown])
+    }, [isStudentDropDownShow])
 
     const handleSideBarItems = (event: React.MouseEvent<HTMLLIElement>) => {
         const text = !isShrinkSideBarCounsellor ? (event.currentTarget.querySelector('p') as HTMLParagraphElement)?.innerHTML.toLowerCase()
@@ -136,10 +137,10 @@ function SideBar() {
                     <SideBarItem color={item === '/counsellor/leaves' ? 'bg-gray-100' : ''} image={hub} text='Hub details' handleSideBarItems={handleSideBarItems} />
                 </div>
                 <div className='relative z-10 bg-white'>
-                    <SideBarItem showStudentDropDown={showStudentDropDown} color={showStudentDropDown ? 'bg-gray-100' : ''} image={studentsMore} text='Students' handleSideBarItems={handlStudentDropDown} />
+                    <SideBarItem showStudentDropDown={isStudentDropDownShow} image={studentsMore} text='Students' handleSideBarItems={handlStudentDropDown} />
                 </div>
                 <div style={styleStudentDropDown} className='flex flex-col border-b-2'>
-                    <SideBarItem color={item === '' ? 'bg-gray-100' : ''} image={students} text='Ongoing Students' handleSideBarItems={handleSideBarItems} />
+                    <SideBarItem color={item === '/counsellor/ongoingstudents' ? 'bg-gray-100' : ''} image={students} text='Ongoing Students' handleSideBarItems={handleSideBarItems} />
                     <SideBarItem color={item === '/counsellor/leetcode' ? 'bg-gray-100' : ''} image={held} text='Held Students' handleSideBarItems={handleSideBarItems} />
                     <SideBarItem color={item === '' ? 'bg-gray-100' : ''} image={critical} text='Critical Students' handleSideBarItems={handleSideBarItems} />
                     <SideBarItem color={item === '/counsellor/leetcode' ? 'bg-gray-100' : ''} image={quality} text='Quality Students' handleSideBarItems={handleSideBarItems} />

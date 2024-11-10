@@ -10,7 +10,8 @@ export interface stateType {
     isSideBarStudent: boolean,
     isShrinkSideBarStudent: boolean,
     isSideBarCounsellor: boolean,
-    isShrinkSideBarCounsellor: boolean
+    isShrinkSideBarCounsellor: boolean,
+    isStudentDropDownShow: boolean
 }
 
 // reducer function for student sideBarVisibility
@@ -46,6 +47,14 @@ const isShrinkSideBarCounsellor = (prevState: boolean = localStorage.getItem('is
 }
 
 
+// reducer function for student drop down in counsellor side
+const isStudentDropDownShow = (prevState: boolean = localStorage.getItem('isStudentDropDownShow') === "true" ? true : false, action: actionType) => {
+    if (action.type === 'showStudentDropDown') {
+        return action.payload;
+    }
+    return prevState;
+}
+
 // reducer function for resize
 const isSmall = (prevState: boolean = false, action: actionType) => {
     if (action.type === 'resize') {
@@ -60,7 +69,8 @@ const appReducer = combineReducers({
     isSideBarStudent,
     isShrinkSideBarStudent,
     isSideBarCounsellor,
-    isShrinkSideBarCounsellor
+    isShrinkSideBarCounsellor,
+    isStudentDropDownShow,
 })
 
 const store = createStore(appReducer);
@@ -99,6 +109,14 @@ function shrinkSideBarCounsellorAction(payload: boolean) {
     }
 }
 
+// action for student drop down in counsellor side
+function showStudentDropDownAction(payload: boolean) {
+    return {
+        type: 'showStudentDropDown',
+        payload: payload
+    }
+}
+
 // action for resize
 function resizeAction(payload: boolean) {
     return {
@@ -115,5 +133,6 @@ export {
     sideBarStudentAction,
     shrinkSideBarStudentAction,
     sideBarCounsellorAction,
-    shrinkSideBarCounsellorAction
+    shrinkSideBarCounsellorAction,
+    showStudentDropDownAction
 }

@@ -15,7 +15,7 @@ function SideBarItem({ image, text, handleSideBarItems, color, showStudentDropDo
     const isShrinkSideBarCounsellor = useSelector((state: stateType) => state.isShrinkSideBarCounsellor)
 
     return (
-        <li title={isShrinkSideBarCounsellor ? text : ''} onClick={handleSideBarItems} className={`${color === '' ? '' : color} hover:bg-gray-100 cursor-pointer`}>
+        <li title={isShrinkSideBarCounsellor ? text : ''} onClick={handleSideBarItems} className={`${color === '' ? '' : color} ${text==='Students'? '' : 'hover:bg-gray-100'} cursor-pointer`}>
             <div className={`flex items-center justify-between p-2 rounded-lg`}>
                 <div className='flex items-center'>
                     <img className='w-8' src={image} alt="" />
