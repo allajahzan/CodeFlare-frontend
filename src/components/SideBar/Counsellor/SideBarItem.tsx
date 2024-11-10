@@ -18,7 +18,7 @@ function SideBarItem({ image, text, handleSideBarItems, color, showStudentDropDo
         <li title={isShrinkSideBarCounsellor ? text : ''} onClick={handleSideBarItems} className={`${color === '' ? '' : color} hover:bg-gray-100 cursor-pointer`}>
             <div className={`flex items-center justify-between p-2 rounded-lg`}>
                 <div className='flex items-center'>
-                    <img style={{ width: '32px' }} src={image} alt="" />
+                    <img className='w-8' src={image} alt="" />
                     {!isShrinkSideBarCounsellor && <p style={{ fontSize: '15.2px' }} className='ml-5 font-extrabold tracking-wide text-nowrap'>{text}</p>}
                 </div>
                 {text === 'Students' && !isShrinkSideBarCounsellor && <img className='w-5' src={showStudentDropDown ? arrowUp : arrowDown} alt="" />}
