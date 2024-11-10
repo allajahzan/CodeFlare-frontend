@@ -3,7 +3,7 @@ import light from '../../assets/light.svg'
 import dark from '../../assets/dark.svg'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { sideBarAction, stateType } from '../../redux/store'
+import { sideBarStudentAction, stateType } from '../../redux/store'
 import menu from '../../assets/menu.svg'
 
 
@@ -16,9 +16,9 @@ function Navbar() {
     }
 
     const dispath = useDispatch()
-    const sideBar = useSelector((state: stateType) => state.isSideBar)
+    const sideBar = useSelector((state: stateType) => state.isSideBarStudent)
     const handleSideBar = () => {
-        dispath(sideBarAction(!sideBar))
+        dispath(sideBarStudentAction(!sideBar))
     }
 
     const isSmall = useSelector((state: stateType) => state.isSmall)

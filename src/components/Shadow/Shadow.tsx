@@ -3,12 +3,13 @@ import { stateType } from "../../redux/store"
 
 function Shadow() {
 
-    const isSideBar = useSelector((state: stateType) => state.isSideBar)
+    const isSideBarStudent = useSelector((state: stateType) => state.isSideBarStudent)
+    const isSideBarCounsellor = useSelector((state:stateType)=>state.isSideBarCounsellor)
     const isSmall = useSelector((state: stateType) => state.isSmall)
 
     return (
         <>
-            {isSideBar && isSmall && <div className='bg-black opacity-10 absolute z-30 top-0 left-0 h-screen w-screen'></div>}
+            {(isSideBarStudent || isSideBarCounsellor) && isSmall && <div className='bg-black bg-opacity-20 absolute z-30 top-0 left-0 h-screen w-screen'></div>}
         </>
     )
 }

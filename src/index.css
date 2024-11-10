@@ -10,7 +10,7 @@ body {
     /* font-family: 'Lato', sans-serif; */
     font-family: 'Comfortaa', sans-serif;
     background-color: white;
-    font-size: 14px;
+    font-size: 14.5px;
     transition: 'all 0.3s ease-in-out'
 }
 
@@ -27,7 +27,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #e1e1e1;
+    background: #e8e8e8;
     border-radius: 200px;
     border: 6px solid transparent;
     background-clip: padding-box;

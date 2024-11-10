@@ -78,9 +78,9 @@ function LeaveModal({ openModal, setOpenModal }: propsType) {
                             <DropDown datas={absenceTypes} selectedItem={selectedAbsenceType} setStateVariable1={setDropDown1} setStateVariable2={setDropDown2} setStateVariable3={setDropDown3} stateVariable={isDropDown1Open} handleFunction={onChangeSelect1} />
                             {selectedAbsenceType === 'Leave' ? <DropDown datas={leaveTypes} selectedItem={selectedLeaveType} setStateVariable1={setDropDown2} stateVariable={isDropDown2Open} handleFunction={onChangeSelect2} /> : ''}
                             {selectedAbsenceType === 'Partial Absence' ? <DropDown datas={partailAbsenceTypes} selectedItem={selectedPartialAbsenceType} setStateVariable1={setDropDown3} stateVariable={isDropDown3Open} handleFunction={onChangeSelect3} /> : ''}
-                            <input name="field4" className="p-2 sm:p-3 bg-transparent border-2 border-black border-opacity-20 font-medium rounded-lg outline-none cursor-pointer" type="date" required />
+                            <input name="field4" className="p-2 sm:p-3 bg-transparent border-2 border-black border-opacity-10 font-medium rounded-lg outline-none cursor-pointer" type="date" required />
                             <div className="relative w-full">
-                                <textarea id="reason" className="block p-2 sm:p-3 bg-transparent border-2 border-black border-opacity-20 font-medium rounded-lg outline-none w-full resize-none" rows={5} required></textarea>
+                                <textarea id="reason" className="block p-2 sm:p-3 bg-transparent border-2 border-black border-opacity-10 font-medium rounded-lg outline-none w-full resize-none" rows={5} required></textarea>
                                 <label htmlFor="reason" className="absolute -top-2 left-2 bg-white text-gray-500 text-xs font-extrabold px-2">Reason</label>
                             </div>
                             <div className="w-full flex gap-2 justify-center">

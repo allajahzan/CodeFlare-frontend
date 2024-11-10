@@ -9,11 +9,11 @@ import leetcode from '../../../assets/leetcode.svg'
 import user from '../../../assets/user.svg'
 import menu from '../../../assets/menu.svg'
 import close from '../../../assets/close.svg'
-import SideBarItem from '../SideBarItem'
+import SideBarItem from '../Student/SideBarItem'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useLayoutEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { stateType, resizeAction, sideBarAction, shrinkAction } from '../../../redux/store'
+import { stateType, resizeAction, sideBarStudentAction, shrinkSideBarStudentAction } from '../../../redux/store'
 import './SideBar.css'
 
 
@@ -21,25 +21,25 @@ function SideBar() {
 
     const [style, setStyle] = useState<React.CSSProperties>({})
     const isSmall = useSelector((state: stateType) => state.isSmall)
-    const isSideBar = useSelector((state: stateType) => state.isSideBar)
-    const isShrink = useSelector((state: stateType) => state.isShrink)
+    const isSideBarStudent = useSelector((state: stateType) => state.isSideBarStudent)
+    const isShrinkSideBarStudent = useSelector((state: stateType) => state.isShrinkSideBarStudent)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const item = (useLocation().pathname)
 
     const handleShrink = () => {
-        dispatch(shrinkAction(!isShrink))
-        localStorage.setItem("isSideBarShriked", `${!isShrink}`)
+        dispatch(shrinkSideBarStudentAction(!isShrinkSideBarStudent))
+        localStorage.setItem("isSideBarStudentShriked", `${!isShrinkSideBarStudent}`)
     }
 
     const handleSideBar = () => {
-        dispatch(shrinkAction(!isShrink))
-        localStorage.setItem('isSideBarShriked', `${!isShrink}`)
-        dispatch(sideBarAction(!isSideBar))
+        dispatch(shrinkSideBarStudentAction(!isShrinkSideBarStudent))
+        localStorage.setItem('isSideBarStudentShriked', `${!isShrinkSideBarStudent}`)
+        dispatch(sideBarStudentAction(!isSideBarStudent))
     }
 
     const handleSideBarItems = (event: React.MouseEvent<HTMLLIElement>) => {
-        const text = !isShrink ? (event.currentTarget.querySelector('p') as HTMLParagraphElement)?.innerHTML.toLowerCase()
+        const text = !isShrinkSideBarStudent ? (event.currentTarget.querySelector('p') as HTMLParagraphElement)?.innerHTML.toLowerCase()
             : event.currentTarget.title.toLowerCase()
 
         if (text) {
@@ -47,7 +47,7 @@ function SideBar() {
         }
 
         if (isSmall) {
-            dispatch(sideBarAction(!isSideBar));
+            dispatch(sideBarStudentAction(!isSideBarStudent));
         }
     }
 
@@ -57,7 +57,7 @@ function SideBar() {
                 dispatch(resizeAction(true))
             } else {
                 dispatch(resizeAction(false))
-                dispatch(sideBarAction(false))
+                dispatch(sideBarStudentAction(false))
             }
         };
 
@@ -72,42 +72,43 @@ function SideBar() {
         setStyle((prev) => {
             return {
                 ...prev,
-                width: isShrink ? '68px' : '250px'
+                width: isShrinkSideBarStudent ? '68px' : '250px'
             }
         })
-    }, [isShrink])
+    }, [isShrinkSideBarStudent])
 
     useLayoutEffect(() => {
         setStyle((prev) => {
             return {
                 ...prev,
-                width: isShrink ? '68px' : '250px',
+                width: isShrinkSideBarStudent ? '68px' : '250px',
                 transform: isSmall ? 'translateX(-100%)' : 'translateX(0%)',
                 opacity: 1,
                 transition: 'all 0.3s ease-in-out',
             }
         })
-    }, [isSmall, isShrink]);
+    }, [isSmall, isShrinkSideBarStudent]);
 
     useLayoutEffect(() => {
         setStyle((prev) => {
             return {
                 ...prev,
-                transform: isSideBar ? 'translateX(0%)' : isSmall ? 'translateX(-100%)' : 'translateX(0%)',
+                transform: isSideBarStudent ? 'translateX(0%)' : isSmall ? 'translateX(-100%)' : 'translateX(0%)',
                 opacity: 1,
                 transition: 'all 0.3s ease-in-out',
             }
         })
-    }, [isSideBar])
+    }, [isSideBarStudent])
 
     return (
         <div style={style} className={`h-full fixed top-0 left-0 flex flex-col justify-between ${isSmall ? 'bg-white shadow-xl z-30' : 'bg-white z-20'}`}>
-            <div style={{ paddingTop: '72px' }} className='overflow-auto overflow-x-hidden relative'>
-                <div className='p-5 pr-4 flex fixed top-0 w-full items-center justify-between border-b-2 border-opacity-5 border-black'>
-                    {/* <img className='w-32' src={logo} alt="" /> */}
-                    {!isShrink && <h1 className='text-2xl overflow-hidden'>LOGO</h1>}
-                    <img onClick={isSideBar && isSmall ? handleSideBar : handleShrink} className='w-8 cursor-pointer' src={isSideBar && isSmall ? close : menu} alt="" />
-                </div>
+            <div className='p-5 pr-4 flex fixed z-50 bg-white top-0 w-full items-center justify-between shadow-sm'>
+                {/* <img className='w-32' src={logo} alt="" /> */}
+                {!isShrinkSideBarStudent && <h1 className='text-2xl overflow-hidden'>LOGO</h1>}
+                <img onClick={isSideBarStudent && isSmall ? handleSideBar : handleShrink} className='w-8 cursor-pointer' src={isSideBarStudent && isSmall ? close : menu} alt="" />
+            </div>
+            <div style={{ marginTop: '72px' }} className='overflow-auto overflow-x-hidden relative'>
+
                 <SideBarItem color={item === '/student/dashboard' ? 'bg-gray-100' : ''} image={dashboard} text='Dashboard' handleSideBarItems={handleSideBarItems} />
                 <SideBarItem color={item === '/student/reviews' ? 'bg-gray-100' : ''} image={review} text='Reviews' handleSideBarItems={handleSideBarItems} />
                 <SideBarItem color={item === '' ? 'bg-gray-100' : ''} image={task} text='Tasks' handleSideBarItems={handleSideBarItems} />
@@ -117,11 +118,11 @@ function SideBar() {
                 <SideBarItem color={item === '/student/manifest' ? 'bg-gray-100' : ''} image={manifest} text='Manifest' handleSideBarItems={handleSideBarItems} />
                 <SideBarItem color={item === '' ? 'bg-gray-100' : ''} image={logout} text='Logout' />
             </div>
-            <div title={isShrink ? `Ahsan allaj pk MERNStack` : ''} style={isShrink ? { padding: '17.4px 18px' } : { padding: '10px 18px' }} className='flex items-center bg-gray-100 overflow-hidden'>
+            <div title={isShrinkSideBarStudent ? `Ahsan allaj pk MERNStack` : ''} style={isShrinkSideBarStudent ? { padding: '25.3px 18px' } : { padding: '18px 18px' }} className='flex fixed z-50 bottom-0  w-full items-center bg-gray-100 overflow-hidden'>
                 <img className='w-8' src={user} alt="" />
                 <div className='ml-5 flex flex-col gap-1 text-nowrap'>
-                    {!isShrink && <p style={{ fontSize: '15.2px' }} className='font-extrabold'>Ahsan allaj pk</p>}
-                    {!isShrink && <p style={{ fontSize: '13.2px' }} className='font-extrabold'>MERN Stack</p>}
+                    {!isShrinkSideBarStudent && <p style={{ fontSize: '15.2px' }} className='font-extrabold'>Ahsan allaj pk</p>}
+                    {!isShrinkSideBarStudent && <p style={{ fontSize: '13.2px' }} className='font-extrabold'>MERN Stack</p>}
                 </div>
             </div>
         </div>

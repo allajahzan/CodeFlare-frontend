@@ -20,7 +20,7 @@ function Login() {
                 <form action="" className='w-full sm:w-[400px] relative flex flex-col space-y-4 transition-all duration-300 ease-in-out'>
                     <div className='flex relative items-center'>
                         <img className='absolute left-3 top-2.5 w-7' src={email} alt="" />
-                        <input type="text" placeholder='Email ID' className='font-medium p-3 pl-14 px-4 w-full rounded-lg border-2 border-black border-opacity-20 outline-none' />
+                        <input type="text" placeholder='Email ID' className='font-medium p-3 pl-14 px-4 w-full rounded-lg border-2 border-black border-opacity-10 outline-none' />
                     </div>
                     <button className='w-full p-3 px-8 rounded-md bg-black text-white shadow-lg font-extrabold tracking-wider uppercase'>Login</button>
                 </form>

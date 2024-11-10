@@ -12,11 +12,13 @@ import manifest from '../../../assets/manifest.svg'
 import logout from '../../../assets/logout.svg'
 import invoice from '../../../assets/invoice.svg'
 import user from '../../../assets/user.svg'
-import SideBarItem from '../SideBarItem'
+import menu from '../../../assets/menu.svg'
+import close from '../../../assets/close.svg'
+import SideBarItem from '../Counsellor/SideBarItem'
 import { useLocation, useNavigate } from 'react-router-dom'
 import React, { useLayoutEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { stateType, resizeAction, sideBarAction } from '../../../redux/store'
+import { stateType, resizeAction, shrinkSideBarCounsellorAction, sideBarCounsellorAction } from '../../../redux/store'
 import './SideBar.css'
 
 function SideBar() {
@@ -26,35 +28,30 @@ function SideBar() {
     const [styleStudentDropDown, setStudentDropDownStyle] = useState<React.CSSProperties>({ opacity: 0 })
     const [styleBelongItems, setStyleBelowItems] = useState<React.CSSProperties>({})
     const isSmall = useSelector((state: stateType) => state.isSmall)
-    const isSideBar = useSelector((state: stateType) => state.isSideBar)
+    const isSideBarCounsellor = useSelector((state: stateType) => state.isSideBarCounsellor)
+    const isShrinkSideBarCounsellor = useSelector((state: stateType) => state.isShrinkSideBarCounsellor)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const item = (useLocation().pathname)
 
-    // handle side bar item navigation
-    const handleSideBarItems = (event: React.MouseEvent<HTMLDivElement>) => {
-        const text = (event.currentTarget.querySelector('p') as HTMLParagraphElement)?.innerHTML.toLowerCase();
-
-        if (text) {
-            if (text.split(' ').length == 2)
-                navigate(`/counsellor/${(text.split(' ')[0] + text.split(' ')[1]).toLowerCase()}`);
-            else
-                navigate(`/counsellor/${text}`)
-        }
-
-        if (isSmall) {
-            dispatch(sideBarAction(!isSideBar));
-        }
+    const handleShrink = () => {
+        dispatch(shrinkSideBarCounsellorAction(!isShrinkSideBarCounsellor))
+        localStorage.setItem("isSideBarCounsellorShriked", `${!isShrinkSideBarCounsellor}`)
     }
 
-    // handle student drop down
+    const handleSideBar = () => {
+        dispatch(shrinkSideBarCounsellorAction(!isShrinkSideBarCounsellor))
+        localStorage.setItem('isSideBarCounsellorShriked', `${!isShrinkSideBarCounsellor}`)
+        dispatch(sideBarCounsellorAction(!isSideBarCounsellor))
+    }
+
     const handlStudentDropDown = () => {
         setStudentDropDown(!showStudentDropDown)
     }
 
     useLayoutEffect(() => {
         setStudentDropDownStyle({
-            opacity: 1,
+            opacity: showStudentDropDown ? 1 : 0,
             transition: 'all 0.3s ease-in-out',
             transform: showStudentDropDown ? 'translateY(0%)' : 'translateY(-100%)',
         })
@@ -64,16 +61,26 @@ function SideBar() {
         })
     }, [showStudentDropDown])
 
+    const handleSideBarItems = (event: React.MouseEvent<HTMLLIElement>) => {
+        const text = !isShrinkSideBarCounsellor ? (event.currentTarget.querySelector('p') as HTMLParagraphElement)?.innerHTML.toLowerCase()
+            : event.currentTarget.title.toLowerCase()
 
-    // check screen size
+        if (text) {
+            navigate(`/counsellor/${text.split(' ').join('')}`);
+        }
+
+        if (isSmall) {
+            dispatch(sideBarCounsellorAction(!isSideBarCounsellor));
+        }
+    }
+
     useLayoutEffect(() => {
         const checkScreenSize = () => {
-            if (window.innerWidth < 1130) {
-                localStorage.setItem('isSmall', 'true')
+            if (window.innerWidth < 899) {
                 dispatch(resizeAction(true))
             } else {
-                localStorage.setItem('isSmall', 'false')
                 dispatch(resizeAction(false))
+                dispatch(sideBarCounsellorAction(false))
             }
         };
 
@@ -84,33 +91,46 @@ function SideBar() {
         };
     }, [])
 
-    // change side bar style
     useLayoutEffect(() => {
         setStyle((prev) => {
             return {
                 ...prev,
+                width: isShrinkSideBarCounsellor ? '84px' : '250px'
+            }
+        })
+    }, [isShrinkSideBarCounsellor])
+
+    useLayoutEffect(() => {
+        setStyle((prev) => {
+            return {
+                ...prev,
+                width: isShrinkSideBarCounsellor ? '84px' : '250px',
                 transform: isSmall ? 'translateX(-100%)' : 'translateX(0%)',
                 opacity: 1,
                 transition: 'all 0.3s ease-in-out',
             }
         })
-    }, [isSmall]);
+    }, [isSmall, isShrinkSideBarCounsellor]);
 
-    // show side bar 
     useLayoutEffect(() => {
         setStyle((prev) => {
             return {
                 ...prev,
-                transform: isSideBar ? 'translateX(0%)' : isSmall ? 'translateX(-100%)' : 'translateX(0%)',
+                transform: isSideBarCounsellor ? 'translateX(0%)' : isSmall ? 'translateX(-100%)' : 'translateX(0%)',
                 opacity: 1,
                 transition: 'all 0.3s ease-in-out',
             }
         })
-    }, [isSideBar])
+    }, [isSideBarCounsellor])
 
     return (
-        <div style={style} className='w-[300px] h-full fixed z-20 left-0 shadow-xl flex flex-col justify-between sidebar bg-white'>
-            <div className='overflow-auto overflow-x-hidden relative h-full'>
+        <div style={style} className={`h-full fixed top-0 left-0 flex flex-col justify-between ${isSmall ? 'bg-white shadow-xl z-30' : 'bg-white z-20'}`}>
+            <div className='p-5 pr-4 flex fixed z-50 bg-white top-0 w-full items-center justify-between shadow-sm'>
+                {/* <img className='w-32' src={logo} alt="" /> */}
+                {!isShrinkSideBarCounsellor && <h1 className='text-2xl overflow-hidden'>LOGO</h1>}
+                <img onClick={isSideBarCounsellor && isSmall ? handleSideBar : handleShrink} className='w-8 cursor-pointer' src={isSideBarCounsellor && isSmall ? close : menu} alt="" />
+            </div>
+            <div style={{ marginTop: '72px', marginBottom: '82px' }} className='overflow-auto overflow-x-hidden relative'>
                 <div className='flex flex-col bg-white relative z-10 border-b-2'>
                     <SideBarItem color={item === '/counsellor/dashboard' ? 'bg-gray-100' : ''} image={dashboard} text='Dashboard' handleSideBarItems={handleSideBarItems} />
                     <SideBarItem color={item === '/counsellor/leaves' ? 'bg-gray-100' : ''} image={hub} text='Hub details' handleSideBarItems={handleSideBarItems} />
@@ -134,11 +154,11 @@ function SideBar() {
                     <SideBarItem color={item === '' ? 'bg-gray-100' : ''} image={logout} text='Logout' />
                 </div>
             </div>
-            <div className='flex p-5 bg-gray-100'>
+            <div title={isShrinkSideBarCounsellor ? `Ahsan allaj pk MERNStack` : ''} style={isShrinkSideBarCounsellor ? { padding: '25px 18px' } : { padding: '18px 18px' }} className='flex fixed z-50 bottom-0  w-full items-center bg-gray-100 overflow-hidden'>
                 <img className='w-8' src={user} alt="" />
-                <div className='ml-5'>
-                    <p style={{ fontSize: '15.5px' }} className='font-bold'>Vidhul</p>
-                    <p style={{ fontSize: '15.5px' }} className='font-bold'>Counsellor</p>
+                <div className='ml-5 flex flex-col gap-1 text-nowrap'>
+                    {!isShrinkSideBarCounsellor && <p style={{ fontSize: '15.2px' }} className='font-extrabold'>Ahsan allaj pk</p>}
+                    {!isShrinkSideBarCounsellor && <p style={{ fontSize: '13.2px' }} className='font-extrabold'>MERN Stack</p>}
                 </div>
             </div>
         </div>

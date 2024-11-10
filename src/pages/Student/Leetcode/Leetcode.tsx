@@ -1,42 +1,47 @@
-import Navbar from '../../../components/Navbar/Navbar'
 import SideBar from '../../../components/SideBar/Student/SideBar'
 import DataTable from '../../../components/Table/DataTable/DataTable'
 import leetcode from '../../../assets/leetcode.svg'
 import { useLayoutEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { stateType } from '../../../redux/store'
+import ContentHeadingInSmallSize from '../../../components/Headings/Student/ContentHeadingInSmallSize'
+import ContentHeading from '../../../components/Headings/ContentHeading'
+import Shadow from '../../../components/Shadow/Shadow'
 
 function LeetCode() {
 
-    const [style, setStyle] = useState<React.CSSProperties>({
-        padding: '20px',
-        paddingTop: '96px',
-        transition: 'all 0.3s ease-in-out',
-    });
-
+    const [style, setStyle] = useState<React.CSSProperties>({ transition: 'all 0.3s ease-in-out' });
     const isSmall = useSelector((state: stateType) => state.isSmall);
+    const isShrinkSideBarStudent = useSelector((state: stateType) => state.isShrinkSideBarStudent)
 
     useLayoutEffect(() => {
         setStyle(prevStyle => ({
             ...prevStyle,
-            paddingLeft: isSmall ? '20px' : '320px'
+            paddingTop: isShrinkSideBarStudent ? isSmall ? '0px' : '0px' : isSmall ? '0px' : '20px',
+            paddingLeft: isShrinkSideBarStudent ? isSmall ? '0px' : '68px' : isSmall ? '0px' : '250px'
         }));
-    }, [isSmall]);
+    }, [isShrinkSideBarStudent, isSmall])
 
     return (
         <div>
-            <Navbar />
+            <Shadow />
             <div className='flex h-[100vh]'>
                 <SideBar />
-                <div style={style} className='w-full flex flex-col gap-y-4'>
-                    <div className='flex items-start'>
-                        <img className='w-8' src={leetcode} alt="" />
-                        <p className='text-black font-bold text-lg tracking-wider ml-3 uppercase underline underline-offset-4'>Leetcode</p>
+                <div style={style} className='w-full'>
+                    <div style={{ borderWidth: isSmall ? '0px' : '6px 0px 0px 6px', boxShadow: '0.01rem 0.05rem 1rem 0.2rem #eeeeee', backgroundColor: '#f5f5f5', padding: '20px', paddingTop: isSmall ? '14px' : '20px' }}
+                        className='w-full h-full flex flex-col gap-y-4 border-white rounded-tl-lg  relative z-20'>
+
+                        <ContentHeadingInSmallSize />
+
+                        <div className='flex justify-between items-start relative'>
+                            <ContentHeading image={leetcode} text='Leetcode' />
+                        </div>
+
+                        <DataTable />
+
                     </div>
-                    <DataTable />
                 </div>
             </div>
-
         </div>
     )
 }
