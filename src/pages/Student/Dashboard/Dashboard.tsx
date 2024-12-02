@@ -22,7 +22,7 @@ const containerStyles: React.CSSProperties = {
 };
 
 function Dashboard() {
-  const [style, setStyle] = useState<React.CSSProperties>({ transition: "all 0.4s ease-in-out" });
+  const [style, setStyle] = useState<React.CSSProperties>({ transition: "all 0.3s ease-in-out" });
   const isShrinkSideBarStudent = useSelector((state: stateType) => state.isShrinkSideBarStudent);
   const isSmall = useSelector((state: stateType) => state.isSmall);
 
