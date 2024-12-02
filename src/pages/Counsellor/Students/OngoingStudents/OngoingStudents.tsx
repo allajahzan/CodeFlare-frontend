@@ -1,5 +1,5 @@
 import SideBar from "../../../../components/SideBar/Counsellor/SideBar"
-import students from '../../../../assets/students.svg'
+import students from '../../../../assets/icons/students.svg'
 import { useLayoutEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { stateType } from "../../../../redux/store";
@@ -45,7 +45,7 @@ function OngoingStudents() {
         setStyle(prevStyle => ({
             ...prevStyle,
             paddingTop: isShrinkSideBarCounsellor ? isSmall ? '70px' : '0px' : isSmall ? '70px' : '20px',
-            paddingLeft: isShrinkSideBarCounsellor ? isSmall ? '20px' : '68px' : isSmall ? '20px' : '250px'
+            paddingLeft: isShrinkSideBarCounsellor ? isSmall ? '20px' : '64px' : isSmall ? '20px' : '250px'
         }));
     }, [isShrinkSideBarCounsellor, isSmall])
 

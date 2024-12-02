@@ -1,10 +1,10 @@
-import logo from '../../assets/logo.png'
-import light from '../../assets/light.svg'
-import dark from '../../assets/dark.svg'
+import logo from '../../assets/images/logo.png'
+import light from '../../assets/icons/light.svg'
+import dark from '../../assets/icons/dark.svg'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { sideBarStudentAction, stateType } from '../../redux/store'
-import menu from '../../assets/menu.svg'
+import menu from '../../assets/icons/menu.svg'
 
 
 function Navbar() {

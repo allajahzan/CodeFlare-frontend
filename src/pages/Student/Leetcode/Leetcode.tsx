@@ -1,6 +1,6 @@
 import SideBar from '../../../components/SideBar/Student/SideBar'
 import DataTable from '../../../components/Table/DataTable/DataTable'
-import leetcode from '../../../assets/leetcode.svg'
+import leetcode from '../../../assets/icons/leetcode.svg'
 import { useLayoutEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { stateType } from '../../../redux/store'

@@ -1,5 +1,5 @@
 import SideBar from '../../../components/SideBar/Student/SideBar'
-import invoice from '../../../assets/invoice.svg'
+import invoice from '../../../assets/icons/invoice.svg'
 import InvoiceTable from '../../../components/Table/InvoiceTable/InvoiceTable'
 import { useLayoutEffect, useState } from 'react'
 import { useSelector } from 'react-redux'

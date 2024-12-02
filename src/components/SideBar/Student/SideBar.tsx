@@ -1,132 +1,176 @@
-import dashboard from '../../../assets/dashboard.svg'
-import leave from '../../../assets/leave.svg'
-import review from '../../../assets/review.svg'
-import task from '../../../assets/task.svg'
-import manifest from '../../../assets/manifest.svg'
-import logout from '../../../assets/logout.svg'
-import invoice from '../../../assets/invoice.svg'
-import leetcode from '../../../assets/leetcode.svg'
-import user from '../../../assets/user.svg'
-import menu from '../../../assets/menu.svg'
-import close from '../../../assets/close.svg'
-import SideBarItem from '../Student/SideBarItem'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useLayoutEffect, useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { stateType, resizeAction, sideBarStudentAction, shrinkSideBarStudentAction } from '../../../redux/store'
-import './SideBar.css'
-
+import {
+    dashboard,
+    review,
+    task,
+    invoice,
+    leave,
+    leetcode,
+    user,
+    manifest,
+    close,
+    logout,
+    menu,
+} from "../../../assets/icons";
+import SideBarItem from "../Student/SideBarItem";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useLayoutEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+    stateType,
+    resizeAction,
+    sideBarStudentAction,
+    shrinkSideBarStudentAction,
+} from "../../../redux/store";
+import "./SideBar.css";
 
 function SideBar() {
-
-    const [style, setStyle] = useState<React.CSSProperties>({})
-    const isSmall = useSelector((state: stateType) => state.isSmall)
-    const isSideBarStudent = useSelector((state: stateType) => state.isSideBarStudent)
-    const isShrinkSideBarStudent = useSelector((state: stateType) => state.isShrinkSideBarStudent)
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const item = (useLocation().pathname)
+    const [style, setStyle] = useState<React.CSSProperties>({});
+    const isSmall = useSelector((state: stateType) => state.isSmall);
+    const isSideBarStudent = useSelector(
+        (state: stateType) => state.isSideBarStudent
+    );
+    const isShrinkSideBarStudent = useSelector(
+        (state: stateType) => state.isShrinkSideBarStudent
+    );
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const currentPath = useLocation().pathname;
 
     const handleShrink = () => {
-        dispatch(shrinkSideBarStudentAction(!isShrinkSideBarStudent))
-        localStorage.setItem("isSideBarStudentShriked", `${!isShrinkSideBarStudent}`)
-    }
+        const newShrinkState = !isShrinkSideBarStudent;
+        dispatch(shrinkSideBarStudentAction(newShrinkState));
+        localStorage.setItem("isSideBarStudentShriked", String(newShrinkState));
+    };
 
-    const handleSideBar = () => {
-        dispatch(shrinkSideBarStudentAction(!isShrinkSideBarStudent))
-        localStorage.setItem('isSideBarStudentShriked', `${!isShrinkSideBarStudent}`)
-        dispatch(sideBarStudentAction(!isSideBarStudent))
-    }
+    const handleSideBarToggle = () => {
+        dispatch(sideBarStudentAction(!isSideBarStudent));
+    };
 
-    const handleSideBarItems = (event: React.MouseEvent<HTMLLIElement>) => {
-        const text = !isShrinkSideBarStudent ? (event.currentTarget.querySelector('p') as HTMLParagraphElement)?.innerHTML.toLowerCase()
-            : event.currentTarget.title.toLowerCase()
+    const handleSideBarItemClick = (event: React.MouseEvent<HTMLLIElement>) => {
+        const text = !isShrinkSideBarStudent
+            ? (
+                event.currentTarget.querySelector("p") as HTMLParagraphElement
+            )?.innerText.toLowerCase()
+            : event.currentTarget.title.toLowerCase();
 
         if (text) {
             navigate(`/student/${text}`);
         }
 
         if (isSmall) {
-            dispatch(sideBarStudentAction(!isSideBarStudent));
+            dispatch(sideBarStudentAction(false));
         }
-    }
+    };
 
     useLayoutEffect(() => {
-        const checkScreenSize = () => {
+        const updateScreenSize = () => {
             if (window.innerWidth < 899) {
-                dispatch(resizeAction(true))
+                dispatch(resizeAction(true));
             } else {
-                dispatch(resizeAction(false))
-                dispatch(sideBarStudentAction(false))
+                dispatch(resizeAction(false));
+                dispatch(sideBarStudentAction(false));
             }
         };
 
-        checkScreenSize()
-        window.addEventListener('resize', checkScreenSize)
-        return () => {
-            window.removeEventListener('resize', checkScreenSize);
-        };
-    }, [])
+        updateScreenSize();
+        window.addEventListener("resize", updateScreenSize);
+        return () => window.removeEventListener("resize", updateScreenSize);
+    }, [dispatch]);
 
     useLayoutEffect(() => {
-        setStyle((prev) => {
-            return {
-                ...prev,
-                width: isShrinkSideBarStudent ? '68px' : '250px'
-            }
-        })
-    }, [isShrinkSideBarStudent])
+        const width = isShrinkSideBarStudent ? "64px" : "220px";
+        const transform = isSmall ? "translateX(-100%)" : "translateX(0%)";
+
+        setStyle({
+            width,
+            transform,
+            opacity: 1,
+            transition: "all 0.3s ease-in-out",
+        });
+    }, [isShrinkSideBarStudent, isSmall]);
 
     useLayoutEffect(() => {
-        setStyle((prev) => {
-            return {
-                ...prev,
-                width: isShrinkSideBarStudent ? '68px' : '250px',
-                transform: isSmall ? 'translateX(-100%)' : 'translateX(0%)',
-                opacity: 1,
-                transition: 'all 0.3s ease-in-out',
-            }
-        })
-    }, [isSmall, isShrinkSideBarStudent]);
+        const transform = isSideBarStudent
+            ? "translateX(0%)"
+            : isSmall
+                ? "translateX(-100%)"
+                : "translateX(0%)";
 
-    useLayoutEffect(() => {
-        setStyle((prev) => {
-            return {
-                ...prev,
-                transform: isSideBarStudent ? 'translateX(0%)' : isSmall ? 'translateX(-100%)' : 'translateX(0%)',
-                opacity: 1,
-                transition: 'all 0.3s ease-in-out',
-            }
-        })
-    }, [isSideBarStudent])
+        setStyle((prev) => ({
+            ...prev,
+            transform,
+        }));
+    }, [isSideBarStudent, isSmall]);
+
+    const sideBarItems = [
+        { path: "/student/dashboard", icon: dashboard, label: "Dashboard" },
+        { path: "/student/reviews", icon: review, label: "Reviews" },
+        { path: "/student/tasks", icon: task, label: "Tasks" },
+        { path: "/student/leetcode", icon: leetcode, label: "Leetcode" },
+        { path: "/student/leaves", icon: leave, label: "Leaves" },
+        { path: "/student/invoice", icon: invoice, label: "Invoice" },
+        { path: "/student/manifest", icon: manifest, label: "Manifest" },
+        { path: "", icon: logout, label: "Logout" },
+    ];
 
     return (
-        <div style={style} className={`h-full fixed top-0 left-0 flex flex-col justify-between ${isSmall ? 'bg-white shadow-xl z-30' : 'bg-white z-20'}`}>
-            <div className='p-5 pr-4 flex fixed z-50 bg-white top-0 w-full items-center justify-between'>
-                {/* <img className='w-32' src={logo} alt="" /> */}
-                {!isShrinkSideBarStudent && <h1 className='text-xl overflow-hidden font-extrabold'>BootCamp</h1>}
-                <img onClick={isSideBarStudent && isSmall ? handleSideBar : handleShrink} className='w-8 cursor-pointer' src={isSideBarStudent && isSmall ? close : menu} alt="" />
+        <div
+            style={style}
+            className={`h-full fixed top-0 left-0 flex flex-col justify-between ${isSmall ? "bg-white shadow-xl z-30" : "bg-white z-20"
+                }`}
+        >
+            {/* Header Section */}
+            <div className="p-5 pr-4 flex fixed z-50 bg-white top-0 w-full items-center justify-between">
+                {!isShrinkSideBarStudent && (
+                    <h1 className="text-xl overflow-hidden font-extrabold">BootCamp</h1>
+                )}
+                <img
+                    onClick={
+                        isSideBarStudent && isSmall ? handleSideBarToggle : handleShrink
+                    }
+                    className="cursor-pointer"
+                    src={isSideBarStudent && isSmall ? close : menu}
+                    alt="Menu"
+                    style={{ width: "28px" }}
+                />
             </div>
-            <div style={{ marginTop: '72px', marginBottom: '82px' }} className='overflow-auto overflow-x-hidden relative'>
 
-                <SideBarItem color={item === '/student/dashboard' ? 'bg-gray-100' : ''} image={dashboard} text='Dashboard' handleSideBarItems={handleSideBarItems} />
-                <SideBarItem color={item === '/student/reviews' ? 'bg-gray-100' : ''} image={review} text='Reviews' handleSideBarItems={handleSideBarItems} />
-                <SideBarItem color={item === '' ? 'bg-gray-100' : ''} image={task} text='Tasks' handleSideBarItems={handleSideBarItems} />
-                <SideBarItem color={item === '/student/leetcode' ? 'bg-gray-100' : ''} image={leetcode} text='Leetcode' handleSideBarItems={handleSideBarItems} />
-                <SideBarItem color={item === '/student/leaves' ? 'bg-gray-100' : ''} image={leave} text='Leaves' handleSideBarItems={handleSideBarItems} />
-                <SideBarItem color={item === '/student/invoice' ? 'bg-gray-100' : ''} image={invoice} text='Invoice' handleSideBarItems={handleSideBarItems} />
-                <SideBarItem color={item === '/student/manifest' ? 'bg-gray-100' : ''} image={manifest} text='Manifest' handleSideBarItems={handleSideBarItems} />
-                <SideBarItem color={item === '' ? 'bg-gray-100' : ''} image={logout} text='Logout' />
+            {/* SideBar Items Section */}
+            <div
+                style={{ marginTop: "69px", marginBottom: "80px" }}
+                className="overflow-auto overflow-x-hidden relative"
+            >
+                {sideBarItems.map((item) => (
+                    <SideBarItem
+                        key={item.label}
+                        color={currentPath === item.path ? "bg-gray-100" : ""}
+                        image={item.icon}
+                        text={item.label}
+                        handleSideBarItems={handleSideBarItemClick}
+                    />
+                ))}
             </div>
-            <div title={isShrinkSideBarStudent ? `Ahsan allaj pk MERNStack` : ''} style={isShrinkSideBarStudent ? { padding: '25.3px 18px' } : { padding: '18px 18px' }} className='flex fixed z-50 bottom-0 w-full items-center bg-white overflow-hidden'>
-                <img className='w-8' src={user} alt="" />
-                <div className='ml-5 flex flex-col gap-1 text-nowrap'>
-                    {!isShrinkSideBarStudent && <p style={{ fontSize: '15.2px' }} className='font-extrabold'>Ahsan allaj pk</p>}
-                    {!isShrinkSideBarStudent && <p style={{ fontSize: '13.2px' }} className='font-extrabold'>MERN Stack</p>}
-                </div>
+
+            {/* Footer Section */}
+            <div
+                title={isShrinkSideBarStudent ? `Ahsan allaj pk MERNStack` : ""}
+                style={{
+                    padding: isShrinkSideBarStudent ? "27.2px 18px" : "18px 18px",
+                }}
+                className="flex fixed z-50 bottom-0 w-full items-center bg-white overflow-hidden"
+            >
+                <img src={user} alt="User" style={{ width: "28px" }} />
+                {!isShrinkSideBarStudent && (
+                    <div className="ml-5 flex flex-col gap-1">
+                        <p className="font-extrabold">Ahsan allaj pk</p>
+                        <p className="font-extrabold" style={{ fontSize: "13.2px" }}>
+                            MERN Stack
+                        </p>
+                    </div>
+                )}
             </div>
         </div>
-    )
+    );
 }
 
-export default SideBar
+export default SideBar;

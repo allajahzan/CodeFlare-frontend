@@ -10,8 +10,15 @@ body {
     /* font-family: 'Lato', sans-serif; */
     font-family: 'Comfortaa', sans-serif;
     background-color: white;
-    font-size: 14.5px;
     transition: 'all 0.3s ease-in-out'
+}
+
+p{
+    font-size: 14.5px;
+}
+
+h1 {
+    font-size: 16.5px;
 }
 
 ::-webkit-scrollbar {

@@ -1,6 +1,6 @@
 import SideBar from '../../../components/SideBar/Student/SideBar'
 import DataTable from '../../../components/Table/DataTable/DataTable'
-import review from '../../../assets/review.svg'
+import review from '../../../assets/icons/review.svg'
 import { useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { stateType } from '../../../redux/store';

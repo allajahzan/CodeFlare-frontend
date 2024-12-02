@@ -1,5 +1,5 @@
-import downArrow from '../../../assets/arrowDown.svg'
-import upArrow from '../../../assets/arrowUp.svg'
+import downArrow from '../../../assets/icons/arrowDown.svg'
+import upArrow from '../../../assets/icons/arrowUp.svg'
 
 interface propType {
     stateVariable: boolean,

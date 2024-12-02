@@ -1,9 +1,8 @@
 import SideBar from "../../../components/SideBar/Counsellor/SideBar"
-import dashboard from '../../../assets/dashboard.svg'
+import dashboard from '../../../assets/icons/dashboard.svg'
 import { useSelector } from "react-redux";
 import { useLayoutEffect, useState } from "react";
 import { stateType } from "../../../redux/store";
-// import CountCard from "../../../components/Cards/Counseller/CountCard"
 import Shadow from "../../../components/Shadow/Shadow";
 import ContentHeadingInSmallSize from "../../../components/Headings/Counsellor/ContentHeadingInSmallSize";
 import ContentHeading from "../../../components/Headings/ContentHeading";
@@ -18,7 +17,7 @@ function Dashboard() {
     setStyle(prevStyle => ({
       ...prevStyle,
       paddingTop: isShrinkSideBarCounsellor ? isSmall ? '70px' : '0px' : isSmall ? '70px' : '20px',
-      paddingLeft: isShrinkSideBarCounsellor ? isSmall ? '20px' : '68px' : isSmall ? '20px' : '250px'
+      paddingLeft: isShrinkSideBarCounsellor ? isSmall ? '20px' : '64px' : isSmall ? '20px' : '250px'
     }));
   }, [isShrinkSideBarCounsellor, isSmall])
 

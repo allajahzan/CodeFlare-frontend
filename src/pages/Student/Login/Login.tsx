@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
-// import logo from '../../../assets/logo.png'
-import email from '../../../assets/email.svg'
-// import copyright from '../../../assets/copyright.svg'
+// import logo from '../../../assets/icons/logo.png'
+import email from '../../../assets/icons/email.svg'
+// import copyright from '../../../assets/icons/copyright.svg'
 
 function Login() {
 

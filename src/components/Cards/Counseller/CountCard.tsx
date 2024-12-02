@@ -1,4 +1,4 @@
-import student from '../../../assets/studentsMore.svg'
+import student from '../../../assets/icons/studentsMore.svg'
 
 interface propType {
     text: string,

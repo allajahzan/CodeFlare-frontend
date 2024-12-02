@@ -1,9 +1,9 @@
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { shrinkSideBarCounsellorAction, sideBarCounsellorAction, stateType } from "../../../redux/store"
-import menu from '../../../assets/menu.svg'
-import light from '../../../assets/light.svg'
-import dark from '../../../assets/dark.svg'
+import menu from '../../../assets/icons/menu.svg'
+import light from '../../../assets/icons/light.svg'
+import dark from '../../../assets/icons/dark.svg'
 
 function ContentHeadingInSmallSize() {
 

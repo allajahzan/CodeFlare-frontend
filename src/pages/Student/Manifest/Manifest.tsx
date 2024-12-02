@@ -1,6 +1,6 @@
 import SideBar from '../../../components/SideBar/Student/SideBar'
-import manifest from '../../../assets/manifest.svg'
-import user from '../../../assets/allaj.jpeg'
+import manifest from '../../../assets/icons/manifest.svg'
+import user from '../../../assets/images/allaj.jpeg'
 import TextField from '../../../components/TextField/TextField'
 import { useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
