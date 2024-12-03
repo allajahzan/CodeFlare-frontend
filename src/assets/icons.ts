@@ -8,7 +8,7 @@ import quality from '../assets/icons/qualityStudents.svg';
 import leave from '../assets/icons/leave.svg';
 import review from '../assets/icons/review.svg';
 import fumigation from '../assets/icons/fumigation.svg';
-import manifest from '../assets/icons/manifest.svg';
+import manifest from '../assets/icons/manifest1.svg';
 import logout from '../assets/icons/logout.svg';
 import invoice from '../assets/icons/invoice.svg';
 import user from '../assets/icons/user.svg';

@@ -1,16 +1,3 @@
-import {
-    dashboard,
-    review,
-    task,
-    invoice,
-    leave,
-    leetcode,
-    user,
-    manifest,
-    close,
-    logout,
-    menu,
-} from "../../../assets/icons";
 import SideBarItem from "../Student/SideBarItem";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useLayoutEffect, useState } from "react";
@@ -22,6 +9,19 @@ import {
     shrinkSideBarStudentAction,
 } from "../../../redux/store";
 import "./SideBar.css";
+import {
+    CalendarCheck2,
+    CodeXml,
+    CreditCard,
+    FileUser,
+    IdCard,
+    LayoutDashboard,
+    ListTodo,
+    PanelRightClose,
+    PanelRightOpen,
+    UserRound,
+    X,
+} from "lucide-react";
 
 function SideBar() {
     const [style, setStyle] = useState<React.CSSProperties>({});
@@ -78,7 +78,7 @@ function SideBar() {
     }, [dispatch]);
 
     useLayoutEffect(() => {
-        const width = isShrinkSideBarStudent ? "64px" : "220px";
+        const width = isShrinkSideBarStudent ? "64px" : "240px";
         const transform = isSmall ? "translateX(-100%)" : "translateX(0%)";
 
         setStyle({
@@ -103,14 +103,17 @@ function SideBar() {
     }, [isSideBarStudent, isSmall]);
 
     const sideBarItems = [
-        { path: "/student/dashboard", icon: dashboard, label: "Dashboard" },
-        { path: "/student/reviews", icon: review, label: "Reviews" },
-        { path: "/student/tasks", icon: task, label: "Tasks" },
-        { path: "/student/leetcode", icon: leetcode, label: "Leetcode" },
-        { path: "/student/leaves", icon: leave, label: "Leaves" },
-        { path: "/student/invoice", icon: invoice, label: "Invoice" },
-        { path: "/student/manifest", icon: manifest, label: "Manifest" },
-        { path: "", icon: logout, label: "Logout" },
+        {
+            path: "/student/dashboard",
+            icon: <LayoutDashboard />,
+            label: "Dashboard",
+        },
+        { path: "/student/tasks", icon: <ListTodo />, label: "Tasks" },
+        { path: "/student/leetcode", icon: <CodeXml />, label: "Leetcode" },
+        { path: "/student/reviews", icon: <CalendarCheck2 />, label: "Reviews" },
+        { path: "/student/leaves", icon: <IdCard />, label: "Leaves" },
+        { path: "/student/invoice", icon: <CreditCard />, label: "Invoice" },
+        { path: "/student/manifest", icon: <FileUser />, label: "Manifest" },
     ];
 
     return (
@@ -124,15 +127,20 @@ function SideBar() {
                 {!isShrinkSideBarStudent && (
                     <h1 className="text-xl overflow-hidden font-extrabold">BootCamp</h1>
                 )}
-                <img
+                <div
                     onClick={
                         isSideBarStudent && isSmall ? handleSideBarToggle : handleShrink
                     }
                     className="cursor-pointer"
-                    src={isSideBarStudent && isSmall ? close : menu}
-                    alt="Menu"
-                    style={{ width: "28px" }}
-                />
+                >
+                    {isSideBarStudent && isSmall ? (
+                        <X />
+                    ) : isShrinkSideBarStudent ? (
+                        <PanelRightClose />
+                    ) : (
+                        <PanelRightOpen />
+                    )}
+                </div>
             </div>
 
             {/* SideBar Items Section */}
@@ -155,13 +163,13 @@ function SideBar() {
             <div
                 title={isShrinkSideBarStudent ? `Ahsan allaj pk MERNStack` : ""}
                 style={{
-                    padding: isShrinkSideBarStudent ? "27.2px 18px" : "18px 18px",
+                    padding: isShrinkSideBarStudent ? "26.8px 18px" : "18px 18px",
                 }}
-                className="flex fixed z-50 bottom-0 w-full items-center bg-white overflow-hidden"
+                className="flex fixed z-50 bottom-0 w-full items-center bg-gray-100 overflow-hidden"
             >
-                <img src={user} alt="User" style={{ width: "28px" }} />
+                <div><UserRound/></div>
                 {!isShrinkSideBarStudent && (
-                    <div className="ml-5 flex flex-col gap-1">
+                    <div className="ml-5 flex flex-col gap-1 text-nowrap">
                         <p className="font-extrabold">Ahsan allaj pk</p>
                         <p className="font-extrabold" style={{ fontSize: "13.2px" }}>
                             MERN Stack
