@@ -16,7 +16,6 @@ import {
     IdCard,
     LayoutDashboard,
     ListTodo,
-    Menu,
     UserRound,
     X,
 } from "lucide-react";
@@ -25,32 +24,25 @@ import Slider from "@/components/Slider/Slider";
 function SideBar() {
     const [style, setStyle] = useState<React.CSSProperties>({});
     const isSmall = useSelector((state: stateType) => state.isSmall);
-    const isSideBarStudent = useSelector(
-        (state: stateType) => state.isSideBarStudent
-    );
-    const isShrinkSideBarStudent = useSelector(
-        (state: stateType) => state.isShrinkSideBarStudent
-    );
+    const isSideBarStudent = useSelector((state: stateType) => state.isSideBarStudent);
+    const isShrinkSideBarStudent = useSelector((state: stateType) => state.isShrinkSideBarStudent);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const currentPath = useLocation().pathname;
 
+    // handle sidebar item
     const handleSideBarItemClick = (event: React.MouseEvent<HTMLLIElement>) => {
-        const text = !isShrinkSideBarStudent
-            ? (
+        const text = isShrinkSideBarStudent
+            ? event.currentTarget.getAttribute("data-text")?.toLowerCase()
+            : (
                 event.currentTarget.querySelector("p") as HTMLParagraphElement
-            )?.innerText.toLowerCase()
-            : event.currentTarget.getAttribute("data-text")?.toLowerCase();
+            )?.innerText.toLowerCase();
 
-        if (text) {
-            navigate(`/student/${text}`);
-        }
-
-        if (isSmall) {
-            dispatch(sideBarStudentAction(false));
-        }
+        if (text) navigate(`/student/${text}`);
+        if (isSmall) dispatch(sideBarStudentAction(false));
     };
 
+    // screen size
     useLayoutEffect(() => {
         const updateScreenSize = () => {
             if (window.innerWidth < 899) {
@@ -66,6 +58,7 @@ function SideBar() {
         return () => window.removeEventListener("resize", updateScreenSize);
     }, [dispatch]);
 
+    // sidebar shrink
     useLayoutEffect(() => {
         const width = isShrinkSideBarStudent ? "60px" : "240px";
         const transform = isSmall ? "translateX(-100%)" : "translateX(0%)";
@@ -78,6 +71,7 @@ function SideBar() {
         });
     }, [isShrinkSideBarStudent, isSmall]);
 
+    // sidebar toggle
     useLayoutEffect(() => {
         const transform = isSideBarStudent
             ? "translateX(0%)"
@@ -91,8 +85,9 @@ function SideBar() {
         }));
     }, [isSideBarStudent, isSmall]);
 
+    // sidebar items
     const sideBarItems = [
-        { path: "/student/dashboard", icon: <LayoutDashboard />,label: "Dashboard"},
+        { path: "/student/dashboard",icon: <LayoutDashboard />,label: "Dashboard"},
         { path: "/student/tasks", icon: <ListTodo />, label: "Tasks" },
         { path: "/student/leetcode", icon: <CodeXml />, label: "Leetcode" },
         { path: "/student/reviews", icon: <CalendarCheck2 />, label: "Reviews" },
@@ -104,16 +99,13 @@ function SideBar() {
     return (
         <div
             style={style}
-            className={`h-full fixed top-0 left-0 flex flex-col justify-between ${isSmall ? "bg-white shadow-xl z-30" : "bg-white z-20"
-                }`}
+            className={`h-full fixed top-0 left-0 flex flex-col justify-between ${isSmall ? "bg-white shadow-xl z-30" : "bg-white z-20"}`}
         >
             <li className="fixed top-0 w-full p-5 py-6">
                 <div className={`flex items-center`}>
-                    {!isShrinkSideBarStudent && (
-                        <h1 className="text-xl overflow-hidden font-extrabold w-full">
-                            BootCamp
-                        </h1>
-                    )}
+                    <h1 className={`text-xl overflow-hidden font-extrabold w-full ${isShrinkSideBarStudent ? "opacity-0" : "" }`}>
+                        BootCamp
+                    </h1>
                     <div className="bg-white">
                         {isSmall && isSideBarStudent ? <X /> : <Slider />}
                     </div>
