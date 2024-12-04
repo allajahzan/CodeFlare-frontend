@@ -7,8 +7,6 @@ import Shadow from "../../../components/Shadow/Shadow";
 import ContentHeadingInSmallSize from "../../../components/Headings/Student/ContentHeadingInSmallSize";
 import ContentHeading from "../../../components/Headings/ContentHeading";
 import RightBarStudent from "../../../components/RightBar/RightBarStudent";
-import { PanelRightClose, PanelRightOpen } from "lucide-react";
-import Slider from "@/components/Slider/Slider";
 
 const calculatePadding = (
   isShrink: boolean,

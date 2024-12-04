@@ -3,7 +3,7 @@ import {
     sideBarStudentAction,
     stateType,
 } from "@/redux/store";
-import { PanelRightClose, PanelRightOpen } from "lucide-react";
+import { Grip } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 
 function Slider() {
@@ -28,9 +28,9 @@ function Slider() {
     return (
         <div
             onClick={isSideBarStudent && isSmall ? handleSideBarToggle : handleShrink}
-            className="absolute z-50 -left-4 top-1/2 transform -translate-y-1/2"
+            className="absolute z-50 top-3.5 right-1.5 p-3 cursor-pointer bg-white"
         >
-            {isShrinkSideBarStudent ? <PanelRightClose /> : <PanelRightOpen />}
+            {isShrinkSideBarStudent ? <Grip /> : <Grip />}
         </div>
     );
 }

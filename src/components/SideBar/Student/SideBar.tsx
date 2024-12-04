@@ -6,7 +6,6 @@ import {
     stateType,
     resizeAction,
     sideBarStudentAction,
-    shrinkSideBarStudentAction,
 } from "../../../redux/store";
 import "./SideBar.css";
 import {
@@ -21,6 +20,7 @@ import {
     UserRound,
     X,
 } from "lucide-react";
+import Slider from "@/components/Slider/Slider";
 
 function SideBar() {
     const [style, setStyle] = useState<React.CSSProperties>({});
@@ -92,11 +92,7 @@ function SideBar() {
     }, [isSideBarStudent, isSmall]);
 
     const sideBarItems = [
-        {
-            path: "/student/dashboard",
-            icon: <LayoutDashboard />,
-            label: "Dashboard",
-        },
+        { path: "/student/dashboard", icon: <LayoutDashboard />,label: "Dashboard"},
         { path: "/student/tasks", icon: <ListTodo />, label: "Tasks" },
         { path: "/student/leetcode", icon: <CodeXml />, label: "Leetcode" },
         { path: "/student/reviews", icon: <CalendarCheck2 />, label: "Reviews" },
@@ -119,7 +115,7 @@ function SideBar() {
                         </h1>
                     )}
                     <div className="bg-white">
-                        {isSmall && isSideBarStudent ? <X /> : <Menu />}
+                        {isSmall && isSideBarStudent ? <X /> : <Slider />}
                     </div>
                 </div>
             </li>
