@@ -87,14 +87,14 @@ function SideBar() {
 
     // sidebar items
     const sideBarItems = [
-        { path: "/student/dashboard", icon: <LayoutDashboard />, label: "Dashboard" },
-        { path: "/student/chat", icon: <MessageCircleMore />, label: "Chats" },
-        { path: "/student/tasks", icon: <ListTodo />, label: "Tasks" },
-        { path: "/student/reviews", icon: <CalendarCheck2 />, label: "Reviews" },
-        { path: "/student/leetcode", icon: <CodeXml />, label: "Leetcode" },
-        { path: "/student/leaves", icon: <IdCard />, label: "Leaves" },
-        { path: "/student/invoice", icon: <CreditCard />, label: "Invoices" },
-        { path: "/student/manifest", icon: <FileUser />, label: "Manifest" },
+        { path: "/student/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+        { path: "/student/chat", icon: MessageCircleMore, label: "Chats" },
+        { path: "/student/tasks", icon: ListTodo, label: "Tasks" },
+        { path: "/student/reviews", icon: CalendarCheck2, label: "Reviews" },
+        { path: "/student/leetcode", icon: CodeXml, label: "Leetcode" },
+        { path: "/student/leaves", icon: IdCard, label: "Leaves" },
+        { path: "/student/invoices", icon: CreditCard, label: "Invoices" },
+        { path: "/student/manifest", icon: FileUser, label: "Manifest" },
     ];
 
     return (
@@ -126,7 +126,7 @@ function SideBar() {
                     <SideBarItem
                         key={item.label}
                         color={currentPath === item.path ? "bg-gray-100" : ""}
-                        image={item.icon}
+                        Image={item.icon}
                         text={item.label}
                         handleSideBarItems={handleSideBarItemClick}
                     />
