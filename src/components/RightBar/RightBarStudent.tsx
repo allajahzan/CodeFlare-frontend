@@ -22,13 +22,13 @@ function RightBarStudent() {
             ${isShrinkSideBarStudent ? "p-0" : "py-5"}`}
         >
             <div>
-            <RightBarItem text="Community" children={<GlobeLock />} />
+            <RightBarItem text="Community" children={<GlobeLock className="animate-pulse" />} />
             <RightBarItem text="Folders" children={<FolderOpen />} />
             <RightBarItem text="Notifications" children={<Bell />} />
             </div>
             <div>
             <RightBarItem text={theme ? 'Light' : 'Dark'} action={handleTheme} children={theme ? <Sun /> : <Moon />}/>
-            <RightBarItem text="Settings" children={<Settings />} />
+            <RightBarItem text="Settings" children={<Settings className="animate-spin" />} />
             <RightBarItem text="Account" children={<UserRound />} />
             <RightBarItem text="Logout" children={<LogOut />} />
             </div>
