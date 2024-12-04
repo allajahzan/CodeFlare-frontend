@@ -9,7 +9,7 @@ import {
     sideBarCounsellorAction,
     showStudentDropDownAction,
 } from "../../../redux/store";
-import "./SideBar.css";
+import "../SideBar.css";
 
 // Import icons
 import {

@@ -7,7 +7,6 @@ import {
     resizeAction,
     sideBarStudentAction,
 } from "../../../redux/store";
-import "./SideBar.css";
 import {
     CalendarCheck2,
     CodeXml,
@@ -20,6 +19,7 @@ import {
     X,
 } from "lucide-react";
 import Slider from "@/components/Slider/Slider";
+import '../SideBar.css'
 
 function SideBar() {
     const [style, setStyle] = useState<React.CSSProperties>({});
@@ -99,7 +99,7 @@ function SideBar() {
     return (
         <div
             style={style}
-            className={`h-full fixed top-0 left-0 flex flex-col justify-between ${isSmall ? "bg-white shadow-xl z-30" : "bg-white z-20"}`}
+            className={`sidebar bg-white ${isSmall ? "shadow-xl z-30" : "z-20"}`}
         >
             <li className="fixed top-0 w-full p-5 py-6">
                 <div className={`flex items-center`}>
