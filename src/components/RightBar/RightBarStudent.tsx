@@ -18,11 +18,10 @@ function RightBarStudent() {
     return (
         <div
             style={{ transition: "all 0.3s ease-in-out" }}
-            className={`fixed flex flex-col gap-3 p-2 ${isShrinkSideBarStudent ? "pt-2" : "pt-2"
-                } right-0 top-0 w-[64px] ${isShrinkSideBarStudent ? "mt-0" : "mt-5"}`}
+            className={`fixed h-full flex flex-col items-center justify-start right-0 w-[60px] ${isShrinkSideBarStudent ? "mt-1" : "mt-5"}`}
         >
             <RightBarItem
-                text={theme? 'Light' : 'Dark'}
+                text={theme ? 'Light' : 'Dark'}
                 action={handleTheme}
                 children={theme ? <Sun /> : <Moon />}
             />

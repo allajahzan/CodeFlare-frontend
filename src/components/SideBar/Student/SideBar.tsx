@@ -51,7 +51,7 @@ function SideBar() {
             ? (
                 event.currentTarget.querySelector("p") as HTMLParagraphElement
             )?.innerText.toLowerCase()
-            : event.currentTarget.title.toLowerCase();
+            : event.currentTarget.getAttribute("data-text")?.toLowerCase();
 
         if (text) {
             navigate(`/student/${text}`);
@@ -78,7 +78,7 @@ function SideBar() {
     }, [dispatch]);
 
     useLayoutEffect(() => {
-        const width = isShrinkSideBarStudent ? "64px" : "240px";
+        const width = isShrinkSideBarStudent ? "60px" : "240px";
         const transform = isSmall ? "translateX(-100%)" : "translateX(0%)";
 
         setStyle({
@@ -122,30 +122,31 @@ function SideBar() {
             className={`h-full fixed top-0 left-0 flex flex-col justify-between ${isSmall ? "bg-white shadow-xl z-30" : "bg-white z-20"
                 }`}
         >
-            {/* Header Section */}
-            <div className="p-5 pr-4 flex fixed z-50 bg-white top-0 w-full items-center justify-between">
-                {!isShrinkSideBarStudent && (
-                    <h1 className="text-xl overflow-hidden font-extrabold">BootCamp</h1>
-                )}
-                <div
-                    onClick={
-                        isSideBarStudent && isSmall ? handleSideBarToggle : handleShrink
-                    }
-                    className="cursor-pointer"
-                >
-                    {isSideBarStudent && isSmall ? (
-                        <X />
-                    ) : isShrinkSideBarStudent ? (
-                        <PanelRightClose />
-                    ) : (
-                        <PanelRightOpen />
+            <li className="fixed top-0 w-full">
+                <div style={{ scrollbarWidth: 'none' }} className={`flex items-center justify-center`}>
+                    {!isShrinkSideBarStudent && (
+                        <h1 className="relative left-2 z-10 text-xl overflow-hidden font-extrabold w-full">BootCamp</h1>
                     )}
+                    <div
+                        style={{ padding: '14px 10px' }}
+                        className="cursor-pointer z-20 bg-white"
+                        onClick={
+                            isSideBarStudent && isSmall ? handleSideBarToggle : handleShrink
+                        }
+                    >
+                        {isSmall && isSideBarStudent ? <X /> :
+                            isShrinkSideBarStudent ? (
+                                <PanelRightClose />
+                            ) : (
+                                <PanelRightOpen />
+                            )}
+                    </div>
                 </div>
-            </div>
+            </li>
 
             {/* SideBar Items Section */}
             <div
-                style={{ marginTop: "69px", marginBottom: "80px" }}
+                style={{ marginTop: "73px", marginBottom: "80px" }}
                 className="overflow-auto overflow-x-hidden relative"
             >
                 {sideBarItems.map((item) => (
@@ -163,11 +164,13 @@ function SideBar() {
             <div
                 title={isShrinkSideBarStudent ? `Ahsan allaj pk MERNStack` : ""}
                 style={{
-                    padding: isShrinkSideBarStudent ? "26.8px 18px" : "18px 18px",
+                    padding: isShrinkSideBarStudent ? "29px 18px" : "18px 18px",
                 }}
                 className="flex fixed z-50 bottom-0 w-full items-center bg-gray-100 overflow-hidden"
             >
-                <div><UserRound/></div>
+                <div>
+                    <UserRound />
+                </div>
                 {!isShrinkSideBarStudent && (
                     <div className="ml-5 flex flex-col gap-1 text-nowrap">
                         <p className="font-extrabold">Ahsan allaj pk</p>

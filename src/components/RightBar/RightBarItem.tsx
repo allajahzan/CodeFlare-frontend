@@ -16,16 +16,15 @@ function RightBarItem({ children, action, text }: propType) {
     return (
         <TooltipProvider>
             <Tooltip>
-                <TooltipTrigger>
-                    <div
-                        onClick={action}
-                        className="flex items-center justify-center cursor-pointer"
-                    >
-                        <div className="hover:bg-gray-100 p-3 rounded-xl">{children}</div>
+                <TooltipTrigger className="w-full">
+                    <div onClick={action} className={`flex items-center justify-center p-2`}>
+                        <div className="flex items-center p-2 hover:bg-gray-100 rounded-lg">
+                            {children}
+                        </div>
                     </div>
                 </TooltipTrigger>
                 <TooltipContent>
-                    <p style={{ fontSize: "12px"}}>{text}</p>
+                    <p style={{ fontSize: "13px" }}>{text}</p>
                 </TooltipContent>
             </Tooltip>
         </TooltipProvider>

@@ -14,8 +14,8 @@ const calculatePadding = (
 ): React.CSSProperties => {
   return {
     paddingTop: isSmall ? "70px" : isShrink ? "0px" : "20px",
-    paddingLeft: isSmall ? "20px" : isShrink ? "64px" : "240px",
-    paddingRight: "64px",
+    paddingLeft: isSmall ? "20px" : isShrink ? "60px" : "240px",
+    paddingRight: "60px",
   };
 };
 
