@@ -46,10 +46,10 @@ function SideBarItem({ image, text, handleSideBarItems, color }: propTypes) {
                         } hover:bg-gray-100 cursor-pointer`}
                 >
                     <div className={`flex items-center p-2`}>
-                        <div className="flex items-center">
+                        <div className="flex items-center gap-5">
                             {image}
                             {!isShrinkSideBarStudent && (
-                                <p className="ml-5 font-extrabold tracking-wide text-nowrap">
+                                <p className="pt-0.5 font-extrabold tracking-wide text-nowrap">
                                     {text}
                                 </p>
                             )}

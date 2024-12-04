@@ -2,60 +2,78 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-    scrollbar-width: none;
-}
+@layer utilities {
+    html {
+        scrollbar-width: none;
+    }
 
-body {
-    /* font-family: 'Lato', sans-serif; */
-    font-family: 'Comfortaa', sans-serif;
-    background-color: white;
-    transition: 'all 0.3s ease-in-out'
-}
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+        /* Hide scrollbar for Chrome, Edge, Safari */
+    }
 
-p, label, input, textarea, option{
-    font-size: 14.5px;
-}
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        /* Internet Explorer 10+ */
+        scrollbar-width: none;
+        /* Firefox */
+    }
 
-h1 {
-    font-size: 16.5px;
-}
+    body {
+        /* font-family: 'Lato', sans-serif; */
+        font-family: 'Comfortaa', sans-serif;
+        background-color: white;
+        transition: 'all 0.3s ease-in-out'
+    }
 
-::-webkit-scrollbar {
-    width: 16px;
-    height: 16px;
-}
+    p,
+    label,
+    input,
+    textarea,
+    option {
+        font-size: 14.5px;
+    }
 
-::-webkit-scrollbar-track {
-    background: transparent;
-    margin: 2px;
-    border-radius: 6px;
-    cursor: pointer;
-}
+    h1 {
+        font-size: 16.5px;
+    }
 
-::-webkit-scrollbar-thumb {
-    background: #e8e8e8;
-    border-radius: 200px;
-    border: 6px solid transparent;
-    background-clip: padding-box;
-    cursor: pointer;
-}
+    ::-webkit-scrollbar {
+        width: 16px;
+        height: 16px;
+    }
 
-div,
-img,
-h1,
-p,
-input,
-button,
-h2,
-label {
-    outline: none;
-    -webkit-user-drag: none;
-    user-select: none;
+    ::-webkit-scrollbar-track {
+        background: transparent;
+        margin: 2px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #e8e8e8;
+        border-radius: 200px;
+        border: 6px solid transparent;
+        background-clip: padding-box;
+        cursor: pointer;
+    }
+
+    div,
+    img,
+    h1,
+    p,
+    input,
+    button,
+    h2,
+    label {
+        outline: none;
+        -webkit-user-drag: none;
+        user-select: none;
+    }
 }
 
 @layer base {
-  :root {
+    :root {
         --background: 0 0% 100%;
         --foreground: 240 10% 3.9%;
         --card: 0 0% 100%;
@@ -82,7 +100,8 @@ label {
         --chart-5: 27 87% 67%;
         --radius: 0.5rem;
     }
-  .dark {
+
+    .dark {
         --background: 240 10% 3.9%;
         --foreground: 0 0% 98%;
         --card: 240 10% 3.9%;
@@ -111,10 +130,11 @@ label {
 }
 
 @layer base {
-  * {
-    @apply border-border;
+    * {
+        @apply border-border;
     }
-  body {
-    @apply bg-background text-foreground;
+
+    body {
+        @apply bg-background text-foreground;
     }
 }

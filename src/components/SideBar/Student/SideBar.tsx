@@ -17,8 +17,7 @@ import {
     IdCard,
     LayoutDashboard,
     ListTodo,
-    PanelRightClose,
-    PanelRightOpen,
+    Menu,
     UserRound,
     X,
 } from "lucide-react";
@@ -35,16 +34,6 @@ function SideBar() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const currentPath = useLocation().pathname;
-
-    const handleShrink = () => {
-        const newShrinkState = !isShrinkSideBarStudent;
-        dispatch(shrinkSideBarStudentAction(newShrinkState));
-        localStorage.setItem("isSideBarStudentShriked", String(newShrinkState));
-    };
-
-    const handleSideBarToggle = () => {
-        dispatch(sideBarStudentAction(!isSideBarStudent));
-    };
 
     const handleSideBarItemClick = (event: React.MouseEvent<HTMLLIElement>) => {
         const text = !isShrinkSideBarStudent
@@ -122,32 +111,27 @@ function SideBar() {
             className={`h-full fixed top-0 left-0 flex flex-col justify-between ${isSmall ? "bg-white shadow-xl z-30" : "bg-white z-20"
                 }`}
         >
-            <li className="fixed top-0 w-full">
-                <div style={{ scrollbarWidth: 'none' }} className={`flex items-center justify-center`}>
+            <li className="fixed top-0 w-full p-5 py-6">
+                <div className={`flex items-center`}>
                     {!isShrinkSideBarStudent && (
-                        <h1 className="relative left-2 z-10 text-xl overflow-hidden font-extrabold w-full">BootCamp</h1>
+                        <h1 className="text-xl overflow-hidden font-extrabold w-full">
+                            BootCamp
+                        </h1>
                     )}
-                    <div
-                        style={{ padding: '14px 10px' }}
-                        className="cursor-pointer z-20 bg-white"
-                        onClick={
-                            isSideBarStudent && isSmall ? handleSideBarToggle : handleShrink
-                        }
-                    >
-                        {isSmall && isSideBarStudent ? <X /> :
-                            isShrinkSideBarStudent ? (
-                                <PanelRightClose />
-                            ) : (
-                                <PanelRightOpen />
-                            )}
+                    <div className="bg-white">
+                        {isSmall && isSideBarStudent ? <X /> : <Menu />}
                     </div>
                 </div>
             </li>
 
             {/* SideBar Items Section */}
             <div
-                style={{ marginTop: "73px", marginBottom: "80px" }}
-                className="overflow-auto overflow-x-hidden relative"
+                style={{
+                    marginTop: "73px",
+                    marginBottom: "82px",
+                    scrollbarWidth: "none",
+                }}
+                className="overflow-auto overflow-x-hidden relative no-scrollbar"
             >
                 {sideBarItems.map((item) => (
                     <SideBarItem
