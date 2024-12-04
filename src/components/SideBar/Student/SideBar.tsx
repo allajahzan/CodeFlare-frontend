@@ -138,8 +138,7 @@ function SideBar() {
                 style={{
                     padding: isShrinkSideBarStudent ? "29px 18px" : "18px 18px",
                 }}
-                className="flex fixed z-50 bottom-0 w-full items-center bg-gray-100 overflow-hidden"
-            >
+                className="name_card">
                 <div>
                     <UserRound />
                 </div>
