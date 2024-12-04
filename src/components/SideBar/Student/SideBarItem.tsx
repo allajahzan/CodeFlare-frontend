@@ -29,9 +29,7 @@ function SideBarItem({ image, text, handleSideBarItems, color }: propTypes) {
                             className={`${color === "" ? "" : color
                                 } hover:bg-gray-100 cursor-pointer`}
                         >
-                            <div className={`flex items-center p-2`}>
-                                {image}
-                            </div>
+                            <div className={`flex items-center p-2`}>{image}</div>
                         </li>
                     </TooltipTrigger>
                     <TooltipContent>

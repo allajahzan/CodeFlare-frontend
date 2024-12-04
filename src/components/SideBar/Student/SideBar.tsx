@@ -87,7 +87,7 @@ function SideBar() {
 
     // sidebar items
     const sideBarItems = [
-        { path: "/student/dashboard",icon: <LayoutDashboard />,label: "Dashboard"},
+        { path: "/student/dashboard", icon: <LayoutDashboard />, label: "Dashboard" },
         { path: "/student/tasks", icon: <ListTodo />, label: "Tasks" },
         { path: "/student/leetcode", icon: <CodeXml />, label: "Leetcode" },
         { path: "/student/reviews", icon: <CalendarCheck2 />, label: "Reviews" },
@@ -103,7 +103,7 @@ function SideBar() {
         >
             <li className="fixed top-0 w-full p-5 py-6">
                 <div className={`flex items-center`}>
-                    <h1 className={`text-xl overflow-hidden font-extrabold w-full ${isShrinkSideBarStudent ? "opacity-0" : "" }`}>
+                    <h1 className={`text-xl overflow-hidden font-extrabold w-full ${isShrinkSideBarStudent ? "opacity-0" : ""}`}>
                         BootCamp
                     </h1>
                     <div className="bg-white">
