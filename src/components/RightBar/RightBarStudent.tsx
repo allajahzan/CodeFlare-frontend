@@ -18,13 +18,13 @@ function RightBarStudent() {
     return (
         <div
             style={{ transition: "all 0.3s ease-in-out" }}
-            className={`fixed h-full flex flex-col items-center justify-center right-0 w-[60px] overflow-auto overflow-x-hidden no-scrollbar 
+            className={`fixed h-full flex flex-col items-center justify-between right-0 w-[60px] overflow-auto overflow-x-hidden no-scrollbar 
             ${isShrinkSideBarStudent ? "p-0" : "py-5"}`}
         >
             <div>
-            <RightBarItem text="Community" children={<GlobeLock className="animate-pulse" />} />
-            <RightBarItem text="Folders" children={<FolderOpen />} />
             <RightBarItem text="Notifications" children={<Bell />} />
+            <RightBarItem text="Folders" children={<FolderOpen />} />
+            <RightBarItem text="Community" children={<GlobeLock className="animate-pulse" />} />
             </div>
             <div>
             <RightBarItem text={theme ? 'Light' : 'Dark'} action={handleTheme} children={theme ? <Sun /> : <Moon />}/>
