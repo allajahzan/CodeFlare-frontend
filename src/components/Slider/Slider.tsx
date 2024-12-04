@@ -30,7 +30,7 @@ function Slider() {
             onClick={isSideBarStudent && isSmall ? handleSideBarToggle : handleShrink}
             className="absolute z-50 top-3.5 right-1.5 p-3 cursor-pointer bg-white"
         >
-            {isShrinkSideBarStudent ? <Grip /> : <Grip />}
+            <Grip />
         </div>
     );
 }

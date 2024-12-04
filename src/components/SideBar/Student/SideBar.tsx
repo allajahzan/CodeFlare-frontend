@@ -15,8 +15,8 @@ import {
     IdCard,
     LayoutDashboard,
     ListTodo,
+    MessageCircleMore,
     UserRound,
-    X,
 } from "lucide-react";
 import Slider from "@/components/Slider/Slider";
 import '../SideBar.css'
@@ -88,11 +88,12 @@ function SideBar() {
     // sidebar items
     const sideBarItems = [
         { path: "/student/dashboard", icon: <LayoutDashboard />, label: "Dashboard" },
+        { path: "/student/chat", icon: <MessageCircleMore />, label: "Chats" },
         { path: "/student/tasks", icon: <ListTodo />, label: "Tasks" },
-        { path: "/student/leetcode", icon: <CodeXml />, label: "Leetcode" },
         { path: "/student/reviews", icon: <CalendarCheck2 />, label: "Reviews" },
+        { path: "/student/leetcode", icon: <CodeXml />, label: "Leetcode" },
         { path: "/student/leaves", icon: <IdCard />, label: "Leaves" },
-        { path: "/student/invoice", icon: <CreditCard />, label: "Invoice" },
+        { path: "/student/invoice", icon: <CreditCard />, label: "Invoices" },
         { path: "/student/manifest", icon: <FileUser />, label: "Manifest" },
     ];
 
@@ -107,7 +108,7 @@ function SideBar() {
                         BootCamp
                     </h1>
                     <div className="bg-white">
-                        {isSmall && isSideBarStudent ? <X /> : <Slider />}
+                        <Slider />
                     </div>
                 </div>
             </li>
@@ -134,11 +135,10 @@ function SideBar() {
 
             {/* Footer Section */}
             <div
-                title={isShrinkSideBarStudent ? `Ahsan allaj pk MERNStack` : ""}
                 style={{
                     padding: isShrinkSideBarStudent ? "29px 18px" : "18px 18px",
                 }}
-                className="name_card">
+                className="name_card cursor-pointer">
                 <div>
                     <UserRound />
                 </div>

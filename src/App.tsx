@@ -32,7 +32,7 @@ function UserRoutes() {
         <Route path='student/dashboard' element={<DashboardStudent />} />
         <Route path='student/reviews' element={<Reviews />} />
         <Route path='student/leetcode' element={<LeetCode />} />
-        <Route path='student/invoice' element={<Invoice />} />
+        <Route path='student/invoices' element={<Invoice />} />
         <Route path='student/manifest' element={<Manifest />} />
         <Route path='student/leaves' element={<Leave />} />
       </Routes>
