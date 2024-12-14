@@ -14,7 +14,7 @@ import Manifest from "./pages/Student/Manifest/Manifest";
 import Leave from "./pages/Student/Leave/Leave";
 import Login from "./pages/Student/Login/Login";
 import OngoingStudents from "./pages/Counsellor/Students/OngoingStudents/OngoingStudents";
-import MainLayout from "./components/Layout/MainLayout";
+import MainLayout from "./components/Layout/StudentLayout";
 
 function App() {
   return (

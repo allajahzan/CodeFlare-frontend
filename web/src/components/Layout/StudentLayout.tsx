@@ -6,7 +6,7 @@ import SideBar from "../SideBar/Student/SideBar";
 import { Outlet } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
 
-function MainLayout() {
+function StudentLayout() {
     const isSmall = useSelector((state: stateType) => state.isSmall);
 
     const style = useMemo<React.CSSProperties>(
@@ -42,4 +42,4 @@ function MainLayout() {
     );
 }
 
-export default MainLayout;
+export default StudentLayout;
