@@ -7,7 +7,6 @@ import { stateType } from "../../../redux/store";
 import ContentHeadingInSmallSize from "../../../components/Headings/Student/ContentHeadingInSmallSize";
 import ContentHeading from "../../../components/Headings/ContentHeading";
 import Shadow from "../../../components/Shadow/Shadow";
-import "../Student.css";
 
 
 const calculatePadding = (
@@ -46,7 +45,7 @@ function LeetCode() {
 
     return (
         <div>
-            <Shadow />
+            {/* <Shadow />
             <div className="flex h-[100vh]">
                 <SideBar />
                 <div style={style} className="w-full">
@@ -59,7 +58,7 @@ function LeetCode() {
                     </div>
                 </div>
                 <RightBarStudent />
-            </div>
+            </div> */}
         </div>
     );
 }

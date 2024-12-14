@@ -1,4 +1,3 @@
-import "../Student.css";
 function Dashboard() {
   return (
     <div className="grid grid-cols-3 gap-4">

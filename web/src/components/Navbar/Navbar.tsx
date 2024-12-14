@@ -10,17 +10,15 @@ const Navbar = () => {
     const theme = useSelector((state: stateType) => state.theme);
     const dispatch = useDispatch();
 
-    // Theme toggle handler with useCallback for stable reference
     const handleTheme = useCallback(() => {
         dispatch(themeAction(!theme));
     }, [dispatch, theme]);
 
-    // Memoized values for theme-related properties
     const themeIcon = useMemo(() => (theme ? Sun : Moon), [theme]);
     const themeText = useMemo(() => (theme ? "Light" : "Dark"), [theme]);
 
     return (
-        <div className="sticky top-[30px] z-50 w-full flex justify-between items-center">
+        <div className="sticky top-0 z-50 w-full flex justify-between items-center py-6 bg-white">
             {/* Heading */}
             <ContentHeading text="Good morning, Ahsan!" />
 

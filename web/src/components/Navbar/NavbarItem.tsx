@@ -17,7 +17,7 @@ function NavbarItem({ Image, action, text }: propType) {
         <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger className="">
-                    <div onClick={action} className="flex items-center justify-center bg-zinc-100 hover:bg-gray-100 rounded-full p-3">
+                    <div onClick={action} className="flex items-center justify-center bg-zinc-100 rounded-full p-3">
                         <Image className="w-5 h-5" />
                     </div>
                 </TooltipTrigger>

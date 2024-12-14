@@ -25,7 +25,7 @@ function Manifest() {
 
     return (
         <div>
-            <Shadow />
+            {/* <Shadow />
             <div className='flex h-[100vh]'>
                 <SideBar />
                 <div style={style} className='w-full'>
@@ -69,7 +69,7 @@ function Manifest() {
 
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>
     )
 }

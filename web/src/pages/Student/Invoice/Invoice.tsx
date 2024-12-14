@@ -8,8 +8,6 @@ import ContentHeadingInSmallSize from "../../../components/Headings/Student/Cont
 import ContentHeading from "../../../components/Headings/ContentHeading";
 import { stateType } from "../../../redux/store";
 
-import '../Student.css'
-
 const calculatePadding = (isShrink: boolean, isSmall: boolean): React.CSSProperties => ({
     paddingTop: isSmall ? "70px" : isShrink ? "0px" : "20px",
     paddingLeft: isSmall ? "20px" : isShrink ? "60px" : "240px",
@@ -37,7 +35,7 @@ function Invoice() {
 
     return (
         <div>
-            <Shadow />
+            {/* <Shadow />
             <div className="flex h-[100vh]">
                 <SideBar />
                 <div style={style} className="w-full">
@@ -53,7 +51,7 @@ function Invoice() {
                     </div>
                 </div>
                 <RightBarStudent/>
-            </div>
+            </div> */}
         </div>
     );
 }

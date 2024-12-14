@@ -1,7 +1,7 @@
 import { stateType } from "@/redux/store";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import Shadow from "../Shadow/Shadow";
+// import Shadow from "../Shadow/Shadow";
 import SideBar from "../SideBar/Student/SideBar";
 import { Outlet } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
@@ -22,20 +22,20 @@ function StudentLayout() {
     const containerStyles = useMemo<React.CSSProperties>(
         () => ({
             backgroundColor: "white",
-            padding: "30px 30px 30px 0px",
+            padding: "0px 30px 30px 20px",
         }),
         []
     );
 
     return (
         <div className="bg-white">
-            <Shadow />
+            {/* <Shadow /> */}
             <div className="flex h-full">
                 <SideBar />
-                <div style={style} className="w-full">
+                <div style={style} className="w-full flex flex-grow">
                     <div style={containerStyles} className="container_style">
                         <Navbar />
-                        <Outlet />
+                        <Outlet  />
                     </div>
                 </div>
             </div>

@@ -10,7 +10,7 @@ import DropDown from "../../../components/DropDowns/Counsellor/DropDown";
 import ContentHeading from "../../../components/Headings/ContentHeading";
 import ContentHeadingInSmallSize from "../../../components/Headings/Student/ContentHeadingInSmallSize";
 import Shadow from "../../../components/Shadow/Shadow";
-import '../Student.css'
+
 
 const calculatePadding = (
     isShrink: boolean,
@@ -58,7 +58,7 @@ function Leave() {
 
     return (
         <div>
-            <Shadow />
+            {/* <Shadow />
             <div className="flex h-[100vh]">
                 <SideBar />
                 <div style={style} className="w-full bg-white">
@@ -98,10 +98,10 @@ function Leave() {
                             />
                         </div>
 
-                        {/* leaves table */}
+                     
                         <div className="overflow-x-auto h-full">
                             <div className="flex h-full" style={{ minWidth: "1000px" }}>
-                                {/* Table Rows */}
+                            
                                 <div className="flex-1 overflow-y-auto">
                                     <div className="sticky top-0 z-10 bg-white">
                                         <Header />
@@ -118,7 +118,7 @@ function Leave() {
                     <LeaveModal openModal={openModal} setOpenModal={setOpenModal} />
                 </div>
                 <RightBarStudent/>
-            </div>
+            </div> */}
         </div>
     );
 }

@@ -1,0 +1,10 @@
+.paragraph{
+    font-weight: 500;
+}
+
+.custom_border{
+    border-radius: 1rem;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #f3f4f6;
+}
