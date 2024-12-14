@@ -5,6 +5,7 @@ import Shadow from "../Shadow/Shadow";
 import SideBar from "../SideBar/Student/SideBar";
 import { Outlet } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
+import './Layout.css'
 
 function StudentLayout() {
     const isSmall = useSelector((state: stateType) => state.isSmall);
