@@ -38,62 +38,6 @@ function Reviews() {
       details:
         "Showed significant progress in coding skills. Implemented complex features with minimal guidance.",
     },
-    {
-      id: 4,
-      week: 4,
-      date: "11th Jul 2024",
-      status: "pass",
-      details:
-        "Excellent teamwork and communication. Took initiative in leading a small project team.",
-    },
-    {
-      id: 5,
-      week: 3,
-      date: "4th Jul 2024",
-      status: "pass",
-      details:
-        "Showed significant progress in coding skills. Implemented complex features with minimal guidance.",
-    },
-    {
-      id: 6,
-      week: 4,
-      date: "11th Jul 2024",
-      status: "pass",
-      details:
-        "Excellent teamwork and communication. Took initiative in leading a small project team.",
-    },
-    {
-      id: 7,
-      week: 3,
-      date: "4th Jul 2024",
-      status: "pass",
-      details:
-        "Showed significant progress in coding skills. Implemented complex features with minimal guidance.",
-    },
-    {
-      id: 8,
-      week: 4,
-      date: "11th Jul 2024",
-      status: "pass",
-      details:
-        "Excellent teamwork and communication. Took initiative in leading a small project team.",
-    },
-    {
-      id: 9,
-      week: 3,
-      date: "4th Jul 2024",
-      status: "pass",
-      details:
-        "Showed significant progress in coding skills. Implemented complex features with minimal guidance.",
-    },
-    {
-      id: 10,
-      week: 4,
-      date: "11th Jul 2024",
-      status: "pass",
-      details:
-        "Excellent teamwork and communication. Took initiative in leading a small project team.",
-    },
   ];
 
   const [selectedReview, setSelectedReview] = useState<Review | null>(
@@ -102,14 +46,11 @@ function Reviews() {
 
   return (
     <div className="h-full w-full flex flex-col gap-5">
-      <div className="h-full p-6 pt-0 grid grid-cols-1 sm:grid-cols-3 gap-5">
-        <div className="flex justify-between items-center col-span-3">
-          <Heading text="Reviews" className="text-lg font-semibold" />
-          <div className="h-10"></div>
-        </div>
-        <div className="relative p-3 flex flex-col gap-10 overflow-auto no-scrollbar rounded-2xl border-2 border-zinc-100">
+      <div className="h-full p-5 grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div className="relative h-fit p-3 flex flex-col gap-10 overflow-auto no-scrollbar rounded-2xl shadow-custom">
           {reviews.map((review, index) => (
             <div key={review.id} className="relative rounded-2xl">
+              {/* list */}
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -120,7 +61,7 @@ function Reviews() {
                 )}
                 onClick={() => setSelectedReview(review)}
               >
-                <div className="h-12 w-12 rounded-full flex items-center justify-center backdrop-blur-md">
+                <div className="h-12 w-12 rounded-full flex items-center justify-center">
                   {review.status === "pass" ? (
                     <CheckCircle size={24} className="text-green-700" />
                   ) : (
@@ -154,7 +95,7 @@ function Reviews() {
         </div>
 
         {/* review details */}
-        <div className="w-full p-5 rounded-2xl border-2 border-zinc-100">
+        <div className="w-full h-fit p-5 rounded-2xl shadow-custom">
           <AnimatePresence mode="wait">
             {selectedReview && (
               <motion.div

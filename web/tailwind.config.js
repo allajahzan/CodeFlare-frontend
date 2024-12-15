@@ -10,7 +10,7 @@ export default {
   theme: {
   	extend: {
 		boxShadow: {
-			'custom': '0 4px 10px rgba(0.1, 0, 0.1, 0.1)', 
+			'custom': '0 0 10px rgba(0, 0, 0, 0.1)', 
 		},
   		borderRadius: {
   			lg: 'var(--radius)',
