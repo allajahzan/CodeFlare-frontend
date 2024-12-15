@@ -7,7 +7,7 @@ import LeaveModal from "../../../components/LeaveModal/LeaveModal";
 import Header from "../../../components/Table/DataTable/Header";
 import Body from "../../../components/Table/DataTable/Body";
 import DropDown from "../../../components/DropDowns/Counsellor/DropDown";
-import ContentHeading from "../../../components/Headings/ContentHeading";
+import ContentHeading from "../../../components/ui/Heading";
 import ContentHeadingInSmallSize from "../../../components/Headings/Student/ContentHeadingInSmallSize";
 import Shadow from "../../../components/Shadow/Shadow";
 

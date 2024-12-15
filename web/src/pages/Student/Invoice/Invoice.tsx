@@ -5,7 +5,7 @@ import invoice from "../../../assets/icons/invoice.svg";
 import InvoiceTable from "../../../components/Table/InvoiceTable/InvoiceTable";
 import Shadow from "../../../components/Shadow/Shadow";
 import ContentHeadingInSmallSize from "../../../components/Headings/Student/ContentHeadingInSmallSize";
-import ContentHeading from "../../../components/Headings/ContentHeading";
+import ContentHeading from "../../../components/ui/Heading";
 import { stateType } from "../../../redux/store";
 
 const calculatePadding = (isShrink: boolean, isSmall: boolean): React.CSSProperties => ({

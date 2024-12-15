@@ -5,7 +5,7 @@ import { useLayoutEffect, useState } from "react";
 import { stateType } from "../../../redux/store";
 import Shadow from "../../../components/Shadow/Shadow";
 import ContentHeadingInSmallSize from "../../../components/Headings/Counsellor/ContentHeadingInSmallSize";
-import ContentHeading from "../../../components/Headings/ContentHeading";
+import ContentHeading from "../../../components/ui/Heading";
 
 function Dashboard() {
 

@@ -1,41 +1,23 @@
-import { stateType } from "@/redux/store";
-import { useMemo } from "react";
-import { useSelector } from "react-redux";
-// import Shadow from "../Shadow/Shadow";
 import SideBar from "../SideBar/Student/SideBar";
 import { Outlet } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
-import './Layout.css'
+import "./Layout.css";
+import { useSelector } from "react-redux";
+import { stateType } from "@/redux/store";
+import { cn } from "@/lib/utils";
 
 function StudentLayout() {
-    const isSmall = useSelector((state: stateType) => state.isSmall);
 
-    const style = useMemo<React.CSSProperties>(
-        () => ({
-            paddingTop: "0px",
-            paddingLeft: isSmall ? "20px" : "130px",
-            transition: "all 0.3s ease-in-out",
-        }),
-        [isSmall]
-    );
-
-    const containerStyles = useMemo<React.CSSProperties>(
-        () => ({
-            backgroundColor: "white",
-            padding: "0px 30px 30px 20px",
-        }),
-        []
-    );
+    const isSmall  = useSelector((state:stateType)=>state.isSmall)
 
     return (
         <div className="bg-white">
-            {/* <Shadow /> */}
-            <div className="flex h-full">
+            <div className="flex h-screen">
                 <SideBar />
-                <div style={style} className="w-full flex flex-grow">
-                    <div style={containerStyles} className="container_style">
-                        <Navbar />
-                        <Outlet  />
+                <div className={cn("flex flex-grow flex-col h-full relative", isSmall? 'm-0' : 'ml-[130px]')}>
+                    <Navbar />
+                    <div className="h-screen overflow-auto">                        
+                        <Outlet />
                     </div>
                 </div>
             </div>

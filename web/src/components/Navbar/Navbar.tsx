@@ -1,8 +1,8 @@
 import { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { stateType, themeAction } from "../../redux/store";
-import ContentHeading from "../Headings/ContentHeading";
 import NavbarItem from "./NavbarItem";
+import Heading from "../ui/Heading";
 import { Bell, ChevronDown, Globe, Moon, Sun } from "lucide-react";
 import avatar_boy from "../../assets/images/avatar_boy.jpg";
 
@@ -18,9 +18,9 @@ const Navbar = () => {
     const themeText = useMemo(() => (theme ? "Light" : "Dark"), [theme]);
 
     return (
-        <div className="sticky top-0 z-50 w-full flex justify-between items-center py-6 bg-white">
+        <div className="sticky top-0 w-full z-50 flex justify-between items-center p-6 bg-white">
             {/* Heading */}
-            <ContentHeading text="Good morning, Ahsan!" />
+            <Heading className="text-2xl font-bold text-zinc-900" text="Good morning, Ahsan!" />
 
             {/* Right Section */}
             <div className="flex items-center gap-2">
