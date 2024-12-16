@@ -50,8 +50,8 @@
     }
 
     ::-webkit-scrollbar-thumb {
-        background: #e8e8e8;
-        border-radius: 200px;
+        background: #f4f4f5;
+        border-radius: 100px;
         border: 6px solid transparent;
         background-clip: padding-box;
         cursor: pointer;

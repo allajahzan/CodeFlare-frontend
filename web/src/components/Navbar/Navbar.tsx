@@ -34,7 +34,7 @@ const Navbar = () => {
     return (
         <div className="sticky top-0 left-0 w-full z-50 flex justify-between items-center p-5 bg-white">
             {/* Heading */}
-            <Heading className="text-2xl font-bold text-zinc-900" text={path} />
+            <Heading className="text-2xl font-bold text-black" text={path} />
 
             {/* Right Section */}
             <div className="flex items-center gap-4">
