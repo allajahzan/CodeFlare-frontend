@@ -10,7 +10,7 @@ function Reviews() {
   interface Review {
     id: number;
     week: number;
-    title: string;
+    title : string;
     date: string;
     status: "Pass" | "Fail";
     details: string;
@@ -20,7 +20,7 @@ function Reviews() {
     {
       id: 1,
       week: 1,
-      title: "Javascript",
+      title : 'Javascript',
       date: "20th Jun 2024",
       status: "Pass",
       details:
@@ -30,7 +30,7 @@ function Reviews() {
     {
       id: 2,
       week: 2,
-      title: "MongoDB",
+      title : "MongoDB",
       date: "27th Jun 2024",
       status: "Fail",
       details:
@@ -40,7 +40,7 @@ function Reviews() {
     {
       id: 3,
       week: 3,
-      title: "Full Domain",
+      title : 'Full Domain',
       date: "4th Jul 2024",
       status: "Pass",
       details:
@@ -123,7 +123,7 @@ function Reviews() {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -30 }}
-                  transition={{ duration: 0.2 }}
+                  transition={{ duration: 0.3 }}
                 >
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between">
@@ -164,7 +164,7 @@ function Reviews() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -30 }}
-                    transition={{ duration: 0.2 }}
+                    transition={{ duration: 0.3 }}
                   >
                     <div className="flex items-center justify-between">
                       <p className="text-base font-medium">
