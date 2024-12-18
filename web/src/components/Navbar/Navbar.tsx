@@ -2,7 +2,7 @@ import { useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { stateType, themeAction } from "../../redux/store";
 import NavbarItem from "./NavbarItem";
-import Heading from "../ui/Heading";
+import Heading from "../ui/heading";
 import { Bell, ChevronDown, Globe, Moon, Sun } from "lucide-react";
 import avatar_boy from "../../assets/images/avatar_boy.jpg";
 import { useLocation } from "react-router-dom";

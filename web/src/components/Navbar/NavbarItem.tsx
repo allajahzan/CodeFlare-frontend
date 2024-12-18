@@ -22,7 +22,7 @@ function NavbarItem({ Image, action, text }: propType) {
                     </div>
                 </TooltipTrigger>
                 <TooltipContent>
-                    <p style={{ fontSize: "12px" }}>{text}</p>
+                    <p style={{ fontSize: "13px" }}>{text}</p>
                 </TooltipContent>
             </Tooltip>
         </TooltipProvider>

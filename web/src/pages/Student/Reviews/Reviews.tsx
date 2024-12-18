@@ -5,57 +5,75 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import "../common.css";
 import LineChart from "@/components/LineChart";
+import { useToast } from "@/hooks/use-toast";
+
+interface Review {
+  id: number;
+  week: number;
+  title: string;
+  date: string;
+  status: "Pass" | "Fail";
+  details: string;
+  pendings: string[];
+}
+const reviews: Review[] = [
+  {
+    id: 1,
+    week: 1,
+    title: "Javascript",
+    date: "20th Jun 2024",
+    status: "Pass",
+    details:
+      "Successfully completed all tasks for Week 1. Demonstrated excellent problem-solving skills and attention to detail.",
+    pendings: ["data", "data", "data"],
+  },
+  {
+    id: 2,
+    week: 2,
+    title: "MongoDB",
+    date: "27th Jun 2024",
+    status: "Fail",
+    details:
+      "Need improvement in project management skills. Time management and task prioritization require attention.",
+    pendings: ["data", "data", "data"],
+  },
+  {
+    id: 3,
+    week: 3,
+    title: "Full Domain",
+    date: "4th Jul 2024",
+    status: "Pass",
+    details:
+      "Showed significant progress in coding skills. Implemented complex features with minimal guidance.",
+    pendings: ["data", "data", "data"],
+  },
+];
+
+const monthlyData = [
+  { week: "1", score: 9 },
+  { week: "2", score: 15 },
+  { week: "3", score: 0 },
+  { week: "5", score: 20 },
+  { week: "6", score: 10 },
+  { week: "7", score: 12 },
+  { week: "8", score: 0 },
+  { week: "9", score: 20 },
+  { week: "10", score: 10 },
+  { week: "11", score: 12 },
+  { week: "12", score: 0 },
+];
 
 function Reviews() {
-  interface Review {
-    id: number;
-    week: number;
-    title : string;
-    date: string;
-    status: "Pass" | "Fail";
-    details: string;
-    pendings: string[];
-  }
-  const reviews: Review[] = [
-    {
-      id: 1,
-      week: 1,
-      title : 'Javascript',
-      date: "20th Jun 2024",
-      status: "Pass",
-      details:
-        "Successfully completed all tasks for Week 1. Demonstrated excellent problem-solving skills and attention to detail.",
-      pendings: ["data", "data", "data"],
-    },
-    {
-      id: 2,
-      week: 2,
-      title : "MongoDB",
-      date: "27th Jun 2024",
-      status: "Fail",
-      details:
-        "Need improvement in project management skills. Time management and task prioritization require attention.",
-      pendings: ["data", "data", "data"],
-    },
-    {
-      id: 3,
-      week: 3,
-      title : 'Full Domain',
-      date: "4th Jul 2024",
-      status: "Pass",
-      details:
-        "Showed significant progress in coding skills. Implemented complex features with minimal guidance.",
-      pendings: ["data", "data", "data"],
-    },
-  ];
-
   const [selectedReview, setSelectedReview] = useState<Review | null>(
     reviews[reviews.length - 1]
   );
 
+  const { toast } = useToast();
+
   // copy to clipboard
   const handleCopy = async (texts: string[]) => {
     try {
+      toast({ title: "Pendings copied to clipboard" });
       await navigator.clipboard.writeText(texts.toString());
     } catch (error) {
       console.error("Failed to copy to clipboard:", error);
@@ -115,7 +133,7 @@ function Reviews() {
 
         <div className="w-full h-fit grid grid-rows-3 col-span-2 gap-5">
           {/* review details */}
-          <div className="h-full p-8 rounded-2xl shadow-custom overflow-hidden ">
+          <div className="h-full p-8 rounded-2xl shadow-custom overflow-hidden">
             <AnimatePresence mode="wait">
               {selectedReview && (
                 <motion.div
@@ -194,7 +212,10 @@ function Reviews() {
             </div>
             {/* chart for monthly performance*/}
             <div className="p-8 bg-zinc-0 rounded-2xl shadow-custom">
-              <LineChart />
+              <LineChart
+                data={monthlyData}
+                text="Weekly Performance Level (Last 12 Weeks)"
+              />
             </div>
           </div>
         </div>

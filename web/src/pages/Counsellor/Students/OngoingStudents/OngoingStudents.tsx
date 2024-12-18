@@ -7,7 +7,7 @@ import DropDown from "../../../../components/DropDowns/Counsellor/DropDown";
 import Header from "../../../../components/Table/DataTable/Header";
 import Body from "../../../../components/Table/DataTable/Body";
 import ContentHeadingInSmallSize from "../../../../components/Headings/Counsellor/ContentHeadingInSmallSize";
-import ContentHeading from "../../../../components/ui/Heading";
+import ContentHeading from "../../../../components/ui/heading";
 import Shadow from "../../../../components/Shadow/Shadow";
 
 function OngoingStudents() {

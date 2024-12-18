@@ -15,18 +15,24 @@ import Leave from "./pages/Student/Leave/Leave";
 import Login from "./pages/Student/Login/Login";
 import OngoingStudents from "./pages/Counsellor/Students/OngoingStudents/OngoingStudents";
 import MainLayout from "./components/Layout/StudentLayout";
+import { Toaster } from "@/components/ui/toaster"
 
 function App() {
   return (
     <Router>
+      {/* toster */}
+      <Toaster />
+
+      {/* tourtes */}
       <Routes>
         <Route path="/*" element={<UserRoutes />} />
-        <Route path="/counsellor/*" element={<AdminRoutes />} />
+        <Route path="/counsellor/*" element={<CounsellorRoutes />} />
       </Routes>
     </Router>
   );
 }
 
+// user routes
 function UserRoutes() {
   return (
     <>
@@ -49,7 +55,8 @@ function UserRoutes() {
   );
 }
 
-function AdminRoutes() {
+// counsellor routes
+function CounsellorRoutes() {
   return (
     <>
       <Routes>

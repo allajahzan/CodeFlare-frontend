@@ -6,7 +6,7 @@ import { useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { stateType } from '../../../redux/store';
 import Shadow from '../../../components/Shadow/Shadow';
-import ContentHeading from '../../../components/ui/Heading';
+import ContentHeading from '../../../components/ui/heading';
 import ContentHeadingInSmallSize from '../../../components/Headings/Student/ContentHeadingInSmallSize';
 
 function Manifest() {
