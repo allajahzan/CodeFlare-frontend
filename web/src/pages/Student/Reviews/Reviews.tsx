@@ -64,8 +64,8 @@ function Reviews() {
 
   return (
     <div className="h-full w-full flex flex-col gap-5">
-      <div className="h-fit p-5 grid grid-cols-1 sm:grid-cols-3 gap-5">
-        {/* lists */}
+      <div className="h-full p-5 grid grid-cols-1 sm:grid-cols-3 gap-5">
+        {/* reviews lists */}
         <div className="relative max-h-min flex flex-col gap-[30px] overflow-auto no-scrollbar">
           {reviews.reverse().map((review, index) => (
             <div key={review.id} className="relative rounded-full">
@@ -113,7 +113,7 @@ function Reviews() {
           ))}
         </div>
 
-        <div className="w-full h-full grid grid-rows-3 col-span-2 gap-5">
+        <div className="w-full h-fit grid grid-rows-3 col-span-2 gap-5">
           {/* review details */}
           <div className="h-full p-8 rounded-2xl shadow-custom overflow-hidden ">
             <AnimatePresence mode="wait">
@@ -123,7 +123,7 @@ function Reviews() {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -30 }}
-                  transition={{ duration: 0.3 }}
+                  transition={{ duration: 0.2 }}
                 >
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between">
@@ -132,7 +132,7 @@ function Reviews() {
                       </p>
                       <Badge
                         className={cn(
-                          "text-sm",
+                          "text-sm font-bold",
                           selectedReview.status === "Pass"
                             ? "text-green-900"
                             : "text-red-900"
@@ -152,7 +152,7 @@ function Reviews() {
             </AnimatePresence>
           </div>
 
-          {/* performance status */}
+          {/* pendings and performance status */}
           <div className="h-full grid grid-cols-2 row-span-2  gap-5">
             {/* pendings */}
             <div className="p-8 bg-zinc-0 rounded-2xl shadow-custom">
@@ -164,7 +164,7 @@ function Reviews() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -30 }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.2 }}
                   >
                     <div className="flex items-center justify-between">
                       <p className="text-base font-medium">
@@ -172,9 +172,9 @@ function Reviews() {
                       </p>
                       <div
                         onClick={() => handleCopy(selectedReview.pendings)}
-                        className="p-2 active:bg-zinc-100 active:animate-ping rounded-lg"
+                        className="p-2 active:bg-zinc-100 active:animate-ping rounded-lg cursor-pointer"
                       >
-                        <Copy className="w-5 h-5 cursor-pointer" />
+                        <Copy className="w-5 h-5" />
                       </div>
                     </div>
                     <AnimatePresence mode="wait">
