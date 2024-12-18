@@ -13,7 +13,7 @@ const AdminDashboard = ({data,text}:propType) => {
 
   return (
     <div className="h-full w-full flex flex-col gap-10">
-      <p className="text-base font-medium">{text}</p>
+      <p className="text-base font-medium text-ellipsis overflow-hidden text-nowrap">{text}</p>
       <div className="h-[266px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>

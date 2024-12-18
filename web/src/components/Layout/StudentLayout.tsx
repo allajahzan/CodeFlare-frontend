@@ -14,7 +14,7 @@ function StudentLayout() {
         <div className="bg-white">
             <div className="flex h-screen">
                 <SideBar />
-                <div className={cn("flex flex-grow flex-col h-full relative", isSmall? 'm-0' : 'ml-[130px]')}>
+                <div className={cn("flex flex-grow flex-col h-screen relative", isSmall? 'm-0' : 'ml-[130px]')}>
                     <Navbar />
                     <div className="h-screen overflow-auto">                        
                         <Outlet />

@@ -81,10 +81,13 @@ function Reviews() {
   };
 
   return (
-    <div className="h-full w-full flex flex-col gap-5">
-      <div className="h-full p-5 grid grid-cols-1 sm:grid-cols-3 gap-5">
+    <div className="w-full flex flex-col gap-5">
+      <div className="p-5 grid grid-cols-1 sm:grid-cols-3 gap-5">
         {/* reviews lists */}
-        <div className="relative max-h-min flex flex-col gap-[30px] overflow-auto no-scrollbar">
+        <div
+          style={{ height: "calc(100vh - 130px)" }}
+          className="sticky top-[20px] flex flex-col gap-[30px] overflow-auto no-scrollbar"
+        >
           {reviews.reverse().map((review, index) => (
             <div key={review.id} className="relative rounded-full">
               {/* one list */}
@@ -171,7 +174,7 @@ function Reviews() {
           </div>
 
           {/* pendings and performance status */}
-          <div className="h-full grid grid-cols-2 row-span-2  gap-5">
+          <div className="h-full grid grid-cols-2 row-span-2 gap-5">
             {/* pendings */}
             <div className="p-8 bg-zinc-0 rounded-2xl shadow-custom">
               <AnimatePresence mode="wait">
@@ -185,7 +188,7 @@ function Reviews() {
                     transition={{ duration: 0.2 }}
                   >
                     <div className="flex items-center justify-between">
-                      <p className="text-base font-medium">
+                      <p className="text-base font-medium text-ellipsis overflow-hidden text-nowrap">
                         Pendings ({selectedReview.title})
                       </p>
                       <div
@@ -211,11 +214,8 @@ function Reviews() {
               </AnimatePresence>
             </div>
             {/* chart for monthly performance*/}
-            <div className="p-8 bg-zinc-0 rounded-2xl shadow-custom">
-              <LineChart
-                data={monthlyData}
-                text="Weekly Performance Level (Last 12 Weeks)"
-              />
+            <div className="p-8 bg-zinc-0 rounded-2xl shadow-custom h-full">
+              <LineChart data={monthlyData} text="Weekly Performance" />
             </div>
           </div>
         </div>
