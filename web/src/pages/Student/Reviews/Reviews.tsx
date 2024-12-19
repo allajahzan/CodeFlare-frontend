@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckCircle, ChevronRight, Copy, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -56,37 +56,7 @@ const reviews: Review[] = [
     details:
       "Showed significant progress in coding skills. Implemented complex features with minimal guidance.",
     pendings: ["data", "data", "data"],
-  },
-  {
-    id: 5,
-    week: 5,
-    title: "Full Domain",
-    date: "4th Jul 2024",
-    status: "Pass",
-    details:
-      "Showed significant progress in coding skills. Implemented complex features with minimal guidance.",
-    pendings: ["data", "data", "data"],
-  },
-  {
-    id: 6,
-    week: 6,
-    title: "Full Domain",
-    date: "4th Jul 2024",
-    status: "Pass",
-    details:
-      "Showed significant progress in coding skills. Implemented complex features with minimal guidance.",
-    pendings: ["data", "data", "data"],
-  },
-  {
-    id: 7,
-    week: 7,
-    title: "Full Domain",
-    date: "4th Jul 2024",
-    status: "Pass",
-    details:
-      "Showed significant progress in coding skills. Implemented complex features with minimal guidance.",
-    pendings: ["data", "data", "data"],
-  },
+  }
 ];
 
 const monthlyData = [
@@ -111,14 +81,18 @@ function Reviews() {
   const { toast } = useToast();
 
   // copy to clipboard
-  const handleCopy = async (texts: string[]) => {
-    try {
-      toast({ title: "Pendings copied to clipboard" });
-      await navigator.clipboard.writeText(texts.toString());
-    } catch (error) {
-      console.error("Failed to copy to clipboard:", error);
-    }
-  };
+  const handleCopy = useCallback(
+    async (texts: string[]) => {
+      try {
+        await navigator.clipboard.writeText(texts.toString());
+        toast({ title: "Pendings copied to clipboard" });
+      } catch (error) {
+        console.error("Failed to copy to clipboard:", error);
+        toast({ title: "Failed to copy to clipboard" });
+      }
+    },
+    [toast]
+  );
 
   return (
     <div className="w-full flex flex-col gap-5">
