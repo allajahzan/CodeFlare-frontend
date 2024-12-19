@@ -21,8 +21,8 @@
         font-family: "Urbanist", sans-serif;
         font-optical-sizing: auto;
         background-color: white;
-        transition: 'all 0.3s ease-in-out'
-
+        transition: "all 0.3s ease-in-out";
+        outline: none;
     }
 
     p,
@@ -31,6 +31,7 @@
     textarea,
     option {
         font-size: 14.5px;
+        transition: "all 0.3s ease-in-out",
     }
 
     h1 {
@@ -68,6 +69,7 @@
         outline: none;
         -webkit-user-drag: none;
         user-select: none;
+        transition: "all 0.3s ease-in-out",
     }
 }
 

@@ -1,4 +1,3 @@
-import SideBarItem from "./SideBarItem";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useLayoutEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,47 +7,45 @@ import {
     sideBarStudentAction,
 } from "../../redux/store";
 import {
-    CalendarCheck2,
-    CodeXml,
-    CreditCard,
-    FileUser,
-    IdCard,
-    LayoutDashboard,
-    ListTodo,
-    LogOut,
-    MessageCircleMore,
-} from "lucide-react";
-import "../SideBar.css";
-import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
+import SideBarItem from "./SideBarItem";
+import { LogOut, LucideProps } from "lucide-react";
+import "./SideBar.css";
+import Slider from "../Slider/Slider";
 
-function SideBar() {
+interface propsType {
+    sideBarItems: {
+        path: string;
+        icon: React.ForwardRefExoticComponent<
+            Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
+        >;
+        label: string;
+    }[];
+}
+
+function SideBar({ sideBarItems }: propsType) {
     const [style, setStyle] = useState<React.CSSProperties>({});
     const isSmall = useSelector((state: stateType) => state.isSmall);
-    const isSideBarStudent = useSelector(
+    const isSideBarVisible = useSelector(
         (state: stateType) => state.isSideBarStudent
     );
-    const isShrinkSideBarStudent = useSelector(
-        (state: stateType) => state.isShrinkSideBarStudent
-    );
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const currentPath = useLocation().pathname;
 
     // handle sidebar item
     const handleSideBarItemClick = (event: React.MouseEvent<HTMLLIElement>) => {
-        const text = !isSmall
-            ? event.currentTarget.getAttribute("data-text")?.toLowerCase()
-            : (
-                event.currentTarget.querySelector("p") as HTMLParagraphElement
-            )?.innerText.toLowerCase();
+        const label = event.currentTarget.getAttribute("data-label")?.toLowerCase();
 
-        if (text) navigate(`/student/${text}`);
+        if (label) {
+            const basePath = window.location.pathname.split("/")[1];
+            navigate(`${basePath}/${label}`);
+        }
         if (isSmall) dispatch(sideBarStudentAction(false));
     };
 
@@ -70,12 +67,8 @@ function SideBar() {
 
     // sidebar shrink
     useLayoutEffect(() => {
-        const width = isSmall ? "240px" : "130px";
-        const transform = isSmall
-            ? "translateX(-100%)"
-            : isShrinkSideBarStudent
-                ? "translateX(-100%)"
-                : "translateX(0%)";
+        const width = "130px";
+        const transform = isSmall ? "translateX(-100%)" : "translateX(0%)";
 
         setStyle({
             width,
@@ -83,45 +76,29 @@ function SideBar() {
             opacity: 1,
             transition: "all 0.3s ease-in-out",
         });
-    }, [isShrinkSideBarStudent, isSmall]);
+    }, [isSmall]);
 
     // sidebar toggle
     useLayoutEffect(() => {
-        const transform = isSideBarStudent
-            ? "translateX(0%)"
-            : isSmall
-                ? "translateX(-100%)"
-                : "translateX(0%)";
+        const transform = isSmall
+            ? isSideBarVisible
+                ? "translateX(0%)"
+                : "translateX(-100%)"
+            : "translateX(0%)";
 
         setStyle((prev) => ({
             ...prev,
             transform,
         }));
-    }, [isSideBarStudent, isSmall]);
-
-    // sidebar items
-    const sideBarItems = [
-        { path: "/student/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-        { path: "/student/chat", icon: MessageCircleMore, label: "Chats" },
-        { path: "/student/tasks", icon: ListTodo, label: "Tasks" },
-        { path: "/student/reviews", icon: CalendarCheck2, label: "Reviews" },
-        { path: "/student/leetcode", icon: CodeXml, label: "Leetcode" },
-        { path: "/student/leaves", icon: IdCard, label: "Leaves" },
-        { path: "/student/invoices", icon: CreditCard, label: "Invoices" },
-        { path: "/student/manifest", icon: FileUser, label: "Manifest" },
-    ];
+    }, [isSideBarVisible, isSmall]);
 
     return (
-        <div style={style} className={cn("sidebar bg-white")}>
+        <div style={style} className="sidebar z-50 bg-transparent">
             {/* SideBar Items Section */}
-            <div className={`${isSmall ? "p-0" : "p-5"} h-full`}>
-                <div
-                    style={
-                        !isSmall ? { boxShadow: "0.01rem 0.05rem 1rem 0.2rem #d1d5db" } : {}
-                    }
-                    className={`h-full flex flex-col justify-between py-8  ${isSmall ? "bg-transparent" : "bg-zinc-900 rounded-3xl"
-                        }`}
-                >
+            <div className="h-full p-5">
+                <div className="h-full py-8 bg-zinc-900 flex flex-col justify-between rounded-3xl">
+                    {isSideBarVisible && <Slider />}
+                    {/* title */}
                     <li>
                         <div className="flex justify-center p-2">
                             <em
@@ -133,11 +110,12 @@ function SideBar() {
                         </div>
                     </li>
 
+                    {/* items */}
                     <div className="overflow-auto overflow-x-hidden no-scrollbar h-[448px]">
                         {sideBarItems.map((item) => (
                             <SideBarItem
                                 key={item.label}
-                                color={currentPath === item.path ? "bg-gray-100" : ""}
+                                color={currentPath === item.path ? "" : ""}
                                 Image={item.icon}
                                 text={item.label}
                                 handleSideBarItems={handleSideBarItemClick}
@@ -145,6 +123,7 @@ function SideBar() {
                         ))}
                     </div>
 
+                    {/* logout */}
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger className="w-full">

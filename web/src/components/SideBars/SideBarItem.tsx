@@ -22,7 +22,7 @@ function SideBarItem({ Image, text, handleSideBarItems }: propTypes) {
             <Tooltip>
                 <TooltipTrigger className="w-full">
                     <li
-                        data-text={text}
+                        data-label={text}
                         onClick={handleSideBarItems}
                         className={`cursor-pointer`}
                     >
