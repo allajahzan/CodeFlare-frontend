@@ -15,7 +15,7 @@ import {
   MessageCircleMore,
 } from "lucide-react";
 import Shadow from "../Shadow/Shadow";
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
 
 function StudentLayout() {
@@ -41,19 +41,22 @@ function StudentLayout() {
   }, [isSmall]);
 
   // sidebar items
-  const sideBarItems = [
-    { path: "/student/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-    ...(isSmall
-      ? [{ path: "/community", icon: Globe, label: "Community" }]
-      : []),
-    { path: "/student/chat", icon: MessageCircleMore, label: "Chats" },
-    { path: "/student/tasks", icon: ListTodo, label: "Tasks" },
-    { path: "/student/reviews", icon: CalendarCheck2, label: "Reviews" },
-    { path: "/student/leetcode", icon: CodeXml, label: "Leetcode" },
-    { path: "/student/leaves", icon: IdCard, label: "Leaves" },
-    { path: "/student/invoices", icon: CreditCard, label: "Invoices" },
-    { path: "/student/manifest", icon: FileUser, label: "Manifest" },
-  ];
+  const sideBarItems = useMemo(
+    () => [
+      { path: "/student/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+      ...(isSmall
+        ? [{ path: "/community", icon: Globe, label: "Community" }]
+        : []),
+      { path: "/student/chat", icon: MessageCircleMore, label: "Chats" },
+      { path: "/student/tasks", icon: ListTodo, label: "Tasks" },
+      { path: "/student/reviews", icon: CalendarCheck2, label: "Reviews" },
+      { path: "/student/leetcode", icon: CodeXml, label: "Leetcode" },
+      { path: "/student/leaves", icon: IdCard, label: "Leaves" },
+      { path: "/student/invoices", icon: CreditCard, label: "Invoices" },
+      { path: "/student/manifest", icon: FileUser, label: "Manifest" },
+    ],
+    [isSmall]
+  );
 
   return (
     <div className="h-screen bg-white">
