@@ -4,7 +4,7 @@ import { CheckCircle, ChevronRight, Copy, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import "../common.css";
-import LineChart from "@/components/LineChart";
+import LineChart from "@/components/Charts/LineChart";
 import { useToast } from "@/hooks/use-toast";
 
 interface Review {

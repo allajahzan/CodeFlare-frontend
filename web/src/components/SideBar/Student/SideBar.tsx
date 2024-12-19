@@ -25,6 +25,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 function SideBar() {
     const [style, setStyle] = useState<React.CSSProperties>({});
@@ -111,15 +112,15 @@ function SideBar() {
     ];
 
     return (
-        <div
-            style={style}
-            className={`sidebar bg-white ${isSmall ? "shadow-xl z-30" : "z-20"}`}
-        >
+        <div style={style} className={cn("sidebar bg-white")}>
             {/* SideBar Items Section */}
-            <div className={`${isSmall ? 'p-0' : 'p-5'} h-full`}>
+            <div className={`${isSmall ? "p-0" : "p-5"} h-full`}>
                 <div
-                    style={!isSmall ? { boxShadow: "0.01rem 0.05rem 1rem 0.2rem #d1d5db" } : {}}
-                    className={`h-full flex flex-col justify-between py-8  ${isSmall ? 'bg-transparent' : 'bg-zinc-900 rounded-3xl'}`}
+                    style={
+                        !isSmall ? { boxShadow: "0.01rem 0.05rem 1rem 0.2rem #d1d5db" } : {}
+                    }
+                    className={`h-full flex flex-col justify-between py-8  ${isSmall ? "bg-transparent" : "bg-zinc-900 rounded-3xl"
+                        }`}
                 >
                     <li>
                         <div className="flex justify-center p-2">

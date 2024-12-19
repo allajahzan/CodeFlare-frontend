@@ -1,5 +1,3 @@
-import { useSelector } from "react-redux";
-import { stateType } from "../../../redux/store";
 import {
     Tooltip,
     TooltipContent,
@@ -18,47 +16,25 @@ interface propTypes {
     color?: string;
 }
 
-function SideBarItem({ Image, text, handleSideBarItems, color }: propTypes) {
-    const isSmall = useSelector(
-        (state: stateType) => state.isSmall
-    );
-
+function SideBarItem({ Image, text, handleSideBarItems }: propTypes) {
     return (
         <TooltipProvider>
-            {!isSmall ? (
-                <Tooltip>
-                    <TooltipTrigger className="w-full">
-                        <li
-                            data-text={text}
-                            onClick={handleSideBarItems}
-                            className={`cursor-pointer`}
-                        >
-                            <div className="flex justify-center p-2">
-                                <Image className="text-white w-5 h-5" />
-                            </div>
-                        </li>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p style={{ fontSize: "13px" }}>{text}</p>
-                    </TooltipContent>
-                </Tooltip>
-            ) : (
-                <li
-                    data-text={text}
-                    onClick={handleSideBarItems}
-                    className={`group cursor-pointer ${color === "" ? "" : color
-                        }`}
-                >
-                    <div className={`flex items-center p-2`}>
-                        <div className="flex items-center gap-4">
-                            <Image />
-                            <p className="pt-0.5 font-bold tracking-wider text-nowrap">
-                                {text}
-                            </p>
+            <Tooltip>
+                <TooltipTrigger className="w-full">
+                    <li
+                        data-text={text}
+                        onClick={handleSideBarItems}
+                        className={`cursor-pointer`}
+                    >
+                        <div className="flex justify-center p-2">
+                            <Image className="text-white w-5 h-5" />
                         </div>
-                    </div>
-                </li>
-            )}
+                    </li>
+                </TooltipTrigger>
+                <TooltipContent>
+                    <p style={{ fontSize: "13px" }}>{text}</p>
+                </TooltipContent>
+            </Tooltip>
         </TooltipProvider>
     );
 }
