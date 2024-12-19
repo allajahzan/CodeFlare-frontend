@@ -24,16 +24,15 @@ const Navbar = () => {
     const location = useLocation();
     const pathname = location.pathname;
 
+    // handle theme
     const handleTheme = useCallback(() => {
         dispatch(themeAction(!theme));
     }, [dispatch, theme]);
 
-    const handleSideBar = () => {
+    // handle sidebar
+    const handleSideBar = useCallback(() => {
         dispatch(sideBarStudentAction(!isSideBarStudent));
-    };
-
-    const themeIcon = useMemo(() => (theme ? Sun : Moon), [theme]);
-    const themeText = useMemo(() => (theme ? "Light" : "Dark"), [theme]);
+    }, [dispatch, isSideBarStudent]);
 
     useLayoutEffect(() => {
         pathname.split("/")[2] === "dashboard"
@@ -43,6 +42,10 @@ const Navbar = () => {
                 pathname.split("/")[2].slice(1)
             );
     }, [location]);
+
+    // determine theme icon and text
+    const themeIcon = useMemo(() => (theme ? Sun : Moon), [theme]);
+    const themeText = useMemo(() => (theme ? "Light" : "Dark"), [theme]);
 
     return (
         <div
