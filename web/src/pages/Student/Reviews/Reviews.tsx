@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import "../common.css";
 import LineChart from "@/components/Charts/LineChart";
 import { useToast } from "@/hooks/use-toast";
+import { useSelector } from "react-redux";
+import { stateType } from "@/redux/store";
 
 interface Review {
   id: number;
@@ -47,6 +49,16 @@ const reviews: Review[] = [
       "Showed significant progress in coding skills. Implemented complex features with minimal guidance.",
     pendings: ["data", "data", "data"],
   },
+  {
+    id: 4,
+    week: 4,
+    title: "Full Domain",
+    date: "4th Jul 2024",
+    status: "Pass",
+    details:
+      "Showed significant progress in coding skills. Implemented complex features with minimal guidance.",
+    pendings: ["data", "data", "data"],
+  },
 ];
 
 const monthlyData = [
@@ -64,6 +76,7 @@ const monthlyData = [
 ];
 
 function Reviews() {
+  const isSmall = useSelector((state: stateType) => state.isSmall);
   const [selectedReview, setSelectedReview] = useState<Review | null>(
     reviews[reviews.length - 1]
   );
@@ -82,11 +95,13 @@ function Reviews() {
 
   return (
     <div className="w-full flex flex-col gap-5">
-      <div className="p-5 grid grid-cols-1 sm:grid-cols-3 gap-5">
+      <div className="p-5 grid grid-cols-1 md:grid-cols-3 gap-0 md:gap-5">
         {/* reviews lists */}
         <div
-          style={{ height: "calc(100vh - 130px)" }}
-          className="sticky top-[20px] flex flex-col gap-[30px] overflow-auto no-scrollbar"
+          style={{
+            height: isSmall ? "calc(100vh - 320px)" : "calc(100vh - 130px)",
+          }}
+          className="sticky top-[20px] w-full flex flex-col gap-[30px] overflow-auto no-scrollbar"
         >
           {reviews.reverse().map((review, index) => (
             <div key={review.id} className="relative rounded-full">
@@ -134,7 +149,7 @@ function Reviews() {
           ))}
         </div>
 
-        <div className="w-full h-fit grid grid-rows-3 col-span-2 gap-5">
+        <div className="w-full h-fit relative z-20 bg-white grid grid-rows-3 col-span-2 gap-5 rounded-2xl">
           {/* review details */}
           <div className="h-full p-8 rounded-2xl shadow-custom overflow-hidden">
             <AnimatePresence mode="wait">
@@ -174,7 +189,7 @@ function Reviews() {
           </div>
 
           {/* pendings and performance status */}
-          <div className="h-full grid grid-cols-2 row-span-2 gap-5">
+          <div className="h-full grid grid-cols-1 sm:grid-cols-2 row-span-2 gap-5">
             {/* pendings */}
             <div className="p-8 bg-zinc-0 rounded-2xl shadow-custom">
               <AnimatePresence mode="wait">

@@ -14,7 +14,7 @@ function Slider() {
     return (
         <div
             onClick={handle}
-            className={`absolute z-50 top-[18%] translate-y-[-50%] -right-1 h-10 w-10 bg-white rounded-full shadow-lg flex justify-center items-center cursor-pointer`}
+            className={`absolute z-50 top-[17%] translate-y-[-50%] -right-1 h-10 w-10 bg-white rounded-full shadow-lg flex justify-center items-center cursor-pointer`}
         >
             <CircleChevronLeft className="text-black w-5" />
         </div>
