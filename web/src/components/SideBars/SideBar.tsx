@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useCallback, useLayoutEffect, useState } from "react";
+import { useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
     stateType,
@@ -17,6 +17,7 @@ import { LogOut, LucideProps, Moon, Sun } from "lucide-react";
 import "./SideBar.css";
 import Slider from "../Slider/Slider";
 import { cn } from "@/lib/utils";
+import React from "react";
 
 interface propsType {
     sideBarItems: {
@@ -44,8 +45,8 @@ function SideBar({ sideBarItems }: propsType) {
         const label = event.currentTarget.getAttribute("data-label")?.toLowerCase();
 
         if (label) {
-            const basePath = window.location.pathname.split("/")[1];
-            navigate(`${basePath}/${label}`);
+            const basePath = currentPath.split("/")[1];
+            navigate(`/${basePath}/${label}`);
         }
         if (isSmall) dispatch(sideBarStudentAction(false));
     };
@@ -137,4 +138,4 @@ function SideBar({ sideBarItems }: propsType) {
     );
 }
 
-export default SideBar;
+export default React.memo(SideBar);
