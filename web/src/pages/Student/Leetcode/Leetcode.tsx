@@ -1,4 +1,4 @@
-import SideBar from "../../../components/SideBar/Student/SideBar";
+import SideBar from "../../../components/SideBars/SideBar";
 import DataTable from "../../../components/Table/DataTable/DataTable";
 import leetcode from "../../../assets/icons/leetcode.svg";
 import { useLayoutEffect, useState } from "react";

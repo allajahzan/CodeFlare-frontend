@@ -1,4 +1,4 @@
-import SideBar from '../../../components/SideBar/Student/SideBar'
+import SideBar from '../../../components/SideBars/SideBar'
 import manifest from '../../../assets/icons/manifest.svg'
 import user from '../../../assets/images/allaj.jpeg'
 import TextField from '../../../components/TextField/TextField'

@@ -1,4 +1,4 @@
-import SideBarItem from "../Student/SideBarItem";
+import SideBarItem from "./SideBarItem";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useLayoutEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -6,7 +6,7 @@ import {
     stateType,
     resizeAction,
     sideBarStudentAction,
-} from "../../../redux/store";
+} from "../../redux/store";
 import {
     CalendarCheck2,
     CodeXml,

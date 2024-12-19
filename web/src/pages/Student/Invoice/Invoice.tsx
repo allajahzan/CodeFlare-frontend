@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import SideBar from "../../../components/SideBar/Student/SideBar";
+import SideBar from "../../../components/SideBars/SideBar";
 import invoice from "../../../assets/icons/invoice.svg";
 import InvoiceTable from "../../../components/Table/InvoiceTable/InvoiceTable";
 import Shadow from "../../../components/Shadow/Shadow";

@@ -1,4 +1,4 @@
-import SideBar from "../../../components/SideBar/Student/SideBar";
+import SideBar from "../../../components/SideBars/SideBar";
 import leave from "../../../assets/icons/leave.svg";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector } from "react-redux";
