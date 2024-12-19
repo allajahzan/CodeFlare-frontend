@@ -10,8 +10,10 @@ import Heading from "../ui/heading";
 import { Bell, ChevronDown, Globe, Moon, Sun } from "lucide-react";
 import avatar_boy from "../../assets/images/avatar_boy.jpg";
 import { useLocation } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
 const Navbar = () => {
+    const isSmall = useSelector((state: stateType) => state.isSmall);
     const isSideBarStudent = useSelector(
         (state: stateType) => state.isSideBarStudent
     );
@@ -43,7 +45,12 @@ const Navbar = () => {
     }, [location]);
 
     return (
-        <div className="sticky top-0 left-0 w-full z-40 flex justify-between items-center p-5 bg-white">
+        <div
+            className={cn(
+                "sticky top-0 left-0 w-full z-40 flex justify-between items-center p-5 bg-white",
+                isSmall && "shadow-custom"
+            )}
+        >
             {/* Heading */}
             <Heading
                 className="text-2xl font-bold text-black"
@@ -70,10 +77,10 @@ const Navbar = () => {
 
                 {/* Profile Section */}
                 <div
-                    className="p-2 w-[120px] h-12 rounded-full bg-zinc-100 flex items-center relative"
+                    className="p-2 w-[120px] h-12 rounded-full bg-zinc-100 flex items-center relative group"
                     aria-label="Profile Dropdown"
                 >
-                    <div className="overflow-hidden h-10 w-10 rounded-full">
+                    <div className="overflow-hidden h-10 w-10 rounded-full group-hover:animate-bounce">
                         <img className="h-full w-full" src={avatar_boy} alt="User Avatar" />
                     </div>
                     <p className="font-bold text-black flex-1 text-center text-ellipsis overflow-hidden">

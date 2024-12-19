@@ -77,7 +77,7 @@ const isStudentDropDownShow = (
 };
 
 // reducer function for resize
-const isSmall = (prevState: boolean = false, action: actionType) => {
+const isSmall = (prevState: boolean = localStorage.getItem('isSizeSmall') === "1"? true : false , action: actionType) => {
     if (action.type === "resize") {
         return action.payload;
     }

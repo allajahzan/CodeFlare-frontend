@@ -1,27 +1,51 @@
 import SideBar from "../SideBars/SideBar";
 import { Outlet } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
-import { useSelector } from "react-redux";
-import { stateType } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { resizeAction, sideBarStudentAction, stateType } from "@/redux/store";
 import {
   CalendarCheck2,
   CodeXml,
   CreditCard,
   FileUser,
+  Globe,
   IdCard,
   LayoutDashboard,
   ListTodo,
   MessageCircleMore,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
 import Shadow from "../Shadow/Shadow";
+import { useLayoutEffect } from "react";
+import { cn } from "@/lib/utils";
 
 function StudentLayout() {
   const isSmall = useSelector((state: stateType) => state.isSmall);
+  const dispatch = useDispatch();
+
+  // screen size
+  useLayoutEffect(() => {
+    const updateScreenSize = () => {
+      if (window.innerWidth < 899) {
+        dispatch(resizeAction(true));
+        localStorage.setItem("isSizeSmall", "1");
+      } else {
+        dispatch(resizeAction(false));
+        dispatch(sideBarStudentAction(false));
+        localStorage.setItem("isSizeSmall", "0");
+      }
+    };
+
+    updateScreenSize();
+    window.addEventListener("resize", updateScreenSize);
+    return () => window.removeEventListener("resize", updateScreenSize);
+  }, [isSmall]);
 
   // sidebar items
   const sideBarItems = [
     { path: "/student/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+    ...(isSmall
+      ? [{ path: "/community", icon: Globe, label: "Community" }]
+      : []),
     { path: "/student/chat", icon: MessageCircleMore, label: "Chats" },
     { path: "/student/tasks", icon: ListTodo, label: "Tasks" },
     { path: "/student/reviews", icon: CalendarCheck2, label: "Reviews" },

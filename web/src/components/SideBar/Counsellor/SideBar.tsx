@@ -82,41 +82,41 @@ function SideBar() {
         }
     };
 
-    // Effects
-    useLayoutEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth < 899) {
-                dispatch(resizeAction(true));
-            } else {
-                dispatch(resizeAction(false));
-                dispatch(sideBarCounsellorAction(false));
-            }
-        };
-        handleResize();
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, [dispatch]);
+    // // Effects
+    // useLayoutEffect(() => {
+    //     const handleResize = () => {
+    //         if (window.innerWidth < 899) {
+    //             dispatch(resizeAction(true));
+    //         } else {
+    //             dispatch(resizeAction(false));
+    //             dispatch(sideBarCounsellorAction(false));
+    //         }
+    //     };
+    //     handleResize();
+    //     window.addEventListener("resize", handleResize);
+    //     return () => window.removeEventListener("resize", handleResize);
+    // }, [dispatch]);
 
-    useLayoutEffect(() => {
-        setStudentDropDownStyle({
-            opacity: isStudentDropDownShow ? 1 : 0,
-            transition: "all 0.3s ease-in-out",
-            transform: isStudentDropDownShow ? "translateY(0%)" : "translateY(-100%)",
-        });
-        setBelowItemsStyle({
-            transition: "all 0.3s ease-in-out",
-            marginTop: isStudentDropDownShow ? "0px" : "-320px",
-        });
-    }, [isStudentDropDownShow]);
+    // useLayoutEffect(() => {
+    //     setStudentDropDownStyle({
+    //         opacity: isStudentDropDownShow ? 1 : 0,
+    //         transition: "all 0.3s ease-in-out",
+    //         transform: isStudentDropDownShow ? "translateY(0%)" : "translateY(-100%)",
+    //     });
+    //     setBelowItemsStyle({
+    //         transition: "all 0.3s ease-in-out",
+    //         marginTop: isStudentDropDownShow ? "0px" : "-320px",
+    //     });
+    // }, [isStudentDropDownShow]);
 
-    useLayoutEffect(() => {
-        setStyle({
-            width: isShrinkSideBarCounsellor ? "80px" : "250px",
-            transform: isSmall ? "translateX(-100%)" : "translateX(0%)",
-            opacity: 1,
-            transition: "all 0.3s ease-in-out",
-        });
-    }, [isSmall, isShrinkSideBarCounsellor]);
+    // useLayoutEffect(() => {
+    //     setStyle({
+    //         width: isShrinkSideBarCounsellor ? "80px" : "250px",
+    //         transform: isSmall ? "translateX(-100%)" : "translateX(0%)",
+    //         opacity: 1,
+    //         transition: "all 0.3s ease-in-out",
+    //     });
+    // }, [isSmall, isShrinkSideBarCounsellor]);
 
     useLayoutEffect(() => {
         setStyle((prev) => ({

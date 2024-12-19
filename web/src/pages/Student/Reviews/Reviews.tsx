@@ -6,8 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import "../common.css";
 import LineChart from "@/components/Charts/LineChart";
 import { useToast } from "@/hooks/use-toast";
-import { useSelector } from "react-redux";
-import { stateType } from "@/redux/store";
 
 interface Review {
   id: number;
@@ -106,7 +104,6 @@ const monthlyData = [
 ];
 
 function Reviews() {
-  const isSmall = useSelector((state: stateType) => state.isSmall);
   const [selectedReview, setSelectedReview] = useState<Review | null>(
     reviews[reviews.length - 1]
   );
@@ -128,10 +125,8 @@ function Reviews() {
       <div className="p-5 grid grid-cols-1 md:grid-cols-3 gap-0 md:gap-5">
         {/* reviews lists */}
         <div
-          className={cn(
-            "sticky top-[20px] w-full flex flex-col gap-[30px] overflow-auto no-scrollbar",
-            "h-[calc(100vh_-_322px)] md:h-[calc(100vh_-_130px)]", isSmall? "mb-5" : "mb-0"
-          )}
+          className="sticky top-[20px] w-full flex flex-col gap-[30px] overflow-auto no-scrollbar
+            h-[calc(100vh-322px)] md:h-[calc(100vh-130px)] mb-5 md:mb-0"
         >
           {reviews.reverse().map((review, index) => (
             <div key={review.id} className="relative rounded-full">
@@ -232,19 +227,19 @@ function Reviews() {
                     exit={{ opacity: 0, y: -30 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-start justify-between relative">
                       <p className="text-base font-medium text-ellipsis overflow-hidden text-nowrap">
                         Pendings ({selectedReview.title})
                       </p>
                       <div
                         onClick={() => handleCopy(selectedReview.pendings)}
-                        className="p-2 active:bg-zinc-100 active:animate-ping rounded-lg cursor-pointer"
+                        className="p-3 absolute -right-4 -top-2.5 bg-white active:bg-zinc-100 rounded-lg cursor-pointer"
                       >
                         <Copy className="w-5 h-5" />
                       </div>
                     </div>
                     <AnimatePresence mode="wait">
-                      <div className="h-[166px] sm:h-[266px] flex flex-col gap-2 overflow-auto no-scrolbar">
+                      <div className="h-[170px] sm:h-[266px] flex flex-col gap-2 overflow-auto no-scrolbar">
                         {selectedReview.pendings.map((item, index) => {
                           return (
                             <p key={index} className="font-medium">
