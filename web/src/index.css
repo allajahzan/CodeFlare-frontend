@@ -5,7 +5,7 @@
 @layer utilities {
     html {
         scrollbar-width: none;
-        /* color: hsl(240 5.9% 10%); */
+        scroll-behavior: smooth;
     }
 
     .no-scrollbar::-webkit-scrollbar {
