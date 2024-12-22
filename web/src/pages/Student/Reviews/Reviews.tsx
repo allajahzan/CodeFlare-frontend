@@ -188,7 +188,7 @@ function Reviews() {
           </div>
 
           {/* pendings and performance status */}
-          <div className="h-full grid grid-cols-1 sm:grid-cols-2 row-span-2 gap-5">
+          <div className="h-fit grid grid-cols-1 sm:grid-cols-2 row-span-2 gap-5">
             {/* pendings */}
             <div className="p-8 bg-zinc-0 rounded-2xl shadow-custom">
               <AnimatePresence mode="wait">
