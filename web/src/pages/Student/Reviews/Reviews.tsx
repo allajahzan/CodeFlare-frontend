@@ -4,8 +4,8 @@ import { CheckCircle, ChevronRight, Copy, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import "../common.css";
-import LineChart from "@/components/Charts/LineChart";
 import { useToast } from "@/hooks/use-toast";
+import LineCharts from "@/components/Charts/LineChart";
 
 interface Review {
   id: number;
@@ -229,7 +229,7 @@ function Reviews() {
             </div>
             {/* chart for monthly performance*/}
             <div className="p-8 bg-zinc-0 rounded-2xl shadow-custom h-full">
-              <LineChart data={monthlyData} text="Weekly Performance" />
+              <LineCharts data={monthlyData} text="Weekly Performance" />
             </div>
           </div>
         </div>

@@ -59,7 +59,7 @@ function OngoingStudents() {
         <div>
             <Shadow />
             <div className='flex h-[100vh]'>
-                <SideBar />
+                {/* <SideBar /> */}
                 <div style={style} className='w-full'>
 
                     <ContentHeadingInSmallSize />
@@ -68,17 +68,17 @@ function OngoingStudents() {
                         className='w-full h-full flex flex-col gap-y-4 border-white rounded-tl-lg  relative z-20'>
 
                         <div className='flex justify-between items-start relative'>
-                            <ContentHeading image={students} text='Ongoing students' />
+                            {/* <ContentHeading image={students} text='Ongoing students' /> */}
                         </div>
 
-                        <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-2">
-                            {/* batch drop down */}
+                        {/* <div className="w-full grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            
                             <DropDown datas={batches as string[]} selectedItem={selectedBatch} setStateVariable1={setIsOpenBatchDropDown} setStateVariable2={setIsOpenWeekDropDown} setStateVariable3={setIsOpenDomainDropDown} stateVariable={isOpenBatchDropDown} handleFunction={handleBatch} />
-                            {/* week drop down */}
+                            
                             <DropDown datas={weeks as string[]} selectedItem={selectedWeek} setStateVariable1={setIsOpenWeekDropDown} setStateVariable2={setIsOpenBatchDropDown} setStateVariable3={setIsOpenDomainDropDown} stateVariable={isOpenWeekDropDown} handleFunction={handleWeek} />
-                            {/* week drop down */}
+                            
                             <DropDown datas={domain as string[]} selectedItem={selectedDomain} setStateVariable1={setIsOpenDomainDropDown} setStateVariable2={setIsOpenWeekDropDown} setStateVariable3={setIsOpenBatchDropDown} stateVariable={isOpenDomainDropDown} handleFunction={handleDomain} />
-                        </div>
+                        </div> */}
 
                         <div className="w-full">
                             <input placeholder="Search students" name="search students" type="text" className="w-full bg-white p-3 bg-transparent border-2 border-black border-opacity-10 font-medium rounded-lg" autoComplete="off" />

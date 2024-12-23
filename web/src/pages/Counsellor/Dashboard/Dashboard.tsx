@@ -25,7 +25,7 @@ function Dashboard() {
     <div>
       <Shadow />
       <div className='flex h-[100vh]'>
-        <SideBar />
+        {/* <SideBar /> */}
         <div style={style} className='w-full'>
 
           <ContentHeadingInSmallSize />
@@ -34,7 +34,7 @@ function Dashboard() {
             className='w-full h-full flex flex-col gap-y-4 border-white rounded-tl-lg  relative z-20'>
 
             <div className='flex justify-between items-start relative'>
-              <ContentHeading image={dashboard} text='Dashboard' />
+              {/* <ContentHeading image={dashboard} text='Dashboard' /> */}
             </div>
 
             {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-2">
