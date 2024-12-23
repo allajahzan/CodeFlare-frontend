@@ -58,13 +58,14 @@ const LineCharts = ({ data, text }: PropType) => {
             <CartesianGrid stroke="#e0e0e0" strokeDasharray="3 3" />
 
             {/* Add a Tooltip */}
-            <Tooltip
+            <Tooltip 
               contentStyle={{
                 backgroundColor: "#ffffff",
                 borderRadius: "8px",
-                boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+                boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
                 padding: "10px",
-                fontSize: "12px",
+                fontSize: "14px",
+                border : '1px solid #e5e5e5'
               }}
               itemStyle={{ color: "#374151" }}
             />
