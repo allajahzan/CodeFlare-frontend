@@ -56,7 +56,7 @@ const Navbar = () => {
         >
             {/* Heading */}
             <Heading
-                className="text-2xl font-bold text-black"
+                className="text-2xl font-bold"
                 text={path}
                 handle={handleSideBar}
             />
@@ -86,7 +86,7 @@ const Navbar = () => {
                     <div className="overflow-hidden h-10 w-10 rounded-full group-hover:animate-bounce">
                         <img className="h-full w-full" src={avatar_boy} alt="User Avatar" />
                     </div>
-                    <p className="font-bold text-black flex-1 text-center text-ellipsis overflow-hidden">
+                    <p className="font-bold flex-1 text-center text-ellipsis overflow-hidden">
                         AA
                     </p>
                     <ChevronDown />

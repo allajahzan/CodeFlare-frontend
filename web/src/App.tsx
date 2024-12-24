@@ -7,12 +7,12 @@ import {
 } from "react-router-dom";
 import DashboardStudent from "./pages/Student/Dashboard/Dashboard";
 import DashboardCounsellor from "./pages/Counsellor/Dashboard/Dashboard";
-import Reviews from "./pages/Student/Reviews/Reviews";
+import Reviews from "./pages/Student/reviews/reviews";
 import LeetCode from "./pages/Student/Leetcode/Leetcode";
 import Invoice from "./pages/Student/Invoice/Invoice";
 import Manifest from "./pages/Student/Manifest/Manifest";
 import Leave from "./pages/Student/Leave/Leave";
-import Login from "./pages/Student/Login/Login";
+import LoginPageStudent from "./pages/Student/login/login";
 import OngoingStudents from "./pages/Counsellor/Students/OngoingStudents/OngoingStudents";
 import MainLayout from "./components/Layout/StudentLayout";
 import { Toaster } from "@/components/ui/toaster"
@@ -39,7 +39,7 @@ function UserRoutes() {
       <Routes>
         <Route path="/" element={<Navigate to={"student/login"} />} />
         <Route path="*" element={<Navigate to={"student/login"} />} />
-        <Route path="student/login" element={<Login />} />
+        <Route path="student/login" element={<LoginPageStudent />} />
 
         {/* Main layout */}
         <Route element={<MainLayout />}>
