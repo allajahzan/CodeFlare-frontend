@@ -64,7 +64,7 @@ function LoginPageStudent() {
                             animation: `${item.animation} 30s infinite ease-in-out alternate`,
                         }}
                     >
-                        <div className="opacity-[0.3]">{item.icon}</div>
+                        <div className="opacity-[0.2]">{item.icon}</div>
                     </div>
                 ))}
 
