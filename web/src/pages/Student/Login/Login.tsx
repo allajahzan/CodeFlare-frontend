@@ -32,11 +32,11 @@ function LoginPageStudent() {
     );
 
     return (
-        <div className="h-screen bg-white flex flex-col overflow-hidden relative px-40 py-20">
+        <div className="h-screen bg-white flex flex-col overflow-hidden transition-all duration-100 relative px-40 py-20">
             {/* animated background elements */}
             <div className="fixed inset-0 overflow-hidden">
                 {/* binary rain effect */}
-                <div className="absolute hidden inset-0 opacity-[0.2]">
+                {/* <div className="absolute hidden inset-0 opacity-[0.2]">
                     {[...Array(10)].map((_, i) => (
                         <motion.div
                             key={i}
@@ -53,7 +53,7 @@ function LoginPageStudent() {
                             <p className="text-2xl">{Math.random() > 0.5 ? "1" : "0"}</p>
                         </motion.div>
                     ))}
-                </div>
+                </div> */}
 
                 {/* floatin tech icons */}
                 {floatingIcons.map((item, index) => (
@@ -87,6 +87,11 @@ function LoginPageStudent() {
                     }}
                 />
             </div>
+
+            {/* header */}
+            {/* <div className="absolute left-0 top-0 p-5">
+                <p className="text-2xl font-medium">CodeFlare</p>
+            </div> */}
 
             {/* login form */}
             <Form />
