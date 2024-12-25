@@ -29,7 +29,7 @@ function Carousel({ slides }: propType) {
                 backgroundSize: "cover",
                 backgroundPosition: "center",
             }}
-            className="h-full w-full relative overflow-hidden"
+            className="h-full w-full relative overflow-hidden rounded-2xl"
         >
             {/* SVG Animated Overlay */}
             {/* <div className="absolute inset-0">
