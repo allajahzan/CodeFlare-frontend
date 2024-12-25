@@ -67,10 +67,10 @@ function Carousel({slides}:propType) {
                         transition={{ duration: 0.5 }}
                         className="text-center px-12"
                     >
-                        <h2 className="text-2xl text-white font-bold mb-4">
+                        <h2 className="text-3xl text-white font-bold mb-4">
                             {slides[currentSlide].title}
                         </h2>
-                        <p className="text-white">{slides[currentSlide].description}</p>
+                        <p className="text-white text-base">{slides[currentSlide].description}</p>
                     </motion.div>
                 </AnimatePresence>
             </div>
@@ -82,7 +82,7 @@ function Carousel({slides}:propType) {
                         key={index}
                         onClick={() => goToSlide(index)}
                         className={`w-2 h-2 rounded-full transition-colors ${
-                            index === currentSlide ? "bg-white" : "bg-zinc-200"
+                            index === currentSlide ? "bg-white" : "bg-zinc-900"
                         }`}
                     />
                 ))}

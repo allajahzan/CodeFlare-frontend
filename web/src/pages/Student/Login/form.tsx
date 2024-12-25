@@ -40,15 +40,12 @@ function Form() {
         <div className="relative z-0 p-6 h-full w-full grid grid-cols-2 items-center justify-center bg-white/100 rounded-2xl shadow-custom overflow-hidden">
             {/* login form */}
             <motion.div
-                initial={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                // transition={{ duration: 1 }}
+                transition={{ duration: 0.5 }}
                 className="w-full h-full bg-white"
             >
-                <motion.div
-                    className="p-8 flex flex-col justify-center gap-10 h-full"
-                    transition={{ duration: 0.3 }}
-                >
+                <div className="p-8 flex flex-col justify-center gap-10 h-full">
                     <div className="text-center space-y-5">
                         <h1 className="text-2xl font-semibold">Student Login</h1>
                         <p className="text-base font-medium">
@@ -88,7 +85,7 @@ function Form() {
                                 />
                                 <div
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="p-2 absolute right-0 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+                                    className="p-2 absolute right-0 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 cursor-pointer"
                                 >
                                     {showPassword ? (
                                         <EyeOff className="h-6 w-6" />
@@ -113,7 +110,7 @@ function Form() {
                             </button>
                         </motion.div>
                     </form>
-                </motion.div>
+                </div>
             </motion.div>
 
             {/* carousal */}
