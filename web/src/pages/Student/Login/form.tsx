@@ -40,10 +40,10 @@ function Form() {
         <div className="relative z-0 p-6 h-full w-full grid grid-cols-2 items-center justify-center bg-white/100 rounded-2xl shadow-custom overflow-hidden">
             {/* login form */}
             <motion.div
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="w-full h-full bg-white"
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                className="w-full h-full bg-white animate-slideUp_50"
             >
                 <div className="p-8 flex flex-col justify-center gap-10 h-full">
                     <div className="text-center space-y-5">
@@ -85,7 +85,7 @@ function Form() {
                                 />
                                 <div
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="p-2 absolute right-0 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 cursor-pointer"
+                                    className="p-2 absolute right-0 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-500 cursor-pointer"
                                 >
                                     {showPassword ? (
                                         <EyeOff className="h-6 w-6" />
@@ -103,7 +103,7 @@ function Form() {
                         >
                             <button
                                 type="submit"
-                                className="w-full bg-zinc-900 hover:bg-zinc-950 text-white rounded-lg h-12"
+                                className="w-full h-12 bg-zinc-900 hover:bg-zinc-950 text-white font-medium rounded-lg"
                                 disabled={isLoading}
                             >
                                 {isLoading ? "Signing in..." : "Sign in"}

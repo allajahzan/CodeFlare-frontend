@@ -40,7 +40,7 @@ function LoginPageStudent() {
                     {[...Array(10)].map((_, i) => (
                         <motion.div
                             key={i}
-                            className="absolute text-black text-xs font-mono"
+                            className="absolute text-xs font-mono"
                             initial={{ y: -100, x: Math.random() * window.innerWidth }}
                             animate={{ y: window.innerHeight + 100 }}
                             transition={{

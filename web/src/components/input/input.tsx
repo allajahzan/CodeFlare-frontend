@@ -33,7 +33,7 @@ function Input({ id, input, setInput, label, type, color }: Type) {
             <label
                 style={style}
                 htmlFor={id}
-                className="absolute cursor-text font-medium top-0 text-sm left-0 transition-all duration-200 peer-focus:text-sm peer-focus:top-0 peer-placeholder-shown:text-sm peer-placeholder-shown:top-4"
+                className="absolute cursor-text font-medium text-zinc-400 top-0 left-0 transition-all duration-300"
             >
                 {label}
             </label>

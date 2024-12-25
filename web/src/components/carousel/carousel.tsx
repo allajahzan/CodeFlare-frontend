@@ -3,10 +3,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import bgImage from "../../assets/images/loginImage4.jpg";
 
 interface propType {
-    slides : {id:number, title: string, description: string}[]
+    slides: { id: number; title: string; description: string }[];
 }
 
-function Carousel({slides}:propType) {
+function Carousel({ slides }: propType) {
     const [currentSlide, setCurrentSlide] = useState(0);
 
     const goToNextSlide = useCallback(() => {
@@ -15,10 +15,10 @@ function Carousel({slides}:propType) {
 
     useEffect(() => {
         const timer = setInterval(goToNextSlide, 5000);
-        return () => clearInterval(timer); 
+        return () => clearInterval(timer);
     }, [goToNextSlide]);
 
-    const goToSlide = (index:number) => {
+    const goToSlide = (index: number) => {
         setCurrentSlide(index);
     };
 
@@ -64,13 +64,15 @@ function Carousel({slides}:propType) {
                         initial={{ opacity: 0, x: 100 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -100 }}
-                        transition={{ duration: 0.5 }}
+                        transition={{ duration: 0.5, ease: "easeInOut" }}
                         className="text-center px-12"
                     >
                         <h2 className="text-3xl text-white font-bold mb-4">
                             {slides[currentSlide].title}
                         </h2>
-                        <p className="text-white text-base">{slides[currentSlide].description}</p>
+                        <p className="text-white text-base">
+                            {slides[currentSlide].description}
+                        </p>
                     </motion.div>
                 </AnimatePresence>
             </div>
@@ -81,9 +83,8 @@ function Carousel({slides}:propType) {
                     <button
                         key={index}
                         onClick={() => goToSlide(index)}
-                        className={`w-2 h-2 rounded-full transition-colors ${
-                            index === currentSlide ? "bg-white" : "bg-zinc-900"
-                        }`}
+                        className={`w-2 h-2 rounded-full transition-colors ${index === currentSlide ? "bg-white" : "bg-zinc-900"
+                            }`}
                     />
                 ))}
             </div>
