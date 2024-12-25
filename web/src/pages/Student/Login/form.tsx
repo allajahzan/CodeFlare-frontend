@@ -1,7 +1,8 @@
+import Carousel from "@/components/carousel/carousel";
 import Input from "@/components/input/input";
 import { motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 
 function Form() {
     const [showPassword, setShowPassword] = useState(false);
@@ -14,14 +15,35 @@ function Form() {
         setIsLoading(false);
     };
 
+    const slides = useMemo(
+        () => [
+            {
+                id: 1,
+                title: "Welcome to CodeFlare",
+                description: "Your all-in-one business solution",
+            },
+            {
+                id: 2,
+                title: "Streamline Your Workflow",
+                description: "Efficient tools for modern teams",
+            },
+            {
+                id: 3,
+                title: "Secure & Reliable",
+                description: "Enterprise-grade security for your data",
+            },
+        ],
+        []
+    );
+
     return (
-        <div className="grid grid-cols-2 items-center justify-center p-6 relative h-full w-full bg-white/100 rounded-2xl shadow-custom ">
+        <div className="relative z-0 p-6 h-full w-full grid grid-cols-2 items-center justify-center bg-white/100 rounded-2xl shadow-custom overflow-hidden">
             {/* login form */}
             <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 1, y: 0 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                className="w-full h-full bg-white rounded-2xl"
+                // transition={{ duration: 1 }}
+                className="w-full h-full bg-white"
             >
                 <motion.div
                     className="p-8 flex flex-col justify-center gap-10 h-full"
@@ -37,7 +59,7 @@ function Form() {
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <motion.div
                             className="space-y-2"
-                            initial={{ opacity: 0, x: -20 }}
+                            initial={{ opacity: 0, x: -30 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.2 }}
                         >
@@ -52,7 +74,7 @@ function Form() {
 
                         <motion.div
                             className="space-y-2"
-                            initial={{ opacity: 0, x: -20 }}
+                            initial={{ opacity: 0, x: -30 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.3 }}
                         >
@@ -78,7 +100,7 @@ function Form() {
                         </motion.div>
 
                         <motion.div
-                            initial={{ opacity: 0 }}
+                            initial={{ opacity: 1 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.4 }}
                         >
@@ -95,7 +117,9 @@ function Form() {
             </motion.div>
 
             {/* carousal */}
-            <div className="h-full w-full bg-zinc-100 rounded-2xl"></div>
+            <div className="h-full w-full flex items-center justify-center rounded-2xl overflow-hidden">
+                <Carousel slides={slides} />
+            </div>
         </div>
     );
 }
