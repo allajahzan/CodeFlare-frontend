@@ -28,11 +28,11 @@ function LoginPageStudent() {
             {/* Animated Background Elements */}
             <div className="fixed inset-0 overflow-hidden">
                 {/* Binary Rain Effect */}
-                <div className="absolute hidden inset-0 opacity-[.2]">
+                <div className="absolute inset-0 opacity-[0.2]">
                     {[...Array(10)].map((_, i) => (
                         <motion.div
                             key={i}
-                            className="absolute text-black text-xs font-mono"
+                            className="absolute hidden text-black text-xs font-mono"
                             initial={{ y: -100, x: Math.random() * window.innerWidth }}
                             animate={{ y: window.innerHeight + 100 }}
                             transition={{
@@ -51,7 +51,7 @@ function LoginPageStudent() {
                 {floatingIcons.map((item, index) => (
                     <div
                         key={`floating-icon-${index}`}
-                        className="absolute opacity-[1]"
+                        className="absolute opacity-[0.2]"
                         style={{
                             animation: `${item.animation} 30s infinite ease-in-out alternate`,
                         }}
