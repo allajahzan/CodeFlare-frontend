@@ -1,15 +1,15 @@
 /* Code icon */
 @keyframes icon-code {
   0% {
-    transform: translate(85vw, 10vh) rotate(30deg);
+    transform: translate(90vw, 6vh) rotate(30deg);
   }
 
   25% {
-    transform: translate(90vw, 30vh) rotate(60deg);
+    transform: translate(92vw, 30vh) rotate(60deg);
   }
 
   50% {
-    transform: translate(85vw, 70vh) rotate(90deg);
+    transform: translate(88vw, 70vh) rotate(90deg);
   }
 
   75% {
@@ -17,14 +17,14 @@
   }
 
   100% {
-    transform: translate(85vw, 10vh) rotate(180deg);
+    transform: translate(92vw, 10vh) rotate(180deg);
   }
 }
 
 /* Laptop icon */
 @keyframes icon-laptop {
   0% {
-    transform: translate(10vw, 90vh) rotate(90deg);
+    transform: translate(10vw, 90vh) rotate(0deg);
   }
 
   25% {
@@ -32,11 +32,11 @@
   }
 
   50% {
-    transform: translate(15vw, 80vh) rotate(270deg);
+    transform: translate(8vw, 40vh) rotate(270deg);
   }
 
   75% {
-    transform: translate(10vw, 60vh) rotate(360deg);
+    transform: translate(5vw, 60vh) rotate(360deg);
   }
 
   100% {
@@ -47,19 +47,19 @@
 /* Terminal icon */
 @keyframes icon-terminal {
   0% {
-    transform: translate(5vw, 10vh) rotate(45deg);
+    transform: translate(5vw, 5vh) rotate(45deg);
   }
 
   25% {
-    transform: translate(10vw, 25vh) rotate(90deg);
+    transform: translate(2vw, 25vh) rotate(90deg);
   }
 
   50% {
-    transform: translate(15vw, 15vh) rotate(135deg);
+    transform: translate(10vw, 5vh) rotate(135deg);
   }
 
   75% {
-    transform: translate(10vw, 30vh) rotate(180deg);
+    transform: translate(20vw, 2vh) rotate(180deg);
   }
 
   100% {
@@ -70,45 +70,45 @@
 /* Calendar icon */
 @keyframes icon-calender {
   0% {
-    transform: translate(75vw, 80vh) rotate(30deg);
+    transform: translate(45vw, 90vh) rotate(30deg);
   }
 
   25% {
-    transform: translate(85vw, 90vh) rotate(60deg);
+    transform: translate(60vw, 90vh) rotate(60deg);
   }
 
   50% {
-    transform: translate(70vw, 70vh) rotate(90deg);
+    transform: translate(50vw, 88vh) rotate(120deg);
   }
 
   75% {
-    transform: translate(80vw, 85vh) rotate(120deg);
+    transform: translate(40vw, 90vh) rotate(180deg);
   }
 
   100% {
-    transform: translate(75vw, 80vh) rotate(180deg);
+    transform: translate(60vw, 90vh) rotate(260deg);
   }
 }
 
 /* Alarm icon */
 @keyframes icon-alarm {
   0% {
-    transform: translate(90vw, 50vh) rotate(45deg);
+    transform: translate(50vw, 1vh) rotate(0deg);
   }
 
   25% {
-    transform: translate(85vw, 70vh) rotate(90deg);
+    transform: translate(70vw, 3vh) rotate(90deg);
   }
 
   50% {
-    transform: translate(75vw, 60vh) rotate(135deg);
+    transform: translate(90vw, 5vh) rotate(135deg);
   }
 
   75% {
-    transform: translate(85vw, 40vh) rotate(180deg);
+    transform: translate(70vw, 3vh) rotate(180deg);
   }
 
   100% {
-    transform: translate(90vw, 50vh) rotate(225deg);
+    transform: translate(50vw, 1vh) rotate(225deg);
   }
 }

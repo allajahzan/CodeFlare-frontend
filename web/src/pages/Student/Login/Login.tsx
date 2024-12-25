@@ -4,7 +4,6 @@ import {
     Code,
     Laptop,
     Terminal,
-    Database,
     AlarmClock,
     Calendar,
 } from "lucide-react";
@@ -12,18 +11,17 @@ import Form from "./form";
 import "./animation.css";
 
 function LoginPageStudent() {
-    // Memoize the floating icons to prevent rerenders
+
     const floatingIcons = useMemo(
         () => [
-            { icon: <Code className="w-20 h-20" />, animation: "icon-code" },
-            { icon: <Laptop className="w-20 h-20" />, animation: "icon-laptop" },
-            { icon: <Terminal className="w-24 h-24" />, animation: "icon-terminal" },
-            // { icon: <Database className="w-24 h-24" />, delay: 0, x: 1400, y: 100 },
-            { icon: <Calendar className="w-24 h-24" />, animation : 'icon-calender' },
-            { icon: <AlarmClock className="w-24 h-24" />, animation : 'icon-alarm' },
+            { icon: <Code className="w-14 h-14" />, animation: "icon-code" },
+            { icon: <Laptop className="w-14 h-14" />, animation: "icon-laptop" },
+            { icon: <Terminal className="w-14 h-14" />, animation: "icon-terminal" },
+            { icon: <Calendar className="w-14 h-14" />, animation : 'icon-calender' },
+            { icon: <AlarmClock className="w-14 h-14" />, animation : 'icon-alarm' },
         ],
         []
-    ); // Empty dependency array ensures this is created only once
+    ); 
 
     return (
         <div className="h-screen bg-white flex flex-col overflow-hidden relative px-40 py-20">
