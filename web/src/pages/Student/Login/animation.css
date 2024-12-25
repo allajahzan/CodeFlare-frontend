@@ -1,0 +1,114 @@
+/* Code icon */
+@keyframes icon-code {
+  0% {
+    transform: translate(85vw, 10vh) rotate(30deg);
+  }
+
+  25% {
+    transform: translate(90vw, 30vh) rotate(60deg);
+  }
+
+  50% {
+    transform: translate(85vw, 70vh) rotate(90deg);
+  }
+
+  75% {
+    transform: translate(90vw, 50vh) rotate(120deg);
+  }
+
+  100% {
+    transform: translate(85vw, 10vh) rotate(180deg);
+  }
+}
+
+/* Laptop icon */
+@keyframes icon-laptop {
+  0% {
+    transform: translate(10vw, 90vh) rotate(90deg);
+  }
+
+  25% {
+    transform: translate(5vw, 70vh) rotate(180deg);
+  }
+
+  50% {
+    transform: translate(15vw, 80vh) rotate(270deg);
+  }
+
+  75% {
+    transform: translate(10vw, 60vh) rotate(360deg);
+  }
+
+  100% {
+    transform: translate(10vw, 90vh) rotate(450deg);
+  }
+}
+
+/* Terminal icon */
+@keyframes icon-terminal {
+  0% {
+    transform: translate(5vw, 10vh) rotate(45deg);
+  }
+
+  25% {
+    transform: translate(10vw, 25vh) rotate(90deg);
+  }
+
+  50% {
+    transform: translate(15vw, 15vh) rotate(135deg);
+  }
+
+  75% {
+    transform: translate(10vw, 30vh) rotate(180deg);
+  }
+
+  100% {
+    transform: translate(5vw, 10vh) rotate(225deg);
+  }
+}
+
+/* Calendar icon */
+@keyframes icon-calender {
+  0% {
+    transform: translate(75vw, 80vh) rotate(30deg);
+  }
+
+  25% {
+    transform: translate(85vw, 90vh) rotate(60deg);
+  }
+
+  50% {
+    transform: translate(70vw, 70vh) rotate(90deg);
+  }
+
+  75% {
+    transform: translate(80vw, 85vh) rotate(120deg);
+  }
+
+  100% {
+    transform: translate(75vw, 80vh) rotate(180deg);
+  }
+}
+
+/* Alarm icon */
+@keyframes icon-alarm {
+  0% {
+    transform: translate(90vw, 50vh) rotate(45deg);
+  }
+
+  25% {
+    transform: translate(85vw, 70vh) rotate(90deg);
+  }
+
+  50% {
+    transform: translate(75vw, 60vh) rotate(135deg);
+  }
+
+  75% {
+    transform: translate(85vw, 40vh) rotate(180deg);
+  }
+
+  100% {
+    transform: translate(90vw, 50vh) rotate(225deg);
+  }
+}

@@ -15,13 +15,13 @@ function Form() {
     };
 
     return (
-        <div className="grid grid-cols-2 items-center justify-center p-6 relative h-full w-full bg-white/100 rounded-2xl shadow-custom ">
+        <div className="grid grid-cols-2 items-center justify-center p-6 relative h-full w-full bg-white/80 rounded-2xl shadow-custom ">
             {/* login form */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="w-full h-full"
+                className="w-full h-full bg-white rounded-2xl"
             >
                 <motion.div
                     className="p-8 flex flex-col justify-center gap-10 h-full"
@@ -64,17 +64,16 @@ function Form() {
                                     input=""
                                     setInput={() => { }}
                                 />
-                                <button
-                                    type="button"
+                                <div
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+                                    className="p-2 absolute right-0 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
                                 >
                                     {showPassword ? (
-                                        <EyeOff className="h-5 w-5" />
+                                        <EyeOff className="h-6 w-6" />
                                     ) : (
-                                        <Eye className="h-5 w-5" />
+                                        <Eye className="h-6 w-6" />
                                     )}
-                                </button>
+                                </div>
                             </div>
                         </motion.div>
 
