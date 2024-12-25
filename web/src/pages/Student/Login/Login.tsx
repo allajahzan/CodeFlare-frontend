@@ -6,22 +6,30 @@ import {
     Terminal,
     AlarmClock,
     Calendar,
+    ChartLine,
+    MessageCircleMore,
+    ListCheck,
 } from "lucide-react";
 import Form from "./form";
 import "./animation.css";
 
 function LoginPageStudent() {
-
     const floatingIcons = useMemo(
         () => [
-            { icon: <Code className="w-14 h-14" />, animation: "icon-code" },
-            { icon: <Laptop className="w-14 h-14" />, animation: "icon-laptop" },
-            { icon: <Terminal className="w-14 h-14" />, animation: "icon-terminal" },
-            { icon: <Calendar className="w-14 h-14" />, animation : 'icon-calender' },
-            { icon: <AlarmClock className="w-14 h-14" />, animation : 'icon-alarm' },
+            { icon: <Code className="w-10 h-10" />, animation: "icon-code" },
+            { icon: <Laptop className="w-10 h-10" />, animation: "icon-laptop" },
+            { icon: <Terminal className="w-10 h-10" />, animation: "icon-terminal" },
+            { icon: <Calendar className="w-10 h-10" />, animation: "icon-calender" },
+            { icon: <AlarmClock className="w-10 h-10" />, animation: "icon-alarm" },
+            { icon: <ChartLine className="w-10 h-10" />, animation: "icon-chart" },
+            { icon: <ListCheck className="w-10 h-10" />, animation: "icon-list" },
+            {
+                icon: <MessageCircleMore className="w-10 h-10" />,
+                animation: "icon-chat",
+            },
         ],
         []
-    ); 
+    );
 
     return (
         <div className="h-screen bg-white flex flex-col overflow-hidden relative px-40 py-20">
@@ -51,12 +59,12 @@ function LoginPageStudent() {
                 {floatingIcons.map((item, index) => (
                     <div
                         key={`floating-icon-${index}`}
-                        className="absolute opacity-[0.2]"
+                        className="absolute opacity-[1] transition-transform duration-200 ease-in-out hover:scale-110 p-5 bg-white rounded-2xl shadow-custom"
                         style={{
                             animation: `${item.animation} 30s infinite ease-in-out alternate`,
                         }}
                     >
-                        {item.icon}
+                        <div className="opacity-[1]">{item.icon}</div>
                     </div>
                 ))}
 

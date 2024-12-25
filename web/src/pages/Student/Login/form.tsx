@@ -15,7 +15,7 @@ function Form() {
     };
 
     return (
-        <div className="grid grid-cols-2 items-center justify-center p-6 relative h-full w-full bg-white/80 rounded-2xl shadow-custom ">
+        <div className="grid grid-cols-2 items-center justify-center p-6 relative h-full w-full bg-white/100 rounded-2xl shadow-custom ">
             {/* login form */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}

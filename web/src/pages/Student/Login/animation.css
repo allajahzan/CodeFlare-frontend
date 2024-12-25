@@ -1,114 +1,183 @@
-/* Code icon */
+/* Chart icon (Top-Left Corner) */
+@keyframes icon-chart {
+  0% {
+    transform: translate(3vw, 2vh) rotate(30deg) scale(1);
+  }
+
+  25% {
+    transform: translate(7vw, 4vh) rotate(90deg) scale(1.1);
+  }
+
+  50% {
+    transform: translate(10vw, 2vh) rotate(180deg) scale(1);
+  }
+
+  75% {
+    transform: translate(6vw, 5vh) rotate(260deg) scale(0.8);
+  }
+
+  100% {
+    transform: translate(3vw, 2vh) rotate(360deg) scale(1);
+  }
+}
+
+/* Code icon (Top-Center) */
 @keyframes icon-code {
   0% {
-    transform: translate(90vw, 6vh) rotate(30deg);
+    transform: translate(50vw, 4vh) rotate(30deg) scale(1);
   }
 
   25% {
-    transform: translate(92vw, 30vh) rotate(60deg);
+    transform: translate(53vw, 3vh) rotate(90deg) scale(1.1);
   }
 
   50% {
-    transform: translate(88vw, 70vh) rotate(90deg);
+    transform: translate(48vw, 2vh) rotate(180deg) scale(1);
   }
 
   75% {
-    transform: translate(90vw, 50vh) rotate(120deg);
+    transform: translate(52vw, 4vh) rotate(260deg) scale(0.8);
   }
 
   100% {
-    transform: translate(92vw, 10vh) rotate(180deg);
+    transform: translate(50vw, 2vh) rotate(360deg) scale(1);
   }
 }
 
-/* Laptop icon */
-@keyframes icon-laptop {
-  0% {
-    transform: translate(10vw, 90vh) rotate(0deg);
-  }
-
-  25% {
-    transform: translate(5vw, 70vh) rotate(180deg);
-  }
-
-  50% {
-    transform: translate(8vw, 40vh) rotate(270deg);
-  }
-
-  75% {
-    transform: translate(5vw, 60vh) rotate(360deg);
-  }
-
-  100% {
-    transform: translate(10vw, 90vh) rotate(450deg);
-  }
-}
-
-/* Terminal icon */
+/* Terminal icon (Top-Right Corner) */
 @keyframes icon-terminal {
   0% {
-    transform: translate(5vw, 5vh) rotate(45deg);
+    transform: translate(88vw, 5vh) rotate(30deg) scale(1);
   }
 
   25% {
-    transform: translate(2vw, 25vh) rotate(90deg);
+    transform: translate(90vw, 8vh) rotate(45deg) scale(1.1);
   }
 
   50% {
-    transform: translate(10vw, 5vh) rotate(135deg);
+    transform: translate(88vw, 4vh) rotate(90deg) scale(1);
   }
 
   75% {
-    transform: translate(20vw, 2vh) rotate(180deg);
+    transform: translate(92vw, 6vh) rotate(135deg) scale(0.8);
   }
 
   100% {
-    transform: translate(5vw, 10vh) rotate(225deg);
+    transform: translate(95vw, 5vh) rotate(180deg) scale(1);
   }
 }
 
-/* Calendar icon */
-@keyframes icon-calender {
+/* Chat icon (Center-Left) */
+@keyframes icon-chat {
   0% {
-    transform: translate(45vw, 90vh) rotate(30deg);
+    transform: translate(4vw, 50vh) rotate(120deg) scale(1);
   }
 
   25% {
-    transform: translate(60vw, 90vh) rotate(60deg);
+    transform: translate(6vw, 45vh) rotate(90deg) scale(1.1);
   }
 
   50% {
-    transform: translate(50vw, 88vh) rotate(120deg);
+    transform: translate(3vw, 55vh) rotate(180deg) scale(1);
   }
 
   75% {
-    transform: translate(40vw, 90vh) rotate(180deg);
+    transform: translate(5vw, 48vh) rotate(260deg) scale(0.8);
   }
 
   100% {
-    transform: translate(60vw, 90vh) rotate(260deg);
+    transform: translate(4vw, 50vh) rotate(360deg) scale(1);
   }
 }
 
-/* Alarm icon */
+/* Alarm icon (Bottom-Left Corner) */
 @keyframes icon-alarm {
   0% {
-    transform: translate(50vw, 1vh) rotate(0deg);
+    transform: translate(3vw, 85vh) rotate(-30deg) scale(1);
   }
 
   25% {
-    transform: translate(70vw, 3vh) rotate(90deg);
+    transform: translate(6vw, 90vh) rotate(90deg) scale(1.1);
   }
 
   50% {
-    transform: translate(90vw, 5vh) rotate(135deg);
+    transform: translate(4vw, 88vh) rotate(180deg) scale(1);
   }
 
   75% {
-    transform: translate(70vw, 3vh) rotate(180deg);
+    transform: translate(5vw, 92vh) rotate(260deg) scale(0.8);
   }
 
   100% {
-    transform: translate(50vw, 1vh) rotate(225deg);
+    transform: translate(3vw, 85vh) rotate(360deg) scale(1);
+  }
+}
+
+/* Calendar icon (Bottom-Center) */
+@keyframes icon-calender {
+  0% {
+    transform: translate(50vw, 86vh) rotate(-30deg) scale(1);
+  }
+
+  25% {
+    transform: translate(53vw, 88vh) rotate(90deg) scale(1.1);
+  }
+
+  50% {
+    transform: translate(55vw, 92vh) rotate(180deg) scale(1);
+  }
+
+  75% {
+    transform: translate(53vw, 88vh) rotate(260deg) scale(0.8);
+  }
+
+  100% {
+    transform: translate(50vw, 90vh) rotate(360deg) scale(1);
+  }
+}
+
+/* Laptop icon (Bottom-Right Corner) */
+@keyframes icon-laptop {
+  0% {
+    transform: translate(92vw, 87vh) rotate(-30deg) scale(1);
+  }
+
+  25% {
+    transform: translate(90vw, 92vh) rotate(70deg) scale(1.1);
+  }
+
+  50% {
+    transform: translate(88vw, 90vh) rotate(180deg) scale(1);
+  }
+
+  75% {
+    transform: translate(92vw, 92vh) rotate(265deg) scale(0.8);
+  }
+
+  100% {
+    transform: translate(93vw, 90vh) rotate(260deg) scale(1);
+  }
+}
+
+/* List icon (Center-Right) */
+@keyframes icon-list {
+  0% {
+    transform: translate(93vw, 50vh) rotate(30deg) scale(1);
+  }
+
+  25% {
+    transform: translate(90vw, 55vh) rotate(45deg) scale(1.1);
+  }
+
+  50% {
+    transform: translate(88vw, 48vh) rotate(180deg) scale(1);
+  }
+
+  75% {
+    transform: translate(92vw, 52vh) rotate(265deg) scale(0.8);
+  }
+
+  100% {
+    transform: translate(92vw, 50vh) rotate(360deg) scale(1);
   }
 }
