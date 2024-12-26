@@ -72,6 +72,7 @@ const LineCharts = ({ data, text }: PropType) => {
             
             {/* Line configuration */}
             <Line
+              animationDuration={3000}
               type="monotone"
               dataKey="score"
               stroke="black"
