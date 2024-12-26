@@ -14,7 +14,7 @@ import {
   ListTodo,
   MessageCircleMore,
 } from "lucide-react";
-import Shadow from "../Shadow/Shadow";
+import Shadow from "../ui/shadow";
 import { useLayoutEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
 

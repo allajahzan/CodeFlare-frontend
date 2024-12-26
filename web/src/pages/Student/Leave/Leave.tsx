@@ -9,7 +9,7 @@ import Body from "../../../components/Table/DataTable/Body";
 import DropDown from "../../../components/DropDowns/Counsellor/DropDown";
 import ContentHeading from "../../../components/ui/heading";
 import ContentHeadingInSmallSize from "../../../components/Headings/Student/ContentHeadingInSmallSize";
-import Shadow from "../../../components/Shadow/Shadow";
+import Shadow from "../../../components/ui/shadow";
 
 
 const calculatePadding = (

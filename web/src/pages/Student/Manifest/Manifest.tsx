@@ -5,7 +5,7 @@ import TextField from '../../../components/TextField/TextField'
 import { useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { stateType } from '../../../redux/store';
-import Shadow from '../../../components/Shadow/Shadow';
+import Shadow from '../../../components/ui/shadow';
 import ContentHeading from '../../../components/ui/heading';
 import ContentHeadingInSmallSize from '../../../components/Headings/Student/ContentHeadingInSmallSize';
 

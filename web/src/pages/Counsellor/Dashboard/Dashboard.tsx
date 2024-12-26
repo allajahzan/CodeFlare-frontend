@@ -3,7 +3,7 @@ import dashboard from '../../../assets/icons/dashboard.svg'
 import { useSelector } from "react-redux";
 import { useLayoutEffect, useState } from "react";
 import { stateType } from "../../../redux/store";
-import Shadow from "../../../components/Shadow/Shadow";
+import Shadow from "../../../components/ui/shadow";
 import ContentHeadingInSmallSize from "../../../components/Headings/Counsellor/ContentHeadingInSmallSize";
 import ContentHeading from "../../../components/ui/heading";
 

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import SideBar from "../../../components/SideBars/SideBar";
 import invoice from "../../../assets/icons/invoice.svg";
 import InvoiceTable from "../../../components/Table/InvoiceTable/InvoiceTable";
-import Shadow from "../../../components/Shadow/Shadow";
+import Shadow from "../../../components/ui/shadow";
 import ContentHeadingInSmallSize from "../../../components/Headings/Student/ContentHeadingInSmallSize";
 import ContentHeading from "../../../components/ui/heading";
 import { stateType } from "../../../redux/store";

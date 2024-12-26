@@ -15,7 +15,7 @@ import {
 import SideBarItem from "./SideBarItem";
 import { LogOut, LucideProps, Moon, Sun } from "lucide-react";
 import "./SideBar.css";
-import Slider from "../Slider/Slider";
+import Slider from "../ui/slider";
 import { cn } from "@/lib/utils";
 import React from "react";
 

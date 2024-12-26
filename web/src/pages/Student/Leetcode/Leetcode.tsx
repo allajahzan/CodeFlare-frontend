@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { stateType } from "../../../redux/store";
 import ContentHeadingInSmallSize from "../../../components/Headings/Student/ContentHeadingInSmallSize";
 import ContentHeading from "../../../components/ui/heading";
-import Shadow from "../../../components/Shadow/Shadow";
+import Shadow from "../../../components/ui/shadow";
 
 
 const calculatePadding = (
