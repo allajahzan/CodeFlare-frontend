@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { CheckCircle, ChevronRight, Copy, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import "../common.css";
 import { useToast } from "@/hooks/use-toast";
 import LineCharts from "@/components/Charts/LineChart";
 

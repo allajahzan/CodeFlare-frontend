@@ -10,6 +10,7 @@ export default {
   ],
   theme: {
   	extend: {
+		// key frames - animation
 		keyframes: {
 			slideUp: {
 			  '0%': { transform: 'translateY(100%)', opacity: '0' },
@@ -29,9 +30,13 @@ export default {
 			fadeIn: 'fadeIn 1s ease-in-out forwards',
 			fadeOut: 'fadeOut 1s ease-in-out forwards',
 		},
+
+		// shadow
 		boxShadow: {
 			'custom': '0 0 10px rgba(0, 0, 0, 0.1)', 
 		},
+
+		// shardcn
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
