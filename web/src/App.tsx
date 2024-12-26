@@ -14,7 +14,7 @@ import Manifest from "./pages/Student/Manifest/Manifest";
 import Leave from "./pages/Student/Leave/Leave";
 import LoginPageStudent from "./pages/login/login";
 import OngoingStudents from "./pages/Counsellor/Students/OngoingStudents/OngoingStudents";
-import MainLayout from "./components/Layout/StudentLayout";
+import MainLayout from "./components/layout/studentLayout";
 import { Toaster } from "@/components/ui/toaster";
 
 function App() {
