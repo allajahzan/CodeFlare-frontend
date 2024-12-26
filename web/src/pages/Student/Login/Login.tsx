@@ -64,7 +64,7 @@ function LoginPageStudent() {
                             animation: `${item.animation} 30s infinite ease-in-out alternate`,
                         }}
                     >
-                        <div className="opacity-[0.2]">{item.icon}</div>
+                        <div className="opacity-[0.3]">{item.icon}</div>
                     </div>
                 ))}
 
@@ -87,11 +87,6 @@ function LoginPageStudent() {
                     }}
                 />
             </div>
-
-            {/* header */}
-            {/* <div className="absolute left-0 top-0 p-5">
-                <p className="text-2xl font-medium">CodeFlare</p>
-            </div> */}
 
             {/* login form */}
             <Form />

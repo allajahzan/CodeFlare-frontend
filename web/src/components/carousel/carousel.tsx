@@ -20,14 +20,14 @@ function Carousel({ slides }: propType) {
     }, [goToNextSlide]);
 
     const goNext = () => {
-        setCurrentSlide((prev:number)=>{
-            return (prev+1) === 3? 0 : prev+1
+        setCurrentSlide((prev: number) => {
+            return prev + 1 === 3 ? 0 : prev + 1;
         });
     };
 
     const goBack = () => {
-        setCurrentSlide((prev:number)=>{
-            return (prev-1) === -1? 2 : prev-1
+        setCurrentSlide((prev: number) => {
+            return prev - 1 === -1 ? 2 : prev - 1;
         });
     };
 
@@ -67,7 +67,10 @@ function Carousel({ slides }: propType) {
 
             {/* slide Content */}
             <div className="relative h-full flex items-center justify-center">
-                <ChevronLeft onClick={goBack} className="text-white h-10 w-10 absolute left-0 top-[50%] -translate-y-[50%] cursor-pointer"/>
+                <ChevronLeft
+                    onClick={goBack}
+                    className="text-white h-10 w-10 absolute left-0 top-[50%] -translate-y-[50%] cursor-pointer"
+                />
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={slides[currentSlide].id}
@@ -85,7 +88,10 @@ function Carousel({ slides }: propType) {
                         </p>
                     </motion.div>
                 </AnimatePresence>
-                <ChevronRight onClick={goNext} className="text-white h-10 w-10 absolute right-0 top-[50%] -translate-y-[50%] cursor-pointer"/>
+                <ChevronRight
+                    onClick={goNext}
+                    className="text-white h-10 w-10 absolute right-0 top-[50%] -translate-y-[50%] cursor-pointer"
+                />
             </div>
 
             {/* navigation dots */}

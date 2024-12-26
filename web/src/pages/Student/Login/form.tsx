@@ -6,13 +6,16 @@ import React, { useMemo, useState } from "react";
 
 function Form() {
     const [showPassword, setShowPassword] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [submiting, setsubmiting] = useState(false);
+    // inputs
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setIsLoading(true);
+        setsubmiting(true);
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        setIsLoading(false);
+        setsubmiting(false);
     };
 
     const slides = useMemo(
@@ -65,8 +68,8 @@ function Form() {
                                     id="email"
                                     type="text"
                                     label="Email"
-                                    input=""
-                                    setInput={() => { }}
+                                    input={email}
+                                    setInput={setEmail}
                                 />
                             </motion.div>
 
@@ -81,8 +84,8 @@ function Form() {
                                         id="password"
                                         type={showPassword ? "text" : "password"}
                                         label="Password"
-                                        input=""
-                                        setInput={() => { }}
+                                        input={password}
+                                        setInput={setPassword}
                                     />
                                     <div
                                         onClick={() => setShowPassword(!showPassword)}
@@ -105,9 +108,9 @@ function Form() {
                                 <button
                                     type="submit"
                                     className="w-full h-12 bg-zinc-900 hover:bg-zinc-950 text-white font-medium rounded-lg"
-                                    disabled={isLoading}
+                                    disabled={submiting}
                                 >
-                                    {isLoading ? "Signing in..." : "Sign in"}
+                                    {submiting ? "Signing in..." : "Sign in"}
                                 </button>
                             </motion.div>
                         </form>

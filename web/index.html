@@ -5,11 +5,33 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/logo.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
   <title>CodeFlare</title>
+  <link rel="preload" href="./src/font/Urbanist-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  <link rel="preload" href="./src/font/Urbanist-Italic-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+  
+  <style>
+    @font-face {
+      font-family: 'Urbanist';
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: 'swap';
+      src: url('./src/font/Urbanist-VariableFont_wght.ttf') format('truetype');
+    }
+
+    @font-face {
+      font-family: 'Urbanist';
+      font-style: italic;
+      font-weight: 100 900;
+      font-display: 'swap';
+      src: url('./src/font/Urbanist-Italic-VariableFont_wght.ttf') format('truetype');
+    }
+
+    body {
+      font-family: 'Urbanist', sans-serif;
+    }
+  </style>
 </head>
+
 <body>
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
