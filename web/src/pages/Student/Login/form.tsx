@@ -1,4 +1,4 @@
-import Carousel from "@/components/carousel/carousel";
+import Carousel from "@/components/animated/carousel";
 import Input from "@/components/input/input";
 import { motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";

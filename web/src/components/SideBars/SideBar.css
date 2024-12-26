@@ -12,3 +12,9 @@ li {
     flex-direction: column;
     justify-content: space-between;
 }
+
+.icon {
+    color: white;
+    height: 20px;
+    width: 20px;
+}

@@ -18,6 +18,7 @@ import "./SideBar.css";
 import Slider from "../Slider/Slider";
 import { cn } from "@/lib/utils";
 import React from "react";
+import { motion } from "framer-motion";
 
 interface propsType {
     sideBarItems: {
@@ -57,9 +58,9 @@ function SideBar({ sideBarItems }: propsType) {
     }, [dispatch, theme]);
 
     return (
-        <div
+        <motion.div
             className={cn(
-                "sidebar z-50 bg-transparent w-[130px] transition-all duration-300 ease-in-out",
+                "sidebar z-50 bg-transparent w-[130px]",
                 {
                     "translate-x-0": !isSmall || isSideBarVisible,
                     "-translate-x-full": isSmall && !isSideBarVisible,
@@ -103,9 +104,9 @@ function SideBar({ sideBarItems }: propsType) {
                                     <li>
                                         <div className="flex justify-center p-2">
                                             {theme ? (
-                                                <Sun className="text-white w-5 h-5" />
+                                                <Sun className="icon" />
                                             ) : (
-                                                <Moon className="text-white w-5 h-5" />
+                                                <Moon className="icon" />
                                             )}
                                         </div>
                                     </li>
@@ -123,7 +124,7 @@ function SideBar({ sideBarItems }: propsType) {
                             <TooltipTrigger className="w-full">
                                 <li>
                                     <div className="flex justify-center p-2">
-                                        <LogOut className="text-white w-5 h-5" />
+                                        <LogOut className="icon" />
                                     </div>
                                 </li>
                             </TooltipTrigger>
@@ -134,7 +135,7 @@ function SideBar({ sideBarItems }: propsType) {
                     </TooltipProvider>
                 </div>
             </div>
-        </div>
+        </motion.div>
     );
 }
 
