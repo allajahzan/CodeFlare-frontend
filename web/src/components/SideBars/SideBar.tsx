@@ -18,7 +18,6 @@ import "./SideBar.css";
 import Slider from "../Slider/Slider";
 import { cn } from "@/lib/utils";
 import React from "react";
-import { motion } from "framer-motion";
 
 interface propsType {
     sideBarItems: {
@@ -58,9 +57,9 @@ function SideBar({ sideBarItems }: propsType) {
     }, [dispatch, theme]);
 
     return (
-        <motion.div
+        <div
             className={cn(
-                "sidebar z-50 bg-transparent w-[130px]",
+                "sidebar z-50 bg-transparent w-[130px] transition-all duration-300 ease-in-out",
                 {
                     "translate-x-0": !isSmall || isSideBarVisible,
                     "-translate-x-full": isSmall && !isSideBarVisible,
@@ -135,7 +134,7 @@ function SideBar({ sideBarItems }: propsType) {
                     </TooltipProvider>
                 </div>
             </div>
-        </motion.div>
+        </div>
     );
 }
 
