@@ -87,7 +87,7 @@ function SideBar({ sideBarItems }: propsType) {
                         {sideBarItems.map((item) => (
                             <SideBarItem
                                 key={item.label}
-                                color={currentPath === item.path ? "" : ""}
+                                path={item.path}
                                 Image={item.icon}
                                 text={item.label}
                                 handleSideBarItems={handleSideBarItemClick}

@@ -1,7 +1,7 @@
 import Form from "./form";
 import FloatingBackground from "@/components/animated/floatingBackground";
 
-function LoginPageStudent() {
+function Login() {
     return (
         <FloatingBackground>
             <Form />
@@ -9,4 +9,4 @@ function LoginPageStudent() {
     );
 }
 
-export default LoginPageStudent;
+export default Login;

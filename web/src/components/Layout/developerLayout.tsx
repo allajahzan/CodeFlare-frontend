@@ -6,6 +6,7 @@ import { resizeAction, sideBarStudentAction, stateType } from "@/redux/store";
 import {
   Globe,
   LayoutDashboard,
+  UsersRound,
 } from "lucide-react";
 import Shadow from "../ui/shadow";
 import { useLayoutEffect, useMemo } from "react";
@@ -40,6 +41,7 @@ function DeveloperLayout() {
       ...(isSmall
         ? [{ path: "/community", icon: Globe, label: "Community" }]
         : []),
+      { path: "/developer/admins", icon: UsersRound, label: 'Admins'}  
       
     ],
     [isSmall]
