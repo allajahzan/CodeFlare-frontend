@@ -12,10 +12,10 @@ import LeetCode from "./pages/Student/Leetcode/Leetcode";
 import Invoice from "./pages/Student/Invoice/Invoice";
 import Manifest from "./pages/Student/Manifest/Manifest";
 import Leave from "./pages/Student/Leave/Leave";
-import LoginPageStudent from "./pages/Student/login/login";
+import LoginPageStudent from "./pages/login/login";
 import OngoingStudents from "./pages/Counsellor/Students/OngoingStudents/OngoingStudents";
 import MainLayout from "./components/Layout/StudentLayout";
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from "@/components/ui/toaster";
 
 function App() {
   return (
@@ -61,6 +61,9 @@ function CounsellorRoutes() {
     <>
       <Routes>
         <Route path="" element={<Navigate to={"login"} />} />
+        <Route path="*" element={<Navigate to={"login"} />} />
+        <Route path="login" element={<LoginPageStudent />} />
+
         <Route path="*" element={<Navigate to={"dashboard"} />} />
         <Route path="dashboard" element={<DashboardCounsellor />} />
         <Route path="ongoingStudents" element={<OngoingStudents />} />

@@ -3,6 +3,7 @@ import Input from "@/components/input/input";
 import { motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
 import React, { useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 function Form() {
     const [showPassword, setShowPassword] = useState(false);
@@ -10,6 +11,9 @@ function Form() {
     // inputs
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+
+    const path = useLocation()
+    const role = path.pathname.split('/')[1]
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -51,7 +55,7 @@ function Form() {
                 >
                     <div className="p-0 sm:p-8 flex flex-col justify-center gap-10 h-full">
                         <div className="text-center space-y-5">
-                            <h1 className="text-2xl font-semibold">Student Login</h1>
+                            <h1 className="text-2xl font-semibold">{role[0].toUpperCase() + role.slice(1)} Login</h1>
                             <p className="text-base font-medium">
                                 Hey, Enter your details to get sign in to your account
                             </p>
