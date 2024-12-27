@@ -122,7 +122,7 @@ function Reviews() {
               </div>
               <div className="flex flex-col gap-1">
                 <p className="font-semibold">Week {review.week}</p>
-                <p className="text-zinc-400">{review.date}</p>
+                <p className="text-zinc-400 text-sm">{review.date}</p>
               </div>
               <ChevronRight className="ml-auto" size={20} />
             </motion.div>
@@ -165,7 +165,7 @@ function Reviews() {
                     </p>
                     <Badge
                       className={cn(
-                        "text-sm font-bold",
+                        "text-sm font-semibold",
                         selectedReview.status === "Pass"
                           ? "text-green-900"
                           : "text-red-900"
@@ -175,8 +175,8 @@ function Reviews() {
                       {selectedReview.status}
                     </Badge>
                   </div>
-                  <p className="text-zinc-400">{selectedReview.date}</p>
-                  <p className="font-medium overflow-hidden text-ellipsis">
+                  <p className="text-zinc-400 text-sm">{selectedReview.date}</p>
+                  <p className="font-medium truncate">
                     {selectedReview.details}
                   </p>
                 </div>
@@ -200,7 +200,7 @@ function Reviews() {
                   transition={{ duration: 0.2 }}
                 >
                   <div className="flex items-start justify-between relative">
-                    <p className="text-base font-medium text-ellipsis overflow-hidden text-nowrap">
+                    <p className="text-base font-medium truncate">
                       Pendings ({selectedReview.title})
                     </p>
                     <div

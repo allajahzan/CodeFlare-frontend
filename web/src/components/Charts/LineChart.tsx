@@ -50,7 +50,7 @@ interface PropType {
 const LineCharts = ({ data, text }: PropType) => {
   return (
     <div className="h-full w-full flex flex-col gap-10">
-      <p className="text-base font-medium text-ellipsis overflow-hidden text-nowrap">{text}</p>
+      <p className="text-base font-medium truncate">{text}</p>
       <div className="h-[170px] sm:h-[266px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>

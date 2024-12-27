@@ -86,7 +86,7 @@ const Navbar = () => {
                     <div className="overflow-hidden h-10 w-10 rounded-full group-hover:animate-bounce">
                         <img className="h-full w-full" src={avatar_boy} alt="User Avatar" />
                     </div>
-                    <p className="font-bold flex-1 text-center text-ellipsis overflow-hidden">
+                    <p className="font-bold flex-1 text-center truncate">
                         AA
                     </p>
                     <ChevronDown />
