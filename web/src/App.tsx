@@ -5,20 +5,20 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import DashboardStudent from "./pages/Student/dashboard/dashboard";
-import DashboardCounsellor from "./pages/Counsellor/Dashboard/Dashboard";
-import DashboardDevelopr from "./pages/developer/dashboard";
-import Reviews from "./pages/Student/reviews/reviews";
-import LeetCode from "./pages/Student/Leetcode/Leetcode";
-import Invoice from "./pages/Student/Invoice/Invoice";
-import Manifest from "./pages/Student/Manifest/Manifest";
-import Leave from "./pages/Student/Leave/Leave";
+import DashboardStudent from "./pages/student/dashboard";
+import DashboardCoordinator from "./pages/coordinator/Dashboard/Dashboard";
+import DashboardAdmin from "./pages/admin/dashboard";
+import Reviews from "./pages/student/reviews";
+import LeetCode from "./pages/student/leetcode";
+import Invoice from "./pages/student/invoice";
+import Manifest from "./pages/student/manifest";
+import Leave from "./pages/student/leave";
 import Login from "./pages/login/login";
-import OngoingStudents from "./pages/Counsellor/Students/OngoingStudents/OngoingStudents";
+import OngoingStudents from "./pages/coordinator/Students/OngoingStudents/OngoingStudents";
 import MainLayout from "./components/layout/studentLayout";
 import { Toaster } from "@/components/ui/toaster";
 import DeveloperLayout from "./components/layout/developerLayout";
-import Admins from "./pages/developer/admins";
+import Users from "./pages/admin/users";
 
 function App() {
   return (
@@ -28,16 +28,16 @@ function App() {
 
       {/* tourtes */}
       <Routes>
-        <Route path="/*" element={<UserRoutes />} />
-        <Route path="/counsellor/*" element={<CounsellorRoutes />} />
-        <Route path="/developer/*" element={<DeveloperRoutes />} />
+        <Route path="/*" element={<StudentRoutes />} />
+        <Route path="/coordinator/*" element={<CoordinatorRoutes />} />
+        <Route path="/admin/*" element={<AdminRoutes />} />
       </Routes>
     </Router>
   );
 }
 
 // user routes
-function UserRoutes() {
+function StudentRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="student/login" />} />
@@ -58,7 +58,7 @@ function UserRoutes() {
 }
 
 // counsellor routes
-function CounsellorRoutes() {
+function CoordinatorRoutes() {
   return (
     <Routes>
       <Route path="" element={<Navigate to="login" />} />
@@ -66,14 +66,14 @@ function CounsellorRoutes() {
       <Route path="login" element={<Login />} />
 
       <Route path="*" element={<Navigate to="dashboard" />} />
-      <Route path="dashboard" element={<DashboardCounsellor />} />
+      <Route path="dashboard" element={<DashboardCoordinator />} />
       <Route path="ongoingStudents" element={<OngoingStudents />} />
     </Routes>
   );
 }
 
-// developer routes
-function DeveloperRoutes() {
+// admin routes routes
+function AdminRoutes() {
   return (
     <Routes>
       <Route path="" element={<Navigate to="login" />} />
@@ -82,8 +82,8 @@ function DeveloperRoutes() {
 
       {/* main layout */}
       <Route element={<DeveloperLayout />}>
-        <Route path="dashboard" element={<DashboardDevelopr />} />
-        <Route path="admins" element={<Admins/>}/>
+        <Route path="dashboard" element={<DashboardAdmin />} />
+        <Route path="users" element={<Users />} />
       </Route>
     </Routes>
   );

@@ -1,12 +1,6 @@
 import { useLayoutEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import SideBar from "../../../components/SideBars/SideBar";
-import invoice from "../../../assets/icons/invoice.svg";
-import InvoiceTable from "../../../components/Table/InvoiceTable/InvoiceTable";
-import Shadow from "../../../components/ui/shadow";
-import ContentHeadingInSmallSize from "../../../components/Headings/Student/ContentHeadingInSmallSize";
-import ContentHeading from "../../../components/ui/heading";
-import { stateType } from "../../../redux/store";
+import { stateType } from "../../redux/store";
 
 const calculatePadding = (isShrink: boolean, isSmall: boolean): React.CSSProperties => ({
     paddingTop: isSmall ? "70px" : isShrink ? "0px" : "20px",

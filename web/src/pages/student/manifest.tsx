@@ -1,14 +1,6 @@
-import SideBar from '../../../components/SideBars/SideBar'
-import manifest from '../../../assets/icons/manifest.svg'
-import user from '../../../assets/images/allaj.jpeg'
-import TextField from '../../../components/TextField/TextField'
 import { useLayoutEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { stateType } from '../../../redux/store';
-import Shadow from '../../../components/ui/shadow';
-import ContentHeading from '../../../components/ui/heading';
-import ContentHeadingInSmallSize from '../../../components/Headings/Student/ContentHeadingInSmallSize';
-
+import { stateType } from '../../redux/store';
 function Manifest() {
 
     const [style, setStyle] = useState<React.CSSProperties>({ transition: 'all 0.3s ease-in-out' });

@@ -1,12 +1,6 @@
-import SideBar from "../../../components/SideBars/SideBar";
-import DataTable from "../../../components/Table/DataTable/DataTable";
-import leetcode from "../../../assets/icons/leetcode.svg";
 import { useLayoutEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { stateType } from "../../../redux/store";
-import ContentHeadingInSmallSize from "../../../components/Headings/Student/ContentHeadingInSmallSize";
-import ContentHeading from "../../../components/ui/heading";
-import Shadow from "../../../components/ui/shadow";
+import { stateType } from "../../redux/store";
 
 
 const calculatePadding = (

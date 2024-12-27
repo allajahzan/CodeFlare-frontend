@@ -1,15 +1,6 @@
-import SideBar from "../../../components/SideBars/SideBar";
-import leave from "../../../assets/icons/leave.svg";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { stateType } from "../../../redux/store";
-import LeaveModal from "../../../components/LeaveModal/LeaveModal";
-import Header from "../../../components/Table/DataTable/Header";
-import Body from "../../../components/Table/DataTable/Body";
-import DropDown from "../../../components/DropDowns/Counsellor/DropDown";
-import ContentHeading from "../../../components/ui/heading";
-import ContentHeadingInSmallSize from "../../../components/Headings/Student/ContentHeadingInSmallSize";
-import Shadow from "../../../components/ui/shadow";
+import { stateType } from "../../redux/store";
 
 
 const calculatePadding = (

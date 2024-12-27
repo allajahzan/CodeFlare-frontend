@@ -2,18 +2,18 @@ import Carousel from "@/components/animated/carousel";
 import Input from "@/components/input/input";
 import { motion } from "framer-motion";
 import { Eye, EyeOff } from "lucide-react";
-import React, { useMemo, useState } from "react";
+import React, { useLayoutEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 function Form() {
     const [showPassword, setShowPassword] = useState(false);
     const [submiting, setsubmiting] = useState(false);
+    const [role, setRole] = useState<string|null>(null)
     // inputs
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
-    const path = useLocation()
-    const role = path.pathname.split('/')[1]
+    const path = useLocation() 
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -43,6 +43,10 @@ function Form() {
         []
     );
 
+    useLayoutEffect(()=>{
+        setRole(path.pathname.split('/')[1])
+    },[path])
+
     return (
         <div className="relative z-0 p-6 h-full w-full bg-white rounded-2xl shadow-custom overflow-hidden">
             <div className="h-full w-full grid grid-cols-2">
@@ -55,7 +59,7 @@ function Form() {
                 >
                     <div className="p-0 sm:p-8 flex flex-col justify-center gap-10 h-full">
                         <div className="text-center space-y-5">
-                            <h1 className="text-2xl font-semibold">{role[0].toUpperCase() + role.slice(1)} Login</h1>
+                            {role && <h1 className="text-2xl font-semibold">{(role as string)[0].toUpperCase() + (role as string).slice(1)} Login</h1>}
                             <p className="text-base font-medium">
                                 Hey, Enter your details to get sign in to your account
                             </p>
