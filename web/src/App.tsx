@@ -18,6 +18,7 @@ import OngoingStudents from "./pages/coordinator/Students/OngoingStudents/Ongoin
 import MainLayout from "./components/layout/studentLayout";
 import { Toaster } from "@/components/ui/toaster";
 import AdminLayout from "./components/layout/adminLayout";
+import Users from "./pages/admin/users";
 
 function App() {
   return (
@@ -82,7 +83,7 @@ function AdminRoutes() {
       {/* main layout */}
       <Route element={<AdminLayout />}>
         <Route path="dashboard" element={<DashboardAdmin />} />
-       
+        <Route path="users" element={<Users />} />
       </Route>
     </Routes>
   );
