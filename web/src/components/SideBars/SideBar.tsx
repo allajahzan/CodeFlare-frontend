@@ -41,13 +41,8 @@ function SideBar({ sideBarItems }: propsType) {
     const currentPath = useLocation().pathname;
 
     // handle sidebar item
-    const handleSideBarItemClick = (event: React.MouseEvent<HTMLLIElement>) => {
-        const label = event.currentTarget.getAttribute("data-label")?.toLowerCase();
-
-        if (label) {
-            const basePath = currentPath.split("/")[1];
-            navigate(`/${basePath}/${label}`);
-        }
+    const handleSideBarItemClick = (path : string) => {
+        navigate(path)
         if (isSmall) dispatch(sideBarStudentAction(false));
     };
 
@@ -83,7 +78,7 @@ function SideBar({ sideBarItems }: propsType) {
                     </li>
 
                     {/* items */}
-                    <div className="overflow-auto overflow-x-hidden no-scrollbar h-[448px]">
+                    <div className="overflow-auto overflow-x-hidden no-scrollbar">
                         {sideBarItems.map((item) => (
                             <SideBarItem
                                 key={item.label}
@@ -95,43 +90,47 @@ function SideBar({ sideBarItems }: propsType) {
                         ))}
                     </div>
 
-                    {/* theme */}
-                    {isSmall && (
+                    <div>
+                        {/* theme */}
+                        {isSmall && (
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger onClick={handleTheme} className="w-full">
+                                        <li>
+                                            <div className="flex justify-center p-2">
+                                                {theme ? (
+                                                    <Sun className="icon" />
+                                                ) : (
+                                                    <Moon className="icon" />
+                                                )}
+                                            </div>
+                                        </li>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p style={{ fontSize: "13px" }}>
+                                            {theme ? "Light" : "Dark"}
+                                        </p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        )}
+
+                        {/* logout */}
                         <TooltipProvider>
                             <Tooltip>
-                                <TooltipTrigger onClick={handleTheme} className="w-full">
+                                <TooltipTrigger className="w-full">
                                     <li>
                                         <div className="flex justify-center p-2">
-                                            {theme ? (
-                                                <Sun className="icon" />
-                                            ) : (
-                                                <Moon className="icon" />
-                                            )}
+                                            <LogOut className="icon" />
                                         </div>
                                     </li>
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                    <p style={{ fontSize: "13px" }}>{theme ? "Light" : "Dark"}</p>
+                                    <p style={{ fontSize: "13px" }}>Logout</p>
                                 </TooltipContent>
                             </Tooltip>
                         </TooltipProvider>
-                    )}
-
-                    {/* logout */}
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger className="w-full">
-                                <li>
-                                    <div className="flex justify-center p-2">
-                                        <LogOut className="icon" />
-                                    </div>
-                                </li>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p style={{ fontSize: "13px" }}>Logout</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
+                    </div>
                 </div>
             </div>
         </div>

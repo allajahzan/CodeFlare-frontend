@@ -4,6 +4,9 @@ import Navbar from "../Navbar/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { resizeAction, sideBarStudentAction, stateType } from "@/redux/store";
 import {
+  CalendarDays,
+  CreditCard,
+  FileUser,
   Globe,
   LayoutDashboard,
   UsersRound,
@@ -12,7 +15,7 @@ import Shadow from "../ui/shadow";
 import { useLayoutEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
 
-function DeveloperLayout() {
+function AdminLayout() {
   const isSmall = useSelector((state: stateType) => state.isSmall);
   const dispatch = useDispatch();
 
@@ -37,12 +40,14 @@ function DeveloperLayout() {
   // sidebar items
   const sideBarItems = useMemo(
     () => [
-      { path: "/student/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+      { path: "/admin/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+      { path: "/admin/users", icon: UsersRound, label: "Users" },
       ...(isSmall
         ? [{ path: "/community", icon: Globe, label: "Community" }]
         : []),
-      { path: "/developer/admins", icon: UsersRound, label: 'Admins'}  
-      
+      { path: "/admin/weeks", icon: CalendarDays, label: "Weeks" },
+      { path: "/admin/batches", icon: FileUser, label: "Batches" },
+      { path: "/admin/invoices", icon: CreditCard, label: "Invoices" },
     ],
     [isSmall]
   );
@@ -66,4 +71,4 @@ function DeveloperLayout() {
   );
 }
 
-export default DeveloperLayout;
+export default AdminLayout;

@@ -20,7 +20,7 @@ function Slider() {
       aria-label="Toggle Sidebar"
       className="absolute z-50 top-[6.3%] translate-y-[-50%] -right-1 h-10 w-10 bg-white rounded-full shadow-lg flex justify-center items-center cursor-pointer"
     >
-      <CircleChevronLeft className="text-black w-5" />
+      <CircleChevronLeft className="w-5 h-5" />
     </button>
   );
 }

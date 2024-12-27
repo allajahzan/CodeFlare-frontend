@@ -17,8 +17,7 @@ import Login from "./pages/login/login";
 import OngoingStudents from "./pages/coordinator/Students/OngoingStudents/OngoingStudents";
 import MainLayout from "./components/layout/studentLayout";
 import { Toaster } from "@/components/ui/toaster";
-import DeveloperLayout from "./components/layout/developerLayout";
-import Users from "./pages/admin/users";
+import AdminLayout from "./components/layout/adminLayout";
 
 function App() {
   return (
@@ -81,9 +80,9 @@ function AdminRoutes() {
       <Route path="login" element={<Login />} />
 
       {/* main layout */}
-      <Route element={<DeveloperLayout />}>
+      <Route element={<AdminLayout />}>
         <Route path="dashboard" element={<DashboardAdmin />} />
-        <Route path="users" element={<Users />} />
+       
       </Route>
     </Routes>
   );

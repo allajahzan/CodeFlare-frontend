@@ -14,11 +14,11 @@ interface propTypes {
         Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
     >;
     text: string;
-    handleSideBarItems?: (event: React.MouseEvent<HTMLLIElement>) => void;
-    path?: string;
+    handleSideBarItems: (path: string) => void;
+    path: string;
 }
 
-function SideBarItem({ Image, text, handleSideBarItems }: propTypes) {
+function SideBarItem({ Image, text, handleSideBarItems, path }: propTypes) {
     // const currentPath = useLocation().pathname;
     // const isActive = path && currentPath.split("/")[2] === path.split("/")[2];
 
@@ -29,7 +29,7 @@ function SideBarItem({ Image, text, handleSideBarItems }: propTypes) {
                     {/* <div className={cn("absolute left-1 top-[50%] -translate-y-[50%] h-10 w-1 rounded-2xl bg-white transition-all duration-300", isActive? 'opacity-1' : 'opacity-0')}></div> */}
                     <li
                         data-label={text}
-                        onClick={handleSideBarItems}
+                        onClick={()=>{handleSideBarItems(path)}}
                         className={`cursor-pointer`}
                     >
                         <div className="flex justify-center p-2">

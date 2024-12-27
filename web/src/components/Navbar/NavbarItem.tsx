@@ -27,9 +27,7 @@ function NavbarItem({ Image, action, text }: propType) {
                 >
                     <div
                         onClick={action}
-                        className={cn(
-                            "flex items-center justify-center bg-zinc-100 rounded-full p-3"
-                        )}
+                        className="flex items-center justify-center bg-zinc-100 rounded-full p-3"
                     >
                         <Image className="w-5 h-5" />
                     </div>
