@@ -5,6 +5,7 @@ import {
     Clock,
     Edit,
     EyeIcon,
+    File,
     Filter,
     Mail,
     MoreHorizontal,
@@ -12,6 +13,7 @@ import {
     Shield,
     SortAsc,
     SortDesc,
+    User,
     UserCheck,
     UserMinus,
     UserRoundMinus,
@@ -74,22 +76,62 @@ const users: User[] = [
     },
 ];
 
+const OrbitingIcon = ({ rotation = 0, delay = 0 }) => (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay }}
+      style={{ 
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        transform: `rotate(${rotation}deg)`,
+      }}
+    >
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: "linear",
+        }}
+        style={{ 
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          transformOrigin: 'center',
+        }}
+      >
+        <div 
+          className="absolute p-2 bg-background border rounded-lg shadow-sm"
+          style={{ 
+            transform: 'translate(-50%, -50%)',
+            left: '0%',
+            top: '50%',
+          }}
+        >
+          <File className="w-3 h-3 text-muted-foreground" />
+        </div>
+      </motion.div>
+    </motion.div>
+  )
+
 function Admins() {
     const [isActive, setActive] = useState<boolean>(true);
-    const [selectedUser, setSelectedUser] = useState<User>(users[0]);
+    const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
     return (
         <div className="grid grid-cols-3 gap-5 p-5">
             {/* users list  */}
-            <div className="p-5 sticky top-5 w-full h-[calc(100vh-322px)] md:h-[calc(100vh-130px)] flex flex-col gap-5 items-center bg-white rounded-2xl shadow-custom">
+            <div className="p-5 sticky top-5 w-full h-[calc(100vh-322px)] md:h-[calc(100vh-130px)] flex flex-col gap-5 items-center bg-white border shadow-md rounded-2xl">
                 {/* Heading */}
                 <div className="w-full flex items-center justify-between">
-                    <button className="text-sm font-semibold border rounded-lg px-6 py-2">
+                    <button className="px-6 py-2 text-sm font-semibold border shadow-md bg-zinc-900 text-white rounded-lg">
                         Add users
                     </button>
                     <Badge
-                        variant="secondary"
-                        className="text-sm font-semibold rounded-full"
+                        variant="outline"
+                        className="text-xs font-semibold shadow-md rounded-full"
                     >
                         3 Total
                     </Badge>
@@ -101,12 +143,12 @@ function Admins() {
                         <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <input
                             placeholder="Search users..."
-                            className="w-full h-full p-2 px-4 pl-9 font-medium placeholder:text-muted-foreground border rounded-lg"
+                            className="w-full h-full px-4 py-2 pl-9 font-medium placeholder:text-muted-foreground border shadow-md rounded-lg"
                         />
                     </div>
                     <button
                         onClick={() => setActive(!isActive)}
-                        className="p-3 border rounded-lg hover:bg-zinc-100 hover:border-muted"
+                        className="p-3 hover:bg-zinc-100 border hover:border-muted shadow-md rounded-lg"
                     >
                         {isActive ? (
                             <UserCheck className="h-4 w-4" />
@@ -115,7 +157,7 @@ function Admins() {
                         )}
                     </button>
                     <DropdownMenu>
-                        <DropdownMenuTrigger className="p-3 border rounded-lg hover:bg-zinc-100 hover:border-muted">
+                        <DropdownMenuTrigger className="p-3 hover:bg-zinc-100 border hover:border-muted shadow-md rounded-lg">
                             <Filter className="h-4 w-4" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="start">
@@ -124,7 +166,7 @@ function Admins() {
                             <DropdownMenuItem>Instructors</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <button className="p-3 border rounded-lg hover:bg-zinc-100 hover:border-muted">
+                    <button className="p-3 hover:bg-zinc-100 border hover:border-muted shadow-md rounded-lg">
                         {"asc" === "asc" ? (
                             <SortAsc className="h-4 w-4" />
                         ) : (
@@ -145,7 +187,7 @@ function Admins() {
                 </div> */}
 
                 {/* lists */}
-                <div className="h-full w-full flex flex-col gap-5 overflow-auto no-scrollbar">
+                <div className="h-full w-full flex flex-col gap-[18px] overflow-auto no-scrollbar">
                     {users.map((user, index) => {
                         return (
                             <motion.div
@@ -156,7 +198,7 @@ function Admins() {
                                 onClick={() => setSelectedUser(users[index])}
                                 className={cn(
                                     "group p-3 w-full border rounded-xl cursor-pointer",
-                                    selectedUser.id === user.id ? "bg-muted border-muted" : ""
+                                    selectedUser?.id === user.id ? "bg-muted border-muted" : ""
                                 )}
                             >
                                 <div className="flex items-center gap-3">
@@ -212,7 +254,7 @@ function Admins() {
             </div>
 
             {/* user details */}
-            <div className="grid grid-rows-2 gap-5 col-span-2">
+            <div className="grid grid-rows-[auto_1fr] gap-5 col-span-2">
                 {/* user details */}
                 <AnimatePresence mode="wait">
                     {selectedUser && (
@@ -230,9 +272,9 @@ function Admins() {
                                 // },
                             }}
                             // exit={{ opacity: 0, x: -10 }}
-                            className="h-full"
+                            className="h-fit"
                         >
-                            <div className="p-5 space-y-5 shadow-custom rounded-2xl overflow-hidden">
+                            <div className="h-full p-5 space-y-5 border shadow-md rounded-2xl overflow-hidden">
                                 <div className="flex items-center gap-4 relative">
                                     <motion.div
                                         initial={{ scale: 0.5, opacity: 0 }}
@@ -312,8 +354,17 @@ function Admins() {
                             </div>
                         </motion.div>
                     )}
+                    {!selectedUser && (
+                        <div className="h-full p-5 flex items-center justify-center shadow-custom rounded-2xl overflow-hidden">
+                            <div className="w-full h-20 flex flex-col items-center justify-center">
+                                <p className="font-medium text-base">No users found</p>
+                            </div>
+                        </div>
+                    )}
                 </AnimatePresence>
-                <div className="h-full bg-zinc-100 rounded-2xl"></div>
+                <div className="h-full bg-zinc-100 rounded-2xl">
+                    
+                </div>
             </div>
         </div>
     );
