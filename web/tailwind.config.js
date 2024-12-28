@@ -34,6 +34,7 @@ export default {
 				fadeIn: 'fadeIn 1s ease-in-out forwards',
 				fadeOut: 'fadeOut 1s ease-in-out forwards',
 				light: 'light 0.3s linear',
+				// lightInfinite: 'light 0.3s linear infinite',
 			},
 
 			// shadow

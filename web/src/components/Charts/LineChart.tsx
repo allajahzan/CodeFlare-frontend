@@ -75,10 +75,10 @@ const LineCharts = ({ data, text }: PropsType) => {
               animationDuration={3000}
               type="monotone"
               dataKey="score"
-              stroke="black"
+              stroke="#18181b"
               strokeWidth={2}
               dot={{ stroke: "black", strokeWidth: 2, r: 4 }} 
-              activeDot={{ r: 4, stroke: "black", strokeWidth: 2 }} 
+              activeDot={{ r: 4, stroke: "#18181b", strokeWidth: 2 }} 
             />
           </LineChart>
         </ResponsiveContainer>

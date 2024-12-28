@@ -27,7 +27,7 @@ function Input({ id, input, setInput, label, type, color }: PropsType) {
             <label
                 style={style}
                 htmlFor={id}
-                className="absolute cursor-text font-medium text-zinc-400 top-0 left-0 transition-all duration-300"
+                className="absolute cursor-text font-medium text-muted-foreground top-0 left-0 transition-all duration-300"
             >
                 {label}
             </label>

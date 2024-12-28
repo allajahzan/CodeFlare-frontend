@@ -122,7 +122,7 @@ function Reviews() {
               </div>
               <div className="flex flex-col gap-1">
                 <p className="font-semibold">Week {review.week}</p>
-                <p className="text-zinc-400 text-sm">{review.date}</p>
+                <p className="text-muted-foreground text-sm">{review.date}</p>
               </div>
               <ChevronRight className="ml-auto" size={20} />
             </motion.div>
@@ -175,7 +175,9 @@ function Reviews() {
                       {selectedReview.status}
                     </Badge>
                   </div>
-                  <p className="text-zinc-400 text-sm">{selectedReview.date}</p>
+                  <p className="text-muted-foreground text-sm">
+                    {selectedReview.date}
+                  </p>
                   <p className="font-medium truncate">
                     {selectedReview.details}
                   </p>
@@ -205,7 +207,7 @@ function Reviews() {
                     </p>
                     <div
                       onClick={() => handleCopy(selectedReview.pendings)}
-                      className="p-3 absolute -right-4 -top-2.5 bg-white active:bg-zinc-100 rounded-lg cursor-pointer"
+                      className="p-3 absolute -right-4 -top-2.5 bg-white hover:bg-zinc-100 rounded-lg cursor-pointer"
                     >
                       <Copy className="w-5 h-5" />
                     </div>

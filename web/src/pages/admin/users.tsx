@@ -28,17 +28,69 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState } from "react";
 import LightEffect from "@/components/ui/light";
+import { AnimatePresence, motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+
+interface User {
+    id: number;
+    name: string;
+    email: string;
+    joined: string;
+    lastActive: string;
+    ActiviyStatus: "Normal" | "Poor" | "Average";
+    role: string;
+    isBlock: boolean;
+}
+const users: User[] = [
+    {
+        id: 1,
+        name: "Ahsan allaj pk",
+        email: "ahsanallajpk22@gmail.com",
+        joined: "20th Jun 2024",
+        lastActive: "20 hours ago",
+        ActiviyStatus: "Normal",
+        role: "Coordinator",
+        isBlock: false,
+    },
+    {
+        id: 2,
+        name: "Amrutha H",
+        email: "ammrutha22@gmail.com",
+        joined: "28th Jul 2024",
+        lastActive: "1 hours ago",
+        ActiviyStatus: "Normal",
+        role: "Instructor",
+        isBlock: true,
+    },
+    {
+        id: 3,
+        name: "Jirjis",
+        email: "jirjis@gmail.com",
+        joined: "22th Nov 2024",
+        lastActive: "20 hours ago",
+        ActiviyStatus: "Normal",
+        role: "Coordinator",
+        isBlock: false,
+    },
+];
 
 function Admins() {
     const [isActive, setActive] = useState<boolean>(true);
+    const [selectedUser, setSelectedUser] = useState<User>(users[0]);
+
     return (
-        <div className="grid grid-cols-2 gap-5 p-5">
+        <div className="grid grid-cols-3 gap-5 p-5">
             {/* users list  */}
-            <div className="p-5 w-full h-[calc(100vh-322px)] md:h-[calc(100vh-130px)] flex flex-col gap-5 items-center bg-white rounded-2xl shadow-custom">
+            <div className="p-5 sticky top-5 w-full h-[calc(100vh-322px)] md:h-[calc(100vh-130px)] flex flex-col gap-5 items-center bg-white rounded-2xl shadow-custom">
                 {/* Heading */}
                 <div className="w-full flex items-center justify-between">
-                    <h2 className="text-lg font-semibold">Manage users</h2>
-                    <Badge variant="outline" className="text-sm font-semibold">
+                    <button className="text-sm font-semibold border rounded-lg px-6 py-2">
+                        Add users
+                    </button>
+                    <Badge
+                        variant="secondary"
+                        className="text-sm font-semibold rounded-full"
+                    >
                         3 Total
                     </Badge>
                 </div>
@@ -46,10 +98,10 @@ function Admins() {
                 {/* search , filter, sort */}
                 <div className="w-full flex gap-2">
                     <div className="relative flex-1">
-                        <Search className="absolute left-3 top-3 h-4 w-4 text-zinc-400" />
+                        <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <input
                             placeholder="Search users..."
-                            className="w-full h-full p-2 px-4 pl-9 font-medium placeholder:text-zinc-400 border rounded-lg"
+                            className="w-full h-full p-2 px-4 pl-9 font-medium placeholder:text-muted-foreground border rounded-lg"
                         />
                     </div>
                     <button
@@ -94,11 +146,18 @@ function Admins() {
 
                 {/* lists */}
                 <div className="h-full w-full flex flex-col gap-5 overflow-auto no-scrollbar">
-                    {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, index) => {
+                    {users.map((user, index) => {
                         return (
-                            <div
+                            <motion.div
+                                initial={{ opacity: 0, x: -30 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: index * 0.1 }}
                                 key={index}
-                                className="group p-3 w-full cursor-pointer border hover:border-muted hover:bg-muted rounded-xl"
+                                onClick={() => setSelectedUser(users[index])}
+                                className={cn(
+                                    "group p-3 w-full border rounded-xl cursor-pointer",
+                                    selectedUser.id === user.id ? "bg-muted border-muted" : ""
+                                )}
                             >
                                 <div className="flex items-center gap-3">
                                     <Avatar className="border-2 border-zinc-100 w-12 h-12">
@@ -109,28 +168,32 @@ function Admins() {
                                     </Avatar>
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2">
-                                            <p className="font-semibold truncate">
-                                                {"Ahsan allaj pk"}
-                                            </p>
-                                            <Badge className="relative hidden sm:inline-flex text-xs text-white font-semibold bg-zinc-900 rounded-full overflow-hidden">
+                                            <p className="font-semibold truncate">{user.name}</p>
+                                            {/* <Badge className="relative hidden sm:inline-flex text-xs text-white font-semibold bg-zinc-900 rounded-full overflow-hidden">
                                                 Coordinator
-                                                <LightEffect color="via-white"/>
-                                            </Badge>
+                                                <LightEffect color="via-white" />
+                                            </Badge> */}
                                         </div>
-                                        <p className="text-sm text-zinc-400 flex items-center gap-1">
-                                            <Activity className="w-3 h-3" />1 min ago
+                                        <p className="text-sm text-muted-foreground flex items-center gap-1 truncate">
+                                            <Activity className="w-3 h-3" />
+                                            {user.lastActive}
                                         </p>
                                     </div>
                                     <DropdownMenu>
-                                        <DropdownMenuTrigger className="p-3">
+                                        <DropdownMenuTrigger className="p-3 hover:bg-muted rounded-lg">
                                             <MoreHorizontal className="w-4 h-4" />
                                         </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="start">
-                                            <DropdownMenuItem>
+                                        <DropdownMenuContent
+                                            align="start"
+                                            onClick={(event) => event.stopPropagation()}
+                                        >
+                                            <DropdownMenuItem
+                                                onClick={() => setSelectedUser(users[index])}
+                                            >
                                                 <EyeIcon />
                                                 View Profile
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => alert("edit")}>
                                                 <Edit />
                                                 Edit Profile
                                             </DropdownMenuItem>
@@ -142,60 +205,115 @@ function Admins() {
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </div>
-                            </div>
+                            </motion.div>
                         );
                     })}
                 </div>
             </div>
 
             {/* user details */}
-            <div className="flex flex-col gap-5 p-5 shadow-custom rounded-2xl">
-                {/* user name */}
-                <div className="flex items-center gap-5 relative">
-                    <Avatar className="border-2 border-zinc-100 w-20 h-20">
-                        <AvatarImage src={image} className="object-cover" />
-                        <AvatarFallback>
-                            <CircleUserRound />
-                        </AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1 flex flex-col justify-center gap-2 min-w-0">
-                        <div className="flex items-center gap-5">
-                            <p className="text-xl font-semibold truncate">
-                                {"Ahsan allaj pk"}
-                            </p>
-                            <Badge className="hidden sm:inline-flex text-sm text-white font-semibold bg-zinc-900 rounded-full"
-                            >
-                                Coordinator
-                            </Badge>
-                        </div>
-                        <p className="text-sm text-zinc-400 tracking-wider flex items-center gap-1">
-                            <Mail className="w-5 h-5" />
-                            ahsanallajpk22@gmail.com
-                        </p>
-                    </div>
-                    <button className="self-start px-6 py-2 font-semibold border hover:border-muted hover:bg-muted rounded-lg">
-                        Edit
-                    </button>
-                </div>
+            <div className="grid grid-rows-2 gap-5 col-span-2">
+                {/* user details */}
+                <AnimatePresence mode="wait">
+                    {selectedUser && (
+                        <motion.div
+                            key={selectedUser.id}
+                            initial={{ opacity: 1, x: 0 }}
+                            animate={{
+                                x: 0,
+                                opacity: 1,
+                                // transition: {
+                                //     type: "spring",
+                                //     stiffness: 400,
+                                //     damping: 12,
+                                //     duration: 0.3,
+                                // },
+                            }}
+                            // exit={{ opacity: 0, x: -10 }}
+                            className="h-full"
+                        >
+                            <div className="p-5 space-y-5 shadow-custom rounded-2xl overflow-hidden">
+                                <div className="flex items-center gap-4 relative">
+                                    <motion.div
+                                        initial={{ scale: 0.5, opacity: 0 }}
+                                        animate={{ scale: 1, opacity: 1 }}
+                                        transition={{ delay: 0.2 }}
+                                    >
+                                        <Avatar className="border-2 border-zinc-100 w-16 h-16">
+                                            <AvatarImage src={image} className="object-cover" />
+                                            <AvatarFallback>
+                                                <CircleUserRound />
+                                            </AvatarFallback>
+                                        </Avatar>
+                                    </motion.div>
+                                    <div className="flex-1 flex flex-col justify-center gap-2 min-w-0">
+                                        <div className="flex items-center gap-5">
+                                            <p className="text-lg font-semibold truncate">
+                                                {selectedUser.name}
+                                            </p>
+                                            <Badge className="relative hidden sm:inline-flex text-xs text-white font-semibold bg-zinc-900 hover:bg-zinc-900 rounded-full overflow-hidden">
+                                                {selectedUser.role}
+                                                {/* <LightEffect
+                                                    color="via-white"
+                                                    animation="animate-light"
+                                                /> */}
+                                            </Badge>
+                                        </div>
+                                        <p className="text-sm text-muted-foreground tracking-wider flex items-center gap-1">
+                                            <Mail className="w-4 h-4" />
+                                            {selectedUser.email}
+                                        </p>
+                                    </div>
+                                    <button className="self-start px-6 py-2 font-semibold border hover:border-muted hover:bg-muted rounded-lg">
+                                        Edit
+                                    </button>
+                                </div>
 
-                {/* cards */}
-                <div className="grid sm:grid-cols-2 gap-4 mb-8">
-                    {[Shield, Clock, Calendar, Activity].map((Item, index) => {
-                        return (
-                            <div key={index} className="p-4 border rounded-lg">
-                                <div className="flex items-center gap-4">
-                                    <div className="p-2 rounded-lg bg-primary/10">
-                                        <Item className="w-4 h-4 text-primary" />
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-muted-foreground">{"label"}</p>
-                                        <p className="font-semibold">{"asdf"}</p>
-                                    </div>
+                                {/* cards */}
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                    {[
+                                        {
+                                            icon: Shield,
+                                            label: "Role Status",
+                                            value: selectedUser.isBlock ? "Blocked" : "Active",
+                                            className: "",
+                                        },
+                                        {
+                                            icon: Clock,
+                                            label: "Last Login",
+                                            value: selectedUser.lastActive,
+                                        },
+                                        {
+                                            icon: Calendar,
+                                            label: "Date Joined",
+                                            value: selectedUser.joined,
+                                        },
+                                        {
+                                            icon: Activity,
+                                            label: "Activity",
+                                            value: selectedUser.ActiviyStatus,
+                                        },
+                                    ].map((item, index) => (
+                                        <div key={index} className="p-4 border rounded-lg">
+                                            <div className="flex items-center gap-4">
+                                                <div className="p-2 rounded-lg bg-primary/10">
+                                                    <item.icon className="w-5 h-5" />
+                                                </div>
+                                                <div>
+                                                    <p className="text-sm text-muted-foreground">
+                                                        {item.label}
+                                                    </p>
+                                                    <p className="font-semibold">{item.value}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
-                        );
-                    })}
-                </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+                <div className="h-full bg-zinc-100 rounded-2xl"></div>
             </div>
         </div>
     );

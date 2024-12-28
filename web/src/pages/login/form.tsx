@@ -97,7 +97,7 @@ function Form() {
                                     />
                                     <div
                                         onClick={() => setShowPassword(!showPassword)}
-                                        className="p-2 absolute right-0 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-500 cursor-pointer"
+                                        className="p-2 absolute right-0 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-zinc-500 cursor-pointer"
                                     >
                                         {showPassword ? (
                                             <EyeOff className="h-6 w-6" />
