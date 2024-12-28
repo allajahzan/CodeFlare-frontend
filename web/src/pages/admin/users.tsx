@@ -36,6 +36,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Button from "@/components/ui/button";
 import "./admin.css";
+import NotFoundOrbit from "@/components/animated/notFoundOrbit";
 
 interface User {
     id: number;
@@ -79,8 +80,6 @@ const users: User[] = [
         isBlock: false,
     },
 ];
-
-
 
 function Admins() {
     const [isActive, setActive] = useState<boolean>(true);
@@ -320,9 +319,11 @@ function Admins() {
                         </motion.div>
                     )}
                     {!selectedUser && (
-                        <div className="h-full p-5 flex flex-col gap-5 items-center justify-center shadow-custom rounded-2xl overflow-hidden">
-                            
-                        </div>
+                        <NotFoundOrbit
+                            Icon={User2}
+                            message="No instructors and coordinators are added"
+                            text="No users found"
+                        />
                     )}
                 </AnimatePresence>
                 <div className="h-full bg-zinc-100 rounded-2xl"></div>
