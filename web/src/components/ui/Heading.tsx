@@ -2,13 +2,13 @@ import { cn } from "@/lib/utils";
 import { stateType } from "@/redux/store";
 import { useSelector } from "react-redux";
 
-interface propType {
+interface PropsType {
     text: string;
     className: string;
     handle?: () => void;
 }
 
-function Heading({ text, className, handle }: propType) {
+function Heading({ text, className, handle }: PropsType) {
     const isSmall = useSelector((state: stateType) => state.isSmall);
     return (
         <div

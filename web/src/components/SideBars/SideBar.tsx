@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -19,7 +19,7 @@ import Slider from "../ui/slider";
 import { cn } from "@/lib/utils";
 import React from "react";
 
-interface propsType {
+interface PropsType {
     sideBarItems: {
         path: string;
         icon: React.ForwardRefExoticComponent<
@@ -29,7 +29,7 @@ interface propsType {
     }[];
 }
 
-function SideBar({ sideBarItems }: propsType) {
+function SideBar({ sideBarItems }: PropsType) {
     const theme = useSelector((state: stateType) => state.theme);
     const isSmall = useSelector((state: stateType) => state.isSmall);
     const isSideBarVisible = useSelector(
@@ -38,7 +38,6 @@ function SideBar({ sideBarItems }: propsType) {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const currentPath = useLocation().pathname;
 
     // handle sidebar item
     const handleSideBarItemClick = (path : string) => {

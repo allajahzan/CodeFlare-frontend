@@ -7,7 +7,7 @@ import {
 import { cn } from "@/lib/utils";
 import { LucideProps } from "lucide-react";
 
-interface propType {
+interface PropsType {
     Image: React.ForwardRefExoticComponent<
         Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
     >;
@@ -15,7 +15,7 @@ interface propType {
     text: string;
 }
 
-function NavbarItem({ Image, action, text }: propType) {
+function NavbarItem({ Image, action, text }: PropsType) {
     return (
         <TooltipProvider>
             <Tooltip>

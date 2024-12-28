@@ -115,7 +115,7 @@ function Form() {
                             >
                                 <button
                                     type="submit"
-                                    className="w-full h-12 bg-zinc-900 hover:bg-zinc-950 text-white font-medium rounded-lg"
+                                    className="w-full h-12 bg-zinc-900 hover:bg-zinc-950 text-white font-medium rounded-full"
                                     disabled={submiting}
                                 >
                                     {submiting ? "Signing in..." : "Sign in"}

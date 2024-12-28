@@ -9,7 +9,7 @@ import { LucideProps } from "lucide-react";
 // import { useLocation } from "react-router-dom";
 // import { cn } from "@/lib/utils";
 
-interface propTypes {
+interface PropsType {
     Image: React.ForwardRefExoticComponent<
         Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
     >;
@@ -18,7 +18,7 @@ interface propTypes {
     path: string;
 }
 
-function SideBarItem({ Image, text, handleSideBarItems, path }: propTypes) {
+function SideBarItem({ Image, text, handleSideBarItems, path }: PropsType) {
     // const currentPath = useLocation().pathname;
     // const isActive = path && currentPath.split("/")[2] === path.split("/")[2];
 

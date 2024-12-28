@@ -2,7 +2,7 @@ import arrowUp from '../../../assets/icons/arrowUp.svg'
 import arrowDown from '../../../assets/icons/arrowDown.svg'
 import { useSelector } from 'react-redux'
 import { stateType } from '../../../redux/store'
-interface propTypes {
+interface PropsType {
     image: string
     text: string,
     handleSideBarItems?: (event: React.MouseEvent<HTMLLIElement>) => void,
@@ -10,7 +10,7 @@ interface propTypes {
     showStudentDropDown?: boolean
 }
 
-function SideBarItem({ image, text, handleSideBarItems, color, showStudentDropDown }: propTypes) {
+function SideBarItem({ image, text, handleSideBarItems, color, showStudentDropDown }: PropsType) {
 
     const isShrinkSideBarCounsellor = useSelector((state: stateType) => state.isShrinkSideBarCounsellor)
 

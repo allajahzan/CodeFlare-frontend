@@ -2,12 +2,12 @@ import { Modal } from "flowbite-react";
 import { useEffect, useState } from "react";
 import DropDown from "../DropDowns/Counsellor/DropDown";
 
-interface propsType {
+interface PropsType {
     openModal: boolean,
     setOpenModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function LeaveModal({ openModal, setOpenModal }: propsType) {
+function LeaveModal({ openModal, setOpenModal }: PropsType) {
 
     const [absenceTypes, setAbsenceTypes] = useState<string[]>([])
     const [leaveTypes, setLeaveTypes] = useState<string[]>([])

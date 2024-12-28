@@ -12,11 +12,11 @@ import {
 } from "lucide-react";
 import "./floatinBackground.css";
 
-interface propType{
+interface PropsType{
     children: React.ReactNode
 }
 
-function FloatingBackground({children}:propType) {
+function FloatingBackground({children}:PropsType) {
     const floatingIcons = useMemo(
         () => [
             { icon: <Code className="w-8 h-8" />, animation: "icon-code" },

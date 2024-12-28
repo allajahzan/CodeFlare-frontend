@@ -1,4 +1,4 @@
-interface Type {
+interface PropsType {
     id: string;
     type: string;
     label: string;
@@ -7,7 +7,7 @@ interface Type {
     color?: string;
 }
 
-function Input({ id, input, setInput, label, type, color }: Type) {
+function Input({ id, input, setInput, label, type, color }: PropsType) {
     const style: React.CSSProperties = {
         color: color,
     };

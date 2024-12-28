@@ -4,12 +4,12 @@
 //   ResponsiveContainer,
 // } from "recharts";
 
-// interface propType {
+// interface PropsType {
 //   data : object[]
 //   text : string
 // }
 
-// const AdminDashboard = ({data,text}:propType) => {
+// const AdminDashboard = ({data,text}:PropsType) => {
 
 //   return (
 //     <div className="h-full w-full flex flex-col gap-10">
@@ -42,12 +42,12 @@ import {
   CartesianGrid,
 } from "recharts";
 
-interface PropType {
+interface PropsType {
   data: object[];
   text: string;
 }
 
-const LineCharts = ({ data, text }: PropType) => {
+const LineCharts = ({ data, text }: PropsType) => {
   return (
     <div className="h-full w-full flex flex-col gap-10">
       <p className="text-base font-medium truncate">{text}</p>

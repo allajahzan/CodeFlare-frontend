@@ -1,7 +1,7 @@
 import downArrow from '../../../assets/icons/arrowDown.svg'
 import upArrow from '../../../assets/icons/arrowUp.svg'
 
-interface propType {
+interface PropsType {
     stateVariable: boolean,
     setStateVariable1: React.Dispatch<React.SetStateAction<boolean>>,
     setStateVariable2?: React.Dispatch<React.SetStateAction<boolean>>,
@@ -11,7 +11,7 @@ interface propType {
     datas: string[] | null
 }
 
-function DropDown({ selectedItem, stateVariable, setStateVariable1, setStateVariable2, setStateVariable3, handleFunction, datas }: propType) {
+function DropDown({ selectedItem, stateVariable, setStateVariable1, setStateVariable2, setStateVariable3, handleFunction, datas }: PropsType) {
     return (
         <div className="relative">
             <div onClick={() => { setStateVariable1(!stateVariable); setStateVariable2?.(false); setStateVariable3?.(false) }} className="p-3 bg-white flex items-center justify-between bg-transparent border-2 border-black border-opacity-10 font-medium rounded-lg cursor-pointer">

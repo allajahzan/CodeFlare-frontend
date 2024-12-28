@@ -3,11 +3,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import bgImage from "../../assets/images/loginImage4.jpg";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-interface propType {
+interface PropsType {
     slides: { id: number; title: string; description: string }[];
 }
 
-function Carousel({ slides }: propType) {
+function Carousel({ slides }: PropsType) {
     const [currentSlide, setCurrentSlide] = useState<number>(0);
 
     const goToNextSlide = useCallback(() => {
