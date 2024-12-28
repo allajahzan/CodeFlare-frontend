@@ -88,7 +88,7 @@ function NotFoundOrbit({ Icon, message, text }: PropsType) {
                 transition={{ delay: 0.5 }}
                 className="text-center"
             >
-                <h3 className="text-xl font-semibold">{text}</h3>
+                <h3 className="text-lg font-semibold">{text}</h3>
                 <p className="text-muted-foreground font-medium">{message}</p>
             </motion.div>
         </div>

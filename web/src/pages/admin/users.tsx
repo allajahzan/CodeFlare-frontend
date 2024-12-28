@@ -48,38 +48,7 @@ interface User {
     role: string;
     isBlock: boolean;
 }
-const users: User[] = [
-    {
-        id: 1,
-        name: "Ahsan allaj pk",
-        email: "ahsanallajpk22@gmail.com",
-        joined: "20th Jun 2024",
-        lastActive: "20 hours ago",
-        ActiviyStatus: "Normal",
-        role: "Coordinator",
-        isBlock: false,
-    },
-    {
-        id: 2,
-        name: "Amrutha H",
-        email: "ammrutha22@gmail.com",
-        joined: "28th Jul 2024",
-        lastActive: "1 hours ago",
-        ActiviyStatus: "Normal",
-        role: "Instructor",
-        isBlock: true,
-    },
-    {
-        id: 3,
-        name: "Jirjis",
-        email: "jirjis@gmail.com",
-        joined: "22th Nov 2024",
-        lastActive: "20 hours ago",
-        ActiviyStatus: "Normal",
-        role: "Coordinator",
-        isBlock: false,
-    },
-];
+const users: User[] = [];
 
 function Admins() {
     const [isActive, setActive] = useState<boolean>(true);
@@ -99,7 +68,7 @@ function Admins() {
                         variant="outline"
                         className="text-xs font-semibold shadow-md rounded-full"
                     >
-                        3 Total
+                        {users.length} Total
                     </Badge>
                 </div>
 
@@ -150,69 +119,73 @@ function Admins() {
                 </div> */}
 
                 {/* lists */}
-                <div className="h-full w-full flex flex-col gap-[18px] overflow-auto no-scrollbar">
-                    {users.map((user, index) => {
-                        return (
-                            <motion.div
-                                initial={{ opacity: 0, x: -30 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: index * 0.1 }}
-                                key={index}
-                                onClick={() => setSelectedUser(users[index])}
-                                className={cn(
-                                    "group p-3 w-full border rounded-xl cursor-pointer",
-                                    selectedUser?.id === user.id ? "bg-muted border-muted" : ""
-                                )}
-                            >
-                                <div className="flex items-center gap-3">
-                                    <Avatar className="border-2 border-zinc-100 w-12 h-12">
-                                        <AvatarImage src={image} className="object-cover" />
-                                        <AvatarFallback>
-                                            <CircleUserRound />
-                                        </AvatarFallback>
-                                    </Avatar>
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex items-center gap-2">
-                                            <p className="font-semibold truncate">{user.name}</p>
-                                            {/* <Badge className="relative hidden sm:inline-flex text-xs text-white font-semibold bg-zinc-900 rounded-full overflow-hidden">
-                                                Coordinator
-                                                <LightEffect color="via-white" />
-                                            </Badge> */}
+                <div className="h-full w-full flex flex-col gap-[18px] overflow-auto no-scrollbar rounded-2xl">
+                    {users.length > 0 &&
+                        users.map((user, index) => {
+                            return (
+                                <motion.div
+                                    initial={{ opacity: 0, x: -30 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: index * 0.1 }}
+                                    key={index}
+                                    onClick={() => setSelectedUser(users[index])}
+                                    className={cn(
+                                        "group p-3 w-full border rounded-xl cursor-pointer",
+                                        selectedUser?.id === user.id ? "bg-muted border-muted" : ""
+                                    )}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        <Avatar className="border-2 border-zinc-100 w-12 h-12">
+                                            <AvatarImage src={image} className="object-cover" />
+                                            <AvatarFallback>
+                                                <CircleUserRound />
+                                            </AvatarFallback>
+                                        </Avatar>
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-2">
+                                                <p className="font-semibold truncate">{user.name}</p>
+                                            </div>
+                                            <p className="text-sm text-muted-foreground flex items-center gap-1 truncate">
+                                                <Activity className="w-3 h-3" />
+                                                {user.lastActive}
+                                            </p>
                                         </div>
-                                        <p className="text-sm text-muted-foreground flex items-center gap-1 truncate">
-                                            <Activity className="w-3 h-3" />
-                                            {user.lastActive}
-                                        </p>
-                                    </div>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger className="p-3 hover:bg-muted rounded-lg">
-                                            <MoreHorizontal className="w-4 h-4" />
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent
-                                            align="start"
-                                            onClick={(event) => event.stopPropagation()}
-                                        >
-                                            <DropdownMenuItem
-                                                onClick={() => setSelectedUser(users[index])}
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger className="p-3 hover:bg-muted rounded-lg">
+                                                <MoreHorizontal className="w-4 h-4" />
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent
+                                                align="start"
+                                                onClick={(event) => event.stopPropagation()}
                                             >
-                                                <EyeIcon />
-                                                View Profile
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => alert("edit")}>
-                                                <Edit />
-                                                Edit Profile
-                                            </DropdownMenuItem>
-                                            <DropdownMenuSeparator />
-                                            <DropdownMenuItem>
-                                                <UserRoundMinus />
-                                                Block
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                </div>
-                            </motion.div>
-                        );
-                    })}
+                                                <DropdownMenuItem
+                                                    onClick={() => setSelectedUser(users[index])}
+                                                >
+                                                    <EyeIcon />
+                                                    View Profile
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem onClick={() => alert("edit")}>
+                                                    <Edit />
+                                                    Edit Profile
+                                                </DropdownMenuItem>
+                                                <DropdownMenuSeparator />
+                                                <DropdownMenuItem>
+                                                    <UserRoundMinus />
+                                                    Block
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </div>
+                                </motion.div>
+                            );
+                        })}
+                    {users.length === 0 && (
+                        <NotFoundOrbit
+                            Icon={User2}
+                            message="No instructors and coordinators are added"
+                            text="No users found"
+                        />
+                    )}
                 </div>
             </div>
 
@@ -318,6 +291,8 @@ function Admins() {
                             </div>
                         </motion.div>
                     )}
+
+                    {/* no users found */}
                     {!selectedUser && (
                         <NotFoundOrbit
                             Icon={User2}
