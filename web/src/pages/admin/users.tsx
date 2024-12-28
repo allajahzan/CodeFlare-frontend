@@ -9,11 +9,13 @@ import {
     Filter,
     Mail,
     MoreHorizontal,
+    Plus,
     Search,
     Shield,
     SortAsc,
     SortDesc,
     User,
+    User2,
     UserCheck,
     UserMinus,
     UserRoundMinus,
@@ -32,6 +34,8 @@ import { useState } from "react";
 import LightEffect from "@/components/ui/light";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import Button from "@/components/ui/button";
+import "./admin.css";
 
 interface User {
     id: number;
@@ -76,45 +80,7 @@ const users: User[] = [
     },
 ];
 
-const OrbitingIcon = ({ rotation = 0, delay = 0 }) => (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay }}
-      style={{ 
-        position: 'absolute',
-        width: '100%',
-        height: '100%',
-        transform: `rotate(${rotation}deg)`,
-      }}
-    >
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: "linear",
-        }}
-        style={{ 
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          transformOrigin: 'center',
-        }}
-      >
-        <div 
-          className="absolute p-2 bg-background border rounded-lg shadow-sm"
-          style={{ 
-            transform: 'translate(-50%, -50%)',
-            left: '0%',
-            top: '50%',
-          }}
-        >
-          <File className="w-3 h-3 text-muted-foreground" />
-        </div>
-      </motion.div>
-    </motion.div>
-  )
+
 
 function Admins() {
     const [isActive, setActive] = useState<boolean>(true);
@@ -126,9 +92,10 @@ function Admins() {
             <div className="p-5 sticky top-5 w-full h-[calc(100vh-322px)] md:h-[calc(100vh-130px)] flex flex-col gap-5 items-center bg-white border shadow-md rounded-2xl">
                 {/* Heading */}
                 <div className="w-full flex items-center justify-between">
-                    <button className="px-6 py-2 text-sm font-semibold border shadow-md bg-zinc-900 text-white rounded-lg">
-                        Add users
-                    </button>
+                    <Button
+                        className="bg-zinc-900 hover:bg-zinc-800 text-white"
+                        text="Add new user"
+                    />
                     <Badge
                         variant="outline"
                         className="text-xs font-semibold shadow-md rounded-full"
@@ -143,13 +110,10 @@ function Admins() {
                         <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <input
                             placeholder="Search users..."
-                            className="w-full h-full px-4 py-2 pl-9 font-medium placeholder:text-muted-foreground border shadow-md rounded-lg"
+                            className="w-full h-full px-4 py-2 pl-9 font-medium placeholder:text-muted-foreground border rounded-lg"
                         />
                     </div>
-                    <button
-                        onClick={() => setActive(!isActive)}
-                        className="p-3 hover:bg-zinc-100 border hover:border-muted shadow-md rounded-lg"
-                    >
+                    <button onClick={() => setActive(!isActive)} className="icon-style">
                         {isActive ? (
                             <UserCheck className="h-4 w-4" />
                         ) : (
@@ -157,7 +121,7 @@ function Admins() {
                         )}
                     </button>
                     <DropdownMenu>
-                        <DropdownMenuTrigger className="p-3 hover:bg-zinc-100 border hover:border-muted shadow-md rounded-lg">
+                        <DropdownMenuTrigger className="icon-style">
                             <Filter className="h-4 w-4" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="start">
@@ -166,7 +130,7 @@ function Admins() {
                             <DropdownMenuItem>Instructors</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <button className="p-3 hover:bg-zinc-100 border hover:border-muted shadow-md rounded-lg">
+                    <button className="icon-style">
                         {"asc" === "asc" ? (
                             <SortAsc className="h-4 w-4" />
                         ) : (
@@ -306,9 +270,10 @@ function Admins() {
                                             {selectedUser.email}
                                         </p>
                                     </div>
-                                    <button className="self-start px-6 py-2 font-semibold border hover:border-muted hover:bg-muted rounded-lg">
-                                        Edit
-                                    </button>
+                                    <Button
+                                        className="bg-zinc-900 hover:bg-zinc-800 text-white self-start"
+                                        text="Edit profile"
+                                    />
                                 </div>
 
                                 {/* cards */}
@@ -355,16 +320,12 @@ function Admins() {
                         </motion.div>
                     )}
                     {!selectedUser && (
-                        <div className="h-full p-5 flex items-center justify-center shadow-custom rounded-2xl overflow-hidden">
-                            <div className="w-full h-20 flex flex-col items-center justify-center">
-                                <p className="font-medium text-base">No users found</p>
-                            </div>
+                        <div className="h-full p-5 flex flex-col gap-5 items-center justify-center shadow-custom rounded-2xl overflow-hidden">
+                            
                         </div>
                     )}
                 </AnimatePresence>
-                <div className="h-full bg-zinc-100 rounded-2xl">
-                    
-                </div>
+                <div className="h-full bg-zinc-100 rounded-2xl"></div>
             </div>
         </div>
     );
