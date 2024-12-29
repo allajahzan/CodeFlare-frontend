@@ -1,5 +1,4 @@
 import {
-    Activity,
     Calendar,
     CircleUserRound,
     Clock,
@@ -8,14 +7,13 @@ import {
     Filter,
     Mail,
     MoreHorizontal,
+    PersonStanding,
     Search,
-    Shield,
     SortAsc,
     SortDesc,
     User,
     User2,
-    UserCheck,
-    UserMinus,
+    UserRoundCheck,
     UserRoundMinus,
 } from "lucide-react";
 import image from "../../assets/images/allaj.jpeg";
@@ -76,36 +74,6 @@ const users: User[] = [
         role: "Coordinator",
         isBlock: false,
     },
-    {
-        id: 4,
-        name: "Jirjis",
-        email: "jirjis@gmail.com",
-        joined: "22th Nov 2024",
-        lastActive: "20 hours ago",
-        ActiviyStatus: "Normal",
-        role: "Coordinator",
-        isBlock: false,
-    },
-    {
-        id: 5,
-        name: "Jirjis",
-        email: "jirjis@gmail.com",
-        joined: "22th Nov 2024",
-        lastActive: "20 hours ago",
-        ActiviyStatus: "Normal",
-        role: "Coordinator",
-        isBlock: false,
-    },
-    {
-        id: 6,
-        name: "Jirjis",
-        email: "jirjis@gmail.com",
-        joined: "22th Nov 2024",
-        lastActive: "20 hours ago",
-        ActiviyStatus: "Normal",
-        role: "Coordinator",
-        isBlock: false,
-    },
 ];
 
 function Admins() {
@@ -119,13 +87,15 @@ function Admins() {
                 {/* Heading */}
                 <div className="w-full flex items-center justify-between">
                     <div className="flex gap-2">
-                        <p className="text-lg font-semibold">Manage users</p>
-                        <Badge
+                        <p className="text-lg font-semibold">
+                            Manage users ({users.length})
+                        </p>
+                        {/* <Badge
                             variant="outline"
                             className="text-xs font-semibold shadow-md rounded-full"
                         >
                             {users.length} Total
-                        </Badge>
+                        </Badge> */}
                     </div>
                     <Button
                         className="bg-zinc-900 hover:bg-zinc-800 text-white"
@@ -139,21 +109,21 @@ function Admins() {
                         <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <input
                             placeholder="Search users..."
-                            className="w-full h-full px-4 py-2 pl-9 font-medium placeholder:text-muted-foreground border shadow-md rounded-lg"
+                            className="w-full h-full px-4 py-2 pl-9 font-medium placeholder:text-muted-foreground border shadow-sm rounded-lg"
                         />
                     </div>
                     <button
                         onClick={() => setActive(!isActive)}
-                        className="icon-style shadow-md"
+                        className="icon-style shadow-sm"
                     >
                         {isActive ? (
-                            <UserCheck className="h-4 w-4" />
+                            <UserRoundCheck className="h-4 w-4" />
                         ) : (
-                            <UserMinus className="h-4 w-4" />
+                            <UserRoundMinus className="h-4 w-4" />
                         )}
                     </button>
                     <DropdownMenu>
-                        <DropdownMenuTrigger className="icon-style shadow-md">
+                        <DropdownMenuTrigger className="icon-style shadow-sm">
                             <Filter className="h-4 w-4" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="start">
@@ -162,7 +132,7 @@ function Admins() {
                             <DropdownMenuItem>Instructors</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <button className="icon-style shadow-md">
+                    <button className="icon-style shadow-sm">
                         {"asc" === "asc" ? (
                             <SortAsc className="h-4 w-4" />
                         ) : (
@@ -183,7 +153,7 @@ function Admins() {
                 </div> */}
 
                 {/* lists */}
-                <div className="h-full w-full flex flex-col gap-5 overflow-auto no-scrollbar">
+                <div className="h-full w-full flex flex-col gap-[9px] overflow-auto bg-transparent no-scrollbar">
                     {users.length > 0 &&
                         users.map((user, index) => {
                             return (
@@ -194,7 +164,7 @@ function Admins() {
                                     key={index}
                                     onClick={() => setSelectedUser(users[index])}
                                     className={cn(
-                                        "group p-3 w-full hover:bg-muted rounded-xl cursor-pointer",
+                                        "group p-2 px-3 w-full border hover:bg-muted hover:border-muted rounded-xl cursor-pointer",
                                         selectedUser?.id === user.id ? "bg-muted border-muted" : ""
                                     )}
                                 >
@@ -209,9 +179,18 @@ function Admins() {
                                             <div className="flex items-center gap-2">
                                                 <p className="font-semibold truncate">{user.name}</p>
                                             </div>
-                                            <p className="text-sm text-muted-foreground flex items-center gap-1 truncate">
-                                                <Activity className="w-3 h-3" />
-                                                {user.lastActive}
+                                            <p
+                                                className={cn(
+                                                    "text-sm text-muted-foreground font-medium flex items-center gap-1 truncate"
+                                                    // user.isBlock ? "text-red-900" : "text-green-900"
+                                                )}
+                                            >
+                                                {user.isBlock ? (
+                                                    <UserRoundMinus className="w-3 h-3" />
+                                                ) : (
+                                                    <UserRoundCheck className="w-3 h-3" />
+                                                )}
+                                                {user.isBlock ? "Blocked" : "Active"}
                                             </p>
                                         </div>
                                         <DropdownMenu>
@@ -234,8 +213,12 @@ function Admins() {
                                                 </DropdownMenuItem>
                                                 <DropdownMenuSeparator />
                                                 <DropdownMenuItem>
-                                                    <UserRoundMinus />
-                                                    Block
+                                                    {user.isBlock ? (
+                                                        <UserRoundCheck />
+                                                    ) : (
+                                                        <UserRoundMinus />
+                                                    )}
+                                                    {user.isBlock ? "Unblock" : "Block"}
                                                 </DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
@@ -295,13 +278,9 @@ function Admins() {
                                             </p>
                                             <Badge className="relative hidden sm:inline-flex text-xs text-white font-semibold bg-zinc-900 hover:bg-zinc-900 rounded-full overflow-hidden">
                                                 {selectedUser.role}
-                                                {/* <LightEffect
-                                                    color="via-white"
-                                                    animation="animate-light"
-                                                /> */}
                                             </Badge>
                                         </div>
-                                        <p className="text-sm text-muted-foreground tracking-wider flex items-center gap-1">
+                                        <p className="text-sm text-muted-foreground font-medium tracking-wide flex items-center gap-1">
                                             <Mail className="w-4 h-4" />
                                             {selectedUser.email}
                                         </p>
@@ -316,7 +295,9 @@ function Admins() {
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-[13px]">
                                     {[
                                         {
-                                            icon: Shield,
+                                            icon: selectedUser.isBlock
+                                                ? UserRoundMinus
+                                                : UserRoundCheck,
                                             label: "Role Status",
                                             value: selectedUser.isBlock ? "Blocked" : "Active",
                                             className: "",
@@ -331,19 +312,19 @@ function Admins() {
                                             label: "Date Joined",
                                             value: selectedUser.joined,
                                         },
-                                        {
-                                            icon: Activity,
-                                            label: "Activity",
-                                            value: selectedUser.ActiviyStatus,
-                                        },
+                                        // {
+                                        //     icon: Activity,
+                                        //     label: "Activity",
+                                        //     value: selectedUser.ActiviyStatus,
+                                        // },
                                     ].map((item, index) => (
-                                        <div key={index} className="p-4 border rounded-lg">
+                                        <div key={index} className="p-3 border rounded-lg">
                                             <div className="flex items-center gap-4">
                                                 <div className="p-2 rounded-lg bg-primary/10">
                                                     <item.icon className="w-5 h-5" />
                                                 </div>
                                                 <div>
-                                                    <p className="text-sm text-muted-foreground">
+                                                    <p className="text-sm text-muted-foreground font-medium">
                                                         {item.label}
                                                     </p>
                                                     <p className="font-semibold">{item.value}</p>
@@ -351,6 +332,25 @@ function Admins() {
                                             </div>
                                         </div>
                                     ))}
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger className="flex items-center gap-4 text-start cursor-pointer p-3 border rounded-lg">
+                                            <div className="p-2 rounded-lg bg-primary/10">
+                                                <PersonStanding className="w-5 h-5" />
+                                            </div>
+                                            <div>
+                                                <p className="text-sm text-muted-foreground">Batches</p>
+                                                <p className="font-semibold">Assigned Batches</p>
+                                            </div>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent
+                                            align="end"
+                                            className="max-h-[200px] overflow-auto"
+                                        >
+                                            <DropdownMenuItem>BCK 188</DropdownMenuItem>
+                                            <DropdownMenuItem>BCK 129</DropdownMenuItem>
+                                            <DropdownMenuItem>BCK 198</DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
                                 </div>
                             </div>
                         </motion.div>
