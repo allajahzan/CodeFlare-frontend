@@ -77,7 +77,7 @@ function SideBar({ sideBarItems }: PropsType) {
                     </li>
 
                     {/* items */}
-                    <div className="overflow-auto overflow-x-hidden no-scrollbar">
+                    <div className="h-[466px] overflow-auto overflow-x-hidden no-scrollbar">
                         {sideBarItems.map((item) => (
                             <SideBarItem
                                 key={item.label}
