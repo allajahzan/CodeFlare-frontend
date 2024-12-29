@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { LucideProps, Plus } from "lucide-react";
 
@@ -10,6 +11,8 @@ interface PropsType {
     text?: string;
     message?: string;
 }
+
+// orbiting icon
 function OrbitingIcon({ delay, rotation }: PropsType) {
     return (
         <motion.div
@@ -52,9 +55,10 @@ function OrbitingIcon({ delay, rotation }: PropsType) {
     );
 }
 
+// not found orbit
 function NotFoundOrbit({ Icon, message, text }: PropsType) {
     return (
-        <div className="relative h-full p-5 flex flex-col gap-5 items-center justify-center border shadow-md rounded-2xl overflow-hidden">
+        <div className="relative h-full p-5 flex flex-col gap-5 items-center justify-center border shadow-sm rounded-2xl overflow-hidden">
             <div className="relative w-[185px] h-[185px]">
                 {/* Inner orbit */}
                 <div className="absolute inset-10 rounded-full border border-dashed border-muted-foreground/20">
@@ -88,11 +92,39 @@ function NotFoundOrbit({ Icon, message, text }: PropsType) {
                 transition={{ delay: 0.2 }}
                 className="text-center"
             >
-                <h3 className="text-base font-semibold">{text}</h3>
-                <p className="text-muted-foreground font-medium">{message}</p>
+                <h3 className="text-base font-semibold">"{text}"</h3>
+                <p className="text-muted-foreground font-medium">"{message}"</p>
             </motion.div>
         </div>
     );
 }
 
-export default NotFoundOrbit;
+// notselected
+interface PropsType {
+    className?: string
+}
+function NotSelected({ Icon, message, text, className }: PropsType) {
+    return (
+        <div className={cn("flex flex-col gap-5 items-center justify-center border shadow-sm rounded-2xl", className)}>
+            <motion.div
+                initial={{ scale: 0.5, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="p-3 bg-background border-2 border-dashed rounded-full"
+            >
+                {Icon && <Icon className="w-5 h-5 text-muted-foreground" />}
+            </motion.div>
+            <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="text-center"
+            >
+                <h3 className="text-base font-semibold">"{text}"</h3>
+                <p className="text-muted-foreground font-medium">"{message}"</p>
+            </motion.div>
+        </div>
+    );
+}
+
+export { NotFoundOrbit, NotSelected };

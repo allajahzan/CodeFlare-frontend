@@ -32,8 +32,8 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Button from "@/components/ui/button";
+import { NotFoundOrbit, NotSelected } from "@/components/animated/fallbacks";
 import "./admin.css";
-import NotFoundOrbit from "@/components/animated/notFoundOrbit";
 
 interface User {
     id: number;
@@ -76,6 +76,36 @@ const users: User[] = [
         role: "Coordinator",
         isBlock: false,
     },
+    {
+        id: 4,
+        name: "Jirjis",
+        email: "jirjis@gmail.com",
+        joined: "22th Nov 2024",
+        lastActive: "20 hours ago",
+        ActiviyStatus: "Normal",
+        role: "Coordinator",
+        isBlock: false,
+    },
+    {
+        id: 5,
+        name: "Jirjis",
+        email: "jirjis@gmail.com",
+        joined: "22th Nov 2024",
+        lastActive: "20 hours ago",
+        ActiviyStatus: "Normal",
+        role: "Coordinator",
+        isBlock: false,
+    },
+    {
+        id: 6,
+        name: "Jirjis",
+        email: "jirjis@gmail.com",
+        joined: "22th Nov 2024",
+        lastActive: "20 hours ago",
+        ActiviyStatus: "Normal",
+        role: "Coordinator",
+        isBlock: false,
+    },
 ];
 
 function Admins() {
@@ -85,19 +115,22 @@ function Admins() {
     return (
         <div className="grid grid-cols-3 gap-5 p-5">
             {/* users list  */}
-            <div className="p-5 sticky top-5 w-full h-[calc(100vh-322px)] md:h-[calc(100vh-130px)] flex flex-col gap-5 items-center bg-white border shadow-md rounded-2xl">
+            <div className="p-5 sticky top-5 w-full h-[calc(100vh-322px)] md:h-[calc(100vh-130px)] flex flex-col gap-5 items-center bg-white border shadow-sm rounded-2xl">
                 {/* Heading */}
                 <div className="w-full flex items-center justify-between">
+                    <div className="flex gap-2">
+                        <p className="text-lg font-semibold">Manage users</p>
+                        <Badge
+                            variant="outline"
+                            className="text-xs font-semibold shadow-md rounded-full"
+                        >
+                            {users.length} Total
+                        </Badge>
+                    </div>
                     <Button
                         className="bg-zinc-900 hover:bg-zinc-800 text-white"
-                        text="Add new user"
+                        text="Add user"
                     />
-                    <Badge
-                        variant="outline"
-                        className="text-xs font-semibold shadow-md rounded-full"
-                    >
-                        {users.length} Total
-                    </Badge>
                 </div>
 
                 {/* search , filter, sort */}
@@ -106,10 +139,13 @@ function Admins() {
                         <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <input
                             placeholder="Search users..."
-                            className="w-full h-full px-4 py-2 pl-9 font-medium placeholder:text-muted-foreground border rounded-lg"
+                            className="w-full h-full px-4 py-2 pl-9 font-medium placeholder:text-muted-foreground border shadow-md rounded-lg"
                         />
                     </div>
-                    <button onClick={() => setActive(!isActive)} className="icon-style">
+                    <button
+                        onClick={() => setActive(!isActive)}
+                        className="icon-style shadow-md"
+                    >
                         {isActive ? (
                             <UserCheck className="h-4 w-4" />
                         ) : (
@@ -117,7 +153,7 @@ function Admins() {
                         )}
                     </button>
                     <DropdownMenu>
-                        <DropdownMenuTrigger className="icon-style">
+                        <DropdownMenuTrigger className="icon-style shadow-md">
                             <Filter className="h-4 w-4" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="start">
@@ -126,7 +162,7 @@ function Admins() {
                             <DropdownMenuItem>Instructors</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <button className="icon-style">
+                    <button className="icon-style shadow-md">
                         {"asc" === "asc" ? (
                             <SortAsc className="h-4 w-4" />
                         ) : (
@@ -147,7 +183,7 @@ function Admins() {
                 </div> */}
 
                 {/* lists */}
-                <div className="h-full w-full flex flex-col gap-[18px] overflow-auto no-scrollbar">
+                <div className="h-full w-full flex flex-col gap-5 overflow-auto no-scrollbar">
                     {users.length > 0 &&
                         users.map((user, index) => {
                             return (
@@ -158,7 +194,7 @@ function Admins() {
                                     key={index}
                                     onClick={() => setSelectedUser(users[index])}
                                     className={cn(
-                                        "group p-3 w-full border rounded-xl cursor-pointer",
+                                        "group p-3 w-full hover:bg-muted rounded-xl cursor-pointer",
                                         selectedUser?.id === user.id ? "bg-muted border-muted" : ""
                                     )}
                                 >
@@ -208,13 +244,17 @@ function Admins() {
                             );
                         })}
                     {users.length === 0 && (
-                        <p></p>
+                        <NotFoundOrbit
+                            Icon={User2}
+                            message="No instructors and coordinators are added"
+                            text="No users found"
+                        />
                     )}
                 </div>
             </div>
 
             {/* user details */}
-            <div className="grid grid-rows-[auto_1fr] gap-5 col-span-2">
+            <div className="grid gap-5 col-span-2 grid-rows-[auto_1fr]">
                 {/* user details */}
                 <AnimatePresence mode="wait">
                     {selectedUser && (
@@ -234,7 +274,7 @@ function Admins() {
                             // exit={{ opacity: 0, x: -10 }}
                             className="h-fit"
                         >
-                            <div className="h-full p-5 space-y-5 border shadow-md rounded-2xl overflow-hidden">
+                            <div className="h-full p-5 space-y-5 border shadow-sm rounded-2xl overflow-hidden">
                                 <div className="flex items-center gap-4 relative">
                                     <motion.div
                                         initial={{ scale: 0.5, opacity: 0 }}
@@ -273,7 +313,7 @@ function Admins() {
                                 </div>
 
                                 {/* cards */}
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-[13px]">
                                     {[
                                         {
                                             icon: Shield,
@@ -318,14 +358,15 @@ function Admins() {
 
                     {/* no users found */}
                     {!selectedUser && (
-                        <NotFoundOrbit
+                        <NotSelected
                             Icon={User2}
-                            message="No instructors and coordinators are added"
-                            text="No users found"
+                            message="Select a user from the list to view their details"
+                            text="No user selected"
+                            className="h-[290.5px]"
                         />
                     )}
                 </AnimatePresence>
-                <div className="h-full bg-zinc-100 rounded-2xl"></div>
+                <div className="h-full p-5 bg-zinc-100 rounded-2xl"></div>
             </div>
         </div>
     );

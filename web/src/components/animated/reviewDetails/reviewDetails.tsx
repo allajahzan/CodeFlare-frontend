@@ -11,6 +11,7 @@ interface PropsType {
     selectedReview: Review;
 }
 
+// review details
 function ReviewDetails({ selectedReview }: PropsType) {
     return (
         <div className="h-full p-8 rounded-2xl shadow-custom overflow-hidden">
@@ -106,6 +107,9 @@ function ReviewDetails({ selectedReview }: PropsType) {
         </div>
     );
 }
+
+
+// pendings and chart
 
 const monthlyData = [
     { week: "1", score: 2 },
