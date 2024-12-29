@@ -55,7 +55,7 @@ function OrbitingIcon({ delay, rotation }: PropsType) {
 function NotFoundOrbit({ Icon, message, text }: PropsType) {
     return (
         <div className="relative h-full p-5 flex flex-col gap-5 items-center justify-center border shadow-md rounded-2xl overflow-hidden">
-            <div className="relative w-[181px] h-[181px]">
+            <div className="relative w-[185px] h-[185px]">
                 {/* Inner orbit */}
                 <div className="absolute inset-10 rounded-full border border-dashed border-muted-foreground/20">
                     <OrbitingIcon rotation={180} delay={0.3} />
@@ -83,12 +83,12 @@ function NotFoundOrbit({ Icon, message, text }: PropsType) {
 
             {/* message */}
             <motion.div
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
+                transition={{ delay: 0.2 }}
                 className="text-center"
             >
-                <h3 className="text-lg font-semibold">{text}</h3>
+                <h3 className="text-base font-semibold">{text}</h3>
                 <p className="text-muted-foreground font-medium">{message}</p>
             </motion.div>
         </div>
