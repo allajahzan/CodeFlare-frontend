@@ -34,6 +34,7 @@
 
 // export default AdminDashboard;
 
+import { cn } from "@/lib/utils";
 import {
   LineChart,
   Line,
@@ -45,13 +46,14 @@ import {
 interface PropsType {
   data: object[];
   text: string;
+  className: string;
 }
 
-const LineCharts = ({ data, text }: PropsType) => {
+const LineCharts = ({ data, text, className }: PropsType) => {
   return (
-    <div className="h-full w-full flex flex-col gap-10">
+    <div className="h-full w-full flex flex-col gap-5">
       <p className="text-base font-medium truncate">{text}</p>
-      <div className="h-[170px] sm:h-[266px]">
+      <div className={cn(className)}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
             {/* Add a grid for a cleaner look */}
@@ -72,7 +74,7 @@ const LineCharts = ({ data, text }: PropsType) => {
             
             {/* Line configuration */}
             <Line
-              animationDuration={3000}
+              animationDuration={1000}
               type="monotone"
               dataKey="score"
               stroke="#18181b"

@@ -5,11 +5,9 @@ import {
     Clock,
     Edit,
     EyeIcon,
-    File,
     Filter,
     Mail,
     MoreHorizontal,
-    Plus,
     Search,
     Shield,
     SortAsc,
@@ -31,7 +29,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState } from "react";
-import LightEffect from "@/components/ui/light";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Button from "@/components/ui/button";
@@ -48,7 +45,38 @@ interface User {
     role: string;
     isBlock: boolean;
 }
-const users: User[] = [];
+const users: User[] = [
+    {
+        id: 1,
+        name: "Ahsan allaj pk",
+        email: "ahsanallajpk22@gmail.com",
+        joined: "20th Jun 2024",
+        lastActive: "20 hours ago",
+        ActiviyStatus: "Normal",
+        role: "Coordinator",
+        isBlock: false,
+    },
+    {
+        id: 2,
+        name: "Amrutha H",
+        email: "ammrutha22@gmail.com",
+        joined: "28th Jul 2024",
+        lastActive: "1 hours ago",
+        ActiviyStatus: "Normal",
+        role: "Instructor",
+        isBlock: true,
+    },
+    {
+        id: 3,
+        name: "Jirjis",
+        email: "jirjis@gmail.com",
+        joined: "22th Nov 2024",
+        lastActive: "20 hours ago",
+        ActiviyStatus: "Normal",
+        role: "Coordinator",
+        isBlock: false,
+    },
+];
 
 function Admins() {
     const [isActive, setActive] = useState<boolean>(true);
@@ -119,7 +147,7 @@ function Admins() {
                 </div> */}
 
                 {/* lists */}
-                <div className="h-full w-full flex flex-col gap-[18px] overflow-auto no-scrollbar rounded-2xl">
+                <div className="h-full w-full flex flex-col gap-[18px] overflow-auto no-scrollbar">
                     {users.length > 0 &&
                         users.map((user, index) => {
                             return (
@@ -180,11 +208,7 @@ function Admins() {
                             );
                         })}
                     {users.length === 0 && (
-                        <NotFoundOrbit
-                            Icon={User2}
-                            message="No instructors and coordinators are added"
-                            text="No users found"
-                        />
+                        <p></p>
                     )}
                 </div>
             </div>

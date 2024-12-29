@@ -11,6 +11,7 @@ import { Bell, ChevronDown, Globe, Moon, Sun } from "lucide-react";
 import avatar_boy from "../../assets/images/avatar_boy.jpg";
 import { useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 const Navbar = () => {
     const isSmall = useSelector((state: stateType) => state.isSmall);
@@ -55,11 +56,27 @@ const Navbar = () => {
             )}
         >
             {/* Heading */}
-            <Heading
-                className="text-2xl font-bold"
-                text={path}
-                handle={handleSideBar}
-            />
+            <motion.div
+                key={path}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{
+                    y: 0,
+                    opacity: 1,
+                    // transition: {
+                    //     type: "spring",
+                    //     stiffness: 400,
+                    //     damping: 12,
+                    //     duration: 0.3,
+                    // },
+                }}
+                transition={{ delay: 0.2 }}
+            >
+                <Heading
+                    className="text-2xl font-bold"
+                    text={path}
+                    handle={handleSideBar}
+                />
+            </motion.div>
 
             {/* Right Section */}
             <div className="flex items-center gap-4">
@@ -86,9 +103,7 @@ const Navbar = () => {
                     <div className="overflow-hidden h-10 w-10 rounded-full group-hover:animate-bounce">
                         <img className="h-full w-full" src={avatar_boy} alt="User Avatar" />
                     </div>
-                    <p className="font-bold flex-1 text-center truncate">
-                        AA
-                    </p>
+                    <p className="font-bold flex-1 text-center truncate">AA</p>
                     <ChevronDown />
                 </div>
             </div>

@@ -1,17 +1,19 @@
-import { useCallback, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { CheckCircle, ChevronRight, Copy, XCircle } from "lucide-react";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { CheckCircle, ChevronRight, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
-import LineCharts from "@/components/Charts/LineChart";
+import {
+  PendingsAndChart,
+  ReviewDetails,
+} from "@/components/animated/reviewDetails/reviewDetails";
 
-interface Review {
+export interface Review {
   id: number;
   week: number;
   title: string;
   date: string;
   status: "Pass" | "Fail";
+  instructor: "Ahsan allaj pk";
   details: string;
   pendings: string[];
 }
@@ -22,6 +24,7 @@ const reviews: Review[] = [
     title: "Javascript",
     date: "20th Jun 2024",
     status: "Pass",
+    instructor: "Ahsan allaj pk",
     details:
       "Successfully completed all tasks for Week 1. Demonstrated excellent problem-solving skills and attention to detail.",
     pendings: ["data", "data", "data"],
@@ -32,6 +35,7 @@ const reviews: Review[] = [
     title: "MongoDB",
     date: "27th Jun 2024",
     status: "Fail",
+    instructor: "Ahsan allaj pk",
     details:
       "Need improvement in project management skills. Time management and task prioritization require attention.",
     pendings: ["data", "data", "data"],
@@ -42,6 +46,7 @@ const reviews: Review[] = [
     title: "Full Domain",
     date: "4th Jul 2024",
     status: "Pass",
+    instructor: "Ahsan allaj pk",
     details:
       "Showed significant progress in coding skills. Implemented complex features with minimal guidance.",
     pendings: ["data", "data", "data"],
@@ -52,45 +57,17 @@ const reviews: Review[] = [
     title: "Full Domain",
     date: "4th Jul 2024",
     status: "Pass",
+    instructor: "Ahsan allaj pk",
     details:
       "Showed significant progress in coding skills. Implemented complex features with minimal guidance.",
     pendings: ["data", "data", "data"],
   },
 ];
 
-const monthlyData = [
-  { week: "1", score: 9 },
-  { week: "2", score: 15 },
-  { week: "3", score: 0 },
-  { week: "5", score: 20 },
-  { week: "6", score: 10 },
-  { week: "7", score: 12 },
-  { week: "8", score: 0 },
-  { week: "9", score: 20 },
-  { week: "10", score: 10 },
-  { week: "11", score: 12 },
-  { week: "12", score: 0 },
-];
 
 function Reviews() {
   const [selectedReview, setSelectedReview] = useState<Review | null>(
     reviews[reviews.length - 1]
-  );
-
-  const { toast } = useToast();
-
-  // copy to clipboard
-  const handleCopy = useCallback(
-    async (texts: string[]) => {
-      try {
-        await navigator.clipboard.writeText(texts.toString());
-        toast({ title: "Pendings copied to clipboard" });
-      } catch (error) {
-        console.error("Failed to copy to clipboard:", error);
-        toast({ title: "Failed to copy to clipboard" });
-      }
-    },
-    [toast]
   );
 
   return (
@@ -106,7 +83,7 @@ function Reviews() {
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.1 }}
+              transition={{ delay: 0.2 + index * 0.1 }}
               className={cn(
                 "p-3 flex items-center gap-4 cursor-pointer rounded-full",
                 selectedReview?.id === review.id ? "bg-zinc-100" : ""
@@ -132,7 +109,7 @@ function Reviews() {
               <motion.div
                 initial={{ height: 0 }}
                 animate={{ height: 54 }}
-                transition={{ delay: index * 0.1 }}
+                transition={{ delay: 0.2 + index * 0.1 }}
                 style={{ top: "60px" }}
                 className={cn(
                   "absolute left-9 w-0.5 -translate-x-1/2 rounded-full",
@@ -146,92 +123,12 @@ function Reviews() {
         ))}
       </div>
 
-      <div className="w-full h-full relative z-20 bg-white grid grid-rows-3 col-span-2 gap-5 rounded-2xl">
+      <div className="w-full h-full relative z-20 bg-white grid grid-rows-[auto_1fr] col-span-2 gap-5">
         {/* review details */}
-        <div className="h-full p-8 rounded-2xl shadow-custom overflow-hidden">
-          <AnimatePresence mode="wait">
-            {selectedReview && (
-              <motion.div
-                key={selectedReview.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -30 }}
-                transition={{ duration: 0.2 }}
-              >
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center justify-between">
-                    <p className="font-semibold text-lg">
-                      Week {selectedReview.week}
-                    </p>
-                    <Badge
-                      className={cn(
-                        "text-sm font-semibold",
-                        selectedReview.status === "Pass"
-                          ? "text-green-900"
-                          : "text-red-900"
-                      )}
-                      variant="secondary"
-                    >
-                      {selectedReview.status}
-                    </Badge>
-                  </div>
-                  <p className="text-muted-foreground text-sm">
-                    {selectedReview.date}
-                  </p>
-                  <p className="font-medium truncate">
-                    {selectedReview.details}
-                  </p>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+        <ReviewDetails selectedReview={selectedReview as Review} />
 
         {/* pendings and performance status */}
-        <div className="h-fit grid grid-cols-1 sm:grid-cols-2 row-span-2 gap-5">
-          {/* pendings */}
-          <div className="p-8 bg-zinc-0 rounded-2xl shadow-custom">
-            <AnimatePresence mode="wait">
-              {selectedReview && (
-                <motion.div
-                  className="h-full w-full flex flex-col gap-7"
-                  key={selectedReview.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -30 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div className="flex items-start justify-between relative">
-                    <p className="text-base font-medium truncate">
-                      Pendings ({selectedReview.title})
-                    </p>
-                    <div
-                      onClick={() => handleCopy(selectedReview.pendings)}
-                      className="p-3 absolute -right-4 -top-2.5 bg-white hover:bg-zinc-100 rounded-lg cursor-pointer"
-                    >
-                      <Copy className="w-5 h-5" />
-                    </div>
-                  </div>
-                  <AnimatePresence mode="wait">
-                    <div className="h-[170px] sm:h-[266px] flex flex-col gap-2 overflow-auto no-scrolbar">
-                      {selectedReview.pendings.map((item, index) => {
-                        return (
-                          <p key={index} className="font-medium">
-                            {item}
-                          </p>
-                        );
-                      })}
-                    </div>
-                  </AnimatePresence>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-          {/* chart for monthly performance*/}
-          <div className="p-8 bg-zinc-0 rounded-2xl shadow-custom h-full">
-            <LineCharts data={monthlyData} text="Weekly Performance" />
-          </div>
-        </div>
+        <PendingsAndChart selectedReview={selectedReview as Review} />
       </div>
     </div>
   );
