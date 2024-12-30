@@ -26,12 +26,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Button from "@/components/ui/button";
 import { NotFoundOrbit, NotSelected } from "@/components/animated/fallbacks";
 import "./admin.css";
+import UserList from "@/components/usersList/userList";
 
 interface User {
     id: number;
@@ -43,7 +44,8 @@ interface User {
     role: string;
     isBlock: boolean;
 }
-const users: User[] = [
+
+const data: User[] = [
     {
         id: 1,
         name: "Ahsan allaj pk",
@@ -77,12 +79,39 @@ const users: User[] = [
 ];
 
 function Admins() {
-    const [isActive, setActive] = useState<boolean>(true);
+    const [isBlock, setIsBlock] = useState<boolean>(false);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
+    const [users, setUsers] = useState<User[]>(data);
+
+    // inputs
+    const [search, setSearch] = useState<string>("");
+
+    // select user
+    const handleSelect = (index: number) => {
+        setSelectedUser(users[index]);
+    };
+
+    useEffect(() => {
+        const trimmed = search.trim();
+        if (trimmed) {
+            const regex = new RegExp(trimmed, "i");
+            const filtered = users.filter((u) => regex.test(u.name));
+            setUsers(filtered);
+        } else {
+            setUsers(data);
+        }
+    }, [search]);
+
+    useEffect(() => {
+        console.log(isBlock);
+        const filteredUsers = data.filter((user) => user.isBlock == isBlock);
+        console.log(filteredUsers);
+        setUsers(filteredUsers);
+    }, [isBlock]);
 
     return (
         <div className="grid grid-cols-3 gap-5 p-5">
-            {/* users list  */}
+            {/* left side  */}
             <div className="p-5 sticky top-5 w-full h-[calc(100vh-322px)] md:h-[calc(100vh-130px)] flex flex-col gap-5 items-center bg-white border shadow-sm rounded-2xl">
                 {/* Heading */}
                 <div className="w-full flex items-center justify-between">
@@ -90,12 +119,6 @@ function Admins() {
                         <p className="text-lg font-semibold">
                             Manage users ({users.length})
                         </p>
-                        {/* <Badge
-                            variant="outline"
-                            className="text-xs font-semibold shadow-md rounded-full"
-                        >
-                            {users.length} Total
-                        </Badge> */}
                     </div>
                     <Button
                         className="bg-zinc-900 hover:bg-zinc-800 text-white"
@@ -108,18 +131,20 @@ function Admins() {
                     <div className="relative flex-1">
                         <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <input
+                            value={search}
+                            onChange={(event) => setSearch(event.target.value)}
                             placeholder="Search users..."
                             className="w-full h-full px-4 py-2 pl-9 font-medium placeholder:text-muted-foreground border shadow-sm rounded-lg"
                         />
                     </div>
                     <button
-                        onClick={() => setActive(!isActive)}
+                        onClick={() => setIsBlock(!isBlock)}
                         className="icon-style shadow-sm"
                     >
-                        {isActive ? (
-                            <UserRoundCheck className="h-4 w-4" />
-                        ) : (
+                        {isBlock ? (
                             <UserRoundMinus className="h-4 w-4" />
+                        ) : (
+                            <UserRoundCheck className="h-4 w-4" />
                         )}
                     </button>
                     <DropdownMenu>
@@ -142,57 +167,27 @@ function Admins() {
                 </div>
 
                 {/* users lists */}
-                {/* <div className="p-4 w-full rounded-xl border">
-                    <div className="flex items-center gap-3">
-                        <div className="w-14 h-14 rounded-full bg-muted" />
-                        <div className="flex-1 space-y-2">
-                            <div className="h-4 w-24 bg-muted rounded" />
-                            <div className="h-3 w-32 bg-muted rounded" />
-                        </div>
-                    </div>
-                </div> */}
-
-                {/* lists */}
                 <div className="h-full w-full flex flex-col gap-[9px] overflow-auto bg-transparent no-scrollbar">
                     {users.length > 0 &&
                         users.map((user, index) => {
                             return (
-                                <motion.div
-                                    initial={{ opacity: 0, x: -30 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: 0.2 + index * 0.1 }}
+                                <UserList
                                     key={index}
-                                    onClick={() => setSelectedUser(users[index])}
-                                    className={cn(
-                                        "group p-2 px-3 w-full border hover:bg-muted hover:border-muted rounded-xl cursor-pointer",
-                                        selectedUser?.id === user.id ? "bg-muted border-muted" : ""
-                                    )}
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <Avatar className="border-2 border-zinc-100 w-12 h-12">
-                                            <AvatarImage src={image} className="object-cover" />
-                                            <AvatarFallback>
-                                                <CircleUserRound />
-                                            </AvatarFallback>
-                                        </Avatar>
-                                        <div className="flex-1 min-w-0">
-                                            <div className="flex items-center gap-2">
-                                                <p className="font-semibold truncate">{user.name}</p>
-                                            </div>
-                                            <p
-                                                className={cn(
-                                                    "text-sm text-muted-foreground font-medium flex items-center gap-1 truncate"
-                                                    // user.isBlock ? "text-red-900" : "text-green-900"
-                                                )}
-                                            >
-                                                {user.isBlock ? (
-                                                    <UserRoundMinus className="w-3 h-3" />
-                                                ) : (
-                                                    <UserRoundCheck className="w-3 h-3" />
-                                                )}
-                                                {user.isBlock ? "Blocked" : "Active"}
-                                            </p>
-                                        </div>
+                                    index={index}
+                                    action={handleSelect}
+                                    data={user}
+                                    selectedUser={selectedUser}
+                                    children1={
+                                        <p className="text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
+                                            {user.isBlock ? (
+                                                <UserRoundMinus className="w-3 h-3" />
+                                            ) : (
+                                                <UserRoundCheck className="w-3 h-3" />
+                                            )}
+                                            {user.isBlock ? "Blocked" : "Active"}
+                                        </p>
+                                    }
+                                    children2={
                                         <DropdownMenu>
                                             <DropdownMenuTrigger className="p-3 hover:bg-muted rounded-lg">
                                                 <MoreHorizontal className="w-4 h-4" />
@@ -222,8 +217,8 @@ function Admins() {
                                                 </DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
-                                    </div>
-                                </motion.div>
+                                    }
+                                />
                             );
                         })}
                     {users.length === 0 && (
@@ -236,7 +231,7 @@ function Admins() {
                 </div>
             </div>
 
-            {/* user details */}
+            {/* right side */}
             <div className="grid gap-5 col-span-2 grid-rows-[auto_1fr]">
                 {/* user details */}
                 <AnimatePresence mode="wait">
@@ -247,14 +242,7 @@ function Admins() {
                             animate={{
                                 x: 0,
                                 opacity: 1,
-                                // transition: {
-                                //     type: "spring",
-                                //     stiffness: 400,
-                                //     damping: 12,
-                                //     duration: 0.3,
-                                // },
                             }}
-                            // exit={{ opacity: 0, x: -10 }}
                             className="h-fit"
                         >
                             <div className="h-full p-5 space-y-5 border shadow-sm rounded-2xl overflow-hidden">
@@ -312,11 +300,6 @@ function Admins() {
                                             label: "Date Joined",
                                             value: selectedUser.joined,
                                         },
-                                        // {
-                                        //     icon: Activity,
-                                        //     label: "Activity",
-                                        //     value: selectedUser.ActiviyStatus,
-                                        // },
                                     ].map((item, index) => (
                                         <div key={index} className="p-3 border rounded-lg">
                                             <div className="flex items-center gap-4">
