@@ -6,6 +6,6 @@
 
 .icon-style:hover{
     --tw-bg-opacity: 1;
-    border-color: hsl(var(--muted));
+    /* border-color: hsl(var(--muted)); */
     background-color: rgb(244 244 245 / var(--tw-bg-opacity))
 }

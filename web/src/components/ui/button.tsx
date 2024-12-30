@@ -1,20 +1,21 @@
 import { cn } from "@/lib/utils";
+import { LucideProps } from "lucide-react";
 
 interface PropsType {
-    text: string;
+    text?: string;
     className: string;
-    action?: () => void;
+    action?: any;
+    Icon?: React.ForwardRefExoticComponent<
+        Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
+    >;
 }
-function Button({ className, text, action }: PropsType) {
+function Button({ className, text, action, Icon }: PropsType) {
     return (
         <button
             onClick={action}
-            className={cn(
-                "px-6 py-2 text-sm font-semibold border shadow-md rounded-lg",
-                className
-            )}
+            className={cn("text-sm font-semibold border shadow-md p-3", className)}
         >
-            {text}
+            {text ? text : Icon && <Icon className="h-4 w-4" />}
         </button>
     );
 }

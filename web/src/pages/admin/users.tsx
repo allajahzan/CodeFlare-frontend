@@ -1,16 +1,18 @@
 import {
+    ArrowUpAZ,
     Calendar,
+    CalendarArrowUp,
     CircleUserRound,
     Clock,
     Edit,
+    Edit2,
     EyeIcon,
     Filter,
     Mail,
     MoreHorizontal,
     PersonStanding,
-    Search,
+    Plus,
     SortAsc,
-    SortDesc,
     User,
     User2,
     UserRoundCheck,
@@ -26,13 +28,26 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useLayoutEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { cn } from "@/lib/utils";
 import Button from "@/components/ui/button";
 import { NotFoundOrbit, NotSelected } from "@/components/animated/fallbacks";
-import "./admin.css";
 import UserList from "@/components/usersList/userList";
+import CardHeader from "@/components/card/cardHeader";
+import SearchFilterSort from "@/components/card/searchFilterSort";
+import { useMediaQuery } from "usehooks-ts";
+import { cn } from "@/lib/utils";
+import {
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+} from "@/components/ui/drawer";
+import "./admin.css";
 
 interface User {
     id: number;
@@ -79,9 +94,11 @@ const data: User[] = [
 ];
 
 function Admins() {
-    const [isBlock, setIsBlock] = useState<boolean>(false);
+    const [status, setStatus] = useState<boolean>(false);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [users, setUsers] = useState<User[]>(data);
+    const isSmall = useMediaQuery("(max-width: 768px)");
+    const [isDrawerOpen, setDrawerOpen] = useState<boolean>(false);
 
     // inputs
     const [search, setSearch] = useState<string>("");
@@ -91,80 +108,105 @@ function Admins() {
         setSelectedUser(users[index]);
     };
 
-    useEffect(() => {
+    // handle search
+    const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+        setSearch(event.target.value);
+    };
+
+    // handle blocked-unblocked
+    const handleStatus = () => {
+        setStatus(!status);
+    };
+
+    useLayoutEffect(() => {
         const trimmed = search.trim();
-        if (trimmed) {
-            const regex = new RegExp(trimmed, "i");
-            const filtered = users.filter((u) => regex.test(u.name));
-            setUsers(filtered);
-        } else {
-            setUsers(data);
-        }
-    }, [search]);
+        const regex = trimmed ? new RegExp(trimmed, "i") : null;
+
+        const filteredUsers = data.filter((user) => {
+            const matchesStatus =
+                status !== undefined ? user.isBlock === status : true;
+            const matchesSearch = regex ? regex.test(user.name) : true;
+            return matchesStatus && matchesSearch;
+        });
+
+        setUsers(filteredUsers);
+    }, [search, status, data]);
 
     useEffect(() => {
-        console.log(isBlock);
-        const filteredUsers = data.filter((user) => user.isBlock == isBlock);
-        console.log(filteredUsers);
-        setUsers(filteredUsers);
-    }, [isBlock]);
+        document.body.style.transition = isDrawerOpen ? "transform 0.3s ease" : "";
+        document.body.style.transform = isDrawerOpen ? "transalte(-20px)" : "";
+        document.body.style.overflow = isDrawerOpen ? "hidden" : "";
+    }, [isDrawerOpen]);
 
     return (
-        <div className="grid grid-cols-3 gap-5 p-5">
+        <div
+            style={
+                isDrawerOpen
+                    ? {
+                        transformOrigin: "center top",
+                        transitionProperty: "transform, border-radius",
+                        transitionDuration: "0.5s",
+                        transitionTimingFunction: "cubic-bezier(0.32, 0.72, 0, 1)",
+                        borderRadius: "8px",
+                        overflow: "hidden",
+                        transform:
+                            "scale(0.9447983014861996) translate3d(0, calc(env(safe-area-inset-top) + 14px), 0)",
+                    }
+                    : {}
+            }
+            className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-5"
+        >
             {/* left side  */}
-            <div className="p-5 sticky top-5 w-full h-[calc(100vh-322px)] md:h-[calc(100vh-130px)] flex flex-col gap-5 items-center bg-white border shadow-sm rounded-2xl">
-                {/* Heading */}
-                <div className="w-full flex items-center justify-between">
-                    <div className="flex gap-2">
-                        <p className="text-lg font-semibold">
-                            Manage users ({users.length})
-                        </p>
-                    </div>
-                    <Button
-                        className="bg-zinc-900 hover:bg-zinc-800 text-white"
-                        text="Add user"
-                    />
-                </div>
-
-                {/* search , filter, sort */}
-                <div className="w-full flex gap-2">
-                    <div className="relative flex-1">
-                        <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                        <input
-                            value={search}
-                            onChange={(event) => setSearch(event.target.value)}
-                            placeholder="Search users..."
-                            className="w-full h-full px-4 py-2 pl-9 font-medium placeholder:text-muted-foreground border shadow-sm rounded-lg"
+            <div className="p-5 sticky z-0 top-5 w-full h-[calc(100vh-322px)] md:h-[calc(100vh-130px)] flex flex-col gap-5 items-center bg-white border shadow-sm rounded-2xl">
+                {/* heading */}
+                <CardHeader
+                    heading="Manage users"
+                    count={users.length}
+                    children={
+                        <Button
+                            action={() => alert("Add")}
+                            className="bg-zinc-900 hover:bg-zinc-800 text-white p-2 rounded-full"
+                            Icon={Plus}
                         />
-                    </div>
-                    <button
-                        onClick={() => setIsBlock(!isBlock)}
-                        className="icon-style shadow-sm"
-                    >
-                        {isBlock ? (
-                            <UserRoundMinus className="h-4 w-4" />
-                        ) : (
-                            <UserRoundCheck className="h-4 w-4" />
-                        )}
-                    </button>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger className="icon-style shadow-sm">
-                            <Filter className="h-4 w-4" />
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="start">
-                            <DropdownMenuItem>All Roles</DropdownMenuItem>
-                            <DropdownMenuItem>Coordinators</DropdownMenuItem>
-                            <DropdownMenuItem>Instructors</DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                    <button className="icon-style shadow-sm">
-                        {"asc" === "asc" ? (
-                            <SortAsc className="h-4 w-4" />
-                        ) : (
-                            <SortDesc className="h-4 w-4" />
-                        )}
-                    </button>
-                </div>
+                    }
+                />
+
+                {/* search filter sort  */}
+                <SearchFilterSort
+                    search={search}
+                    status={status}
+                    handleSearch={handleSearch}
+                    hanldeStatus={handleStatus}
+                    children1={
+                        <DropdownMenu>
+                            <DropdownMenuTrigger className="icon-style shadow-sm">
+                                <Filter className="h-4 w-4" />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align={isSmall ? "end" : "start"}>
+                                <DropdownMenuItem>All Roles</DropdownMenuItem>
+                                <DropdownMenuItem>Coordinators</DropdownMenuItem>
+                                <DropdownMenuItem>Instructors</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    }
+                    children2={
+                        <DropdownMenu>
+                            <DropdownMenuTrigger className="icon-style shadow-sm">
+                                <SortAsc className="h-4 w-4" />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align={isSmall ? "end" : "start"}>
+                                <DropdownMenuItem>
+                                    <ArrowUpAZ />
+                                    Name
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <CalendarArrowUp />
+                                    Date
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    }
+                />
 
                 {/* users lists */}
                 <div className="h-full w-full flex flex-col gap-[9px] overflow-auto bg-transparent no-scrollbar">
@@ -193,8 +235,13 @@ function Admins() {
                                                 <MoreHorizontal className="w-4 h-4" />
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent
-                                                align="start"
+                                                // change alignments in small size
+                                                align={isSmall ? "end" : "start"}
                                                 onClick={(event) => event.stopPropagation()}
+                                                className={cn(
+                                                    "relative",
+                                                    isSmall ? "left-[13px]" : "left-0"
+                                                )}
                                             >
                                                 <DropdownMenuItem
                                                     onClick={() => setSelectedUser(users[index])}
@@ -232,7 +279,7 @@ function Admins() {
             </div>
 
             {/* right side */}
-            <div className="grid gap-5 col-span-2 grid-rows-[auto_1fr]">
+            <div className="grid gap-5 col-auto lg:col-span-2 grid-rows-[auto_1fr] relative z-10">
                 {/* user details */}
                 <AnimatePresence mode="wait">
                     {selectedUser && (
@@ -243,9 +290,9 @@ function Admins() {
                                 x: 0,
                                 opacity: 1,
                             }}
-                            className="h-fit"
+                            className="h-full w-full min-w-0"
                         >
-                            <div className="h-full p-5 space-y-5 border shadow-sm rounded-2xl overflow-hidden">
+                            <div className="h-full p-5 space-y-5 bg-white border shadow-sm rounded-2xl overflow-hidden">
                                 <div className="flex items-center gap-4 relative">
                                     <motion.div
                                         initial={{ scale: 0.5, opacity: 0 }}
@@ -259,28 +306,30 @@ function Admins() {
                                             </AvatarFallback>
                                         </Avatar>
                                     </motion.div>
-                                    <div className="flex-1 flex flex-col justify-center gap-2 min-w-0">
-                                        <div className="flex items-center gap-5">
+                                    <div className="flex-1 flex flex-col justify-center gap-2 min-w-0 truncate">
+                                        <div className="flex items-center gap-2">
                                             <p className="text-lg font-semibold truncate">
                                                 {selectedUser.name}
                                             </p>
-                                            <Badge className="relative hidden sm:inline-flex text-xs text-white font-semibold bg-zinc-900 hover:bg-zinc-900 rounded-full overflow-hidden">
+                                            <Badge className="hidden lg:block relative text-xs text-white font-semibold bg-zinc-900 hover:bg-zinc-900 rounded-full overflow-hidden">
                                                 {selectedUser.role}
                                             </Badge>
                                         </div>
-                                        <p className="text-sm text-muted-foreground font-medium tracking-wide flex items-center gap-1">
-                                            <Mail className="w-4 h-4" />
+                                        <p className="text-sm text-muted-foreground font-medium truncate tracking-wide flex items-center gap-1">
+                                            <Mail className="w-4 h-4 flex-shrink-0" />
                                             {selectedUser.email}
                                         </p>
                                     </div>
+
                                     <Button
-                                        className="bg-zinc-900 hover:bg-zinc-800 text-white self-start"
-                                        text="Edit profile"
+                                        action={() => alert("Edit")}
+                                        className="bg-zinc-900 hover:bg-zinc-800 text-white p-2 rounded-full self-start"
+                                        Icon={Edit2}
                                     />
                                 </div>
 
                                 {/* cards */}
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-[13px]">
+                                <div className="grid grid-cols-1 lg:grid-cols-2 col-auto gap-[13px]">
                                     {[
                                         {
                                             icon: selectedUser.isBlock
@@ -303,26 +352,33 @@ function Admins() {
                                     ].map((item, index) => (
                                         <div key={index} className="p-3 border rounded-lg">
                                             <div className="flex items-center gap-4">
-                                                <div className="p-2 rounded-lg bg-primary/10">
+                                                <div className="p-2 rounded-lg bg-muted">
                                                     <item.icon className="w-5 h-5" />
                                                 </div>
                                                 <div>
                                                     <p className="text-sm text-muted-foreground font-medium">
-                                                        {item.label}
+                                                        {item.label}{" "}
+                                                        {item.label === "Role Status" && (
+                                                            <span className="inline-block lg:hidden text-zinc-900">
+                                                                ({selectedUser.role})
+                                                            </span>
+                                                        )}
                                                     </p>
                                                     <p className="font-semibold">{item.value}</p>
                                                 </div>
                                             </div>
                                         </div>
                                     ))}
+
+                                    {/* assigned batches lists */}
                                     <DropdownMenu>
                                         <DropdownMenuTrigger className="flex items-center gap-4 text-start cursor-pointer p-3 border rounded-lg">
-                                            <div className="p-2 rounded-lg bg-primary/10">
+                                            <div className="p-2 rounded-lg bg-muted">
                                                 <PersonStanding className="w-5 h-5" />
                                             </div>
                                             <div>
                                                 <p className="text-sm text-muted-foreground">Batches</p>
-                                                <p className="font-semibold">Assigned Batches</p>
+                                                <p className="font-semibold">Batches</p>
                                             </div>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent
@@ -339,17 +395,19 @@ function Admins() {
                         </motion.div>
                     )}
 
-                    {/* no users found */}
+                    {/* no user selected */}
                     {!selectedUser && (
                         <NotSelected
                             Icon={User2}
                             message="Select a user from the list to view their details"
                             text="No user selected"
-                            className="h-[290.5px]"
+                            className="h-[434px] lg:h-[273.3px]"
                         />
                     )}
                 </AnimatePresence>
-                <div className="h-full p-5 bg-zinc-100 rounded-2xl"></div>
+                <div className="h-full p-5 bg-zinc-0 border rounded-2xl">
+                    
+                </div>
             </div>
         </div>
     );

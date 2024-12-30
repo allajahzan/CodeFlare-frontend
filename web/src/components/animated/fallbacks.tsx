@@ -105,7 +105,7 @@ interface PropsType {
 }
 function NotSelected({ Icon, message, text, className }: PropsType) {
     return (
-        <div className={cn("flex flex-col gap-5 items-center justify-center border shadow-sm rounded-2xl", className)}>
+        <div className={cn("flex flex-col gap-5 items-center justify-center bg-white border shadow-sm rounded-2xl", className)}>
             <motion.div
                 initial={{ scale: 0.5, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
