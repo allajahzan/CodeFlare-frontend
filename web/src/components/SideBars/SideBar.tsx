@@ -12,7 +12,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
-import SideBarItem from "./SideBarItem";
+import SideBarItem from "./sideBarItem";
 import { LogOut, LucideProps, Moon, Sun } from "lucide-react";
 import "./SideBar.css";
 import Slider from "../ui/slider";

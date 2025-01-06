@@ -5,7 +5,7 @@ import {
     stateType,
     themeAction,
 } from "../../redux/store";
-import NavbarItem from "./NavbarItem";
+import NavbarItem from "./navbarItem";
 import Heading from "../ui/heading";
 import { Bell, ChevronDown, Globe, Moon, Sun } from "lucide-react";
 import avatar_boy from "../../assets/images/avatar_boy.jpg";
