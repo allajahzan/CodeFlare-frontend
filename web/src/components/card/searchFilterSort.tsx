@@ -6,8 +6,8 @@ interface PropsType {
     handleSearch: (event: ChangeEvent<HTMLInputElement>) => void;
     status: boolean;
     hanldeStatus: () => void;
-    children1: React.ReactNode;
-    children2: React.ReactNode;
+    children1?: React.ReactNode;
+    children2?: React.ReactNode;
 }
 
 function SearchFilterSort({

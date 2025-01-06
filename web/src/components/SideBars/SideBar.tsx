@@ -33,7 +33,7 @@ function SideBar({ sideBarItems }: PropsType) {
     const theme = useSelector((state: stateType) => state.theme);
     const isSmall = useSelector((state: stateType) => state.isSmall);
     const isSideBarVisible = useSelector(
-        (state: stateType) => state.isSideBarStudent
+        (state: stateType) => state.isSideBarVisible
     );
 
     const dispatch = useDispatch();

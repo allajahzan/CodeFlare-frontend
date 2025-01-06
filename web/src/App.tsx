@@ -19,6 +19,7 @@ import MainLayout from "./components/layout/studentLayout";
 import { Toaster } from "@/components/ui/toaster";
 import AdminLayout from "./components/layout/adminLayout";
 import Users from "./pages/admin/users";
+import { useState } from "react";
 
 function App() {
   return (
@@ -74,6 +75,7 @@ function CoordinatorRoutes() {
 
 // admin routes routes
 function AdminRoutes() {
+  const [isDrawerOpen, setDrawerOpen] = useState<boolean>(false);
   return (
     <Routes>
       <Route path="" element={<Navigate to="login" />} />
@@ -81,9 +83,20 @@ function AdminRoutes() {
       <Route path="login" element={<Login />} />
 
       {/* main layout */}
-      <Route element={<AdminLayout />}>
+      <Route
+        element={
+          <AdminLayout
+            isDrawerOpen={isDrawerOpen}
+          />
+        }
+      >
         <Route path="dashboard" element={<DashboardAdmin />} />
-        <Route path="users" element={<Users />} />
+        <Route
+          path="users"
+          element={
+            <Users isDrawerOpen={isDrawerOpen} setDrawerOpen={setDrawerOpen} />
+          }
+        />
       </Route>
     </Routes>
   );

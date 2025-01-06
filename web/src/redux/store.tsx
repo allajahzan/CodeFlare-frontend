@@ -7,7 +7,7 @@ interface actionType {
 
 export interface stateType {
     isSmall: boolean;
-    isSideBarStudent: boolean;
+    isSideBarVisible: boolean;
     isShrinkSideBarStudent: boolean;
     isSideBarCounsellor: boolean;
     isShrinkSideBarCounsellor: boolean;
@@ -16,7 +16,7 @@ export interface stateType {
 }
 
 // reducer function for student sideBarVisibility
-const isSideBarStudent = (prevState: boolean = false, action: actionType) => {
+const isSideBarVisible = (prevState: boolean = false, action: actionType) => {
     if (action.type === "sidebarStudent") {
         return action.payload;
     }
@@ -25,8 +25,8 @@ const isSideBarStudent = (prevState: boolean = false, action: actionType) => {
 
 // reducer function for shrink student side bar
 const isShrinkSideBarStudent = (
-    prevState: boolean = localStorage.getItem("isSideBarStudentShriked")
-        ? localStorage.getItem("isSideBarStudentShriked") === "true"
+    prevState: boolean = localStorage.getItem("isSideBarVisibleShriked")
+        ? localStorage.getItem("isSideBarVisibleShriked") === "true"
             ? true
             : false
         : true,
@@ -94,7 +94,7 @@ const theme = (prevState: boolean = true, action: actionType) => {
 
 const appReducer = combineReducers({
     isSmall,
-    isSideBarStudent,
+    isSideBarVisible,
     isShrinkSideBarStudent,
     isSideBarCounsellor,
     isShrinkSideBarCounsellor,

@@ -8,8 +8,8 @@ interface PropsType {
     index: number;
     action: any;
     data: any;
-    children1: React.ReactNode;
-    children2: React.ReactNode;
+    children1?: React.ReactNode;
+    children2?: React.ReactNode;
     selectedUser: any;
     className?: string
 }
@@ -22,7 +22,7 @@ function UserList({
     children1,
     children2,
     className
-}: PropsType) {
+}: PropsType,) {
     return (
         <motion.div
             key={index}

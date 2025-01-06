@@ -5,14 +5,14 @@ import { shrinkSideBarStudentAction, sideBarStudentAction, stateType } from "../
 function ContentHeadingInSmallSize() {
 
     const [icon, setIcon] = useState<string>('light')
-    const isSideBarStudent = useSelector((state: stateType) => state.isSideBarStudent)
+    const isSideBarVisible = useSelector((state: stateType) => state.isSideBarVisible)
     const isSmall = useSelector((state: stateType) => state.isSmall)
     const dispatch = useDispatch()
 
     const handleSideBar = () => {
         dispatch(shrinkSideBarStudentAction(false))
-        localStorage.setItem('isSideBarStudentShriked', `${false}`)
-        dispatch(sideBarStudentAction(!isSideBarStudent))
+        localStorage.setItem('isSideBarVisibleShriked', `${false}`)
+        dispatch(sideBarStudentAction(!isSideBarVisible))
     }
 
     const handleTheme = () => {

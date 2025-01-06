@@ -15,7 +15,11 @@ import Shadow from "../ui/shadow";
 import { useLayoutEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
 
-function AdminLayout() {
+interface PropsType {
+  isDrawerOpen: boolean;
+}
+
+function AdminLayout({ isDrawerOpen }: PropsType) {
   const isSmall = useSelector((state: stateType) => state.isSmall);
   const dispatch = useDispatch();
 
@@ -53,7 +57,31 @@ function AdminLayout() {
   );
 
   return (
-    <div className="h-screen bg-white">
+    <div
+      style={{
+        ...(isDrawerOpen
+          ? {
+            transformOrigin: "center top",
+            transitionProperty: "transform, border-radius",
+            transitionDuration: "0.5s",
+            transitionTimingFunction: "cubic-bezier(0.32, 0.72, 0, 1)",
+            borderRadius: "8px",
+            overflow: "hidden",
+            transform:
+              "scale(0.9447983014861996) translate3d(0, calc(env(safe-area-inset-top) + 14px), 0)",
+          }
+          : {
+            transformOrigin: "center top",
+            transitionProperty: "transform",
+            transitionDuration: "0.5s",
+            transitionTimingFunction: "cubic-bezier(0.32, 0.72, 0, 1)",
+            borderRadius: "0px",
+            overflow: "hidden",
+            transform: "scale(1) translate3d(0, 0, 0)",
+          }),
+      }}
+      className="h-screen bg-white"
+    >
       <Shadow />
       <SideBar sideBarItems={sideBarItems} />
       <div

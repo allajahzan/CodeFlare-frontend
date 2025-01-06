@@ -15,8 +15,8 @@ import { motion } from "framer-motion";
 
 const Navbar = () => {
     const isSmall = useSelector((state: stateType) => state.isSmall);
-    const isSideBarStudent = useSelector(
-        (state: stateType) => state.isSideBarStudent
+    const isSideBarVisible = useSelector(
+        (state: stateType) => state.isSideBarVisible
     );
     const theme = useSelector((state: stateType) => state.theme);
     const dispatch = useDispatch();
@@ -32,8 +32,8 @@ const Navbar = () => {
 
     // handle sidebar
     const handleSideBar = useCallback(() => {
-        dispatch(sideBarStudentAction(!isSideBarStudent));
-    }, [dispatch, isSideBarStudent]);
+        dispatch(sideBarStudentAction(!isSideBarVisible));
+    }, [dispatch, isSideBarVisible]);
 
     useLayoutEffect(() => {
         pathname.split("/")[2] === "dashboard"
