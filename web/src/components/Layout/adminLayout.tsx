@@ -63,7 +63,7 @@ function AdminLayout({ isDrawerOpen }: PropsType) {
           ? {
             transformOrigin: "center top",
             transitionProperty: "transform, border-radius",
-            transitionDuration: "0.5s",
+            transitionDuration: "0.3s",
             transitionTimingFunction: "cubic-bezier(0.32, 0.72, 0, 1)",
             borderRadius: "8px",
             overflow: "hidden",
@@ -73,7 +73,7 @@ function AdminLayout({ isDrawerOpen }: PropsType) {
           : {
             transformOrigin: "center top",
             transitionProperty: "transform",
-            transitionDuration: "0.5s",
+            transitionDuration: "0.3s",
             transitionTimingFunction: "cubic-bezier(0.32, 0.72, 0, 1)",
             borderRadius: "0px",
             overflow: "hidden",

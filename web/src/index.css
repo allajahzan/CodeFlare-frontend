@@ -6,6 +6,7 @@
     html {
         scrollbar-width: none;
         scroll-behavior: smooth;
+        will-change: auto;
     }
 
     .no-scrollbar::-webkit-scrollbar {
@@ -74,6 +75,14 @@
         transition: "all 0.3s ease-in-out",
     }
 }
+
+@layer components {
+    [data-vaul-drawer] {
+      will-change: auto !important;
+      backface-visibility: hidden !important;
+      animation-duration: .3s !important
+    }
+  }
 
 @layer base {
     :root {

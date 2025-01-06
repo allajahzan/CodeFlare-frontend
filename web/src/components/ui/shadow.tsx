@@ -13,7 +13,7 @@ function Shadow() {
             className={cn(
                 isSmall &&
                 isSideBarVisible &&
-                "bg-black bg-opacity-20 absolute z-50 top-0 left-0 h-screen w-screen transition-all duration-300"
+                "bg-black/80 absolute z-50 top-0 left-0 h-screen w-screen transition-all duration-300"
             )}
         ></div>
     );

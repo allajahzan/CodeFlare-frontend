@@ -37,16 +37,6 @@ import CardHeader from "@/components/card/cardHeader";
 import SearchFilterSort from "@/components/card/searchFilterSort";
 import { useMediaQuery } from "usehooks-ts";
 import { cn } from "@/lib/utils";
-import {
-    Drawer,
-    DrawerClose,
-    DrawerContent,
-    DrawerDescription,
-    DrawerFooter,
-    DrawerHeader,
-    DrawerTitle,
-    DrawerTrigger,
-} from "@/components/ui/drawer";
 import "./admin.css";
 import DrawerUsersList from "@/components/drawers/admin.users";
 
@@ -99,7 +89,7 @@ interface PropsType {
     setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function Users({ isDrawerOpen, setDrawerOpen }: PropsType) {
+function Users({ setDrawerOpen }: PropsType) {
     const [status, setStatus] = useState<boolean>(false);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [users, setUsers] = useState<User[]>(data);
@@ -196,7 +186,16 @@ function Users({ isDrawerOpen, setDrawerOpen }: PropsType) {
                 />
 
                 {/* users lists in small screen */}
-                {isSmall && <DrawerUsersList users={users} selectedUser={selectedUser as User} isSmall={isSmall} setDrawerOpen={setDrawerOpen} setSelectedUser={setSelectedUser} action={handleSelect}/>}
+                {isSmall && (
+                    <DrawerUsersList
+                        users={users}
+                        selectedUser={selectedUser as User}
+                        isSmall={isSmall}
+                        setDrawerOpen={setDrawerOpen}
+                        setSelectedUser={setSelectedUser}
+                        action={handleSelect}
+                    />
+                )}
 
                 {/* users list in large screen */}
                 {!isSmall && (
@@ -271,9 +270,9 @@ function Users({ isDrawerOpen, setDrawerOpen }: PropsType) {
             </div>
 
             {/* right side */}
-            <div className="grid gap-5 col-auto lg:col-span-2 grid-rows-[auto_1fr] relative z-10">
-                {/* user details */}
-                {!isSmall && (
+            {!isSmall && (
+                <div className="grid gap-5 col-auto lg:col-span-2 grid-rows-[auto_1fr] relative z-10">
+                    {/* user details */}
                     <AnimatePresence mode="wait">
                         {selectedUser && (
                             <motion.div
@@ -400,9 +399,10 @@ function Users({ isDrawerOpen, setDrawerOpen }: PropsType) {
                             />
                         )}
                     </AnimatePresence>
-                )}
-                <div className="h-full p-5 bg-zinc-0 border rounded-2xl"></div>
-            </div>
+
+                    <div className="h-full p-5 bg-zinc-0 border rounded-2xl"></div>
+                </div>
+            )}
         </div>
     );
 }
