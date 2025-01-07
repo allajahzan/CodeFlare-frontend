@@ -22,7 +22,6 @@
         font-family: "Urbanist", sans-serif;
         font-optical-sizing: auto;
         background-color: black;
-        transition: "all 0.3s ease-in-out";
         outline: none;
         color: #18181b;
         will-change: auto !important;

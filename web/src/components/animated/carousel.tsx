@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import bgImage from "../../assets/images/loginImage4.jpg";
-import logo from '../../../public/logo.png'
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface PropsType {
@@ -10,7 +9,7 @@ interface PropsType {
 
 function Carousel({ slides }: PropsType) {
     const [currentSlide, setCurrentSlide] = useState<number>(0);
-    let timer : any
+    let timer: any;
 
     const goToNextSlide = useCallback(() => {
         setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -25,25 +24,18 @@ function Carousel({ slides }: PropsType) {
         setCurrentSlide((prev: number) => {
             return prev + 1 === 3 ? 0 : prev + 1;
         });
-        clearInterval(timer)
+        clearInterval(timer);
     };
 
     const goBack = () => {
         setCurrentSlide((prev: number) => {
             return prev - 1 === -1 ? 2 : prev - 1;
         });
-        clearInterval(timer)
+        clearInterval(timer);
     };
 
     return (
-        <div
-            style={{
-                backgroundImage: `url(${bgImage})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-            }}
-            className="h-full w-full relative overflow-hidden rounded-2xl"
-        >
+        <div className="h-full md:h-full w-full relative overflow-hidden rounded-2xl">
             {/* SVG Animated Overlay */}
             {/* <div className="absolute inset-0">
                 <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -69,11 +61,10 @@ function Carousel({ slides }: PropsType) {
                 </svg>
             </div> */}
 
-            {/* heading */}
-            
+            <img src={bgImage} alt="" className="object-cover h-full w-full" />
 
             {/* slide Content */}
-            <div className="relative h-full flex items-center justify-center">
+            <div className="absolute inset-0 flex items-center justify-center">
                 <ChevronLeft
                     onClick={goBack}
                     className="text-white h-10 w-10 absolute left-0 top-[50%] -translate-y-[50%] cursor-pointer"
@@ -87,12 +78,10 @@ function Carousel({ slides }: PropsType) {
                         transition={{ delay: 0.2 }}
                         className="text-center px-12"
                     >
-                        <h2 className="text-2xl sm:text-3xl text-white font-bold mb-4">
+                        <h2 className="text-2xl text-white font-bold mb-4">
                             {slides[currentSlide].title}
                         </h2>
-                        <p className="text-sm sm:text-base text-white">
-                            {slides[currentSlide].description}
-                        </p>
+                        <p className="text-white">{slides[currentSlide].description}</p>
                     </motion.div>
                 </AnimatePresence>
                 <ChevronRight
@@ -107,7 +96,7 @@ function Carousel({ slides }: PropsType) {
                     <button
                         key={index}
                         onClick={goNext}
-                        className={`w-2 h-2 rounded-full transition-colors ${index === currentSlide ? "bg-white" : "bg-zinc-900"
+                        className={`w-2 h-2 rounded-full transition-colors ${index === currentSlide ? "bg-white" : "bg-muted-foreground/20"
                             }`}
                     />
                 ))}

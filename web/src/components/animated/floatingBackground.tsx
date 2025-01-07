@@ -35,7 +35,7 @@ function FloatingBackground({children}:PropsType) {
     );
 
     return (
-        <div className="h-screen bg-white flex flex-col overflow-hidden transition-all duration-100 relative px-40 py-20">
+        <div className="h-screen bg-white flex flex-col items-center justify-center overflow-hidden transition-all duration-100 relative">
             {/* animated background elements */}
             <div className="fixed inset-0 overflow-hidden">
                 {/* binary rain effect */}
@@ -67,13 +67,13 @@ function FloatingBackground({children}:PropsType) {
                             animation: `${item.animation} 30s infinite ease-in-out alternate`,
                         }}
                     >
-                        <div className="opacity-[0.4]">{item.icon}</div>
+                        <div className="opacity-[0.1]">{item.icon}</div>
                     </div>
                 ))}
 
                 {/* grid pattern */}
                 <motion.div
-                    className="absolute inset-0 opacity-[0.2]"
+                    className="absolute inset-0 opacity-[0.1]"
                     style={{
                         backgroundImage: `linear-gradient(#000 1px, transparent 1px),
               linear-gradient(90deg, #000 1px, transparent 1px)`,
