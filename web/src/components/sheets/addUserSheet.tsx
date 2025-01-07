@@ -48,9 +48,9 @@ function AddUserSheet({ button }: PropsType) {
         <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger>{button}</SheetTrigger>
             <SheetContent className="p-0 flex flex-col gap-0">
-                <SheetHeader className="p-5 bg-zinc-900">
-                    <SheetTitle className="text-muted">Add new user</SheetTitle>
-                    <SheetDescription className="font-medium text-muted">
+                <SheetHeader className="p-5 bg-zinc-0">
+                    <SheetTitle className="text-foreground">Add new user</SheetTitle>
+                    <SheetDescription className="font-medium text-foreground">
                         Fill in the information below to add a new user.
                     </SheetDescription>
                 </SheetHeader>

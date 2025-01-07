@@ -9,13 +9,14 @@ interface PropsType {
 
 function Carousel({ slides }: PropsType) {
     const [currentSlide, setCurrentSlide] = useState<number>(0);
+    let timer : any
 
     const goToNextSlide = useCallback(() => {
         setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, []);
 
     useEffect(() => {
-        const timer = setInterval(goToNextSlide, 5000);
+        timer = setInterval(goToNextSlide, 5000);
         return () => clearInterval(timer);
     }, [goToNextSlide]);
 
@@ -23,12 +24,14 @@ function Carousel({ slides }: PropsType) {
         setCurrentSlide((prev: number) => {
             return prev + 1 === 3 ? 0 : prev + 1;
         });
+        clearInterval(timer)
     };
 
     const goBack = () => {
         setCurrentSlide((prev: number) => {
             return prev - 1 === -1 ? 2 : prev - 1;
         });
+        clearInterval(timer)
     };
 
     return (
@@ -74,10 +77,10 @@ function Carousel({ slides }: PropsType) {
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={slides[currentSlide].id}
-                        initial={{ opacity: 0, x: 100 }}
+                        initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -100 }}
-                        transition={{ duration: 0.5, ease: "easeInOut" }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ delay: 0.2 }}
                         className="text-center px-12"
                     >
                         <h2 className="text-2xl sm:text-3xl text-white font-bold mb-4">
