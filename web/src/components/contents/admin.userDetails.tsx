@@ -20,7 +20,7 @@ import {
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { NotSelected } from "../animated/fallbacks";
-import Button from "../ui/button";
+import IconButton from "../ui/iconButton";
 import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";
 
@@ -76,7 +76,7 @@ function UserDetails({ selectedUser, className }: PropsType) {
                                 </p>
                             </div>
 
-                            <Button
+                            <IconButton
                                 action={() => alert("Edit")}
                                 className="bg-zinc-900 hover:bg-zinc-800 text-white p-2 rounded-full self-start"
                                 Icon={Edit2}
