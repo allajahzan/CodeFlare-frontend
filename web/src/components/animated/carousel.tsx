@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import bgImage from "../../assets/images/loginImage4.jpg";
+import logo from '../../../public/logo.png'
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface PropsType {
@@ -68,6 +69,9 @@ function Carousel({ slides }: PropsType) {
                 </svg>
             </div> */}
 
+            {/* heading */}
+            
+
             {/* slide Content */}
             <div className="relative h-full flex items-center justify-center">
                 <ChevronLeft
@@ -77,7 +81,7 @@ function Carousel({ slides }: PropsType) {
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={slides[currentSlide].id}
-                        initial={{ opacity: 0, x: 20 }}
+                        initial={{ opacity: 1, x: 0 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: -20 }}
                         transition={{ delay: 0.2 }}
