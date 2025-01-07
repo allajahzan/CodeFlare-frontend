@@ -33,6 +33,7 @@
     label,
     input,
     textarea,
+    select,
     option {
         font-size: 14.5px;
         transition: "all 0.3s ease-in-out",
@@ -89,7 +90,7 @@
 @layer base {
     :root {
         --background: 0 0% 100%;
-        --foreground: 240 10% 3.9%;
+        --foreground: 240, 6%, 10.0%;
         --card: 0 0% 100%;
         --card-foreground: 240 10% 3.9%;
         --popover: 0 0% 100%;

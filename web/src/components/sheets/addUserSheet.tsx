@@ -47,12 +47,11 @@ function AddUserSheet({ button }: PropsType) {
     return (
         <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger>{button}</SheetTrigger>
-            <SheetContent className="p-5 flex flex-col gap-5">
-                <SheetHeader className="">
-                    <SheetTitle>Add new user</SheetTitle>
-                    <SheetDescription className="font-medium">
-                        Fill in the information below to add a new user to your
-                        organization.
+            <SheetContent className="p-0 flex flex-col gap-0">
+                <SheetHeader className="p-5 bg-zinc-900">
+                    <SheetTitle className="text-muted">Add new user</SheetTitle>
+                    <SheetDescription className="font-medium text-muted">
+                        Fill in the information below to add a new user.
                     </SheetDescription>
                 </SheetHeader>
                 <motion.form
@@ -60,7 +59,7 @@ function AddUserSheet({ button }: PropsType) {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.3, delay: 0.2 }}
                     onSubmit={handleSubmit}
-                    className="space-y-3"
+                    className="space-y-3 p-5 overflow-auto"
                 >
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -113,9 +112,9 @@ function AddUserSheet({ button }: PropsType) {
                             Role
                         </Label>
                         <div className="relative">
-                            <Select>
+                            <Select >
                                 <SelectTrigger id="role" className="font-medium p-5 pl-9">
-                                    <SelectValue placeholder="Select a role" />
+                                    <SelectValue placeholder="Select a role" className="" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="coordinator">Coordinator</SelectItem>
@@ -138,7 +137,7 @@ function AddUserSheet({ button }: PropsType) {
                         <div className="relative">
                             <Select>
                                 <SelectTrigger id="role" className="font-medium p-5 pl-9">
-                                    <SelectValue placeholder="Select a role" />
+                                    <SelectValue placeholder="Select a batch" />
                                 </SelectTrigger>
                                 <SelectContent className="max-h-[200px]">
                                     <SelectItem value="coordinator">BCK-188</SelectItem>
