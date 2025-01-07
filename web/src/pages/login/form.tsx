@@ -48,7 +48,7 @@ function Form() {
     },[path])
 
     return (
-        <div className="relative z-0 p-6 h-full w-full bg-white rounded-2xl shadow-custom overflow-hidden">
+        <div className="relative z-0 p-5 h-full w-full bg-white rounded-2xl shadow-custom overflow-hidden">
             <div className="h-full w-full grid grid-cols-2">
                 {/* login form */}
                 <motion.div

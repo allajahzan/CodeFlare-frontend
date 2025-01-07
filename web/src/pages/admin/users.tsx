@@ -20,7 +20,6 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChangeEvent, useEffect, useLayoutEffect, useState } from "react";
-import Button from "@/components/ui/button";
 import { NotFoundOrbit } from "@/components/animated/fallbacks";
 import UserList from "@/components/usersList/userList";
 import CardHeader from "@/components/card/cardHeader";
@@ -30,6 +29,7 @@ import { cn } from "@/lib/utils";
 import "./admin.css";
 import DrawerUsersList from "@/components/drawers/admin.users";
 import UserDetails from "@/components/contents/admin.userDetails";
+import AddUserSheet from "@/components/sheets/addUserSheet";
 
 export interface User {
     id: number;
@@ -127,10 +127,12 @@ function Users({ setDrawerOpen }: PropsType) {
                     heading="Manage users"
                     count={users.length}
                     children={
-                        <Button
-                            action={() => alert("Add")}
-                            className="bg-zinc-900 hover:bg-zinc-800 text-white p-2 rounded-full"
-                            Icon={Plus}
+                        <AddUserSheet
+                            button={
+                                <div className="shadow-md bg-zinc-900 hover:bg-zinc-800 text-white rounded-full p-2">
+                                    <Plus className="h-4 w-4" />
+                                </div>
+                            }
                         />
                     }
                 />
@@ -260,10 +262,16 @@ function Users({ setDrawerOpen }: PropsType) {
             {!isSmall && (
                 <div className="grid gap-5 col-auto lg:col-span-2 grid-rows-[auto_1fr] relative z-10">
                     {/* user details */}
-                    <UserDetails selectedUser={selectedUser as User} />
+                    <UserDetails
+                        selectedUser={selectedUser as User}
+                        className="border shadow-sm rounded-2xl"
+                    />
                     <div className="h-full p-5 bg-zinc-0 border rounded-2xl"></div>
                 </div>
             )}
+
+            {/* add user modal */}
+            {/* <AddUserModal addModal={addModal} setAddModal={setAddModal} /> */}
         </div>
     );
 }

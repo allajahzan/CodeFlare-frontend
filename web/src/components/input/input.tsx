@@ -19,7 +19,7 @@ function Input({ id, input, setInput, label, type, color }: PropsType) {
                 value={input}
                 type={type}
                 id={id}
-                className="block p-6 pb-2 px-0 w-full font-medium bg-transparent focus:outline-none border-b-[1px]"
+                className="block p-5 pb-2 px-0 w-full text-black text-base font-medium bg-transparent focus:outline-none border-b-[1px]"
                 placeholder=" "
                 autoComplete="off"
                 required
@@ -27,7 +27,7 @@ function Input({ id, input, setInput, label, type, color }: PropsType) {
             <label
                 style={style}
                 htmlFor={id}
-                className="absolute cursor-text font-medium text-muted-foreground top-0 left-0 transition-all duration-300"
+                className="absolute cursor-text text-sm font-medium text-muted-foreground top-0 left-0 transition-all duration-300"
             >
                 {label}
             </label>

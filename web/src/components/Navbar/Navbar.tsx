@@ -52,7 +52,7 @@ const Navbar = () => {
         <div
             className={cn(
                 "sticky top-0 left-0 w-full z-40 flex justify-between items-center p-5 bg-white",
-                isSmall && "shadow-custom"
+                isSmall && ""
             )}
         >
             {/* Heading */}
@@ -79,7 +79,7 @@ const Navbar = () => {
             </motion.div>
 
             {/* Right Section */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center sm:gap-3 gap-4">
                 {/* Search Form */}
                 <form className="hidden md:block">
                     <input

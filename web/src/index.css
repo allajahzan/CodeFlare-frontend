@@ -25,6 +25,8 @@
         transition: "all 0.3s ease-in-out";
         outline: none;
         color: #18181b;
+        will-change: auto !important;
+        backface-visibility: hidden !important;
     }
 
     p,

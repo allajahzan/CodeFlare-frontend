@@ -22,12 +22,14 @@ import {
 import { NotSelected } from "../animated/fallbacks";
 import Button from "../ui/button";
 import { Badge } from "../ui/badge";
+import { cn } from "@/lib/utils";
 
 interface PropsType {
     selectedUser: User;
+    className?: string;
 }
 
-function UserDetails({ selectedUser }: PropsType) {
+function UserDetails({ selectedUser, className }: PropsType) {
     return (
         <AnimatePresence mode="wait">
             {selectedUser && (
@@ -40,8 +42,13 @@ function UserDetails({ selectedUser }: PropsType) {
                     }}
                     className="h-full w-full min-w-0"
                 >
-                    <div className="h-full p-5 space-y-5 bg-white border shadow-sm rounded-2xl overflow-hidden">
-                        <div className="flex items-center gap-4 relative">
+                    <div
+                        className={cn(
+                            "h-full p-5 space-y-5 bg-white overflow-hidden",
+                            className
+                        )}
+                    >
+                        <div className="flex items-center gap-3 relative">
                             <motion.div
                                 initial={{ scale: 0.5, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
@@ -97,7 +104,7 @@ function UserDetails({ selectedUser }: PropsType) {
                                 },
                             ].map((item, index) => (
                                 <div key={index} className="p-3 border rounded-lg">
-                                    <div className="flex items-center gap-4">
+                                    <div className="flex items-center gap-3">
                                         <div className="p-2 rounded-lg bg-muted">
                                             <item.icon className="w-5 h-5" />
                                         </div>
@@ -118,7 +125,7 @@ function UserDetails({ selectedUser }: PropsType) {
 
                             {/* assigned batches lists */}
                             <DropdownMenu>
-                                <DropdownMenuTrigger className="flex items-center gap-4 text-start cursor-pointer p-3 border rounded-lg">
+                                <DropdownMenuTrigger className="flex items-center gap-3 text-start cursor-pointer p-3 border rounded-lg">
                                     <div className="p-2 rounded-lg bg-muted">
                                         <PersonStanding className="w-5 h-5" />
                                     </div>
