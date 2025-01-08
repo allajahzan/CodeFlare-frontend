@@ -19,15 +19,15 @@ interface PropsType{
 function FloatingBackground({children}:PropsType) {
     const floatingIcons = useMemo(
         () => [
-            { icon: <Code className="w-7 h-7" />, animation: "icon-code" },
-            { icon: <Laptop className="w-7 h-7" />, animation: "icon-laptop" },
-            { icon: <Terminal className="w-7 h-7" />, animation: "icon-terminal" },
-            { icon: <Calendar className="w-7 h-7" />, animation: "icon-calender" },
-            { icon: <AlarmClock className="w-7 h-7" />, animation: "icon-alarm" },
-            { icon: <ChartLine className="w-7 h-7" />, animation: "icon-chart" },
-            { icon: <ListCheck className="w-7 h-7" />, animation: "icon-list" },
+            { icon: <Code className="w-8 h-8" />, animation: "icon-code" },
+            { icon: <Laptop className="w-8 h-8" />, animation: "icon-laptop" },
+            { icon: <Terminal className="w-8 h-8" />, animation: "icon-terminal" },
+            { icon: <Calendar className="w-8 h-8" />, animation: "icon-calender" },
+            { icon: <AlarmClock className="w-8 h-8" />, animation: "icon-alarm" },
+            { icon: <ChartLine className="w-8 h-8" />, animation: "icon-chart" },
+            { icon: <ListCheck className="w-8 h-8" />, animation: "icon-list" },
             {
-                icon: <MessageCircleMore className="w-7 h-7" />,
+                icon: <MessageCircleMore className="w-8 h-8" />,
                 animation: "icon-chat",
             },
         ],
@@ -67,7 +67,7 @@ function FloatingBackground({children}:PropsType) {
                             animation: `${item.animation} 30s infinite ease-in-out alternate`,
                         }}
                     >
-                        <div className="opacity-[0.1]">{item.icon}</div>
+                        <div className="opacity-[0.2]">{item.icon}</div>
                     </div>
                 ))}
 

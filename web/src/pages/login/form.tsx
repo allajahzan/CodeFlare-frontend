@@ -50,14 +50,14 @@ function Form() {
     }, [path]);
 
     return (
-        <div className="relative z-0 p-5 pr-5 md:pr-0 h-full lg:h-[80%] w-full lg:w-[80%] bg-white rounded-2xl shadow-custom overflow-hidden">
+        <div className="relative z-0 p-5 pr-5 md:pr-0 h-full w-full lg:w-[80%] lg:h-[80%]  bg-white rounded-2xl shadow-custom overflow-hidden transition-all duration-300">
             <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-0">
                 {/* carousal */}
                 <Carousel slides={slides} />
 
                 {/* login form */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 1, y: 0 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
                     className="w-full h-full bg-white"
@@ -74,9 +74,9 @@ function Form() {
                         <form onSubmit={handleSubmit} className="space-y-5">
                             <motion.div
                                 className="space-y-2"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.3 }}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.2 }}
                             >
                                 <Label htmlFor="email" className="text-sm font-medium">
                                     Email Address
@@ -95,9 +95,9 @@ function Form() {
 
                             <motion.div
                                 className="space-y-2 relative"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.4 }}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.3 }}
                             >
                                 <Label htmlFor="email" className="text-sm font-medium">
                                     Password
@@ -126,9 +126,9 @@ function Form() {
 
                             {role !== "admin" && (
                                 <motion.p
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.5 }}
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: 0.4 }}
                                     className="text-end font-medium cursor-pointer"
                                 >
                                     Forgot Password?
@@ -136,9 +136,9 @@ function Form() {
                             )}
 
                             <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.6 }}
+                                initial={{ opacity: 1, x: 0 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: role === "admin" ? 0.4 : 0.5 }}
                             >
                                 <Button
                                     type="submit"

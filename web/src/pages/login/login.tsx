@@ -3,9 +3,12 @@ import FloatingBackground from "@/components/animated/floatingBackground";
 
 function Login() {
     return (
-        <FloatingBackground>
+        // <FloatingBackground>
+        <div className="h-screen bg-white flex flex-col items-center justify-center">
             <Form />
-        </FloatingBackground>
+        </div>
+            
+        // </FloatingBackground>
     );
 }
 
