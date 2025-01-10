@@ -2,7 +2,7 @@ import express from "express";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import morgan from "morgan";
 import cors from "cors";
-import dotenv from 'dotenv'
+import dotenv from "dotenv";
 
 // create app
 const app = express();
@@ -11,7 +11,7 @@ const app = express();
 app.use(morgan("dev"));
 
 // env config
-dotenv.config()
+dotenv.config();
 
 // cors origin policy
 app.use(
