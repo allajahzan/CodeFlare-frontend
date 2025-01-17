@@ -22,8 +22,8 @@ import {
 import { ChangeEvent, useEffect, useLayoutEffect, useState } from "react";
 import { NotFoundOrbit } from "@/components/animated/fallbacks";
 import UserList from "@/components/usersList/userList";
-import CardHeader from "@/components/card/cardHeader";
-import SearchFilterSort from "@/components/card/searchFilterSort";
+import CardHeader from "@/components/dataCard/header";
+import SearchFilterSort from "@/components/dataCard/searchFilterSort";
 import { useMediaQuery } from "usehooks-ts";
 import { cn } from "@/lib/utils";
 import "./admin.css";
@@ -269,9 +269,6 @@ function Users({ setDrawerOpen }: PropsType) {
                     <div className="h-full p-5 bg-zinc-0 border rounded-2xl"></div>
                 </div>
             )}
-
-            {/* add user modal */}
-            {/* <AddUserModal addModal={addModal} setAddModal={setAddModal} /> */}
         </div>
     );
 }

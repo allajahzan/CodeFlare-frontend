@@ -6,11 +6,13 @@ import { motion } from "framer-motion";
 import { Eye, EyeOff, KeyRound, Loader2, Mail } from "lucide-react";
 import React, { useLayoutEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
+import bgImage from "@/assets/images/loginImage4.jpg";
 
 function Form() {
     const [showPassword, setShowPassword] = useState(false);
     const [submiting, setsubmiting] = useState(false);
     const [role, setRole] = useState<string | null>(null);
+
     // inputs
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -20,7 +22,7 @@ function Form() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setsubmiting(true);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+
         setsubmiting(false);
     };
 
@@ -50,33 +52,43 @@ function Form() {
     }, [path]);
 
     return (
-        <div className="relative z-0 p-5 pr-5 md:pr-0 h-full w-full lg:w-[80%] lg:h-[80%]  bg-white rounded-2xl shadow-custom overflow-hidden transition-all duration-300">
+        <div className="relative z-0 p-5 pr-5 md:pr-0 h-full w-full lg:w-[80%] lg:h-[80%] bg-white rounded-2xl shadow-custom overflow-hidden transition-all duration-300">
             <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-0">
                 {/* carousal */}
-                <Carousel slides={slides} />
+                <Carousel
+                    slides={slides}
+                    image={
+                        <img src={bgImage} alt="" className="object-cover h-full w-full" />
+                    }
+                />
 
                 {/* login form */}
-                <motion.div
-                    initial={{ opacity: 1, y: 0 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="w-full h-full bg-white"
-                >
-                    <div className="p-0 px-0 md:px-12 lg:px-20 flex flex-col justify-center gap-10 h-full">
-                        <div className="text-center space-y-5">
+                <div className="w-full h-full bg-white">
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3, delay: 0.2 }}
+                        className="p-0 px-0 md:px-12 lg:px-20 flex flex-col justify-center gap-10 h-full"
+                    >
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                            className="text-center space-y-5"
+                        >
                             <h1 className="text-2xl font-semibold">Welcome Back!</h1>
                             <p className="font-medium">
                                 Hey, {role && role[0].toUpperCase() + role?.slice(1)} sign in to
                                 your account
                             </p>
-                        </div>
+                        </motion.div>
 
-                        <form onSubmit={handleSubmit} className="space-y-5">
+                        <form onSubmit={handleSubmit} className="space-y-2">
                             <motion.div
-                                className="space-y-2"
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.2 }}
+                                className="space-y-2 relative"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.4 }}
                             >
                                 <Label htmlFor="email" className="text-sm font-medium">
                                     Email Address
@@ -87,7 +99,8 @@ function Form() {
                                         type="email"
                                         placeholder="Email"
                                         required
-                                        className="font-medium p-5 pl-9"
+                                        className="font-medium p-5 pl-9 border-2"
+                                        onChange={(event) => setEmail(event.target.value)}
                                     />
                                     <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                                 </div>
@@ -95,9 +108,9 @@ function Form() {
 
                             <motion.div
                                 className="space-y-2 relative"
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.3 }}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.5 }}
                             >
                                 <Label htmlFor="email" className="text-sm font-medium">
                                     Password
@@ -108,7 +121,8 @@ function Form() {
                                         type={showPassword ? "password" : "email"}
                                         placeholder="Password"
                                         required
-                                        className="font-medium p-5 pl-9"
+                                        className="font-medium p-5 pl-9 border-2"
+                                        onChange={(event) => setPassword(event.target.value)}
                                     />
                                     <KeyRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                                 </div>
@@ -126,19 +140,20 @@ function Form() {
 
                             {role !== "admin" && (
                                 <motion.p
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: 0.4 }}
-                                    className="text-end font-medium cursor-pointer"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.6 }}
+                                    className="text-end font-medium cursor-pointer pt-2"
                                 >
                                     Forgot Password?
                                 </motion.p>
                             )}
 
                             <motion.div
-                                initial={{ opacity: 1, x: 0 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: role === "admin" ? 0.4 : 0.5 }}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: role == "admin" ? 0.6 : 0.7 }}
+                                className="pt-2"
                             >
                                 <Button
                                     type="submit"
@@ -156,8 +171,8 @@ function Form() {
                                 </Button>
                             </motion.div>
                         </form>
-                    </div>
-                </motion.div>
+                    </motion.div>
+                </div>
             </div>
         </div>
     );

@@ -12,11 +12,11 @@ import {
 } from "lucide-react";
 import "./floatinBackground.css";
 
-interface PropsType{
-    children: React.ReactNode
+interface PropsType {
+    children: React.ReactNode;
 }
 
-function FloatingBackground({children}:PropsType) {
+function FloatingBackground({ children }: PropsType) {
     const floatingIcons = useMemo(
         () => [
             { icon: <Code className="w-8 h-8" />, animation: "icon-code" },
@@ -39,7 +39,7 @@ function FloatingBackground({children}:PropsType) {
             {/* animated background elements */}
             <div className="fixed inset-0 overflow-hidden">
                 {/* binary rain effect */}
-                {/* <div className="absolute hidden inset-0 opacity-[0.2]">
+                {/* <div className="absolute inset-0 opacity-[0.2]">
                     {[...Array(10)].map((_, i) => (
                         <motion.div
                             key={i}

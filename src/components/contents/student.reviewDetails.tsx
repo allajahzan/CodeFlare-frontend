@@ -110,7 +110,6 @@ function ReviewDetails({ selectedReview }: PropsType) {
 
 
 // pendings and chart
-
 const monthlyData = [
     { week: "1", score: 2 },
     { week: "2", score: 10 },

@@ -1,13 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import bgImage from "../../assets/images/loginImage4.jpg";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface PropsType {
     slides: { id: number; title: string; description: string }[];
+    image: React.ReactNode;
 }
 
-function Carousel({ slides }: PropsType) {
+function Carousel({ slides, image }: PropsType) {
     const [currentSlide, setCurrentSlide] = useState<number>(0);
     let timer: any;
 
@@ -16,7 +15,7 @@ function Carousel({ slides }: PropsType) {
     }, []);
 
     useEffect(() => {
-        timer = setInterval(goToNextSlide, 5000);
+        timer = setInterval(goToNextSlide, 3000);
         return () => clearInterval(timer);
     }, [goToNextSlide]);
 
@@ -27,67 +26,33 @@ function Carousel({ slides }: PropsType) {
         clearInterval(timer);
     };
 
-    const goBack = () => {
-        setCurrentSlide((prev: number) => {
-            return prev - 1 === -1 ? 2 : prev - 1;
-        });
-        clearInterval(timer);
-    };
-
     return (
         <div className="h-full md:h-full w-full relative overflow-hidden rounded-2xl">
-            {/* SVG Animated Overlay */}
-            {/* <div className="absolute inset-0">
-                <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-                    <motion.path
-                        d="M0,0 Q50,50 100,0 V100 Q50,50 0,100 Z"
-                        fill="#f4f4f5"
-                        initial={{
-                            d: "M0,0 Q50,50 100,0 V100 Q50,50 0,100 Z",
-                        }}
-                        animate={{
-                            d: [
-                                "M0,0 Q50,50 100,0 V100 Q50,50 0,100 Z",
-                                "M0,0 Q50,30 100,0 V100 Q50,70 0,100 Z",
-                                "M0,0 Q50,50 100,0 V100 Q50,50 0,100 Z",
-                            ],
-                        }}
-                        transition={{
-                            duration: 10,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                        }}
-                    />
-                </svg>
-            </div> */}
-
-            <img src={bgImage} alt="" className="object-cover h-full w-full" />
+            {image}
 
             {/* slide Content */}
             <div className="absolute inset-0 flex items-center justify-center">
-                <ChevronLeft
-                    onClick={goBack}
-                    className="text-white h-10 w-10 absolute left-0 top-[50%] -translate-y-[50%] cursor-pointer"
-                />
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={slides[currentSlide].id}
-                        initial={{ opacity: 1, x: 0 }}
+                        initial={{ opacity: 0, x: 40 }}
                         animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -20 }}
-                        transition={{ delay: 0.2 }}
+                        transition={{
+                            type: "spring",
+                            stiffness: 400,
+                            damping: 12,
+                            delay: 0.2,
+                        }}
                         className="text-center px-12"
                     >
-                        <h2 className="text-2xl text-white font-bold mb-4">
+                        <h2 className="text-3xl sm:text-4xl text-white font-bold mb-4">
                             {slides[currentSlide].title}
                         </h2>
-                        <p className="text-white">{slides[currentSlide].description}</p>
+                        <p className="text-white text-lg">
+                            {slides[currentSlide].description}
+                        </p>
                     </motion.div>
                 </AnimatePresence>
-                <ChevronRight
-                    onClick={goNext}
-                    className="text-white h-10 w-10 absolute right-0 top-[50%] -translate-y-[50%] cursor-pointer"
-                />
             </div>
 
             {/* navigation dots */}

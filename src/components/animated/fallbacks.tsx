@@ -92,8 +92,8 @@ function NotFoundOrbit({ Icon, message, text }: PropsType) {
                 transition={{ delay: 0.2 }}
                 className="text-center"
             >
-                <h3 className="text-base font-semibold">"{text}"</h3>
-                <p className="text-muted-foreground font-medium">"{message}"</p>
+                <h3 className="text-base font-semibold">{text}</h3>
+                <p className="text-muted-foreground font-medium">{message}</p>
             </motion.div>
         </div>
     );
@@ -101,11 +101,16 @@ function NotFoundOrbit({ Icon, message, text }: PropsType) {
 
 // notselected
 interface PropsType {
-    className?: string
+    className?: string;
 }
 function NotSelected({ Icon, message, text, className }: PropsType) {
     return (
-        <div className={cn("flex flex-col gap-5 items-center justify-center bg-white border shadow-sm rounded-2xl", className)}>
+        <div
+            className={cn(
+                "flex flex-col gap-5 items-center justify-center bg-white border shadow-sm rounded-2xl",
+                className
+            )}
+        >
             <motion.div
                 initial={{ scale: 0.5, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
@@ -120,8 +125,8 @@ function NotSelected({ Icon, message, text, className }: PropsType) {
                 transition={{ delay: 0.2 }}
                 className="text-center"
             >
-                <h3 className="text-base font-semibold">"{text}"</h3>
-                <p className="text-muted-foreground font-medium">"{message}"</p>
+                <h3 className="text-base font-semibold">{text}</h3>
+                <p className="text-muted-foreground font-medium">{message}</p>
             </motion.div>
         </div>
     );
