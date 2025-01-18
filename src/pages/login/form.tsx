@@ -10,6 +10,7 @@ import bgImage from "@/assets/images/loginImage4.jpg";
 import { postData } from "@/utils/apiService";
 import { authApi } from "@/api/authApi";
 import { toast } from "@/hooks/use-toast";
+import { handleError } from "@/utils/error";
 
 function Form() {
     const [showPassword, setShowPassword] = useState(false);
@@ -30,30 +31,31 @@ function Form() {
 
         try {
             // send request
-            const resp = await postData(`${authApi.login}/asd`, {
+            const resp = await postData(`${authApi.login}`, {
                 email,
                 password,
                 role,
             });
 
+            const data = resp?.data.data;
+
             // success response
             if (resp && resp.status === 200) {
-                if (resp.data.data.role.toLowerCase() !== role) {
+                if (data.role.toLowerCase() !== role) {
                     setsubmiting(false);
-                    toast({ title: "You are not authorized to login" });
+                    toast({ title: "Unauthorized Access!" });
                     return;
                 }
 
                 setTimeout(() => {
                     setsubmiting(false);
-                    navigate(`/${resp.data.data.role.toLocaleLowerCase()}/dashboard`);
+                    navigate(`/${data.role.toLowerCase()}/dashboard`);
                     toast({ title: "Successfully Logged In" });
                 }, 1000);
             }
         } catch (err: any) {
-            console.log(err);
             setsubmiting(false);
-            toast({ title: "Something went wrong" });
+            handleError(err);
         }
     };
 
