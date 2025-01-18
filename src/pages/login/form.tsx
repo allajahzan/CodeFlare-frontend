@@ -45,7 +45,8 @@ function Form() {
 
             // Success response
             if (resp && resp.status === 200) {
-                if (data.role !== role) { // Check role with url
+                // Check role with url
+                if (data.role !== role) {
                     setsubmiting(false);
                     toast({ title: "Unauthorized Access!" });
                     return;
@@ -64,7 +65,10 @@ function Form() {
                     // Redirect
                     navigate(`/${data.role.toLowerCase()}/dashboard`);
 
-                    toast({ title: "Successfully Logged In", description: "Welcome to CodeFlare" });
+                    toast({
+                        title: "Successfully Logged In",
+                        description: "Welcome to CodeFlare",
+                    });
                 }, 1000);
             }
         } catch (err: any) {
