@@ -9,9 +9,9 @@ import axiosInstance from "./axiosInstence";
 export const fetchData = async (url: string) => {
     try {
         const resp = await axiosInstance.get(url);
-        return resp.data;
+        return resp
     } catch (err: any) {
-        throw err;
+        throw err.response;
     }
 };
 
@@ -25,9 +25,9 @@ export const fetchData = async (url: string) => {
 export const postData = async (url: string, data?: any) => {
     try {
         const resp = await axiosInstance.post(url, data || null);
-        return resp.data;
+        return resp
     } catch (err: any) {
-        throw err;
+        throw err.response;
     }
 };
 
@@ -41,9 +41,9 @@ export const postData = async (url: string, data?: any) => {
 export const fullUpdateData = async (url: string, data?: any) => {
     try {
         const resp = await axiosInstance.put(url, data || null);
-        return resp.data;
+        return resp
     } catch (err: any) {
-        throw err;
+        throw err.response;
     }
 };
 
@@ -57,9 +57,9 @@ export const fullUpdateData = async (url: string, data?: any) => {
 export const partialUpdateData = async (url: string, data?: any) => {
     try {
         const resp = await axiosInstance.patch(url, data || null);
-        return resp.data;
+        return resp
     } catch (err: any) {
-        throw err;
+        throw err.response;
     }
 };
 
@@ -72,8 +72,8 @@ export const partialUpdateData = async (url: string, data?: any) => {
 export const deleteData = async (url: string) => {
     try {
         const resp = await axiosInstance.delete(url);
-        return resp.data;
+        return resp
     } catch (err: any) {
-        throw err;
+        throw err.response;
     }
 };
