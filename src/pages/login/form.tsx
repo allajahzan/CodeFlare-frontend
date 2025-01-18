@@ -23,29 +23,41 @@ function Form() {
     const path = useLocation();
     const navigate = useNavigate();
 
+    // Handle submit
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setsubmiting(true);
 
         try {
-            const resp = await postData(`${authApi.login}`, { email, password });
-            console.log(resp);
-            if (resp.status === 200) {
-                toast({title: "Successfully Logged In", description: "Redirecting..."});  
+            // send request
+            const resp = await postData(`${authApi.login}/asd`, {
+                email,
+                password,
+                role,
+            });
+
+            // success response
+            if (resp && resp.status === 200) {
+                if (resp.data.data.role.toLowerCase() !== role) {
+                    setsubmiting(false);
+                    toast({ title: "You are not authorized to login" });
+                    return;
+                }
+
                 setTimeout(() => {
-                    navigate('/admin/dashboard')
-                },2000)
-            } else {
-                toast({
-                    title: resp.data.errors[0].message,
-                });
+                    setsubmiting(false);
+                    navigate(`/${resp.data.data.role.toLocaleLowerCase()}/dashboard`);
+                    toast({ title: "Successfully Logged In" });
+                }, 1000);
             }
-            setsubmiting(false);
         } catch (err: any) {
-            console.log(err.message);
+            console.log(err);
+            setsubmiting(false);
+            toast({ title: "Something went wrong" });
         }
     };
 
+    // carousal data
     const slides = useMemo(
         () => [
             {
@@ -67,6 +79,7 @@ function Form() {
         []
     );
 
+    // set role
     useLayoutEffect(() => {
         setRole(path.pathname.split("/")[1]);
     }, [path]);
@@ -85,13 +98,13 @@ function Form() {
                 {/* login form */}
                 <div className="w-full h-full bg-white">
                     <motion.div
-                        initial={{ opacity: 0 }}
+                        initial={{ opacity: 1 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.3, delay: 0.2 }}
                         className="p-0 px-0 md:px-12 lg:px-20 flex flex-col justify-center gap-10 h-full"
                     >
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 1, y: 0 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3 }}
                             className="text-center space-y-5"
@@ -106,7 +119,7 @@ function Form() {
                         <form onSubmit={handleSubmit} className="space-y-2">
                             <motion.div
                                 className="space-y-2 relative"
-                                initial={{ opacity: 0, y: 20 }}
+                                initial={{ opacity: 1, y: 0 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.4 }}
                             >
@@ -128,7 +141,7 @@ function Form() {
 
                             <motion.div
                                 className="space-y-2 relative"
-                                initial={{ opacity: 0, y: 20 }}
+                                initial={{ opacity: 1, y: 0 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.5 }}
                             >
@@ -161,7 +174,7 @@ function Form() {
 
                             {role !== "admin" && (
                                 <motion.p
-                                    initial={{ opacity: 0, y: 20 }}
+                                    initial={{ opacity: 1, y: 0 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.6 }}
                                     className="text-end font-medium cursor-pointer pt-2"
@@ -171,7 +184,7 @@ function Form() {
                             )}
 
                             <motion.div
-                                initial={{ opacity: 0, y: 20 }}
+                                initial={{ opacity: 1, y: 0 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: role == "admin" ? 0.6 : 0.7 }}
                                 className="pt-2"
@@ -184,7 +197,7 @@ function Form() {
                                     {submiting ? (
                                         <div className="flex items-center gap-2">
                                             <Loader2 className="h-4 w-4 animate-spin" />
-                                            Processing...
+                                            SignIn...
                                         </div>
                                     ) : (
                                         "SignIn"

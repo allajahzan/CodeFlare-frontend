@@ -1,4 +1,5 @@
 import axiosInstance from "./axiosInstence";
+import { throwCustomError } from "./error";
 
 /**
  * Fetches data from the given URL and returns the response.
@@ -9,9 +10,9 @@ import axiosInstance from "./axiosInstence";
 export const fetchData = async (url: string) => {
     try {
         const resp = await axiosInstance.get(url);
-        return resp
+        return resp;
     } catch (err: any) {
-        return err.response;
+        throwCustomError(err);
     }
 };
 
@@ -25,9 +26,9 @@ export const fetchData = async (url: string) => {
 export const postData = async (url: string, data?: any) => {
     try {
         const resp = await axiosInstance.post(url, data || null);
-        return resp
+        return resp;
     } catch (err: any) {
-        return err.response;
+        throwCustomError(err);
     }
 };
 
@@ -41,9 +42,9 @@ export const postData = async (url: string, data?: any) => {
 export const fullUpdateData = async (url: string, data?: any) => {
     try {
         const resp = await axiosInstance.put(url, data || null);
-        return resp
+        return resp;
     } catch (err: any) {
-        return err.response;
+        throwCustomError(err);
     }
 };
 
@@ -57,9 +58,9 @@ export const fullUpdateData = async (url: string, data?: any) => {
 export const partialUpdateData = async (url: string, data?: any) => {
     try {
         const resp = await axiosInstance.patch(url, data || null);
-        return resp
+        return resp;
     } catch (err: any) {
-        return err.response;
+        throwCustomError(err);
     }
 };
 
@@ -72,8 +73,8 @@ export const partialUpdateData = async (url: string, data?: any) => {
 export const deleteData = async (url: string) => {
     try {
         const resp = await axiosInstance.delete(url);
-        return resp
+        return resp;
     } catch (err: any) {
-        return err.response;
+        throwCustomError(err);
     }
 };

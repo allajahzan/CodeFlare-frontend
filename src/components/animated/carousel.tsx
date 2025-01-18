@@ -45,7 +45,7 @@ function Carousel({ slides, image }: PropsType) {
                         }}
                         className="text-center px-12"
                     >
-                        <h2 className="text-3xl sm:text-4xl text-white font-bold mb-4">
+                        <h2 className="text-3xl text-white font-bold mb-4">
                             {slides[currentSlide].title}
                         </h2>
                         <p className="text-white text-lg">
