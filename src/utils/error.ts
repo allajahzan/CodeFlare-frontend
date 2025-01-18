@@ -33,6 +33,7 @@ export const handleError = (err: any) => {
     else if (err.status === 404) toast({ title: err.message });
     else if (err.status === 500) toast({ title: err.message });
     else if (err.status === 501) toast({ title: err.message });
+    else if (err.status === 504) toast({ title: err.message });
     else if (err.status === 0) toast({ title: err.message });
     else toast({ title: err.messagee });
 };

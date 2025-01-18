@@ -59,6 +59,11 @@ function Form() {
         }
     };
 
+    // set role
+    useLayoutEffect(() => {
+        setRole(path.pathname.split("/")[1]);
+    }, [path]);
+
     // carousal data
     const slides = useMemo(
         () => [
@@ -80,11 +85,6 @@ function Form() {
         ],
         []
     );
-
-    // set role
-    useLayoutEffect(() => {
-        setRole(path.pathname.split("/")[1]);
-    }, [path]);
 
     return (
         <div className="relative z-0 p-5 pr-5 md:pr-0 h-full w-full lg:w-[80%] lg:h-[80%] bg-white rounded-2xl shadow-custom overflow-hidden transition-all duration-300">
