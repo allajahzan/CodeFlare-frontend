@@ -4,25 +4,28 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, KeyRound, Loader2, Mail } from "lucide-react";
-import React, { useLayoutEffect, useMemo, useState } from "react";
+import React, { useContext, useLayoutEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import bgImage from "@/assets/images/loginImage4.jpg";
 import { postData } from "@/utils/apiService";
 import { authApi } from "@/api/authApi";
 import { toast } from "@/hooks/use-toast";
 import { handleError } from "@/utils/error";
+import { UserContext } from "@/context/userContext";
 
 function Form() {
     const [showPassword, setShowPassword] = useState(false);
     const [submiting, setsubmiting] = useState(false);
     const [role, setRole] = useState<string | null>(null);
 
-    // inputs
+    // Inputs
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
     const path = useLocation();
     const navigate = useNavigate();
+
+    const userContext = useContext(UserContext);
 
     // Handle submit
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -30,7 +33,7 @@ function Form() {
         setsubmiting(true);
 
         try {
-            // send request
+            // Send request
             const resp = await postData(`${authApi.login}`, {
                 email,
                 password,
@@ -39,7 +42,7 @@ function Form() {
 
             const data = resp?.data.data;
 
-            // success response
+            // Success response
             if (resp && resp.status === 200) {
                 if (data.role.toLowerCase() !== role) {
                     setsubmiting(false);
@@ -49,7 +52,17 @@ function Form() {
 
                 setTimeout(() => {
                     setsubmiting(false);
+
+                    // Set isAuth
+                    localStorage.setItem("isLoggedIn", "1");
+                    userContext?.setAuth(true);
+
+                    // Store accesstoken in localstorage
+                    localStorage.setItem("accessToken", data.accessToken);
+
+                    // Redirect
                     navigate(`/${data.role.toLowerCase()}/dashboard`);
+
                     toast({ title: "Successfully Logged In" });
                 }, 1000);
             }
@@ -59,12 +72,12 @@ function Form() {
         }
     };
 
-    // set role
+    // Set role
     useLayoutEffect(() => {
         setRole(path.pathname.split("/")[1]);
     }, [path]);
 
-    // carousal data
+    // Carousal data
     const slides = useMemo(
         () => [
             {
@@ -89,7 +102,7 @@ function Form() {
     return (
         <div className="relative z-0 p-5 pr-5 md:pr-0 h-full w-full lg:w-[80%] lg:h-[80%] bg-white rounded-2xl shadow-custom overflow-hidden transition-all duration-300">
             <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-0">
-                {/* carousal */}
+                {/* Carousal */}
                 <Carousel
                     slides={slides}
                     image={
@@ -97,7 +110,7 @@ function Form() {
                     }
                 />
 
-                {/* login form */}
+                {/* Login form */}
                 <div className="w-full h-full bg-white">
                     <motion.div
                         initial={{ opacity: 1 }}
@@ -105,6 +118,7 @@ function Form() {
                         transition={{ duration: 0.3, delay: 0.2 }}
                         className="p-0 px-0 md:px-12 lg:px-20 flex flex-col justify-center gap-10 h-full"
                     >
+                        {/* Header */}
                         <motion.div
                             initial={{ opacity: 1, y: 0 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -118,7 +132,9 @@ function Form() {
                             </p>
                         </motion.div>
 
+                        {/* form */}
                         <form onSubmit={handleSubmit} className="space-y-2">
+                            {/* Input for email */}
                             <motion.div
                                 className="space-y-2 relative"
                                 initial={{ opacity: 1, y: 0 }}
@@ -141,6 +157,7 @@ function Form() {
                                 </div>
                             </motion.div>
 
+                            {/* Input for password */}
                             <motion.div
                                 className="space-y-2 relative"
                                 initial={{ opacity: 1, y: 0 }}
@@ -174,6 +191,7 @@ function Form() {
                                 </div>
                             </motion.div>
 
+                            {/* Forgot password */}
                             {role !== "admin" && (
                                 <motion.p
                                     initial={{ opacity: 1, y: 0 }}
@@ -185,6 +203,7 @@ function Form() {
                                 </motion.p>
                             )}
 
+                            {/* Submit button */}
                             <motion.div
                                 initial={{ opacity: 1, y: 0 }}
                                 animate={{ opacity: 1, y: 0 }}

@@ -16,11 +16,11 @@ const axiosInstance = axios.create({
 const refreshToken = async () => {
     try {
         const resp = await axiosInstance.post(authApi.refreshToken);
-        const { accessToken } = resp.data;
+        const data = resp?.data.data
 
-        localStorage.setItem("accessToken", accessToken); // set accessToken to localstorage
+        localStorage.setItem("accessToken", data.accessToken); // set accessToken to localstorage
 
-        return accessToken;
+        return data.accessToken;
     } catch (err: any) {
         console.log(err);
         throw err;
