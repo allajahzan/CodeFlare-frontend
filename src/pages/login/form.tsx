@@ -25,6 +25,7 @@ function Form() {
     const path = useLocation();
     const navigate = useNavigate();
 
+    // User Context
     const userContext = useContext(UserContext);
 
     // Handle submit
@@ -44,7 +45,7 @@ function Form() {
 
             // Success response
             if (resp && resp.status === 200) {
-                if (data.role.toLowerCase() !== role) {
+                if (data.role !== role) { // Check role with url
                     setsubmiting(false);
                     toast({ title: "Unauthorized Access!" });
                     return;
@@ -54,8 +55,8 @@ function Form() {
                     setsubmiting(false);
 
                     // Set isAuth
-                    localStorage.setItem("isLoggedIn", "1");
-                    userContext?.setAuth(true);
+                    localStorage.setItem("isAuth", "1");
+                    userContext?.setIsAuth(true);
 
                     // Store accesstoken in localstorage
                     localStorage.setItem("accessToken", data.accessToken);
@@ -63,7 +64,7 @@ function Form() {
                     // Redirect
                     navigate(`/${data.role.toLowerCase()}/dashboard`);
 
-                    toast({ title: "Successfully Logged In" });
+                    toast({ title: "Successfully Logged In", description: "Welcome to CodeFlare" });
                 }, 1000);
             }
         } catch (err: any) {

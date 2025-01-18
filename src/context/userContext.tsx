@@ -18,7 +18,7 @@ interface IUser {
 // Interface for User Context
 interface IUserContext {
     isAuth: boolean;
-    setAuth: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
     user: IUser | null;
     logout: () => void;
 }
@@ -28,8 +28,8 @@ const UserContext = createContext<IUserContext | null>(null);
 
 // User Context Provider Component
 const UserContextProvider = ({ children }: { children: ReactNode }) => {
-    const [isAuth, setAuth] = useState<boolean>(
-        localStorage.getItem("isLoggedIn") === "1"
+    const [isAuth, setIsAuth] = useState<boolean>(
+        localStorage.getItem("isAuth") === "1"
     );
     const [user, setUser] = useState<IUser | null>(null);
 
@@ -58,7 +58,7 @@ const UserContextProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <UserContext.Provider value={{ isAuth, setAuth, user, logout }}>
+        <UserContext.Provider value={{ isAuth, setIsAuth, user, logout }}>
             {children}
         </UserContext.Provider>
     );
