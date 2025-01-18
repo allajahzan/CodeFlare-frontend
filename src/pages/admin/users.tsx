@@ -115,7 +115,7 @@ function Users({ setDrawerOpen }: PropsType) {
     }, [search, status, data]);
 
     useEffect(() => {
-        setDrawerOpen(!isSmall ? false : false);
+        setDrawerOpen(false);
     }, [isSmall]);
 
     return (

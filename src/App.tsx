@@ -83,20 +83,9 @@ function AdminRoutes() {
       <Route path="login" element={<Login />} />
 
       {/* main layout */}
-      <Route
-        element={
-          <AdminLayout
-            isDrawerOpen={isDrawerOpen}
-          />
-        }
-      >
+      <Route element={<AdminLayout isDrawerOpen={isDrawerOpen} />} >
         <Route path="dashboard" element={<DashboardAdmin />} />
-        <Route
-          path="users"
-          element={
-            <Users isDrawerOpen={isDrawerOpen} setDrawerOpen={setDrawerOpen} />
-          }
-        />
+        <Route path="users" element={<Users isDrawerOpen={isDrawerOpen} setDrawerOpen={setDrawerOpen} />} />
       </Route>
     </Routes>
   );
