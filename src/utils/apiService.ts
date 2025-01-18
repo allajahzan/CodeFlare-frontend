@@ -11,7 +11,7 @@ export const fetchData = async (url: string) => {
         const resp = await axiosInstance.get(url);
         return resp
     } catch (err: any) {
-        throw err.response;
+        return err.response;
     }
 };
 
@@ -27,7 +27,7 @@ export const postData = async (url: string, data?: any) => {
         const resp = await axiosInstance.post(url, data || null);
         return resp
     } catch (err: any) {
-        throw err.response;
+        return err.response;
     }
 };
 
@@ -43,7 +43,7 @@ export const fullUpdateData = async (url: string, data?: any) => {
         const resp = await axiosInstance.put(url, data || null);
         return resp
     } catch (err: any) {
-        throw err.response;
+        return err.response;
     }
 };
 
@@ -59,7 +59,7 @@ export const partialUpdateData = async (url: string, data?: any) => {
         const resp = await axiosInstance.patch(url, data || null);
         return resp
     } catch (err: any) {
-        throw err.response;
+        return err.response;
     }
 };
 
@@ -74,6 +74,6 @@ export const deleteData = async (url: string) => {
         const resp = await axiosInstance.delete(url);
         return resp
     } catch (err: any) {
-        throw err.response;
+        return err.response;
     }
 };
