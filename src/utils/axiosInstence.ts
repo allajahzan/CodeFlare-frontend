@@ -1,3 +1,4 @@
+import { authApi } from "@/api/authApi";
 import axios from "axios";
 
 // Base url
@@ -14,7 +15,7 @@ const axiosInstance = axios.create({
 
 const refreshToken = async () => {
     try {
-        const resp = await axiosInstance.post(`/auth/user/refresh-token`);
+        const resp = await axiosInstance.post(authApi.refreshToken);
         const { accessToken } = resp.data;
 
         localStorage.setItem("accessToken", accessToken); // set accessToken to localstorage

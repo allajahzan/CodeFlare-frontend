@@ -1,6 +1,6 @@
+// Admin api
 export const adminApis = {
     // admin
-    login: "/auth/user/login",
     admin: "/admin/admin",
 
     // user

@@ -5,8 +5,11 @@ import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, KeyRound, Loader2, Mail } from "lucide-react";
 import React, { useLayoutEffect, useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import bgImage from "@/assets/images/loginImage4.jpg";
+import { postData } from "@/utils/apiService";
+import { authApi } from "@/api/authApi";
+import { toast } from "@/hooks/use-toast";
 
 function Form() {
     const [showPassword, setShowPassword] = useState(false);
@@ -18,12 +21,29 @@ function Form() {
     const [password, setPassword] = useState<string>("");
 
     const path = useLocation();
+    const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setsubmiting(true);
 
-        setsubmiting(false);
+        try {
+            const resp = await postData(`${authApi.login}`, { email, password });
+            console.log(resp);
+            if (resp.status === 200) {
+                toast({title: "Successfully Logged In", description: "Redirecting..."});  
+                setTimeout(() => {
+                    navigate('/admin/dashboard')
+                },2000)
+            } else {
+                toast({
+                    title: resp.data.errors[0].message,
+                });
+            }
+            setsubmiting(false);
+        } catch (err: any) {
+            console.log(err.message);
+        }
     };
 
     const slides = useMemo(
@@ -99,8 +119,8 @@ function Form() {
                                         type="email"
                                         placeholder="Email"
                                         required
-                                        className="font-medium p-5 pl-9 border-2"
                                         onChange={(event) => setEmail(event.target.value)}
+                                        className="font-medium p-5 pl-9 border-2"
                                     />
                                     <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                                 </div>
@@ -117,12 +137,13 @@ function Form() {
                                 </Label>
                                 <div className="relative">
                                     <Input
-                                        id="email"
-                                        type={showPassword ? "password" : "email"}
+                                        id="password"
+                                        type={showPassword ? "password" : "text"}
                                         placeholder="Password"
                                         required
-                                        className="font-medium p-5 pl-9 border-2"
+                                        autoComplete="off"
                                         onChange={(event) => setPassword(event.target.value)}
+                                        className="font-medium p-5 pl-9 border-2"
                                     />
                                     <KeyRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                                 </div>
