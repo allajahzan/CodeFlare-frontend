@@ -7,8 +7,8 @@ import LeetCode from "@/pages/student/leetcode";
 import Manifest from "@/pages/student/manifest";
 import Reviews from "@/pages/student/reviews";
 import { Navigate, Route, Routes } from "react-router-dom";
-import PublicRoute from "@/components/common/publicRoute";
-import ProtectedRoute from "@/components/common/protectedRoute";
+import PublicRoute from "@/routes/publicRoute";
+import ProtectedRoute from "@/routes/protectedRoute";
 
 // Student Routes
 function StudentRoutes() {

@@ -4,8 +4,8 @@ import Users from "@/pages/admin/users";
 import Login from "@/pages/login/login";
 import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import PublicRoute from "@/components/common/publicRoute";
-import ProtectedRoute from "@/components/common/protectedRoute";
+import PublicRoute from "@/routes/publicRoute";
+import ProtectedRoute from "@/routes/protectedRoute";
 
 // Admin Routes
 function AdminRoutes() {
