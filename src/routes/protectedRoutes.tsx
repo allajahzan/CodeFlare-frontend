@@ -8,7 +8,7 @@ interface PropType {
 }
 
 // Protected Route
-function ProtectedRoute({ allowedRole }: PropType) {
+function ProtectedRoutes({ allowedRole }: PropType) {
     const userContext = useContext(UserContext) as IUserContext;
     const { user, isAuth } = userContext;
 
@@ -21,4 +21,4 @@ function ProtectedRoute({ allowedRole }: PropType) {
 }
 
 // Export Protected Route
-export default ProtectedRoute;
+export default ProtectedRoutes;

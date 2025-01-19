@@ -7,22 +7,22 @@ import LeetCode from "@/pages/student/leetcode";
 import Manifest from "@/pages/student/manifest";
 import Reviews from "@/pages/student/reviews";
 import { Navigate, Route, Routes } from "react-router-dom";
-import PublicRoute from "@/routes/publicRoute";
-import ProtectedRoute from "@/routes/protectedRoute";
+import PublicRoutes from "@/routes/publicRoutes";
+import ProtectedRoutes from "@/routes/protectedRoutes";
 
 // Student Routes
 function StudentRoutes() {
     return (
         <Routes>
             {/* Public Routes */}
-            <Route element={<PublicRoute allowedRole="student" />}>
+            <Route element={<PublicRoutes allowedRole="student" />}>
                 <Route path="" element={<Navigate to="student/login" />} />
                 <Route path="student" element={<Navigate to="student/login" />} />
                 <Route path="student/login" element={<Login />} />
             </Route>
 
             {/* Protected Routes */}
-            <Route element={<ProtectedRoute allowedRole="student" />}>
+            <Route element={<ProtectedRoutes allowedRole="student" />}>
                 <Route path="student" element={<StudentLayout />}>
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="reviews" element={<Reviews />} />

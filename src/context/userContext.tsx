@@ -50,7 +50,7 @@ const UserContextProvider = ({ children }: { children: ReactNode }) => {
             }
         };
 
-        isAuth ? getUserData() : setUser(null);
+        isAuth? getUserData() : setUser(null);
     }, [isAuth]); // Trigger effect when isAuth changes
 
     const logout = () => {

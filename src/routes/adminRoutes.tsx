@@ -4,8 +4,8 @@ import Users from "@/pages/admin/users";
 import Login from "@/pages/login/login";
 import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import PublicRoute from "@/routes/publicRoute";
-import ProtectedRoute from "@/routes/protectedRoute";
+import PublicRoutes from "@/routes/publicRoutes";
+import ProtectedRoutes from "@/routes/protectedRoutes";
 
 // Admin Routes
 function AdminRoutes() {
@@ -13,13 +13,13 @@ function AdminRoutes() {
     return (
         <Routes>
             {/* Public Routes */}
-            <Route element={<PublicRoute allowedRole="admin" />}>
+            <Route element={<PublicRoutes allowedRole="admin" />}>
                 <Route path="" element={<Navigate to="login" />} />
                 <Route path="login" element={<Login />} />
             </Route>
 
             {/* Protected Routes */}
-            <Route element={<ProtectedRoute allowedRole="admin" />}>
+            <Route element={<ProtectedRoutes allowedRole="admin" />}>
                 <Route element={<AdminLayout isDrawerOpen={isDrawerOpen} />}>
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="users" element={<Users isDrawerOpen={isDrawerOpen} setDrawerOpen={setDrawerOpen} />} />

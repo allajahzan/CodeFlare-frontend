@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import AdminRoutes from "./routes/adminRoutes";
 import StudentRoutes from "./routes/studentRoutes";
+
 function App() {
   return (
     <Router>
