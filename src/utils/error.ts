@@ -26,7 +26,7 @@ export const throwCustomError = (err: any) => {
  * appropriate for the error status code
  * @param {object} err - The error object from the API response
  */
-export const handleError = (err: any) => {
+export const handleCustomError = (err: any) => {
     console.log(err);
     if (err.status === 401) toast({ title: err.message });
     else if (err.status === 403) toast({ title: err.message });

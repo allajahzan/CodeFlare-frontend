@@ -10,7 +10,7 @@ import bgImage from "@/assets/images/loginImage4.jpg";
 import { postData } from "@/utils/apiService";
 import { authApi } from "@/api/authApi";
 import { toast } from "@/hooks/use-toast";
-import { handleError } from "@/utils/error";
+import { handleCustomError } from "@/utils/error";
 import { UserContext } from "@/context/userContext";
 
 function Form() {
@@ -62,18 +62,12 @@ function Form() {
                     // Store accesstoken in localstorage
                     localStorage.setItem("accessToken", data.accessToken);
 
-                    // Redirect
-                    navigate(`/${data.role.toLowerCase()}/dashboard`);
-
-                    toast({
-                        title: "Successfully Logged In",
-                        description: "Welcome to CodeFlare",
-                    });
+                    toast({ title: "Successfully Logged In" });
                 }, 1000);
             }
         } catch (err: any) {
             setsubmiting(false);
-            handleError(err);
+            handleCustomError(err);
         }
     };
 

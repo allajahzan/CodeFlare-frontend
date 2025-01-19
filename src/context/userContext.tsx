@@ -1,6 +1,6 @@
 import { adminApis } from "@/api/adminApi";
 import { fetchData } from "@/utils/apiService";
-import { handleError } from "@/utils/error";
+import { handleCustomError } from "@/utils/error";
 import { createContext, ReactNode, useState, useLayoutEffect } from "react";
 
 // Interface for User
@@ -16,7 +16,7 @@ interface IUser {
 }
 
 // Interface for User Context
-interface IUserContext {
+export interface IUserContext {
     isAuth: boolean;
     setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
     user: IUser | null;
@@ -31,7 +31,7 @@ const UserContextProvider = ({ children }: { children: ReactNode }) => {
     const [isAuth, setIsAuth] = useState<boolean>(
         localStorage.getItem("isAuth") === "1"
     );
-    const [user, setUser] = useState<IUser | null>(null);
+    const [user, setUser] = useState<IUser | null>((JSON.parse(localStorage.getItem("user") as string)|| null));
 
     // Fetch user data
     useLayoutEffect(() => {
@@ -39,17 +39,18 @@ const UserContextProvider = ({ children }: { children: ReactNode }) => {
             try {
                 const resp = await fetchData(adminApis.admin);
 
-                const data = resp?.data.data;
+                const user = resp?.data.data;
 
                 if (resp && resp.status === 200) {
-                    setUser(data.user);
+                    localStorage.setItem("user", JSON.stringify(user));
+                    setUser(user);
                 }
             } catch (err: any) {
-                handleError(err);
+                handleCustomError(err);
             }
         };
 
-        if (isAuth) getUserData();
+        isAuth ? getUserData() : setUser(null);
     }, [isAuth]); // Trigger effect when isAuth changes
 
     const logout = () => {
