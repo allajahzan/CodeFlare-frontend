@@ -43,7 +43,7 @@ interface PropsType {
 function AddUserSheet({ button, setNewUser }: PropsType) {
     // Sheet state
     const [open, setOpen] = useState<boolean | undefined>(undefined);
-    const [isLoading, setIsLoading] = useState(false);
+    const [submiting, setSubmiting] = useState(false);
 
     // Inputs
     const [name, setName] = useState("");
@@ -64,7 +64,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
     // Handle submit
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setIsLoading(true);
+        setSubmiting(true);
 
         try {
             // Send request
@@ -81,7 +81,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
             // Success response
             if (resp && resp.status === 200) {
                 setTimeout(() => {
-                    setIsLoading(false);
+                    setSubmiting(false);
 
                     // Set new user
                     setNewUser(user);
@@ -93,7 +93,10 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                 }, 1000);
             }
         } catch (err: any) {
-            handleCustomError(err);
+            setTimeout(() => {
+                setSubmiting(false);
+                handleCustomError(err);
+            }, 1000);
         }
     };
 
@@ -281,10 +284,10 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                     >
                         <Button
                             type="submit"
-                            disabled={isLoading}
-                            className="w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled={submiting}
+                            className="w-full h-11 bg-zinc-900 hover:bg-zinc-900 text-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:cursor-not-allowed"
                         >
-                            {isLoading ? (
+                            {submiting ? (
                                 <div className="flex items-center gap-2">
                                     <Loader2 className="h-4 w-4 animate-spin" />
                                     Processing...

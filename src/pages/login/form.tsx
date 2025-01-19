@@ -15,7 +15,7 @@ import { UserContext } from "@/context/userContext";
 
 function Form() {
     const [showPassword, setShowPassword] = useState(false);
-    const [submiting, setsubmiting] = useState(false);
+    const [submiting, setSubmiting] = useState(false);
     const [role, setRole] = useState<string | null>(null);
 
     // Inputs
@@ -30,7 +30,7 @@ function Form() {
     // Handle submit
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setsubmiting(true);
+        setSubmiting(true);
 
         try {
             // Send request
@@ -46,13 +46,13 @@ function Form() {
             if (resp && resp.status === 200) {
                 // Check role with url
                 if (data.role !== role) {
-                    setsubmiting(false);
+                    setSubmiting(false);
                     toast({ title: "Unauthorized Access!" });
                     return;
                 }
 
                 setTimeout(() => {
-                    setsubmiting(false);
+                    setSubmiting(false);
 
                     // Set isAuth
                     localStorage.setItem("isAuth", "1");
@@ -65,8 +65,10 @@ function Form() {
                 }, 1000);
             }
         } catch (err: any) {
-            setsubmiting(false);
-            handleCustomError(err);
+            setTimeout(() => {
+                setSubmiting(false);
+                handleCustomError(err);
+            }, 1000);
         }
     };
 
@@ -104,11 +106,7 @@ function Form() {
                 <Carousel
                     slides={slides}
                     image={
-                        <img
-                            src={bgImage}
-                            alt=""
-                            className="object-cover h-full w-full"
-                        />
+                        <img src={bgImage} alt="" className="object-cover h-full w-full" />
                     }
                 />
 
