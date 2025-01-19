@@ -8,11 +8,12 @@ interface PropsType {
 }
 
 // UnProtected Route
-function UnProtectedRoute({ allowedRole }: PropsType) {
+function PublicRoute({ allowedRole }: PropsType) {
     const userContext = useContext(UserContext) as IUserContext;
     const { isAuth, user } = userContext;
 
-    if (isAuth && user?.role === allowedRole){
+    // Check auth and role
+    if (isAuth && user?.role === allowedRole) {
         return <Navigate to={`/${allowedRole}/dashboard`} />;
     }
 
@@ -20,4 +21,4 @@ function UnProtectedRoute({ allowedRole }: PropsType) {
 }
 
 // Export UnProtected Route
-export default UnProtectedRoute;
+export default PublicRoute;
