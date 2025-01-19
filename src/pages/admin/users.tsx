@@ -42,69 +42,45 @@ export interface User {
     isBlock: boolean;
 }
 
-const data: User[] = [
-    {
-        id: 1,
-        name: "Ahsan allaj pk",
-        email: "ahsanallajpk22@gmail.com",
-        joined: "20th Jun 2024",
-        lastActive: "20 hours ago",
-        ActiviyStatus: "Normal",
-        role: "Coordinator",
-        isBlock: false,
-    },
-    {
-        id: 2,
-        name: "Amrutha H",
-        email: "ammrutha22@gmail.com",
-        joined: "28th Jul 2024",
-        lastActive: "1 hours ago",
-        ActiviyStatus: "Normal",
-        role: "Instructor",
-        isBlock: true,
-    },
-    {
-        id: 3,
-        name: "Jirjis",
-        email: "jirjis@gmail.com",
-        joined: "22th Nov 2024",
-        lastActive: "20 hours ago",
-        ActiviyStatus: "Normal",
-        role: "Coordinator",
-        isBlock: false,
-    },
-];
-
 interface PropsType {
     isDrawerOpen: boolean;
     setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function Users({ setDrawerOpen }: PropsType) {
-    const [status, setStatus] = useState<boolean>(false);
+    // Users related states
+    const [newUser, setNewUser] = useState<User | null>(null);
+    const [users, setUsers] = useState<User[] | []>([]);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
-    const [users, setUsers] = useState<User[]>(data);
+    const [status, setStatus] = useState<boolean>(false);
+
+    // Search user
     const [search, setSearch] = useState<string>("");
+
+    // Small screen
     const isSmall = useMediaQuery("(max-width: 767.20px)");
 
     // select user
     const handleSelect = (index: number) => {
         setSelectedUser(users[index]);
     };
+
     // handle search
     const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
         setSearch(event.target.value);
     };
+
     // handle blocked-unblocked
     const handleStatus = () => {
         setStatus(!status);
     };
 
+    // Search filter sort
     useLayoutEffect(() => {
         const trimmed = search.trim();
         const regex = trimmed ? new RegExp(trimmed, "i") : null;
 
-        const filteredUsers = data.filter((user) => {
+        const filteredUsers = users.filter((user) => {
             const matchesStatus =
                 status !== undefined ? user.isBlock === status : true;
             const matchesSearch = regex ? regex.test(user.name) : true;
@@ -112,8 +88,19 @@ function Users({ setDrawerOpen }: PropsType) {
         });
 
         setUsers(filteredUsers);
-    }, [search, status, data]);
+    }, [search, status]);
 
+    // Add new user
+    useEffect(() => {
+        if (newUser) {
+            setUsers((prevUsers: User[]) => {
+                return [...prevUsers, newUser];
+            });
+            setNewUser(null);
+        }
+    }, [newUser]);
+
+    // Close drawer on screen size change
     useEffect(() => {
         setDrawerOpen(false);
     }, [isSmall]);
@@ -133,6 +120,7 @@ function Users({ setDrawerOpen }: PropsType) {
                                     <Plus className="h-4 w-4" />
                                 </div>
                             }
+                            setNewUser={setNewUser}
                         />
                     }
                 />

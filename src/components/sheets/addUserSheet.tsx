@@ -6,7 +6,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import {
@@ -26,34 +26,97 @@ import {
     UsersRound,
 } from "lucide-react";
 import { Button } from "../ui/button";
+import { handleCustomError } from "@/utils/error";
+import { postData } from "@/utils/apiService";
+import { adminApis } from "@/api/adminApi";
+import { User } from "@/pages/admin/users";
+import { cn } from "@/lib/utils";
+import { toast } from "@/hooks/use-toast";
 
+// Interface for Props
 interface PropsType {
     button: ReactNode;
+    setNewUser: React.Dispatch<React.SetStateAction<User | null>>;
 }
 
-function AddUserSheet({ button }: PropsType) {
+// Add user sheet
+function AddUserSheet({ button, setNewUser }: PropsType) {
+    // Sheet state
     const [open, setOpen] = useState<boolean | undefined>(undefined);
     const [isLoading, setIsLoading] = useState(false);
 
+    // Inputs
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [role, setRole] = useState("");
+    const [batches, setBatches] = useState<string[]>([]);
+    const [message, setMessage] = useState("");
+
+    // Handle select batches
+    const handleSelectBatches = (value: string) => {
+        setBatches((batches) =>
+            batches.includes(value)
+                ? batches.filter((batch) => batch !== value)
+                : [...batches, value]
+        );
+    };
+
+    // Handle submit
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        setIsLoading(false);
-        setOpen(false);
+
+        try {
+            // Send request
+            const resp = await postData(adminApis.user, {
+                name,
+                email,
+                role,
+                batches,
+                message,
+            });
+
+            const user = resp?.data.data;
+
+            // Success response
+            if (resp && resp.status === 200) {
+                setTimeout(() => {
+                    setIsLoading(false);
+
+                    // Set new user
+                    setNewUser(user);
+
+                    // Close sheet
+                    setOpen(false);
+
+                    toast({ title: "User added successfully." });
+                }, 1000);
+            }
+        } catch (err: any) {
+            handleCustomError(err);
+        }
     };
+
+    // Clear batches when sheet closes
+    useEffect(() => {
+        if (!open) {
+            setBatches([]);
+        }
+    }, [open]);
 
     return (
         <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger>{button}</SheetTrigger>
             <SheetContent className="p-0 flex flex-col gap-0">
+                {/* Header */}
                 <SheetHeader className="p-5 bg-zinc-0">
                     <SheetTitle className="text-foreground">Add new user</SheetTitle>
                     <SheetDescription className="font-medium text-foreground">
                         Fill in the information below to add a new user.
                     </SheetDescription>
                 </SheetHeader>
+
+                {/* Form */}
                 <motion.form
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -61,6 +124,7 @@ function AddUserSheet({ button }: PropsType) {
                     onSubmit={handleSubmit}
                     className="space-y-3 p-5 overflow-auto"
                 >
+                    {/* Input for name */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -75,12 +139,15 @@ function AddUserSheet({ button }: PropsType) {
                                 id="name"
                                 placeholder="Enter user's full name"
                                 required
+                                autoComplete="off"
+                                onChange={(event) => setName(event.target.value)}
                                 className="font-medium p-5 pl-9"
                             />
                             <UserRoundPlus className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
                     </motion.div>
 
+                    {/* Input for email */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -96,12 +163,15 @@ function AddUserSheet({ button }: PropsType) {
                                 type="email"
                                 placeholder="user@gmail.com"
                                 required
+                                autoComplete="off"
+                                onChange={(event) => setEmail(event.target.value)}
                                 className="font-medium p-5 pl-9"
                             />
                             <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
                     </motion.div>
 
+                    {/* Input for role */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -112,9 +182,13 @@ function AddUserSheet({ button }: PropsType) {
                             Role
                         </Label>
                         <div className="relative">
-                            <Select >
+                            <Select
+                                key="role"
+                                required
+                                onValueChange={(value) => setRole(value)}
+                            >
                                 <SelectTrigger id="role" className="font-medium p-5 pl-9">
-                                    <SelectValue placeholder="Select a role" className="" />
+                                    <SelectValue placeholder="Select a role" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="coordinator">Coordinator</SelectItem>
@@ -125,6 +199,7 @@ function AddUserSheet({ button }: PropsType) {
                         </div>
                     </motion.div>
 
+                    {/* Input for batches */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -135,19 +210,47 @@ function AddUserSheet({ button }: PropsType) {
                             Batches
                         </Label>
                         <div className="relative">
-                            <Select>
-                                <SelectTrigger id="role" className="font-medium p-5 pl-9">
-                                    <SelectValue placeholder="Select a batch" />
+                            <Select
+                                key={"batches"}
+                                required
+                                onValueChange={(value) => handleSelectBatches(value)}
+                            >
+                                <SelectTrigger
+                                    id="batches"
+                                    className="font-medium p-5 pl-9 relative"
+                                >
+                                    {/* Conditional rendering of SelectValue */}
+                                    <SelectValue
+                                        placeholder="Select a batch"
+                                        className={cn(
+                                            "relative transition-opacity duration-200",
+                                            batches.length !== 0 && "opacity-0 pointer-events-none"
+                                        )}
+                                    />
+                                    {/* Overlay displaying selected batches */}
+                                    <div className="absolute inset-0 flex items-center p-5 pl-9 bg-white">
+                                        <p
+                                            className={cn(
+                                                "transition-opacity duration-200",
+                                                batches.length === 0 && "opacity-0"
+                                            )}
+                                        >
+                                            {batches.length > 0 ? batches.join(", ") : null}
+                                        </p>
+                                    </div>
                                 </SelectTrigger>
                                 <SelectContent className="max-h-[200px]">
-                                    <SelectItem value="coordinator">BCK-188</SelectItem>
-                                    <SelectItem value="instructor">BCK-189</SelectItem>
+                                    <SelectItem value="BCK-188">BCK-188</SelectItem>
+                                    <SelectItem value="BCK-189">BCK-189</SelectItem>
+                                    <SelectItem value="BCK-190">BCK-190</SelectItem>
+                                    <SelectItem value="BCK-198">BCK-198</SelectItem>
                                 </SelectContent>
                             </Select>
                             <UsersRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
                     </motion.div>
 
+                    {/* Input fot message */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -161,12 +264,15 @@ function AddUserSheet({ button }: PropsType) {
                             <Input
                                 id="message"
                                 placeholder="Add a personal message to the invitation"
+                                autoComplete="off"
+                                onChange={(event) => setMessage(event.target.value)}
                                 className="font-medium p-5 pl-9"
                             />
                             <MessageSquare className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
                     </motion.div>
 
+                    {/* Submit button */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
