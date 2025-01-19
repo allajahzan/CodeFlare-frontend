@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, KeyRound, Loader2, Mail } from "lucide-react";
 import React, { useContext, useLayoutEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import bgImage from "@/assets/images/loginImage4.jpg";
 import { postData } from "@/utils/apiService";
 import { authApi } from "@/api/authApi";
@@ -23,7 +23,6 @@ function Form() {
     const [password, setPassword] = useState<string>("");
 
     const path = useLocation();
-    const navigate = useNavigate();
 
     // User Context
     const userContext = useContext(UserContext);
@@ -105,7 +104,11 @@ function Form() {
                 <Carousel
                     slides={slides}
                     image={
-                        <img src={bgImage} alt="" className="object-cover h-full w-full" />
+                        <img
+                            src={bgImage}
+                            alt=""
+                            className="object-cover h-full w-full"
+                        />
                     }
                 />
 

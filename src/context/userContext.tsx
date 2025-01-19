@@ -31,7 +31,9 @@ const UserContextProvider = ({ children }: { children: ReactNode }) => {
     const [isAuth, setIsAuth] = useState<boolean>(
         localStorage.getItem("isAuth") === "1"
     );
-    const [user, setUser] = useState<IUser | null>((JSON.parse(localStorage.getItem("user") as string)|| null));
+    const [user, setUser] = useState<IUser | null>(
+        JSON.parse(localStorage.getItem("user") as string) || null
+    );
 
     // Fetch user data
     useLayoutEffect(() => {
@@ -50,7 +52,7 @@ const UserContextProvider = ({ children }: { children: ReactNode }) => {
             }
         };
 
-        isAuth? getUserData() : setUser(null);
+        isAuth ? getUserData() : null;
     }, [isAuth]); // Trigger effect when isAuth changes
 
     const logout = () => {

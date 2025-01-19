@@ -8,7 +8,7 @@ import { NextUIProvider } from "@nextui-org/react";
 import {UserContextProvider} from "./context/userContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
+  // <StrictMode>
     <NextUIProvider>
       <Provider store={store}>
         <UserContextProvider>
@@ -16,5 +16,5 @@ createRoot(document.getElementById("root")!).render(
         </UserContextProvider>
       </Provider>
     </NextUIProvider>
-  </StrictMode>
+  // </StrictMode>
 );

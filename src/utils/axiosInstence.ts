@@ -15,14 +15,17 @@ const axiosInstance = axios.create({
 
 const refreshToken = async () => {
     try {
-        const resp = await axiosInstance.post(authApi.refreshToken);
-        const data = resp?.data.data
+        const resp = await axios.post(
+            `${BASE_URL}` + authApi.refreshToken,
+            {},
+            { withCredentials: true }
+        );
+        const data = resp?.data.data;
 
         localStorage.setItem("accessToken", data.accessToken); // set accessToken to localstorage
 
         return data.accessToken;
     } catch (err: any) {
-        console.log(err);
         throw err;
     }
 };
@@ -68,6 +71,7 @@ axiosInstance.interceptors.response.use(
                 console.log(err.message);
                 console.log("Logging Out...");
                 localStorage.removeItem("accessToken");
+                localStorage.removeItem("isAuth");
                 return Promise.reject(err);
             }
         }

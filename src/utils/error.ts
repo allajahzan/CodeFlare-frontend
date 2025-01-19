@@ -9,7 +9,7 @@ import { toast } from "@/hooks/use-toast";
 export const throwCustomError = (err: any) => {
     if (err.response) {
         const { status, data } = err.response;
-        throw { status, message: data.errors?.[0].message || "An error occurred" };
+        throw { status, message: data.errors?.[0].message || data.message || "An error occurred" };
     } else if (err.request) {
         // no response
         throw { status: 0, message: "Network error. Please try again later." };
