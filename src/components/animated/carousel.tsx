@@ -27,7 +27,7 @@ function Carousel({ slides, image }: PropsType) {
     };
 
     return (
-        <div className="h-full md:h-full w-full relative overflow-hidden rounded-2xl shadow-md order-1 md:order-2">
+        <div className="h-full md:h-full w-full relative overflow-hidden rounded-2xl shadow-md">
             {image}
 
             {/* slide Content */}

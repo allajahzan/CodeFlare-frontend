@@ -2,7 +2,7 @@ import { authApi } from "@/api/authApi";
 import axios from "axios";
 
 // Base url
-const BASE_URL = import.meta.env.VITE_BASE_URL;
+export const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 // Create an instance of axios
 const axiosInstance = axios.create({

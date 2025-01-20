@@ -8,6 +8,7 @@ import {
     Edit,
     Loader,
     MoreHorizontal,
+    Plus,
     User2,
     UserRound,
     UserRoundCheck,
@@ -21,7 +22,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { NotFoundOrbit, NotSelected } from "../animated/fallbacks";
+import { NotFoundOrbit } from "../animated/fallbacks";
 import UserDetails from "../contents/admin.userDetails";
 
 interface PropsType {
@@ -136,7 +137,8 @@ function DrawerUsersList({
                 {/* If no users */}
                 {!fetching && users.length === 0 && (
                     <NotFoundOrbit
-                        Icon={User2}
+                        MainIcon={User2}
+                        SubIcon={Plus}
                         message="No instructors and coordinators are added"
                         text="No users found"
                     />
@@ -144,12 +146,11 @@ function DrawerUsersList({
 
                 {/* Loader while fetching */}
                 {fetching && users.length === 0 && (
-                    <NotSelected
-                        Icon={Loader}
-                        IconClassName="animate-spin"
-                        className="h-full"
+                    <NotFoundOrbit
+                        MainIcon={User2}
+                        SubIcon={Loader}
+                        message="Please wait a second...."
                         text="Fetching users"
-                        message="Please wait a moment..."
                     />
                 )}
             </div>

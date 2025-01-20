@@ -22,7 +22,7 @@ function Form() {
 
     const path = useLocation();
     const navigate = useNavigate();
-
+    
     const queryParams = new URLSearchParams(location.search);
     const token = queryParams.get("token");
 
@@ -34,7 +34,7 @@ function Form() {
         try {
             // Send request
             const resp = await axios.post(
-                BASE_URL + `${authApi.verifyEmail}?token=${token}`,
+                BASE_URL + `${authApi.sendOtp}?token=${token}`,
                 {
                     email,
                 }
@@ -44,11 +44,10 @@ function Form() {
             if (resp && resp.status === 200) {
                 setTimeout(() => {
                     setSubmiting(false);
-                    
-                    toast({ title: "OTP has been sent to your email." });
+
+                    toast({ title: "Your accout has been verified." });
 
                     // Redirect to otp page
-                    navigate(`/${role}/verify-otp?token=${token}`);
                 }, 1000);
             }
         } catch (err: any) {
@@ -104,16 +103,16 @@ function Form() {
                             transition={{ delay: 0.3 }}
                             className="text-center space-y-5"
                         >
-                            <h1 className="text-2xl font-semibold">Account Verification!</h1>
+                            <h1 className="text-2xl font-semibold">Enter the OTP!</h1>
                             <p className="font-medium">
-                                Hey, {role && role[0].toUpperCase() + role?.slice(1)} verify
-                                your account
+                                Hey, {role && role[0].toUpperCase() + role?.slice(1)} enter the
+                                OTP sent to your email
                             </p>
                         </motion.div>
 
                         {/* form */}
                         <form onSubmit={handleSubmit} className="space-y-2">
-                            {/* Input for email */}
+                            {/* Input for otp */}
                             <motion.div
                                 className="space-y-2 relative"
                                 initial={{ opacity: 1, y: 0 }}
@@ -125,9 +124,9 @@ function Form() {
                                 </Label>
                                 <div className="relative">
                                     <Input
-                                        id="email"
-                                        type="email"
-                                        placeholder="Email"
+                                        id="otp"
+                                        type="text"
+                                        placeholder="OTP"
                                         required
                                         onChange={(event) => setEmail(event.target.value)}
                                         className="font-medium p-5 pl-9 border-2"
@@ -154,7 +153,7 @@ function Form() {
                                             Processing...
                                         </div>
                                     ) : (
-                                        "Verify"
+                                        "Submit"
                                     )}
                                 </Button>
                             </motion.div>

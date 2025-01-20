@@ -6,6 +6,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import PublicRoutes from "@/routes/publicRoutes";
 import ProtectedRoutes from "@/routes/protectedRoutes";
 import VerifyEmail from "@/pages/authentication/verifyEmail/verifyEmail";
+import VerifyOtp from "@/pages/authentication/otp/verifyOtp";
 
 // Admin Routes
 function CoordinatorRoutes() {
@@ -17,6 +18,7 @@ function CoordinatorRoutes() {
                 <Route path="" element={<Navigate to="login" />} />
                 <Route path="login" element={<Login />} />
                 <Route path="verify-email" element={<VerifyEmail />} />
+                <Route path="verify-otp" element={<VerifyOtp />} />
             </Route>
 
             {/* Protected Routes */}
