@@ -288,7 +288,7 @@ function Users({ setDrawerOpen }: PropsType) {
                                 IconClassName="animate-spin"
                                 className="h-full"
                                 text="Fetching users"
-                                message="Please wait a moment..."
+                                message="Please wait a second..."
                             />
                         )}
                     </div>

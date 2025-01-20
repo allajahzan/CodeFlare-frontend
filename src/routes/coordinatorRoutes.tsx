@@ -1,28 +1,28 @@
 import AdminLayout from "@/components/layout/adminLayout";
 import Dashboard from "@/pages/admin/dashboard";
-import Users from "@/pages/admin/users";
 import Login from "@/pages/authentication/login/login";
 import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import PublicRoutes from "@/routes/publicRoutes";
 import ProtectedRoutes from "@/routes/protectedRoutes";
+import VerifyEmail from "@/pages/authentication/verifyEmail/verifyEmail";
 
 // Admin Routes
-function AdminRoutes() {
-    const [isDrawerOpen, setDrawerOpen] = useState<boolean>(false);
+function CoordinatorRoutes() {
+    const [isDrawerOpen, _setDrawerOpen] = useState<boolean>(false);
     return (
         <Routes>
             {/* Public Routes */}
-            <Route element={<PublicRoutes allowedRole="admin" />}>
+            <Route element={<PublicRoutes allowedRole="coordinator" />}>
                 <Route path="" element={<Navigate to="login" />} />
                 <Route path="login" element={<Login />} />
+                <Route path="verifyEmail" element={<VerifyEmail />} />
             </Route>
 
             {/* Protected Routes */}
-            <Route element={<ProtectedRoutes allowedRole="admin" />}>
+            <Route element={<ProtectedRoutes allowedRole="coordinator" />}>
                 <Route element={<AdminLayout isDrawerOpen={isDrawerOpen} />}>
                     <Route path="dashboard" element={<Dashboard />} />
-                    <Route path="users" element={<Users isDrawerOpen={isDrawerOpen} setDrawerOpen={setDrawerOpen} />} />
                 </Route>
             </Route>
 
@@ -32,4 +32,4 @@ function AdminRoutes() {
     );
 }
 
-export default AdminRoutes;
+export default CoordinatorRoutes;

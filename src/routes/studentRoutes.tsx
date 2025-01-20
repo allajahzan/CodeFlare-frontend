@@ -1,5 +1,5 @@
 import StudentLayout from "@/components/layout/studentLayout";
-import Login from "@/pages/login/login";
+import Login from "@/pages/authentication/login/login";
 import Dashboard from "@/pages/student/dashboard";
 import Invoice from "@/pages/student/invoice";
 import Leave from "@/pages/student/leave";
