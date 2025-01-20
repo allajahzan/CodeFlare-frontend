@@ -30,7 +30,7 @@ export const handleCustomError = (err: any) => {
     console.log(err);
     if (err.status === 401) toast({ title: err.message });
     else if (err.status === 403) toast({ title: err.message });
-    else if (err.status === 404) toast({ title: err.message });
+    else if (err.status === 404) toast({ title: err.name === "AxiosError" ? err.response.data.errors?.[0].message : err.message, });
     else if (err.status === 409) toast({ title: err.message });
     else if (err.status === 500) toast({ title: err.name === "AxiosError" ? err.response.data.message : err.message, });
     else if (err.status === 501) toast({ title: err.name === "AxiosError" ? err.response.data.message : err.message, });

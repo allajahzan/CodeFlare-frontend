@@ -18,7 +18,7 @@ function Form() {
     const [role, setRole] = useState<string | null>(null);
 
     // Inputs
-    const [email, setEmail] = useState<string>("");
+    const [otp, setOtp] = useState<string>("");
 
     const path = useLocation();
     const navigate = useNavigate();
@@ -36,7 +36,7 @@ function Form() {
             const resp = await axios.post(
                 BASE_URL + `${authApi.sendOtp}?token=${token}`,
                 {
-                    email,
+                    otp,
                 }
             );
 
@@ -128,7 +128,9 @@ function Form() {
                                         type="text"
                                         placeholder="OTP"
                                         required
-                                        onChange={(event) => setEmail(event.target.value)}
+                                        maxLength={6}
+                                        minLength={6}
+                                        onChange={(event) => setOtp(event.target.value)}
                                         className="font-medium p-5 pl-9 border-2"
                                     />
                                     <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
