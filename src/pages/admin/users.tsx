@@ -200,6 +200,7 @@ function Users({ setDrawerOpen }: PropsType) {
                 {/* users lists in small screen */}
                 {isSmall && (
                     <DrawerUsersList
+                        fetching={fetching}
                         users={users}
                         selectedUser={selectedUser as User}
                         isSmall={isSmall}

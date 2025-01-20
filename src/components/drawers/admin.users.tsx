@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
     Edit,
+    Loader,
     MoreHorizontal,
     User2,
     UserRound,
@@ -20,10 +21,11 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { NotFoundOrbit } from "../animated/fallbacks";
+import { NotFoundOrbit, NotSelected } from "../animated/fallbacks";
 import UserDetails from "../contents/admin.userDetails";
 
 interface PropsType {
+    fetching: boolean;
     users: User[];
     setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setSelectedUser: React.Dispatch<React.SetStateAction<User | null>>;
@@ -33,6 +35,7 @@ interface PropsType {
 }
 
 function DrawerUsersList({
+    fetching,
     users,
     selectedUser,
     isSmall,
@@ -129,11 +132,24 @@ function DrawerUsersList({
                             </DrawerTrigger>
                         );
                     })}
-                {users.length === 0 && (
+
+                {/* If no users */}
+                {!fetching && users.length === 0 && (
                     <NotFoundOrbit
                         Icon={User2}
                         message="No instructors and coordinators are added"
                         text="No users found"
+                    />
+                )}
+
+                {/* Loader while fetching */}
+                {fetching && users.length === 0 && (
+                    <NotSelected
+                        Icon={Loader}
+                        IconClassName="animate-spin"
+                        className="h-full"
+                        text="Fetching users"
+                        message="Please wait a moment..."
                     />
                 )}
             </div>
