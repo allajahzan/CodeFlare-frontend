@@ -3,29 +3,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
-import { Eye, EyeOff, KeyRound, Loader2, Mail } from "lucide-react";
-import React, { useContext, useLayoutEffect, useMemo, useState } from "react";
+import { Loader2, Mail } from "lucide-react";
+import React, { useLayoutEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import bgImage from "@/assets/images/loginImage4.jpg";
 import { postData } from "@/utils/apiService";
 import { authApi } from "@/api/authApi";
 import { toast } from "@/hooks/use-toast";
 import { handleCustomError } from "@/utils/error";
-import { UserContext } from "@/context/userContext";
 
 function Form() {
-    const [showPassword, setShowPassword] = useState(false);
     const [submiting, setSubmiting] = useState(false);
     const [role, setRole] = useState<string | null>(null);
 
     // Inputs
     const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
 
     const path = useLocation();
-
-    // User Context
-    const userContext = useContext(UserContext);
 
     // Handle submit
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -34,34 +28,22 @@ function Form() {
 
         try {
             // Send request
-            const resp = await postData(`${authApi.login}`, {
+            const resp = await postData(`${authApi.verifyEmail}`, {
                 email,
-                password,
                 role,
             });
 
-            const data = resp?.data.data;
+            const user = resp?.data.data;
 
             // Success response
             if (resp && resp.status === 200) {
-                // Check role with url
-                if (data.role !== role) {
-                    setSubmiting(false);
-                    toast({ title: "Unauthorized Access!" });
-                    return;
-                }
-
                 setTimeout(() => {
                     setSubmiting(false);
 
-                    // Set isAuth
-                    localStorage.setItem("isAuth", "1");
-                    userContext?.setIsAuth(true);
+                    // Store email in local storage
+                    localStorage.setItem("email", user.email);
 
-                    // Store accesstoken in localstorage
-                    localStorage.setItem("accessToken", data.accessToken);
-
-                    toast({ title: "Successfully Logged In" });
+                    toast({ title: "OTP has been sent to your email." });
                 }, 1000);
             }
         } catch (err: any) {
@@ -100,18 +82,10 @@ function Form() {
     );
 
     return (
-        <div className="relative z-0 p-5 pr-5 md:pr-0 h-full w-full lg:w-[80%] lg:h-[80%] bg-white rounded-2xl shadow-custom overflow-hidden transition-all duration-300">
+        <div className="relative z-0 p-5 pl-5 md:pl-0 h-full w-full lg:w-[80%] lg:h-[80%] bg-white rounded-2xl shadow-custom overflow-hidden transition-all duration-300">
             <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-0">
-                {/* Carousal */}
-                <Carousel
-                    slides={slides}
-                    image={
-                        <img src={bgImage} alt="" className="object-cover h-full w-full" />
-                    }
-                />
-
                 {/* Login form */}
-                <div className="w-full h-full bg-white">
+                <div className="w-full min-h-[330px] md:h-full bg-white order-2 md:order-1">
                     <motion.div
                         initial={{ opacity: 1 }}
                         animate={{ opacity: 1 }}
@@ -125,9 +99,9 @@ function Form() {
                             transition={{ delay: 0.3 }}
                             className="text-center space-y-5"
                         >
-                            <h1 className="text-2xl font-semibold">Welcome Back!</h1>
+                            <h1 className="text-2xl font-semibold">Account Verification!</h1>
                             <p className="font-medium">
-                                Hey, {role && role[0].toUpperCase() + role?.slice(1)} sign in to
+                                Hey, {role && role[0].toUpperCase() + role?.slice(1)} verify
                                 your account
                             </p>
                         </motion.div>
@@ -157,52 +131,6 @@ function Form() {
                                 </div>
                             </motion.div>
 
-                            {/* Input for password */}
-                            <motion.div
-                                className="space-y-2 relative"
-                                initial={{ opacity: 1, y: 0 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.5 }}
-                            >
-                                <Label htmlFor="email" className="text-sm font-medium">
-                                    Password
-                                </Label>
-                                <div className="relative">
-                                    <Input
-                                        id="password"
-                                        type={showPassword ? "password" : "text"}
-                                        placeholder="Password"
-                                        required
-                                        autoComplete="off"
-                                        onChange={(event) => setPassword(event.target.value)}
-                                        className="font-medium p-5 pl-9 border-2"
-                                    />
-                                    <KeyRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
-                                </div>
-                                <div
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    className="p-2 absolute right-0 bottom-[3px] text-muted-foreground hover:text-zinc-500 cursor-pointer"
-                                >
-                                    {showPassword ? (
-                                        <EyeOff className="h-5 w-5" />
-                                    ) : (
-                                        <Eye className="h-5 w-5" />
-                                    )}
-                                </div>
-                            </motion.div>
-
-                            {/* Forgot password */}
-                            {role !== "admin" && (
-                                <motion.p
-                                    initial={{ opacity: 1, y: 0 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.6 }}
-                                    className="text-end font-medium cursor-pointer pt-2"
-                                >
-                                    Forgot Password?
-                                </motion.p>
-                            )}
-
                             {/* Submit button */}
                             <motion.div
                                 initial={{ opacity: 1, y: 0 }}
@@ -221,13 +149,21 @@ function Form() {
                                             Processing...
                                         </div>
                                     ) : (
-                                        "SignIn"
+                                        "Verify"
                                     )}
                                 </Button>
                             </motion.div>
                         </form>
                     </motion.div>
                 </div>
+
+                {/* Carousal */}
+                <Carousel
+                    slides={slides}
+                    image={
+                        <img src={bgImage} alt="" className="object-cover h-full w-full" />
+                    }
+                />
             </div>
         </div>
     );
