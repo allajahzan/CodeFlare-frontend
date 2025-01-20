@@ -33,15 +33,13 @@ function Form() {
                 role,
             });
 
-            const user = resp?.data.data;
-
             // Success response
             if (resp && resp.status === 200) {
                 setTimeout(() => {
                     setSubmiting(false);
 
                     // Store email in local storage
-                    localStorage.setItem("email", user.email);
+                    localStorage.setItem("email", email);
 
                     toast({ title: "OTP has been sent to your email." });
                 }, 1000);
