@@ -21,7 +21,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChangeEvent, useEffect, useLayoutEffect, useState } from "react";
-import { NotFoundOrbit, NotSelected } from "@/components/animated/fallbacks";
+import { NotFoundOrbit } from "@/components/animated/fallbacks";
 import UserList from "@/components/usersList/userList";
 import CardHeader from "@/components/dataCard/header";
 import SearchFilterSort from "@/components/dataCard/searchFilterSort";
@@ -275,7 +275,8 @@ function Users({ setDrawerOpen }: PropsType) {
                         {/* If no users are there */}
                         {!fetching && users.length === 0 && (
                             <NotFoundOrbit
-                                Icon={User2}
+                                MainIcon={User2}
+                                SubIcon={Plus}
                                 message="No instructors and coordinators are added"
                                 text="No users found"
                             />
@@ -283,12 +284,11 @@ function Users({ setDrawerOpen }: PropsType) {
 
                         {/* Loader while fetching */}
                         {fetching && users.length === 0 && (
-                            <NotSelected
-                                Icon={Loader}
-                                IconClassName="animate-spin"
-                                className="h-full"
-                                text="Fetching users"
+                            <NotFoundOrbit
+                                MainIcon={User2}
+                                SubIcon={Loader}
                                 message="Please wait a second..."
+                                text="Fetching users"
                             />
                         )}
                     </div>

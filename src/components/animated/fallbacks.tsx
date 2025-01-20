@@ -1,11 +1,14 @@
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
-import { LucideProps, Plus } from "lucide-react";
+import { LucideProps } from "lucide-react";
 
 interface PropsType {
     rotation?: number;
     delay?: number;
-    Icon?: React.ForwardRefExoticComponent<
+    MainIcon?: React.ForwardRefExoticComponent<
+        Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
+    >;
+    SubIcon?: React.ForwardRefExoticComponent<
         Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
     >;
     text?: string;
@@ -13,7 +16,7 @@ interface PropsType {
 }
 
 // orbiting icon
-function OrbitingIcon({ delay, rotation }: PropsType) {
+function OrbitingIcon({ delay, rotation, SubIcon }: PropsType) {
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -48,7 +51,7 @@ function OrbitingIcon({ delay, rotation }: PropsType) {
                         top: "50%",
                     }}
                 >
-                    <Plus className="w-3 h-3 text-muted-foreground " />
+                    {SubIcon && <SubIcon className="w-3 h-3 text-muted-foreground " />}
                 </div>
             </motion.div>
         </motion.div>
@@ -56,20 +59,20 @@ function OrbitingIcon({ delay, rotation }: PropsType) {
 }
 
 // not found orbit
-function NotFoundOrbit({ Icon, message, text }: PropsType) {
+function NotFoundOrbit({ MainIcon,SubIcon, message, text }: PropsType) {
     return (
         <div className="relative h-full p-5 flex flex-col gap-5 items-center justify-center border shadow-sm rounded-2xl overflow-hidden">
             <div className="relative w-[185px] h-[185px]">
                 {/* Inner orbit */}
                 <div className="absolute inset-10 rounded-full border border-dashed border-muted-foreground/20">
-                    <OrbitingIcon rotation={180} delay={0.3} />
+                    <OrbitingIcon rotation={180} delay={0.3} SubIcon={SubIcon} />
                 </div>
 
                 {/* Inner orbit */}
                 <div className="absolute inset-2 rounded-full border border-dashed border-muted-foreground/20">
-                    <OrbitingIcon rotation={90} delay={0.5} />
-                    <OrbitingIcon rotation={270} delay={0.7} />
-                    <OrbitingIcon rotation={360} delay={0.9} />
+                    <OrbitingIcon rotation={90} delay={0.5} SubIcon={SubIcon} />
+                    <OrbitingIcon rotation={270} delay={0.7} SubIcon={SubIcon} />
+                    <OrbitingIcon rotation={360} delay={0.9} SubIcon={SubIcon} />
                 </div>
 
                 {/* Center icon */}
@@ -80,7 +83,7 @@ function NotFoundOrbit({ Icon, message, text }: PropsType) {
                         transition={{ delay: 0.2 }}
                         className="p-3 bg-background border-2 border-dashed rounded-full"
                     >
-                        {Icon && <Icon className="w-5 h-5 text-muted-foreground" />}
+                        {MainIcon && <MainIcon className="w-5 h-5 text-muted-foreground" />}
                     </motion.div>
                 </div>
             </div>
@@ -103,9 +106,14 @@ function NotFoundOrbit({ Icon, message, text }: PropsType) {
 interface PropsType {
     className?: string;
     IconClassName?: string;
-
 }
-function NotSelected({ Icon, message, text, className, IconClassName }: PropsType) {
+function NotSelected({
+    MainIcon,
+    message,
+    text,
+    className,
+    IconClassName,
+}: PropsType) {
     return (
         <div
             className={cn(
@@ -119,7 +127,11 @@ function NotSelected({ Icon, message, text, className, IconClassName }: PropsTyp
                 transition={{ delay: 0.2 }}
                 className="p-3 bg-background border-2 border-dashed rounded-full"
             >
-                {Icon && <Icon className={cn("w-5 h-5 text-muted-foreground", IconClassName)} />}
+                {MainIcon && (
+                    <MainIcon
+                        className={cn("w-5 h-5 text-muted-foreground", IconClassName)}
+                    />
+                )}
             </motion.div>
             <motion.div
                 initial={{ opacity: 0, y: -20 }}

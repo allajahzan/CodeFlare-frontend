@@ -157,7 +157,7 @@ function UserDetails({ selectedUser, className }: PropsType) {
             {/* no user selected */}
             {!selectedUser && (
                 <NotSelected
-                    Icon={User2}
+                    MainIcon={User2}
                     message="Select a user from the list to view their details"
                     text="No user selected"
                     className="h-[434px] lg:h-[273.3px]"

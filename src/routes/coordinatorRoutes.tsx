@@ -16,7 +16,7 @@ function CoordinatorRoutes() {
             <Route element={<PublicRoutes allowedRole="coordinator" />}>
                 <Route path="" element={<Navigate to="login" />} />
                 <Route path="login" element={<Login />} />
-                <Route path="verifyEmail" element={<VerifyEmail />} />
+                <Route path="verify-email" element={<VerifyEmail />} />
             </Route>
 
             {/* Protected Routes */}
