@@ -3,12 +3,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
     Calendar,
-    CircleUserRound,
     Clock,
     Edit2,
     Mail,
     PersonStanding,
     User2,
+    UserRound,
     UserRoundCheck,
     UserRoundMinus,
 } from "lucide-react";
@@ -34,7 +34,7 @@ function UserDetails({ selectedUser, className }: PropsType) {
         <AnimatePresence mode="wait">
             {selectedUser && (
                 <motion.div
-                    key={selectedUser.id}
+                    key={selectedUser._id}
                     initial={{ opacity: 1, x: 0 }}
                     animate={{
                         x: 0,
@@ -55,9 +55,11 @@ function UserDetails({ selectedUser, className }: PropsType) {
                                 transition={{ delay: 0.2 }}
                             >
                                 <Avatar className="border-2 border-zinc-100 w-16 h-16">
-                                    <AvatarImage src={image} className="object-cover" />
+                                    {selectedUser.profilePic && (
+                                        <AvatarImage src={image} className="object-cover" />
+                                    )}
                                     <AvatarFallback>
-                                        <CircleUserRound />
+                                        <UserRound />
                                     </AvatarFallback>
                                 </Avatar>
                             </motion.div>
@@ -95,12 +97,12 @@ function UserDetails({ selectedUser, className }: PropsType) {
                                 {
                                     icon: Clock,
                                     label: "Last Login",
-                                    value: selectedUser.lastActive,
+                                    value: selectedUser.lastActive || '1 day ago',
                                 },
                                 {
                                     icon: Calendar,
                                     label: "Date Joined",
-                                    value: selectedUser.joined,
+                                    value: selectedUser.createdAt || '20th jan 2025',
                                 },
                             ].map((item, index) => (
                                 <div key={index} className="p-3 border rounded-lg">
@@ -138,9 +140,13 @@ function UserDetails({ selectedUser, className }: PropsType) {
                                     align="end"
                                     className="max-h-[200px] overflow-auto"
                                 >
-                                    <DropdownMenuItem>BCK 188</DropdownMenuItem>
-                                    <DropdownMenuItem>BCK 129</DropdownMenuItem>
-                                    <DropdownMenuItem>BCK 198</DropdownMenuItem>
+                                    {selectedUser.batches.map((batch, index) => {
+                                        return (
+                                            <DropdownMenuItem key={index} textValue={batch}>
+                                                {batch}
+                                            </DropdownMenuItem>
+                                        );
+                                    })}
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </div>

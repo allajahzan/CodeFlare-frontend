@@ -102,8 +102,10 @@ function NotFoundOrbit({ Icon, message, text }: PropsType) {
 // notselected
 interface PropsType {
     className?: string;
+    IconClassName?: string;
+
 }
-function NotSelected({ Icon, message, text, className }: PropsType) {
+function NotSelected({ Icon, message, text, className, IconClassName }: PropsType) {
     return (
         <div
             className={cn(
@@ -117,7 +119,7 @@ function NotSelected({ Icon, message, text, className }: PropsType) {
                 transition={{ delay: 0.2 }}
                 className="p-3 bg-background border-2 border-dashed rounded-full"
             >
-                {Icon && <Icon className="w-5 h-5 text-muted-foreground" />}
+                {Icon && <Icon className={cn("w-5 h-5 text-muted-foreground", IconClassName)} />}
             </motion.div>
             <motion.div
                 initial={{ opacity: 0, y: -20 }}

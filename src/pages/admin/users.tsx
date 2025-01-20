@@ -4,6 +4,7 @@ import {
     Edit,
     EyeIcon,
     Filter,
+    Loader,
     MoreHorizontal,
     Plus,
     SortAsc,
@@ -20,7 +21,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChangeEvent, useEffect, useLayoutEffect, useState } from "react";
-import { NotFoundOrbit } from "@/components/animated/fallbacks";
+import { NotFoundOrbit, NotSelected } from "@/components/animated/fallbacks";
 import UserList from "@/components/usersList/userList";
 import CardHeader from "@/components/dataCard/header";
 import SearchFilterSort from "@/components/dataCard/searchFilterSort";
@@ -30,16 +31,21 @@ import "./admin.css";
 import DrawerUsersList from "@/components/drawers/admin.users";
 import UserDetails from "@/components/contents/admin.userDetails";
 import AddUserSheet from "@/components/sheets/addUserSheet";
+import { fetchData } from "@/utils/apiService";
+import { adminApis } from "@/api/adminApi";
+import { handleCustomError } from "@/utils/error";
 
 export interface User {
-    id: number;
+    _id: number;
     name: string;
     email: string;
-    joined: string;
+    batches: string[];
+    role: string;
+    profilePic: string;
+    isBlock: boolean;
+    createdAt: string;
     lastActive: string;
     ActiviyStatus: "Normal" | "Poor" | "Average";
-    role: string;
-    isBlock: boolean;
 }
 
 interface PropsType {
@@ -53,6 +59,7 @@ function Users({ setDrawerOpen }: PropsType) {
     const [users, setUsers] = useState<User[] | []>([]);
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [status, setStatus] = useState<boolean>(false);
+    const [fetching, setFetching] = useState<boolean>(false);
 
     // Search user
     const [search, setSearch] = useState<string>("");
@@ -76,19 +83,19 @@ function Users({ setDrawerOpen }: PropsType) {
     };
 
     // Search filter sort
-    useLayoutEffect(() => {
-        const trimmed = search.trim();
-        const regex = trimmed ? new RegExp(trimmed, "i") : null;
+    // useLayoutEffect(() => {
+    //     const trimmed = search.trim();
+    //     const regex = trimmed ? new RegExp(trimmed, "i") : null;
 
-        const filteredUsers = users.filter((user) => {
-            const matchesStatus =
-                status !== undefined ? user.isBlock === status : true;
-            const matchesSearch = regex ? regex.test(user.name) : true;
-            return matchesStatus && matchesSearch;
-        });
+    //     const filteredUsers = users.filter((user) => {
+    //         const matchesStatus =
+    //             status !== undefined ? user.isBlock === status : true;
+    //         const matchesSearch = regex ? regex.test(user.name) : true;
+    //         return matchesStatus && matchesSearch;
+    //     });
 
-        setUsers(filteredUsers);
-    }, [search, status]);
+    //     setUsers(filteredUsers);
+    // }, [search, status]);
 
     // Add new user
     useEffect(() => {
@@ -99,6 +106,34 @@ function Users({ setDrawerOpen }: PropsType) {
             setNewUser(null);
         }
     }, [newUser]);
+
+    // Fetch users
+    useLayoutEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                setFetching(true);
+
+                // Send request
+                const resp = await fetchData(adminApis.user);
+
+                const users = resp?.data.data;
+
+                // Success response
+                if (resp && resp.status === 200) {
+                    setTimeout(() => {
+                        setUsers(users);
+                        setFetching(false);
+                    }, 1000);
+                }
+            } catch (err: any) {
+                setTimeout(() => {
+                    setFetching(false);
+                    handleCustomError(err);
+                }, 1000);
+            }
+        };
+        fetchUsers();
+    }, []);
 
     // Close drawer on screen size change
     useEffect(() => {
@@ -184,7 +219,7 @@ function Users({ setDrawerOpen }: PropsType) {
                                         key={index}
                                         index={index}
                                         action={handleSelect}
-                                        data={user}
+                                        user={user}
                                         selectedUser={selectedUser}
                                         children1={
                                             <p className="text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
@@ -235,11 +270,24 @@ function Users({ setDrawerOpen }: PropsType) {
                                     />
                                 );
                             })}
-                        {users.length === 0 && (
+
+                        {/* If no users are there */}
+                        {!fetching && users.length === 0 && (
                             <NotFoundOrbit
                                 Icon={User2}
                                 message="No instructors and coordinators are added"
                                 text="No users found"
+                            />
+                        )}
+
+                        {/* Loader while fetching */}
+                        {fetching && users.length === 0 && (
+                            <NotSelected
+                                Icon={Loader}
+                                IconClassName="animate-spin"
+                                className="h-full"
+                                text="Fetching users"
+                                message="Please wait a moment..."
                             />
                         )}
                     </div>

@@ -5,10 +5,10 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import {
-    CircleUserRound,
     Edit,
     MoreHorizontal,
     User2,
+    UserRound,
     UserRoundCheck,
     UserRoundMinus,
 } from "lucide-react";
@@ -69,14 +69,18 @@ function DrawerUsersList({
                                     onClick={() => action(index)}
                                     className={cn(
                                         "group p-2 px-3 w-full border hover:bg-muted hover:border-muted rounded-xl cursor-pointer",
-                                        selectedUser?.id === user.id ? "bg-muted border-muted" : ""
+                                        selectedUser?._id === user._id
+                                            ? "bg-muted border-muted"
+                                            : ""
                                     )}
                                 >
                                     <div className="flex items-center gap-3">
                                         <Avatar className="border-2 border-zinc-100 w-12 h-12">
-                                            <AvatarImage src={image} className="object-cover" />
+                                            {user.profilePic && (
+                                                <AvatarImage src={image} className="object-cover" />
+                                            )}
                                             <AvatarFallback>
-                                                <CircleUserRound />
+                                                <UserRound />
                                             </AvatarFallback>
                                         </Avatar>
                                         <div className="flex-1 min-w-0">
