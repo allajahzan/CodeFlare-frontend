@@ -96,7 +96,7 @@ function UserDetails({ selectedUser, className }: PropsType) {
                                 },
                                 {
                                     icon: Clock,
-                                    label: "Last Login",
+                                    label: "Last Active",
                                     value: selectedUser.lastActive || '1 day ago',
                                 },
                                 {
@@ -132,7 +132,7 @@ function UserDetails({ selectedUser, className }: PropsType) {
                                         <PersonStanding className="w-5 h-5" />
                                     </div>
                                     <div>
-                                        <p className="text-sm text-muted-foreground">Batches</p>
+                                        <p className="text-sm text-muted-foreground font-medium">Batches</p>
                                         <p className="font-semibold">Batches</p>
                                     </div>
                                 </DropdownMenuTrigger>

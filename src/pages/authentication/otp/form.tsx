@@ -7,11 +7,10 @@ import { Loader2, Mail } from "lucide-react";
 import React, { useLayoutEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import bgImage from "@/assets/images/loginImage4.jpg";
-import { authApi } from "@/api/authApi";
+import { userApi } from "@/api/userApi";
 import { toast } from "@/hooks/use-toast";
 import { handleCustomError } from "@/utils/error";
 import axios from "axios";
-import { BASE_URL } from "@/utils/axiosInstence";
 
 function Form() {
     const [submiting, setSubmiting] = useState(false);
@@ -22,7 +21,7 @@ function Form() {
 
     const path = useLocation();
     const navigate = useNavigate();
-    
+
     const queryParams = new URLSearchParams(location.search);
     const token = queryParams.get("token");
 
@@ -33,12 +32,7 @@ function Form() {
 
         try {
             // Send request
-            const resp = await axios.post(
-                BASE_URL + `${authApi.sendOtp}?token=${token}`,
-                {
-                    otp,
-                }
-            );
+            const resp = await axios.post(userApi.sendOtp + token, { otp });
 
             // Success response
             if (resp && resp.status === 200) {

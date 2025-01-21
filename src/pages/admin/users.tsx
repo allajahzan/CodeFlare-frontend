@@ -32,8 +32,8 @@ import DrawerUsersList from "@/components/drawers/admin.users";
 import UserDetails from "@/components/contents/admin.userDetails";
 import AddUserSheet from "@/components/sheets/addUserSheet";
 import { fetchData } from "@/utils/apiService";
-import { adminApis } from "@/api/adminApi";
 import { handleCustomError } from "@/utils/error";
+import { userApi } from "@/api/userApi";
 
 export interface User {
     _id: number;
@@ -114,7 +114,7 @@ function Users({ setDrawerOpen }: PropsType) {
                 setFetching(true);
 
                 // Send request
-                const resp = await fetchData(adminApis.user);
+                const resp = await fetchData(userApi.getCoordinatorsAndInstructors);
 
                 const users = resp?.data.data;
 

@@ -1,8 +1,6 @@
-import { authApi } from "@/api/authApi";
+import { BASE_URL } from "@/api/baseApi";
+import { userApi } from "@/api/userApi";
 import axios from "axios";
-
-// Base url
-export const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 // Create an instance of axios
 const axiosInstance = axios.create({
@@ -16,7 +14,7 @@ const axiosInstance = axios.create({
 const refreshToken = async () => {
     try {
         const resp = await axios.post(
-            `${BASE_URL}` + authApi.refreshToken,
+            userApi.refreshToken,
             {},
             { withCredentials: true }
         );

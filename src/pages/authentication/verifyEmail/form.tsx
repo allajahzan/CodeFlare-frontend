@@ -7,11 +7,10 @@ import { Loader2, Mail } from "lucide-react";
 import React, { useLayoutEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import bgImage from "@/assets/images/loginImage4.jpg";
-import { authApi } from "@/api/authApi";
+import { userApi } from "@/api/userApi";
 import { toast } from "@/hooks/use-toast";
 import { handleCustomError } from "@/utils/error";
 import axios from "axios";
-import { BASE_URL } from "@/utils/axiosInstence";
 
 function Form() {
     const [submiting, setSubmiting] = useState(false);
@@ -33,18 +32,13 @@ function Form() {
 
         try {
             // Send request
-            const resp = await axios.post(
-                BASE_URL + `${authApi.verifyEmail}?token=${token}`,
-                {
-                    email,
-                }
-            );
+            const resp = await axios.post(userApi.verifyEmail + token, { email });
 
             // Success response
             if (resp && resp.status === 200) {
                 setTimeout(() => {
                     setSubmiting(false);
-                    
+
                     toast({ title: "OTP has been sent to your email." });
 
                     // Redirect to otp page

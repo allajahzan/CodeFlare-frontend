@@ -7,11 +7,11 @@ import { Eye, EyeOff, KeyRound, Loader2, Mail } from "lucide-react";
 import React, { useContext, useLayoutEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import bgImage from "@/assets/images/loginImage4.jpg";
-import { postData } from "@/utils/apiService";
-import { authApi } from "@/api/authApi";
+import { userApi } from "@/api/userApi";
 import { toast } from "@/hooks/use-toast";
 import { handleCustomError } from "@/utils/error";
 import { UserContext } from "@/context/userContext";
+import axios from "axios";
 
 function Form() {
     const [showPassword, setShowPassword] = useState(false);
@@ -34,7 +34,7 @@ function Form() {
 
         try {
             // Send request
-            const resp = await postData(`${authApi.login}`, {
+            const resp = await axios.post(userApi.login, {
                 email,
                 password,
                 role,

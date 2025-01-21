@@ -28,10 +28,10 @@ import {
 import { Button } from "../ui/button";
 import { handleCustomError } from "@/utils/error";
 import { postData } from "@/utils/apiService";
-import { adminApis } from "@/api/adminApi";
 import { User } from "@/pages/admin/users";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
+import { userApi } from "@/api/userApi";
 
 // Interface for Props
 interface PropsType {
@@ -68,7 +68,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
 
         try {
             // Send request
-            const resp = await postData(adminApis.user, {
+            const resp = await postData(userApi.user, {
                 name,
                 email,
                 role,
