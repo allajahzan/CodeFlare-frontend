@@ -4,11 +4,11 @@ import {
     sideBarStudentAction,
     stateType,
     themeAction,
-} from "../../redux/store";
+} from "../../../redux/store";
 import NavbarItem from "./navbarItem";
-import Heading from "../ui/heading";
+import Heading from "@/components/ui/heading";
 import { Bell, ChevronDown, Globe, Moon, Sun } from "lucide-react";
-import avatar_boy from "../../assets/images/avatar_boy.jpg";
+import avatar_boy from "@/assets/images/avatar_boy.jpg"
 import { useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";

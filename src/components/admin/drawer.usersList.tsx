@@ -22,8 +22,8 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { NotFoundOrbit } from "../animated/fallbacks";
-import UserDetails from "../contents/admin.userDetails";
+import { NotFoundOrbit } from "../animation/fallbacks";
+import UserDetails from "./card.userDetails";
 
 interface PropsType {
     fetching: boolean;

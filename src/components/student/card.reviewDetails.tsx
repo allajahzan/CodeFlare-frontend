@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { CalendarClock, Copy } from "lucide-react";
 import { Review } from "@/pages/student/reviews";
 import { cn } from "@/lib/utils";
-import LineCharts from "@/components/charts/LineChart";
+import LineCharts from "@/components/common/charts/LineChart";
 import { useCallback } from "react";
 import { toast } from "@/hooks/use-toast";
 

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import {
   PendingsAndChart,
   ReviewDetails,
-} from "@/components/contents/student.reviewDetails";
+} from "@/components/student/card.reviewDetails";
 
 export interface Review {
   id: number;

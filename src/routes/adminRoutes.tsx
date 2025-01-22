@@ -1,7 +1,7 @@
 import AdminLayout from "@/components/layout/adminLayout";
 import Dashboard from "@/pages/admin/dashboard";
 import Users from "@/pages/admin/users";
-import Login from "@/pages/authentication/login/login";
+import Login from "@/pages/authentication/login";
 import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import PublicRoutes from "@/routes/publicRoutes";

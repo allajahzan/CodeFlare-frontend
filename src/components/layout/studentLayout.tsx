@@ -1,6 +1,6 @@
-import SideBar from "../sideBars/sideBar";
+import SideBar from "../common/sideBar/sideBar";
 import { Outlet } from "react-router-dom";
-import Navbar from "../navbar/navbar";
+import Navbar from "../common/navbar/navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { resizeAction, sideBarStudentAction, stateType } from "@/redux/store";
 import {

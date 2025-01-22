@@ -1,31 +1,29 @@
-import Carousel from "@/components/animated/carousel";
+import Carousel from "@/components/animation/carousel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
-import { Eye, EyeOff, KeyRound, Loader2, Mail } from "lucide-react";
-import React, { useContext, useLayoutEffect, useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Loader2, Mail } from "lucide-react";
+import React, { useLayoutEffect, useMemo, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import bgImage from "@/assets/images/loginImage4.jpg";
 import { userApi } from "@/api/userApi";
 import { toast } from "@/hooks/use-toast";
 import { handleCustomError } from "@/utils/error";
-import { UserContext } from "@/context/userContext";
 import axios from "axios";
 
 function Form() {
-    const [showPassword, setShowPassword] = useState(false);
     const [submiting, setSubmiting] = useState(false);
     const [role, setRole] = useState<string | null>(null);
 
     // Inputs
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
+    const [otp, setOtp] = useState<string>("");
 
     const path = useLocation();
+    const navigate = useNavigate();
 
-    // User Context
-    const userContext = useContext(UserContext);
+    const queryParams = new URLSearchParams(location.search);
+    const token = queryParams.get("token");
 
     // Handle submit
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -34,34 +32,17 @@ function Form() {
 
         try {
             // Send request
-            const resp = await axios.post(userApi.login, {
-                email,
-                password,
-                role,
-            });
-
-            const data = resp?.data.data;
+            const resp = await axios.post(userApi.sendOtp + token, { otp });
 
             // Success response
             if (resp && resp.status === 200) {
-                // Check role with url
-                if (data.role !== role) {
-                    setSubmiting(false);
-                    toast({ title: "Unauthorized Access!" });
-                    return;
-                }
-
                 setTimeout(() => {
                     setSubmiting(false);
 
-                    // Set isAuth
-                    localStorage.setItem("isAuth", "1");
-                    userContext?.setIsAuth(true);
+                    toast({ title: "Account is verified." });
 
-                    // Store accesstoken in localstorage
-                    localStorage.setItem("accessToken", data.accessToken);
-
-                    toast({ title: "Successfully Logged In" });
+                    // Redirect to reset password
+                    navigate(`/${role}/reset-password?token=${token}`);
                 }, 1000);
             }
         } catch (err: any) {
@@ -100,18 +81,10 @@ function Form() {
     );
 
     return (
-        <div className="relative z-0 p-5 pr-5 md:pr-0 h-full w-full lg:w-[80%] lg:h-[80%] bg-white rounded-2xl shadow-custom overflow-hidden transition-all duration-300">
+        <div className="relative z-0 p-5 pl-5 md:pl-0 h-full w-full lg:w-[80%] lg:h-[80%] bg-white rounded-2xl shadow-custom overflow-hidden transition-all duration-300">
             <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-0">
-                {/* Carousal */}
-                <Carousel
-                    slides={slides}
-                    image={
-                        <img src={bgImage} alt="" className="object-cover h-full w-full" />
-                    }
-                />
-
                 {/* Login form */}
-                <div className="w-full h-full bg-white">
+                <div className="w-full min-h-[330px] md:h-full bg-white order-2 md:order-1">
                     <motion.div
                         initial={{ opacity: 1 }}
                         animate={{ opacity: 1 }}
@@ -125,16 +98,16 @@ function Form() {
                             transition={{ delay: 0.3 }}
                             className="text-center space-y-5"
                         >
-                            <h1 className="text-2xl font-semibold">Welcome Back!</h1>
+                            <h1 className="text-2xl font-semibold">Enter the OTP!</h1>
                             <p className="font-medium">
-                                Hey, {role && role[0].toUpperCase() + role?.slice(1)} sign in to
-                                your account
+                                Hey, {role && role[0].toUpperCase() + role?.slice(1)} enter the
+                                OTP sent to your email
                             </p>
                         </motion.div>
 
                         {/* form */}
                         <form onSubmit={handleSubmit} className="space-y-2">
-                            {/* Input for email */}
+                            {/* Input for otp */}
                             <motion.div
                                 className="space-y-2 relative"
                                 initial={{ opacity: 1, y: 0 }}
@@ -146,62 +119,18 @@ function Form() {
                                 </Label>
                                 <div className="relative">
                                     <Input
-                                        id="email"
-                                        type="email"
-                                        placeholder="Email"
+                                        id="otp"
+                                        type="text"
+                                        placeholder="OTP"
                                         required
-                                        onChange={(event) => setEmail(event.target.value)}
+                                        maxLength={6}
+                                        minLength={6}
+                                        onChange={(event) => setOtp(event.target.value)}
                                         className="font-medium p-5 pl-9 border-2"
                                     />
                                     <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                                 </div>
                             </motion.div>
-
-                            {/* Input for password */}
-                            <motion.div
-                                className="space-y-2 relative"
-                                initial={{ opacity: 1, y: 0 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.5 }}
-                            >
-                                <Label htmlFor="email" className="text-sm font-medium">
-                                    Password
-                                </Label>
-                                <div className="relative">
-                                    <Input
-                                        id="password"
-                                        type={showPassword ? "password" : "text"}
-                                        placeholder="Password"
-                                        required
-                                        autoComplete="off"
-                                        onChange={(event) => setPassword(event.target.value)}
-                                        className="font-medium p-5 pl-9 border-2"
-                                    />
-                                    <KeyRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
-                                </div>
-                                <div
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    className="p-2 absolute right-0 bottom-[3px] text-muted-foreground hover:text-zinc-500 cursor-pointer"
-                                >
-                                    {showPassword ? (
-                                        <EyeOff className="h-5 w-5" />
-                                    ) : (
-                                        <Eye className="h-5 w-5" />
-                                    )}
-                                </div>
-                            </motion.div>
-
-                            {/* Forgot password */}
-                            {role !== "admin" && (
-                                <motion.p
-                                    initial={{ opacity: 1, y: 0 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.6 }}
-                                    className="text-end font-medium cursor-pointer pt-2"
-                                >
-                                    Forgot Password?
-                                </motion.p>
-                            )}
 
                             {/* Submit button */}
                             <motion.div
@@ -221,13 +150,21 @@ function Form() {
                                             Processing...
                                         </div>
                                     ) : (
-                                        "SignIn"
+                                        "Submit"
                                     )}
                                 </Button>
                             </motion.div>
                         </form>
                     </motion.div>
                 </div>
+
+                {/* Carousal */}
+                <Carousel
+                    slides={slides}
+                    image={
+                        <img src={bgImage} alt="" className="object-cover h-full w-full" />
+                    }
+                />
             </div>
         </div>
     );

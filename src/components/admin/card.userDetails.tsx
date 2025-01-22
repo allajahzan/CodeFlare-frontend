@@ -19,7 +19,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { NotSelected } from "../animated/fallbacks";
+import { NotSelected } from "../animation/fallbacks";
 import IconButton from "../ui/iconButton";
 import { Badge } from "../ui/badge";
 import { cn } from "@/lib/utils";

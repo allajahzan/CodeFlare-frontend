@@ -1,12 +1,12 @@
 import AdminLayout from "@/components/layout/adminLayout";
 import Dashboard from "@/pages/admin/dashboard";
-import Login from "@/pages/authentication/login/login";
+import Login from "@/pages/authentication/login";
 import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import PublicRoutes from "@/routes/publicRoutes";
 import ProtectedRoutes from "@/routes/protectedRoutes";
-import VerifyEmail from "@/pages/authentication/verifyEmail/verifyEmail";
-import VerifyOtp from "@/pages/authentication/otp/verifyOtp";
+import VerifyEmail from "@/pages/authentication/verify";
+import VerifyOtp from "@/pages/authentication/otp";
 
 // Admin Routes
 function CoordinatorRoutes() {

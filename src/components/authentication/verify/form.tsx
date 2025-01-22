@@ -1,4 +1,4 @@
-import Carousel from "@/components/animated/carousel";
+import Carousel from "@/components/animation/carousel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,7 +17,7 @@ function Form() {
     const [role, setRole] = useState<string | null>(null);
 
     // Inputs
-    const [otp, setOtp] = useState<string>("");
+    const [email, setEmail] = useState<string>("");
 
     const path = useLocation();
     const navigate = useNavigate();
@@ -32,16 +32,17 @@ function Form() {
 
         try {
             // Send request
-            const resp = await axios.post(userApi.sendOtp + token, { otp });
+            const resp = await axios.post(userApi.verifyEmail + token, { email });
 
             // Success response
             if (resp && resp.status === 200) {
                 setTimeout(() => {
                     setSubmiting(false);
 
-                    toast({ title: "Your accout has been verified." });
+                    toast({ title: "OTP has been sent to your email." });
 
                     // Redirect to otp page
+                    navigate(`/${role}/verify-otp?token=${token}`);
                 }, 1000);
             }
         } catch (err: any) {
@@ -97,16 +98,16 @@ function Form() {
                             transition={{ delay: 0.3 }}
                             className="text-center space-y-5"
                         >
-                            <h1 className="text-2xl font-semibold">Enter the OTP!</h1>
+                            <h1 className="text-2xl font-semibold">Account Verification!</h1>
                             <p className="font-medium">
-                                Hey, {role && role[0].toUpperCase() + role?.slice(1)} enter the
-                                OTP sent to your email
+                                Hey, {role && role[0].toUpperCase() + role?.slice(1)} verify
+                                your account
                             </p>
                         </motion.div>
 
                         {/* form */}
                         <form onSubmit={handleSubmit} className="space-y-2">
-                            {/* Input for otp */}
+                            {/* Input for email */}
                             <motion.div
                                 className="space-y-2 relative"
                                 initial={{ opacity: 1, y: 0 }}
@@ -118,13 +119,11 @@ function Form() {
                                 </Label>
                                 <div className="relative">
                                     <Input
-                                        id="otp"
-                                        type="text"
-                                        placeholder="OTP"
+                                        id="email"
+                                        type="email"
+                                        placeholder="Email"
                                         required
-                                        maxLength={6}
-                                        minLength={6}
-                                        onChange={(event) => setOtp(event.target.value)}
+                                        onChange={(event) => setEmail(event.target.value)}
                                         className="font-medium p-5 pl-9 border-2"
                                     />
                                     <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
@@ -149,7 +148,7 @@ function Form() {
                                             Processing...
                                         </div>
                                     ) : (
-                                        "Submit"
+                                        "Verify"
                                     )}
                                 </Button>
                             </motion.div>

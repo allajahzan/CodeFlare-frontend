@@ -21,16 +21,16 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ChangeEvent, useEffect, useLayoutEffect, useState } from "react";
-import { NotFoundOrbit } from "@/components/animated/fallbacks";
+import { NotFoundOrbit } from "@/components/animation/fallbacks";
 import UserList from "@/components/usersList/userList";
-import CardHeader from "@/components/dataCard/header";
-import SearchFilterSort from "@/components/dataCard/searchFilterSort";
+import CardHeader from "@/components/common/dataCard/header";
+import SearchFilterSort from "@/components/common/dataCard/searchFilterSort";
 import { useMediaQuery } from "usehooks-ts";
 import { cn } from "@/lib/utils";
 import "./admin.css";
-import DrawerUsersList from "@/components/drawers/admin.users";
-import UserDetails from "@/components/contents/admin.userDetails";
-import AddUserSheet from "@/components/sheets/addUserSheet";
+import DrawerUsersList from "@/components/admin/drawer.usersList";
+import UserDetails from "@/components/admin/card.userDetails";
+import AddUserSheet from "@/components/admin/sheet.addUser";
 import { fetchData } from "@/utils/apiService";
 import { handleCustomError } from "@/utils/error";
 import { userApi } from "@/api/userApi";
