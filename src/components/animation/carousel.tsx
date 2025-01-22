@@ -1,12 +1,14 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface PropsType {
     slides: { id: number; title: string; description: string }[];
     image: React.ReactNode;
+    className: string;
 }
 
-function Carousel({ slides, image }: PropsType) {
+function Carousel({ slides, image, className }: PropsType) {
     const [currentSlide, setCurrentSlide] = useState<number>(0);
     let timer: any;
 
@@ -27,7 +29,9 @@ function Carousel({ slides, image }: PropsType) {
     };
 
     return (
-        <div className="h-full md:h-full w-full relative overflow-hidden rounded-2xl shadow-md">
+        <div className={cn("h-full md:h-full w-full relative overflow-hidden rounded-2xl shadow-md", className)}>
+
+            {/* Background Image */}
             {image}
 
             {/* slide Content */}

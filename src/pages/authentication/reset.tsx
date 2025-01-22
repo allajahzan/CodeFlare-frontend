@@ -1,7 +1,7 @@
-import Form from "@/components/authentication/otp/form";
+import Form from "@/components/authentication/reset/form"
 import FloatingBackground from "@/components/animation/floatingBackground";
 
-function Otp() {
+function Reset() {
     return (
         <FloatingBackground>
             <Form />
@@ -9,4 +9,4 @@ function Otp() {
     );
 }
 
-export default Otp;
+export default Reset;

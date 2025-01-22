@@ -5,8 +5,9 @@ import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import PublicRoutes from "@/routes/publicRoutes";
 import ProtectedRoutes from "@/routes/protectedRoutes";
-import VerifyEmail from "@/pages/authentication/verify";
-import VerifyOtp from "@/pages/authentication/otp";
+import Verify from "@/pages/authentication/verify";
+import Otp from "@/pages/authentication/otp";
+import Reset from "@/pages/authentication/reset";
 
 // Admin Routes
 function CoordinatorRoutes() {
@@ -17,8 +18,9 @@ function CoordinatorRoutes() {
             <Route element={<PublicRoutes allowedRole="coordinator" />}>
                 <Route path="" element={<Navigate to="login" />} />
                 <Route path="login" element={<Login />} />
-                <Route path="verify-email" element={<VerifyEmail />} />
-                <Route path="verify-otp" element={<VerifyOtp />} />
+                <Route path="verify-email" element={<Verify />} />
+                <Route path="verify-otp" element={<Otp />} />
+                <Route path="reset-password" element={<Reset />} />
             </Route>
 
             {/* Protected Routes */}
