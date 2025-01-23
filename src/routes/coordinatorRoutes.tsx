@@ -1,4 +1,4 @@
-import AdminLayout from "@/components/layout/adminLayout";
+import CoordinatorLayout from "@/components/layout/coordinatorLayout";
 import Dashboard from "@/pages/admin/dashboard";
 import Login from "@/pages/authentication/login";
 import { useState } from "react";
@@ -26,7 +26,7 @@ function CoordinatorRoutes() {
 
             {/* Protected Routes */}
             <Route element={<ProtectedRoutes allowedRole="coordinator" />}>
-                <Route element={<AdminLayout isDrawerOpen={isDrawerOpen} />}>
+                <Route element={<CoordinatorLayout isDrawerOpen={isDrawerOpen} />}>
                     <Route path="dashboard" element={<Dashboard />} />
                 </Route>
             </Route>

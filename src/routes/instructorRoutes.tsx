@@ -1,4 +1,4 @@
-import AdminLayout from "@/components/layout/adminLayout";
+import InstructorLayout from "@/components/layout/instructorLayout";
 import Dashboard from "@/pages/admin/dashboard";
 import Login from "@/pages/authentication/login";
 import { useState } from "react";
@@ -26,7 +26,7 @@ function InstructorRoutes() {
 
             {/* Protected Routes */}
             <Route element={<ProtectedRoutes allowedRole="instructor" />}>
-                <Route element={<AdminLayout isDrawerOpen={isDrawerOpen} />}>
+                <Route element={<InstructorLayout isDrawerOpen={isDrawerOpen} />}>
                     <Route path="dashboard" element={<Dashboard />} />
                 </Route>
             </Route>
