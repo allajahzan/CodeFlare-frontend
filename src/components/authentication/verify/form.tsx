@@ -39,10 +39,7 @@ function Form() {
                 setTimeout(() => {
                     setSubmiting(false);
 
-                    toast({ title: "OTP has been sent to your email." });
-
-                    // Redirect to otp page
-                    navigate(`/${role}/verify-otp?token=${token}`);
+                    toast({ title: "Password reset link has been sent to your email." });
                 }, 1000);
             }
         } catch (err: any) {

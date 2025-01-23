@@ -4,12 +4,12 @@ import Navbar from "../common/navbar/navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { resizeAction, sideBarStudentAction, stateType } from "@/redux/store";
 import {
-    CalendarDays,
-    CreditCard,
-    FileUser,
-    Globe,
+    //   CalendarDays,
+    //   CreditCard,
+    //   FileUser,
+    //   Globe,
+    //   UsersRound,
     LayoutDashboard,
-    UsersRound,
 } from "lucide-react";
 import Shadow from "../ui/shadow";
 import { useLayoutEffect, useMemo } from "react";
@@ -19,7 +19,7 @@ interface PropsType {
     isDrawerOpen: boolean;
 }
 
-function AdminLayout({ isDrawerOpen }: PropsType) {
+function InstructorLayout({ isDrawerOpen }: PropsType) {
     const isSmall = useSelector((state: stateType) => state.isSmall);
     const dispatch = useDispatch();
 
@@ -44,14 +44,18 @@ function AdminLayout({ isDrawerOpen }: PropsType) {
     // sidebar items
     const sideBarItems = useMemo(
         () => [
-            { path: "/admin/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-            { path: "/admin/users", icon: UsersRound, label: "Users" },
-            ...(isSmall
-                ? [{ path: "/community", icon: Globe, label: "Community" }]
-                : []),
-            { path: "/admin/weeks", icon: CalendarDays, label: "Weeks" },
-            { path: "/admin/batches", icon: FileUser, label: "Batches" },
-            { path: "/admin/invoices", icon: CreditCard, label: "Invoices" },
+            {
+                path: "/instructor/dashboard",
+                icon: LayoutDashboard,
+                label: "Dashboard",
+            },
+            //   { path: "/instructor/users", icon: UsersRound, label: "Users" },
+            //   ...(isSmall
+            //     ? [{ path: "/community", icon: Globe, label: "Community" }]
+            //     : []),
+            //   { path: "/instructor/weeks", icon: CalendarDays, label: "Weeks" },
+            //   { path: "/instructor/batches", icon: FileUser, label: "Batches" },
+            //   { path: "/instructor/invoices", icon: CreditCard, label: "Invoices" },
         ],
         [isSmall]
     );
@@ -99,4 +103,4 @@ function AdminLayout({ isDrawerOpen }: PropsType) {
     );
 }
 
-export default AdminLayout;
+export default InstructorLayout;
