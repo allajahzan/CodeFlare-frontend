@@ -1,9 +1,9 @@
 import React from "react";
-import { Drawer, DrawerContent, DrawerTrigger } from "../ui/drawer";
-import { User } from "@/pages/admin/users";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import { User } from "./users";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
     Edit,
     Loader,
@@ -14,16 +14,16 @@ import {
     UserRoundCheck,
     UserRoundMinus,
 } from "lucide-react";
-import image from "../../assets/images/allaj.jpeg";
+import image from "@/assets/images/allaj.jpeg";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { NotFoundOrbit } from "../animation/fallbacks";
-import UserDetails from "./card.userDetails";
+} from "@/components/ui/dropdown-menu";
+import { NotFoundOrbit } from "@/components/animation/fallbacks";
+import UserDetails from "./userDetails";
 
 interface PropsType {
     fetching: boolean;

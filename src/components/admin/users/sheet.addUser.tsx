@@ -7,15 +7,15 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet";
 import { ReactNode, useEffect, useState } from "react";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "../ui/select";
+} from "@/components/ui/select";
 import { motion } from "framer-motion";
 import {
     BriefcaseIcon,
@@ -25,10 +25,10 @@ import {
     UserRoundPlus,
     UsersRound,
 } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { handleCustomError } from "@/utils/error";
 import { postData } from "@/utils/apiService";
-import { User } from "@/pages/admin/users";
+import { User } from "./users";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import { userApi } from "@/api/userApi";

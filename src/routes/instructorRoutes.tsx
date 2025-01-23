@@ -1,5 +1,5 @@
 import InstructorLayout from "@/components/layout/instructorLayout";
-import Dashboard from "@/pages/admin/dashboard";
+import Dashboard from "@/pages/instructor/dashboard";
 import Login from "@/pages/authentication/login";
 import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";

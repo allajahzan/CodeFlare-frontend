@@ -1,6 +1,6 @@
-import { User } from "@/pages/admin/users";
+import { User } from "./users";
 import { AnimatePresence, motion } from "framer-motion";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
     Calendar,
     Clock,
@@ -12,16 +12,16 @@ import {
     UserRoundCheck,
     UserRoundMinus,
 } from "lucide-react";
-import image from "../../assets/images/allaj.jpeg";
+import image from "@/assets/images/allaj.jpeg";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { NotSelected } from "../animation/fallbacks";
-import IconButton from "../ui/iconButton";
-import { Badge } from "../ui/badge";
+} from "@/components/ui/dropdown-menu";
+import { NotSelected } from "@/components/animation/fallbacks";
+import IconButton from "@/components/ui/iconButton";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 interface PropsType {
@@ -97,12 +97,12 @@ function UserDetails({ selectedUser, className }: PropsType) {
                                 {
                                     icon: Clock,
                                     label: "Last Active",
-                                    value: selectedUser.lastActive || '1 day ago',
+                                    value: selectedUser.lastActive || "1 day ago",
                                 },
                                 {
                                     icon: Calendar,
                                     label: "Date Joined",
-                                    value: selectedUser.createdAt || '20th jan 2025',
+                                    value: selectedUser.createdAt || "20th jan 2025",
                                 },
                             ].map((item, index) => (
                                 <div key={index} className="p-3 border rounded-lg">
@@ -132,7 +132,9 @@ function UserDetails({ selectedUser, className }: PropsType) {
                                         <PersonStanding className="w-5 h-5" />
                                     </div>
                                     <div>
-                                        <p className="text-sm text-muted-foreground font-medium">Batches</p>
+                                        <p className="text-sm text-muted-foreground font-medium">
+                                            Batches
+                                        </p>
                                         <p className="font-semibold">Batches</p>
                                     </div>
                                 </DropdownMenuTrigger>
