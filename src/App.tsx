@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import AdminRoutes from "./routes/adminRoutes";
 import StudentRoutes from "./routes/studentRoutes";
 import CoordinatorRoutes from "./routes/coordinatorRoutes";
+import InstructorRoutes from "./routes/instructorRoutes";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/*" element={<StudentRoutes />} />
         <Route path="/admin/*" element={<AdminRoutes />} />
         <Route path="/coordinator/*" element={<CoordinatorRoutes />} />
+        <Route path="/instructor/*" element={<InstructorRoutes />} />
       </Routes>
     </Router>
   );

@@ -9,13 +9,13 @@ import Verify from "@/pages/authentication/verify";
 import Reset from "@/pages/authentication/reset";
 import AuthenticationLayout from "@/components/layout/autheticationLayout";
 
-// Coordinator Routes
-function CoordinatorRoutes() {
+// Instructor Routes
+function InstructorRoutes() {
     const [isDrawerOpen, _setDrawerOpen] = useState<boolean>(false);
     return (
         <Routes>
             {/* Public Routes */}
-            <Route element={<PublicRoutes allowedRole="coordinator" />}>
+            <Route element={<PublicRoutes allowedRole="instructor" />}>
                 <Route element={<AuthenticationLayout />}>
                     <Route path="" element={<Navigate to="login" />} />
                     <Route path="login" element={<Login />} />
@@ -25,7 +25,7 @@ function CoordinatorRoutes() {
             </Route>
 
             {/* Protected Routes */}
-            <Route element={<ProtectedRoutes allowedRole="coordinator" />}>
+            <Route element={<ProtectedRoutes allowedRole="instructor" />}>
                 <Route element={<AdminLayout isDrawerOpen={isDrawerOpen} />}>
                     <Route path="dashboard" element={<Dashboard />} />
                 </Route>
@@ -37,4 +37,4 @@ function CoordinatorRoutes() {
     );
 }
 
-export default CoordinatorRoutes;
+export default InstructorRoutes;
