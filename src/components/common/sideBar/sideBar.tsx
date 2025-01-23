@@ -19,6 +19,7 @@ import Slider from "../../ui/slider";
 import { cn } from "@/lib/utils";
 import React from "react";
 
+// Interface for Props
 interface PropsType {
     sideBarItems: {
         path: string;
@@ -29,6 +30,7 @@ interface PropsType {
     }[];
 }
 
+// SideBar Component
 function SideBar({ sideBarItems }: PropsType) {
     const theme = useSelector((state: stateType) => state.theme);
     const isSmall = useSelector((state: stateType) => state.isSmall);
@@ -40,8 +42,8 @@ function SideBar({ sideBarItems }: PropsType) {
     const navigate = useNavigate();
 
     // handle sidebar item
-    const handleSideBarItemClick = (path : string) => {
-        navigate(path)
+    const handleSideBarItemClick = (path: string) => {
+        navigate(path);
         if (isSmall) dispatch(sideBarStudentAction(false));
     };
 

@@ -5,5 +5,4 @@ function Reset() {
     return <Form />;
 }
 
-// Export Reset Component
 export default Reset;

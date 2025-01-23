@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
 import image from "../../assets/images/allaj.jpeg";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
 import { UserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 import React from "react";
 import { User } from "@/pages/admin/users";
+
+// Interface for Props
 interface PropsType {
     index: number;
     action: any;
@@ -15,6 +17,7 @@ interface PropsType {
     className?: string;
 }
 
+// UsersList Component
 function UserList({
     index,
     action,

@@ -16,6 +16,7 @@ interface PropsType {
     children: React.ReactNode;
 }
 
+// Floating Background Component
 function FloatingBackground({ children }: PropsType) {
     const floatingIcons = useMemo(
         () => [

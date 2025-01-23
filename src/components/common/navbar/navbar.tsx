@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 
+// Navbar Component
 const Navbar = () => {
     const isSmall = useSelector((state: stateType) => state.isSmall);
     const isSideBarVisible = useSelector(

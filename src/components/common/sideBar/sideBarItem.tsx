@@ -9,6 +9,7 @@ import { LucideProps } from "lucide-react";
 // import { useLocation } from "react-router-dom";
 // import { cn } from "@/lib/utils";
 
+// Interface for Props
 interface PropsType {
     Image: React.ForwardRefExoticComponent<
         Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
@@ -18,6 +19,7 @@ interface PropsType {
     path: string;
 }
 
+// SideBarItem Component
 function SideBarItem({ Image, text, handleSideBarItems, path }: PropsType) {
     // const currentPath = useLocation().pathname;
     // const isActive = path && currentPath.split("/")[2] === path.split("/")[2];
@@ -29,7 +31,9 @@ function SideBarItem({ Image, text, handleSideBarItems, path }: PropsType) {
                     {/* <div className={cn("absolute left-1 top-[50%] -translate-y-[50%] h-10 w-1 rounded-2xl bg-white transition-all duration-300", isActive? 'opacity-1' : 'opacity-0')}></div> */}
                     <li
                         data-label={text}
-                        onClick={()=>{handleSideBarItems(path)}}
+                        onClick={() => {
+                            handleSideBarItems(path);
+                        }}
                         className={`cursor-pointer`}
                     >
                         <div className="flex justify-center p-2">

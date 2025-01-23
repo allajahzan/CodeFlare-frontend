@@ -7,5 +7,4 @@ function Verify() {
     );
 }
 
-// Export Verify Component
 export default Verify;

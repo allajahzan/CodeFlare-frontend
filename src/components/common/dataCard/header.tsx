@@ -1,9 +1,11 @@
+// Interface for Props
 interface PropsType {
     count: number;
     heading: string;
     children?: React.ReactNode;
 }
 
+// CardHeader Component
 function CardHeader({ count, heading, children }: PropsType) {
     return (
         <div className="w-full flex items-center justify-between">

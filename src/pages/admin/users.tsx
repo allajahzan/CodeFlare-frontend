@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChangeEvent, useEffect, useLayoutEffect, useState } from "react";
 import { NotFoundOrbit } from "@/components/animation/fallbacks";
-import UserList from "@/components/usersList/userList";
+import UserList from "@/components/common/usersList/userList";
 import CardHeader from "@/components/common/dataCard/header";
 import SearchFilterSort from "@/components/common/dataCard/searchFilterSort";
 import { useMediaQuery } from "usehooks-ts";
@@ -35,6 +35,7 @@ import { fetchData } from "@/utils/apiService";
 import { handleCustomError } from "@/utils/error";
 import { userApi } from "@/api/userApi";
 
+// Interface for User
 export interface User {
     _id: number;
     name: string;
@@ -48,11 +49,13 @@ export interface User {
     ActiviyStatus: "Normal" | "Poor" | "Average";
 }
 
+// Interface for Props
 interface PropsType {
     isDrawerOpen: boolean;
     setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+// Users Component
 function Users({ setDrawerOpen }: PropsType) {
     // Users related states
     const [newUser, setNewUser] = useState<User | null>(null);

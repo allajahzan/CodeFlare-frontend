@@ -1,6 +1,7 @@
 import { Search, UserRoundCheck, UserRoundMinus } from "lucide-react";
 import { ChangeEvent } from "react";
 
+// Interface for Props
 interface PropsType {
     search: string;
     handleSearch: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -10,6 +11,7 @@ interface PropsType {
     children2?: React.ReactNode;
 }
 
+// SearchFilterSort Component
 function SearchFilterSort({
     search,
     status,

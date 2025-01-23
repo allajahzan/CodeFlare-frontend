@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { LucideProps } from "lucide-react";
 
+// Interface for Props
 interface PropsType {
     rotation?: number;
     delay?: number;
@@ -13,9 +14,11 @@ interface PropsType {
     >;
     text?: string;
     message?: string;
+    className?: string;
+    IconClassName?: string;
 }
 
-// orbiting icon
+// OrbitingIcon Component
 function OrbitingIcon({ delay, rotation, SubIcon }: PropsType) {
     return (
         <motion.div
@@ -58,8 +61,8 @@ function OrbitingIcon({ delay, rotation, SubIcon }: PropsType) {
     );
 }
 
-// not found orbit
-function NotFoundOrbit({ MainIcon,SubIcon, message, text }: PropsType) {
+// NotFoundOrbit Component
+function NotFoundOrbit({ MainIcon, SubIcon, message, text }: PropsType) {
     return (
         <div className="relative h-full p-5 flex flex-col gap-5 items-center justify-center border shadow-sm rounded-2xl overflow-hidden">
             <div className="relative w-[185px] h-[185px]">
@@ -102,11 +105,7 @@ function NotFoundOrbit({ MainIcon,SubIcon, message, text }: PropsType) {
     );
 }
 
-// notselected
-interface PropsType {
-    className?: string;
-    IconClassName?: string;
-}
+// NotSelected Component
 function NotSelected({
     MainIcon,
     message,

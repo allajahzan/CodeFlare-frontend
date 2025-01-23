@@ -2,12 +2,14 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
+// Inteface for Props
 interface PropsType {
     slides: { id: number; title: string; description: string }[];
     image?: React.ReactNode;
     className?: string;
 }
 
+// Carousel Component
 function Carousel({ slides, image, className }: PropsType) {
     const [currentSlide, setCurrentSlide] = useState<number>(0);
     let timer: any;

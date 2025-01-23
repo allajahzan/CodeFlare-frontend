@@ -35,12 +35,10 @@
     select,
     option {
         font-size: 14.5px;
-        transition: "all 0.3s ease-in-out",
     }
 
     h1 {
         font-size: 16.5px;
-        transition: "all 0.3s ease-in-out",
     }
 
     ::-webkit-scrollbar {
@@ -74,7 +72,6 @@
         outline: none;
         -webkit-user-drag: none;
         user-select: none;
-        transition: "all 0.3s ease-in-out",
     }
 }
 

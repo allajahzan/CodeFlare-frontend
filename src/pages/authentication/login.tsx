@@ -5,5 +5,4 @@ function Login() {
     return <Form />;
 }
 
-// Export Login Component
 export default Login;
