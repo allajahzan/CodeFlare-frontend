@@ -155,7 +155,7 @@ function Form() {
                                         placeholder="Email"
                                         required
                                         onChange={(event) => setEmail(event.target.value)}
-                                        className="font-medium p-5 pl-9 border-2"
+                                        className="font-medium p-5 pl-9"
                                     />
                                     <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                                 </div>
@@ -179,7 +179,7 @@ function Form() {
                                         required
                                         autoComplete="off"
                                         onChange={(event) => setPassword(event.target.value)}
-                                        className="font-medium p-5 pl-9 border-2"
+                                        className="font-medium p-5 pl-9"
                                     />
                                     <KeyRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                                 </div>

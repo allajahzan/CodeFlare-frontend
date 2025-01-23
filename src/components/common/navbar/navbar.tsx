@@ -7,11 +7,12 @@ import {
 } from "../../../redux/store";
 import NavbarItem from "./navbarItem";
 import Heading from "@/components/ui/heading";
-import { Bell, ChevronDown, Globe, Moon, Sun } from "lucide-react";
-import avatar_boy from "@/assets/images/avatar_boy.jpg"
+import { Bell, ChevronDown, Globe, Search, Moon, Sun } from "lucide-react";
+import avatar_boy from "@/assets/images/avatar_boy.jpg";
 import { useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { Input } from "@/components/ui/input";
 
 const Navbar = () => {
     const isSmall = useSelector((state: stateType) => state.isSmall);
@@ -82,12 +83,16 @@ const Navbar = () => {
             <div className="flex items-center sm:gap-3 gap-4">
                 {/* Search Form */}
                 <form className="hidden md:block">
-                    <input
-                        type="text"
-                        className="border-2 border-gray-200 rounded-lg p-2 px-4 font-medium"
-                        placeholder="Search"
-                        aria-label="Search"
-                    />
+                    <div className="relative">
+                        <Input
+                            id="search"
+                            type="search"
+                            placeholder="Search"
+                            required
+                            className="font-medium p-5 pl-9 border rounded-lg"
+                        />
+                        <Search className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                    </div>
                 </form>
 
                 {/* Navbar Items */}

@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 import { Loader, Mail } from "lucide-react";
 import React, { useLayoutEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import bgImage from "@/assets/images/login.jpg";
 import { userApi } from "@/api/userApi";
 import { toast } from "@/hooks/use-toast";
@@ -20,7 +20,6 @@ function Form() {
     const [email, setEmail] = useState<string>("");
 
     const path = useLocation();
-    const navigate = useNavigate();
 
     const queryParams = new URLSearchParams(location.search);
     const token = queryParams.get("token");
@@ -121,7 +120,7 @@ function Form() {
                                         placeholder="Email"
                                         required
                                         onChange={(event) => setEmail(event.target.value)}
-                                        className="font-medium p-5 pl-9 border-2"
+                                        className="font-medium p-5 pl-9 border"
                                     />
                                     <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                                 </div>
