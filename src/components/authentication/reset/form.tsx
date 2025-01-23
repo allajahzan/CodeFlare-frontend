@@ -211,7 +211,7 @@ function Form() {
                                         <Button
                                             type="submit"
                                             disabled={submiting}
-                                            className="w-full h-11 bg-zinc-900 hover:bg-zinc-900 text-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:cursor-not-allowed"
+                                            className="w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:cursor-not-allowed"
                                         >
                                             {submiting ? (
                                                 <div className="flex items-center gap-2">
@@ -267,7 +267,7 @@ function Form() {
                 </div>
             )}
             {isMount === false && (
-                <div className="relative z-0 text-center p-5 space-y-5">
+                <div className="relative h-screen w-full z-0 flex flex-col items-center justify-center p-5 space-y-5">
                     <h1 className="font-bold text-2xl">
                         Sorry, this page isn't available.
                     </h1>

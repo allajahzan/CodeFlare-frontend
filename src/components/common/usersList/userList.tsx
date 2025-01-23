@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import image from "../../assets/images/allaj.jpeg";
-import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
+import image from "@/assets/images/allaj.jpeg";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 import React from "react";
@@ -46,7 +46,7 @@ function UserList({
                         <AvatarImage src={image} className="object-cover" />
                     )}
                     <AvatarFallback>
-                        <UserRound className="h-5 w-5 text-muted-foreground" />
+                        <UserRound className="h-5 w-5" />
                     </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0">

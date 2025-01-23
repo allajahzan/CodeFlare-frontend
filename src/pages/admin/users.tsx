@@ -4,7 +4,7 @@ import {
     Edit,
     EyeIcon,
     Filter,
-    Loader,
+    Search,
     MoreHorizontal,
     Plus,
     SortAsc,
@@ -276,22 +276,12 @@ function Users({ setDrawerOpen }: PropsType) {
                             })}
 
                         {/* If no users are there */}
-                        {!fetching && users.length === 0 && (
+                        {users.length === 0 && (
                             <NotFoundOrbit
                                 MainIcon={User2}
-                                SubIcon={Plus}
-                                message="No instructors and coordinators are added"
-                                text="No users found"
-                            />
-                        )}
-
-                        {/* Loader while fetching */}
-                        {fetching && users.length === 0 && (
-                            <NotFoundOrbit
-                                MainIcon={User2}
-                                SubIcon={Loader}
-                                message="Please wait a second..."
-                                text="Fetching users"
+                                SubIcon={ fetching ? Search : Plus}
+                                message={ fetching?  "Please wait a moment..." : "No instructors and coordinators are added"}
+                                text={ fetching? "Finding users" : "No users found"}
                             />
                         )}
                     </div>
