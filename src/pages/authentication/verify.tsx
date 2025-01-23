@@ -1,12 +1,11 @@
 import Form from "@/components/authentication/verify/form";
-import FloatingBackground from "@/components/animation/floatingBackground";
 
+// Verify Component
 function Verify() {
     return (
-        <FloatingBackground>
             <Form />
-        </FloatingBackground>
     );
 }
 
+// Export Verify Component
 export default Verify;

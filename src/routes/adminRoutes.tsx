@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import PublicRoutes from "@/routes/publicRoutes";
 import ProtectedRoutes from "@/routes/protectedRoutes";
+import AuthenticationLayout from "@/components/layout/autheticationLayout";
 
 // Admin Routes
 function AdminRoutes() {
@@ -14,8 +15,10 @@ function AdminRoutes() {
         <Routes>
             {/* Public Routes */}
             <Route element={<PublicRoutes allowedRole="admin" />}>
-                <Route path="" element={<Navigate to="login" />} />
-                <Route path="login" element={<Login />} />
+                <Route element={<AuthenticationLayout />}>
+                    <Route path="" element={<Navigate to="login" />} />
+                    <Route path="login" element={<Login />} />
+                </Route>
             </Route>
 
             {/* Protected Routes */}

@@ -19,7 +19,7 @@ import {
 import { motion } from "framer-motion";
 import {
     BriefcaseIcon,
-    Loader2,
+    Loader,
     Mail,
     MessageSquare,
     UserRoundPlus,
@@ -289,7 +289,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                         >
                             {submiting ? (
                                 <div className="flex items-center gap-2">
-                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                    <Loader className="h-4 w-4 animate-spin" />
                                     Processing...
                                 </div>
                             ) : (

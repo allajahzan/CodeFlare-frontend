@@ -1,5 +1,6 @@
 import { BASE_URL } from "@/api/baseApi";
 import { userApi } from "@/api/userApi";
+import { toast } from "@/hooks/use-toast";
 import axios from "axios";
 
 // Create an instance of axios
@@ -66,11 +67,9 @@ axiosInstance.interceptors.response.use(
 
                 return axiosInstance(originalRequest);
             } catch (err: any) {
-                console.log(err.message);
-                console.log("Logging Out...");
-                localStorage.removeItem("accessToken");
-                localStorage.removeItem("isAuth");
-                return Promise.reject(err);
+                toast({ title: err.status === 401 ? err.response.data.errors.message : "Token expired. Please login again!" });
+                localStorage.clear();
+                return;
             }
         }
 

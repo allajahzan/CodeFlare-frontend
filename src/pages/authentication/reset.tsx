@@ -1,12 +1,9 @@
-import Form from "@/components/authentication/reset/form"
-import FloatingBackground from "@/components/animation/floatingBackground";
+import Form from "@/components/authentication/reset/form";
 
+// Reset Component
 function Reset() {
-    return (
-        <FloatingBackground>
-            <Form />
-        </FloatingBackground>
-    );
+    return <Form />;
 }
 
+// Export Reset Component
 export default Reset;

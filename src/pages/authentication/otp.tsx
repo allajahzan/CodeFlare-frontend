@@ -1,12 +1,9 @@
 import Form from "@/components/authentication/otp/form";
-import FloatingBackground from "@/components/animation/floatingBackground";
 
+// OTP Component
 function Otp() {
-    return (
-        <FloatingBackground>
-            <Form />
-        </FloatingBackground>
-    );
+    return <Form />;
 }
 
+// Export OTP Component
 export default Otp;

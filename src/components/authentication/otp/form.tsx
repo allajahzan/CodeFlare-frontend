@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
-import { Loader2, Mail } from "lucide-react";
+import { Loader, Mail } from "lucide-react";
 import React, { useLayoutEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import bgImage from "@/assets/images/loginImage4.jpg";
+import bgImage from "@/assets/images/login.jpg";
 import { userApi } from "@/api/userApi";
 import { toast } from "@/hooks/use-toast";
 import { handleCustomError } from "@/utils/error";
@@ -81,10 +81,10 @@ function Form() {
     );
 
     return (
-        <div className="relative z-0 p-5 pl-5 md:pl-0 h-full w-full lg:w-[80%] lg:h-[80%] bg-white rounded-2xl shadow-custom overflow-hidden transition-all duration-300">
+        <div className="relative z-0 p-5 pl-5 md:pl-0 h-full w-full lg:w-[80%] lg:h-[80%] bg-white rounded-2xl shadow-custom overflow-auto no-scrollbar transition-all duration-300">
             <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-0">
                 {/* Login form */}
-                <div className="w-full min-h-[330px] md:h-full bg-white order-2 md:order-1">
+                <div className="w-full h-[410px] md:h-full bg-white order-2 md:order-1">
                     <motion.div
                         initial={{ opacity: 1 }}
                         animate={{ opacity: 1 }}
@@ -146,7 +146,7 @@ function Form() {
                                 >
                                     {submiting ? (
                                         <div className="flex items-center gap-2">
-                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                            <Loader className="h-4 w-4 animate-spin" />
                                             Processing...
                                         </div>
                                     ) : (

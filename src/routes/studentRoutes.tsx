@@ -1,5 +1,5 @@
 import StudentLayout from "@/components/layout/studentLayout";
-import Login from "@/pages/authentication/login"
+import Login from "@/pages/authentication/login";
 import Dashboard from "@/pages/student/dashboard";
 import Invoice from "@/pages/student/invoice";
 import Leave from "@/pages/student/leave";
@@ -9,6 +9,7 @@ import Reviews from "@/pages/student/reviews";
 import { Navigate, Route, Routes } from "react-router-dom";
 import PublicRoutes from "@/routes/publicRoutes";
 import ProtectedRoutes from "@/routes/protectedRoutes";
+import AuthenticationLayout from "@/components/layout/autheticationLayout";
 
 // Student Routes
 function StudentRoutes() {
@@ -16,9 +17,11 @@ function StudentRoutes() {
         <Routes>
             {/* Public Routes */}
             <Route element={<PublicRoutes allowedRole="student" />}>
-                <Route path="" element={<Navigate to="student/login" />} />
-                <Route path="student" element={<Navigate to="student/login" />} />
-                <Route path="student/login" element={<Login />} />
+                <Route element={<AuthenticationLayout />}>
+                    <Route path="" element={<Navigate to="student/login" />} />
+                    <Route path="student" element={<Navigate to="student/login" />} />
+                    <Route path="student/login" element={<Login />} />
+                </Route>
             </Route>
 
             {/* Protected Routes */}

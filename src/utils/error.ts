@@ -9,7 +9,10 @@ import { toast } from "@/hooks/use-toast";
 export const throwCustomError = (err: any) => {
     if (err.response) {
         const { status, data } = err.response;
-        throw { status, message: data.errors?.[0].message || data.message || "An error occurred" };
+        throw {
+            status,
+            message: data.errors.message || data.message || "An error occurred",
+        };
     } else if (err.request) {
         // no response
         throw { status: 0, message: "Network error. Please try again later." };
@@ -28,13 +31,59 @@ export const throwCustomError = (err: any) => {
  */
 export const handleCustomError = (err: any) => {
     console.log(err);
-    if (err.status === 401) toast({ title: err.message });
-    else if (err.status === 403) toast({ title: err.name === "AxiosError" ? "An unexpected error occurred" : err.message });
-    else if (err.status === 404) toast({ title: err.name === "AxiosError" ? err.response.data.errors?.[0].message : err.message, });
-    else if (err.status === 409) toast({ title: err.message });
-    else if (err.status === 500) toast({ title: err.name === "AxiosError" ? err.response.data.message : err.message, });
-    else if (err.status === 501) toast({ title: err.name === "AxiosError" ? err.response.data.message : err.message, });
-    else if (err.status === 504) toast({ title: err.name === "AxiosError" ? err.response.data.message || "An unexpected error occurred" : err.message, });
+    const { data } = err.response;
+
+    // 400: Bad Request
+    if (err.status === 400) toast({ title: data.errors.message || err.message });
+
+    // 401: Unauthorized
+    else if (err.status === 401) toast({ title: data.errors.message || err.message });
+
+    // 403: Forbidden
+    else if (err.status === 403)
+        toast({
+            title: data.errors.message || err.message,
+        });
+
+    // 404: Not Found
+    else if (err.status === 404)
+        toast({
+            title: data.errors.message || err.message,
+        });
+
+    // 409: Conflict
+    else if (err.status === 409)
+        toast({
+            title: data.errors.message || err.message,
+        });
+
+    // 410: Gone
+    else if (err.status === 410) toast({ title: data.errors.message });
+
+    // 500: Internal Server Error
+    else if (err.status === 500)
+        toast({
+            title: data.errors.message || err.message || "Internal server error",
+        });
+
+    // 501: Not Implemented
+    else if (err.status === 501)
+        toast({
+            title: "An unexpected error occurred",
+        });
+
+    // 504: Gateway Timeout
+    else if (err.status === 504)
+        toast({
+            title: "An unexpected error occurred",
+        });
+
+    // 0: Network Error
     else if (err.status === 0) toast({ title: err.message });
-    else toast({ title: err.name === "AxiosError" ? err.response.data.message : err.message, });
+
+    // -1: Unexpected Error
+    else
+        toast({
+            title: data.message || err.message,
+        });
 };

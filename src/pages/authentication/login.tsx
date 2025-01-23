@@ -1,12 +1,9 @@
-import Form from "@/components/authentication/login/form"
-import FloatingBackground from "@/components/animation/floatingBackground";
+import Form from "@/components/authentication/login/form";
 
+// Login Component
 function Login() {
-    return (
-        <FloatingBackground>
-            <Form />
-        </FloatingBackground>
-    );
+    return <Form />;
 }
 
+// Export Login Component
 export default Login;

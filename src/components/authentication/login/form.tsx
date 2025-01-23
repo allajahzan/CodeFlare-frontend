@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
-import { Eye, EyeOff, KeyRound, Loader2, Mail } from "lucide-react";
+import { Eye, EyeOff, KeyRound, Loader, Mail } from "lucide-react";
 import React, { useContext, useLayoutEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
-import bgImage from "@/assets/images/loginImage4.jpg";
+import bgImage from "@/assets/images/login.jpg";
 import { userApi } from "@/api/userApi";
 import { toast } from "@/hooks/use-toast";
 import { handleCustomError } from "@/utils/error";
@@ -34,11 +34,15 @@ function Form() {
 
         try {
             // Send request
-            const resp = await axios.post(userApi.login, {
-                email,
-                password,
-                role,
-            });
+            const resp = await axios.post(
+                userApi.login,
+                {
+                    email,
+                    password,
+                    role,
+                },
+                { withCredentials: true }
+            );
 
             const data = resp?.data.data;
 
@@ -100,7 +104,7 @@ function Form() {
     );
 
     return (
-        <div className="relative z-0 p-5 pr-5 md:pr-0 h-full w-full lg:w-[80%] lg:h-[80%] bg-white rounded-2xl shadow-custom overflow-hidden transition-all duration-300">
+        <div className="relative z-0 p-5 pr-5 md:pr-0 h-full w-full lg:w-[80%] lg:h-[80%] bg-white rounded-none md:rounded-2xl shadow-custom overflow-auto no-scrollbar transition-all duration-300">
             <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-0">
                 {/* Carousal */}
                 <Carousel
@@ -111,12 +115,12 @@ function Form() {
                 />
 
                 {/* Login form */}
-                <div className="w-full h-full bg-white">
+                <div className="w-full h-[410px] md:h-full bg-white">
                     <motion.div
                         initial={{ opacity: 1 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.3, delay: 0.2 }}
-                        className="p-0 px-0 md:px-12 lg:px-20 flex flex-col justify-center gap-10 h-full"
+                        className="p-0 px-0 md:px-12 lg:px-20 flex flex-col justify-start md:justify-center gap-10 h-full"
                     >
                         {/* Header */}
                         <motion.div
@@ -217,7 +221,7 @@ function Form() {
                                 >
                                     {submiting ? (
                                         <div className="flex items-center gap-2">
-                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                            <Loader className="h-4 w-4 animate-spin" />
                                             Processing...
                                         </div>
                                     ) : (
