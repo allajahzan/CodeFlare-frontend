@@ -4,13 +4,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 import React from "react";
-import { User } from "@/pages/admin/users";
+import { User } from "@/types/admin";
+import { Student } from "@/types/coordinator";
 
 // Interface for Props
 interface PropsType {
     index: number;
     action: any;
-    user: User;
+    user: User | Student;
     children1?: React.ReactNode;
     children2?: React.ReactNode;
     selectedUser: any;
@@ -41,7 +42,8 @@ function UserList({
             )}
         >
             <div className="flex items-center gap-3">
-                <Avatar className="border-2 border-zinc-100 w-12 h-12">
+                {/* Avatar profile pic */}
+                <Avatar className="border-2 border-zinc-100 w-12 h-12 shadow-md">
                     {user.profilePic && (
                         <AvatarImage src={image} className="object-cover" />
                     )}
@@ -49,6 +51,8 @@ function UserList({
                         <UserRound className="h-5 w-5" />
                     </AvatarFallback>
                 </Avatar>
+                
+                {/* Name and other details */}
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                         <p className="font-semibold truncate">{user.name}</p>

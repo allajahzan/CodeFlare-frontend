@@ -19,6 +19,14 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+} from "@/components/ui/select";
 import { ChangeEvent, useEffect, useLayoutEffect, useState } from "react";
 import { NotFoundOrbit } from "@/components/animation/fallbacks";
 import UserList from "@/components/common/user/userList";
@@ -28,13 +36,12 @@ import { useMediaQuery } from "usehooks-ts";
 import { cn } from "@/lib/utils";
 import DrawerUsersList from "@/components/common/user/drawer.usersList";
 import UserDetails from "@/components/common/user/userDetails";
-import AddUserSheet from "@/components/admin/users/sheet.addUser";
 import { fetchData } from "@/utils/apiService";
 import { handleCustomError } from "@/utils/error";
 import { userApi } from "@/api/userApi";
-import { User } from "@/types/admin";
-import "../admin.css";
+import AddStudentSheet from "./sheet.addStudent";
 import { Student } from "@/types/coordinator";
+import { User } from "@/types/admin";
 
 // Interface for Props
 interface PropsType {
@@ -42,32 +49,34 @@ interface PropsType {
     setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-// Users Component
-function Users({ setDrawerOpen }: PropsType) {
-    // Users related states
-    const [newUser, setNewUser] = useState<User | null>(null);
-    const [users, setUsers] = useState<User[] | []>([]);
-    const [selectedUser, setSelectedUser] = useState<User | Student | null>(null);
+// Students Component
+function Students({ setDrawerOpen }: PropsType) {
+    // Students related states
+    const [newStudent, setNewStudent] = useState<Student | null>(null);
+    const [students, setStudents] = useState<Student[] | []>([]);
+    const [selectedStudent, setSelectedStudent] = useState<Student | User | null>(
+        null
+    );
     const [status, setStatus] = useState<boolean>(false);
     const [fetching, setFetching] = useState<boolean>(false);
 
-    // Search user
+    // Search student
     const [search, setSearch] = useState<string>("");
 
     // Small screen
     const isSmall = useMediaQuery("(max-width: 767.20px)");
 
-    // Select user
+    // select student
     const handleSelect = (index: number) => {
-        setSelectedUser(users[index]);
+        setSelectedStudent(students[index]);
     };
 
-    // Handle search
+    // handle search
     const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
         setSearch(event.target.value);
     };
 
-    // Handle blocked-unblocked
+    // handle blocked-unblocked
     const handleStatus = () => {
         setStatus(!status);
     };
@@ -84,22 +93,22 @@ function Users({ setDrawerOpen }: PropsType) {
     //         return matchesStatus && matchesSearch;
     //     });
 
-    //     setUsers(filteredUsers);
+    //     setStudents(filteredUsers);
     // }, [search, status]);
 
-    // Add new user
+    // Add new student
     useEffect(() => {
-        if (newUser) {
-            setUsers((prevUsers: User[]) => {
-                return [...prevUsers, newUser];
+        if (newStudent) {
+            setStudents((prevStudents: Student[]) => {
+                return [...prevStudents, newStudent];
             });
-            setNewUser(null);
+            setNewStudent(null);
         }
-    }, [newUser]);
+    }, [newStudent]);
 
-    // Fetch users
+    // Fetch students
     useLayoutEffect(() => {
-        const fetchUsers = async () => {
+        const fetchStudents = async () => {
             try {
                 setFetching(true);
 
@@ -111,7 +120,7 @@ function Users({ setDrawerOpen }: PropsType) {
                 // Success response
                 if (resp && resp.status === 200) {
                     setTimeout(() => {
-                        setUsers(users);
+                        setStudents(users);
                         setFetching(false);
                     }, 1000);
                 }
@@ -122,7 +131,7 @@ function Users({ setDrawerOpen }: PropsType) {
                 }, 1000);
             }
         };
-        fetchUsers();
+        fetchStudents();
     }, []);
 
     // Close drawer on screen size change
@@ -132,20 +141,20 @@ function Users({ setDrawerOpen }: PropsType) {
 
     return (
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-5">
-            {/*Left side  */}
+            {/* Left side  */}
             <div className="p-5 sticky z-0 top-[20px] md:top-5 w-full h-[calc(100vh-130px)] flex flex-col gap-5 items-center bg-white border shadow-sm rounded-2xl">
                 {/* Heading */}
                 <CardHeader
                     heading="Manage users"
-                    count={users.length}
+                    count={students.length}
                     children={
-                        <AddUserSheet
+                        <AddStudentSheet
                             button={
                                 <div className="shadow-md bg-zinc-900 hover:bg-zinc-800 text-white rounded-full p-2">
                                     <Plus className="h-4 w-4" />
                                 </div>
                             }
-                            setNewUser={setNewUser}
+                            setNewStudent={setNewStudent}
                         />
                     }
                 />
@@ -157,16 +166,21 @@ function Users({ setDrawerOpen }: PropsType) {
                     handleSearch={handleSearch}
                     hanldeStatus={handleStatus}
                     children1={
-                        <DropdownMenu>
-                            <DropdownMenuTrigger className="icon-style shadow-sm">
+                        <Select>
+                            <SelectTrigger className="icon-style shadow-sm">
                                 <Filter className="h-4 w-4" />
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align={isSmall ? "end" : "start"}>
-                                <DropdownMenuItem>All Roles</DropdownMenuItem>
-                                <DropdownMenuItem>Coordinators</DropdownMenuItem>
-                                <DropdownMenuItem>Instructors</DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                            </SelectTrigger>
+                            <SelectContent align={isSmall ? "end" : "start"}>
+                                <SelectGroup>
+                                    <SelectLabel>Fruits</SelectLabel>
+                                    <SelectItem value="all">All</SelectItem>
+                                    <SelectItem value="ongoing">OnGoing</SelectItem>
+                                    <SelectItem value="held">Held</SelectItem>
+                                    <SelectItem value="placement">Placement</SelectItem>
+                                    <SelectItem value="critical">Critical</SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
                     }
                     children2={
                         <DropdownMenu>
@@ -191,38 +205,37 @@ function Users({ setDrawerOpen }: PropsType) {
                 {isSmall && (
                     <DrawerUsersList
                         fetching={fetching}
-                        users={users}
-                        selectedUser={selectedUser as User}
+                        users={students}
+                        selectedUser={selectedStudent as Student}
                         isSmall={isSmall}
                         setDrawerOpen={setDrawerOpen}
-                        setSelectedUser={setSelectedUser}
+                        setSelectedUser={setSelectedStudent}
                         action={handleSelect}
                     />
                 )}
 
-                {/* Users list in large screen */}
+                {/* Students list in large screen */}
                 {!isSmall && (
                     <div className="h-full w-full flex flex-col gap-[9px] overflow-auto bg-transparent no-scrollbar">
-                        {users.length > 0 &&
-                            users.map((user, index) => {
+                        {students.length > 0 &&
+                            students.map((student, index) => {
                                 return (
                                     <UserList
                                         key={index}
                                         index={index}
                                         action={handleSelect}
-                                        user={user}
-                                        selectedUser={selectedUser}
+                                        user={student}
+                                        selectedUser={selectedStudent}
                                         children1={
                                             // <p className="text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
-                                            //     {user.isBlock ? (
+                                            //     {student.isBlock ? (
                                             //         <UserRoundMinus className="w-3 h-3" />
                                             //     ) : (
                                             //         <UserRoundCheck className="w-3 h-3" />
                                             //     )}
-                                            //     {user.isBlock ? "Blocked" : "Active"}
+                                            //     {student.isBlock ? "Blocked" : "Active"}
                                             // </p>
-                                            <p className="text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">{user.role[0].toUpperCase()+user.role.slice(1)}</p>
-                                    
+                                            <p className="text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">{student.role[0].toUpperCase()+student.role.slice(1)}</p>
                                         }
                                         children2={
                                             <DropdownMenu>
@@ -239,7 +252,7 @@ function Users({ setDrawerOpen }: PropsType) {
                                                     )}
                                                 >
                                                     <DropdownMenuItem
-                                                        onClick={() => setSelectedUser(users[index])}
+                                                        onClick={() => setSelectedStudent(students[index])}
                                                     >
                                                         <EyeIcon />
                                                         View Profile
@@ -250,12 +263,12 @@ function Users({ setDrawerOpen }: PropsType) {
                                                     </DropdownMenuItem>
                                                     <DropdownMenuSeparator />
                                                     <DropdownMenuItem>
-                                                        {user.isBlock ? (
+                                                        {student.isBlock ? (
                                                             <UserRoundCheck />
                                                         ) : (
                                                             <UserRoundMinus />
                                                         )}
-                                                        {user.isBlock ? "Unblock" : "Block"}
+                                                        {student.isBlock ? "Unblock" : "Block"}
                                                     </DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
@@ -265,24 +278,28 @@ function Users({ setDrawerOpen }: PropsType) {
                             })}
 
                         {/* If no users are there */}
-                        {users.length === 0 && (
+                        {students.length === 0 && (
                             <NotFoundOrbit
                                 MainIcon={User2}
-                                SubIcon={ fetching ? Search : Plus}
-                                message={ fetching?  "Please wait a moment..." : "No instructors and coordinators are added"}
-                                text={ fetching? "Finding users" : "No users found"}
+                                SubIcon={fetching ? Search : Plus}
+                                message={
+                                    fetching
+                                        ? "Please wait a moment..."
+                                        : "No instructors and coordinators are added"
+                                }
+                                text={fetching ? "Finding users" : "No users found"}
                             />
                         )}
                     </div>
                 )}
             </div>
 
-            {/* Right side */}
+            {/* right side */}
             {!isSmall && (
                 <div className="grid gap-5 col-auto lg:col-span-2 grid-rows-[auto_1fr] relative z-10">
-                    {/* User details */}
+                    {/* student details */}
                     <UserDetails
-                        selectedUser={selectedUser as User}
+                        selectedUser={selectedStudent as Student}
                         className="border shadow-sm rounded-2xl"
                     />
                     <div className="h-full p-5 bg-zinc-0 border rounded-2xl"></div>
@@ -292,4 +309,4 @@ function Users({ setDrawerOpen }: PropsType) {
     );
 }
 
-export default Users;
+export default Students;

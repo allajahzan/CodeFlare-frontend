@@ -49,7 +49,7 @@ function CoordinatorLayout({ isDrawerOpen }: PropsType) {
                 icon: LayoutDashboard,
                 label: "Dashboard",
             },
-            { path: "/coordinator/users", icon: UsersRound, label: "Students" },
+            { path: "/coordinator/students", icon: UsersRound, label: "Students" },
             //   ...(isSmall
             //     ? [{ path: "/community", icon: Globe, label: "Community" }]
             //     : []),

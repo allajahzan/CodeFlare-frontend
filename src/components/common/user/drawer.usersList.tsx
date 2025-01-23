@@ -1,6 +1,5 @@
 import React from "react";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import { User } from "./users";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -23,15 +22,17 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { NotFoundOrbit } from "@/components/animation/fallbacks";
-import UserDetails from "./userDetails";
+import UserDetails from "../../common/user/userDetails";
+import { Student } from "@/types/coordinator";
+import { User } from "@/types/admin";
 
 interface PropsType {
     fetching: boolean;
-    users: User[];
+    users: User[] | Student[];
     setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setSelectedUser: React.Dispatch<React.SetStateAction<User | null>>;
+    setSelectedUser: React.Dispatch<React.SetStateAction<User | Student | null>>;
     action: (index: number) => void;
-    selectedUser: User;
+    selectedUser: User | Student;
     isSmall: boolean;
 }
 

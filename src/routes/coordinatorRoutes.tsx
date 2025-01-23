@@ -8,6 +8,7 @@ import ProtectedRoutes from "@/routes/protectedRoutes";
 import Verify from "@/pages/authentication/verify";
 import Reset from "@/pages/authentication/reset";
 import AuthenticationLayout from "@/components/layout/autheticationLayout";
+import Students from "@/pages/coordinator/students";
 
 // Coordinator Routes
 function CoordinatorRoutes() {
@@ -28,6 +29,7 @@ function CoordinatorRoutes() {
             <Route element={<ProtectedRoutes allowedRole="coordinator" />}>
                 <Route element={<CoordinatorLayout isDrawerOpen={isDrawerOpen} />}>
                     <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="students" element={<Students isDrawerOpen={isDrawerOpen} setDrawerOpen={_setDrawerOpen} />}/>
                 </Route>
             </Route>
 

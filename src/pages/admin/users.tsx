@@ -6,8 +6,9 @@ interface PropsType {
     setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function users({ isDrawerOpen, setDrawerOpen }: PropsType) {
+// Users Component
+function UsersPage({ isDrawerOpen, setDrawerOpen }: PropsType) {
     return <Users isDrawerOpen={isDrawerOpen} setDrawerOpen={setDrawerOpen} />;
 }
 
-export default users;
+export default UsersPage;

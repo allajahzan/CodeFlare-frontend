@@ -31,16 +31,16 @@ import { postData } from "@/utils/apiService";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import { userApi } from "@/api/userApi";
-import { User } from "@/types/admin";
+import { Student } from "@/types/coordinator";
 
 // Interface for Props
 interface PropsType {
     button: ReactNode;
-    setNewUser: React.Dispatch<React.SetStateAction<User | null>>;
+    setNewStudent: React.Dispatch<React.SetStateAction<Student | null>>;
 }
 
 // Add user sheet
-function AddUserSheet({ button, setNewUser }: PropsType) {
+function AddStudentSheet({ button, setNewStudent }: PropsType) {
     // Sheet state
     const [open, setOpen] = useState<boolean | undefined>(undefined);
     const [submiting, setSubmiting] = useState(false);
@@ -84,7 +84,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                     setSubmiting(false);
 
                     // Set new user
-                    setNewUser(user);
+                    setNewStudent(user);
 
                     // Close sheet
                     setOpen(false);
@@ -303,4 +303,4 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
     );
 }
 
-export default AddUserSheet;
+export default AddStudentSheet;
