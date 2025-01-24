@@ -11,7 +11,7 @@ import { userApi } from "@/api/userApi";
 import { toast } from "@/hooks/use-toast";
 import { handleCustomError } from "@/utils/error";
 import { UserContext } from "@/context/userContext";
-import axios from "axios";
+import basicAxiosInstance from "@/utils/basicAxiosInstance";
 
 function Form() {
     // From related states
@@ -40,7 +40,7 @@ function Form() {
 
         try {
             // Send request
-            const resp = await axios.post(
+            const resp = await basicAxiosInstance.post(
                 userApi.login,
                 {
                     email,

@@ -20,7 +20,7 @@ import { cn } from "@/lib/utils";
 import React from "react";
 import { userApi } from "@/api/userApi";
 import { handleCustomError } from "@/utils/error";
-import axiosInstance from "@/utils/axiosInstence";
+import axiosInstance from "@/utils/axiosInstance";
 import { IUserContext, UserContext } from "@/context/userContext";
 import { toast } from "@/hooks/use-toast";
 

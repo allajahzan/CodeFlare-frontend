@@ -10,7 +10,7 @@ import bgImage from "@/assets/images/verifyEmail.jpg";
 import { userApi } from "@/api/userApi";
 import { toast } from "@/hooks/use-toast";
 import { handleCustomError } from "@/utils/error";
-import axios from "axios";
+import basicAxiosInstance from "@/utils/basicAxiosInstance";
 
 function Form() {
     const [submiting, setSubmiting] = useState(false);
@@ -31,7 +31,7 @@ function Form() {
 
         try {
             // Send request
-            const resp = await axios.post(userApi.verifyEmail, { email, role });
+            const resp = await basicAxiosInstance.post(userApi.verifyEmail, { email, role });
 
             // Success response
             if (resp && resp.status === 200) {

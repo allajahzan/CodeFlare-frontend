@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstence";
+import axiosInstance from "./axiosInstance";
 import { throwCustomError } from "./error";
 
 /**
@@ -39,7 +39,7 @@ export const postData = async (url: string, data?: any) => {
  * @returns The response data.
  * @throws The error if the request fails.
  */
-export const fullUpdateData = async (url: string, data?: any) => {
+export const updateData = async (url: string, data?: any) => {
     try {
         const resp = await axiosInstance.put(url, data || null);
         return resp;
@@ -55,7 +55,7 @@ export const fullUpdateData = async (url: string, data?: any) => {
  * @returns The response data.
  * @throws The error if the request fails.
  */
-export const partialUpdateData = async (url: string, data?: any) => {
+export const patchData = async (url: string, data?: any) => {
     try {
         const resp = await axiosInstance.patch(url, data || null);
         return resp;

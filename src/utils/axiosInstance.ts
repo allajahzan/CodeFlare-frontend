@@ -1,7 +1,7 @@
-import { BASE_URL } from "@/api/baseApi";
 import { userApi } from "@/api/userApi";
 import { toast } from "@/hooks/use-toast";
 import axios from "axios";
+import { BASE_URL } from "./baseUrl";
 
 // Create an instance of axios
 const axiosInstance = axios.create({

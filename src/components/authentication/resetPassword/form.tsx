@@ -10,7 +10,7 @@ import bgImage from "@/assets/images/resetPassword1.jpg";
 import { userApi } from "@/api/userApi";
 import { toast } from "@/hooks/use-toast";
 import { handleCustomError } from "@/utils/error";
-import axios from "axios";
+import basicAxiosInstance from "@/utils/basicAxiosInstance";
 
 function Form() {
     const [isMount, setMount] = useState<boolean | null>(null);
@@ -36,7 +36,7 @@ function Form() {
 
         try {
             // Send request
-            const resp = await axios.post(userApi.resetPassword + token, {
+            const resp = await basicAxiosInstance.post(userApi.resetPassword + token, {
                 password,
                 confirmPassword,
             });
@@ -69,7 +69,7 @@ function Form() {
         const checkResetLink = async () => {
             try {
                 // Send request
-                const resp = await axios.post(userApi.resetPassword + token);
+                const resp = await basicAxiosInstance.post(userApi.resetPassword + token);
 
                 // Success response
                 if (resp && resp.status === 200) {
