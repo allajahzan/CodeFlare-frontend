@@ -1,11 +1,10 @@
 import { userApi } from "@/api/userApi";
 import { toast } from "@/hooks/use-toast";
 import axios from "axios";
-import { BASE_URL } from "./baseUrl";
 
-// Create an instance of axios
+// Create an axios instance
 const axiosInstance = axios.create({
-    baseURL: BASE_URL,
+    baseURL: import.meta.env.VITE_BASE_URL,
     headers: {
         "Content-Type": "application/json",
     },
@@ -14,9 +13,8 @@ const axiosInstance = axios.create({
 
 const refreshToken = async () => {
     try {
-        const resp = await axios.post(
+        const resp = await axios.get(
             userApi.refreshToken,
-            {},
             { withCredentials: true }
         );
         const data = resp?.data.data;
