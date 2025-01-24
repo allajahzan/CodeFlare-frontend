@@ -19,10 +19,9 @@ function StudentRoutes() {
         <Routes>
             {/* Public Routes */}
             <Route element={<PublicRoutes allowedRole="student" />}>
-                <Route element={<AuthenticationLayout />}>
+                <Route path="student" element={<AuthenticationLayout />}>
                     <Route path="" element={<Navigate to="student/login" />} />
-                    <Route path="student" element={<Navigate to="student/login" />} />
-                    <Route path="student/login" element={<Login />} />
+                    <Route path="login" element={<Login />} />
                     <Route path="verify-email" element={<Verify />} />
                     <Route path="reset-password" element={<Reset />} />
                 </Route>

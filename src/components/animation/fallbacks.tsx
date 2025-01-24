@@ -96,10 +96,10 @@ function NotFoundOrbit({ MainIcon, SubIcon, message, text }: PropsType) {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-center"
+                className="text-center space-y-1"
             >
                 <h3 className="text-base font-semibold">{text}</h3>
-                <p className="text-muted-foreground font-medium">{message}</p>
+                <p className="text-muted-foreground font-medium text-sm">{message}</p>
             </motion.div>
         </div>
     );
@@ -136,10 +136,10 @@ function NotSelected({
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-center"
+                className="text-center space-y-1"
             >
                 <h3 className="text-base font-semibold">{text}</h3>
-                <p className="text-muted-foreground font-medium">{message}</p>
+                <p className="text-muted-foreground font-medium text-sm">{message}</p>
             </motion.div>
         </div>
     );

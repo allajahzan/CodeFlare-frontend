@@ -48,7 +48,7 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
     // Inputs
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-    const [role, _setRole] = useState("student");
+    const [role, _setRole] = useState("Student");
     const [batch, setBatch] = useState<string>("");
     const [message, setMessage] = useState("");
 
@@ -62,7 +62,7 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
             const resp = await postData(userApi.user, {
                 name,
                 email,
-                role,
+                role: role.toLowerCase(),
                 batch,
                 message,
             });
@@ -80,7 +80,7 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                     // Close sheet
                     setOpen(false);
 
-                    toast({ title: "User added successfully." });
+                    toast({ title: "Student added successfully." });
                 }, 1000);
             }
         } catch (err: any) {
@@ -175,7 +175,7 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                                 required
                                 autoComplete="off"
                                 readOnly
-                                value={role[0].toUpperCase() + role.slice(1)}
+                                value={role}
                                 className="font-medium p-5 pl-9"
                             />
                             <BriefcaseIcon className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
@@ -209,7 +209,9 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                                 </SelectTrigger>
                                 <SelectContent className="max-h-[200px]">
                                     {batches.map((batch, index) => (
-                                        <SelectItem key={index} value={batch}>{batch}</SelectItem>
+                                        <SelectItem key={index} value={batch}>
+                                            {batch}
+                                        </SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
