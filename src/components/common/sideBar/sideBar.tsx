@@ -68,7 +68,11 @@ function SideBar({ sideBarItems }: PropsType) {
 
         try {
             // Send request
-            const resp = await axiosInstance.post(userApi.logout);
+            const resp = await axiosInstance.post(
+                userApi.logout,
+                {},
+                { withCredentials: false }
+            );
 
             // Success response
             if (resp && resp.status === 200) {
