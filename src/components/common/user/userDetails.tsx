@@ -136,9 +136,9 @@ function UserDetails({ selectedUser, className, role }: PropsType) {
                             ]
                                 .filter((item) => item) // Filter out null
                                 .map((item, index) => (
-                                    <Fragment>
+                                    <Fragment key={index}>
                                         {item?.icon && (
-                                            <div key={index} className="p-3 border rounded-lg">
+                                            <div className="p-3 border rounded-lg">
                                                 <div className="flex items-center gap-3">
                                                     <div className="p-2 rounded-lg bg-muted">
                                                         <item.icon className="w-5 h-5" />

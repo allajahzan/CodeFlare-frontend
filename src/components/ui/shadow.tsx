@@ -1,5 +1,5 @@
-import { useSelector } from "react-redux";
-import { stateType } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { sideBarVisibilityAction, stateType } from "../../redux/store";
 import { cn } from "@/lib/utils";
 
 function Shadow() {
@@ -8,8 +8,16 @@ function Shadow() {
     );
     const isSmall = useSelector((state: stateType) => state.isSmall);
 
+    const dispatch = useDispatch();
+
+    // Hide sidebar
+    const handleSideBar = () => {
+        dispatch(sideBarVisibilityAction(false));
+    };
+
     return (
         <div
+            onClick={handleSideBar}
             className={cn(
                 isSmall &&
                 isSideBarVisible &&

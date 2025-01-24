@@ -63,6 +63,9 @@ function SideBar({ sideBarItems }: PropsType) {
 
     // Handle Logout
     const handleLogout = async () => {
+        // Hide sidebar
+        dispatch(sideBarVisibilityAction(false));
+
         try {
             // Send request
             const resp = await axiosInstance.post(userApi.logout);
