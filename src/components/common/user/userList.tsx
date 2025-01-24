@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
 import image from "@/assets/images/allaj.jpeg";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { UserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 import React from "react";
 import { User } from "@/types/admin";
 import { Student } from "@/types/coordinator";
+import profile from '@/assets/images/no-profile.svg'
 
 // Interface for Props
 interface PropsType {
@@ -43,12 +43,12 @@ function UserList({
         >
             <div className="flex items-center gap-3">
                 {/* Avatar profile pic */}
-                <Avatar className="border-2 border-zinc-100 w-12 h-12 shadow-md">
+                <Avatar className="bg-white w-12 h-12">
                     {user.profilePic && (
                         <AvatarImage src={image} className="object-cover" />
                     )}
-                    <AvatarFallback>
-                        <UserRound className="h-5 w-5" />
+                    <AvatarFallback className="bg-transparent">
+                        <img className="w-full" src={profile} alt="" />
                     </AvatarFallback>
                 </Avatar>
                 

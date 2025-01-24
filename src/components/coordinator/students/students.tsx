@@ -113,7 +113,7 @@ function Students({ setDrawerOpen }: PropsType) {
                 setFetching(true);
 
                 // Send request
-                const resp = await fetchData(userApi.getCoordinatorsAndInstructors);
+                const resp = await fetchData(userApi.getStudents);
 
                 const users = resp?.data.data;
 
@@ -227,15 +227,9 @@ function Students({ setDrawerOpen }: PropsType) {
                                         user={student}
                                         selectedUser={selectedStudent}
                                         children1={
-                                            // <p className="text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
-                                            //     {student.isBlock ? (
-                                            //         <UserRoundMinus className="w-3 h-3" />
-                                            //     ) : (
-                                            //         <UserRoundCheck className="w-3 h-3" />
-                                            //     )}
-                                            //     {student.isBlock ? "Blocked" : "Active"}
-                                            // </p>
-                                            <p className="text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">{student.role[0].toUpperCase()+student.role.slice(1)}</p>
+                                            <p className="text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
+                                                {student.role[0].toUpperCase() + student.role.slice(1)}
+                                            </p>
                                         }
                                         children2={
                                             <DropdownMenu>
@@ -243,7 +237,7 @@ function Students({ setDrawerOpen }: PropsType) {
                                                     <MoreHorizontal className="w-4 h-4" />
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent
-                                                    // change alignments in small size
+                                                    // Change alignments in small size
                                                     align={isSmall ? "end" : "start"}
                                                     onClick={(event) => event.stopPropagation()}
                                                     className={cn(
@@ -277,7 +271,7 @@ function Students({ setDrawerOpen }: PropsType) {
                                 );
                             })}
 
-                        {/* If no users are there */}
+                        {/* If no students are there */}
                         {students.length === 0 && (
                             <NotFoundOrbit
                                 MainIcon={User2}
@@ -287,17 +281,17 @@ function Students({ setDrawerOpen }: PropsType) {
                                         ? "Please wait a moment..."
                                         : "No instructors and coordinators are added"
                                 }
-                                text={fetching ? "Finding users" : "No users found"}
+                                text={fetching ? "Finding students" : "No users found"}
                             />
                         )}
                     </div>
                 )}
             </div>
 
-            {/* right side */}
+            {/* Right side */}
             {!isSmall && (
                 <div className="grid gap-5 col-auto lg:col-span-2 grid-rows-[auto_1fr] relative z-10">
-                    {/* student details */}
+                    {/* Student details */}
                     <UserDetails
                         selectedUser={selectedStudent as Student}
                         className="border shadow-sm rounded-2xl"

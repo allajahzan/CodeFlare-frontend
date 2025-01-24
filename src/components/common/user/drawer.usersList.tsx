@@ -26,6 +26,7 @@ import UserDetails from "../../common/user/userDetails";
 import { Student } from "@/types/coordinator";
 import { User } from "@/types/admin";
 
+// Interface for Props
 interface PropsType {
     fetching: boolean;
     users: User[] | Student[];
@@ -36,6 +37,7 @@ interface PropsType {
     isSmall: boolean;
 }
 
+// Drawer Users List Component
 function DrawerUsersList({
     fetching,
     users,
@@ -58,6 +60,8 @@ function DrawerUsersList({
                 <div id="drawerDescription" style={{ display: "none" }}>
                     View and manage users in the drawer interface.
                 </div>
+
+                {/* Users list */}
                 {users.length > 0 &&
                     users.map((user, index) => {
                         return (
@@ -80,6 +84,7 @@ function DrawerUsersList({
                                     )}
                                 >
                                     <div className="flex items-center gap-3">
+                                        {/* Avatar profile pic */}
                                         <Avatar className="border-2 border-zinc-100 w-12 h-12">
                                             {user.profilePic && (
                                                 <AvatarImage src={image} className="object-cover" />
@@ -93,20 +98,17 @@ function DrawerUsersList({
                                                 <p className="font-semibold truncate">{user.name}</p>
                                             </div>
                                             <p className="text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
-                                                {user.isBlock ? (
-                                                    <UserRoundMinus className="w-3 h-3" />
-                                                ) : (
-                                                    <UserRoundCheck className="w-3 h-3" />
-                                                )}
-                                                {user.isBlock ? "Blocked" : "Active"}
+                                                {user.role[0].toUpperCase() + user.role.slice(1)}
                                             </p>
                                         </div>
+
+                                        {/* Dropdown menu */}
                                         <DropdownMenu>
                                             <DropdownMenuTrigger className="p-3 hover:bg-muted rounded-lg">
                                                 <MoreHorizontal className="w-4 h-4" />
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent
-                                                // change alignments in small size
+                                                // Change alignments in small size
                                                 align={isSmall ? "end" : "start"}
                                                 onClick={(event) => event.stopPropagation()}
                                                 className={cn(
@@ -156,7 +158,7 @@ function DrawerUsersList({
                 )}
             </div>
 
-            {/* selected user details */}
+            {/* Selected user details */}
             <DrawerContent className="will-change-auto">
                 <UserDetails selectedUser={selectedUser as User} />
             </DrawerContent>

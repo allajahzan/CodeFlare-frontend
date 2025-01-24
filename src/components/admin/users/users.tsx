@@ -213,16 +213,9 @@ function Users({ setDrawerOpen }: PropsType) {
                                         user={user}
                                         selectedUser={selectedUser}
                                         children1={
-                                            // <p className="text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
-                                            //     {user.isBlock ? (
-                                            //         <UserRoundMinus className="w-3 h-3" />
-                                            //     ) : (
-                                            //         <UserRoundCheck className="w-3 h-3" />
-                                            //     )}
-                                            //     {user.isBlock ? "Blocked" : "Active"}
-                                            // </p>
-                                            <p className="text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">{user.role[0].toUpperCase()+user.role.slice(1)}</p>
-                                    
+                                            <p className="text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
+                                                {user.role[0].toUpperCase() + user.role.slice(1)}
+                                            </p>
                                         }
                                         children2={
                                             <DropdownMenu>
@@ -230,7 +223,7 @@ function Users({ setDrawerOpen }: PropsType) {
                                                     <MoreHorizontal className="w-4 h-4" />
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent
-                                                    // change alignments in small size
+                                                    // Change alignments in small size
                                                     align={isSmall ? "end" : "start"}
                                                     onClick={(event) => event.stopPropagation()}
                                                     className={cn(
@@ -268,9 +261,13 @@ function Users({ setDrawerOpen }: PropsType) {
                         {users.length === 0 && (
                             <NotFoundOrbit
                                 MainIcon={User2}
-                                SubIcon={ fetching ? Search : Plus}
-                                message={ fetching?  "Please wait a moment..." : "No instructors and coordinators are added"}
-                                text={ fetching? "Finding users" : "No users found"}
+                                SubIcon={fetching ? Search : Plus}
+                                message={
+                                    fetching
+                                        ? "Please wait a moment..."
+                                        : "No instructors and coordinators are added"
+                                }
+                                text={fetching ? "Finding users" : "No users found"}
                             />
                         )}
                     </div>

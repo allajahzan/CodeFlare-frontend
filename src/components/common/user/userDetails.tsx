@@ -9,7 +9,6 @@ import {
     Mail,
     PersonStanding,
     User2,
-    UserRound,
     UserRoundCheck,
     UserRoundMinus,
 } from "lucide-react";
@@ -27,6 +26,7 @@ import { cn } from "@/lib/utils";
 import { Student } from "@/types/coordinator";
 import { User } from "@/types/admin";
 import { Fragment } from "react/jsx-runtime";
+import profile from "@/assets/images/no-profile.svg";
 
 interface PropsType {
     selectedUser: User | Student;
@@ -60,12 +60,12 @@ function UserDetails({ selectedUser, className }: PropsType) {
                                 animate={{ scale: 1, opacity: 1 }}
                                 transition={{ delay: 0.2 }}
                             >
-                                <Avatar className="border-2 border-zinc-100 w-16 h-16 shadow-md">
+                                <Avatar className="bg-white w-16 h-16 shadow-md">
                                     {selectedUser.profilePic && (
                                         <AvatarImage src={image} className="object-cover" />
                                     )}
-                                    <AvatarFallback>
-                                        <UserRound />
+                                    <AvatarFallback className="bg-transparent">
+                                        <img src={profile} alt="" />
                                     </AvatarFallback>
                                 </Avatar>
                             </motion.div>
@@ -77,7 +77,8 @@ function UserDetails({ selectedUser, className }: PropsType) {
                                         {selectedUser.name}
                                     </p>
                                     <Badge className="hidden lg:block relative text-xs text-white font-semibold bg-zinc-900 hover:bg-zinc-900 rounded-full overflow-hidden">
-                                        {selectedUser.role[0].toUpperCase()+selectedUser.role.slice(1)}
+                                        {selectedUser.role[0].toUpperCase() +
+                                            selectedUser.role.slice(1)}
                                     </Badge>
                                 </div>
                                 <p className="text-sm text-muted-foreground font-medium truncate tracking-wide flex items-center gap-1">
@@ -146,7 +147,10 @@ function UserDetails({ selectedUser, className }: PropsType) {
                                                             {item.label}{" "}
                                                             {item.label === "Role Status" && (
                                                                 <span className="inline-block lg:hidden text-zinc-900">
-                                                                    ({selectedUser.role[0].toUpperCase()+selectedUser.role.slice(1)})
+                                                                    (
+                                                                    {selectedUser.role[0].toUpperCase() +
+                                                                        selectedUser.role.slice(1)}
+                                                                    )
                                                                 </span>
                                                             )}
                                                         </p>

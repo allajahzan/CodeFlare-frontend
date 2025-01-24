@@ -6,7 +6,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -28,7 +28,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { handleCustomError } from "@/utils/error";
 import { postData } from "@/utils/apiService";
-import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import { userApi } from "@/api/userApi";
 import { Student } from "@/types/coordinator";
@@ -48,18 +47,9 @@ function AddStudentSheet({ button, setNewStudent }: PropsType) {
     // Inputs
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-    const [role, setRole] = useState("");
-    const [batches, setBatches] = useState<string[]>([]);
+    const [role, _setRole] = useState("Student");
+    const [batch, setBatch] = useState<string>("");
     const [message, setMessage] = useState("");
-
-    // Handle select batches
-    const handleSelectBatches = (value: string) => {
-        setBatches((batches) =>
-            batches.includes(value)
-                ? batches.filter((batch) => batch !== value)
-                : [...batches, value]
-        );
-    };
 
     // Handle submit
     const handleSubmit = async (e: React.FormEvent) => {
@@ -72,7 +62,7 @@ function AddStudentSheet({ button, setNewStudent }: PropsType) {
                 name,
                 email,
                 role,
-                batches,
+                batch,
                 message,
             });
 
@@ -100,20 +90,13 @@ function AddStudentSheet({ button, setNewStudent }: PropsType) {
         }
     };
 
-    // Clear batches when sheet closes
-    useEffect(() => {
-        if (!open) {
-            setBatches([]);
-        }
-    }, [open]);
-
     return (
         <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger>{button}</SheetTrigger>
             <SheetContent className="p-0 flex flex-col gap-0">
                 {/* Header */}
                 <SheetHeader className="p-5 bg-zinc-0">
-                    <SheetTitle className="text-foreground">Add new user</SheetTitle>
+                    <SheetTitle className="text-foreground">Add new student</SheetTitle>
                     <SheetDescription className="font-medium text-foreground">
                         Fill in the information below to add a new user.
                     </SheetDescription>
@@ -185,19 +168,15 @@ function AddStudentSheet({ button, setNewStudent }: PropsType) {
                             Role
                         </Label>
                         <div className="relative">
-                            <Select
-                                key="role"
+                               <Input
+                                id="role"
+                                type="text"
                                 required
-                                onValueChange={(value) => setRole(value)}
-                            >
-                                <SelectTrigger id="role" className="font-medium p-5 pl-9">
-                                    <SelectValue placeholder="Select a role" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="coordinator">Coordinator</SelectItem>
-                                    <SelectItem value="instructor">Instructor</SelectItem>
-                                </SelectContent>
-                            </Select>
+                                autoComplete="off"
+                                readOnly
+                                value={role}
+                                className="font-medium p-5 pl-9"
+                            />
                             <BriefcaseIcon className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
                     </motion.div>
@@ -216,31 +195,16 @@ function AddStudentSheet({ button, setNewStudent }: PropsType) {
                             <Select
                                 key={"batches"}
                                 required
-                                onValueChange={(value) => handleSelectBatches(value)}
+                                onValueChange={(value) => setBatch(value)}
                             >
                                 <SelectTrigger
                                     id="batches"
                                     className="font-medium p-5 pl-9 relative"
                                 >
-                                    {/* Conditional rendering of SelectValue */}
                                     <SelectValue
                                         placeholder="Select a batch"
-                                        className={cn(
-                                            "relative transition-opacity duration-200",
-                                            batches.length !== 0 && "opacity-0 pointer-events-none"
-                                        )}
+                                        className="relative transition-opacity duration-200"
                                     />
-                                    {/* Overlay displaying selected batches */}
-                                    <div className="absolute inset-0 flex items-center p-5 pl-9 bg-white">
-                                        <p
-                                            className={cn(
-                                                "transition-opacity duration-200",
-                                                batches.length === 0 && "opacity-0"
-                                            )}
-                                        >
-                                            {batches.length > 0 ? batches.join(", ") : null}
-                                        </p>
-                                    </div>
                                 </SelectTrigger>
                                 <SelectContent className="max-h-[200px]">
                                     <SelectItem value="BCK-188">BCK-188</SelectItem>
