@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
     Edit,
-    Loader,
     MoreHorizontal,
     Plus,
     User2,
@@ -25,6 +24,7 @@ import { NotFoundOrbit } from "@/components/animation/fallbacks";
 import UserDetails from "../../common/user/userDetails";
 import { Student } from "@/types/coordinator";
 import { User } from "@/types/admin";
+import { useLocation } from "react-router-dom";
 
 // Interface for Props
 interface PropsType {
@@ -46,6 +46,10 @@ function DrawerUsersList({
     setDrawerOpen,
     action,
 }: PropsType) {
+
+    const pathname = useLocation().pathname;
+    const role = pathname.split("/")[2]
+
     return (
         <Drawer
             onClose={() => {
@@ -138,29 +142,36 @@ function DrawerUsersList({
                     })}
 
                 {/* If no users */}
-                {!fetching && users.length === 0 && (
+                {users.length === 0 && (
                     <NotFoundOrbit
                         MainIcon={User2}
                         SubIcon={Plus}
-                        message="No instructors and coordinators are added"
-                        text="No users found"
-                    />
-                )}
-
-                {/* Loader while fetching */}
-                {fetching && users.length === 0 && (
-                    <NotFoundOrbit
-                        MainIcon={User2}
-                        SubIcon={Loader}
-                        message="Please wait a second...."
-                        text="Fetching users"
+                        message={
+                            fetching
+                                ? "Please wait a moment..."
+                                : role === "students"
+                                    ? "Add new student to the batch"
+                                    : "Add new user to codeflare"
+                        }
+                        text={
+                            fetching
+                                ? role === "students"
+                                    ? "Fetching students"
+                                    : "Fetching users"
+                                : role === "students"
+                                    ? "No students found"
+                                    : "No users found"
+                        }
                     />
                 )}
             </div>
 
             {/* Selected user details */}
             <DrawerContent className="will-change-auto">
-                <UserDetails selectedUser={selectedUser as User} />
+                <UserDetails
+                    selectedUser={selectedUser}
+                    role={role === "students" ? "student" : "user"}
+                />
             </DrawerContent>
         </Drawer>
     );

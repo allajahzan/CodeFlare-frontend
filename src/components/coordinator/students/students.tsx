@@ -42,6 +42,7 @@ import { userApi } from "@/api/userApi";
 import AddStudentSheet from "./sheet.addStudent";
 import { Student } from "@/types/coordinator";
 import { User } from "@/types/admin";
+import "../coordinator.css";
 
 // Interface for Props
 interface PropsType {
@@ -121,6 +122,9 @@ function Students({ setDrawerOpen }: PropsType) {
                 if (resp && resp.status === 200) {
                     setTimeout(() => {
                         setStudents(users);
+
+                        // setSelectedStudent(users.length && users[0]);
+
                         setFetching(false);
                     }, 1000);
                 }
@@ -145,7 +149,7 @@ function Students({ setDrawerOpen }: PropsType) {
             <div className="p-5 sticky z-0 top-[20px] md:top-5 w-full h-[calc(100vh-130px)] flex flex-col gap-5 items-center bg-white border shadow-sm rounded-2xl">
                 {/* Heading */}
                 <CardHeader
-                    heading="Manage users"
+                    heading="Manage students"
                     count={students.length}
                     children={
                         <AddStudentSheet
@@ -167,12 +171,12 @@ function Students({ setDrawerOpen }: PropsType) {
                     hanldeStatus={handleStatus}
                     children1={
                         <Select>
-                            <SelectTrigger className="icon-style shadow-sm">
+                            <SelectTrigger className="w-[41.6px] h-[41.6px] flex justify-center p-0 py-5 shadow-sm">
                                 <Filter className="h-4 w-4" />
                             </SelectTrigger>
-                            <SelectContent align={isSmall ? "end" : "start"}>
+                            <SelectContent align={isSmall ? "start" : "end"}>
                                 <SelectGroup>
-                                    <SelectLabel>Fruits</SelectLabel>
+                                    <SelectLabel>Category</SelectLabel>
                                     <SelectItem value="all">All</SelectItem>
                                     <SelectItem value="ongoing">OnGoing</SelectItem>
                                     <SelectItem value="held">Held</SelectItem>
@@ -279,9 +283,9 @@ function Students({ setDrawerOpen }: PropsType) {
                                 message={
                                     fetching
                                         ? "Please wait a moment..."
-                                        : "No instructors and coordinators are added"
+                                        : "Add new student to the batch"
                                 }
-                                text={fetching ? "Finding students" : "No users found"}
+                                text={fetching ? "Fetching students" : "No students found"}
                             />
                         )}
                     </div>
@@ -295,6 +299,7 @@ function Students({ setDrawerOpen }: PropsType) {
                     <UserDetails
                         selectedUser={selectedStudent as Student}
                         className="border shadow-sm rounded-2xl"
+                        role="student"
                     />
                     <div className="h-full p-5 bg-zinc-0 border rounded-2xl"></div>
                 </div>

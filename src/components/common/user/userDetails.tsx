@@ -31,9 +31,10 @@ import profile from "@/assets/images/no-profile.svg";
 interface PropsType {
     selectedUser: User | Student;
     className?: string;
+    role: string;
 }
 
-function UserDetails({ selectedUser, className }: PropsType) {
+function UserDetails({ selectedUser, className, role }: PropsType) {
     return (
         <AnimatePresence mode="wait">
             {selectedUser && (
@@ -60,7 +61,7 @@ function UserDetails({ selectedUser, className }: PropsType) {
                                 animate={{ scale: 1, opacity: 1 }}
                                 transition={{ delay: 0.2 }}
                             >
-                                <Avatar className="bg-white w-16 h-16 shadow-md">
+                                <Avatar className="bg-white w-16 h-16 border-2">
                                     {selectedUser.profilePic && (
                                         <AvatarImage src={image} className="object-cover" />
                                     )}
@@ -199,8 +200,8 @@ function UserDetails({ selectedUser, className }: PropsType) {
             {!selectedUser && (
                 <NotSelected
                     MainIcon={User2}
-                    message="Select a user from the list to view their details"
-                    text="No user selected"
+                    message={`Select a ${role} from the list to view their details`}
+                    text={`No ${role} selected`}
                     className="h-[434px] lg:h-[273.3px]"
                 />
             )}

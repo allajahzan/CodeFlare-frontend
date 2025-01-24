@@ -265,9 +265,9 @@ function Users({ setDrawerOpen }: PropsType) {
                                 message={
                                     fetching
                                         ? "Please wait a moment..."
-                                        : "No instructors and coordinators are added"
+                                        : "Add new user to codeflare"
                                 }
-                                text={fetching ? "Finding users" : "No users found"}
+                                text={fetching ? "Fetching users" : "No users found"}
                             />
                         )}
                     </div>
@@ -281,6 +281,7 @@ function Users({ setDrawerOpen }: PropsType) {
                     <UserDetails
                         selectedUser={selectedUser as User}
                         className="border shadow-sm rounded-2xl"
+                        role="user"
                     />
                     <div className="h-full p-5 bg-zinc-0 border rounded-2xl"></div>
                 </div>

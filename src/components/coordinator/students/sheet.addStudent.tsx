@@ -47,7 +47,7 @@ function AddStudentSheet({ button, setNewStudent }: PropsType) {
     // Inputs
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
-    const [role, _setRole] = useState("Student");
+    const [role, _setRole] = useState("student");
     const [batch, setBatch] = useState<string>("");
     const [message, setMessage] = useState("");
 
@@ -168,13 +168,13 @@ function AddStudentSheet({ button, setNewStudent }: PropsType) {
                             Role
                         </Label>
                         <div className="relative">
-                               <Input
+                            <Input
                                 id="role"
                                 type="text"
                                 required
                                 autoComplete="off"
                                 readOnly
-                                value={role}
+                                value={role[0].toUpperCase() + role.slice(1)}
                                 className="font-medium p-5 pl-9"
                             />
                             <BriefcaseIcon className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
