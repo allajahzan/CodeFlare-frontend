@@ -18,7 +18,11 @@ import "./SideBar.css";
 import Slider from "../../ui/slider";
 import { cn } from "@/lib/utils";
 import React from "react";
+import { userApi } from "@/api/userApi";
+import { handleCustomError } from "@/utils/error";
+import axiosInstance from "@/utils/axiosInstence";
 import { IUserContext, UserContext } from "@/context/userContext";
+import { toast } from "@/hooks/use-toast";
 
 // Interface for Props
 interface PropsType {
@@ -41,6 +45,9 @@ function SideBar({ sideBarItems }: PropsType) {
     );
     const dispatch = useDispatch();
 
+    // User Context
+    const { setIsAuth, setUser } = useContext(UserContext) as IUserContext;
+
     const navigate = useNavigate();
 
     // Handle sidebar item
@@ -53,6 +60,26 @@ function SideBar({ sideBarItems }: PropsType) {
     const handleTheme = useCallback(() => {
         dispatch(themeAction(!theme));
     }, [dispatch, theme]);
+
+    // Handle Logout
+    const handleLogout = async () => {
+        try {
+            // Send request
+            const resp = await axiosInstance.post(userApi.logout);
+
+            // Success response
+            if (resp && resp.status === 200) {
+                toast({ title: "Successfully Logged out." });
+
+                // Clear isAuth, user and localStorage
+                setIsAuth(false);
+                setUser(null);
+                localStorage.clear();
+            }
+        } catch (err: unknown) {
+            handleCustomError(err);
+        }
+    };
 
     return (
         <div
@@ -122,6 +149,7 @@ function SideBar({ sideBarItems }: PropsType) {
                         <TooltipProvider>
                             <Tooltip>
                                 <TooltipTrigger
+                                    onClick={() => handleLogout()}
                                     className="w-full"
                                 >
                                     <li>
