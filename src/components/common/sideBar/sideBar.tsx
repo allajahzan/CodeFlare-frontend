@@ -32,13 +32,14 @@ interface PropsType {
 
 // SideBar Component
 function SideBar({ sideBarItems }: PropsType) {
+    // Redux states
     const theme = useSelector((state: stateType) => state.theme);
     const isSmall = useSelector((state: stateType) => state.isSmall);
     const isSideBarVisible = useSelector(
         (state: stateType) => state.isSideBarVisible
     );
-
     const dispatch = useDispatch();
+    
     const navigate = useNavigate();
 
     // handle sidebar item

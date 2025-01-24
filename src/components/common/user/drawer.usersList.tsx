@@ -46,6 +46,7 @@ function DrawerUsersList({
     setDrawerOpen,
     action,
 }: PropsType) {
+    // Get role
     const pathname = useLocation().pathname;
     const role = pathname.split("/")[2];
 

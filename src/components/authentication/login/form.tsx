@@ -4,8 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, KeyRound, Loader, Mail } from "lucide-react";
-import React, { useContext, useLayoutEffect, useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useContext, useMemo, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import bgImage from "@/assets/images/login.jpg";
 import { userApi } from "@/api/userApi";
 import { toast } from "@/hooks/use-toast";
@@ -14,15 +14,17 @@ import { UserContext } from "@/context/userContext";
 import axios from "axios";
 
 function Form() {
+    // From related states
     const [showPassword, setShowPassword] = useState(false);
     const [submiting, setSubmiting] = useState(false);
-    const [role, setRole] = useState<string | null>(null);
 
     // Inputs
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
+    // Get role
     const path = useLocation();
+    const role = path.pathname.split("/")[1];
 
     // User Context
     const userContext = useContext(UserContext);
@@ -80,11 +82,6 @@ function Form() {
         }
     };
 
-    // Set role
-    useLayoutEffect(() => {
-        setRole(path.pathname.split("/")[1]);
-    }, [path]);
-
     // Carousal data
     const slides = useMemo(
         () => [
@@ -136,7 +133,7 @@ function Form() {
                             <h1 className="text-2xl font-semibold">Welcome Back!</h1>
                             <p className="font-medium">
                                 Hey, {role && role[0].toUpperCase() + role?.slice(1)} sign in to
-                                your account
+                                your account.
                             </p>
                         </motion.div>
 
@@ -205,9 +202,9 @@ function Form() {
                                     initial={{ opacity: 1, y: 0 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.6 }}
-                                    className="text-end font-medium cursor-pointer pt-2"
+                                    className="flex items-center justify-end font-medium pt-2"
                                 >
-                                    Forgot Password?
+                                    <Link to={`/${role}/verify-email`}>Forgot Password?</Link>
                                 </motion.p>
                             )}
 

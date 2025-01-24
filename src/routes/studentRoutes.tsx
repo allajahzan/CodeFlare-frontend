@@ -10,8 +10,8 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import PublicRoutes from "@/routes/publicRoutes";
 import ProtectedRoutes from "@/routes/protectedRoutes";
 import AuthenticationLayout from "@/components/layout/autheticationLayout";
-import Verify from "@/pages/authentication/verify";
-import Reset from "@/pages/authentication/reset";
+import ForgotPassword from "@/pages/authentication/forgotPassword";
+import ResetPassword from "@/pages/authentication/resetPassword";
 
 // Student Routes
 function StudentRoutes() {
@@ -22,8 +22,8 @@ function StudentRoutes() {
                 <Route path="student" element={<AuthenticationLayout />}>
                     <Route path="" element={<Navigate to="student/login" />} />
                     <Route path="login" element={<Login />} />
-                    <Route path="verify-email" element={<Verify />} />
-                    <Route path="reset-password" element={<Reset />} />
+                    <Route path="forgot-password" element={<ForgotPassword />} />
+                    <Route path="reset-password" element={<ResetPassword />} />
                 </Route>
             </Route>
 

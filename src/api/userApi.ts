@@ -3,7 +3,7 @@ import { BASE_URL } from "./baseApi";
 // Authentication api
 export const userApi = {
     login: BASE_URL + "/user/login",
-    verifyEmail: BASE_URL + "/user/verify-email?token=",
+    forgotPasswod: BASE_URL + "/user/forgot-password",
     sendOtp: BASE_URL + "/user/verify-otp?token=",
     resetPassword: BASE_URL + "/user/reset-password?token=",
     refreshToken: BASE_URL + "/user/refresh-token",

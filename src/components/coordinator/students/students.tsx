@@ -27,7 +27,13 @@ import {
     SelectLabel,
     SelectTrigger,
 } from "@/components/ui/select";
-import { ChangeEvent, useContext, useEffect, useLayoutEffect, useState } from "react";
+import {
+    ChangeEvent,
+    useContext,
+    useEffect,
+    useLayoutEffect,
+    useState,
+} from "react";
 import { NotFoundOrbit } from "@/components/animation/fallbacks";
 import UserList from "@/components/common/user/userList";
 import CardHeader from "@/components/common/dataCard/header";
@@ -63,7 +69,7 @@ function Students({ setDrawerOpen }: PropsType) {
     const [fetching, setFetching] = useState<boolean>(false);
 
     // User details
-    const {user} = useContext(UserContext) as IUserContext
+    const { user } = useContext(UserContext) as IUserContext;
 
     // Search student
     const [search, setSearch] = useState<string>("");

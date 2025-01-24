@@ -25,6 +25,7 @@ function Form() {
     const path = useLocation();
     const navigate = useNavigate();
 
+    // Get query params
     const queryParams = new URLSearchParams(location.search);
     const token = queryParams.get("token");
 
@@ -108,7 +109,7 @@ function Form() {
     return (
         <Fragment>
             {isMount === true && (
-                <div className="relative z-0 p-5 pl-5 md:pl-0 h-full w-full lg:w-[80%] lg:h-[80%] bg-white rounded-2xl shadow-custom overflow-auto no-scrollbar transition-all duration-300">
+                <div className="relative z-0 p-5 pl-5 md:pl-0 h-full w-full lg:w-[80%] lg:h-[80%] bg-white rounded-none md:rounded-2xl shadow-custom overflow-auto no-scrollbar transition-all duration-300">
                     <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-0">
                         {/* Login form */}
                         <div className="w-full min-h-[410px] md:h-full bg-white order-2 md:order-1">
@@ -130,7 +131,7 @@ function Form() {
                                     </h1>
                                     <p className="font-medium">
                                         Hey, {role && role[0].toUpperCase() + role?.slice(1)} reset
-                                        your password
+                                        your password.
                                     </p>
                                 </motion.div>
 
@@ -271,7 +272,7 @@ function Form() {
                     <h1 className="font-bold text-2xl">
                         Sorry, this page isn't available.
                     </h1>
-                    <p className="font-medium text-lg">
+                    <p className="text-center font-medium text-lg">
                         The link you followed may be broken, or the page may have been
                         removed.{" "}
                         <Link to={`/${role}/login`} replace>

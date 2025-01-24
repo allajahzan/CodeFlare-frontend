@@ -4,9 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 import { Loader, Mail } from "lucide-react";
-import React, { useLayoutEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
-import bgImage from "@/assets/images/login.jpg";
+import bgImage from "@/assets/images/verifyEmail.jpg";
 import { userApi } from "@/api/userApi";
 import { toast } from "@/hooks/use-toast";
 import { handleCustomError } from "@/utils/error";
@@ -14,15 +14,13 @@ import axios from "axios";
 
 function Form() {
     const [submiting, setSubmiting] = useState(false);
-    const [role, setRole] = useState<string | null>(null);
 
     // Inputs
     const [email, setEmail] = useState<string>("");
 
+    // Get role
     const path = useLocation();
-
-    const queryParams = new URLSearchParams(location.search);
-    const token = queryParams.get("token");
+    const role = path.pathname.split("/")[1];
 
     // Handle submit
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -31,7 +29,7 @@ function Form() {
 
         try {
             // Send request
-            const resp = await axios.post(userApi.verifyEmail + token, { email });
+            const resp = await axios.post(userApi.forgotPasswod, { email });
 
             // Success response
             if (resp && resp.status === 200) {
@@ -48,11 +46,6 @@ function Form() {
             }, 1000);
         }
     };
-
-    // Set role
-    useLayoutEffect(() => {
-        setRole(path.pathname.split("/")[1]);
-    }, [path]);
 
     // Carousal data
     const slides = useMemo(
@@ -77,7 +70,7 @@ function Form() {
     );
 
     return (
-        <div className="relative z-0 p-5 pl-5 md:pl-0 h-full w-full lg:w-[80%] lg:h-[80%] bg-white rounded-2xl shadow-custom overflow-auto no-scrollbar transition-all duration-300">
+        <div className="relative z-0 p-5 pl-5 md:pl-0 h-full w-full lg:w-[80%] lg:h-[80%] bg-white rounded-none md:rounded-2xl shadow-custom overflow-auto no-scrollbar transition-all duration-300">
             <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-0">
                 {/* Login form */}
                 <div className="w-full h-[410px] md:h-full bg-white order-2 md:order-1">
@@ -94,10 +87,9 @@ function Form() {
                             transition={{ delay: 0.3 }}
                             className="text-center space-y-5"
                         >
-                            <h1 className="text-2xl font-semibold">Account Verification!</h1>
+                            <h1 className="text-2xl font-semibold">Forgot Password?</h1>
                             <p className="font-medium">
-                                Hey, {role && role[0].toUpperCase() + role?.slice(1)} verify
-                                your account
+                                We will send you a reset instructions.
                             </p>
                         </motion.div>
 
@@ -144,7 +136,7 @@ function Form() {
                                             Processing...
                                         </div>
                                     ) : (
-                                        "Verify"
+                                        "Reset Password"
                                     )}
                                 </Button>
                             </motion.div>
@@ -156,8 +148,16 @@ function Form() {
                 <Carousel
                     slides={slides}
                     image={
-                        <img src={bgImage} alt="" className="object-cover h-full w-full" />
+                        <div className="relative h-full">
+                            <div className=" w-full h-full  absolute top-0 left-0 bg-black/10"></div>
+                            <img
+                                src={bgImage}
+                                alt=""
+                                className="object-cover h-full w-full"
+                            />
+                        </div>
                     }
+                    className="order-1 md:order-2 text-black"
                 />
             </div>
         </div>
