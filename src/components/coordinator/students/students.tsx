@@ -27,7 +27,7 @@ import {
     SelectLabel,
     SelectTrigger,
 } from "@/components/ui/select";
-import { ChangeEvent, useEffect, useLayoutEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useLayoutEffect, useState } from "react";
 import { NotFoundOrbit } from "@/components/animation/fallbacks";
 import UserList from "@/components/common/user/userList";
 import CardHeader from "@/components/common/dataCard/header";
@@ -43,6 +43,7 @@ import AddStudentSheet from "./sheet.addStudent";
 import { Student } from "@/types/coordinator";
 import { User } from "@/types/admin";
 import "../coordinator.css";
+import { IUserContext, UserContext } from "@/context/userContext";
 
 // Interface for Props
 interface PropsType {
@@ -60,6 +61,9 @@ function Students({ setDrawerOpen }: PropsType) {
     );
     const [status, setStatus] = useState<boolean>(false);
     const [fetching, setFetching] = useState<boolean>(false);
+
+    // User details
+    const {user} = useContext(UserContext) as IUserContext
 
     // Search student
     const [search, setSearch] = useState<string>("");
@@ -97,7 +101,7 @@ function Students({ setDrawerOpen }: PropsType) {
     //     setStudents(filteredUsers);
     // }, [search, status]);
 
-    // Add new student
+    // Add new students
     useEffect(() => {
         if (newStudent) {
             setStudents((prevStudents: Student[]) => {
@@ -159,6 +163,7 @@ function Students({ setDrawerOpen }: PropsType) {
                                 </div>
                             }
                             setNewStudent={setNewStudent}
+                            batches={(user as User).batches}
                         />
                     }
                 />
@@ -282,10 +287,10 @@ function Students({ setDrawerOpen }: PropsType) {
                                 SubIcon={fetching ? Search : Plus}
                                 message={
                                     fetching
-                                        ? "Please wait a moment..."
-                                        : "Add new student to the batch"
+                                        ? "Please wait a moment"
+                                        : "Add new students to the batch"
                                 }
-                                text={fetching ? "Fetching students" : "No students found"}
+                                text={fetching ? "Fetching..." : "No students found"}
                             />
                         )}
                     </div>

@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { shrinkSideBarStudentAction, sideBarStudentAction, stateType } from "../../../redux/store"
+import { shrinksideBarVisibilityAction, sideBarVisibilityAction, stateType } from "../../../redux/store"
 
 function ContentHeadingInSmallSize() {
 
@@ -10,9 +10,9 @@ function ContentHeadingInSmallSize() {
     const dispatch = useDispatch()
 
     const handleSideBar = () => {
-        dispatch(shrinkSideBarStudentAction(false))
+        dispatch(shrinksideBarVisibilityAction(false))
         localStorage.setItem('isSideBarVisibleShriked', `${false}`)
-        dispatch(sideBarStudentAction(!isSideBarVisible))
+        dispatch(sideBarVisibilityAction(!isSideBarVisible))
     }
 
     const handleTheme = () => {

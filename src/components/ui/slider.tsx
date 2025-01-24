@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { sideBarStudentAction, stateType } from "@/redux/store";
+import { sideBarVisibilityAction, stateType } from "@/redux/store";
 import { CircleChevronLeft } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -11,7 +11,7 @@ function Slider() {
 
   // sidebar toggle
   const handleToggle = useCallback(() => {
-    dispatch(sideBarStudentAction(!isSideBarVisible));
+    dispatch(sideBarVisibilityAction(!isSideBarVisible));
   }, [dispatch, isSideBarVisible]);
 
   return (

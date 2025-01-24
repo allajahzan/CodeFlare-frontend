@@ -46,9 +46,8 @@ function DrawerUsersList({
     setDrawerOpen,
     action,
 }: PropsType) {
-
     const pathname = useLocation().pathname;
-    const role = pathname.split("/")[2]
+    const role = pathname.split("/")[2];
 
     return (
         <Drawer
@@ -148,16 +147,14 @@ function DrawerUsersList({
                         SubIcon={Plus}
                         message={
                             fetching
-                                ? "Please wait a moment..."
+                                ? "Please wait a moment"
                                 : role === "students"
-                                    ? "Add new student to the batch"
-                                    : "Add new user to codeflare"
+                                    ? "Add new students to the batch"
+                                    : "Add new users to codeflare"
                         }
                         text={
                             fetching
-                                ? role === "students"
-                                    ? "Fetching students"
-                                    : "Fetching users"
+                                ? "Fetching..."
                                 : role === "students"
                                     ? "No students found"
                                     : "No users found"

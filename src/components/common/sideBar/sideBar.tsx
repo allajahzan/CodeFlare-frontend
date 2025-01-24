@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
     stateType,
-    sideBarStudentAction,
+    sideBarVisibilityAction,
     themeAction,
 } from "../../../redux/store";
 import {
@@ -44,7 +44,7 @@ function SideBar({ sideBarItems }: PropsType) {
     // handle sidebar item
     const handleSideBarItemClick = (path: string) => {
         navigate(path);
-        if (isSmall) dispatch(sideBarStudentAction(false));
+        if (isSmall) dispatch(sideBarVisibilityAction(false));
     };
 
     // handle theme

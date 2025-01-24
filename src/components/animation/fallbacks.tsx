@@ -54,7 +54,7 @@ function OrbitingIcon({ delay, rotation, SubIcon }: PropsType) {
                         top: "50%",
                     }}
                 >
-                    {SubIcon && <SubIcon className="w-3 h-3 text-muted-foreground " />}
+                    {SubIcon && <SubIcon className="w-3 h-3 text-muted-foreground" />}
                 </div>
             </motion.div>
         </motion.div>
@@ -64,7 +64,7 @@ function OrbitingIcon({ delay, rotation, SubIcon }: PropsType) {
 // NotFoundOrbit Component
 function NotFoundOrbit({ MainIcon, SubIcon, message, text }: PropsType) {
     return (
-        <div className="relative h-full p-5 flex flex-col gap-5 items-center justify-center border shadow-sm rounded-2xl overflow-hidden">
+        <div className="relative h-full p-5 flex flex-col gap-7 items-center justify-center border shadow-sm rounded-2xl overflow-hidden">
             <div className="relative w-[185px] h-[185px]">
                 {/* Inner orbit */}
                 <div className="absolute inset-10 rounded-full border border-dashed border-muted-foreground/20">

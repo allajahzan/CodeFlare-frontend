@@ -36,10 +36,11 @@ import { Student } from "@/types/coordinator";
 interface PropsType {
     button: ReactNode;
     setNewStudent: React.Dispatch<React.SetStateAction<Student | null>>;
+    batches: string[];
 }
 
 // Add user sheet
-function AddStudentSheet({ button, setNewStudent }: PropsType) {
+function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
     // Sheet state
     const [open, setOpen] = useState<boolean | undefined>(undefined);
     const [submiting, setSubmiting] = useState(false);
@@ -98,7 +99,7 @@ function AddStudentSheet({ button, setNewStudent }: PropsType) {
                 <SheetHeader className="p-5 bg-zinc-0">
                     <SheetTitle className="text-foreground">Add new student</SheetTitle>
                     <SheetDescription className="font-medium text-foreground">
-                        Fill in the information below to add a new user.
+                        Fill in the information below to add a new student.
                     </SheetDescription>
                 </SheetHeader>
 
@@ -123,7 +124,7 @@ function AddStudentSheet({ button, setNewStudent }: PropsType) {
                         <div className="relative">
                             <Input
                                 id="name"
-                                placeholder="Enter user's full name"
+                                placeholder="Enter student's full name"
                                 required
                                 autoComplete="off"
                                 onChange={(event) => setName(event.target.value)}
@@ -147,7 +148,7 @@ function AddStudentSheet({ button, setNewStudent }: PropsType) {
                             <Input
                                 id="email"
                                 type="email"
-                                placeholder="user@gmail.com"
+                                placeholder="student@gmail.com"
                                 required
                                 autoComplete="off"
                                 onChange={(event) => setEmail(event.target.value)}
@@ -207,10 +208,9 @@ function AddStudentSheet({ button, setNewStudent }: PropsType) {
                                     />
                                 </SelectTrigger>
                                 <SelectContent className="max-h-[200px]">
-                                    <SelectItem value="BCK-188">BCK-188</SelectItem>
-                                    <SelectItem value="BCK-189">BCK-189</SelectItem>
-                                    <SelectItem value="BCK-190">BCK-190</SelectItem>
-                                    <SelectItem value="BCK-198">BCK-198</SelectItem>
+                                    {batches.map((batch, index) => (
+                                        <SelectItem key={index} value={batch}>{batch}</SelectItem>
+                                    ))}
                                 </SelectContent>
                             </Select>
                             <UsersRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />

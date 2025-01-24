@@ -264,10 +264,10 @@ function Users({ setDrawerOpen }: PropsType) {
                                 SubIcon={fetching ? Search : Plus}
                                 message={
                                     fetching
-                                        ? "Please wait a moment..."
-                                        : "Add new user to codeflare"
+                                        ? "Please wait a moment"
+                                        : "Add new users to codeflare"
                                 }
-                                text={fetching ? "Fetching users" : "No users found"}
+                                text={fetching ? "Fetching..." : "No users found"}
                             />
                         )}
                     </div>

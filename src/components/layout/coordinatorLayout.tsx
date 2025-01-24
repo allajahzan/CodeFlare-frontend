@@ -2,7 +2,7 @@ import SideBar from "../common/sideBar/sideBar";
 import { Outlet } from "react-router-dom";
 import Navbar from "../common/navbar/navbar";
 import { useDispatch, useSelector } from "react-redux";
-import { resizeAction, sideBarStudentAction, stateType } from "@/redux/store";
+import { resizeAction, sideBarVisibilityAction, stateType } from "@/redux/store";
 import {
     //   CalendarDays,
     //   CreditCard,
@@ -31,7 +31,7 @@ function CoordinatorLayout({ isDrawerOpen }: PropsType) {
                 localStorage.setItem("isSizeSmall", "1");
             } else {
                 dispatch(resizeAction(false));
-                dispatch(sideBarStudentAction(false));
+                dispatch(sideBarVisibilityAction(false));
                 localStorage.setItem("isSizeSmall", "0");
             }
         };

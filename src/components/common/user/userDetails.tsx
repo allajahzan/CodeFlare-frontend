@@ -115,7 +115,7 @@ function UserDetails({ selectedUser, className, role }: PropsType) {
                                     value:
                                         selectedUser.role !== "student"
                                             ? selectedUser.lastActive || "Not recently"
-                                            : (selectedUser as Student).week,
+                                            : (selectedUser as Student).week || "Fumigation",
                                 },
 
                                 // Date joined

@@ -1,7 +1,7 @@
 import { useCallback, useLayoutEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-    sideBarStudentAction,
+    sideBarVisibilityAction,
     stateType,
     themeAction,
 } from "../../../redux/store";
@@ -34,7 +34,7 @@ const Navbar = () => {
 
     // handle sidebar
     const handleSideBar = useCallback(() => {
-        dispatch(sideBarStudentAction(!isSideBarVisible));
+        dispatch(sideBarVisibilityAction(!isSideBarVisible));
     }, [dispatch, isSideBarVisible]);
 
     useLayoutEffect(() => {
