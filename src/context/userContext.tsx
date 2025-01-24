@@ -20,6 +20,7 @@ export interface IUserContext {
     isAuth: boolean;
     setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
     user: IUser | null;
+    setUser: React.Dispatch<React.SetStateAction<IUser | null>>;
     logout: () => void;
 }
 
@@ -47,7 +48,7 @@ const UserContextProvider = ({ children }: { children: ReactNode }) => {
                     localStorage.setItem("user", JSON.stringify(user));
                     setUser(user);
                 }
-            } catch (err: any) {
+            } catch (err: unknown) {
                 handleCustomError(err);
             }
         };
@@ -61,7 +62,7 @@ const UserContextProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <UserContext.Provider value={{ isAuth, setIsAuth, user, logout }}>
+        <UserContext.Provider value={{ isAuth, setIsAuth, user, setUser, logout }}>
             {children}
         </UserContext.Provider>
     );

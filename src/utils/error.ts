@@ -31,39 +31,41 @@ export const throwCustomError = (err: any) => {
  */
 export const handleCustomError = (err: any) => {
     console.log(err);
-    const { data } = err.response;
+
+    let data;
+    if(err.response) data = err.response.data
 
     // 400: Bad Request
-    if (err.status === 400) toast({ title: data.errors.message || err.message });
+    if (err.status === 400) toast({ title: data?.errors.message || err.message });
 
     // 401: Unauthorized
-    else if (err.status === 401) toast({ title: data.errors.message || err.message });
+    else if (err.status === 401) toast({ title: data?.errors.message || err.message });
 
     // 403: Forbidden
     else if (err.status === 403)
         toast({
-            title: data.errors.message || err.message,
+            title: data?.errors.message || err.message,
         });
 
     // 404: Not Found
     else if (err.status === 404)
         toast({
-            title: data.errors.message || err.message,
+            title: data?.errors.message || err.message,
         });
 
     // 409: Conflict
     else if (err.status === 409)
         toast({
-            title: data.errors.message || err.message,
+            title: data?.errors.message || err.message,
         });
 
     // 410: Gone
-    else if (err.status === 410) toast({ title: data.errors.message });
+    else if (err.status === 410) toast({ title: data?.errors.message });
 
     // 500: Internal Server Error
     else if (err.status === 500)
         toast({
-            title: data.errors.message || err.message || "Internal server error",
+            title: data?.errors.message || err.message || "Internal server error",
         });
 
     // 501: Not Implemented
@@ -84,6 +86,6 @@ export const handleCustomError = (err: any) => {
     // -1: Unexpected Error
     else
         toast({
-            title: data.message || err.message,
+            title: data?.message || err.message,
         });
 };

@@ -51,7 +51,7 @@ function Form() {
                     setConfirmPassword("");
                 }, 1000);
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             setTimeout(() => {
                 setSubmiting(false);
                 handleCustomError(err);
@@ -75,7 +75,7 @@ function Form() {
                 if (resp && resp.status === 200) {
                     setMount(true);
                 }
-            } catch (err: any) {
+            } catch (err: unknown) {
                 setMount(false);
                 return;
             }

@@ -115,7 +115,7 @@ function Users({ setDrawerOpen }: PropsType) {
                         setFetching(false);
                     }, 1000);
                 }
-            } catch (err: any) {
+            } catch (err: unknown) {
                 setTimeout(() => {
                     setFetching(false);
                     handleCustomError(err);

@@ -27,12 +27,12 @@ const Navbar = () => {
     const location = useLocation();
     const pathname = location.pathname;
 
-    // handle theme
+    // Handle theme
     const handleTheme = useCallback(() => {
         dispatch(themeAction(!theme));
     }, [dispatch, theme]);
 
-    // handle sidebar
+    // Handle sidebar
     const handleSideBar = useCallback(() => {
         dispatch(sideBarVisibilityAction(!isSideBarVisible));
     }, [dispatch, isSideBarVisible]);
@@ -46,7 +46,7 @@ const Navbar = () => {
             );
     }, [location]);
 
-    // determine theme icon and text
+    // Determine theme icon and text
     const themeIcon = useMemo(() => (theme ? Sun : Moon), [theme]);
     const themeText = useMemo(() => (theme ? "Light" : "Dark"), [theme]);
 

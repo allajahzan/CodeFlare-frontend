@@ -92,7 +92,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                     toast({ title: "User added successfully." });
                 }, 1000);
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             setTimeout(() => {
                 setSubmiting(false);
                 handleCustomError(err);

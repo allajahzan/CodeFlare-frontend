@@ -83,7 +83,7 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                     toast({ title: "Student added successfully." });
                 }, 1000);
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             setTimeout(() => {
                 setSubmiting(false);
                 handleCustomError(err);

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useCallback } from "react";
+import { useCallback, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
     stateType,
@@ -18,6 +18,7 @@ import "./SideBar.css";
 import Slider from "../../ui/slider";
 import { cn } from "@/lib/utils";
 import React from "react";
+import { IUserContext, UserContext } from "@/context/userContext";
 
 // Interface for Props
 interface PropsType {
@@ -39,16 +40,16 @@ function SideBar({ sideBarItems }: PropsType) {
         (state: stateType) => state.isSideBarVisible
     );
     const dispatch = useDispatch();
-    
+
     const navigate = useNavigate();
 
-    // handle sidebar item
+    // Handle sidebar item
     const handleSideBarItemClick = (path: string) => {
         navigate(path);
         if (isSmall) dispatch(sideBarVisibilityAction(false));
     };
 
-    // handle theme
+    // Handle theme
     const handleTheme = useCallback(() => {
         dispatch(themeAction(!theme));
     }, [dispatch, theme]);
@@ -67,7 +68,7 @@ function SideBar({ sideBarItems }: PropsType) {
             <div className="h-full p-5">
                 <div className="h-full py-8 bg-zinc-900 flex flex-col justify-between rounded-3xl">
                     {isSideBarVisible && <Slider />}
-                    {/* title */}
+                    {/* Title */}
                     <li>
                         <div className="flex justify-center p-2">
                             <em
@@ -79,7 +80,7 @@ function SideBar({ sideBarItems }: PropsType) {
                         </div>
                     </li>
 
-                    {/* items */}
+                    {/* iTems */}
                     <div className="h-[466px] overflow-auto overflow-x-hidden no-scrollbar">
                         {sideBarItems.map((item) => (
                             <SideBarItem
@@ -93,7 +94,7 @@ function SideBar({ sideBarItems }: PropsType) {
                     </div>
 
                     <div>
-                        {/* theme */}
+                        {/* Theme */}
                         {isSmall && (
                             <TooltipProvider>
                                 <Tooltip>
@@ -117,10 +118,12 @@ function SideBar({ sideBarItems }: PropsType) {
                             </TooltipProvider>
                         )}
 
-                        {/* logout */}
+                        {/*Logout */}
                         <TooltipProvider>
                             <Tooltip>
-                                <TooltipTrigger className="w-full">
+                                <TooltipTrigger
+                                    className="w-full"
+                                >
                                     <li>
                                         <div className="flex justify-center p-2">
                                             <LogOut className="icon" />

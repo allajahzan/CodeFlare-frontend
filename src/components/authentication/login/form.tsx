@@ -74,7 +74,7 @@ function Form() {
                     toast({ title: "Successfully Logged In" });
                 }, 1000);
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             setTimeout(() => {
                 setSubmiting(false);
                 handleCustomError(err);
