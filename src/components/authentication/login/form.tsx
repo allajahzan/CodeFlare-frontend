@@ -204,7 +204,7 @@ function Form() {
                                     transition={{ delay: 0.6 }}
                                     className="flex items-center justify-end font-medium pt-2"
                                 >
-                                    <Link to={`/${role}/verify-email`}>Forgot Password?</Link>
+                                    <Link to={`/${role}/forgot-password`}>Forgot Password?</Link>
                                 </motion.p>
                             )}
 

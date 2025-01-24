@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
-import { Loader, Mail } from "lucide-react";
+import { ArrowLeft, Loader, Mail } from "lucide-react";
 import React, { useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import bgImage from "@/assets/images/verifyEmail.jpg";
 import { userApi } from "@/api/userApi";
 import { toast } from "@/hooks/use-toast";
@@ -22,6 +22,8 @@ function Form() {
     const path = useLocation();
     const role = path.pathname.split("/")[1];
 
+    const navigate = useNavigate()
+
     // Handle submit
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -29,7 +31,7 @@ function Form() {
 
         try {
             // Send request
-            const resp = await axios.post(userApi.forgotPasswod, { email });
+            const resp = await axios.post(userApi.verifyEmail, { email, role });
 
             // Success response
             if (resp && resp.status === 200) {
@@ -37,6 +39,8 @@ function Form() {
                     setSubmiting(false);
 
                     toast({ title: "Password reset link has been sent to your email." });
+
+                    setEmail("");
                 }, 1000);
             }
         } catch (err: any) {
@@ -89,7 +93,7 @@ function Form() {
                         >
                             <h1 className="text-2xl font-semibold">Forgot Password?</h1>
                             <p className="font-medium">
-                                We will send you a reset instructions.
+                                We will send a reset link to your email.
                             </p>
                         </motion.div>
 
@@ -111,6 +115,7 @@ function Form() {
                                         type="email"
                                         placeholder="Email"
                                         required
+                                        value={email}
                                         onChange={(event) => setEmail(event.target.value)}
                                         className="font-medium p-5 pl-9 border"
                                     />
@@ -138,6 +143,27 @@ function Form() {
                                     ) : (
                                         "Reset Password"
                                     )}
+                                </Button>
+                            </motion.div>
+
+                            {/* Go back to login */}
+                            <motion.div
+                                initial={{ opacity: 1, y: 0 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: role == "admin" ? 0.6 : 0.7 }}
+                                className="pt-2"
+                            >
+                                <Button
+                                    type="button"
+                                    className="w-full h-11 bg-transparent hover:bg-transparent text-zin-900 shadow-none"
+                                >
+                                    <div
+                                        onClick={() => navigate(`/${role}/login`)}
+                                        className="flex items-center gap-2"
+                                    >
+                                        <ArrowLeft className="h-4 w-4" />
+                                        Back to login
+                                    </div>
                                 </Button>
                             </motion.div>
                         </form>
