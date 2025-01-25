@@ -36,10 +36,13 @@ function Form() {
 
         try {
             // Send request
-            const resp = await basicAxiosInstance.post(ApiEndpoints.RESET_PASSWORD + token, {
-                password,
-                confirmPassword,
-            });
+            const resp = await basicAxiosInstance.post(
+                ApiEndpoints.RESET_PASSWORD + token,
+                {
+                    password,
+                    confirmPassword,
+                }
+            );
 
             // Success response
             if (resp && resp.status === 200) {
@@ -69,7 +72,9 @@ function Form() {
         const checkResetLink = async () => {
             try {
                 // Send request
-                const resp = await basicAxiosInstance.post(ApiEndpoints.RESET_PASSWORD + token);
+                const resp = await basicAxiosInstance.post(
+                    ApiEndpoints.RESET_PASSWORD + token
+                );
 
                 // Success response
                 if (resp && resp.status === 200) {
@@ -110,7 +115,7 @@ function Form() {
         <Fragment>
             {isMount === true && (
                 <div className="relative z-0 p-5 pl-5 md:pl-0 h-full w-full lg:w-[80%] lg:h-[80%] bg-white rounded-none md:rounded-2xl shadow-custom transition-all duration-300">
-                    <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-0 overflow-auto no-scrollbar">
+                    <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 grid-rows-[auto_1fr] md:grid-rows-1 gap-5 md:gap-0 overflow-auto no-scrollbar">
                         {/* Login form */}
                         <div className="w-full h-full bg-white order-2 md:order-1">
                             <motion.div

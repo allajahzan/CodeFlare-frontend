@@ -78,7 +78,7 @@ function Form() {
 
     return (
         <div className="relative z-0 p-5 pl-5 md:pl-0 h-full w-full lg:w-[80%] lg:h-[80%] bg-white rounded-none md:rounded-2xl shadow-custom transition-all duration-300">
-            <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-0 overflow-auto no-scrollbar">
+            <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 grid-rows-[auto_1fr] md:grid-rows-1 gap-5 md:gap-0 overflow-auto no-scrollbar">
                 {/* Login form */}
                 <div className="w-full h-full bg-white order-2 md:order-1">
                     <motion.div
@@ -177,14 +177,10 @@ function Form() {
                 <Carousel
                     slides={slides}
                     image={
-                        <div className="relative h-full">
-                            <div className=" w-full h-full  absolute top-0 left-0 bg-black/10"></div>
-                            <img
-                                src={bgImage}
-                                alt=""
-                                className="object-cover h-full w-full"
-                            />
-                        </div>
+                        // <div className="relative h-full">
+                        // <div className=" w-full h-full  absolute top-0 left-0 bg-black/10"></div>
+                        <img src={bgImage} alt="" className="object-cover h-full w-full" />
+                        // </div>
                     }
                     className="order-1 md:order-2 text-black"
                 />
