@@ -5,9 +5,10 @@ import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import PublicRoutes from "@/routes/publicRoutes";
 import ProtectedRoutes from "@/routes/protectedRoutes";
-import Verify from "@/pages/authentication/forgotPassword";
+import ForgotPassword from "@/pages/authentication/forgotPassword";
 import Reset from "@/pages/authentication/resetPassword";
 import AuthenticationLayout from "@/components/layout/autheticationLayout";
+import AppRoutes from "@/constants/appRoutes";
 
 // Instructor Routes
 function InstructorRoutes() {
@@ -15,24 +16,24 @@ function InstructorRoutes() {
     return (
         <Routes>
             {/* Public Routes */}
-            <Route element={<PublicRoutes allowedRole="instructor" />}>
+            <Route element={<PublicRoutes allowedRole={AppRoutes.INSTRUCTOR} />}>
                 <Route element={<AuthenticationLayout />}>
-                    <Route path="" element={<Navigate to="login" />} />
-                    <Route path="login" element={<Login />} />
-                    <Route path="forgot-password" element={<Verify />} />
-                    <Route path="reset-password" element={<Reset />} />
+                    <Route path="" element={<Navigate to={AppRoutes.LOGIN} />} />
+                    <Route path={AppRoutes.LOGIN} element={<Login />} />
+                    <Route path={AppRoutes.FORGOT_PASSWORD} element={<ForgotPassword />} />
+                    <Route path={AppRoutes.RESET_PASSWORD} element={<Reset />} />
                 </Route>
             </Route>
 
             {/* Protected Routes */}
-            <Route element={<ProtectedRoutes allowedRole="instructor" />}>
+            <Route element={<ProtectedRoutes allowedRole={AppRoutes.INSTRUCTOR} />}>
                 <Route element={<InstructorLayout isDrawerOpen={isDrawerOpen} />}>
-                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path={AppRoutes.DASHBOARD} element={<Dashboard />} />
                 </Route>
             </Route>
 
             {/* Fallback for unmatched routes */}
-            <Route path="*" element={<Navigate to="login" />} />
+            <Route path="*" element={<Navigate to={`/${AppRoutes.INSTRUCTOR}`} />} />
         </Routes>
     );
 }

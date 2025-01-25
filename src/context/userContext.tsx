@@ -1,5 +1,5 @@
-import { userApi } from "@/api/userApi";
-import { fetchData } from "@/utils/apiService";
+import ApiEndpoints from "@/constants/apiEndpoints";
+import { fetchData } from "@/service/apiService";
 import { handleCustomError } from "@/utils/error";
 import { createContext, ReactNode, useState, useLayoutEffect } from "react";
 
@@ -40,7 +40,7 @@ const UserContextProvider = ({ children }: { children: ReactNode }) => {
     useLayoutEffect(() => {
         const getUserData = async () => {
             try {
-                const resp = await fetchData(userApi.user);
+                const resp = await fetchData(ApiEndpoints.USER);
 
                 const user = resp?.data.data;
 

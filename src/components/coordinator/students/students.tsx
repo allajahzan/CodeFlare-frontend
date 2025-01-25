@@ -42,9 +42,9 @@ import { useMediaQuery } from "usehooks-ts";
 import { cn } from "@/lib/utils";
 import DrawerUsersList from "@/components/common/user/drawer.usersList";
 import UserDetails from "@/components/common/user/userDetails";
-import { fetchData } from "@/utils/apiService";
+import { fetchData } from "@/service/apiService";
 import { handleCustomError } from "@/utils/error";
-import { userApi } from "@/api/userApi";
+import ApiEndpoints from "@/constants/apiEndpoints";
 import AddStudentSheet from "./sheet.addStudent";
 import { Student } from "@/types/coordinator";
 import { User } from "@/types/admin";
@@ -124,7 +124,7 @@ function Students({ setDrawerOpen }: PropsType) {
                 setFetching(true);
 
                 // Send request
-                const resp = await fetchData(userApi.getStudents);
+                const resp = await fetchData(ApiEndpoints.GET_STUDENTS);
 
                 const users = resp?.data.data;
 

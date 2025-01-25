@@ -1,0 +1,19 @@
+enum ApiEndpoints {
+    // Authentication APIs
+    LOGIN = "/user/login",
+    VERIFY_EMAIL = "/user/verify-email",
+    SEND_OTP = "/user/verify-otp?token=",
+    RESET_PASSWORD = "/user/reset-password?token=",
+    REFRESH_TOKEN = "/user/refresh-token",
+    LOGOUT = "/user/logout",
+
+    // User CRUD APIs
+    GET_STUDENTS = "/user/student",
+    GET_COORDINATORS_AND_INSTRUCTORS = "/user/coordinator-instructor",
+    USER = "/user",
+
+    // Admin APIs
+    ADMIN = "/admin",
+}
+
+export default ApiEndpoints;

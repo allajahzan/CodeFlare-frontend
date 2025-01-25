@@ -9,6 +9,7 @@ import ForgotPassword from "@/pages/authentication/forgotPassword";
 import ResetPassword from "@/pages/authentication/resetPassword";
 import AuthenticationLayout from "@/components/layout/autheticationLayout";
 import Students from "@/pages/coordinator/students";
+import AppRoutes from "@/constants/appRoutes";
 
 // Coordinator Routes
 function CoordinatorRoutes() {
@@ -16,25 +17,25 @@ function CoordinatorRoutes() {
     return (
         <Routes>
             {/* Public Routes */}
-            <Route element={<PublicRoutes allowedRole="coordinator" />}>
+            <Route element={<PublicRoutes allowedRole={AppRoutes.COORDINATOR} />}>
                 <Route element={<AuthenticationLayout />}>
-                    <Route path="" element={<Navigate to="login" />} />
-                    <Route path="login" element={<Login />} />
-                    <Route path="forgot-password" element={<ForgotPassword />} />
-                    <Route path="reset-password" element={<ResetPassword />} />
+                    <Route path="" element={<Navigate to={AppRoutes.LOGIN} />} />
+                    <Route path={AppRoutes.LOGIN} element={<Login />} />
+                    <Route path={AppRoutes.FORGOT_PASSWORD} element={<ForgotPassword />} />
+                    <Route path={AppRoutes.RESET_PASSWORD} element={<ResetPassword />} />
                 </Route>
             </Route>
 
             {/* Protected Routes */}
-            <Route element={<ProtectedRoutes allowedRole="coordinator" />}>
+            <Route element={<ProtectedRoutes allowedRole={AppRoutes.COORDINATOR} />}>
                 <Route element={<CoordinatorLayout isDrawerOpen={isDrawerOpen} />}>
-                    <Route path="dashboard" element={<Dashboard />} />
-                    <Route path="students" element={<Students isDrawerOpen={isDrawerOpen} setDrawerOpen={_setDrawerOpen} />}/>
+                    <Route path={AppRoutes.DASHBOARD} element={<Dashboard />} />
+                    <Route path={AppRoutes.COORDINATOR_STUDENTS} element={<Students isDrawerOpen={isDrawerOpen} setDrawerOpen={_setDrawerOpen} />}/>
                 </Route>
             </Route>
 
             {/* Fallback for unmatched routes */}
-            <Route path="*" element={<Navigate to="login" />} />
+            <Route path="*" element={<Navigate to={`/${AppRoutes.COORDINATOR}`} />} />
         </Routes>
     );
 }

@@ -7,11 +7,11 @@ import { Eye, EyeOff, KeyRound, Loader, Mail } from "lucide-react";
 import { useContext, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import bgImage from "@/assets/images/login.jpg";
-import { userApi } from "@/api/userApi";
+import ApiEndpoints from "@/constants/apiEndpoints";
 import { toast } from "@/hooks/use-toast";
 import { handleCustomError } from "@/utils/error";
 import { UserContext } from "@/context/userContext";
-import basicAxiosInstance from "@/utils/basicAxiosInstance";
+import basicAxiosInstance from "@/service/basicAxiosInstance";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { formSchema, FormType } from "@/validations/loginForm";
@@ -48,7 +48,7 @@ function Form() {
         try {
             // Send request
             const resp = await basicAxiosInstance.post(
-                userApi.login,
+                ApiEndpoints.LOGIN,
                 {
                     email: formData.email,
                     password: formData.password,

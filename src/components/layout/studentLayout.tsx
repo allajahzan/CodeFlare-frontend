@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { resizeAction, sideBarVisibilityAction, stateType } from "@/redux/store";
 import {
   CalendarCheck2,
-  CodeXml,
   CreditCard,
   FileUser,
   Globe,
@@ -17,6 +16,7 @@ import {
 import Shadow from "@/components/ui/shadow";
 import { useLayoutEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
+import AppRoutes from "@/constants/appRoutes";
 
 function StudentLayout() {
   const isSmall = useSelector((state: stateType) => state.isSmall);
@@ -43,17 +43,16 @@ function StudentLayout() {
   // sidebar items
   const sideBarItems = useMemo(
     () => [
-      { path: "/student/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+      { path: AppRoutes.DASHBOARD, icon: LayoutDashboard, label: "Dashboard" },
       ...(isSmall
         ? [{ path: "/community", icon: Globe, label: "Community" }]
         : []),
-      { path: "/student/chat", icon: MessageCircleMore, label: "Chats" },
-      { path: "/student/tasks", icon: ListTodo, label: "Tasks" },
-      { path: "/student/reviews", icon: CalendarCheck2, label: "Reviews" },
-      { path: "/student/leetcode", icon: CodeXml, label: "Leetcode" },
-      { path: "/student/leaves", icon: IdCard, label: "Leaves" },
-      { path: "/student/invoices", icon: CreditCard, label: "Invoices" },
-      { path: "/student/manifest", icon: FileUser, label: "Manifest" },
+      { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
+      { path: AppRoutes.STUDENT_TASKS, icon: ListTodo, label: "Tasks" },
+      { path: AppRoutes.STUDENT_REVIEWS, icon: CalendarCheck2, label: "Reviews" },
+      { path: AppRoutes.STUDENT_LEAVES, icon: IdCard, label: "Leaves" },
+      { path: AppRoutes.STUDENT_INVOICES, icon: CreditCard, label: "Invoices" },
+      { path: AppRoutes.PROFILE, icon: FileUser, label: "Manifest" },
     ],
     [isSmall]
   );

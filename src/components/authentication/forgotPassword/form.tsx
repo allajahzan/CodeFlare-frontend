@@ -7,10 +7,10 @@ import { ArrowLeft, Loader, Mail } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import bgImage from "@/assets/images/verifyEmail.jpg";
-import { userApi } from "@/api/userApi";
+import ApiEndpoints from "@/constants/apiEndpoints";
 import { toast } from "@/hooks/use-toast";
 import { handleCustomError } from "@/utils/error";
-import basicAxiosInstance from "@/utils/basicAxiosInstance";
+import basicAxiosInstance from "@/service/basicAxiosInstance";
 
 function Form() {
     const [submiting, setSubmiting] = useState(false);
@@ -31,7 +31,7 @@ function Form() {
 
         try {
             // Send request
-            const resp = await basicAxiosInstance.post(userApi.verifyEmail, { email, role });
+            const resp = await basicAxiosInstance.post(ApiEndpoints.VERIFY_EMAIL, { email, role });
 
             // Success response
             if (resp && resp.status === 200) {

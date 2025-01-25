@@ -29,9 +29,9 @@ import { cn } from "@/lib/utils";
 import DrawerUsersList from "@/components/common/user/drawer.usersList";
 import UserDetails from "@/components/common/user/userDetails";
 import AddUserSheet from "@/components/admin/users/sheet.addUser";
-import { fetchData } from "@/utils/apiService";
+import { fetchData } from "@/service/apiService";
 import { handleCustomError } from "@/utils/error";
-import { userApi } from "@/api/userApi";
+import ApiEndpoints from "@/constants/apiEndpoints";
 import { User } from "@/types/admin";
 import "../admin.css";
 import { Student } from "@/types/coordinator";
@@ -104,7 +104,7 @@ function Users({ setDrawerOpen }: PropsType) {
                 setFetching(true);
 
                 // Send request
-                const resp = await fetchData(userApi.getCoordinatorsAndInstructors);
+                const resp = await fetchData(ApiEndpoints.GET_COORDINATORS_AND_INSTRUCTORS);
 
                 const users = resp?.data.data;
 

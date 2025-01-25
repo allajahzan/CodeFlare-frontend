@@ -18,9 +18,9 @@ import "./SideBar.css";
 import Slider from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import React from "react";
-import { userApi } from "@/api/userApi";
+import ApiEndpoints from '@/constants/apiEndpoints'
 import { handleCustomError } from "@/utils/error";
-import axiosInstance from "@/utils/axiosInstance";
+import axiosInstance from "@/service/axiosInstance";
 import { IUserContext, UserContext } from "@/context/userContext";
 import { toast } from "@/hooks/use-toast";
 
@@ -66,7 +66,7 @@ function SideBar({ sideBarItems }: PropsType) {
         try {
             // Send request
             const resp = await axiosInstance.post(
-                userApi.logout,
+                ApiEndpoints.LOGOUT,
                 {},
                 { withCredentials: false }
             );

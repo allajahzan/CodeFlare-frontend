@@ -1,6 +1,6 @@
 function Invoice() {
     return (
-        <div>s
+        <div>
         </div>
     );
 }

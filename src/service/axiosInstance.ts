@@ -1,4 +1,4 @@
-import { userApi } from "@/api/userApi";
+import ApiEndpoints from "@/constants/apiEndpoints";
 import { toast } from "@/hooks/use-toast";
 import axios from "axios";
 
@@ -14,7 +14,7 @@ const axiosInstance = axios.create({
 const refreshToken = async () => {
     try {
         const resp = await axios.get(
-            userApi.refreshToken,
+            ApiEndpoints.REFRESH_TOKEN,
             { withCredentials: true }
         );
         const data = resp?.data.data;

@@ -1,5 +1,5 @@
 import axiosInstance from "./axiosInstance";
-import { throwCustomError } from "./error";
+import { throwCustomError } from "../utils/error";
 
 /**
  * Fetches data from the given URL and returns the response.

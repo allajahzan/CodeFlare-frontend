@@ -14,6 +14,7 @@ import {
 import Shadow from "@/components/ui/shadow";
 import { useLayoutEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
+import AppRoutes from "@/constants/appRoutes";
 
 interface PropsType {
     isDrawerOpen: boolean;
@@ -45,17 +46,10 @@ function InstructorLayout({ isDrawerOpen }: PropsType) {
     const sideBarItems = useMemo(
         () => [
             {
-                path: "/instructor/dashboard",
+                path: AppRoutes.DASHBOARD,
                 icon: LayoutDashboard,
                 label: "Dashboard",
             },
-            //   { path: "/instructor/users", icon: UsersRound, label: "Users" },
-            //   ...(isSmall
-            //     ? [{ path: "/community", icon: Globe, label: "Community" }]
-            //     : []),
-            //   { path: "/instructor/weeks", icon: CalendarDays, label: "Weeks" },
-            //   { path: "/instructor/batches", icon: FileUser, label: "Batches" },
-            //   { path: "/instructor/invoices", icon: CreditCard, label: "Invoices" },
         ],
         [isSmall]
     );

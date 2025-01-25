@@ -14,6 +14,7 @@ import {
 import Shadow from "@/components/ui/shadow";
 import { useLayoutEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
+import AppRoutes from "@/constants/appRoutes";
 
 interface PropsType {
     isDrawerOpen: boolean;
@@ -45,7 +46,7 @@ function CoordinatorLayout({ isDrawerOpen }: PropsType) {
     const sideBarItems = useMemo(
         () => [
             {
-                path: "/coordinator/dashboard",
+                path: AppRoutes.DASHBOARD,
                 icon: LayoutDashboard,
                 label: "Dashboard",
             },

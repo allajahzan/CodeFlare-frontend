@@ -7,10 +7,10 @@ import { ArrowLeft, Eye, EyeOff, KeyRound, Loader } from "lucide-react";
 import React, { Fragment, useLayoutEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import bgImage from "@/assets/images/resetPassword1.jpg";
-import { userApi } from "@/api/userApi";
+import ApiEndpoints from "@/constants/apiEndpoints";
 import { toast } from "@/hooks/use-toast";
 import { handleCustomError } from "@/utils/error";
-import basicAxiosInstance from "@/utils/basicAxiosInstance";
+import basicAxiosInstance from "@/service/basicAxiosInstance";
 
 function Form() {
     const [isMount, setMount] = useState<boolean | null>(null);
@@ -36,7 +36,7 @@ function Form() {
 
         try {
             // Send request
-            const resp = await basicAxiosInstance.post(userApi.resetPassword + token, {
+            const resp = await basicAxiosInstance.post(ApiEndpoints.RESET_PASSWORD + token, {
                 password,
                 confirmPassword,
             });
@@ -69,7 +69,7 @@ function Form() {
         const checkResetLink = async () => {
             try {
                 // Send request
-                const resp = await basicAxiosInstance.post(userApi.resetPassword + token);
+                const resp = await basicAxiosInstance.post(ApiEndpoints.RESET_PASSWORD + token);
 
                 // Success response
                 if (resp && resp.status === 200) {

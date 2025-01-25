@@ -27,10 +27,10 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { handleCustomError } from "@/utils/error";
-import { postData } from "@/utils/apiService";
+import { postData } from "@/service/apiService";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
-import { userApi } from "@/api/userApi";
+import ApiEndpoints from "@/constants/apiEndpoints";
 import { User } from "@/types/admin";
 
 // Interface for Props
@@ -68,7 +68,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
 
         try {
             // Send request
-            const resp = await postData(userApi.user, {
+            const resp = await postData(ApiEndpoints.USER, {
                 name,
                 email,
                 role,
