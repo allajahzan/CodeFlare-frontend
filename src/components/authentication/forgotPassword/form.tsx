@@ -75,7 +75,7 @@ function Form() {
 
     return (
         <div className="relative z-0 p-5 pl-5 md:pl-0 h-full w-full lg:w-[80%] lg:h-[80%] bg-white rounded-none md:rounded-2xl shadow-custom overflow-auto no-scrollbar transition-all duration-300">
-            <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-0">
+            <div className="h-fit md:h-full w-full grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-0">
                 {/* Login form */}
                 <div className="w-full h-[410px] md:h-full bg-white order-2 md:order-1">
                     <motion.div

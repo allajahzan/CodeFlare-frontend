@@ -113,7 +113,7 @@ function Form() {
 
     return (
         <div className="relative z-0 p-5 pr-5 md:pr-0 h-full w-full lg:w-[80%] lg:h-[80%] bg-white rounded-none md:rounded-2xl shadow-custom overflow-auto no-scrollbar transition-all duration-300">
-            <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-0">
+            <div className="h-fit md:h-full w-full grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-0">
                 {/* Carousal */}
                 <Carousel
                     slides={slides}
@@ -128,7 +128,7 @@ function Form() {
                         initial={{ opacity: 1 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.3, delay: 0.2 }}
-                        className="p-0 px-0 md:px-12 lg:px-20 flex flex-col justify-start md:justify-center gap-10 h-full"
+                        className="p-0 px-0 md:px-12 lg:px-20 flex flex-col justify-center gap-10 h-full"
                     >
                         {/* Header */}
                         <motion.div
