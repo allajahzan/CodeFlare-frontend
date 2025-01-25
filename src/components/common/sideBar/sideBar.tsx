@@ -63,9 +63,6 @@ function SideBar({ sideBarItems }: PropsType) {
 
     // Handle Logout
     const handleLogout = async () => {
-        // Hide sidebar
-        dispatch(sideBarVisibilityAction(false));
-
         try {
             // Send request
             const resp = await axiosInstance.post(
@@ -76,6 +73,9 @@ function SideBar({ sideBarItems }: PropsType) {
 
             // Success response
             if (resp && resp.status === 200) {
+                // Hide sidebar
+                dispatch(sideBarVisibilityAction(false));
+
                 toast({ title: "Successfully Logged out." });
 
                 // Clear isAuth, user and localStorage
