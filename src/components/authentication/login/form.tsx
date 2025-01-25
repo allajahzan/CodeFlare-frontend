@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, KeyRound, Loader, Mail } from "lucide-react";
-import React, { useContext, useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import bgImage from "@/assets/images/login.jpg";
 import { userApi } from "@/api/userApi";
@@ -12,15 +12,14 @@ import { toast } from "@/hooks/use-toast";
 import { handleCustomError } from "@/utils/error";
 import { UserContext } from "@/context/userContext";
 import basicAxiosInstance from "@/utils/basicAxiosInstance";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { formSchema, FormType } from "@/validations/loginForm";
 
 function Form() {
     // From related states
     const [showPassword, setShowPassword] = useState(false);
     const [submiting, setSubmiting] = useState(false);
-
-    // Inputs
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
 
     // Get role
     const path = useLocation();
@@ -29,9 +28,17 @@ function Form() {
     // User Context
     const userContext = useContext(UserContext);
 
+    // Form validator
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<FormType>({
+        resolver: zodResolver(formSchema),
+    });
+
     // Handle submit
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const onSubmit = async (formData: { email: string; password: string }) => {
         setSubmiting(true);
 
         // Reset isAuth
@@ -43,8 +50,8 @@ function Form() {
             const resp = await basicAxiosInstance.post(
                 userApi.login,
                 {
-                    email,
-                    password,
+                    email: formData.email,
+                    password: formData.password,
                     role,
                 },
                 { withCredentials: true }
@@ -138,7 +145,7 @@ function Form() {
                         </motion.div>
 
                         {/* form */}
-                        <form onSubmit={handleSubmit} className="space-y-2">
+                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
                             {/* Input for email */}
                             <motion.div
                                 className="space-y-2 relative"
@@ -147,7 +154,7 @@ function Form() {
                                 transition={{ delay: 0.4 }}
                             >
                                 <Label htmlFor="email" className="text-sm font-medium">
-                                    Email Address
+                                    Email 
                                 </Label>
                                 <div className="relative">
                                     <Input
@@ -155,11 +162,14 @@ function Form() {
                                         type="email"
                                         placeholder="Email"
                                         required
-                                        onChange={(event) => setEmail(event.target.value)}
+                                        {...register("email")}
                                         className="font-medium p-5 pl-9"
                                     />
                                     <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                                 </div>
+                                <p className="text-xs text-red-800 font-semibold">
+                                    {errors.email && errors.email.message}
+                                </p>
                             </motion.div>
 
                             {/* Input for password */}
@@ -169,7 +179,7 @@ function Form() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.5 }}
                             >
-                                <Label htmlFor="email" className="text-sm font-medium">
+                                <Label htmlFor="password" className="text-sm font-medium">
                                     Password
                                 </Label>
                                 <div className="relative">
@@ -179,21 +189,24 @@ function Form() {
                                         placeholder="Password"
                                         required
                                         autoComplete="off"
-                                        onChange={(event) => setPassword(event.target.value)}
+                                        {...register("password")}
                                         className="font-medium p-5 pl-9"
                                     />
                                     <KeyRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                                    <div
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="p-2 absolute right-0 bottom-[3px] text-muted-foreground hover:text-zinc-500 cursor-pointer"
+                                    >
+                                        {showPassword ? (
+                                            <EyeOff className="h-5 w-5" />
+                                        ) : (
+                                            <Eye className="h-5 w-5" />
+                                        )}
+                                    </div>
                                 </div>
-                                <div
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    className="p-2 absolute right-0 bottom-[3px] text-muted-foreground hover:text-zinc-500 cursor-pointer"
-                                >
-                                    {showPassword ? (
-                                        <EyeOff className="h-5 w-5" />
-                                    ) : (
-                                        <Eye className="h-5 w-5" />
-                                    )}
-                                </div>
+                                <p className="text-xs text-red-800 font-semibold">
+                                    {errors.password && errors.password.message}
+                                </p>
                             </motion.div>
 
                             {/* Forgot password */}
