@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { sideBarVisibilityAction, stateType } from "../../redux/store";
+import { sideBarVisibilityAction, stateType } from "@//redux/store";
 import { cn } from "@/lib/utils";
 
 function Shadow() {

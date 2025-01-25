@@ -5,7 +5,7 @@ import {
     stateType,
     sideBarVisibilityAction,
     themeAction,
-} from "../../../redux/store";
+} from "@/redux/store";
 import {
     Tooltip,
     TooltipContent,
@@ -15,7 +15,7 @@ import {
 import SideBarItem from "./sideBarItem";
 import { LogOut, LucideProps, Moon, Sun } from "lucide-react";
 import "./SideBar.css";
-import Slider from "../../ui/slider";
+import Slider from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import React from "react";
 import { userApi } from "@/api/userApi";

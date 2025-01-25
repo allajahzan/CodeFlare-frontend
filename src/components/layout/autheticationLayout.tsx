@@ -1,4 +1,4 @@
-import FloatingBackground from '../animation/floatingBackground'
+import FloatingBackground from '@/components/animation/floatingBackground'
 import { Outlet } from 'react-router-dom'
 
 function AuthenticationLayout() {

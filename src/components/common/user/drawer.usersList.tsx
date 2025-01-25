@@ -8,7 +8,6 @@ import {
     MoreHorizontal,
     Plus,
     User2,
-    UserRound,
     UserRoundCheck,
     UserRoundMinus,
 } from "lucide-react";
@@ -21,10 +20,11 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { NotFoundOrbit } from "@/components/animation/fallbacks";
-import UserDetails from "../../common/user/userDetails";
+import UserDetails from "@/components/common/user/userDetails";
 import { Student } from "@/types/coordinator";
 import { User } from "@/types/admin";
 import { useLocation } from "react-router-dom";
+import profile from '@/assets/images/no-profile.svg'
 
 // Interface for Props
 interface PropsType {
@@ -89,12 +89,12 @@ function DrawerUsersList({
                                 >
                                     <div className="flex items-center gap-3">
                                         {/* Avatar profile pic */}
-                                        <Avatar className="border-2 border-zinc-100 w-12 h-12">
+                                        <Avatar className="border-2 bg-white w-12 h-12">
                                             {user.profilePic && (
                                                 <AvatarImage src={image} className="object-cover" />
                                             )}
-                                            <AvatarFallback>
-                                                <UserRound />
+                                            <AvatarFallback className="bg-transparent">
+                                              <img className="w-full" src={profile} alt="" />
                                             </AvatarFallback>
                                         </Avatar>
                                         <div className="flex-1 min-w-0">

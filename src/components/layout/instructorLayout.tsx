@@ -1,6 +1,6 @@
-import SideBar from "../common/sideBar/sideBar";
+import SideBar from "@/components/common/sideBar/sideBar";
 import { Outlet } from "react-router-dom";
-import Navbar from "../common/navbar/navbar";
+import Navbar from "@/components/common/navbar/navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { resizeAction, sideBarVisibilityAction, stateType } from "@/redux/store";
 import {
@@ -11,7 +11,7 @@ import {
     //   UsersRound,
     LayoutDashboard,
 } from "lucide-react";
-import Shadow from "../ui/shadow";
+import Shadow from "@/components/ui/shadow";
 import { useLayoutEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
 

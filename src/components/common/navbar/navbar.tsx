@@ -4,7 +4,7 @@ import {
     sideBarVisibilityAction,
     stateType,
     themeAction,
-} from "../../../redux/store";
+} from "@/redux/store";
 import NavbarItem from "./navbarItem";
 import Heading from "@/components/ui/heading";
 import { Bell, ChevronDown, Globe, Search, Moon, Sun } from "lucide-react";
