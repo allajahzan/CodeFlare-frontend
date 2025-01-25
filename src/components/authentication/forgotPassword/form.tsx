@@ -4,19 +4,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 import { ArrowLeft, Loader, Mail } from "lucide-react";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import bgImage from "@/assets/images/verifyEmail.jpg";
 import ApiEndpoints from "@/constants/apiEndpoints";
 import { toast } from "@/hooks/use-toast";
 import { handleCustomError } from "@/utils/error";
 import basicAxiosInstance from "@/service/basicAxiosInstance";
+import { useForm } from "react-hook-form";
+import {
+    formSchema,
+    FormType,
+} from "@/validations/authentication/forgotPassword";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 function Form() {
     const [submiting, setSubmiting] = useState(false);
-
-    // Inputs
-    const [email, setEmail] = useState<string>("");
 
     // Get role
     const path = useLocation();
@@ -24,15 +27,21 @@ function Form() {
 
     const navigate = useNavigate();
 
-    // Handle submit
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    // Form validator
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<FormType>({ resolver: zodResolver(formSchema) });
+
+    // On submit
+    const onSubmit = async (formData: { email: string }) => {
         setSubmiting(true);
 
         try {
             // Send request
             const resp = await basicAxiosInstance.post(ApiEndpoints.VERIFY_EMAIL, {
-                email,
+                email: formData.email,
                 role,
             });
 
@@ -42,8 +51,6 @@ function Form() {
                     setSubmiting(false);
 
                     toast({ title: "Password reset link has been sent to your email." });
-
-                    setEmail("");
                 }, 1000);
             }
         } catch (err: unknown) {
@@ -101,7 +108,7 @@ function Form() {
                         </motion.div>
 
                         {/* form */}
-                        <form onSubmit={handleSubmit} className="space-y-2">
+                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
                             {/* Input for email */}
                             <motion.div
                                 className="space-y-2 relative"
@@ -118,12 +125,14 @@ function Form() {
                                         type="email"
                                         placeholder="Email"
                                         required
-                                        value={email}
-                                        onChange={(event) => setEmail(event.target.value)}
+                                        {...register("email")}
                                         className="font-medium p-5 pl-9 border"
                                     />
                                     <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                                 </div>
+                                <p className="text-xs text-red-800 font-semibold">
+                                    {errors.email && errors.email.message}
+                                </p>
                             </motion.div>
 
                             {/* Submit button */}

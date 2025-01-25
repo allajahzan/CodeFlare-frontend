@@ -14,7 +14,7 @@ import { UserContext } from "@/context/userContext";
 import basicAxiosInstance from "@/service/basicAxiosInstance";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { formSchema, FormType } from "@/validations/loginForm";
+import { formSchema, FormType } from "@/validations/authentication/login";
 
 function Form() {
     // From related states
@@ -37,7 +37,7 @@ function Form() {
         resolver: zodResolver(formSchema),
     });
 
-    // Handle submit
+    // On submit
     const onSubmit = async (formData: { email: string; password: string }) => {
         setSubmiting(true);
 
