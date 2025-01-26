@@ -28,10 +28,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { handleCustomError } from "@/utils/error";
 import { postData } from "@/service/apiService";
-import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import ApiEndpoints from "@/constants/apiEndpoints";
 import { User } from "@/types/admin";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { formSchema, FormType } from "@/validations/admin/user";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+    MultiSelector,
+    MultiSelectorContent,
+    TriggerMultiSelector,
+} from "@/components/ui/multi-selector";
 
 // Interface for Props
 interface PropsType {
@@ -45,35 +52,33 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
     const [open, setOpen] = useState<boolean | undefined>(undefined);
     const [submiting, setSubmiting] = useState(false);
 
+    // Drop down for batches
+    const [dropDownOpen, setDropDownOpen] = useState<boolean>(false);
+
     // Inputs
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [role, setRole] = useState("");
-    const [batches, setBatches] = useState<string[]>([]);
-    const [message, setMessage] = useState("");
+    const [selectedBatches, setSelectedBatches] = useState<string[]>([]);
 
-    // Handle select batches
-    const handleSelectBatches = (value: string) => {
-        setBatches((batches) =>
-            batches.includes(value)
-                ? batches.filter((batch) => batch !== value)
-                : [...batches, value]
-        );
-    };
+    // Form validator
+    const {
+        register,
+        handleSubmit,
+        reset,
+        setValue,
+        formState: { errors },
+    } = useForm<FormType>({ resolver: zodResolver(formSchema) });
 
-    // Handle submit
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    // On submit
+    const onSubmit: SubmitHandler<FormType> = async (formData) => {
         setSubmiting(true);
 
         try {
             // Send request
             const resp = await postData(ApiEndpoints.USER, {
-                name,
-                email,
-                role,
-                batches,
-                message,
+                name: formData.name,
+                email: formData.email,
+                role: formData.role,
+                batches: [formData.batches],
+                message: formData.message,
             });
 
             const user = resp?.data.data;
@@ -82,6 +87,8 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
             if (resp && resp.status === 200) {
                 setTimeout(() => {
                     setSubmiting(false);
+                    reset();
+                    setSelectedBatches([]);
 
                     // Set new user
                     setNewUser(user);
@@ -100,10 +107,24 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
         }
     };
 
-    // Clear batches when sheet closes
+    // Handle select batches
+    const handleSelectBatches = (value: string) => {
+        setSelectedBatches((batches) => {
+            const updatedBatches = batches.includes(value)
+                ? batches.filter((batch) => batch !== value)
+                : [...batches, value];
+
+            setValue("batches", updatedBatches.join(", "));
+            return updatedBatches;
+        });
+    };
+
+    // Clear fields when sheet closes
     useEffect(() => {
         if (!open) {
-            setBatches([]);
+            reset();
+            setDropDownOpen(false);
+            setSelectedBatches([]);
         }
     }, [open]);
 
@@ -124,8 +145,9 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.3, delay: 0.2 }}
-                    onSubmit={handleSubmit}
-                    className="space-y-3 p-5 overflow-auto"
+                    onSubmit={handleSubmit(onSubmit)}
+                    className="space-y-3 p-5 overflow-auto h-full"
+                    onClick={() => setDropDownOpen(false)}
                 >
                     {/* Input for name */}
                     <motion.div
@@ -140,14 +162,19 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                         <div className="relative">
                             <Input
                                 id="name"
+                                type="text"
                                 placeholder="Enter user's full name"
                                 required
                                 autoComplete="off"
-                                onChange={(event) => setName(event.target.value)}
+                                {...register("name")}
                                 className="font-medium p-5 pl-9"
                             />
                             <UserRoundPlus className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
+                        {/* Name error message */}
+                        <p className="text-xs text-red-800 font-semibold">
+                            {errors.name?.message}
+                        </p>
                     </motion.div>
 
                     {/* Input for email */}
@@ -167,11 +194,15 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                                 placeholder="user@gmail.com"
                                 required
                                 autoComplete="off"
-                                onChange={(event) => setEmail(event.target.value)}
+                                {...register("email")}
                                 className="font-medium p-5 pl-9"
                             />
                             <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
+                        {/* Email error message */}
+                        <p className="text-xs text-red-800 font-semibold">
+                            {errors.email?.message}
+                        </p>
                     </motion.div>
 
                     {/* Input for role */}
@@ -188,7 +219,9 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                             <Select
                                 key="role"
                                 required
-                                onValueChange={(value) => setRole(value)}
+                                onValueChange={(value: "coordinator" | "instructor") =>
+                                    setValue("role", value, { shouldValidate: true })
+                                }
                             >
                                 <SelectTrigger id="role" className="font-medium p-5 pl-9">
                                     <SelectValue placeholder="Select a role" />
@@ -200,6 +233,10 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                             </Select>
                             <BriefcaseIcon className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
+                        {/* Role error message */}
+                        <p className="text-xs text-red-800 font-semibold">
+                            {errors.role?.message}
+                        </p>
                     </motion.div>
 
                     {/* Input for batches */}
@@ -209,48 +246,32 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                         transition={{ delay: 0.6 }}
                         className="space-y-2"
                     >
-                        <Label htmlFor="role" className="text-sm font-medium">
+                        <Label htmlFor="batches" className="text-sm font-medium">
                             Batches
                         </Label>
-                        <div className="relative">
-                            <Select
-                                key={"batches"}
-                                required
-                                onValueChange={(value) => handleSelectBatches(value)}
-                            >
-                                <SelectTrigger
-                                    id="batches"
-                                    className="font-medium p-5 pl-9 relative"
-                                >
-                                    {/* Conditional rendering of SelectValue */}
-                                    <SelectValue
-                                        placeholder="Select a batch"
-                                        className={cn(
-                                            "relative transition-opacity duration-200",
-                                            batches.length !== 0 && "opacity-0 pointer-events-none"
-                                        )}
-                                    />
-                                    {/* Overlay displaying selected batches */}
-                                    <div className="absolute inset-0 flex items-center p-5 pl-9 bg-white">
-                                        <p
-                                            className={cn(
-                                                "transition-opacity duration-200",
-                                                batches.length === 0 && "opacity-0"
-                                            )}
-                                        >
-                                            {batches.length > 0 ? batches.join(", ") : null}
-                                        </p>
-                                    </div>
-                                </SelectTrigger>
-                                <SelectContent className="max-h-[200px]">
-                                    <SelectItem value="BCK-188">BCK-188</SelectItem>
-                                    <SelectItem value="BCK-189">BCK-189</SelectItem>
-                                    <SelectItem value="BCK-190">BCK-190</SelectItem>
-                                    <SelectItem value="BCK-198">BCK-198</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <UsersRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
-                        </div>
+                        <MultiSelector
+                            triggerMultiSelector={
+                                <TriggerMultiSelector
+                                    fieldName="batches"
+                                    setDropDownOpen={setDropDownOpen}
+                                    dropDownOpen={dropDownOpen}
+                                    Icon={UsersRound}
+                                    register={register}
+                                />
+                            }
+                            multiSelectorContent={
+                                <MultiSelectorContent
+                                    dropDownOpen={dropDownOpen}
+                                    handleSelect={handleSelectBatches}
+                                    values={["Batch 1", "Batch 2", "Batch 3"]}
+                                    selectedBatches={selectedBatches}
+                                />
+                            }
+                        />
+                        {/* Batches error message */}
+                        <p className="text-xs text-red-800 font-semibold">
+                            {errors.batches?.message}
+                        </p>
                     </motion.div>
 
                     {/* Input fot message */}
@@ -268,7 +289,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                                 id="message"
                                 placeholder="Add a personal message to the invitation"
                                 autoComplete="off"
-                                onChange={(event) => setMessage(event.target.value)}
+                                {...register("message")}
                                 className="font-medium p-5 pl-9"
                             />
                             <MessageSquare className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />

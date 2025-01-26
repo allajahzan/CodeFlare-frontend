@@ -41,7 +41,7 @@ function Form() {
         formState: { errors },
     } = useForm<FormType>({ resolver: zodResolver(formSchema) });
 
-    // Handle submit
+    // On submit
     const onSubmit = async (formData: {
         password: string;
         confirmPassword: string;
