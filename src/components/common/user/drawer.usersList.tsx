@@ -7,6 +7,7 @@ import {
     Edit,
     MoreHorizontal,
     Plus,
+    Search,
     User2,
     UserRoundCheck,
     UserRoundMinus,
@@ -145,7 +146,7 @@ function DrawerUsersList({
                 {users.length === 0 && (
                     <NotFoundOrbit
                         MainIcon={User2}
-                        SubIcon={Plus}
+                        SubIcon={fetching? Search: Plus}
                         message={
                             fetching
                                 ? "Please wait a moment"

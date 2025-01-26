@@ -1,6 +1,7 @@
 import ApiEndpoints from "@/constants/apiEndpoints";
 import { toast } from "@/hooks/use-toast";
 import axios from "axios";
+import basicAxiosInstance from "./basicAxiosInstance";
 
 // Create an axios instance
 const axiosInstance = axios.create({
@@ -13,7 +14,7 @@ const axiosInstance = axios.create({
 
 const refreshToken = async () => {
     try {
-        const resp = await axios.get(
+        const resp = await basicAxiosInstance.post(
             ApiEndpoints.REFRESH_TOKEN,
             { withCredentials: true }
         );
@@ -65,6 +66,8 @@ axiosInstance.interceptors.response.use(
 
                 return axiosInstance(originalRequest);
             } catch (err: any) {
+                console.log(err);
+                
                 toast({ title: err.status === 401 ? err.response.data.errors.message : "Token expired. Please login again!" });
                 localStorage.clear();
                 return;
