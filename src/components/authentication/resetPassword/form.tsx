@@ -89,9 +89,12 @@ function Form() {
                 if (resp && resp.status === 200) {
                     setMount(true);
                 }
-            } catch (err: unknown) {
-                setMount(false);
-                return;
+            } catch (err: any) {
+                if (err.status === 410 || err.status === 404) setMount(false);
+                else {
+                    setMount(true);
+                    handleCustomError(err);
+                }
             }
         };
 
