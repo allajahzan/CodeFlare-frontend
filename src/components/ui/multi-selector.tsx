@@ -88,7 +88,8 @@ function TriggerMultiSelector({
                     event.stopPropagation();
                     setDropDownOpen?.(!dropDownOpen);
                 }}
-                className="font-medium p-5 pl-9 cursor-pointer"
+                onKeyDown={(event)=>event.preventDefault()}
+                className="font-medium p-5 pl-9 cursor-pointer placeholder:text-zinc-900"
             />
             {Icon && (
                 <Icon className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
