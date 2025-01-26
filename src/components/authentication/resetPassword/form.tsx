@@ -4,23 +4,25 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 import { ArrowLeft, Eye, EyeOff, KeyRound, Loader } from "lucide-react";
-import React, { Fragment, useLayoutEffect, useMemo, useState } from "react";
+import { Fragment, useLayoutEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import bgImage from "@/assets/images/resetPassword1.jpg";
 import ApiEndpoints from "@/constants/apiEndpoints";
 import { toast } from "@/hooks/use-toast";
 import { handleCustomError } from "@/utils/error";
 import basicAxiosInstance from "@/service/basicAxiosInstance";
+import { useForm } from "react-hook-form";
+import {
+    formSchema,
+    FormType,
+} from "@/validations/authentication/resetPassword";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 function Form() {
     const [isMount, setMount] = useState<boolean | null>(null);
     const [showPassword, setShowPassword] = useState(false);
     const [submiting, setSubmiting] = useState(false);
     const [role, setRole] = useState<string | null>(null);
-
-    // Inputs
-    const [password, setPassword] = useState<string>("");
-    const [confirmPassword, setConfirmPassword] = useState<string>("");
 
     const path = useLocation();
     const navigate = useNavigate();
@@ -29,9 +31,19 @@ function Form() {
     const queryParams = new URLSearchParams(location.search);
     const token = queryParams.get("token");
 
+    // Form validator
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm<FormType>({ resolver: zodResolver(formSchema) });
+
     // Handle submit
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const onSubmit = async (formData: {
+        password: string;
+        confirmPassword: string;
+    }) => {
         setSubmiting(true);
 
         try {
@@ -39,8 +51,8 @@ function Form() {
             const resp = await basicAxiosInstance.post(
                 ApiEndpoints.RESET_PASSWORD + token,
                 {
-                    password,
-                    confirmPassword,
+                    password: formData.password,
+                    confirmPassword: formData.confirmPassword,
                 }
             );
 
@@ -50,8 +62,8 @@ function Form() {
                     setSubmiting(false);
 
                     toast({ title: "Your password has been successfully reset." });
-                    setPassword("");
-                    setConfirmPassword("");
+
+                    reset();
                 }, 1000);
             }
         } catch (err: unknown) {
@@ -141,7 +153,7 @@ function Form() {
                                 </motion.div>
 
                                 {/* form */}
-                                <form onSubmit={handleSubmit} className="space-y-2">
+                                <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
                                     {/* Input for new password */}
                                     <motion.div
                                         className="space-y-2 relative"
@@ -159,22 +171,24 @@ function Form() {
                                                 placeholder="Password"
                                                 required
                                                 autoComplete="off"
-                                                value={password}
-                                                onChange={(event) => setPassword(event.target.value)}
+                                                {...register("password")}
                                                 className="font-medium p-5 pl-9 border"
                                             />
                                             <KeyRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                                            <div
+                                                onClick={() => setShowPassword(!showPassword)}
+                                                className="p-2 absolute right-0 bottom-[3px] text-muted-foreground hover:text-zinc-500 cursor-pointer"
+                                            >
+                                                {showPassword ? (
+                                                    <EyeOff className="h-5 w-5" />
+                                                ) : (
+                                                    <Eye className="h-5 w-5" />
+                                                )}
+                                            </div>
                                         </div>
-                                        <div
-                                            onClick={() => setShowPassword(!showPassword)}
-                                            className="p-2 absolute right-0 bottom-[3px] text-muted-foreground hover:text-zinc-500 cursor-pointer"
-                                        >
-                                            {showPassword ? (
-                                                <EyeOff className="h-5 w-5" />
-                                            ) : (
-                                                <Eye className="h-5 w-5" />
-                                            )}
-                                        </div>
+                                        <p className="text-xs text-red-800 font-semibold">
+                                            {errors.password && errors.password.message}
+                                        </p>
                                     </motion.div>
 
                                     {/* Input for confirm password */}
@@ -197,14 +211,14 @@ function Form() {
                                                 placeholder="Confirm password"
                                                 required
                                                 autoComplete="off"
-                                                value={confirmPassword}
-                                                onChange={(event) =>
-                                                    setConfirmPassword(event.target.value)
-                                                }
+                                                {...register("confirmPassword")}
                                                 className="font-medium p-5 pl-9 border"
                                             />
                                             <KeyRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                                         </div>
+                                        <p className="text-xs text-red-800 font-semibold">
+                                            {errors.confirmPassword && errors.confirmPassword.message}
+                                        </p>
                                     </motion.div>
 
                                     {/* Submit button */}
