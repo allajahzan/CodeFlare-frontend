@@ -22,9 +22,11 @@ function Form() {
     const [isMount, setMount] = useState<boolean | null>(null);
     const [showPassword, setShowPassword] = useState(false);
     const [submiting, setSubmiting] = useState(false);
-    const [role, setRole] = useState<string | null>(null);
 
+    // Get role
     const path = useLocation();
+    const role = path.pathname.split("/")[1];
+
     const navigate = useNavigate();
 
     // Get query params
@@ -74,18 +76,13 @@ function Form() {
         }
     };
 
-    // Set role
-    useLayoutEffect(() => {
-        setRole(path.pathname.split("/")[1]);
-    }, [path]);
-
-    // Check reset link has expired when page load
+    // Check reset password link has expired when page load
     useLayoutEffect(() => {
         const checkResetLink = async () => {
             try {
                 // Send request
-                const resp = await basicAxiosInstance.post(
-                    ApiEndpoints.RESET_PASSWORD + token
+                const resp = await basicAxiosInstance.get(
+                    ApiEndpoints.CHECK_RESET_PASSWORD_LINK + token
                 );
 
                 // Success response
