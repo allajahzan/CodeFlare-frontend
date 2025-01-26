@@ -14,7 +14,7 @@ const axiosInstance = axios.create({
 
 const refreshToken = async () => {
     try {
-        const resp = await basicAxiosInstance.post(
+        const resp = await basicAxiosInstance.get(
             ApiEndpoints.REFRESH_TOKEN,
             { withCredentials: true }
         );
