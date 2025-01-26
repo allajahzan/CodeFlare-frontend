@@ -31,6 +31,7 @@ function Form() {
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors },
     } = useForm<FormType>({ resolver: zodResolver(formSchema) });
 
@@ -51,6 +52,8 @@ function Form() {
                     setSubmiting(false);
 
                     toast({ title: "Password reset link has been sent to your email." });
+
+                    reset();
                 }, 1000);
             }
         } catch (err: unknown) {
