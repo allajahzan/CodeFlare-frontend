@@ -13,5 +13,5 @@ export const passwordRegex = {
 // Name regex
 export const nameRegex = {
     capitalLetter: /^[A-Z]/,
-    alphabet: /^[a-zA-Z]+$/,
+    alphabet: /^[a-zA-Z]+(?: [a-zA-Z]+)*$/
 };

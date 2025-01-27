@@ -14,9 +14,7 @@ export const formSchema = z.object({
         .email("Invalid email address !")
         .regex(emailRegex.validEmail, "Enter a valid email (eg:user@gmail.com) !")
         .nonempty("Email is required !"),
-    role: z.enum(["coordinator", "instructor"], {
-        required_error: "Role is required",
-    }),
+    role: z.string().nonempty("Role is required !"),
     batches: z.string().nonempty("Batches are required !"),
     message: z.string().optional(),
 });

@@ -6,7 +6,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useLayoutEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -21,13 +21,12 @@ import {
     BriefcaseIcon,
     Loader,
     Mail,
-    MessageSquare,
     UserRoundPlus,
     UsersRound,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { handleCustomError } from "@/utils/error";
-import { postData } from "@/service/apiService";
+import { updateData } from "@/service/apiService";
 import { toast } from "@/hooks/use-toast";
 import ApiEndpoints from "@/constants/apiEndpoints";
 import { User } from "@/types/admin";
@@ -43,11 +42,11 @@ import {
 // Interface for Props
 interface PropsType {
     button: ReactNode;
-    setNewUser: React.Dispatch<React.SetStateAction<User | null>>;
+    selectedUser: User;
 }
 
 // Add user sheet
-function AddUserSheet({ button, setNewUser }: PropsType) {
+function EditUserSheet({ button, selectedUser }: PropsType) {
     // Sheet state
     const [open, setOpen] = useState<boolean | undefined>(undefined);
     const [submiting, setSubmiting] = useState(false);
@@ -73,13 +72,15 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
 
         try {
             // Send request
-            const resp = await postData(ApiEndpoints.USER, {
-                name: formData.name,
-                email: formData.email,
-                role: formData.role,
-                batches: formData.batches.split(", "),
-                message: formData.message,
-            });
+            const resp = await updateData(
+                ApiEndpoints.USER + `/${selectedUser._id}`,
+                {
+                    name: formData.name,
+                    email: formData.email,
+                    role: formData.role,
+                    batches: formData.batches.split(", "),
+                }
+            );
 
             const user = resp?.data.data;
 
@@ -87,16 +88,14 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
             if (resp && resp.status === 200) {
                 setTimeout(() => {
                     setSubmiting(false);
-                    reset();
-                    setSelectedBatches([]);
 
-                    // Set new user
-                    setNewUser(user);
+                    // set updated user
+                    selectedUser = user;
 
                     // Close sheet
                     setOpen(false);
 
-                    toast({ title: "User added successfully." });
+                    toast({ title: "User updated successfully." });
                 }, 1000);
             }
         } catch (err: unknown) {
@@ -119,12 +118,24 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
         });
     };
 
-    // Clear fields when sheet closes
+    // Reset form values
+    useLayoutEffect(() => {
+        if (selectedUser) {
+            reset({
+                name: selectedUser.name || "",
+                email: selectedUser.email || "",
+                role: selectedUser.role || "",
+                batches: selectedUser.batches?.join(", ") || "",
+            });
+            // Set selected batches
+            setSelectedBatches(selectedUser.batches);
+        }
+    }, [selectedUser, reset, open]);
+
+    // Close drop down when sheet close
     useEffect(() => {
         if (!open) {
-            reset();
             setDropDownOpen(false);
-            setSelectedBatches([]);
         }
     }, [open]);
 
@@ -193,9 +204,10 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                                 type="email"
                                 placeholder="user@gmail.com"
                                 required
+                                readOnly
                                 autoComplete="off"
                                 {...register("email")}
-                                className="font-medium p-5 pl-9"
+                                className="font-medium p-5 pl-9 cursor-not-allowed"
                             />
                             <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
@@ -219,6 +231,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                             <Select
                                 key="role"
                                 required
+                                value={selectedUser.role || ""}
                                 onValueChange={(value: string) =>
                                     setValue("role", value, { shouldValidate: true })
                                 }
@@ -274,33 +287,11 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                         </p>
                     </motion.div>
 
-                    {/* Input fot message */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.7 }}
-                        className="space-y-2"
-                    >
-                        <Label htmlFor="message" className="text-sm font-medium">
-                            Personal Message (Optional)
-                        </Label>
-                        <div className="relative">
-                            <Input
-                                id="message"
-                                placeholder="Add a personal message to the invitation"
-                                autoComplete="off"
-                                {...register("message")}
-                                className="font-medium p-5 pl-9"
-                            />
-                            <MessageSquare className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
-                        </div>
-                    </motion.div>
-
                     {/* Submit button */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.8 }}
+                        transition={{ delay: 0.7 }}
                         className="pt-4"
                     >
                         <Button
@@ -314,7 +305,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                                     Processing...
                                 </div>
                             ) : (
-                                "Send Invitation"
+                                "Update User"
                             )}
                         </Button>
                     </motion.div>
@@ -324,4 +315,4 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
     );
 }
 
-export default AddUserSheet;
+export default EditUserSheet;

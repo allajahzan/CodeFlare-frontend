@@ -20,13 +20,13 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { NotSelected } from "@/components/animation/fallbacks";
-import IconButton from "@/components/ui/iconButton";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Student } from "@/types/coordinator";
 import { User } from "@/types/admin";
 import { Fragment } from "react/jsx-runtime";
 import profile from "@/assets/images/no-profile.svg";
+import EditUserSheet from "@/components/admin/users/sheet.editUser";
 
 interface PropsType {
     selectedUser: User | Student;
@@ -89,11 +89,14 @@ function UserDetails({ selectedUser, className, role }: PropsType) {
                             </div>
 
                             {/* Edit button */}
-                            <IconButton
-                                action={() => alert("Edit")}
-                                className="bg-zinc-900 hover:bg-zinc-800 text-white p-2 rounded-full self-start"
-                                Icon={Edit2}
-                            />
+                            <EditUserSheet
+                            button={
+                                <div className="shadow-md bg-zinc-900 hover:bg-zinc-800 text-white rounded-full p-2">
+                                    <Edit2 className="h-4 w-4" />
+                                </div>
+                            }
+                            selectedUser={selectedUser as User}
+                        />
                         </div>
 
                         {/* More details - cards */}
