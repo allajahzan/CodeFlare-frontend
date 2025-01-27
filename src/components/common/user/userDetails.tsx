@@ -27,14 +27,30 @@ import { User } from "@/types/admin";
 import { Fragment } from "react/jsx-runtime";
 import profile from "@/assets/images/no-profile.svg";
 import EditUserSheet from "@/components/admin/users/sheet.editUser";
+import EditStudentSheet from "@/components/coordinator/students/sheet.editStudent";
+import { useContext } from "react";
+import { IUserContext, UserContext } from "@/context/userContext";
 
+// Interface for Props
 interface PropsType {
+    setUsers: React.Dispatch<React.SetStateAction<[] | Student[] | User[]>>;
+    setSelectedUser: React.Dispatch<React.SetStateAction<User | Student | null>>;
     selectedUser: User | Student;
     className?: string;
     role: string;
 }
 
-function UserDetails({ selectedUser, className, role }: PropsType) {
+// User Details Component
+function UserDetails({
+    setUsers,
+    selectedUser,
+    setSelectedUser,
+    className,
+    role,
+}: PropsType) {
+    // User context
+    const { user } = useContext(UserContext) as IUserContext;
+
     return (
         <AnimatePresence mode="wait">
             {selectedUser && (
@@ -89,14 +105,34 @@ function UserDetails({ selectedUser, className, role }: PropsType) {
                             </div>
 
                             {/* Edit button */}
-                            <EditUserSheet
-                            button={
-                                <div className="shadow-md bg-zinc-900 hover:bg-zinc-800 text-white rounded-full p-2">
-                                    <Edit2 className="h-4 w-4" />
-                                </div>
-                            }
-                            selectedUser={selectedUser as User}
-                        />
+                            <div className="self-start">
+                                {role === "user" ? (
+                                    // Edit user
+                                    <EditUserSheet
+                                        button={
+                                            <div className="shadow-md bg-zinc-900 hover:bg-zinc-800 text-white rounded-full p-2">
+                                                <Edit2 className="h-4 w-4" />
+                                            </div>
+                                        }
+                                        setUsers={setUsers as any}
+                                        setSelectedUser={setSelectedUser as any}
+                                        selectedUser={selectedUser as User}
+                                    />
+                                ) : (
+                                    // Edit student
+                                    <EditStudentSheet
+                                        button={
+                                            <div className="shadow-md bg-zinc-900 hover:bg-zinc-800 text-white rounded-full p-2">
+                                                <Edit2 className="h-4 w-4" />
+                                            </div>
+                                        }
+                                        setStudents={setUsers as any}
+                                        setSelectedStudent={setSelectedUser as any}
+                                        selecteStudent={selectedUser as Student}
+                                        batches={(user as User).batches}
+                                    />
+                                )}
+                            </div>
                         </div>
 
                         {/* More details - cards */}

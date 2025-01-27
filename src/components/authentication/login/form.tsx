@@ -15,6 +15,8 @@ import basicAxiosInstance from "@/service/basicAxiosInstance";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { formSchema, FormType } from "@/validations/authentication/login";
+import { useDispatch } from "react-redux";
+import { roleAction } from "@/redux/store";
 
 function Form() {
     // From related states
@@ -24,6 +26,9 @@ function Form() {
     // Get role
     const path = useLocation();
     const role = path.pathname.split("/")[1];
+
+    // Redux
+    const dispatch = useDispatch();
 
     // User Context
     const userContext = useContext(UserContext);
@@ -73,6 +78,8 @@ function Form() {
 
                     toast({ title: "Successfully Logged In" });
                 }, 1000);
+                // set role in redux
+                dispatch(roleAction(data.role));
             }
         } catch (err: unknown) {
             setTimeout(() => {

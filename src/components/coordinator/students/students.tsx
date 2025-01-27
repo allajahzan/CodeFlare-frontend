@@ -313,6 +313,8 @@ function Students({ setDrawerOpen }: PropsType) {
                 <div className="grid gap-5 col-auto lg:col-span-2 grid-rows-[auto_1fr] relative z-10">
                     {/* Student details */}
                     <UserDetails
+                        setUsers = {setStudents as any}
+                        setSelectedUser = {setSelectedStudent}
                         selectedUser={selectedStudent as Student}
                         className="border shadow-sm rounded-2xl"
                         role="student"

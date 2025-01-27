@@ -6,7 +6,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
-import { ReactNode, useEffect, useLayoutEffect, useState } from "react";
+import { ReactNode, useLayoutEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -21,6 +21,7 @@ import {
     BriefcaseIcon,
     Loader,
     Mail,
+    MessageSquare,
     UserRoundPlus,
     UsersRound,
 } from "lucide-react";
@@ -29,32 +30,29 @@ import { handleCustomError } from "@/utils/error";
 import { updateData } from "@/service/apiService";
 import { toast } from "@/hooks/use-toast";
 import ApiEndpoints from "@/constants/apiEndpoints";
-import { User } from "@/types/admin";
+import { Student } from "@/types/coordinator";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { formSchema, FormType } from "@/validations/admin/user";
+import { formSchema, FormType } from "@/validations/coordinator/student";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-    MultiSelector,
-    MultiSelectorContent,
-    TriggerMultiSelector,
-} from "@/components/ui/multi-selector";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 
 // Interface for Props
 interface PropsType {
     button: ReactNode;
-    setUsers: React.Dispatch<React.SetStateAction<[] | User[]>>;
-    setSelectedUser: React.Dispatch<React.SetStateAction<User>>;
-    selectedUser: User;
+    setStudents: React.Dispatch<React.SetStateAction<[] | Student[]>>;
+    setSelectedStudent: React.Dispatch<React.SetStateAction<Student>>;
+    selecteStudent: Student;
+    batches: string[];
 }
 
 // Add user sheet
-function EditUserSheet({
+function EditStudentSheet({
     button,
-    setUsers,
-    selectedUser,
-    setSelectedUser,
+    batches,
+    setStudents,
+    selecteStudent,
+    setSelectedStudent,
 }: PropsType) {
     // Sheet state
     const [open, setOpen] = useState<boolean | undefined>(undefined);
@@ -63,57 +61,58 @@ function EditUserSheet({
     // Redux
     const role = useSelector((state: stateType) => state.role);
 
-    // Drop down for batches
-    const [dropDownOpen, setDropDownOpen] = useState<boolean>(false);
-
-    // Inputs
-    const [selectedBatches, setSelectedBatches] = useState<string[]>([]);
+    // Input
+    const [selectedBatch, setSelectedBatch] = useState<string>("");
 
     // Form validator
     const {
         register,
         handleSubmit,
-        reset,
         setValue,
+        reset,
         formState: { errors },
     } = useForm<FormType>({ resolver: zodResolver(formSchema) });
 
     // On submit
-    const onSubmit: SubmitHandler<FormType> = async (formData) => {
+    const OnSubmit: SubmitHandler<FormType> = async (formData) => {
         setSubmiting(true);
 
         try {
             // Send request
             const resp = await updateData(
-                ApiEndpoints.USER + `/${selectedUser._id}`,
+                ApiEndpoints.USER + `/${selecteStudent._id}`,
                 {
                     name: formData.name,
                     email: formData.email,
-                    role: formData.role,
-                    batches: formData.batches.split(", "),
+                    role: formData.role.toLowerCase(),
+                    batch: formData.batch,
+                    message: formData.message,
                 },
                 role
             );
 
-            const user = resp?.data.data;
+            const student = resp?.data.data;
 
             // Success response
             if (resp && resp.status === 200) {
                 setTimeout(() => {
                     setSubmiting(false);
+                    reset();
 
-                    // Set updated user in selected user
-                    setSelectedUser(user);
+                    // Set updated student in selected student
+                    setSelectedStudent(student);
 
-                    // Set updated user in users list
-                    setUsers((prevUsers) =>
-                        prevUsers.map((u) => (u._id === user._id ? { ...u, ...user } : u))
+                    // Set updated student in students list
+                    setStudents((prevStudents) =>
+                        prevStudents.map((u) =>
+                            u._id === student._id ? { ...u, ...student } : u
+                        )
                     );
 
                     // Close sheet
                     setOpen(false);
 
-                    toast({ title: "User updated successfully." });
+                    toast({ title: "Student updated successfully." });
                 }, 1000);
             }
         } catch (err: unknown) {
@@ -124,38 +123,20 @@ function EditUserSheet({
         }
     };
 
-    // Handle select batches
-    const handleSelectBatches = (value: string) => {
-        setSelectedBatches((batches) => {
-            const updatedBatches = batches.includes(value)
-                ? batches.filter((batch) => batch !== value)
-                : [...batches, value];
-
-            setValue("batches", updatedBatches.join(", "));
-            return updatedBatches;
-        });
-    };
-
     // Reset form values
     useLayoutEffect(() => {
-        if (selectedUser) {
+        if (selecteStudent) {
             reset({
-                name: selectedUser.name || "",
-                email: selectedUser.email || "",
-                role: selectedUser.role || "",
-                batches: selectedUser.batches?.join(", ") || "",
+                name: selecteStudent.name || "",
+                email: selecteStudent.email || "",
+                role:
+                    selecteStudent.role[0].toUpperCase() + selecteStudent.role.slice(1) ||
+                    "",
+                batch: selecteStudent.batch || "",
             });
-            // Set selected batches
-            setSelectedBatches(selectedUser.batches);
+            setSelectedBatch(selecteStudent.batch);
         }
-    }, [selectedUser, reset, open]);
-
-    // Close drop down when sheet close
-    useEffect(() => {
-        if (!open) {
-            setDropDownOpen(false);
-        }
-    }, [open]);
+    }, [selecteStudent, reset, open]);
 
     return (
         <Sheet open={open} onOpenChange={setOpen}>
@@ -164,10 +145,10 @@ function EditUserSheet({
                 {/* Header */}
                 <SheetHeader className="p-5 bg-zinc-0">
                     <SheetTitle className="text-foreground">
-                        Update selected user
+                        Update selected student
                     </SheetTitle>
                     <SheetDescription className="font-medium text-foreground">
-                        Update the information below to change user's details.
+                        Update the information below to change student's details.
                     </SheetDescription>
                 </SheetHeader>
 
@@ -176,9 +157,8 @@ function EditUserSheet({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.3, delay: 0.2 }}
-                    onSubmit={handleSubmit(onSubmit)}
-                    onClick={() => setDropDownOpen(false)}
-                    className="space-y-3 p-5 overflow-auto h-full"
+                    onSubmit={handleSubmit(OnSubmit)}
+                    className="space-y-3 p-5 overflow-auto"
                 >
                     {/* Input for name */}
                     <motion.div
@@ -193,8 +173,7 @@ function EditUserSheet({
                         <div className="relative">
                             <Input
                                 id="name"
-                                type="text"
-                                placeholder="Enter user's full name"
+                                placeholder="Enter student's full name"
                                 required
                                 autoComplete="off"
                                 {...register("name")}
@@ -222,7 +201,7 @@ function EditUserSheet({
                             <Input
                                 id="email"
                                 type="email"
-                                placeholder="user@gmail.com"
+                                placeholder="student@gmail.com"
                                 required
                                 autoComplete="off"
                                 {...register("email")}
@@ -247,23 +226,15 @@ function EditUserSheet({
                             Role
                         </Label>
                         <div className="relative">
-                            <Select
-                                key="role"
+                            <Input
+                                id="role"
+                                type="text"
                                 required
-                                value={selectedUser.role || ""}
+                                autoComplete="off"
                                 disabled
-                                onValueChange={(value: string) =>
-                                    setValue("role", value, { shouldValidate: true })
-                                }
-                            >
-                                <SelectTrigger id="role" className="font-medium p-5 pl-9">
-                                    <SelectValue placeholder="Select a role" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="coordinator">Coordinator</SelectItem>
-                                    <SelectItem value="instructor">Instructor</SelectItem>
-                                </SelectContent>
-                            </Select>
+                                {...register("role")}
+                                className="font-medium p-5 pl-9 cursor-not-allowed"
+                            />
                             <BriefcaseIcon className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
                         {/* Role error message */}
@@ -272,46 +243,78 @@ function EditUserSheet({
                         </p>
                     </motion.div>
 
-                    {/* Input for batches */}
+                    {/* Input for batch */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.6 }}
                         className="space-y-2"
                     >
-                        <Label htmlFor="batches" className="text-sm font-medium">
+                        <Label htmlFor="role" className="text-sm font-medium">
                             Batches
                         </Label>
-                        <MultiSelector
-                            triggerMultiSelector={
-                                <TriggerMultiSelector
-                                    fieldName="batches"
-                                    setDropDownOpen={setDropDownOpen}
-                                    dropDownOpen={dropDownOpen}
-                                    Icon={UsersRound}
-                                    register={register}
-                                />
-                            }
-                            multiSelectorContent={
-                                <MultiSelectorContent
-                                    dropDownOpen={dropDownOpen}
-                                    handleSelect={handleSelectBatches}
-                                    values={["Batch 1", "Batch 2", "Batch 3"]}
-                                    selectedBatches={selectedBatches}
-                                />
-                            }
-                        />
-                        {/* Batches error message */}
+                        <div className="relative">
+                            <Select
+                                key={"batches"}
+                                required
+                                value={selectedBatch}
+                                onValueChange={(value) => {
+                                    setSelectedBatch(value);
+                                    setValue("batch", value);
+                                }}
+                            >
+                                <SelectTrigger
+                                    id="batches"
+                                    className="font-medium p-5 pl-9 relative"
+                                >
+                                    <SelectValue
+                                        placeholder="Select a batch"
+                                        className="relative transition-opacity duration-200"
+                                    />
+                                </SelectTrigger>
+                                <SelectContent className="max-h-[200px]">
+                                    {batches.map((batch, index) => (
+                                        <SelectItem key={index} value={batch}>
+                                            {batch}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            <UsersRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                        </div>
+                        {/* Batch error message */}
                         <p className="text-xs text-red-800 font-semibold">
-                            {errors.batches?.message}
+                            {errors.batch?.message}
                         </p>
+                    </motion.div>
+
+                    {/* Input fot message */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.7 }}
+                        className="space-y-2"
+                    >
+                        <Label htmlFor="message" className="text-sm font-medium">
+                            Personal Message (Optional)
+                        </Label>
+                        <div className="relative">
+                            <Input
+                                id="message"
+                                placeholder="Add a personal message to the invitation"
+                                autoComplete="off"
+                                {...register("message")}
+                                className="font-medium p-5 pl-9"
+                            />
+                            <MessageSquare className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                        </div>
                     </motion.div>
 
                     {/* Submit button */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.7 }}
+                        transition={{ delay: 0.8 }}
                         className="pt-4"
                     >
                         <Button
@@ -335,4 +338,4 @@ function EditUserSheet({
     );
 }
 
-export default EditUserSheet;
+export default EditStudentSheet;
