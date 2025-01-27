@@ -1,7 +1,6 @@
 import {
     ArrowUpAZ,
     CalendarArrowUp,
-    Edit,
     EyeIcon,
     Filter,
     Search,
@@ -199,12 +198,13 @@ function Users({ setDrawerOpen }: PropsType) {
                 {isSmall && (
                     <DrawerUsersList
                         fetching={fetching}
+                        setUsers={setUsers as any}
                         users={users}
-                        selectedUser={selectedUser as User}
-                        isSmall={isSmall}
-                        setDrawerOpen={setDrawerOpen}
                         setSelectedUser={setSelectedUser}
+                        selectedUser={selectedUser as User}
                         action={handleSelect}
+                        setDrawerOpen={setDrawerOpen}
+                        isSmall={isSmall}    
                     />
                 )}
 
@@ -244,10 +244,6 @@ function Users({ setDrawerOpen }: PropsType) {
                                                     >
                                                         <EyeIcon />
                                                         View Profile
-                                                    </DropdownMenuItem>
-                                                    <DropdownMenuItem onClick={() => alert("edit")}>
-                                                        <Edit />
-                                                        Edit Profile
                                                     </DropdownMenuItem>
                                                     <DropdownMenuSeparator />
                                                     <DropdownMenuItem>

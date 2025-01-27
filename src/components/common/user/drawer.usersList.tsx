@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
-    Edit,
+    EyeIcon,
     MoreHorizontal,
     Plus,
     Search,
@@ -25,27 +25,30 @@ import UserDetails from "@/components/common/user/userDetails";
 import { Student } from "@/types/coordinator";
 import { User } from "@/types/admin";
 import { useLocation } from "react-router-dom";
-import profile from '@/assets/images/no-profile.svg'
+import profile from "@/assets/images/no-profile.svg";
 
 // Interface for Props
 interface PropsType {
     fetching: boolean;
+    setUsers: React.Dispatch<React.SetStateAction<[] | User[] | Student[]>>;
     users: User[] | Student[];
-    setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setSelectedUser: React.Dispatch<React.SetStateAction<User | Student | null>>;
-    action: (index: number) => void;
     selectedUser: User | Student;
+    action: (index: number) => void;
+    setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
     isSmall: boolean;
 }
 
 // Drawer Users List Component
 function DrawerUsersList({
     fetching,
+    setUsers,
     users,
+    setSelectedUser,
     selectedUser,
-    isSmall,
-    setDrawerOpen,
     action,
+    setDrawerOpen,
+    isSmall,
 }: PropsType) {
     // Get role
     const pathname = useLocation().pathname;
@@ -95,7 +98,7 @@ function DrawerUsersList({
                                                 <AvatarImage src={image} className="object-cover" />
                                             )}
                                             <AvatarFallback className="bg-transparent">
-                                              <img className="w-full" src={profile} alt="" />
+                                                <img className="w-full" src={profile} alt="" />
                                             </AvatarFallback>
                                         </Avatar>
                                         <div className="flex-1 min-w-0">
@@ -115,18 +118,24 @@ function DrawerUsersList({
                                             <DropdownMenuContent
                                                 // Change alignments in small size
                                                 align={isSmall ? "end" : "start"}
-                                                onClick={(event) => event.stopPropagation()}
                                                 className={cn(
                                                     "relative",
                                                     isSmall ? "left-[13px]" : "left-0"
                                                 )}
                                             >
-                                                <DropdownMenuItem onClick={() => alert("edit")}>
-                                                    <Edit />
-                                                    Edit Profile
+                                                <DropdownMenuItem
+                                                    onClick={() => {
+                                                        setDrawerOpen(true);
+                                                        setSelectedUser(user);
+                                                    }}
+                                                >
+                                                    <EyeIcon />
+                                                    View Profile
                                                 </DropdownMenuItem>
                                                 <DropdownMenuSeparator />
-                                                <DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    onClick={(event) => event.stopPropagation()}
+                                                >
                                                     {user.isBlock ? (
                                                         <UserRoundCheck />
                                                     ) : (
@@ -146,7 +155,7 @@ function DrawerUsersList({
                 {users.length === 0 && (
                     <NotFoundOrbit
                         MainIcon={User2}
-                        SubIcon={fetching? Search: Plus}
+                        SubIcon={fetching ? Search : Plus}
                         message={
                             fetching
                                 ? "Please wait a moment"
@@ -168,6 +177,8 @@ function DrawerUsersList({
             {/* Selected user details */}
             <DrawerContent className="will-change-auto">
                 <UserDetails
+                    setUsers={setUsers}
+                    setSelectedUser={setSelectedUser}
                     selectedUser={selectedUser}
                     role={role === "students" ? "student" : "user"}
                 />

@@ -1,7 +1,6 @@
 import {
     ArrowUpAZ,
     CalendarArrowUp,
-    Edit,
     EyeIcon,
     Filter,
     Search,
@@ -270,10 +269,6 @@ function Students({ setDrawerOpen }: PropsType) {
                                                     >
                                                         <EyeIcon />
                                                         View Profile
-                                                    </DropdownMenuItem>
-                                                    <DropdownMenuItem onClick={() => alert("edit")}>
-                                                        <Edit />
-                                                        Edit Profile
                                                     </DropdownMenuItem>
                                                     <DropdownMenuSeparator />
                                                     <DropdownMenuItem>
