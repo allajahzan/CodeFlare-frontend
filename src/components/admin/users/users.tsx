@@ -118,7 +118,9 @@ function Users({ setDrawerOpen }: PropsType) {
                 // Success response
                 if (resp && resp.status === 200) {
                     setTimeout(() => {
+                        // Set users
                         setUsers(users);
+
                         setFetching(false);
                     }, 1000);
                 }
@@ -140,7 +142,7 @@ function Users({ setDrawerOpen }: PropsType) {
     return (
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-5 pt-0">
             {/*Left side  */}
-            <div className="p-5 sticky z-0 top-[20px] md:top-5 w-full h-[calc(100vh-130px)] flex flex-col gap-5 items-center bg-white border shadow-sm rounded-2xl">
+            <div className="p-5 sticky z-0 top-[20px] md:top-5 w-full h-[calc(100vh-108px)] flex flex-col gap-5 items-center bg-white border shadow-sm rounded-2xl">
                 {/* Heading */}
                 <CardHeader
                     heading="Manage users"
@@ -204,7 +206,7 @@ function Users({ setDrawerOpen }: PropsType) {
                         selectedUser={selectedUser as User}
                         action={handleSelect}
                         setDrawerOpen={setDrawerOpen}
-                        isSmall={isSmall}    
+                        isSmall={isSmall}
                     />
                 )}
 

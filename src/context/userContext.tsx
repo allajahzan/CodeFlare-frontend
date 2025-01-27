@@ -1,17 +1,25 @@
 import ApiEndpoints from "@/constants/apiEndpoints";
-import { stateType } from "@/redux/store";
+import { toast } from "@/hooks/use-toast";
+import { sideBarVisibilityAction, stateType } from "@/redux/store";
 import { fetchData } from "@/service/apiService";
+import axiosInstance from "@/service/axiosInstance";
 import { handleCustomError } from "@/utils/error";
-import { createContext, ReactNode, useState, useLayoutEffect } from "react";
-import { useSelector } from "react-redux";
+import {
+    createContext,
+    ReactNode,
+    useState,
+    useLayoutEffect,
+} from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 // Interface for User
 interface IUser {
     name: string;
     email: string;
     phoneNo?: string;
-    profilePic: string;
+    profilePic?: string;
     role: string;
+    batch?: string;
     batches?: string[] | string;
     createdAt?: string;
     updatedAt?: string;
@@ -31,9 +39,9 @@ const UserContext = createContext<IUserContext | null>(null);
 
 // User Context Provider Component
 const UserContextProvider = ({ children }: { children: ReactNode }) => {
-
     // Get role
-    const role = useSelector((state: stateType)=>state.role)
+    const role = useSelector((state: stateType) => state.role);
+    const dispatch = useDispatch();
 
     const [isAuth, setIsAuth] = useState<boolean>(
         localStorage.getItem("isAuth") === "1"
@@ -62,9 +70,31 @@ const UserContextProvider = ({ children }: { children: ReactNode }) => {
         isAuth ? getUserData() : null;
     }, [isAuth]); // Trigger effect when isAuth changes
 
-    const logout = () => {
-        // Logout
-        alert("logout");
+    // Logout user
+    const logout = async () => {
+        try {
+            // Send request
+            const resp = await axiosInstance.post(
+                ApiEndpoints.LOGOUT,
+                {},
+                { withCredentials: false }
+            );
+
+            // Success response
+            if (resp && resp.status === 200) {
+                // Hide sidebar
+                dispatch(sideBarVisibilityAction(false));
+
+                toast({ title: "Successfully Logged out." });
+
+                // Clear isAuth, user and localStorage
+                setIsAuth(false);
+                setUser(null);
+                localStorage.clear();
+            }
+        } catch (err: unknown) {
+            handleCustomError(err);
+        }
     };
 
     return (

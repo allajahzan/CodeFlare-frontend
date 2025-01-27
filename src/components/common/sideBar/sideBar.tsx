@@ -1,11 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useCallback, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-    stateType,
-    sideBarVisibilityAction,
-    themeAction,
-} from "@/redux/store";
+import { stateType, sideBarVisibilityAction, themeAction } from "@/redux/store";
 import {
     Tooltip,
     TooltipContent,
@@ -18,11 +14,7 @@ import "./SideBar.css";
 import Slider from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import React from "react";
-import ApiEndpoints from '@/constants/apiEndpoints'
-import { handleCustomError } from "@/utils/error";
-import axiosInstance from "@/service/axiosInstance";
 import { IUserContext, UserContext } from "@/context/userContext";
-import { toast } from "@/hooks/use-toast";
 
 // Interface for Props
 interface PropsType {
@@ -46,7 +38,7 @@ function SideBar({ sideBarItems }: PropsType) {
     const dispatch = useDispatch();
 
     // User Context
-    const { setIsAuth, setUser } = useContext(UserContext) as IUserContext;
+    const { logout } = useContext(UserContext) as IUserContext;
 
     const navigate = useNavigate();
 
@@ -60,33 +52,6 @@ function SideBar({ sideBarItems }: PropsType) {
     const handleTheme = useCallback(() => {
         dispatch(themeAction(!theme));
     }, [dispatch, theme]);
-
-    // Handle Logout
-    const handleLogout = async () => {
-        try {
-            // Send request
-            const resp = await axiosInstance.post(
-                ApiEndpoints.LOGOUT,
-                {},
-                { withCredentials: false }
-            );
-
-            // Success response
-            if (resp && resp.status === 200) {
-                // Hide sidebar
-                dispatch(sideBarVisibilityAction(false));
-
-                toast({ title: "Successfully Logged out." });
-
-                // Clear isAuth, user and localStorage
-                setIsAuth(false);
-                setUser(null);
-                localStorage.clear();
-            }
-        } catch (err: unknown) {
-            handleCustomError(err);
-        }
-    };
 
     return (
         <div
@@ -155,10 +120,7 @@ function SideBar({ sideBarItems }: PropsType) {
                         {/*Logout */}
                         <TooltipProvider>
                             <Tooltip>
-                                <TooltipTrigger
-                                    onClick={() => handleLogout()}
-                                    className="w-full"
-                                >
+                                <TooltipTrigger onClick={() => logout()} className="w-full">
                                     <li>
                                         <div className="flex justify-center p-2">
                                             <LogOut className="icon" />

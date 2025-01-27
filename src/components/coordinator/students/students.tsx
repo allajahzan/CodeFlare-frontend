@@ -135,9 +135,8 @@ function Students({ setDrawerOpen }: PropsType) {
                 // Success response
                 if (resp && resp.status === 200) {
                     setTimeout(() => {
+                        // Set students
                         setStudents(users);
-
-                        // setSelectedStudent(users.length && users[0]);
 
                         setFetching(false);
                     }, 1000);
@@ -158,9 +157,9 @@ function Students({ setDrawerOpen }: PropsType) {
     }, [isSmall]);
 
     return (
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-5">
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-5 pt-0">
             {/* Left side  */}
-            <div className="p-5 sticky z-0 top-[20px] md:top-5 w-full h-[calc(100vh-130px)] flex flex-col gap-5 items-center bg-white border shadow-sm rounded-2xl">
+            <div className="p-5 sticky z-0 top-[20px] md:top-5 w-full h-[calc(100vh-108px)] flex flex-col gap-5 items-center bg-white border shadow-sm rounded-2xl">
                 {/* Heading */}
                 <CardHeader
                     heading="Manage students"
@@ -224,12 +223,13 @@ function Students({ setDrawerOpen }: PropsType) {
                 {isSmall && (
                     <DrawerUsersList
                         fetching={fetching}
+                        setUsers={setStudents as any}
                         users={students}
-                        selectedUser={selectedStudent as Student}
-                        isSmall={isSmall}
-                        setDrawerOpen={setDrawerOpen}
                         setSelectedUser={setSelectedStudent}
+                        selectedUser={selectedStudent as Student}
                         action={handleSelect}
+                        setDrawerOpen={setDrawerOpen}
+                        isSmall={isSmall}
                     />
                 )}
 
@@ -308,8 +308,8 @@ function Students({ setDrawerOpen }: PropsType) {
                 <div className="grid gap-5 col-auto lg:col-span-2 grid-rows-[auto_1fr] relative z-10">
                     {/* Student details */}
                     <UserDetails
-                        setUsers = {setStudents as any}
-                        setSelectedUser = {setSelectedStudent}
+                        setUsers={setStudents as any}
+                        setSelectedUser={setSelectedStudent}
                         selectedUser={selectedStudent as Student}
                         className="border shadow-sm rounded-2xl"
                         role="student"
