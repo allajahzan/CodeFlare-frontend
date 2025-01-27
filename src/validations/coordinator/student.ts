@@ -1,0 +1,23 @@
+import { emailRegex, nameRegex } from "@/constants/regex";
+import z from "zod";
+
+// Student form validation schema
+export const formSchema = z.object({
+    name: z
+        .string()
+        .min(3, "Name must be at least 3 characters !")
+        .regex(nameRegex.capitalLetter, "Name's first letter should be capital !")
+        .regex(nameRegex.alphabet, "Name should contain only alphabets !")
+        .nonempty("Name is required !"),
+    email: z
+        .string()
+        .email("Invalid email address !")
+        .regex(emailRegex.validEmail, "Enter a valid email (eg:user@gmail.com) !")
+        .nonempty("Email is required !"),
+    role: z.string().nonempty("Role is required !"),
+    batch: z.string().nonempty("Batch is required !"),
+    message: z.string().optional(),
+});
+
+// Form type based on schema
+export type FormType = z.infer<typeof formSchema>;

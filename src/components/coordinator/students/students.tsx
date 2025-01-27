@@ -50,6 +50,8 @@ import { Student } from "@/types/coordinator";
 import { User } from "@/types/admin";
 import "../coordinator.css";
 import { IUserContext, UserContext } from "@/context/userContext";
+import { useSelector } from "react-redux";
+import { stateType } from "@/redux/store";
 
 // Interface for Props
 interface PropsType {
@@ -70,6 +72,9 @@ function Students({ setDrawerOpen }: PropsType) {
 
     // User details
     const { user } = useContext(UserContext) as IUserContext;
+
+    // Redux
+    const role = useSelector((state: stateType) => state.role);
 
     // Search student
     const [search, setSearch] = useState<string>("");
@@ -124,7 +129,7 @@ function Students({ setDrawerOpen }: PropsType) {
                 setFetching(true);
 
                 // Send request
-                const resp = await fetchData(ApiEndpoints.GET_STUDENTS);
+                const resp = await fetchData(ApiEndpoints.GET_STUDENTS, role);
 
                 const users = resp?.data.data;
 

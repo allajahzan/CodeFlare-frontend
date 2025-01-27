@@ -31,6 +31,11 @@ import { postData } from "@/service/apiService";
 import { toast } from "@/hooks/use-toast";
 import ApiEndpoints from "@/constants/apiEndpoints";
 import { Student } from "@/types/coordinator";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { formSchema, FormType } from "@/validations/coordinator/student";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useSelector } from "react-redux";
+import { stateType } from "@/redux/store";
 
 // Interface for Props
 interface PropsType {
@@ -45,27 +50,35 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
     const [open, setOpen] = useState<boolean | undefined>(undefined);
     const [submiting, setSubmiting] = useState(false);
 
-    // Inputs
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [role, _setRole] = useState("Student");
-    const [batch, setBatch] = useState<string>("");
-    const [message, setMessage] = useState("");
+    // Redux
+    const role = useSelector((state: stateType) => state.role);
 
-    // Handle submit
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    // Form validator
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        reset,
+        formState: { errors },
+    } = useForm<FormType>({ resolver: zodResolver(formSchema) });
+
+    // On submit
+    const OnSubmit: SubmitHandler<FormType> = async (formData) => {
         setSubmiting(true);
 
         try {
             // Send request
-            const resp = await postData(ApiEndpoints.USER, {
-                name,
-                email,
-                role: role.toLowerCase(),
-                batch,
-                message,
-            });
+            const resp = await postData(
+                ApiEndpoints.USER,
+                {
+                    name: formData.name,
+                    email: formData.email,
+                    role: formData.role.toLowerCase(),
+                    batch: formData.batch,
+                    message: formData.message,
+                },
+                role
+            );
 
             const user = resp?.data.data;
 
@@ -73,6 +86,7 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
             if (resp && resp.status === 200) {
                 setTimeout(() => {
                     setSubmiting(false);
+                    reset();
 
                     // Set new user
                     setNewStudent(user);
@@ -108,7 +122,7 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.3, delay: 0.2 }}
-                    onSubmit={handleSubmit}
+                    onSubmit={handleSubmit(OnSubmit)}
                     className="space-y-3 p-5 overflow-auto"
                 >
                     {/* Input for name */}
@@ -127,11 +141,15 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                                 placeholder="Enter student's full name"
                                 required
                                 autoComplete="off"
-                                onChange={(event) => setName(event.target.value)}
+                                {...register("name")}
                                 className="font-medium p-5 pl-9"
                             />
                             <UserRoundPlus className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
+                        {/* Name error message */}
+                        <p className="text-xs text-red-800 font-semibold">
+                            {errors.name?.message}
+                        </p>
                     </motion.div>
 
                     {/* Input for email */}
@@ -151,11 +169,15 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                                 placeholder="student@gmail.com"
                                 required
                                 autoComplete="off"
-                                onChange={(event) => setEmail(event.target.value)}
+                                {...register("email")}
                                 className="font-medium p-5 pl-9"
                             />
                             <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
+                        {/* Email error message */}
+                        <p className="text-xs text-red-800 font-semibold">
+                            {errors.email?.message}
+                        </p>
                     </motion.div>
 
                     {/* Input for role */}
@@ -175,14 +197,19 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                                 required
                                 autoComplete="off"
                                 readOnly
-                                value={role}
-                                className="font-medium p-5 pl-9"
+                                value={"Student"}
+                                {...register("role")}
+                                className="font-medium p-5 pl-9 cursor-not-allowed"
                             />
                             <BriefcaseIcon className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
+                        {/* Role error message */}
+                        <p className="text-xs text-red-800 font-semibold">
+                            {errors.role?.message}
+                        </p>
                     </motion.div>
 
-                    {/* Input for batches */}
+                    {/* Input for batch */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -196,7 +223,9 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                             <Select
                                 key={"batches"}
                                 required
-                                onValueChange={(value) => setBatch(value)}
+                                onValueChange={(value) => {
+                                    setValue("batch", value);
+                                }}
                             >
                                 <SelectTrigger
                                     id="batches"
@@ -217,6 +246,10 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                             </Select>
                             <UsersRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
+                        {/* Batch error message */}
+                        <p className="text-xs text-red-800 font-semibold">
+                            {errors.batch?.message}
+                        </p>
                     </motion.div>
 
                     {/* Input fot message */}
@@ -234,7 +267,7 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                                 id="message"
                                 placeholder="Add a personal message to the invitation"
                                 autoComplete="off"
-                                onChange={(event) => setMessage(event.target.value)}
+                                {...register("message")}
                                 className="font-medium p-5 pl-9"
                             />
                             <MessageSquare className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
