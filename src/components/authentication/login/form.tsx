@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, KeyRound, Loader, Mail } from "lucide-react";
 import { useContext, useMemo, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import bgImage from "@/assets/images/login.jpg";
 import ApiEndpoints from "@/constants/apiEndpoints";
 import { toast } from "@/hooks/use-toast";
@@ -15,15 +15,16 @@ import basicAxiosInstance from "@/service/basicAxiosInstance";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { formSchema, FormType } from "@/validations/authentication/login";
+import { useSelector } from "react-redux";
+import { stateType } from "@/redux/store";
 
 function Form() {
     // From related states
     const [showPassword, setShowPassword] = useState(false);
     const [submiting, setSubmiting] = useState(false);
 
-    // Get role
-    const path = useLocation();
-    const role = path.pathname.split("/")[1];
+    // Redux
+    const role = useSelector((state: stateType) => state.role);
 
     // User Context
     const userContext = useContext(UserContext);
@@ -61,13 +62,6 @@ function Form() {
 
             // Success response
             if (resp && resp.status === 200) {
-                // Check role with url
-                if (data.role !== role) {
-                    setSubmiting(false);
-                    toast({ title: "Unauthorized Access!" });
-                    return;
-                }
-
                 setTimeout(() => {
                     setSubmiting(false);
 

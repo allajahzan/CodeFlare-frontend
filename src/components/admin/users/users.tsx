@@ -35,6 +35,8 @@ import ApiEndpoints from "@/constants/apiEndpoints";
 import { User } from "@/types/admin";
 import "../admin.css";
 import { Student } from "@/types/coordinator";
+import { useSelector } from "react-redux";
+import { stateType } from "@/redux/store";
 
 // Interface for Props
 interface PropsType {
@@ -50,6 +52,9 @@ function Users({ setDrawerOpen }: PropsType) {
     const [selectedUser, setSelectedUser] = useState<User | Student | null>(null);
     const [status, setStatus] = useState<boolean>(false);
     const [fetching, setFetching] = useState<boolean>(false);
+
+    // Redux
+    const role = useSelector((state: stateType) => state.role);
 
     // Search user
     const [search, setSearch] = useState<string>("");
@@ -104,7 +109,10 @@ function Users({ setDrawerOpen }: PropsType) {
                 setFetching(true);
 
                 // Send request
-                const resp = await fetchData(ApiEndpoints.GET_COORDINATORS_AND_INSTRUCTORS);
+                const resp = await fetchData(
+                    ApiEndpoints.GET_COORDINATORS_AND_INSTRUCTORS,
+                    role
+                );
 
                 const users = resp?.data.data;
 
@@ -131,7 +139,7 @@ function Users({ setDrawerOpen }: PropsType) {
     }, [isSmall]);
 
     return (
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-5">
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-5 pt-0">
             {/*Left side  */}
             <div className="p-5 sticky z-0 top-[20px] md:top-5 w-full h-[calc(100vh-130px)] flex flex-col gap-5 items-center bg-white border shadow-sm rounded-2xl">
                 {/* Heading */}

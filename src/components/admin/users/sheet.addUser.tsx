@@ -39,6 +39,8 @@ import {
     MultiSelectorContent,
     TriggerMultiSelector,
 } from "@/components/ui/multi-selector";
+import { useSelector } from "react-redux";
+import { stateType } from "@/redux/store";
 
 // Interface for Props
 interface PropsType {
@@ -51,6 +53,9 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
     // Sheet state
     const [open, setOpen] = useState<boolean | undefined>(undefined);
     const [submiting, setSubmiting] = useState(false);
+
+    // Redux
+    const role = useSelector((state: stateType) => state.role);
 
     // Drop down for batches
     const [dropDownOpen, setDropDownOpen] = useState<boolean>(false);
@@ -73,13 +78,17 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
 
         try {
             // Send request
-            const resp = await postData(ApiEndpoints.USER, {
-                name: formData.name,
-                email: formData.email,
-                role: formData.role,
-                batches: formData.batches.split(", "),
-                message: formData.message,
-            });
+            const resp = await postData(
+                ApiEndpoints.USER,
+                {
+                    name: formData.name,
+                    email: formData.email,
+                    role: formData.role,
+                    batches: formData.batches.split(", "),
+                    message: formData.message,
+                },
+                role
+            );
 
             const user = resp?.data.data;
 

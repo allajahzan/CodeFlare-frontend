@@ -7,9 +7,11 @@ import { throwCustomError } from "../utils/error";
  * @returns The response data.
  * @throws The error if the request fails.
  */
-export const fetchData = async (url: string) => {
+export const fetchData = async (url: string, role?: string) => {
     try {
-        const resp = await axiosInstance.get(url);
+        const resp = await axiosInstance.get(url, {
+            headers: { "x-user-role": JSON.stringify(role) },
+        });
         return resp;
     } catch (err: any) {
         throwCustomError(err);
@@ -23,9 +25,11 @@ export const fetchData = async (url: string) => {
  * @returns The response data.
  * @throws The error if the request fails.
  */
-export const postData = async (url: string, data?: any) => {
+export const postData = async (url: string, data?: any, role?: string) => {
     try {
-        const resp = await axiosInstance.post(url, data || null);
+        const resp = await axiosInstance.post(url, data || null, {
+            headers: { "x-user-role": JSON.stringify(role) },
+        });
         return resp;
     } catch (err: any) {
         throwCustomError(err);
@@ -39,9 +43,11 @@ export const postData = async (url: string, data?: any) => {
  * @returns The response data.
  * @throws The error if the request fails.
  */
-export const updateData = async (url: string, data?: any) => {
+export const updateData = async (url: string, data?: any, role?: string) => {
     try {
-        const resp = await axiosInstance.put(url, data || null);
+        const resp = await axiosInstance.put(url, data || null, {
+            headers: { "x-user-role": JSON.stringify(role) },
+        });
         return resp;
     } catch (err: any) {
         throwCustomError(err);
@@ -55,9 +61,11 @@ export const updateData = async (url: string, data?: any) => {
  * @returns The response data.
  * @throws The error if the request fails.
  */
-export const patchData = async (url: string, data?: any) => {
+export const patchData = async (url: string, data?: any, role?: string) => {
     try {
-        const resp = await axiosInstance.patch(url, data || null);
+        const resp = await axiosInstance.patch(url, data || null, {
+            headers: { "x-user-role": JSON.stringify(role) },
+        });
         return resp;
     } catch (err: any) {
         throwCustomError(err);
@@ -70,9 +78,11 @@ export const patchData = async (url: string, data?: any) => {
  * @returns The response data.
  * @throws The error if the request fails.
  */
-export const deleteData = async (url: string) => {
+export const deleteData = async (url: string, role?: string) => {
     try {
-        const resp = await axiosInstance.delete(url);
+        const resp = await axiosInstance.delete(url, {
+            headers: { "x-user-role": JSON.stringify(role) },
+        });
         return resp;
     } catch (err: any) {
         throwCustomError(err);

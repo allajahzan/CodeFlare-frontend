@@ -1,7 +1,9 @@
 import ApiEndpoints from "@/constants/apiEndpoints";
+import { stateType } from "@/redux/store";
 import { fetchData } from "@/service/apiService";
 import { handleCustomError } from "@/utils/error";
 import { createContext, ReactNode, useState, useLayoutEffect } from "react";
+import { useSelector } from "react-redux";
 
 // Interface for User
 interface IUser {
@@ -29,6 +31,10 @@ const UserContext = createContext<IUserContext | null>(null);
 
 // User Context Provider Component
 const UserContextProvider = ({ children }: { children: ReactNode }) => {
+
+    // Get role
+    const role = useSelector((state: stateType)=>state.role)
+
     const [isAuth, setIsAuth] = useState<boolean>(
         localStorage.getItem("isAuth") === "1"
     );
@@ -40,7 +46,7 @@ const UserContextProvider = ({ children }: { children: ReactNode }) => {
     useLayoutEffect(() => {
         const getUserData = async () => {
             try {
-                const resp = await fetchData(ApiEndpoints.USER);
+                const resp = await fetchData(ApiEndpoints.USER, role);
 
                 const user = resp?.data.data;
 
