@@ -1,10 +1,12 @@
-import { useCallback, useLayoutEffect, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import {
-    sideBarVisibilityAction,
-    stateType,
-    themeAction,
-} from "@/redux/store";
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useMemo,
+    useState,
+} from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { sideBarVisibilityAction, stateType, themeAction } from "@/redux/store";
 import NavbarItem from "./navbarItem";
 import Heading from "@/components/ui/heading";
 import { Bell, ChevronDown, Globe, Search, Moon, Sun } from "lucide-react";
@@ -29,8 +31,8 @@ const Navbar = () => {
 
     // Handle theme
     const handleTheme = useCallback(() => {
-        dispatch(themeAction(!theme));
-    }, [dispatch, theme]);
+        
+    }, []);
 
     // Handle sidebar
     const handleSideBar = useCallback(() => {
@@ -47,13 +49,16 @@ const Navbar = () => {
     }, [location]);
 
     // Determine theme icon and text
-    const themeIcon = useMemo(() => (theme ? Sun : Moon), [theme]);
-    const themeText = useMemo(() => (theme ? "Light" : "Dark"), [theme]);
+    const themeIcon = useMemo(() => (theme === "light" ? Sun : Moon), [theme]);
+    const themeText = useMemo(
+        () => (theme === "light" ? "Light" : "Dark"),
+        [theme]
+    );
 
     return (
         <div
             className={cn(
-                "sticky top-0 left-0 w-full z-40 flex justify-between items-center p-5 bg-white",
+                "sticky top-0 left-0 w-full z-40 flex justify-between items-center p-5 bg-background",
                 isSmall && ""
             )}
         >
@@ -74,7 +79,7 @@ const Navbar = () => {
                 transition={{ delay: 0.2 }}
             >
                 <Heading
-                    className="text-2xl font-bold"
+                    className="text-2xl font-bold text-foreground"
                     text={path}
                     handle={handleSideBar}
                 />
@@ -89,8 +94,9 @@ const Navbar = () => {
                             id="search"
                             type="search"
                             placeholder="Search"
+                            autoComplete="off"
                             required
-                            className="font-medium p-5 pl-9 border rounded-lg"
+                            className="font-medium p-5 pl-9 rounded-lg text-foreground"
                         />
                         <Search className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                     </div>
@@ -103,14 +109,16 @@ const Navbar = () => {
 
                 {/* Profile Section */}
                 <div
-                    className="p-2 w-[120px] h-12 rounded-full bg-zinc-100 flex items-center relative group"
+                    className="group relative p-2 w-[120px] h-12 flex items-center rounded-full bg-muted"
                     aria-label="Profile Dropdown"
                 >
                     <div className="overflow-hidden h-10 w-10 rounded-full group-hover:animate-bounce">
                         <img className="h-full w-full" src={avatar_boy} alt="User Avatar" />
                     </div>
-                    <p className="font-bold flex-1 text-center truncate">AA</p>
-                    <ChevronDown />
+                    <p className="flex-1 text-center text-foreground font-bold truncate">
+                        AA
+                    </p>
+                    <ChevronDown className="text-foreground" />
                 </div>
             </div>
         </div>

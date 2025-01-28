@@ -29,9 +29,9 @@ function NavbarItem({ Image, action, text }: PropsType) {
                 >
                     <div
                         onClick={action}
-                        className="flex items-center justify-center bg-zinc-100 rounded-full p-3"
+                        className="flex items-center justify-center bg-muted rounded-full p-3"
                     >
-                        <Image className="w-5 h-5" />
+                        <Image className="w-5 h-5 text-foreground" />
                     </div>
                 </TooltipTrigger>
                 <TooltipContent>

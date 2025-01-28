@@ -39,13 +39,14 @@ const UserContext = createContext<IUserContext | null>(null);
 
 // User Context Provider Component
 const UserContextProvider = ({ children }: { children: ReactNode }) => {
-    // Get role
+    // Redux
     const role = useSelector((state: stateType) => state.role);
     const dispatch = useDispatch();
 
     const [isAuth, setIsAuth] = useState<boolean>(
         localStorage.getItem("isAuth") === "1"
     );
+    
     const [user, setUser] = useState<IUser | null>(
         JSON.parse(localStorage.getItem("user") as string) || null
     );
@@ -90,7 +91,9 @@ const UserContextProvider = ({ children }: { children: ReactNode }) => {
                 // Clear isAuth, user and localStorage
                 setIsAuth(false);
                 setUser(null);
-                localStorage.clear();
+
+                setIsAuth(false);
+                localStorage.setItem("isAuth", "0");
             }
         } catch (err: unknown) {
             handleCustomError(err);

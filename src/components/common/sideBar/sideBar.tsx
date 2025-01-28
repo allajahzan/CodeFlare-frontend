@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { stateType, sideBarVisibilityAction, themeAction } from "@/redux/store";
 import {
@@ -50,8 +50,14 @@ function SideBar({ sideBarItems }: PropsType) {
 
     // Handle theme
     const handleTheme = useCallback(() => {
-        dispatch(themeAction(!theme));
+        dispatch(themeAction(theme === "dark" ? "light" : "dark"));
     }, [dispatch, theme]);
+
+    // Change theme
+    useEffect(() => {
+        document.documentElement.classList.toggle("dark", theme === "dark");
+        localStorage.setItem("theme", theme);
+    }, [theme]);
 
     return (
         <div
@@ -65,13 +71,13 @@ function SideBar({ sideBarItems }: PropsType) {
         >
             {/* SideBar Items Section */}
             <div className="h-full p-5">
-                <div className="h-full py-8 bg-zinc-900 flex flex-col justify-between rounded-3xl">
+                <div className="h-full py-8 flex flex-col justify-between rounded-3xl bg-sidebar border border-sidebar-border">
                     {isSideBarVisible && <Slider />}
                     {/* Title */}
                     <li>
                         <div className="flex justify-center p-2">
                             <em
-                                className="text-white font-bold tracking-wider"
+                                className="text-sidebar-foreground font-bold tracking-wider"
                                 style={{ fontSize: "12px" }}
                             >
                                 CodeFlare
@@ -100,7 +106,7 @@ function SideBar({ sideBarItems }: PropsType) {
                                     <TooltipTrigger onClick={handleTheme} className="w-full">
                                         <li>
                                             <div className="flex justify-center p-2">
-                                                {theme ? (
+                                                {theme === "light" ? (
                                                     <Sun className="icon" />
                                                 ) : (
                                                     <Moon className="icon" />
@@ -110,7 +116,7 @@ function SideBar({ sideBarItems }: PropsType) {
                                     </TooltipTrigger>
                                     <TooltipContent>
                                         <p style={{ fontSize: "13px" }}>
-                                            {theme ? "Light" : "Dark"}
+                                            {theme === "light" ? "Light" : "Dark"}
                                         </p>
                                     </TooltipContent>
                                 </Tooltip>

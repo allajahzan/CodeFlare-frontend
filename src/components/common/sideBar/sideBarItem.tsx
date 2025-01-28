@@ -37,7 +37,7 @@ function SideBarItem({ Image, text, handleSideBarItems, path }: PropsType) {
                         className={`cursor-pointer`}
                     >
                         <div className="flex justify-center p-2">
-                            <Image className="text-white w-5 h-5" />
+                            <Image className="text-sidebar-foreground w-5 h-5" />
                         </div>
                     </li>
                 </TooltipTrigger>
