@@ -20,15 +20,36 @@ interface PropsType {
 function FloatingBackground({ children }: PropsType) {
     const floatingIcons = useMemo(
         () => [
-            { icon: <Code className="w-8 h-8" />, animation: "icon-code" },
-            { icon: <Laptop className="w-8 h-8" />, animation: "icon-laptop" },
-            { icon: <Terminal className="w-8 h-8" />, animation: "icon-terminal" },
-            { icon: <Calendar className="w-8 h-8" />, animation: "icon-calender" },
-            { icon: <AlarmClock className="w-8 h-8" />, animation: "icon-alarm" },
-            { icon: <ChartLine className="w-8 h-8" />, animation: "icon-chart" },
-            { icon: <ListCheck className="w-8 h-8" />, animation: "icon-list" },
             {
-                icon: <MessageCircleMore className="w-8 h-8" />,
+                icon: <Code className="w-8 h-8 text-foreground" />,
+                animation: "icon-code",
+            },
+            {
+                icon: <Laptop className="w-8 h-8 text-foreground" />,
+                animation: "icon-laptop",
+            },
+            {
+                icon: <Terminal className="w-8 h-8 text-foreground" />,
+                animation: "icon-terminal",
+            },
+            {
+                icon: <Calendar className="w-8 h-8 text-foreground" />,
+                animation: "icon-calender",
+            },
+            {
+                icon: <AlarmClock className="w-8 h-8 text-foreground" />,
+                animation: "icon-alarm",
+            },
+            {
+                icon: <ChartLine className="w-8 h-8 text-foreground" />,
+                animation: "icon-chart",
+            },
+            {
+                icon: <ListCheck className="w-8 h-8 text-foreground" />,
+                animation: "icon-list",
+            },
+            {
+                icon: <MessageCircleMore className="w-8 h-8 text-foreground" />,
                 animation: "icon-chat",
             },
         ],
@@ -36,7 +57,7 @@ function FloatingBackground({ children }: PropsType) {
     );
 
     return (
-        <div className="h-screen bg-white flex flex-col items-center justify-center overflow-hidden transition-all duration-100 relative">
+        <div className="h-screen bg-background flex flex-col items-center justify-center overflow-hidden transition-all duration-100 relative">
             {/* animated background elements */}
             <div className="fixed inset-0 overflow-hidden">
                 {/* binary rain effect */}
@@ -63,7 +84,8 @@ function FloatingBackground({ children }: PropsType) {
                 {floatingIcons.map((item, index) => (
                     <div
                         key={`floating-icon-${index}`}
-                        className="absolute z-50 opacity-[1] transition-transform duration-200 ease-in-out hover:scale-110 p-5 bg-white rounded-2xl shadow-custom"
+                        className="absolute z-50 transition-transform duration-200 ease-in-out hover:scale-110 p-5 rounded-2xl 
+                        bg-background border-2 border-white dark:border-customBorder shadow-custom"
                         style={{
                             animation: `${item.animation} 30s infinite ease-in-out alternate`,
                         }}
@@ -74,12 +96,8 @@ function FloatingBackground({ children }: PropsType) {
 
                 {/* grid pattern */}
                 <motion.div
-                    className="absolute inset-0 opacity-[0.1]"
-                    style={{
-                        backgroundImage: `linear-gradient(#000 1px, transparent 1px),
-              linear-gradient(90deg, #000 1px, transparent 1px)`,
-                        backgroundSize: "50px 50px",
-                    }}
+                    className="absolute inset-0 opacity-[0.1] bg-[length:50px_50px] bg-[linear-gradient(#000_1px,transparent_1px),linear-gradient(90deg,#000_1px,transparent_1px)] 
+                    dark:bg-[linear-gradient(#fff_1px,transparent_1px),linear-gradient(90deg,#fff_1px,transparent_1px)]"   
                     animate={{
                         scale: [1, 1.2, 1],
                         rotate: [0, 5, 0],

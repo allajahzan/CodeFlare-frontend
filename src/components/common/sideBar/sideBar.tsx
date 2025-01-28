@@ -71,7 +71,7 @@ function SideBar({ sideBarItems }: PropsType) {
         >
             {/* SideBar Items Section */}
             <div className="h-full p-5">
-                <div className="h-full py-8 flex flex-col justify-between rounded-3xl bg-sidebar border border-sidebar-border">
+                <div className="h-full py-8 flex flex-col justify-between rounded-3xl bg-sidebar border border-customBorder">
                     {isSideBarVisible && <Slider />}
                     {/* Title */}
                     <li>

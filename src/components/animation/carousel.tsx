@@ -33,7 +33,7 @@ function Carousel({ slides, image, className }: PropsType) {
     return (
         <div
             className={cn(
-                "h-[260px] md:h-full w-full relative overflow-hidden rounded-2xl shadow-md",
+                "h-[260px] md:h-full w-full relative rounded-2xl shadow-md",
                 className
             )}
         >
@@ -41,7 +41,7 @@ function Carousel({ slides, image, className }: PropsType) {
             {image}
 
             {/* slide Content */}
-            <div className="absolute inset-0 flex items-center justify-center">
+            <div className="absolute z-10 inset-0 flex items-center justify-center">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={slides[currentSlide].id}

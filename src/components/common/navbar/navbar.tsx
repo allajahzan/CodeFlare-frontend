@@ -1,12 +1,12 @@
 import {
     useCallback,
-    useEffect,
+    useContext,
     useLayoutEffect,
     useMemo,
     useState,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { sideBarVisibilityAction, stateType, themeAction } from "@/redux/store";
+import { sideBarVisibilityAction, stateType } from "@/redux/store";
 import NavbarItem from "./navbarItem";
 import Heading from "@/components/ui/heading";
 import { Bell, ChevronDown, Globe, Search, Moon, Sun } from "lucide-react";
@@ -15,15 +15,19 @@ import { useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
+import { IThemeContext, ThemeContext } from "@/context/themeContext";
 
 // Navbar Component
 const Navbar = () => {
+    //Redux
     const isSmall = useSelector((state: stateType) => state.isSmall);
     const isSideBarVisible = useSelector(
         (state: stateType) => state.isSideBarVisible
     );
-    const theme = useSelector((state: stateType) => state.theme);
     const dispatch = useDispatch();
+
+    // Theme context
+    const { theme, setTheme } = useContext(ThemeContext) as IThemeContext;
 
     const [path, setPath] = useState<string>("");
     const location = useLocation();
@@ -31,8 +35,8 @@ const Navbar = () => {
 
     // Handle theme
     const handleTheme = useCallback(() => {
-        
-    }, []);
+        setTheme(theme === "light" ? "dark" : "light");
+    }, [theme, setTheme]);
 
     // Handle sidebar
     const handleSideBar = useCallback(() => {

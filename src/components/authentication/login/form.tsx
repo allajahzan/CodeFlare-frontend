@@ -10,13 +10,15 @@ import bgImage from "@/assets/images/login.jpg";
 import ApiEndpoints from "@/constants/apiEndpoints";
 import { toast } from "@/hooks/use-toast";
 import { handleCustomError } from "@/utils/error";
-import { UserContext } from "@/context/userContext";
+import { IUserContext, UserContext } from "@/context/userContext";
 import basicAxiosInstance from "@/service/basicAxiosInstance";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { formSchema, FormType } from "@/validations/authentication/login";
 import { useDispatch } from "react-redux";
 import { roleAction } from "@/redux/store";
+import Breathing from "@/components/animation/breathing";
+import { IThemeContext, ThemeContext } from "@/context/themeContext";
 
 function Form() {
     // From related states
@@ -31,7 +33,10 @@ function Form() {
     const dispatch = useDispatch();
 
     // User Context
-    const userContext = useContext(UserContext);
+    const { setIsAuth } = useContext(UserContext) as IUserContext;
+
+    // Theme Context
+    const { theme } = useContext(ThemeContext) as IThemeContext;
 
     // Form validator
     const {
@@ -48,7 +53,7 @@ function Form() {
 
         // Reset isAuth
         localStorage.setItem("isAuth", "0");
-        userContext?.setIsAuth(false);
+        setIsAuth(false);
 
         try {
             // Send request
@@ -71,7 +76,7 @@ function Form() {
 
                     // Set isAuth
                     localStorage.setItem("isAuth", "1");
-                    userContext?.setIsAuth(true);
+                    setIsAuth(true);
 
                     // Store accesstoken in localstorage
                     localStorage.setItem("accessToken", data.accessToken);
@@ -112,18 +117,31 @@ function Form() {
     );
 
     return (
-        <div className="relative z-0 p-5 pr-5 md:pr-0 h-full w-full lg:w-[80%] lg:h-[80%] bg-white rounded-none md:rounded-2xl shadow-custom transition-all duration-300">
-            <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 grid-rows-[auto_1fr] md:grid-rows-1 gap-5 md:gap-0 overflow-auto no-scrollbar">
+        <div
+            className="relative z-0 p-5 pr-5 md:pr-0 h-full w-full lg:w-[80%] lg:h-[80%] rounded-none lg:rounded-2xl
+         bg-background lg:border border-white dark:border-border
+         shadow-custom 
+         transition-all duration-300"
+        >
+            <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 grid-rows-[auto_1fr] md:grid-rows-1 gap-5 md:gap-0 overflow-auto md:overflow-visible no-scrollbar">
                 {/* Carousal */}
                 <Carousel
                     slides={slides}
                     image={
-                        <img src={bgImage} alt="" className="object-cover h-full w-full" />
+                        <div className="relative h-full rounded-2xl">
+                            {/* Breathing animation */}
+                            {theme === "dark" && <Breathing />}
+                            <img
+                                src={bgImage}
+                                alt=""
+                                className="object-cover h-full w-full rounded-2xl dark:border-2"
+                            />
+                        </div>
                     }
                 />
 
                 {/* Login form */}
-                <div className="w-full h-full bg-white">
+                <div className="w-full h-full bg-background">
                     <motion.div
                         initial={{ opacity: 1 }}
                         animate={{ opacity: 1 }}
@@ -137,8 +155,10 @@ function Form() {
                             transition={{ delay: 0.3 }}
                             className="text-center space-y-5"
                         >
-                            <h1 className="text-2xl font-semibold">Welcome Back!</h1>
-                            <p className="font-medium">
+                            <h1 className="text-2xl font-semibold text-foreground">
+                                Welcome Back!
+                            </h1>
+                            <p className="font-medium text-foreground">
                                 Hey, {role && role[0].toUpperCase() + role?.slice(1)} sign in to
                                 your account.
                             </p>
@@ -153,7 +173,10 @@ function Form() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.4 }}
                             >
-                                <Label htmlFor="email" className="text-sm font-medium">
+                                <Label
+                                    htmlFor="email"
+                                    className="text-sm font-medium text-foreground"
+                                >
                                     Email
                                 </Label>
                                 <div className="relative">
@@ -161,9 +184,10 @@ function Form() {
                                         id="email"
                                         type="email"
                                         placeholder="Email"
+                                        autoComplete="off"
                                         required
                                         {...register("email")}
-                                        className="font-medium p-5 pl-9"
+                                        className="font-medium p-5 pl-9 text-foreground"
                                     />
                                     <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                                 </div>
@@ -179,7 +203,10 @@ function Form() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.5 }}
                             >
-                                <Label htmlFor="password" className="text-sm font-medium">
+                                <Label
+                                    htmlFor="password"
+                                    className="text-sm font-medium text-foreground"
+                                >
                                     Password
                                 </Label>
                                 <div className="relative">
@@ -190,7 +217,7 @@ function Form() {
                                         required
                                         autoComplete="off"
                                         {...register("password")}
-                                        className="font-medium p-5 pl-9"
+                                        className="font-medium p-5 pl-9 text-foreground"
                                     />
                                     <KeyRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                                     <div
@@ -229,9 +256,10 @@ function Form() {
                                 className="pt-2"
                             >
                                 <Button
+                                    variant="default"
                                     type="submit"
                                     disabled={submiting}
-                                    className="w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:cursor-not-allowed"
+                                    className="w-full h-11 shadow-lg disabled:cursor-not-allowed"
                                 >
                                     {submiting ? (
                                         <div className="flex items-center gap-2">

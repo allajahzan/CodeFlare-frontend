@@ -4,12 +4,7 @@ import { sideBarVisibilityAction, stateType } from "@/redux/store";
 import { fetchData } from "@/service/apiService";
 import axiosInstance from "@/service/axiosInstance";
 import { handleCustomError } from "@/utils/error";
-import {
-    createContext,
-    ReactNode,
-    useState,
-    useLayoutEffect,
-} from "react";
+import { createContext, ReactNode, useState, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // Interface for User
@@ -46,7 +41,7 @@ const UserContextProvider = ({ children }: { children: ReactNode }) => {
     const [isAuth, setIsAuth] = useState<boolean>(
         localStorage.getItem("isAuth") === "1"
     );
-    
+
     const [user, setUser] = useState<IUser | null>(
         JSON.parse(localStorage.getItem("user") as string) || null
     );
@@ -92,8 +87,9 @@ const UserContextProvider = ({ children }: { children: ReactNode }) => {
                 setIsAuth(false);
                 setUser(null);
 
-                setIsAuth(false);
-                localStorage.setItem("isAuth", "0");
+                const theme = localStorage.getItem("theme");
+                localStorage.clear();
+                localStorage.setItem("theme", theme as string);
             }
         } catch (err: unknown) {
             handleCustomError(err);

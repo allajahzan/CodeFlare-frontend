@@ -76,11 +76,11 @@
 
 @layer components {
     [data-vaul-drawer] {
-      will-change: auto !important;
-      backface-visibility: hidden !important;
-      animation-duration: .3s !important
+        will-change: auto !important;
+        backface-visibility: hidden !important;
+        animation-duration: .3s !important
     }
-  }
+}
 
 @layer base {
     :root {
@@ -92,9 +92,12 @@
         --sidebar-foreground: 0 0% 98%;
         --sidebar-border: 0 0% 98%;
 
+        /* Custom border */
+        --custom-border: 0 0% 98%;
+
         /* Card */
         --card: 240 4.8% 95.9%;
-        --card-foreground:  240, 6%, 10%;
+        --card-foreground: 240, 6%, 10%;
 
         --popover: 0 0% 100%;
         --popover-foreground: 240 10% 3.9%;
@@ -128,6 +131,9 @@
         --sidebar-foreground: 0 0% 98%;
         --sidebar-border: 240, 6%, 10%;
 
+        /* Custom border */
+        --custom-border: 240, 6%, 10%;
+
         /* Card */
         --card: 240, 5%, 6%;
         --card-foreground: 0 0% 98%;
@@ -154,7 +160,7 @@
         --chart-5: 340 75% 55%;
     }
 
-    
+
 }
 
 @layer base {

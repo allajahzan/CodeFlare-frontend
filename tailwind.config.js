@@ -46,15 +46,25 @@ export default {
 			colors: {
 				background: "hsl(var(--background))",
 				foreground: "hsl(var(--foreground))",
+
+				// Sidebar
 				sidebar: {
 					DEFAULT: "hsl(var(--sidebar))",
 					foreground: "hsl(var(--sidebar-foreground))",
 					border: "hsl(var(--sidebar-border))",
 				},
+
+				// Card
 				card: {
 					DEFAULT: "hsl(var(--card))",
 					foreground: "hsl(var(--card-foreground))",
 				},
+
+				// Custom border
+				customBorder: {
+					DEFAULT: "hsl(var(--custom-border))",
+				},
+
 				popover: {
 					DEFAULT: "hsl(var(--popover))",
 					foreground: "hsl(var(--popover-foreground))",

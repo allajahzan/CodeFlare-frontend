@@ -20,7 +20,7 @@ const ThemeContextProvider = ({ children }: { children: ReactNode }) => {
         const prefersDark = window.matchMedia(
             "(prefers-color-scheme: dark)"
         ).matches;
-        return storedTheme || (prefersDark ? "dark" : "light");
+        return storedTheme || (prefersDark ? "light" : "dark");
     });
 
     useEffect(() => {
