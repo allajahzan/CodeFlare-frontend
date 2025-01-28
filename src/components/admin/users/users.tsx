@@ -142,7 +142,10 @@ function Users({ setDrawerOpen }: PropsType) {
     return (
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-5 pt-0">
             {/*Left side  */}
-            <div className="p-5 sticky z-0 top-[20px] md:top-5 w-full h-[calc(100vh-108px)] flex flex-col gap-5 items-center bg-white border shadow-sm rounded-2xl">
+            <div
+                className="p-5 sticky z-0 top-[20px] md:top-5 w-full h-[calc(100vh-108px)] flex flex-col gap-5 items-center rounded-2xl
+            bg-background border border-border dark:border-customBorder shadow-sm dark:shadow-customBorder dark:shadow-inner"
+            >
                 {/* Heading */}
                 <CardHeader
                     heading="Manage users"
@@ -150,7 +153,10 @@ function Users({ setDrawerOpen }: PropsType) {
                     children={
                         <AddUserSheet
                             button={
-                                <div className="shadow-md bg-zinc-900 hover:bg-zinc-800 text-white rounded-full p-2">
+                                <div
+                                    className="p-2 rounded-full bg-foreground dark:bg-muted hover:bg-zinc-800 dark:hover:bg-zinc-700 
+                                text-white shadow-md"
+                                >
                                     <Plus className="h-4 w-4" />
                                 </div>
                             }
@@ -167,8 +173,11 @@ function Users({ setDrawerOpen }: PropsType) {
                     hanldeStatus={handleStatus}
                     children1={
                         <DropdownMenu>
-                            <DropdownMenuTrigger className="icon-style shadow-sm">
-                                <Filter className="h-4 w-4" />
+                            <DropdownMenuTrigger
+                                className="p-3 rounded-lg border hover:bg-muted dark:hover:bg-sidebar
+                             shadow-sm dark:shadow-customBorder dark:shadow-inner"
+                            >
+                                <Filter className="h-4 w-4 text-foreground" />
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align={isSmall ? "end" : "start"}>
                                 <DropdownMenuItem>All Roles</DropdownMenuItem>
@@ -179,8 +188,11 @@ function Users({ setDrawerOpen }: PropsType) {
                     }
                     children2={
                         <DropdownMenu>
-                            <DropdownMenuTrigger className="icon-style shadow-sm">
-                                <SortAsc className="h-4 w-4" />
+                            <DropdownMenuTrigger
+                                className="p-3 rounded-lg border hover:bg-muted dark:hover:bg-sidebar 
+                            shadow-sm dark:shadow-customBorder dark:shadow-inner"
+                            >
+                                <SortAsc className="h-4 w-4 text-foreground" />
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align={isSmall ? "end" : "start"}>
                                 <DropdownMenuItem>
@@ -229,8 +241,8 @@ function Users({ setDrawerOpen }: PropsType) {
                                         }
                                         children2={
                                             <DropdownMenu>
-                                                <DropdownMenuTrigger className="p-3 hover:bg-muted rounded-lg">
-                                                    <MoreHorizontal className="w-4 h-4" />
+                                                <DropdownMenuTrigger className="p-2 hover:bg-muted rounded-lg">
+                                                    <MoreHorizontal className="w-4 h-4 text-foreground" />
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent
                                                     // Change alignments in small size
@@ -288,10 +300,14 @@ function Users({ setDrawerOpen }: PropsType) {
                         setUsers={setUsers as any}
                         setSelectedUser={setSelectedUser}
                         selectedUser={selectedUser as User}
-                        className="border shadow-sm rounded-2xl"
+                        className="rounded-2xl border border-border dark:border-customBorder 
+                        shadow-sm dark:shadow-customBorder dark:shadow-inner"
                         role="user"
                     />
-                    <div className="h-full p-5 bg-zinc-0 border rounded-2xl"></div>
+                    <div
+                        className="h-full p-5 rounded-2xl bg-background border border-border dark:border-customBorder 
+                    shadow-sm dark:shadow-customBorder dark:shadow-inner"
+                    ></div>
                 </div>
             )}
         </div>

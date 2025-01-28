@@ -64,7 +64,10 @@ function OrbitingIcon({ delay, rotation, SubIcon }: PropsType) {
 // NotFoundOrbit Component
 function NotFoundOrbit({ MainIcon, SubIcon, message, text }: PropsType) {
     return (
-        <div className="relative h-full p-5 flex flex-col gap-7 items-center justify-center border shadow-sm rounded-2xl overflow-hidden">
+        <div
+            className="relative h-full p-5 flex flex-col gap-7 items-center justify-center rounded-2xl overflow-hidden 
+        border border-border dark:border-customBorder shadow-sm dark:shadow-customBorder dark:shadow-inner"
+        >
             <div className="relative w-[185px] h-[185px]">
                 {/* Inner orbit */}
                 <div className="absolute inset-10 rounded-full border border-dashed border-muted-foreground/20">
@@ -98,7 +101,7 @@ function NotFoundOrbit({ MainIcon, SubIcon, message, text }: PropsType) {
                 transition={{ delay: 0.2 }}
                 className="text-center space-y-1"
             >
-                <h3 className="text-base font-semibold">{text}</h3>
+                <h3 className="text-foreground text-base font-semibold">{text}</h3>
                 <p className="text-muted-foreground font-medium text-sm">{message}</p>
             </motion.div>
         </div>
@@ -116,7 +119,7 @@ function NotSelected({
     return (
         <div
             className={cn(
-                "flex flex-col gap-5 items-center justify-center bg-white border shadow-sm rounded-2xl",
+                "flex flex-col gap-5 items-center justify-center rounded-2xl bg-background border border-border dark:border-customBorder shadow-sm dark:shadow-customBorder dark:shadow-inner",
                 className
             )}
         >
@@ -138,7 +141,7 @@ function NotSelected({
                 transition={{ delay: 0.2 }}
                 className="text-center space-y-1"
             >
-                <h3 className="text-base font-semibold">{text}</h3>
+                <h3 className="text-foreground text-base font-semibold">{text}</h3>
                 <p className="text-muted-foreground font-medium text-sm">{message}</p>
             </motion.div>
         </div>

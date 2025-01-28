@@ -32,10 +32,10 @@ function Form() {
     // Redux
     const dispatch = useDispatch();
 
-    // User Context
+    // User context
     const { setIsAuth } = useContext(UserContext) as IUserContext;
 
-    // Theme Context
+    // Theme context
     const { theme } = useContext(ThemeContext) as IThemeContext;
 
     // Form validator
@@ -155,10 +155,10 @@ function Form() {
                             transition={{ delay: 0.3 }}
                             className="text-center space-y-5"
                         >
-                            <h1 className="text-2xl font-semibold text-foreground">
+                            <h1 className="text-2xl text-foreground font-semibold">
                                 Welcome Back!
                             </h1>
-                            <p className="font-medium text-foreground">
+                            <p className="text-foreground font-medium">
                                 Hey, {role && role[0].toUpperCase() + role?.slice(1)} sign in to
                                 your account.
                             </p>
@@ -175,7 +175,7 @@ function Form() {
                             >
                                 <Label
                                     htmlFor="email"
-                                    className="text-sm font-medium text-foreground"
+                                    className="text-sm text-foreground font-medium"
                                 >
                                     Email
                                 </Label>
@@ -187,7 +187,7 @@ function Form() {
                                         autoComplete="off"
                                         required
                                         {...register("email")}
-                                        className="font-medium p-5 pl-9 text-foreground"
+                                        className="p-5 pl-9 text-foreground font-medium"
                                     />
                                     <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                                 </div>
@@ -205,7 +205,7 @@ function Form() {
                             >
                                 <Label
                                     htmlFor="password"
-                                    className="text-sm font-medium text-foreground"
+                                    className="text-sm text-foreground font-medium"
                                 >
                                     Password
                                 </Label>
@@ -217,7 +217,7 @@ function Form() {
                                         required
                                         autoComplete="off"
                                         {...register("password")}
-                                        className="font-medium p-5 pl-9 text-foreground"
+                                        className="p-5 pl-9 text-foreground font-medium"
                                     />
                                     <KeyRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                                     <div

@@ -21,7 +21,7 @@ import {
     BriefcaseIcon,
     Loader,
     Mail,
-    MessageSquare,
+    Pencil,
     UserRoundPlus,
     UsersRound,
 } from "lucide-react";
@@ -36,6 +36,7 @@ import { formSchema, FormType } from "@/validations/coordinator/student";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
+import ValidationError from "@/components/ui/validation-error";
 
 // Interface for Props
 interface PropsType {
@@ -144,10 +145,13 @@ function EditStudentSheet({
             <SheetContent className="p-0 flex flex-col gap-0">
                 {/* Header */}
                 <SheetHeader className="p-5 bg-zinc-0">
-                    <SheetTitle className="text-foreground">
+                    <SheetTitle className="flex items-center gap-3 text-foreground">
+                        <div className="p-2 bg-muted rounded-full">
+                            <Pencil className="w-4 h-4" />
+                        </div>
                         Update selected student
                     </SheetTitle>
-                    <SheetDescription className="font-medium text-foreground">
+                    <SheetDescription className="text-foreground font-medium">
                         Update the information below to change student's details.
                     </SheetDescription>
                 </SheetHeader>
@@ -167,7 +171,10 @@ function EditStudentSheet({
                         transition={{ delay: 0.3 }}
                         className="space-y-2"
                     >
-                        <Label htmlFor="name" className="text-sm font-medium">
+                        <Label
+                            htmlFor="name"
+                            className="text-sm text-foreground font-medium"
+                        >
                             Full Name
                         </Label>
                         <div className="relative">
@@ -177,14 +184,12 @@ function EditStudentSheet({
                                 required
                                 autoComplete="off"
                                 {...register("name")}
-                                className="font-medium p-5 pl-9"
+                                className="text-foreground font-medium p-5 pl-9"
                             />
                             <UserRoundPlus className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
                         {/* Name error message */}
-                        <p className="text-xs text-red-800 font-semibold">
-                            {errors.name?.message}
-                        </p>
+                        <ValidationError message={errors.name?.message as string} />
                     </motion.div>
 
                     {/* Input for email */}
@@ -194,7 +199,10 @@ function EditStudentSheet({
                         transition={{ delay: 0.4 }}
                         className="space-y-2"
                     >
-                        <Label htmlFor="email" className="text-sm font-medium">
+                        <Label
+                            htmlFor="email"
+                            className="text-sm text-foreground font-medium"
+                        >
                             Email Address
                         </Label>
                         <div className="relative">
@@ -205,14 +213,12 @@ function EditStudentSheet({
                                 required
                                 autoComplete="off"
                                 {...register("email")}
-                                className="font-medium p-5 pl-9"
+                                className="text-foreground font-medium p-5 pl-9"
                             />
                             <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
                         {/* Email error message */}
-                        <p className="text-xs text-red-800 font-semibold">
-                            {errors.email?.message}
-                        </p>
+                        <ValidationError message={errors.email?.message as string} />
                     </motion.div>
 
                     {/* Input for role */}
@@ -222,7 +228,10 @@ function EditStudentSheet({
                         transition={{ delay: 0.5 }}
                         className="space-y-2"
                     >
-                        <Label htmlFor="role" className="text-sm font-medium">
+                        <Label
+                            htmlFor="role"
+                            className="text-sm text-foreground font-medium"
+                        >
                             Role
                         </Label>
                         <div className="relative">
@@ -233,14 +242,12 @@ function EditStudentSheet({
                                 autoComplete="off"
                                 disabled
                                 {...register("role")}
-                                className="font-medium p-5 pl-9 cursor-not-allowed"
+                                className="text-foreground font-medium p-5 pl-9 cursor-not-allowed"
                             />
                             <BriefcaseIcon className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
                         {/* Role error message */}
-                        <p className="text-xs text-red-800 font-semibold">
-                            {errors.role?.message}
-                        </p>
+                        <ValidationError message={errors.role?.message as string} />
                     </motion.div>
 
                     {/* Input for batch */}
@@ -250,7 +257,10 @@ function EditStudentSheet({
                         transition={{ delay: 0.6 }}
                         className="space-y-2"
                     >
-                        <Label htmlFor="role" className="text-sm font-medium">
+                        <Label
+                            htmlFor="role"
+                            className="text-sm text-foreground font-medium"
+                        >
                             Batches
                         </Label>
                         <div className="relative">
@@ -265,7 +275,7 @@ function EditStudentSheet({
                             >
                                 <SelectTrigger
                                     id="batches"
-                                    className="font-medium p-5 pl-9 relative"
+                                    className="text-foreground font-medium p-5 pl-9 relative"
                                 >
                                     <SelectValue
                                         placeholder="Select a batch"
@@ -283,31 +293,7 @@ function EditStudentSheet({
                             <UsersRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
                         {/* Batch error message */}
-                        <p className="text-xs text-red-800 font-semibold">
-                            {errors.batch?.message}
-                        </p>
-                    </motion.div>
-
-                    {/* Input fot message */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.7 }}
-                        className="space-y-2"
-                    >
-                        <Label htmlFor="message" className="text-sm font-medium">
-                            Personal Message (Optional)
-                        </Label>
-                        <div className="relative">
-                            <Input
-                                id="message"
-                                placeholder="Add a personal message to the invitation"
-                                autoComplete="off"
-                                {...register("message")}
-                                className="font-medium p-5 pl-9"
-                            />
-                            <MessageSquare className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
-                        </div>
+                        <ValidationError message={errors.batch?.message as string} />
                     </motion.div>
 
                     {/* Submit button */}

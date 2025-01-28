@@ -10,7 +10,7 @@ function CardHeader({ count, heading, children }: PropsType) {
     return (
         <div className="w-full flex items-center justify-between">
             <div className="flex gap-2">
-                <p className="text-lg font-semibold">
+                <p className="text-lg text-foreground font-semibold">
                     {heading} {`(${count})`}
                 </p>
             </div>

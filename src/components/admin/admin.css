@@ -4,7 +4,7 @@
     border-width: 1px;
 }
 
-.icon-style:hover{
+.p-3 rounded-lg border hover:bg-sidebar:hover{
     --tw-bg-opacity: 1;
     /* border-color: hsl(var(--muted)); */
     background-color: rgb(244 244 245 / var(--tw-bg-opacity))

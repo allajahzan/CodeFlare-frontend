@@ -27,7 +27,7 @@ function MultiSelectorContent({
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -2 }}
                     transition={{ duration: 0.1 }}
-                    className="absolute z-10 max-h-[174px] top-[46px] w-full bg-white p-1 border rounded-md shadow-md overflow-y-auto no-scrollbar"
+                    className="absolute z-10 max-h-[174px] top-[46px] w-full bg-popover p-1 border rounded-md shadow-md overflow-y-auto no-scrollbar"
                 >
                     {values?.map((value, index) => {
                         return (
@@ -38,13 +38,13 @@ function MultiSelectorContent({
                                         event.stopPropagation();
                                         handleSelect?.(value);
                                     }}
-                                    className="p-2 py-[5.5px] font-medium hover:bg-muted rounded-sm"
+                                    className="p-2 py-[5.5px] text-popover-foreground font-medium hover:bg-muted rounded-sm"
                                 >
                                     {value}
                                 </p>
                                 {/* Tick */}
                                 {selectedBatches?.includes(value) && (
-                                    <Check className="absolute right-1 top-1 w-4 h-4" />
+                                    <Check className="absolute right-1 top-1 w-4 h-4 text-foreground" />
                                 )}
                             </div>
                         );
@@ -89,7 +89,7 @@ function TriggerMultiSelector({
                     setDropDownOpen?.(!dropDownOpen);
                 }}
                 onKeyDown={(event)=>event.preventDefault()}
-                className="font-medium p-5 pl-9 cursor-pointer placeholder:text-zinc-900"
+                className="text-foreground font-medium p-5 pl-9 cursor-pointer placeholder:text-muted-foreground"
             />
             {Icon && (
                 <Icon className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />

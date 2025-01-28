@@ -41,6 +41,7 @@ import {
 } from "@/components/ui/multi-selector";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
+import ValidationError from "@/components/ui/validation-error";
 
 // Interface for Props
 interface PropsType {
@@ -143,8 +144,13 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
             <SheetContent className="p-0 flex flex-col gap-0">
                 {/* Header */}
                 <SheetHeader className="p-5 bg-zinc-0">
-                    <SheetTitle className="text-foreground">Add new user</SheetTitle>
-                    <SheetDescription className="font-medium text-foreground">
+                    <SheetTitle className="flex items-center gap-3 text-foreground">
+                        <div className="p-2 bg-muted rounded-full">
+                            <UserRoundPlus className="w-4 h-4" />
+                        </div>
+                        <span>Add new user</span>
+                    </SheetTitle>
+                    <SheetDescription className="text-foreground font-medium">
                         Fill in the information below to add a new user.
                     </SheetDescription>
                 </SheetHeader>
@@ -165,7 +171,10 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                         transition={{ delay: 0.3 }}
                         className="space-y-2"
                     >
-                        <Label htmlFor="name" className="text-sm font-medium">
+                        <Label
+                            htmlFor="name"
+                            className="text-sm text-foreground font-medium"
+                        >
                             Full Name
                         </Label>
                         <div className="relative">
@@ -176,14 +185,12 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                                 required
                                 autoComplete="off"
                                 {...register("name")}
-                                className="font-medium p-5 pl-9"
+                                className="text-foreground font-medium p-5 pl-9"
                             />
                             <UserRoundPlus className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
                         {/* Name error message */}
-                        <p className="text-xs text-red-800 font-semibold">
-                            {errors.name?.message}
-                        </p>
+                        <ValidationError message={errors.name?.message as string} />
                     </motion.div>
 
                     {/* Input for email */}
@@ -193,7 +200,10 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                         transition={{ delay: 0.4 }}
                         className="space-y-2"
                     >
-                        <Label htmlFor="email" className="text-sm font-medium">
+                        <Label
+                            htmlFor="email"
+                            className="text-sm text-foreground font-medium"
+                        >
                             Email Address
                         </Label>
                         <div className="relative">
@@ -204,14 +214,12 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                                 required
                                 autoComplete="off"
                                 {...register("email")}
-                                className="font-medium p-5 pl-9"
+                                className="text-foreground font-medium p-5 pl-9"
                             />
                             <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
                         {/* Email error message */}
-                        <p className="text-xs text-red-800 font-semibold">
-                            {errors.email?.message}
-                        </p>
+                        <ValidationError message={errors.email?.message as string} />
                     </motion.div>
 
                     {/* Input for role */}
@@ -221,7 +229,10 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                         transition={{ delay: 0.5 }}
                         className="space-y-2"
                     >
-                        <Label htmlFor="role" className="text-sm font-medium">
+                        <Label
+                            htmlFor="role"
+                            className="text-sm text-foreground font-medium"
+                        >
                             Role
                         </Label>
                         <div className="relative">
@@ -232,7 +243,10 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                                     setValue("role", value, { shouldValidate: true })
                                 }
                             >
-                                <SelectTrigger id="role" className="font-medium p-5 pl-9">
+                                <SelectTrigger
+                                    id="role"
+                                    className="text-foreground font-medium p-5 pl-9"
+                                >
                                     <SelectValue placeholder="Select a role" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -243,9 +257,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                             <BriefcaseIcon className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
                         {/* Role error message */}
-                        <p className="text-xs text-red-800 font-semibold">
-                            {errors.role?.message}
-                        </p>
+                        <ValidationError message={errors.role?.message as string} />
                     </motion.div>
 
                     {/* Input for batches */}
@@ -255,7 +267,10 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                         transition={{ delay: 0.6 }}
                         className="space-y-2"
                     >
-                        <Label htmlFor="batches" className="text-sm font-medium">
+                        <Label
+                            htmlFor="batches"
+                            className="text-sm text-foreground font-medium"
+                        >
                             Batches
                         </Label>
                         <MultiSelector
@@ -278,9 +293,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                             }
                         />
                         {/* Batches error message */}
-                        <p className="text-xs text-red-800 font-semibold">
-                            {errors.batches?.message}
-                        </p>
+                        <ValidationError message={errors.batches?.message as string} />
                     </motion.div>
 
                     {/* Input fot message */}
@@ -290,7 +303,10 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                         transition={{ delay: 0.7 }}
                         className="space-y-2"
                     >
-                        <Label htmlFor="message" className="text-sm font-medium">
+                        <Label
+                            htmlFor="message"
+                            className="text-sm text-foreground font-medium"
+                        >
                             Personal Message (Optional)
                         </Label>
                         <div className="relative">
@@ -299,7 +315,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                                 placeholder="Add a personal message to the invitation"
                                 autoComplete="off"
                                 {...register("message")}
-                                className="font-medium p-5 pl-9"
+                                className="text-foreground font-medium p-5 pl-9"
                             />
                             <MessageSquare className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
@@ -315,7 +331,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                         <Button
                             type="submit"
                             disabled={submiting}
-                            className="w-full h-11 bg-zinc-900 hover:bg-zinc-900 text-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:cursor-not-allowed"
+                            className="w-full h-11 transition-all duration-200 disabled:cursor-not-allowed"
                         >
                             {submiting ? (
                                 <div className="flex items-center gap-2">

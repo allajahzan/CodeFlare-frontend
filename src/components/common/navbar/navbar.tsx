@@ -83,7 +83,7 @@ const Navbar = () => {
                 transition={{ delay: 0.2 }}
             >
                 <Heading
-                    className="text-2xl font-bold text-foreground"
+                    className="text-2xl text-foreground font-bold"
                     text={path}
                     handle={handleSideBar}
                 />
@@ -100,7 +100,7 @@ const Navbar = () => {
                             placeholder="Search"
                             autoComplete="off"
                             required
-                            className="font-medium p-5 pl-9 rounded-lg text-foreground"
+                            className="p-5 pl-9 text-foreground font-medium rounded-lg"
                         />
                         <Search className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                     </div>

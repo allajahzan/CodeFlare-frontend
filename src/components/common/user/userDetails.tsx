@@ -66,7 +66,7 @@ function UserDetails({
                 >
                     <div
                         className={cn(
-                            "h-full p-5 space-y-5 bg-white overflow-hidden",
+                            "h-full p-5 space-y-5 bg-background overflow-hidden",
                             className
                         )}
                     >
@@ -77,7 +77,7 @@ function UserDetails({
                                 animate={{ scale: 1, opacity: 1 }}
                                 transition={{ delay: 0.2 }}
                             >
-                                <Avatar className="bg-white w-16 h-16 border-2">
+                                <Avatar className="bg-background w-16 h-16 border-2">
                                     {selectedUser.profilePic && (
                                         <AvatarImage src={image} className="object-cover" />
                                     )}
@@ -90,10 +90,10 @@ function UserDetails({
                             {/* Name and email */}
                             <div className="flex-1 flex flex-col justify-center gap-2 min-w-0 truncate">
                                 <div className="flex items-center gap-2">
-                                    <p className="text-lg font-semibold truncate">
+                                    <p className="text-lg text-foreground font-semibold truncate">
                                         {selectedUser.name}
                                     </p>
-                                    <Badge className="hidden lg:block relative text-xs text-white font-semibold bg-zinc-900 hover:bg-zinc-900 rounded-full overflow-hidden">
+                                    <Badge className="hidden lg:block relative text-xs text-white font-semibold bg-zinc-900 dark:bg-muted hover:bg-zinc-900 rounded-full overflow-hidden">
                                         {selectedUser.role[0].toUpperCase() +
                                             selectedUser.role.slice(1)}
                                     </Badge>
@@ -110,7 +110,10 @@ function UserDetails({
                                     // Edit user
                                     <EditUserSheet
                                         button={
-                                            <div className="shadow-md bg-zinc-900 hover:bg-zinc-800 text-white rounded-full p-2">
+                                            <div
+                                                className="shadow-md bg-zinc-900 dark:bg-muted hover:bg-zinc-800 dark:hover:bg-zinc-700 
+                                            text-white rounded-full p-2"
+                                            >
                                                 <Edit2 className="h-4 w-4" />
                                             </div>
                                         }
@@ -122,7 +125,10 @@ function UserDetails({
                                     // Edit student
                                     <EditStudentSheet
                                         button={
-                                            <div className="shadow-md bg-zinc-900 hover:bg-zinc-800 text-white rounded-full p-2">
+                                            <div
+                                                className="shadow-md bg-zinc-900 dark:bg-muted hover:bg-zinc-800 dark:hover:bg-zinc-700
+                                             text-white rounded-full p-2"
+                                            >
                                                 <Edit2 className="h-4 w-4" />
                                             </div>
                                         }
@@ -177,16 +183,16 @@ function UserDetails({
                                 .map((item, index) => (
                                     <Fragment key={index}>
                                         {item?.icon && (
-                                            <div className="p-3 border rounded-lg">
+                                            <div className="p-3 rounded-lg border border-border dark:border-customBorder shadow-sm">
                                                 <div className="flex items-center gap-3">
                                                     <div className="p-2 rounded-lg bg-muted">
-                                                        <item.icon className="w-5 h-5" />
+                                                        <item.icon className="w-5 h-5 text-foreground" />
                                                     </div>
                                                     <div>
                                                         <p className="text-sm text-muted-foreground font-medium">
                                                             {item.label}{" "}
                                                             {item.label === "Role Status" && (
-                                                                <span className="inline-block lg:hidden text-zinc-900">
+                                                                <span className="inline-block lg:hidden text-foreground">
                                                                     (
                                                                     {selectedUser.role[0].toUpperCase() +
                                                                         selectedUser.role.slice(1)}
@@ -194,7 +200,9 @@ function UserDetails({
                                                                 </span>
                                                             )}
                                                         </p>
-                                                        <p className="font-semibold">{item.value}</p>
+                                                        <p className="text-foreground font-semibold">
+                                                            {item.value}
+                                                        </p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -205,15 +213,18 @@ function UserDetails({
                             {/* Assigned batches lists for instructors and coordinators*/}
                             {selectedUser.role !== "student" && (
                                 <DropdownMenu>
-                                    <DropdownMenuTrigger className="flex items-center gap-3 text-start cursor-pointer p-3 border rounded-lg">
+                                    <DropdownMenuTrigger
+                                        className="flex items-center gap-3 text-start rounded-lg cursor-pointer p-3 border 
+                                    border-border dark:border-customBorder shadow-sm"
+                                    >
                                         <div className="p-2 rounded-lg bg-muted">
-                                            <PersonStanding className="w-5 h-5" />
+                                            <PersonStanding className="w-5 h-5 text-foreground" />
                                         </div>
                                         <div>
                                             <p className="text-sm text-muted-foreground font-medium">
                                                 Batches
                                             </p>
-                                            <p className="font-semibold">Batches</p>
+                                            <p className="text-foreground font-semibold">Batches</p>
                                         </div>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent

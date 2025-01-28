@@ -202,7 +202,7 @@ function Students({ setDrawerOpen }: PropsType) {
                     }
                     children2={
                         <DropdownMenu>
-                            <DropdownMenuTrigger className="icon-style shadow-sm">
+                            <DropdownMenuTrigger className="p-3 rounded-lg border hover:bg-sidebar shadow-sm">
                                 <SortAsc className="h-4 w-4" />
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align={isSmall ? "end" : "start"}>
