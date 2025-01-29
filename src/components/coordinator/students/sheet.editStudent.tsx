@@ -306,7 +306,7 @@ function EditStudentSheet({
                         <Button
                             type="submit"
                             disabled={submiting}
-                            className="w-full h-11 bg-zinc-900 hover:bg-zinc-900 text-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:cursor-not-allowed"
+                            className="w-full h-11 transition-all duration-200 disabled:cursor-not-allowed"
                         >
                             {submiting ? (
                                 <div className="flex items-center gap-2">

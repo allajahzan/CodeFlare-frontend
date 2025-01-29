@@ -2,7 +2,11 @@ import SideBar from "@/components/common/sideBar/sideBar";
 import { Outlet } from "react-router-dom";
 import Navbar from "@/components/common/navbar/navbar";
 import { useDispatch, useSelector } from "react-redux";
-import { resizeAction, sideBarVisibilityAction, stateType } from "@/redux/store";
+import {
+    resizeAction,
+    sideBarVisibilityAction,
+    stateType,
+} from "@/redux/store";
 import {
     //   CalendarDays,
     //   CreditCard,
@@ -85,7 +89,7 @@ function CoordinatorLayout({ isDrawerOpen }: PropsType) {
                         transform: "scale(1) translate3d(0, 0, 0)",
                     }),
             }}
-            className="h-screen bg-white"
+            className="h-screen bg-background"
         >
             <Shadow />
             <SideBar sideBarItems={sideBarItems} />

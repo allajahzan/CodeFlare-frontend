@@ -159,7 +159,10 @@ function Students({ setDrawerOpen }: PropsType) {
     return (
         <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-5 pt-0">
             {/* Left side  */}
-            <div className="p-5 sticky z-0 top-[20px] md:top-5 w-full h-[calc(100vh-108px)] flex flex-col gap-5 items-center bg-white border shadow-sm rounded-2xl">
+            <div
+                className="p-5 sticky z-0 top-[20px] md:top-5 w-full h-[calc(100vh-108px)] flex flex-col gap-5 items-center rounded-2xl
+            bg-background border border-border dark:border-customBorder shadow-sm dark:shadow-customBorder dark:shadow-inner"
+            >
                 {/* Heading */}
                 <CardHeader
                     heading="Manage students"
@@ -186,7 +189,7 @@ function Students({ setDrawerOpen }: PropsType) {
                     children1={
                         <Select>
                             <SelectTrigger className="w-[41.6px] h-[41.6px] flex justify-center p-0 py-5 shadow-sm">
-                                <Filter className="h-4 w-4" />
+                                <Filter className="h-4 w-4 text-foreground" />
                             </SelectTrigger>
                             <SelectContent align={isSmall ? "start" : "end"}>
                                 <SelectGroup>
@@ -203,7 +206,7 @@ function Students({ setDrawerOpen }: PropsType) {
                     children2={
                         <DropdownMenu>
                             <DropdownMenuTrigger className="p-3 rounded-lg border hover:bg-sidebar shadow-sm">
-                                <SortAsc className="h-4 w-4" />
+                                <SortAsc className="h-4 w-4 text-foreground" />
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align={isSmall ? "end" : "start"}>
                                 <DropdownMenuItem>
@@ -252,8 +255,8 @@ function Students({ setDrawerOpen }: PropsType) {
                                         }
                                         children2={
                                             <DropdownMenu>
-                                                <DropdownMenuTrigger className="p-3 hover:bg-muted rounded-lg">
-                                                    <MoreHorizontal className="w-4 h-4" />
+                                                <DropdownMenuTrigger className="p-2 hover:bg-muted rounded-lg">
+                                                    <MoreHorizontal className="w-4 h-4 text-foreground" />
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent
                                                     // Change alignments in small size
@@ -311,10 +314,14 @@ function Students({ setDrawerOpen }: PropsType) {
                         setUsers={setStudents as any}
                         setSelectedUser={setSelectedStudent}
                         selectedUser={selectedStudent as Student}
-                        className="border shadow-sm rounded-2xl"
+                        className="rounded-2xl border border-border dark:border-customBorder 
+                        shadow-sm dark:shadow-customBorder dark:shadow-inner"
                         role="student"
                     />
-                    <div className="h-full p-5 bg-zinc-0 border rounded-2xl"></div>
+                    <div
+                        className="h-full p-5 rounded-2xl bg-background border border-border dark:border-customBorder 
+                    shadow-sm dark:shadow-customBorder dark:shadow-inner"
+                    ></div>
                 </div>
             )}
         </div>
