@@ -78,7 +78,7 @@ function InstructorLayout({ isDrawerOpen }: PropsType) {
                         transform: "scale(1) translate3d(0, 0, 0)",
                     }),
             }}
-            className="h-screen bg-white"
+            className="h-screen bg-background"
         >
             <Shadow />
             <SideBar sideBarItems={sideBarItems} />
