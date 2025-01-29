@@ -19,6 +19,7 @@ import { useDispatch } from "react-redux";
 import { roleAction } from "@/redux/store";
 import Breathing from "@/components/animation/breathing";
 import { IThemeContext, ThemeContext } from "@/context/themeContext";
+import ValidationError from "@/components/ui/validation-error";
 
 function Form() {
     // From related states
@@ -119,9 +120,7 @@ function Form() {
     return (
         <div
             className="relative z-0 p-5 pr-5 md:pr-0 h-full w-full lg:w-[80%] lg:h-[80%] rounded-none lg:rounded-2xl
-         bg-background lg:border border-white dark:border-border
-         shadow-custom 
-         transition-all duration-300"
+         bg-background lg:border border-white dark:border-border shadow-custom transition-all duration-300"
         >
             <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 grid-rows-[auto_1fr] md:grid-rows-1 gap-5 md:gap-0 overflow-auto md:overflow-visible no-scrollbar">
                 {/* Carousal */}
@@ -191,9 +190,7 @@ function Form() {
                                     />
                                     <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                                 </div>
-                                <p className="text-xs text-red-800 font-semibold">
-                                    {errors.email && errors.email.message}
-                                </p>
+                                <ValidationError message={errors.email?.message as string} />
                             </motion.div>
 
                             {/* Input for password */}
@@ -231,9 +228,7 @@ function Form() {
                                         )}
                                     </div>
                                 </div>
-                                <p className="text-xs text-red-800 font-semibold">
-                                    {errors.password && errors.password.message}
-                                </p>
+                                <ValidationError message={errors.password?.message as string} />
                             </motion.div>
 
                             {/* Forgot password */}
@@ -242,7 +237,7 @@ function Form() {
                                     initial={{ opacity: 1, y: 0 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.6 }}
-                                    className="flex items-center justify-end font-medium pt-2"
+                                    className="flex items-center justify-end text-foreground font-medium pt-2"
                                 >
                                     <Link to={`/${role}/forgot-password`}>Forgot Password?</Link>
                                 </motion.p>

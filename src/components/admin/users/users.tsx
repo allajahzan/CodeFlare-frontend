@@ -10,6 +10,7 @@ import {
     User2,
     UserRoundCheck,
     UserRoundMinus,
+    Send,
 } from "lucide-react";
 import {
     DropdownMenu,
@@ -253,6 +254,10 @@ function Users({ setDrawerOpen }: PropsType) {
                                                         isSmall ? "left-[13px]" : "left-0"
                                                     )}
                                                 >
+                                                    <DropdownMenuItem>
+                                                        <Send />
+                                                        Send Invitation
+                                                    </DropdownMenuItem>
                                                     <DropdownMenuItem
                                                         onClick={() => setSelectedUser(users[index])}
                                                     >

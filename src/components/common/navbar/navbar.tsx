@@ -33,10 +33,9 @@ const Navbar = () => {
     const location = useLocation();
     const pathname = location.pathname;
 
-    // Handle theme
     const handleTheme = useCallback(() => {
-        setTheme(theme === "light" ? "dark" : "light");
-    }, [theme, setTheme]);
+        setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+    }, [theme]);
 
     // Handle sidebar
     const handleSideBar = useCallback(() => {
@@ -100,7 +99,7 @@ const Navbar = () => {
                             placeholder="Search"
                             autoComplete="off"
                             required
-                            className="p-5 pl-9 text-foreground font-medium rounded-lg"
+                            className="p-5 pl-9 text-foreground font-medium rounded-lg shadow-sm dark:shadow-customBorder dark:shadow-inner"
                         />
                         <Search className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                     </div>

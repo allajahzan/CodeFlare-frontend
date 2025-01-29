@@ -12,8 +12,8 @@ function Breathing() {
                 <motion.path
                     d="M0,0 Q50,50 100,0 V100 Q50,50 0,100 Z"
                     initial={{ d: "M0,0 Q50,50 100,0 V100 Q50,50 0,100 Z" }}
-                    fill="#000"
-                    opacity={0.1}
+                    fill="#000 "
+                    opacity={0.05}
                     animate={{
                         d: [
                             "M0,0 Q50,50 100,0 V100 Q50,50 0,100 Z",

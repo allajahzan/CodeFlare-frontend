@@ -4,7 +4,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 import { ArrowLeft, Eye, EyeOff, KeyRound, Loader } from "lucide-react";
-import { Fragment, useLayoutEffect, useMemo, useState } from "react";
+import {
+    Fragment,
+    useContext,
+    useLayoutEffect,
+    useMemo,
+    useState,
+} from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import bgImage from "@/assets/images/resetPassword1.jpg";
 import ApiEndpoints from "@/constants/apiEndpoints";
@@ -17,11 +23,17 @@ import {
     FormType,
 } from "@/validations/authentication/resetPassword";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Breathing from "@/components/animation/breathing";
+import { IThemeContext, ThemeContext } from "@/context/themeContext";
+import ValidationError from "@/components/ui/validation-error";
 
 function Form() {
     const [isMount, setMount] = useState<boolean | null>(null);
     const [showPassword, setShowPassword] = useState(false);
     const [submiting, setSubmiting] = useState(false);
+
+    // Theme context
+    const { theme } = useContext(ThemeContext) as IThemeContext;
 
     // Get role
     const path = useLocation();
@@ -126,10 +138,13 @@ function Form() {
     return (
         <Fragment>
             {isMount === true && (
-                <div className="relative z-0 p-5 pl-5 md:pl-0 h-full w-full lg:w-[80%] lg:h-[80%] bg-white rounded-none md:rounded-2xl shadow-custom transition-all duration-300">
+                <div
+                    className="relative z-0 p-5 pl-5 md:pl-0 h-full w-full lg:w-[80%] lg:h-[80%] rounded-none lg:rounded-2xl
+         bg-background lg:border border-white dark:border-border shadow-custom transition-all duration-300"
+                >
                     <div className="h-full w-full grid grid-cols-1 md:grid-cols-2 grid-rows-[auto_1fr] md:grid-rows-1 gap-5 md:gap-0 overflow-auto no-scrollbar">
                         {/* Login form */}
-                        <div className="w-full h-full bg-white order-2 md:order-1">
+                        <div className="w-full h-full bg-background order-2 md:order-1">
                             <motion.div
                                 initial={{ opacity: 1 }}
                                 animate={{ opacity: 1 }}
@@ -143,10 +158,10 @@ function Form() {
                                     transition={{ delay: 0.3 }}
                                     className="text-center space-y-5"
                                 >
-                                    <h1 className="text-2xl font-semibold">
+                                    <h1 className="text-2xl text-foreground font-semibold">
                                         Reset your password!
                                     </h1>
-                                    <p className="font-medium">
+                                    <p className="text-foreground font-medium">
                                         Hey, {role && role[0].toUpperCase() + role?.slice(1)} reset
                                         your password.
                                     </p>
@@ -161,7 +176,10 @@ function Form() {
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: 0.5 }}
                                     >
-                                        <Label htmlFor="password" className="text-sm font-medium">
+                                        <Label
+                                            htmlFor="password"
+                                            className="text-sm text-foreground font-medium"
+                                        >
                                             New Password
                                         </Label>
                                         <div className="relative">
@@ -172,7 +190,7 @@ function Form() {
                                                 required
                                                 autoComplete="off"
                                                 {...register("password")}
-                                                className="font-medium p-5 pl-9 border"
+                                                className="text-foreground font-medium p-5 pl-9 border"
                                             />
                                             <KeyRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                                             <div
@@ -186,9 +204,9 @@ function Form() {
                                                 )}
                                             </div>
                                         </div>
-                                        <p className="text-xs text-red-800 font-semibold">
-                                            {errors.password && errors.password.message}
-                                        </p>
+                                        <ValidationError
+                                            message={errors.password?.message as string}
+                                        />
                                     </motion.div>
 
                                     {/* Input for confirm password */}
@@ -200,7 +218,7 @@ function Form() {
                                     >
                                         <Label
                                             htmlFor="confirmPassword"
-                                            className="text-sm font-medium"
+                                            className="text-sm text-foreground font-medium"
                                         >
                                             Confirm Password
                                         </Label>
@@ -212,13 +230,13 @@ function Form() {
                                                 required
                                                 autoComplete="off"
                                                 {...register("confirmPassword")}
-                                                className="font-medium p-5 pl-9 border"
+                                                className="text-foreground font-medium p-5 pl-9 border"
                                             />
                                             <KeyRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                                         </div>
-                                        <p className="text-xs text-red-800 font-semibold">
-                                            {errors.confirmPassword && errors.confirmPassword.message}
-                                        </p>
+                                        <ValidationError
+                                            message={errors.confirmPassword?.message as string}
+                                        />
                                     </motion.div>
 
                                     {/* Submit button */}
@@ -231,7 +249,7 @@ function Form() {
                                         <Button
                                             type="submit"
                                             disabled={submiting}
-                                            className="w-full h-11 bg-zinc-900 hover:bg-zinc-800 text-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:cursor-not-allowed"
+                                            className="w-full h-11 transition-all duration-200 disabled:cursor-not-allowed"
                                         >
                                             {submiting ? (
                                                 <div className="flex items-center gap-2">
@@ -253,7 +271,7 @@ function Form() {
                                     >
                                         <Button
                                             type="button"
-                                            className="w-full h-11 bg-transparent hover:bg-transparent text-zin-900 shadow-none"
+                                            className="w-full h-11 bg-transparent hover:bg-transparent dark:hover:bg-transparent text-foreground shadow-none"
                                         >
                                             <div
                                                 onClick={() => navigate(`/${role}/login`)}
@@ -272,26 +290,27 @@ function Form() {
                         <Carousel
                             slides={slides}
                             image={
-                                <div className="relative h-full">
-                                    <div className=" w-full h-full  absolute top-0 left-0 bg-black/10"></div>
+                                <div className="relative h-full rounded-2xl">
+                                    {/* Breathing animation */}
+                                    {theme === "dark" && <Breathing />}
                                     <img
                                         src={bgImage}
                                         alt=""
-                                        className="object-cover h-full w-full"
+                                        className="object-cover h-full w-full rounded-2xl dark:border-2"
                                     />
                                 </div>
                             }
-                            className="order-1 md:order-2 text-black"
+                            className="order-1 md:order-2"
                         />
                     </div>
                 </div>
             )}
             {isMount === false && (
                 <div className="relative h-screen w-full z-0 flex flex-col items-center justify-center p-5 space-y-5">
-                    <h1 className="font-bold text-2xl">
+                    <h1 className="text-foreground font-bold text-2xl">
                         Sorry, this page isn't available.
                     </h1>
-                    <p className="text-center font-medium text-lg">
+                    <p className="text-center text-foreground font-medium text-lg">
                         The link you followed may be broken, or the page may have been
                         removed.{" "}
                         <Link to={`/${role}/login`} replace>

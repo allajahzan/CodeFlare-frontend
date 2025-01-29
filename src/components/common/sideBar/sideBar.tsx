@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { useCallback, useContext, useEffect } from "react";
+import { useCallback, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { stateType, sideBarVisibilityAction, themeAction } from "@/redux/store";
+import { stateType, sideBarVisibilityAction } from "@/redux/store";
 import {
     Tooltip,
     TooltipContent,
@@ -15,6 +15,7 @@ import Slider from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import React from "react";
 import { IUserContext, UserContext } from "@/context/userContext";
+import { IThemeContext, ThemeContext } from "@/context/themeContext";
 
 // Interface for Props
 interface PropsType {
@@ -30,7 +31,6 @@ interface PropsType {
 // SideBar Component
 function SideBar({ sideBarItems }: PropsType) {
     // Redux states
-    const theme = useSelector((state: stateType) => state.theme);
     const isSmall = useSelector((state: stateType) => state.isSmall);
     const isSideBarVisible = useSelector(
         (state: stateType) => state.isSideBarVisible
@@ -39,6 +39,9 @@ function SideBar({ sideBarItems }: PropsType) {
 
     // User Context
     const { logout } = useContext(UserContext) as IUserContext;
+
+    // Theme Context
+    const { setTheme, theme } = useContext(ThemeContext) as IThemeContext;
 
     const navigate = useNavigate();
 
@@ -50,14 +53,8 @@ function SideBar({ sideBarItems }: PropsType) {
 
     // Handle theme
     const handleTheme = useCallback(() => {
-        dispatch(themeAction(theme === "dark" ? "light" : "dark"));
-    }, [dispatch, theme]);
-
-    // Change theme
-    useEffect(() => {
-        document.documentElement.classList.toggle("dark", theme === "dark");
-        localStorage.setItem("theme", theme);
-    }, [theme]);
+        setTheme(theme === "dark" ? "light" : "dark");
+    }, [setTheme]);
 
     return (
         <div
@@ -71,7 +68,7 @@ function SideBar({ sideBarItems }: PropsType) {
         >
             {/* SideBar Items Section */}
             <div className="h-full p-5">
-                <div className="h-full py-8 flex flex-col justify-between rounded-3xl bg-sidebar border border-customBorder">
+                <div className="h-full py-8 flex flex-col justify-between rounded-3xl bg-sidebar border border-transparent dark:border-customBorder">
                     {isSideBarVisible && <Slider />}
                     {/* Title */}
                     <li>

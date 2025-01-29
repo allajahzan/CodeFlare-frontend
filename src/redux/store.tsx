@@ -8,7 +8,6 @@ interface actionType {
 export interface stateType {
     isSideBarVisible: boolean;
     isSmall: boolean;
-    theme: string;
     role: string;
 }
 
@@ -33,18 +32,6 @@ const isSmall = (
     return prevState;
 };
 
-// Reducer function for theme changing
-type Theme = "light" | "dark";
-const storedTheme = localStorage.getItem("theme") as Theme | null;
-const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-const initialTheme = storedTheme || (prefersDark ? "dark" : "light");
-const theme = (prevState: string = initialTheme, action: actionType) => {
-    if (action.type === "theme") {
-        return action.payload;
-    }
-    return prevState;
-};
-
 // Reducer function for role changing
 const publicRoutes = ["login", "forgot-password", "reset-password"] as string[];
 const initialRole = publicRoutes.includes(location.pathname.split("/")[2])
@@ -60,7 +47,6 @@ const role = (prevState: string = initialRole, action: actionType) => {
 const appReducer = combineReducers({
     isSideBarVisible,
     isSmall,
-    theme,
     role,
 });
 
@@ -85,14 +71,6 @@ function resizeAction(payload: boolean) {
 }
 
 // Action for theme changing
-function themeAction(payload: string) {
-    return {
-        type: "theme",
-        payload: payload,
-    };
-}
-
-// Action for theme changing
 function roleAction(payload: string) {
     return {
         type: "role",
@@ -104,6 +82,5 @@ export {
     store,
     sideBarVisibilityAction,
     resizeAction,
-    themeAction,
     roleAction,
 };

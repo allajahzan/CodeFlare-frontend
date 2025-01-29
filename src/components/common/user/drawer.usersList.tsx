@@ -8,6 +8,7 @@ import {
     MoreHorizontal,
     Plus,
     Search,
+    Send,
     User2,
     UserRoundCheck,
     UserRoundMinus,
@@ -85,15 +86,15 @@ function DrawerUsersList({
                                     transition={{ delay: 0.2 + index * 0.1 }}
                                     onClick={() => action(index)}
                                     className={cn(
-                                        "group p-2 px-3 w-full border hover:bg-muted hover:border-muted rounded-xl cursor-pointer",
+                                        "group p-2 px-3 w-full rounded-xl cursor-pointer border border-border dark:border-customBorder hover:bg-muted dark:hover:bg-sidebar",
                                         selectedUser?._id === user._id
-                                            ? "bg-muted border-muted"
+                                            ? "bg-muted dark:bg-sidebar"
                                             : ""
                                     )}
                                 >
                                     <div className="flex items-center gap-3">
                                         {/* Avatar profile pic */}
-                                        <Avatar className="border-2 bg-white w-12 h-12">
+                                        <Avatar className="border-2 bg-background w-12 h-12">
                                             {user.profilePic && (
                                                 <AvatarImage src={image} className="object-cover" />
                                             )}
@@ -103,7 +104,9 @@ function DrawerUsersList({
                                         </Avatar>
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center gap-2">
-                                                <p className="font-semibold truncate">{user.name}</p>
+                                                <p className="text-foreground font-semibold truncate">
+                                                    {user.name}
+                                                </p>
                                             </div>
                                             <p className="text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
                                                 {user.role[0].toUpperCase() + user.role.slice(1)}
@@ -112,8 +115,8 @@ function DrawerUsersList({
 
                                         {/* Dropdown menu */}
                                         <DropdownMenu>
-                                            <DropdownMenuTrigger className="p-3 hover:bg-muted rounded-lg">
-                                                <MoreHorizontal className="w-4 h-4" />
+                                            <DropdownMenuTrigger className="p-2 hover:bg-muted rounded-lg">
+                                                <MoreHorizontal className="w-4 h-4 text-foreground" />
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent
                                                 // Change alignments in small size
@@ -123,6 +126,10 @@ function DrawerUsersList({
                                                     isSmall ? "left-[13px]" : "left-0"
                                                 )}
                                             >
+                                                <DropdownMenuItem>
+                                                    <Send />
+                                                    Send Invitation
+                                                </DropdownMenuItem>
                                                 <DropdownMenuItem
                                                     onClick={() => {
                                                         setDrawerOpen(true);
