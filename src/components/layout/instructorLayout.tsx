@@ -16,10 +16,12 @@ import { useLayoutEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import AppRoutes from "@/constants/appRoutes";
 
+// Interface for Props
 interface PropsType {
     isDrawerOpen: boolean;
 }
 
+// Instrctor layout Component
 function InstructorLayout({ isDrawerOpen }: PropsType) {
     const isSmall = useSelector((state: stateType) => state.isSmall);
     const dispatch = useDispatch();

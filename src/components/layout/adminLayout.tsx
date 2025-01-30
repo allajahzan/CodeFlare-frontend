@@ -15,10 +15,12 @@ import Shadow from "@/components/ui/shadow";
 import { useLayoutEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
 
+// Interface for Props
 interface PropsType {
     isDrawerOpen: boolean;
 }
 
+// Admin layout Component
 function AdminLayout({ isDrawerOpen }: PropsType) {
     const isSmall = useSelector((state: stateType) => state.isSmall);
     const dispatch = useDispatch();

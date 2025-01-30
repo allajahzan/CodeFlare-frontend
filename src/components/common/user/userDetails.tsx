@@ -1,18 +1,15 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
     Calendar,
     CalendarDaysIcon,
     Clock,
     Edit2,
     Home,
-    Mail,
     PersonStanding,
     User2,
     UserRoundCheck,
     UserRoundMinus,
 } from "lucide-react";
-import image from "@/assets/images/allaj.jpeg";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -20,16 +17,15 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { NotSelected } from "@/components/animation/fallbacks";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Student } from "@/types/coordinator";
 import { User } from "@/types/admin";
 import { Fragment } from "react/jsx-runtime";
-import profile from "@/assets/images/no-profile.svg";
 import EditUserSheet from "@/components/admin/users/sheet.editUser";
 import EditStudentSheet from "@/components/coordinator/students/sheet.editStudent";
 import { useContext } from "react";
 import { IUserContext, UserContext } from "@/context/userContext";
+import UserNameCard from "./user-name-card";
 
 // Interface for Props
 interface PropsType {
@@ -70,39 +66,9 @@ function UserDetails({
                             className
                         )}
                     >
-                        <div className="flex items-center gap-3 relative">
-                            {/* Avatar profile pic */}
-                            <motion.div
-                                initial={{ scale: 0.5, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                transition={{ delay: 0.2 }}
-                            >
-                                <Avatar className="bg-background w-16 h-16 border-2">
-                                    {selectedUser.profilePic && (
-                                        <AvatarImage src={image} className="object-cover" />
-                                    )}
-                                    <AvatarFallback className="bg-transparent">
-                                        <img src={profile} alt="" />
-                                    </AvatarFallback>
-                                </Avatar>
-                            </motion.div>
-
-                            {/* Name and email */}
-                            <div className="flex-1 flex flex-col justify-center gap-2 min-w-0 truncate">
-                                <div className="flex items-center gap-2">
-                                    <p className="text-lg text-foreground font-semibold truncate">
-                                        {selectedUser.name}
-                                    </p>
-                                    <Badge className="hidden lg:block relative text-xs text-white font-semibold bg-zinc-900 dark:bg-muted hover:bg-zinc-900 rounded-full overflow-hidden">
-                                        {selectedUser.role[0].toUpperCase() +
-                                            selectedUser.role.slice(1)}
-                                    </Badge>
-                                </div>
-                                <p className="text-sm text-muted-foreground font-medium truncate tracking-wide flex items-center gap-1">
-                                    <Mail className="w-4 h-4 flex-shrink-0" />
-                                    {selectedUser.email}
-                                </p>
-                            </div>
+                        <div className="flex items-center justify-between gap-3 relative">
+                            {/* User name card */}
+                            <UserNameCard data={selectedUser}/>
 
                             {/* Edit button */}
                             <div className="self-start">

@@ -39,7 +39,7 @@ import CardHeader from "@/components/common/dataCard/header";
 import SearchFilterSort from "@/components/common/dataCard/searchFilterSort";
 import { useMediaQuery } from "usehooks-ts";
 import { cn } from "@/lib/utils";
-import DrawerUsersList from "@/components/common/user/drawer.usersList";
+import DrawerUsersList from "@/components/common/user/drawer-usersList";
 import UserDetails from "@/components/common/user/userDetails";
 import { fetchData } from "@/service/apiService";
 import { handleCustomError } from "@/utils/error";
@@ -157,7 +157,7 @@ function Students({ setDrawerOpen }: PropsType) {
     }, [isSmall]);
 
     return (
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-5 pt-0">
+        <div className="p-5 pt-0 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {/* Left side  */}
             <div
                 className="p-5 sticky z-0 top-[20px] md:top-5 w-full h-[calc(100vh-108px)] flex flex-col gap-5 items-center rounded-2xl

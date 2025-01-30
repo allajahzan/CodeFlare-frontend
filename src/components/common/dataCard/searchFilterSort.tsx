@@ -4,10 +4,10 @@ import { ChangeEvent } from "react";
 
 // Interface for Props
 interface PropsType {
-    search: string;
-    handleSearch: (event: ChangeEvent<HTMLInputElement>) => void;
-    status: boolean;
-    hanldeStatus: () => void;
+    search?: string;
+    handleSearch?: (event: ChangeEvent<HTMLInputElement>) => void;
+    status?: boolean;
+    hanldeStatus?: () => void;
     children1?: React.ReactNode;
     children2?: React.ReactNode;
 }

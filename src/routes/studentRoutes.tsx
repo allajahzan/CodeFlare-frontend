@@ -12,9 +12,11 @@ import AuthenticationLayout from "@/components/layout/autheticationLayout";
 import ForgotPassword from "@/pages/authentication/forgotPassword";
 import ResetPassword from "@/pages/authentication/resetPassword";
 import AppRoutes from "@/constants/appRoutes";
+import { useState } from "react";
 
 // Student Routes
 function StudentRoutes() {
+    const [isDrawerOpen, _setDrawerOpen] = useState<boolean>(false);
     return (
         <Routes>
             {/* Public Routes */}
@@ -29,7 +31,7 @@ function StudentRoutes() {
 
             {/* Protected Routes */}
             <Route element={<ProtectedRoutes allowedRole={AppRoutes.STUDENT} />}>
-                <Route path={AppRoutes.STUDENT} element={<StudentLayout />}>
+                <Route path={AppRoutes.STUDENT} element={<StudentLayout isDrawerOpen={isDrawerOpen} />}>
                     <Route path={AppRoutes.DASHBOARD} element={<Dashboard />} />
                     <Route path={AppRoutes.STUDENT_REVIEWS} element={<Reviews />} />
                     <Route path={AppRoutes.STUDENT_INVOICES} element={<Invoice />} />

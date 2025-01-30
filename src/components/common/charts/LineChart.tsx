@@ -1,40 +1,6 @@
-// import {
-//   LineChart,
-//   Line,
-//   ResponsiveContainer,
-// } from "recharts";
-
-// interface PropsType {
-//   data : object[]
-//   text : string
-// }
-
-// const AdminDashboard = ({data,text}:PropsType) => {
-
-//   return (
-//     <div className="h-full w-full flex flex-col gap-10">
-//       <p className="text-base font-medium text-ellipsis overflow-hidden text-nowrap">{text}</p>
-//       <div className="h-[170px] sm:h-[266px]">
-//         <ResponsiveContainer width="100%" height="100%">
-//           <LineChart data={data}>
-//             <Line
-//               animationDuration={3000}
-//               type="monotone"
-//               dataKey="score"
-//               stroke="#000000"
-//               strokeWidth={2}
-//               dot={false}
-//             />
-//           </LineChart>
-//         </ResponsiveContainer>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AdminDashboard;
-
+import { IThemeContext, ThemeContext } from "@/context/themeContext";
 import { cn } from "@/lib/utils";
+import { useContext } from "react";
 import {
     LineChart,
     Line,
@@ -52,14 +18,20 @@ interface PropsType {
 
 // Interface for LineCharts
 const LineCharts = ({ data, text, className }: PropsType) => {
+    // Theme context
+    const { theme } = useContext(ThemeContext) as IThemeContext;
+
     return (
         <div className="h-full w-full flex flex-col gap-5">
-            <p className="text-base font-medium truncate">{text}</p>
+            <p className="text-base text-foreground font-medium truncate">{text}</p>
             <div className={cn(className)}>
                 <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={data}>
                         {/* Add a grid for a cleaner look */}
-                        <CartesianGrid stroke="#e0e0e0" strokeDasharray="3 3" />
+                        <CartesianGrid
+                            stroke={theme === "dark" ? "#27272A" : "#e0e0e0"}
+                            strokeDasharray="3 3"
+                        />
 
                         {/* Add a Tooltip */}
                         <Tooltip
@@ -79,10 +51,14 @@ const LineCharts = ({ data, text, className }: PropsType) => {
                             animationDuration={1000}
                             type="monotone"
                             dataKey="score"
-                            stroke="#18181b"
+                            stroke={theme === "dark" ? "#f5f5f5" : "#18181b"}
                             strokeWidth={2}
                             dot={{ stroke: "black", strokeWidth: 2, r: 4 }}
-                            activeDot={{ r: 4, stroke: "#18181b", strokeWidth: 2 }}
+                            activeDot={{
+                                r: 4,
+                                stroke: theme === "dark" ? "#f5f5f5" : "#18181b",
+                                strokeWidth: 2,
+                            }}
                         />
                     </LineChart>
                 </ResponsiveContainer>
