@@ -7,7 +7,7 @@ import {
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { sideBarVisibilityAction, stateType } from "@/redux/store";
-import NavbarItem from "./navbarItem";
+import NavbarItem from "./navbar-item";
 import Heading from "@/components/ui/heading";
 import { Bell, ChevronDown, Globe, Search, Moon, Sun } from "lucide-react";
 import avatar_boy from "@/assets/images/avatar_boy.jpg";
@@ -15,7 +15,7 @@ import { useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
-import { IThemeContext, ThemeContext } from "@/context/themeContext";
+import { IThemeContext, ThemeContext } from "@/context/theme-context";
 
 // Navbar Component
 const Navbar = () => {

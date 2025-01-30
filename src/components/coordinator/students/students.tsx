@@ -34,21 +34,20 @@ import {
     useState,
 } from "react";
 import { NotFoundOrbit } from "@/components/animation/fallbacks";
-import UserList from "@/components/common/user/userList";
-import CardHeader from "@/components/common/dataCard/header";
-import SearchFilterSort from "@/components/common/dataCard/searchFilterSort";
+import UserList from "@/components/common/user/user-list-card";
+import CardHeader from "@/components/common/data-card/header";
+import SearchFilterSort from "@/components/common/data-card/search-filter-sort";
 import { useMediaQuery } from "usehooks-ts";
 import { cn } from "@/lib/utils";
-import DrawerUsersList from "@/components/common/user/drawer-usersList";
-import UserDetails from "@/components/common/user/userDetails";
-import { fetchData } from "@/service/apiService";
+import DrawerUsersList from "@/components/common/user/drawer-users-list";
+import UserDetails from "@/components/common/user/user-details";
+import { fetchData } from "@/service/api-service";
 import { handleCustomError } from "@/utils/error";
-import ApiEndpoints from "@/constants/apiEndpoints";
-import AddStudentSheet from "./sheet.addStudent";
+import ApiEndpoints from "@/constants/api-endpoints";
+import AddStudentSheet from "./sheet-add-student";
 import { Student } from "@/types/coordinator";
 import { User } from "@/types/admin";
-import "../coordinator.css";
-import { IUserContext, UserContext } from "@/context/userContext";
+import { IUserContext, UserContext } from "@/context/user-context";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 

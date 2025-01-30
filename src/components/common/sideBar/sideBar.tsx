@@ -8,14 +8,14 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
-import SideBarItem from "./sideBarItem";
+import SideBarItem from "./sidebar-item";
 import { LogOut, LucideProps, Moon, Sun } from "lucide-react";
 import "./SideBar.css";
 import Slider from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import React from "react";
-import { IUserContext, UserContext } from "@/context/userContext";
-import { IThemeContext, ThemeContext } from "@/context/themeContext";
+import { IUserContext, UserContext } from "@/context/user-context";
+import { IThemeContext, ThemeContext } from "@/context/theme-context";
 
 // Interface for Props
 interface PropsType {

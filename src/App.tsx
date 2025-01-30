@@ -1,10 +1,10 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
-import AdminRoutes from "./routes/adminRoutes";
-import StudentRoutes from "./routes/studentRoutes";
-import CoordinatorRoutes from "./routes/coordinatorRoutes";
-import InstructorRoutes from "./routes/instructorRoutes";
+import AdminRoutes from "./routes/admin-routes";
+import StudentRoutes from "./routes/student-routes";
+import CoordinatorRoutes from "./routes/coordinator-routes";
+import InstructorRoutes from "./routes/instructor-routes";
 
 // App Component
 function App() {

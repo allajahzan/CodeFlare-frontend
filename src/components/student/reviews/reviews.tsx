@@ -2,9 +2,9 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle, ChevronRight, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { PendingsAndChart, ReviewDetails } from "./reviewDetails";
-import CardHeader from "@/components/common/dataCard/header";
-import SearchFilterSort from "@/components/common/dataCard/searchFilterSort";
+import { PendingsAndChart, ReviewDetails } from "./review-details";
+import CardHeader from "@/components/common/data-card/header";
+import SearchFilterSort from "@/components/common/data-card/search-filter-sort";
 
 // Interface for Review
 export interface Review {
