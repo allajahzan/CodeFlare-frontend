@@ -180,13 +180,11 @@ function Form() {
                                 className="pt-2"
                             >
                                 <Button
+                                    onClick={() => navigate(`/${role}/login`)}
                                     type="button"
                                     className="w-full h-11 bg-transparent hover:bg-transparent dark:hover:bg-transparent text-foreground shadow-none"
                                 >
-                                    <div
-                                        onClick={() => navigate(`/${role}/login`)}
-                                        className="flex items-center gap-2"
-                                    >
+                                    <div className="flex items-center gap-2">
                                         <ArrowLeft className="h-4 w-4" />
                                         Back to login
                                     </div>

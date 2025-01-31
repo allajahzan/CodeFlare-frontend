@@ -28,7 +28,7 @@ function Breathing() {
                     }}
                 />
             </svg>
-            {/* <div className="absolute w-full h-full bg-black/10"></div> */}
+            {/* <div className="absolute w-full h-full bg-gradient-to-br from-black/50 via-black/0 to-black/50"></div> */}
         </div>
     );
 }
