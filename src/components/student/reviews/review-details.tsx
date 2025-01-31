@@ -83,9 +83,9 @@ function ReviewDetails({ selectedReview }: PropsType) {
                 <div className="flex gap-[13px] relative -top-1 w-full overflow-x-auto no-scrollbar whitespace-nowrap scrollbar-hide">
                     {/* Status */}
                     <motion.div
-                        initial={{ opacity: 0, x: -20 }}
+                        initial={{ opacity: 1, x: 0 }}
                         animate={{ x: 0, opacity: 1 }}
-                        transition={{ delay: 0.2 }}
+                        transition={{ delay: 0 }}
                     >
                         <InfoCard
                             Icon={CircleDashed}
@@ -98,9 +98,9 @@ function ReviewDetails({ selectedReview }: PropsType) {
 
                     {/* Sheduled date */}
                     <motion.div
-                        initial={{ opacity: 0, x: -20 }}
+                        initial={{ opacity: 1, x: 0 }}
                         animate={{ x: 0, opacity: 1 }}
-                        transition={{ delay: 0.3 }}
+                        transition={{ delay: 0 }}
                     >
                         <InfoCard
                             Icon={CalendarDays}
@@ -113,9 +113,9 @@ function ReviewDetails({ selectedReview }: PropsType) {
 
                     {/* Review date */}
                     <motion.div
-                        initial={{ opacity: 0, x: -20 }}
+                        initial={{ opacity: 1, x: 0 }}
                         animate={{ x: 0, opacity: 1 }}
-                        transition={{ delay: 0.4 }}
+                        transition={{ delay: 0 }}
                     >
                         {" "}
                         <InfoCard
@@ -129,9 +129,9 @@ function ReviewDetails({ selectedReview }: PropsType) {
 
                     {/* Time */}
                     <motion.div
-                        initial={{ opacity: 0, x: -20 }}
+                        initial={{ opacity: 1, x: 0 }}
                         animate={{ x: 0, opacity: 1 }}
-                        transition={{ delay: 0.5 }}
+                        transition={{ delay: 0 }}
                     >
                         {" "}
                         <InfoCard
@@ -145,9 +145,9 @@ function ReviewDetails({ selectedReview }: PropsType) {
 
                     {/* Duration */}
                     <motion.div
-                        initial={{ opacity: 0, x: -20 }}
+                        initial={{ opacity: 1, x: 0 }}
                         animate={{ x: 0, opacity: 1 }}
-                        transition={{ delay: 0.6 }}
+                        transition={{ delay: 0 }}
                     >
                         <InfoCard
                             Icon={Hourglass}

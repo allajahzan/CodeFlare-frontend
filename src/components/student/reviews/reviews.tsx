@@ -67,7 +67,7 @@ const reviews: Review[] = [
 // Reviews Component
 function Reviews() {
     const [selectedReview, setSelectedReview] = useState<Review | null>(
-        reviews[reviews.length - 1]
+        reviews[0]
     );
 
     return (

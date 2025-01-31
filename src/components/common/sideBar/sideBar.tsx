@@ -54,7 +54,7 @@ function SideBar({ sideBarItems }: PropsType) {
     // Handle theme
     const handleTheme = useCallback(() => {
         setTheme(theme === "dark" ? "light" : "dark");
-    }, [setTheme]);
+    }, [theme]);
 
     return (
         <div

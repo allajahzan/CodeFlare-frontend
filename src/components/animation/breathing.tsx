@@ -1,10 +1,10 @@
-// import { motion } from "framer-motion";
+import { motion } from "framer-motion";
 
 // Breathing Component
 function Breathing() {
     return (
         <div className="absolute inset-0 rounded-2xl overflow-hidden">
-            {/* <svg
+            <svg
                 className="absolute w-full h-full"
                 viewBox="0 0 100 100"
                 preserveAspectRatio="none"
@@ -13,7 +13,7 @@ function Breathing() {
                     d="M0,0 Q50,50 100,0 V100 Q50,50 0,100 Z"
                     initial={{ d: "M0,0 Q50,50 100,0 V100 Q50,50 0,100 Z" }}
                     fill="#000"
-                    opacity={0.2}
+                    opacity={0.05}
                     animate={{
                         d: [
                             "M0,0 Q50,50 100,0 V100 Q50,50 0,100 Z",
@@ -27,8 +27,8 @@ function Breathing() {
                         ease: "easeInOut",
                     }}
                 />
-            </svg> */}
-            <div className="absolute w-full h-full bg-black/10"></div>
+            </svg>
+            {/* <div className="absolute w-full h-full bg-black/10"></div> */}
         </div>
     );
 }
