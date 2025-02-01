@@ -40,7 +40,7 @@ function UserList({
             transition={{ delay: 0.2 + index * 0.1 }}
             onClick={() => action(index)}
             className={cn(
-                "group p-2 px-3 w-full rounded-xl cursor-pointer border border-border dark:border-customBorder hover:bg-muted dark:hover:bg-sidebar",
+                "group p-2 px-3 w-full flex flex-col rounded-xl cursor-pointer border border-border dark:border-customBorder hover:bg-muted dark:hover:bg-sidebar",
                 selectedUser?._id === user._id ? "bg-muted dark:bg-sidebar" : "",
                 className
             )}

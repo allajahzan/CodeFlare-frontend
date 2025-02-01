@@ -1,6 +1,7 @@
 import StudentLayout from "@/components/layout/student-layout";
 import Login from "@/pages/authentication/login";
 import Dashboard from "@/pages/student/dashboard";
+import Chat from '@/pages/chat/chat';
 import Invoice from "@/pages/student/invoice";
 import Leave from "@/pages/student/leave";
 import Manifest from "@/pages/student/manifest";
@@ -31,6 +32,7 @@ function StudentRoutes() {
 
             {/* Protected Routes */}
             <Route element={<ProtectedRoutes allowedRole={AppRoutes.STUDENT} />}>
+                <Route path={`${AppRoutes.STUDENT}/${AppRoutes.CHATS}`} element={<Chat />} />
                 <Route path={AppRoutes.STUDENT} element={<StudentLayout isDrawerOpen={isDrawerOpen} />}>
                     <Route path={AppRoutes.DASHBOARD} element={<Dashboard />} />
                     <Route path={AppRoutes.STUDENT_REVIEWS} element={<Reviews />} />
