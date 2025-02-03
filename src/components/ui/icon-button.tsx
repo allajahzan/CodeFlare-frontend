@@ -3,12 +3,13 @@ import { LucideProps } from "lucide-react";
 
 interface PropsType {
     className?: string;
+    iconClassName?: string;
     action?: any;
     Icon: React.ForwardRefExoticComponent<
         Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
     >;
 }
-function IconButton({ className, action, Icon }: PropsType) {
+function IconButton({ className, action, Icon, iconClassName }: PropsType) {
     return (
         <button
             onClick={
@@ -23,7 +24,7 @@ function IconButton({ className, action, Icon }: PropsType) {
                 className
             )}
         >
-            <Icon className="w-4 h-4 text-foreground" />
+            <Icon className={cn("w-4 h-4 text-foreground", iconClassName)} />
         </button>
     );
 }

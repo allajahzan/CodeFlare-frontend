@@ -11,14 +11,16 @@ import { motion } from "framer-motion";
 import { Ban, Info, Loader, Mail, Plus, Trash2 } from "lucide-react";
 import { ReactNode, useState } from "react";
 import profile from "@/assets/images/no-profile.svg";
+import { Chat } from "./chat";
 
 // Interface for Props
 interface PropsType {
     button: ReactNode;
+    selectedUser: Chat;
 }
 
 // User profile sheet Component
-function UserProfileSheet({ button }: PropsType) {
+function UserProfileSheet({ button, selectedUser }: PropsType) {
     const [open, setOpen] = useState<boolean | undefined>(undefined);
     return (
         <Sheet open={open} onOpenChange={setOpen}>
@@ -62,11 +64,11 @@ function UserProfileSheet({ button }: PropsType) {
                         {/* Name and email */}
                         <div className="flex flex-col items-center gap-0">
                             <h1 className="text-xl text-foreground font-semibold">
-                                Ahsan allaj pk
+                                {selectedUser.sender}
                             </h1>
                             <p className="text-muted-foreground font-medium flex gap-1 items-center">
                                 <Mail className="w-4 h-4 flex-shrink-0" />
-                                allaj@gmail.com
+                                {selectedUser.senderEmail}
                             </p>
                         </div>
                     </div>
@@ -80,17 +82,22 @@ function UserProfileSheet({ button }: PropsType) {
                     </div>
 
                     <div className="w-full p-5 self-start flex flex-col items-start gap-3 bg-white dark:bg-sidebar shadow-sm">
-                        <small className="text-foreground font-bold">Media</small>
-                        <div className="grid grid-cols-4 gap-5 max-h-[210px] overflow-hidden">
-                            <div className="border-2 rounded-lg">
-                                <img src={profile} alt="" />
-                            </div>
-                            <div className="border-2 rounded-lg overflow-hidden">
-                                <img src={profile} alt="" />
-                            </div>
-                            <div className="border-2 rounded-lg overflow-hidden">
-                                <img src={profile} alt="" />
-                            </div>
+                        <small className="text-foreground font-bold">Media</small> 
+                        <div className="grid grid-cols-4 gap-5 w-full max-h-[210px] overflow-hidden">
+                            {selectedUser?.messages
+                                ?.filter((msg) => msg.type === "image") // Only keep image messages
+                                .map((msg, index) => (
+                                    <div
+                                        key={index}
+                                        className="h-[100px] w-[100px] border-2 rounded-lg overflow-hidden"
+                                    >
+                                        <img
+                                            className="w-full h-full object-cover"
+                                            src={msg.text}
+                                            alt="Shared image"
+                                        />
+                                    </div>
+                                ))}
                         </div>
                     </div>
 

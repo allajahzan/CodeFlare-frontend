@@ -38,9 +38,17 @@ function UsersListChat({ users, setSelectedChat, setMessage }: PropsType) {
 
                 <p className="flex-1 text-2xl text-foreground font-bold">Chats</p>
 
-                <IconButton Icon={MessageCirclePlusIcon} />
+                <IconButton
+                    Icon={MessageCirclePlusIcon}
+                    iconClassName="w-5 h-5"
+                    className="border-none shadow-none rounded-full dark:shadow-none hover:bg-muted hover:dark:bg-sidebar"
+                />
 
-                <IconButton Icon={EllipsisVertical} />
+                <IconButton
+                    Icon={EllipsisVertical}
+                    iconClassName="w-5 h-5"
+                    className="border-none shadow-none rounded-full dark:shadow-none hover:bg-muted hover:dark:bg-sidebar"
+                />
             </div>
 
             {/* Search and add user */}

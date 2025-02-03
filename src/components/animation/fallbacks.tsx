@@ -129,7 +129,7 @@ function NotSelected({
                 initial={{ scale: 0.5, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="p-3 bg-background border-2 border-dashed rounded-full"
+                className="p-3 bg-transparent border-2 border-dashed rounded-full"
             >
                 {MainIcon && (
                     <MainIcon

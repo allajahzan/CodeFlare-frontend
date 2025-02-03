@@ -72,6 +72,7 @@ function MessageSideChat({
                 <div className="flex items-center gap-3">
                     {/* Avatar profile pic as button for profile sheet */}
                     <UserProfileSheet
+                        selectedUser={selectedChat as Chat}
                         button={
                             <motion.div
                                 initial={{ scale: 0.5, opacity: 0 }}
@@ -94,7 +95,7 @@ function MessageSideChat({
                         {/* Name and role */}
                         <div className="flex items-center gap-2">
                             <p className="text-lg text-foreground font-semibold truncate">
-                                {"Allaj"}
+                                {selectedChat?.sender}
                             </p>
                             <Badge className="hidden lg:block relative text-xs text-white font-semibold bg-zinc-900 dark:bg-muted hover:bg-zinc-900 rounded-full overflow-hidden">
                                 {"Admin"}
@@ -191,9 +192,8 @@ function MessageSideChat({
 
                 {/* Input */}
                 <div className="relative flex-1 flex items-center">
-                    <IconButton
-                        Icon={Smile}
-                        action={() => setShowPicker(!showPicker)}
+                    <Smile
+                        onClick={() => setShowPicker(!showPicker)}
                         className="absolute left-2.5 top-2.5 h-5 w-5 text-muted-foreground cursor-pointer"
                     />
                     <Input

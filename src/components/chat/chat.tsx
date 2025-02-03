@@ -1,7 +1,6 @@
-import { MessageCircle, UserRound } from "lucide-react";
-
+import { MessageCircle } from "lucide-react";
 import { useState } from "react";
-import { NotFoundOrbit } from "@/components/animation/fallbacks";
+import { NotSelected } from "@/components/animation/fallbacks";
 import UsersListChat from "./chat-users-list";
 import MessageSideChat from "./chat-message-side";
 
@@ -18,6 +17,7 @@ export interface Message {
 export interface Chat {
     id: number;
     sender: string;
+    senderEmail: string;
     messages: Message[];
 }
 
@@ -26,6 +26,7 @@ const u: Chat[] = [
     {
         id: 1,
         sender: "Allaj",
+        senderEmail: "allaj@gmail.com",
         messages: [
             {
                 id: 1,
@@ -50,6 +51,7 @@ const u: Chat[] = [
     {
         id: 2,
         sender: "Jirjis",
+        senderEmail: "jirjis@gmail.com",
         messages: [
             {
                 id: 1,
@@ -74,6 +76,7 @@ const u: Chat[] = [
     {
         id: 3,
         sender: "Am",
+        senderEmail: "am@gmail.com",
         messages: [
             {
                 id: 2,
@@ -165,13 +168,13 @@ function Chat() {
 
             {/* If no chat is selected  */}
             {!selectedChat && (
-                <div className="relative w-full min-h-screen col-span-2 dark:bg-sidebar">
-                    <NotFoundOrbit
-                        className=" border-none bg-transparent dark:shadow-none rounded-none"
+                <div className="relative w-full min-h-screen col-span-2 bg-muted dark:bg-sidebar">
+                    <NotSelected
+                        className="h-full rounded-none bg-transparent border-none"
                         MainIcon={MessageCircle}
-                        SubIcon={UserRound}
+                        IconClassName="w-5 h-5 text-foreground"
                         text="No chat selected"
-                        message="Select a chat to start a conversation"
+                        message="Select a chat to start messaging"
                     />
                 </div>
             )}
