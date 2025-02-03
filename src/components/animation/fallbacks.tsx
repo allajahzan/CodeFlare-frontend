@@ -62,11 +62,13 @@ function OrbitingIcon({ delay, rotation, SubIcon }: PropsType) {
 }
 
 // NotFoundOrbit Component
-function NotFoundOrbit({ MainIcon, SubIcon, message, text }: PropsType) {
+function NotFoundOrbit({ MainIcon, SubIcon, message, text, className }: PropsType) {
     return (
         <div
-            className="relative h-full p-5 flex flex-col gap-7 items-center justify-center rounded-2xl overflow-hidden 
-        border border-border dark:border-customBorder shadow-sm dark:shadow-customBorder dark:shadow-inner"
+            className={cn(
+                "relative h-full p-5 flex flex-col gap-7 items-center justify-center rounded-2xl overflow-hidden border border-border dark:border-customBorder shadow-sm dark:shadow-customBorder dark:shadow-inner",
+                className,
+            )}
         >
             <div className="relative w-[185px] h-[185px]">
                 {/* Inner orbit */}
@@ -87,7 +89,7 @@ function NotFoundOrbit({ MainIcon, SubIcon, message, text }: PropsType) {
                         initial={{ scale: 0.5, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ delay: 0.2 }}
-                        className="p-3 bg-background border-2 border-dashed rounded-full"
+                        className="p-3 bg-transparent border-2 border-dashed rounded-full"
                     >
                         {MainIcon && <MainIcon className="w-5 h-5 text-muted-foreground" />}
                     </motion.div>
