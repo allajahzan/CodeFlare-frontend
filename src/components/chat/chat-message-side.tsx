@@ -2,20 +2,16 @@ import UserProfileSheet from "./sheet-user-profile";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { motion } from "framer-motion";
 import { Badge } from "../ui/badge";
-import {
-    CheckCheck,
-    ChevronDown,
-    Mic,
-    Paperclip,
-    Send,
-    Smile,
-} from "lucide-react";
+import { Mic, Paperclip, Send, Smile } from "lucide-react";
 import { Input } from "../ui/input";
 import profile from "@/assets/images/no-profile.svg";
 import Picker from "@emoji-mart/react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { IThemeContext, ThemeContext } from "@/context/theme-context";
 import { Chat } from "./chat";
+import TextCard from "./card-text";
+import MediaCard from "./card-media";
+import IconButton from "../ui/icon-button";
 
 // Iterface for Props
 interface PropsType {
@@ -23,7 +19,11 @@ interface PropsType {
     selectedChat: Chat | null;
     message: string;
     setMessage: React.Dispatch<React.SetStateAction<string>>;
-    handleSendMessage: (text: string, id: number) => void;
+    handleSendMessage: (
+        text: string,
+        type: "text" | "image" | "file",
+        id: number
+    ) => void;
     showPicker: boolean;
     setShowPicker: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -128,56 +128,44 @@ function MessageSideChat({
                         {users &&
                             selectedChat &&
                             selectedChat.messages.map((msg, index) => {
-                                if (msg.type === "recieved") {
-                                    // For received messages
-                                    return (
-                                        <div
-                                            key={index}
-                                            className="group self-start relative px-4 py-2 pr-14 shadow-md rounded-lg max-w-sm break-all 
-                                                    bg-background dark:bg-muted"
-                                        >
-                                            {/* Text */}
-                                            <p className="text-foreground font-medium">{msg.text}</p>
-
-                                            {/* Time */}
-                                            <small className="absolute right-2 bottom-0.5 text-[10px] text-muted-foreground font-semibold">
-                                                {msg.time}
-                                            </small>
-
-                                            {/* Options */}
-                                            <div
-                                                className="absolute top-0 right-0 h-full p-2 pt-1 group-hover:visible invisible rounded-r-lg
-                                                    bg-transparent"
-                                            >
-                                                <ChevronDown className="w-4 h-4 text-foreground" />
-                                            </div>
-                                        </div>
-                                    );
-                                } else {
-                                    // For sent messages
-                                    return (
-                                        <div
-                                            className="group self-end relative px-4 py-2 pr-[72px] shadow-md rounded-lg max-w-sm break-all 
-                                                    bg-[#d9fdd3] dark:bg-[#005c4b]"
-                                        >
-                                            {/* Text */}
-                                            <p className="text-foreground font-medium">{msg.text}</p>
-
-                                            {/* Time */}
-                                            <small className="absolute right-2 bottom-0.5 flex items-center gap-1 text-[10px] text-muted-foreground font-semibold">
-                                                {msg.time}
-                                                <CheckCheck className="w-4 h-4 text-blue-400" />
-                                            </small>
-
-                                            {/* Options */}
-                                            <div
-                                                className="absolute top-0 right-0 h-full p-2 pt-1 group-hover:visible invisible rounded-r-lg
-                                                    bg-transparent"
-                                            >
-                                                <ChevronDown className="w-4 h-4 text-foreground" />
-                                            </div>
-                                        </div>
-                                    );
+                                if (msg.type === "text") {
+                                    if (msg.status === "recieved") {
+                                        // For received messages
+                                        return (
+                                            <TextCard
+                                                key={index}
+                                                msg={msg}
+                                                className="self-start bg-background dark:bg-muted"
+                                            />
+                                        );
+                                    } else if (msg.status === "sent") {
+                                        // For sent messages
+                                        return (
+                                            <TextCard
+                                                key={index}
+                                                msg={msg}
+                                                className="self-end bg-[#d9fdd3] dark:bg-[#005c4b]"
+                                            />
+                                        );
+                                    }
+                                } else if (msg.type === "image") {
+                                    if (msg.status === "recieved") {
+                                        return (
+                                            <MediaCard
+                                                key={index}
+                                                msg={msg}
+                                                className="self-start bg-background dark:bg-muted"
+                                            />
+                                        );
+                                    } else {
+                                        return (
+                                            <MediaCard
+                                                key={index}
+                                                msg={msg}
+                                                className="self-end bg-[#d9fdd3] dark:bg-[#005c4b]"
+                                            />
+                                        );
+                                    }
                                 }
                             })}
                     </div>
@@ -189,23 +177,23 @@ function MessageSideChat({
                 onSubmit={(event) => {
                     event.preventDefault();
                     if (message) {
-                        handleSendMessage(message, selectedChat?.id as number);
+                        handleSendMessage(
+                            message,
+                            message ? "text" : "image",
+                            selectedChat?.id as number
+                        );
                     }
                 }}
                 className="p-5 px-5 flex gap-2 items-center border-t bg-background relative z-10"
             >
                 {/* Pin */}
-                <button
-                    className="p-3 rounded-lg border border-border hover:bg-muted dark:hover:bg-sidebar 
-                      shadow-sm dark:shadow-customBorder dark:shadow-inner"
-                >
-                    <Paperclip className="w-4 h-4 text-foreground" />
-                </button>
+                <IconButton action={false} Icon={Paperclip} />
 
                 {/* Input */}
                 <div className="relative flex-1 flex items-center">
-                    <Smile
-                        onClick={() => setShowPicker(!showPicker)}
+                    <IconButton
+                        Icon={Smile}
+                        action={() => setShowPicker(!showPicker)}
                         className="absolute left-2.5 top-2.5 h-5 w-5 text-muted-foreground cursor-pointer"
                     />
                     <Input
@@ -218,17 +206,7 @@ function MessageSideChat({
                 </div>
 
                 {/* Button */}
-                <button
-                    type="submit"
-                    className="p-3 rounded-lg border hover:bg-muted dark:hover:bg-sidebar 
-                    shadow-sm dark:shadow-customBorder dark:shadow-inner"
-                >
-                    {message ? (
-                        <Send className="w-4 h-4 text-foreground" />
-                    ) : (
-                        <Mic className="w-4 h-4 text-foreground" />
-                    )}
-                </button>
+                <IconButton Icon={message ? Send : Mic} />
             </form>
 
             {/* Emoji picker */}

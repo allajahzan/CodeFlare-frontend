@@ -2,20 +2,28 @@ import { cn } from "@/lib/utils";
 import { LucideProps } from "lucide-react";
 
 interface PropsType {
-    text?: string;
-    className: string;
+    className?: string;
     action?: any;
-    Icon?: React.ForwardRefExoticComponent<
+    Icon: React.ForwardRefExoticComponent<
         Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
     >;
 }
-function IconButton({ className, text, action, Icon }: PropsType) {
+function IconButton({ className, action, Icon }: PropsType) {
     return (
         <button
-            onClick={action}
-            className={cn("text-sm font-semibold border shadow-md p-3", className)}
+            onClick={
+                action
+                    ? () => {
+                        alert("yes");
+                    }
+                    : () => { }
+            }
+            className={cn(
+                "p-3 rounded-lg border border-border hover:bg-muted dark:hover:bg-sidebar shadow-sm dark:shadow-customBorder dark:shadow-inner",
+                className
+            )}
         >
-            {text ? text : Icon && <Icon className="h-4 w-4" />}
+            <Icon className="w-4 h-4 text-foreground" />
         </button>
     );
 }

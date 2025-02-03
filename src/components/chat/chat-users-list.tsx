@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import {
     ArrowLeft,
+    Camera,
     EllipsisVertical,
     Filter,
     MessageCirclePlusIcon,
@@ -11,15 +12,17 @@ import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
 import { Chat } from "./chat";
 import UserList from "../common/user/user-list-card";
+import IconButton from "../ui/icon-button";
 
 // Interface for Props
 interface PropsType {
     users: Chat[];
     setSelectedChat: React.Dispatch<React.SetStateAction<Chat | null>>;
+    setMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 // Users list Component
-function UsersListChat({ users, setSelectedChat }: PropsType) {
+function UsersListChat({ users, setSelectedChat, setMessage }: PropsType) {
     const navigate = useNavigate();
     return (
         <div
@@ -35,13 +38,9 @@ function UsersListChat({ users, setSelectedChat }: PropsType) {
 
                 <p className="flex-1 text-2xl text-foreground font-bold">Chats</p>
 
-                <button className="p-3 rounded-full hover:bg-muted dark:hover:bg-sidebar">
-                    <MessageCirclePlusIcon className="w-5 h-5 text-foreground" />
-                </button>
+                <IconButton Icon={MessageCirclePlusIcon} />
 
-                <button className="p-3 rounded-full hover:bg-muted dark:hover:bg-sidebar">
-                    <EllipsisVertical className="w-5 h-5 text-foreground" />
-                </button>
+                <IconButton Icon={EllipsisVertical} />
             </div>
 
             {/* Search and add user */}
@@ -62,19 +61,20 @@ function UsersListChat({ users, setSelectedChat }: PropsType) {
                 </div>
 
                 {/* Add user */}
-                <button
-                    className="p-3 rounded-lg border hover:bg-muted dark:hover:bg-sidebar 
-                    shadow-sm dark:shadow-customBorder dark:shadow-inner"
-                >
-                    <Filter className="w-4 h-4 text-foreground" />
-                </button>
+                <IconButton Icon={Filter} />
             </div>
 
             {/* lists */}
             <div className="h-full flex flex-col overflow-y-auto no-scrollbar border-t border-border">
                 {users?.map((user, index) => {
                     return (
-                        <motion.div key={index} onClick={() => setSelectedChat(user)}>
+                        <motion.div
+                            key={index}
+                            onClick={() => {
+                                setSelectedChat(user);
+                                setMessage("");
+                            }}
+                        >
                             <UserList
                                 index={index}
                                 user={{ ...user, name: user.sender } as any}
@@ -86,11 +86,22 @@ function UsersListChat({ users, setSelectedChat }: PropsType) {
                                 )}
                                 children1={(() => {
                                     const lastMessage = user.messages?.[user.messages.length - 1]; // Get the last message
-                                    return (
-                                        <p className="text-sm text-muted-foreground font-medium">
-                                            {lastMessage && lastMessage.text}
-                                        </p>
-                                    );
+                                    if (lastMessage.type === "text") {
+                                        return (
+                                            <p className="text-sm text-muted-foreground font-medium truncate">
+                                                {lastMessage.text}
+                                            </p>
+                                        );
+                                    } else if (lastMessage.type === "image") {
+                                        return (
+                                            <div className="flex items-center gap-1">
+                                                <Camera className="w-4 h-4 text-muted-foreground" />
+                                                <p className="text-sm text-muted-foreground font-medium">
+                                                    Photo
+                                                </p>
+                                            </div>
+                                        );
+                                    }
                                 })()}
                                 children2={
                                     <div className="w-[50px] flex flex-col justify-center items-end gap-1 ">
@@ -103,7 +114,7 @@ function UsersListChat({ users, setSelectedChat }: PropsType) {
                                         {/* Unread messages */}
                                         {(() => {
                                             let unreadMessage = user.messages?.filter(
-                                                (msg) => msg.read === false && msg.type === "recieved"
+                                                (msg) => msg.read === false && msg.status === "recieved"
                                             ).length;
                                             if (unreadMessage) {
                                                 return (
