@@ -13,6 +13,8 @@ import { cn } from "@/lib/utils";
 import { Chat } from "./chat";
 import UserList from "../common/user/user-list-card";
 import IconButton from "../ui/icon-button";
+import UserContactSheet from "./sheet-user-contact";
+import { useState } from "react";
 
 // Interface for Props
 interface PropsType {
@@ -23,6 +25,9 @@ interface PropsType {
 
 // Users list Component
 function UsersListChat({ users, setSelectedChat, setMessage }: PropsType) {
+    // Custom sheet states
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+
     const navigate = useNavigate();
     return (
         <div
@@ -38,12 +43,15 @@ function UsersListChat({ users, setSelectedChat, setMessage }: PropsType) {
 
                 <p className="flex-1 text-2xl text-foreground font-bold">Chats</p>
 
+                {/* Contact */}
                 <IconButton
                     Icon={MessageCirclePlusIcon}
+                    action={() => setIsOpen(true)}
                     iconClassName="w-5 h-5"
                     className="border-none shadow-none rounded-full dark:shadow-none hover:bg-muted hover:dark:bg-sidebar"
                 />
 
+                {/* More */}
                 <IconButton
                     Icon={EllipsisVertical}
                     iconClassName="w-5 h-5"
@@ -68,7 +76,7 @@ function UsersListChat({ users, setSelectedChat, setMessage }: PropsType) {
                     />
                 </div>
 
-                {/* Add user */}
+                {/* Filter user */}
                 <IconButton Icon={Filter} />
             </div>
 
@@ -93,22 +101,26 @@ function UsersListChat({ users, setSelectedChat, setMessage }: PropsType) {
                                     index !== users.length - 1 ? "border-b-[1px]" : ""
                                 )}
                                 children1={(() => {
-                                    const lastMessage = user.messages?.[user.messages.length - 1]; // Get the last message
-                                    if (lastMessage.type === "text") {
-                                        return (
-                                            <p className="text-sm text-muted-foreground font-medium truncate">
-                                                {lastMessage.text}
-                                            </p>
-                                        );
-                                    } else if (lastMessage.type === "image") {
-                                        return (
-                                            <div className="flex items-center gap-1">
-                                                <Camera className="w-4 h-4 text-muted-foreground" />
-                                                <p className="text-sm text-muted-foreground font-medium">
-                                                    Photo
+                                    const lastMessage =
+                                        user.messages.length > 0 &&
+                                        user.messages[user.messages.length - 1]; // Get the last message
+                                    if (lastMessage) {
+                                        if (lastMessage.type === "text") {
+                                            return (
+                                                <p className="text-sm text-muted-foreground font-medium truncate">
+                                                    {lastMessage.text}
                                                 </p>
-                                            </div>
-                                        );
+                                            );
+                                        } else if (lastMessage.type === "image") {
+                                            return (
+                                                <div className="flex items-center gap-1">
+                                                    <Camera className="w-4 h-4 text-muted-foreground" />
+                                                    <p className="text-sm text-muted-foreground font-medium">
+                                                        Photo
+                                                    </p>
+                                                </div>
+                                            );
+                                        }
                                     }
                                 })()}
                                 children2={
@@ -140,6 +152,13 @@ function UsersListChat({ users, setSelectedChat, setMessage }: PropsType) {
                         </motion.div>
                     );
                 })}
+
+                {/* Custom sheet for contacts */}
+                <UserContactSheet
+                    isOpen={isOpen}
+                    setIsOpen={setIsOpen}
+                    setSelectedChat={setSelectedChat}
+                />
             </div>
         </div>
     );

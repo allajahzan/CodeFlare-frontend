@@ -144,7 +144,7 @@ function Users({ setDrawerOpen }: PropsType) {
             {/*Left side  */}
             <div
                 className="p-5 sticky z-0 top-[20px] md:top-5 w-full h-[calc(100vh-108px)] flex flex-col gap-5 items-center rounded-2xl
-            bg-background border border-border dark:border-customBorder shadow-sm dark:shadow-customBorder dark:shadow-inner"
+            bg-background border border-border shadow-sm dark:shadow-customBorder dark:shadow-inner"
             >
                 {/* Heading */}
                 <CardHeader
@@ -304,12 +304,12 @@ function Users({ setDrawerOpen }: PropsType) {
                         setUsers={setUsers as any}
                         setSelectedUser={setSelectedUser}
                         selectedUser={selectedUser as User}
-                        className="rounded-2xl border border-border dark:border-customBorder 
+                        className="rounded-2xl border border-border
                         shadow-sm dark:shadow-customBorder dark:shadow-inner"
                         role="user"
                     />
                     <div
-                        className="h-full p-5 rounded-2xl bg-background border border-border dark:border-customBorder 
+                        className="h-full p-5 rounded-2xl bg-background border border-border
                     shadow-sm dark:shadow-customBorder dark:shadow-inner"
                     ></div>
                 </div>

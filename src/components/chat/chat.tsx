@@ -22,74 +22,7 @@ export interface Chat {
 }
 
 // Example messages
-const u: Chat[] = [
-    {
-        id: 1,
-        sender: "Allaj",
-        senderEmail: "allaj@gmail.com",
-        messages: [
-            {
-                id: 1,
-                date: "20th Jun 2024",
-                text: "How are you?",
-                type: "text",
-                status: "recieved",
-                read: false,
-                time: "10:00 AM",
-            },
-            {
-                id: 2,
-                date: "20th Jun 2024",
-                text: "And where are you?",
-                type: "text",
-                status: "recieved",
-                read: false,
-                time: "10:00 AM",
-            },
-        ],
-    },
-    {
-        id: 2,
-        sender: "Jirjis",
-        senderEmail: "jirjis@gmail.com",
-        messages: [
-            {
-                id: 1,
-                date: "20th Jun 2024",
-                text: "Edaaa iyy ovde?",
-                type: "text",
-                status: "recieved",
-                read: false,
-                time: "10:00 AM",
-            },
-            {
-                id: 2,
-                date: "20th Jun 2024",
-                text: "Therklaano?",
-                type: "text",
-                status: "recieved",
-                read: false,
-                time: "10:00 AM",
-            },
-        ],
-    },
-    {
-        id: 3,
-        sender: "Am",
-        senderEmail: "am@gmail.com",
-        messages: [
-            {
-                id: 2,
-                date: "20th Jun 2024",
-                text: "https://plus.unsplash.com/premium_photo-1673716788847-cd6420a6a8a9?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cmVkJTIwZmxvd2VyfGVufDB8fDB8fHww",
-                type: "image",
-                status: "sent",
-                read: false,
-                time: "10:00 AM",
-            },
-        ],
-    },
-];
+const u: Chat[] = [];
 
 // Chat page Component
 function Chat() {
@@ -154,7 +87,7 @@ function Chat() {
             />
 
             {/* Right side */}
-            {selectedChat && selectedChat.messages && (
+            {selectedChat && (
                 <MessageSideChat
                     users={users as Chat[]}
                     selectedChat={selectedChat}

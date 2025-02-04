@@ -66,7 +66,7 @@ function NotFoundOrbit({ MainIcon, SubIcon, message, text, className }: PropsTyp
     return (
         <div
             className={cn(
-                "relative h-full p-5 flex flex-col gap-7 items-center justify-center rounded-2xl overflow-hidden border border-border dark:border-customBorder shadow-sm dark:shadow-customBorder dark:shadow-inner",
+                "relative h-full p-5 flex flex-col gap-7 items-center justify-center rounded-2xl overflow-hidden border border-border shadow-sm dark:shadow-customBorder dark:shadow-inner",
                 className,
             )}
         >
@@ -121,7 +121,7 @@ function NotSelected({
     return (
         <div
             className={cn(
-                "flex flex-col gap-5 items-center justify-center rounded-2xl bg-background border border-border dark:border-customBorder shadow-sm dark:shadow-customBorder dark:shadow-inner",
+                "flex flex-col gap-5 items-center justify-center rounded-2xl bg-background border border-border shadow-sm dark:shadow-customBorder dark:shadow-inner",
                 className
             )}
         >

@@ -160,7 +160,7 @@ function Students({ setDrawerOpen }: PropsType) {
             {/* Left side  */}
             <div
                 className="p-5 sticky z-0 top-[20px] md:top-5 w-full h-[calc(100vh-108px)] flex flex-col gap-5 items-center rounded-2xl
-            bg-background border border-border dark:border-customBorder shadow-sm dark:shadow-customBorder dark:shadow-inner"
+            bg-background border border-border shadow-sm dark:shadow-customBorder dark:shadow-inner"
             >
                 {/* Heading */}
                 <CardHeader
@@ -313,12 +313,12 @@ function Students({ setDrawerOpen }: PropsType) {
                         setUsers={setStudents as any}
                         setSelectedUser={setSelectedStudent}
                         selectedUser={selectedStudent as Student}
-                        className="rounded-2xl border border-border dark:border-customBorder 
+                        className="rounded-2xl border border-border
                         shadow-sm dark:shadow-customBorder dark:shadow-inner"
                         role="student"
                     />
                     <div
-                        className="h-full p-5 rounded-2xl bg-background border border-border dark:border-customBorder 
+                        className="h-full p-5 rounded-2xl bg-background border border-border
                     shadow-sm dark:shadow-customBorder dark:shadow-inner"
                     ></div>
                 </div>

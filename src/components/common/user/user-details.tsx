@@ -149,7 +149,7 @@ function UserDetails({
                                 .map((item, index) => (
                                     <Fragment key={index}>
                                         {item?.icon && (
-                                            <div className="p-3 rounded-lg border border-border dark:border-customBorder shadow-sm">
+                                            <div className="p-3 rounded-lg border border-border shadow-sm">
                                                 <div className="flex items-center gap-3">
                                                     <div className="p-2 rounded-lg bg-muted">
                                                         <item.icon className="w-5 h-5 text-foreground" />
@@ -181,7 +181,7 @@ function UserDetails({
                                 <DropdownMenu>
                                     <DropdownMenuTrigger
                                         className="flex items-center gap-3 text-start rounded-lg cursor-pointer p-3 border 
-                                    border-border dark:border-customBorder shadow-sm"
+                                    border-border shadow-sm"
                                     >
                                         <div className="p-2 rounded-lg bg-muted">
                                             <PersonStanding className="w-5 h-5 text-foreground" />

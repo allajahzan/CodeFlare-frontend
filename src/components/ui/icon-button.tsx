@@ -14,9 +14,7 @@ function IconButton({ className, action, Icon, iconClassName }: PropsType) {
         <button
             onClick={
                 action
-                    ? () => {
-                        alert("yes");
-                    }
+                    ? () => action()
                     : () => { }
             }
             className={cn(
