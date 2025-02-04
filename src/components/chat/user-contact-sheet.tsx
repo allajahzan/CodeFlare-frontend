@@ -1,27 +1,28 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { Filter, Plus, Search, UsersRound } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import profile from "@/assets/images/no-profile.svg";
 import { cn } from "@/lib/utils";
 import { Chat } from "./chat";
 import { Input } from "../ui/input";
 import IconButton from "../ui/icon-button";
+import { fetchData } from "@/service/api-service";
+import ApiEndpoints from "@/constants/api-endpoints";
+import { useSelector } from "react-redux";
+import { stateType } from "@/redux/store";
+import { handleCustomError } from "@/utils/error";
+import { User } from "@/types/admin";
+import { Student } from "@/types/coordinator";
+import { Message } from "react-hook-form";
+import UserListCard from "./user-list-card";
 
-interface U {
+// Interface for Contact User
+interface IContactUser {
     id: number;
     sender: string;
     senderEmail: string;
-    messages: any[];
+    role: string;
+    profilePic: string;
+    messages: Message[];
 }
-
-const u: U[] = [
-    {
-        id: 1,
-        sender: "Allaj",
-        senderEmail: "allaj@gmail.com",
-        messages: [],
-    },
-];
 
 // Interface for Props
 interface PropsType {
@@ -33,17 +34,54 @@ interface PropsType {
 // User contact Sheet
 function UserContactSheet({ setSelectedChat, isOpen, setIsOpen }: PropsType) {
     // Users
-    const [users, setUsers] = useState<U[]>(u);
+    const [users, setUsers] = useState<IContactUser[]>([]);
 
-    useEffect(() => { }, [
-        
-    ]);
+    // Redux
+    const role = useSelector((state: stateType) => state.role);
+
+    useLayoutEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                // Send request
+                const resp = await fetchData(ApiEndpoints.GET_USERS, role);
+
+                const users = resp?.data.data;
+
+                // Success response
+                if (resp && resp.status === 200) {
+                    // Formate users
+                    const formattedUsers = users.map(
+                        (user: User | Student) => ({
+                            _id: user._id,
+                            sender: user.name,
+                            senderEmail: user.email,
+                            role: user.role,
+                            profilePic: user.profilePic,
+                            messages: [],
+                        })
+                    );
+
+                    // Set users
+                    setTimeout(() => {
+                        // Set users
+                        setUsers(formattedUsers);
+                    }, 1000);
+                }
+            } catch (err: unknown) {
+                setTimeout(() => {
+                    handleCustomError(err);
+                }, 1000);
+            }
+        };
+
+        isOpen ? fetchUsers() : null;
+    }, [isOpen]);
 
     return (
         <div
             className={cn(
                 "h-full w-full bg-background absolute top-0 left-0 transition-all duration-300",
-                isOpen ? "translate-x-0" : "-translate-x-full"
+                isOpen ? "translate-x-0 opacity-1" : "-translate-x-full opacity-0"
             )}
         >
             {/* Header */}
@@ -69,7 +107,7 @@ function UserContactSheet({ setSelectedChat, isOpen, setIsOpen }: PropsType) {
                     <div className="relative flex-1">
                         <Search className="absolute left-3.5 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
-                            id="search"
+                            id="search-contact"
                             type="search"
                             placeholder="Search"
                             autoComplete="off"
@@ -87,40 +125,18 @@ function UserContactSheet({ setSelectedChat, isOpen, setIsOpen }: PropsType) {
 
             {/* Content */}
             <div className="p-0">
-                {users.map((user: U, index: number) => (
-                    <div
+                {users.map((user: IContactUser, index: number) => (
+                    <UserListCard
                         key={index}
-                        onClick={() => {
-                            setSelectedChat(user);
-                            // setIsOpen(false);
-                        }}
-                        className={cn(
-                            "flex-1 py-[9.4px] px-5 rounded-none border-x-0 border-y-0 bg-background dark:bg-transparent hover:bg-muted dark:hover:bg-sidebar",
-                            index !== users.length - 1 ? "border-b-[1px]" : ""
-                        )}
-                    >
-                        <div className="flex items-center gap-3">
-                            {/* Avatar profile pic */}
-                            <Avatar className="bg-background w-12 h-12 border-2">
-                                {false && (
-                                    <AvatarImage src={"image"} className="object-cover" />
-                                )}
-                                <AvatarFallback className="bg-transparent">
-                                    <img className="w-full" src={profile} alt="" />
-                                </AvatarFallback>
-                            </Avatar>
-
-                            {/* Name and other details */}
-                            <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2">
-                                    <p className="font-semibold text-foreground truncate">
-                                        {user.sender}
-                                    </p>
-                                </div>
-                                {/* {children1} */}
-                            </div>
-                        </div>
-                    </div>
+                        user={user}
+                        setSelectedChat={setSelectedChat}
+                        setIsOpen={setIsOpen}
+                        children1={
+                            <p className="text-sm text-muted-foreground font-medium">
+                                {user.role[0].toUpperCase() + user.role.slice(1)}
+                            </p>
+                        }
+                    />
                 ))}
             </div>
         </div>

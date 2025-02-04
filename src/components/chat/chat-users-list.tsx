@@ -9,12 +9,11 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "../ui/input";
-import { cn } from "@/lib/utils";
 import { Chat } from "./chat";
-import UserList from "../common/user/user-list-card";
 import IconButton from "../ui/icon-button";
-import UserContactSheet from "./sheet-user-contact";
+import UserContactSheet from "./user-contact-sheet";
 import { useState } from "react";
+import UserListCard from "./user-list-card";
 
 // Interface for Props
 interface PropsType {
@@ -24,7 +23,7 @@ interface PropsType {
 }
 
 // Users list Component
-function UsersListChat({ users, setSelectedChat, setMessage }: PropsType) {
+function UsersListOfChat({ users, setSelectedChat, setMessage }: PropsType) {
     // Custom sheet states
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -65,7 +64,7 @@ function UsersListChat({ users, setSelectedChat, setMessage }: PropsType) {
                 <div className="relative flex-1">
                     <Search className="absolute left-3.5 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
-                        id="search"
+                        id="search-chat"
                         type="search"
                         placeholder="Search"
                         autoComplete="off"
@@ -91,15 +90,10 @@ function UsersListChat({ users, setSelectedChat, setMessage }: PropsType) {
                                 setMessage("");
                             }}
                         >
-                            <UserList
-                                index={index}
+                            <UserListCard
                                 user={{ ...user, name: user.sender } as any}
-                                selectedUser={user}
-                                action={() => { }}
-                                className={cn(
-                                    "flex-1 py-[9.4px] px-5 rounded-none border-x-0 border-y-0 bg-background dark:bg-transparent",
-                                    index !== users.length - 1 ? "border-b-[1px]" : ""
-                                )}
+                                setSelectedChat={setSelectedChat}
+                                setIsOpen={setIsOpen}
                                 children1={(() => {
                                     const lastMessage =
                                         user.messages.length > 0 &&
@@ -164,4 +158,4 @@ function UsersListChat({ users, setSelectedChat, setMessage }: PropsType) {
     );
 }
 
-export default UsersListChat;
+export default UsersListOfChat;

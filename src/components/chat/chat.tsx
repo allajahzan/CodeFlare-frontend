@@ -1,8 +1,8 @@
 import { MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { NotSelected } from "@/components/animation/fallbacks";
-import UsersListChat from "./chat-users-list";
-import MessageSideChat from "./chat-message-side";
+import UsersListOfChat from "./chat-users-list";
+import MessageSideOfChat from "./chat-message-side";
 
 export interface Message {
     id: number;
@@ -80,7 +80,7 @@ function Chat() {
             className="h-full grid grid-cols-3 bg-background"
         >
             {/* Left side */}
-            <UsersListChat
+            <UsersListOfChat
                 users={users as Chat[]}
                 setSelectedChat={setSelectedChat}
                 setMessage={setMessage}
@@ -88,7 +88,7 @@ function Chat() {
 
             {/* Right side */}
             {selectedChat && (
-                <MessageSideChat
+                <MessageSideOfChat
                     users={users as Chat[]}
                     selectedChat={selectedChat}
                     message={message}

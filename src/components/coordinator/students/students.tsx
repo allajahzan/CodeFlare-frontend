@@ -127,7 +127,7 @@ function Students({ setDrawerOpen }: PropsType) {
                 setFetching(true);
 
                 // Send request
-                const resp = await fetchData(ApiEndpoints.GET_STUDENTS, role);
+                const resp = await fetchData(ApiEndpoints.GET_USERS, role);
 
                 const users = resp?.data.data;
 

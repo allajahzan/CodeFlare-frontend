@@ -109,7 +109,7 @@ function Users({ setDrawerOpen }: PropsType) {
 
                 // Send request
                 const resp = await fetchData(
-                    ApiEndpoints.GET_COORDINATORS_AND_INSTRUCTORS,
+                    ApiEndpoints.GET_USERS,
                     role
                 );
 

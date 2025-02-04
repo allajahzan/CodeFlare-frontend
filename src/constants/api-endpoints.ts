@@ -9,8 +9,7 @@ enum ApiEndpoints {
     LOGOUT = "/user/logout",
 
     // User CRUD APIs
-    GET_STUDENTS = "/user/student",
-    GET_COORDINATORS_AND_INSTRUCTORS = "/user/coordinator-instructor",
+    GET_USERS = "/user/users",
     USER = "/user",
 
     // Admin APIs

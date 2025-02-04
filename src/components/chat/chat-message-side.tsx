@@ -1,4 +1,4 @@
-import UserProfileSheet from "./sheet-user-profile";
+import UserProfileSheet from "./user-profile-sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { motion } from "framer-motion";
 import { Badge } from "../ui/badge";
@@ -9,8 +9,8 @@ import Picker from "@emoji-mart/react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { IThemeContext, ThemeContext } from "@/context/theme-context";
 import { Chat } from "./chat";
-import TextCard from "./card-text";
-import MediaCard from "./card-media";
+import TextCard from "./text-card";
+import MediaCard from "./media-card";
 import IconButton from "../ui/icon-button";
 
 // Iterface for Props
@@ -29,7 +29,7 @@ interface PropsType {
 }
 
 // Messaege side Component
-function MessageSideChat({
+function MessageSideOfChat({
     users,
     selectedChat,
     message,
@@ -227,4 +227,4 @@ function MessageSideChat({
     );
 }
 
-export default MessageSideChat;
+export default MessageSideOfChat;
