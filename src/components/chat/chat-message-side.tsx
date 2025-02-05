@@ -145,7 +145,7 @@ function MessageSideOfChat({
                         ref={messagesEndRef}
                         className="relative z-10 p-5 px-[68px] space-y-1 flex flex-col overflow-y-auto"
                     >
-                        {selectedChat &&
+                        {selectedChat && 
                             selectedChat.messages.length > 0 &&
                             selectedChat.messages.map((msg, index) => {
                                 if (msg.content === "text") {

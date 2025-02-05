@@ -1,12 +1,11 @@
 import { MessageCircle } from "lucide-react";
-import { useContext, useEffect, useLayoutEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NotSelected } from "@/components/animation/fallbacks";
 import UsersListOfChat from "./chat-users-list";
 import MessageSideOfChat from "./chat-message-side";
 import { IUserChat } from "./user-contact-sheet";
 import socket, {
     listenForMessages,
-    registerUser,
     sendPrivateMessage,
 } from "@/service/socket";
 import { IUserContext, UserContext } from "@/context/user-context";
@@ -41,11 +40,6 @@ function Chat() {
     // User context
     const { user } = useContext(UserContext) as IUserContext;
 
-    // Register a user
-    useLayoutEffect(() => {
-        registerUser(user?._id as string);
-    }, []);
-
     // Listen to messages
     useEffect(() => {
         listenForMessages(user?._id as string, (message) => {
@@ -64,10 +58,14 @@ function Chat() {
 
             // Update chat
             setSelectedChat((prevChat: Chat) => {
-                return {
-                    ...prevChat,
-                    messages: [...prevChat.messages, newMessage],
-                };
+                if(prevChat.receiverId === message.senderId){
+                    return {
+                        ...prevChat,
+                        messages: [...prevChat.messages, newMessage],
+                    }
+                }else{
+                    return prevChat
+                }
             });
         });
 

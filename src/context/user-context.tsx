@@ -3,6 +3,7 @@ import { toast } from "@/hooks/use-toast";
 import { sideBarVisibilityAction, stateType } from "@/redux/store";
 import { fetchData } from "@/service/api-service";
 import axiosInstance from "@/service/axios-instance";
+import { registerUser } from "@/service/socket";
 import { handleCustomError } from "@/utils/error";
 import { createContext, ReactNode, useState, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -58,6 +59,9 @@ const UserContextProvider = ({ children }: { children: ReactNode }) => {
                 if (resp && resp.status === 200) {
                     localStorage.setItem("user", JSON.stringify(user));
                     setUser(user);
+
+                    // Register a user to socket io
+                    registerUser(user?._id as string);
                 }
             } catch (err: unknown) {
                 handleCustomError(err);
