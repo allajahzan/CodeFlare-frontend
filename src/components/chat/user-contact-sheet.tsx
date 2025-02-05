@@ -22,8 +22,8 @@ export interface IUserChat {
     role: string;
     profilePic: string;
     content: "text" | "image" | "file";
-    lastMessage: "";
-    updatedAt: "";
+    lastMessage: string;
+    updatedAt: string;
 }
 
 // Interface for Props
@@ -49,6 +49,7 @@ function UserContactSheet({
     // Redux
     const role = useSelector((state: stateType) => state.role);
 
+    // Fetch users
     useLayoutEffect(() => {
         const fetchUsers = async () => {
             try {
@@ -74,14 +75,10 @@ function UserContactSheet({
                     );
 
                     // Set users
-                    setTimeout(() => {
-                        setUsers(formattedUsers);
-                    }, 1000);
+                    setUsers(formattedUsers);
                 }
             } catch (err: unknown) {
-                setTimeout(() => {
-                    handleCustomError(err);
-                }, 1000);
+                handleCustomError(err);
             }
         };
 

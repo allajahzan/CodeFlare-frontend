@@ -1,5 +1,5 @@
 enum ApiEndpoints {
-    // Authentication APIs
+    // Authentication APIs - user service
     LOGIN = "/user/login",
     VERIFY_EMAIL = "/user/verify-email",
     SEND_OTP = "/user/verify-otp?token=",
@@ -8,12 +8,15 @@ enum ApiEndpoints {
     REFRESH_TOKEN = "/user/refresh-token",
     LOGOUT = "/user/logout",
 
-    // User CRUD APIs
+    // User CRUD APIs - user service
     GET_USERS = "/user/users",
     USER = "/user",
 
-    // Admin APIs
+    // Admin APIs - admin service
     ADMIN = "/admin",
+
+    // Chat APIs - communication service
+    CHAT = "/communication/chat",
 }
 
 export default ApiEndpoints;

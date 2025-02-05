@@ -44,4 +44,34 @@ export const listenForMessages = (
     });
 };
 
+/**
+ * Listens for "chats" events from the socket server and triggers the provided callback
+ * only if the chat contains the senderId.
+ * @param senderId - The ID of one of the users in the chat.
+ * @param callback - The callback function to be triggered when a chat is received that contains both the senderId and receiverId.
+ */
+interface User {
+    _id: string;
+    name: string;
+    email: string;
+    role: string;
+    profilePic: string;
+}
+export const ListenForChats = (
+    userId: string,
+    callback: (chat: {
+        chatId: string;
+        sender: User;
+        receiver: User;
+        lastMessage: string;
+        updatedAt: Date;
+    }) => void
+) => {
+    socket.on("chats", (data) => {
+        if (data.chat.sender._id === userId || data.chat.receiver._id === userId) {
+            callback(data.chat);
+        }
+    });
+};
+
 export default socket;

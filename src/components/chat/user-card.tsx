@@ -40,6 +40,7 @@ function UserCard({
 
         // Map chat
         const chat: Chat = {
+            chatId: "",
             senderId: sender?._id as string,
             receiverId: selectedUser._id as string,
             messages: [],
@@ -64,7 +65,7 @@ function UserCard({
     return (
         <div
             onClick={() => handleSelectChat(user)}
-            className="flex-1 pl-5 dark:bg-transparent hover:bg-muted dark:hover:bg-sidebar"
+            className="px-5 dark:bg-transparent hover:bg-muted dark:hover:bg-sidebar"
         >
             <div className="flex items-center gap-3">
                 {/* Avatar profile pic */}
@@ -90,8 +91,8 @@ function UserCard({
                     </div>
                     {children1}
                 </div>
+                {children2}
             </div>
-            {children2}
         </div>
     );
 }

@@ -1,17 +1,20 @@
 import { MessageCircle } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { NotSelected } from "@/components/animation/fallbacks";
 import UsersListOfChat from "./chat-users-list";
 import MessageSideOfChat from "./chat-message-side";
 import { IUserChat } from "./user-contact-sheet";
 import socket, {
+    ListenForChats,
     listenForMessages,
     sendPrivateMessage,
 } from "@/service/socket";
 import { IUserContext, UserContext } from "@/context/user-context";
+import { handleCustomError } from "@/utils/error";
+import axiosInstance from "@/service/axios-instance";
+import ApiEndpoints from "@/constants/api-endpoints";
 
 export interface Message {
-    type: "private" | "group";
     content: "text" | "image" | "file";
     status: "sent" | "seen" | "delivered" | "recieved";
     message: string;
@@ -19,6 +22,7 @@ export interface Message {
 }
 
 export interface Chat {
+    chatId: string;
     senderId: string;
     receiverId: string;
     messages: Message[];
@@ -40,12 +44,70 @@ function Chat() {
     // User context
     const { user } = useContext(UserContext) as IUserContext;
 
-    // Listen to messages
+    // Get chats from server
+    useLayoutEffect(() => {
+        const fetchChats = async () => {
+            try {
+                const resp = await axiosInstance.get(ApiEndpoints.CHAT);
+                console.log(resp);
+            } catch (err: unknown) {
+                handleCustomError(err);
+            }
+        };
+
+        fetchChats();
+    }, []);
+
+    // Get updated chats from socket
+    useEffect(() => {
+        ListenForChats(user?._id as string, (chat) => {
+            // Formatted user chat
+            const formattedUserChat: IUserChat = {
+                chatId: chat.chatId,
+                _id:
+                    chat.sender._id === user?._id ? chat.receiver._id : chat.sender._id,
+                name:
+                    chat.sender._id === user?._id ? chat.receiver.name : chat.sender.name,
+                role:
+                    chat.sender._id === user?._id ? chat.receiver.role : chat.sender.role,
+                email:
+                    chat.sender._id === user?._id
+                        ? chat.receiver.email
+                        : chat.sender.email,
+                profilePic:
+                    chat.sender._id === user?._id
+                        ? chat.receiver.profilePic
+                        : chat.sender.profilePic,
+                content: "text",
+                lastMessage: chat.lastMessage,
+                updatedAt: new Date(chat.updatedAt).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                }),
+            };
+
+            // Update users
+            setUser((prevUsers: IUserChat[]) => {
+                const filteredUserChats = prevUsers.filter(
+                    (userChat) => userChat._id !== formattedUserChat._id
+                );
+                return [formattedUserChat, ...filteredUserChats];
+            });
+        });
+
+        return () => {
+            socket.off("chats");
+        };
+    }, [selectedUser]);
+
+    // Listen for messages
     useEffect(() => {
         listenForMessages(user?._id as string, (message) => {
+            console.log(message + "LISTENING MESSAGES");
+            
             // received message
             const newMessage: Message = {
-                type: "private",
                 content: "text",
                 status: "recieved",
                 message: message.message,
@@ -58,13 +120,13 @@ function Chat() {
 
             // Update chat
             setSelectedChat((prevChat: Chat) => {
-                if(prevChat.receiverId === message.senderId){
+                if (prevChat.receiverId === message.senderId) {
                     return {
                         ...prevChat,
                         messages: [...prevChat.messages, newMessage],
-                    }
-                }else{
-                    return prevChat
+                    };
+                } else {
+                    return prevChat;
                 }
             });
         });
@@ -83,9 +145,8 @@ function Chat() {
             message
         );
 
-        // new Message
+        // New Message
         const newMessage: Message = {
-            type: "private",
             content: "text",
             status: "sent",
             message: message,
@@ -107,10 +168,6 @@ function Chat() {
         // Clear input box
         setMessage("");
     };
-
-    useEffect(() => {
-        console.log(selectedChat);
-    }, [selectedChat]);
 
     return (
         <div
