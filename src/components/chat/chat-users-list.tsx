@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import {
     ArrowLeft,
     Camera,
@@ -9,25 +8,32 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "../ui/input";
-import { Chat } from "./chat";
 import IconButton from "../ui/icon-button";
-import UserContactSheet from "./user-contact-sheet";
+import UserContactSheet, { IUserChat } from "./user-contact-sheet";
 import { useState } from "react";
-import UserListCard from "./user-list-card";
+import UserCard from "./user-card";
+import { Chat } from "./chat";
 
 // Interface for Props
 interface PropsType {
-    users: Chat[];
-    setSelectedChat: React.Dispatch<React.SetStateAction<Chat | null>>;
+    users: IUserChat[];
+    setSelectedUser: React.Dispatch<React.SetStateAction<IUserChat | null>>;
+    setSelectedChat: React.Dispatch<React.SetStateAction<Chat | {}>>;
     setMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 // Users list Component
-function UsersListOfChat({ users, setSelectedChat, setMessage }: PropsType) {
+function UsersListOfChat({
+    users,
+    setSelectedUser,
+    setSelectedChat,
+    setMessage,
+}: PropsType) {
     // Custom sheet states
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     const navigate = useNavigate();
+
     return (
         <div
             className="sticky top-0 h-[calc(100vh)] flex flex-col gap-5 p-0 pt-5 
@@ -83,67 +89,54 @@ function UsersListOfChat({ users, setSelectedChat, setMessage }: PropsType) {
             <div className="h-full flex flex-col overflow-y-auto no-scrollbar border-t border-border">
                 {users?.map((user, index) => {
                     return (
-                        <motion.div
+                        <UserCard
                             key={index}
-                            onClick={() => {
-                                setSelectedChat(user);
-                                setMessage("");
-                            }}
-                        >
-                            <UserListCard
-                                user={{ ...user, name: user.sender } as any}
-                                setSelectedChat={setSelectedChat}
-                                setIsOpen={setIsOpen}
-                                children1={(() => {
-                                    const lastMessage =
-                                        user.messages.length > 0 &&
-                                        user.messages[user.messages.length - 1]; // Get the last message
-                                    if (lastMessage) {
-                                        if (lastMessage.type === "text") {
-                                            return (
-                                                <p className="text-sm text-muted-foreground font-medium truncate">
-                                                    {lastMessage.text}
+                            user={{ ...user, name: user.name } as any}
+                            setSelectedUser={setSelectedUser}
+                            setSelectedChat={setSelectedChat}
+                            setMessage={setMessage}
+                            setIsOpen={setIsOpen}
+                            children1={(() => {
+                                const lastMessage = user.lastMessage; // Get the last message
+                                if (lastMessage) {
+                                    if (user.content === "text") {
+                                        return (
+                                            <p className="text-sm text-muted-foreground font-medium truncate">
+                                                {lastMessage}
+                                            </p>
+                                        );
+                                    } else if (user.content === "image") {
+                                        return (
+                                            <div className="flex items-center gap-1">
+                                                <Camera className="w-4 h-4 text-muted-foreground" />
+                                                <p className="text-sm text-muted-foreground font-medium">
+                                                    Photo
                                                 </p>
-                                            );
-                                        } else if (lastMessage.type === "image") {
-                                            return (
-                                                <div className="flex items-center gap-1">
-                                                    <Camera className="w-4 h-4 text-muted-foreground" />
-                                                    <p className="text-sm text-muted-foreground font-medium">
-                                                        Photo
-                                                    </p>
-                                                </div>
-                                            );
-                                        }
+                                            </div>
+                                        );
                                     }
-                                })()}
-                                children2={
-                                    <div className="w-[50px] flex flex-col justify-center items-end gap-1 ">
-                                        {/* Time or date */}
-                                        <p className="w-full text-right text-xs text-foreground font-medium">
-                                            {user.messages.length > 0 &&
-                                                user.messages[user.messages.length - 1].time}
-                                        </p>
-
-                                        {/* Unread messages */}
-                                        {(() => {
-                                            let unreadMessage = user.messages?.filter(
-                                                (msg) => msg.read === false && msg.status === "recieved"
-                                            ).length;
-                                            if (unreadMessage) {
-                                                return (
-                                                    <div className="bg-foreground w-5 h-5 flex items-center justify-center text-center rounded-full">
-                                                        <p className="text-xs text-background font-medium">
-                                                            {unreadMessage}
-                                                        </p>
-                                                    </div>
-                                                );
-                                            }
-                                        })()}
-                                    </div>
                                 }
-                            />
-                        </motion.div>
+                            })()}
+                            children2={
+                                <div className="w-[50px] flex flex-col justify-center items-end gap-1 ">
+                                    {/* Time or date */}
+                                    <p className="w-full text-right text-xs text-foreground font-medium">
+                                        {user.updatedAt.toString()}
+                                    </p>
+
+                                    {/* Unread messages */}
+                                    {(() => {
+                                        return (
+                                            <div className="bg-foreground w-5 h-5 flex items-center justify-center text-center rounded-full">
+                                                <p className="text-xs text-background font-medium">
+                                                    { }
+                                                </p>
+                                            </div>
+                                        );
+                                    })()}
+                                </div>
+                            }
+                        />
                     );
                 })}
 
@@ -151,7 +144,9 @@ function UsersListOfChat({ users, setSelectedChat, setMessage }: PropsType) {
                 <UserContactSheet
                     isOpen={isOpen}
                     setIsOpen={setIsOpen}
+                    setSelectedUser={setSelectedUser}
                     setSelectedChat={setSelectedChat}
+                    setMessage={setMessage}
                 />
             </div>
         </div>

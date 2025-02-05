@@ -11,12 +11,12 @@ import { motion } from "framer-motion";
 import { Ban, Info, Loader, Mail, Plus, Trash2 } from "lucide-react";
 import { ReactNode, useState } from "react";
 import profile from "@/assets/images/no-profile.svg";
-import { Chat } from "./chat";
+import { IUserChat } from "./user-contact-sheet";
 
 // Interface for Props
 interface PropsType {
     button: ReactNode;
-    selectedUser: Chat;
+    selectedUser: IUserChat;
 }
 
 // User profile sheet Component
@@ -64,11 +64,11 @@ function UserProfileSheet({ button, selectedUser }: PropsType) {
                         {/* Name and email */}
                         <div className="flex flex-col items-center gap-0">
                             <h1 className="text-xl text-foreground font-semibold">
-                                {selectedUser.sender}
+                                {selectedUser.name}
                             </h1>
                             <p className="text-muted-foreground font-medium flex gap-1 items-center">
                                 <Mail className="w-4 h-4 flex-shrink-0" />
-                                {selectedUser.senderEmail}
+                                {selectedUser.email}
                             </p>
                         </div>
                     </div>
@@ -82,9 +82,9 @@ function UserProfileSheet({ button, selectedUser }: PropsType) {
                     </div>
 
                     <div className="w-full p-5 self-start flex flex-col items-start gap-3 bg-white dark:bg-sidebar shadow-sm">
-                        <small className="text-foreground font-bold">Media</small> 
+                        <small className="text-foreground font-bold">Media</small>
                         <div className="grid grid-cols-4 gap-5 w-full max-h-[210px] overflow-hidden">
-                            {selectedUser?.messages
+                            {/* {selectedUser?.messages
                                 ?.filter((msg) => msg.type === "image") // Only keep image messages
                                 .map((msg, index) => (
                                     <div
@@ -97,7 +97,7 @@ function UserProfileSheet({ button, selectedUser }: PropsType) {
                                             alt="Shared image"
                                         />
                                     </div>
-                                ))}
+                                ))} */}
                         </div>
                     </div>
 

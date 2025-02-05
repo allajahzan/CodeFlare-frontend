@@ -1,4 +1,4 @@
-import { CheckCheck, ChevronDown } from "lucide-react";
+import { Check, CheckCheck, ChevronDown } from "lucide-react";
 import { Message } from "./chat";
 import { cn } from "@/lib/utils";
 
@@ -18,12 +18,18 @@ function TextCard({ msg, className }: PropsType) {
             )}
         >
             {/* Text */}
-            <p className="text-foreground font-medium">{msg.text}</p>
+            <p className="text-foreground font-medium">{msg.message}</p>
 
             {/* Time */}
-            <small className="absolute right-2 bottom-0.5 flex items-center gap-1 text-[10px] text-muted-foreground font-semibold">
-                {msg.time}
+            <small className="absolute right-2 bottom-0.5 flex items-center gap-1 text-[10px] text-muted-foreground font-medium">
+                {msg.createdAt}
                 {msg.status === "sent" && (
+                    <Check className="w-4 h-4 text-muted-foreground" />
+                )}
+                {msg.status === "delivered" && (
+                    <CheckCheck className="w-4 h-4 text-muted-foreground" />
+                )}
+                {msg.status === "seen" && (
                     <CheckCheck className="w-4 h-4 text-blue-400" />
                 )}
             </small>

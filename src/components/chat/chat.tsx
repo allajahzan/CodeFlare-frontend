@@ -1,78 +1,118 @@
 import { MessageCircle } from "lucide-react";
-import { useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { NotSelected } from "@/components/animation/fallbacks";
 import UsersListOfChat from "./chat-users-list";
 import MessageSideOfChat from "./chat-message-side";
+import { IUserChat } from "./user-contact-sheet";
+import socket, {
+    listenForMessages,
+    registerUser,
+    sendPrivateMessage,
+} from "@/service/socket";
+import { IUserContext, UserContext } from "@/context/user-context";
 
 export interface Message {
-    id: number;
-    date: string;
-    text: string;
-    type: "text" | "image" | "file";
-    status: "sent" | "recieved";
-    read: boolean;
-    time: string;
+    type: "private" | "group";
+    content: "text" | "image" | "file";
+    status: "sent" | "seen" | "delivered" | "recieved";
+    message: string;
+    createdAt: String;
 }
 
 export interface Chat {
-    id: number;
-    sender: string;
-    senderEmail: string;
+    senderId: string;
+    receiverId: string;
     messages: Message[];
 }
-
-// Example messages
-const u: Chat[] = [];
 
 // Chat page Component
 function Chat() {
     // Emoji picker
     const [showPicker, setShowPicker] = useState<boolean>(false);
 
-    // Selected chat
-    const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
-
-    const [users, setUser] = useState<Chat[] | null>([...u]);
+    // Chat related states
+    const [selectedChat, setSelectedChat] = useState<Chat | {}>({});
+    const [selectedUser, setSelectedUser] = useState<IUserChat | null>(null);
+    const [users, setUser] = useState<IUserChat[] | []>([]);
 
     // Message
     const [message, setMessage] = useState("");
 
-    // Handle send message
-    const handleSendMessage = (
-        text: string,
-        type: "text" | "image" | "file",
-        id: number
-    ) => {
-        let msg: Message = {
-            id: Date.now(),
-            date: new Date().toISOString(),
-            text: text,
-            type: type,
-            status: "sent",
-            read: false,
-            time: "21:34 pm",
-        };
+    // User context
+    const { user } = useContext(UserContext) as IUserContext;
 
-        setUser((prevUsers: Chat[] | null) => {
-            if (!prevUsers) return prevUsers;
+    // Register a user
+    useLayoutEffect(() => {
+        registerUser(user?._id as string);
+    }, []);
 
-            return prevUsers.map((user) =>
-                user.id === id ? { ...user, messages: [...user.messages, msg] } : user
-            );
+    // Listen to messages
+    useEffect(() => {
+        listenForMessages(user?._id as string, (message) => {
+            // received message
+            const newMessage: Message = {
+                type: "private",
+                content: "text",
+                status: "recieved",
+                message: message.message,
+                createdAt: new Date().toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                }),
+            };
+
+            // Update chat
+            setSelectedChat((prevChat: Chat) => {
+                return {
+                    ...prevChat,
+                    messages: [...prevChat.messages, newMessage],
+                };
+            });
         });
 
-        setSelectedChat((prevSelectedChat) => {
-            if (!prevSelectedChat || prevSelectedChat.id !== id) {
-                return users?.find((user) => user.id === id) as Chat;
-            }
+        return () => {
+            socket.off("receivePrivateMessage");
+        };
+    }, []);
+
+    // Send private messages
+    const sendMessage = () => {
+        // Send message to socket
+        sendPrivateMessage(
+            user?._id as string,
+            selectedUser?._id as string,
+            message
+        );
+
+        // new Message
+        const newMessage: Message = {
+            type: "private",
+            content: "text",
+            status: "sent",
+            message: message,
+            createdAt: new Date().toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+            }),
+        };
+
+        // Update chat
+        setSelectedChat((prevChat: Chat) => {
             return {
-                ...prevSelectedChat,
-                messages: [...prevSelectedChat.messages, msg],
+                ...prevChat,
+                messages: [...prevChat.messages, newMessage],
             };
         });
 
+        // Clear input box
         setMessage("");
     };
+
+    useEffect(() => {
+        console.log(selectedChat);
+    }, [selectedChat]);
 
     return (
         <div
@@ -81,26 +121,28 @@ function Chat() {
         >
             {/* Left side */}
             <UsersListOfChat
-                users={users as Chat[]}
+                users={users as IUserChat[]}
+                setSelectedUser={setSelectedUser}
                 setSelectedChat={setSelectedChat}
                 setMessage={setMessage}
             />
 
             {/* Right side */}
-            {selectedChat && (
+            {selectedUser && (
                 <MessageSideOfChat
-                    users={users as Chat[]}
-                    selectedChat={selectedChat}
+                    users={users as IUserChat[]}
+                    selectedUser={selectedUser}
                     message={message}
                     setMessage={setMessage}
-                    handleSendMessage={handleSendMessage}
+                    sendMessage={sendMessage}
+                    selectedChat={selectedChat as Chat}
                     showPicker={showPicker}
                     setShowPicker={setShowPicker}
                 />
             )}
 
             {/* If no chat is selected  */}
-            {!selectedChat && (
+            {!selectedUser && (
                 <div className="relative w-full min-h-screen col-span-2 bg-muted dark:bg-sidebar">
                     <NotSelected
                         className="h-full rounded-none bg-transparent border-none"

@@ -1,7 +1,6 @@
 import { useLayoutEffect, useState } from "react";
 import { Filter, Plus, Search, UsersRound } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Chat } from "./chat";
 import { Input } from "../ui/input";
 import IconButton from "../ui/icon-button";
 import { fetchData } from "@/service/api-service";
@@ -9,32 +8,43 @@ import ApiEndpoints from "@/constants/api-endpoints";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import { handleCustomError } from "@/utils/error";
-import { User } from "@/types/admin";
+import UserCard from "./user-card";
 import { Student } from "@/types/coordinator";
-import { Message } from "react-hook-form";
-import UserListCard from "./user-list-card";
+import { User } from "@/types/admin";
+import { Chat } from "./chat";
 
 // Interface for Contact User
-interface IContactUser {
-    id: number;
-    sender: string;
-    senderEmail: string;
+export interface IUserChat {
+    chatId: string;
+    _id: string;
+    name: string;
+    email: string;
     role: string;
     profilePic: string;
-    messages: Message[];
+    content: "text" | "image" | "file";
+    lastMessage: "";
+    updatedAt: "";
 }
 
 // Interface for Props
 interface PropsType {
-    setSelectedChat: React.Dispatch<React.SetStateAction<Chat | null>>;
+    setSelectedUser: React.Dispatch<React.SetStateAction<IUserChat | null>>;
+    setSelectedChat: React.Dispatch<React.SetStateAction<Chat | {}>>;
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setMessage: React.Dispatch<React.SetStateAction<string>>;
     isOpen: boolean;
 }
 
 // User contact Sheet
-function UserContactSheet({ setSelectedChat, isOpen, setIsOpen }: PropsType) {
+function UserContactSheet({
+    setSelectedUser,
+    setSelectedChat,
+    isOpen,
+    setIsOpen,
+    setMessage,
+}: PropsType) {
     // Users
-    const [users, setUsers] = useState<IContactUser[]>([]);
+    const [users, setUsers] = useState<IUserChat[]>([]);
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
@@ -50,20 +60,21 @@ function UserContactSheet({ setSelectedChat, isOpen, setIsOpen }: PropsType) {
                 // Success response
                 if (resp && resp.status === 200) {
                     // Formate users
-                    const formattedUsers = users.map(
-                        (user: User | Student) => ({
+                    const formattedUsers: IUserChat[] = users.map(
+                        (user: Partial<User | Student>) => ({
                             _id: user._id,
-                            sender: user.name,
-                            senderEmail: user.email,
+                            name: user.name,
+                            email: user.email,
                             role: user.role,
                             profilePic: user.profilePic,
-                            messages: [],
+                            content: "text",
+                            lastMessage: "",
+                            updatedAt: "",
                         })
                     );
 
                     // Set users
                     setTimeout(() => {
-                        // Set users
                         setUsers(formattedUsers);
                     }, 1000);
                 }
@@ -125,11 +136,13 @@ function UserContactSheet({ setSelectedChat, isOpen, setIsOpen }: PropsType) {
 
             {/* Content */}
             <div className="p-0">
-                {users.map((user: IContactUser, index: number) => (
-                    <UserListCard
+                {users.map((user: IUserChat, index: number) => (
+                    <UserCard
                         key={index}
                         user={user}
+                        setSelectedUser={setSelectedUser}
                         setSelectedChat={setSelectedChat}
+                        setMessage={setMessage}
                         setIsOpen={setIsOpen}
                         children1={
                             <p className="text-sm text-muted-foreground font-medium">

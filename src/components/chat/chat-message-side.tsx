@@ -6,24 +6,31 @@ import { Mic, Paperclip, Send, Smile } from "lucide-react";
 import { Input } from "../ui/input";
 import profile from "@/assets/images/no-profile.svg";
 import Picker from "@emoji-mart/react";
-import { useContext, useEffect, useRef, useState } from "react";
+import {
+    useContext,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from "react";
 import { IThemeContext, ThemeContext } from "@/context/theme-context";
-import { Chat } from "./chat";
 import TextCard from "./text-card";
 import MediaCard from "./media-card";
 import IconButton from "../ui/icon-button";
+import { IUserChat } from "./user-contact-sheet";
+import { Chat, Message } from "./chat";
+import { IUserContext, UserContext } from "@/context/user-context";
+import axiosInstance from "@/service/axios-instance";
+import { cn } from "@/lib/utils";
 
 // Iterface for Props
 interface PropsType {
-    users: Chat[];
-    selectedChat: Chat | null;
+    users: IUserChat[];
+    selectedUser: IUserChat | null;
+    selectedChat: Chat;
     message: string;
     setMessage: React.Dispatch<React.SetStateAction<string>>;
-    handleSendMessage: (
-        text: string,
-        type: "text" | "image" | "file",
-        id: number
-    ) => void;
+    sendMessage: () => void;
     showPicker: boolean;
     setShowPicker: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -31,10 +38,11 @@ interface PropsType {
 // Messaege side Component
 function MessageSideOfChat({
     users,
+    selectedUser,
     selectedChat,
     message,
     setMessage,
-    handleSendMessage,
+    sendMessage,
     showPicker,
     setShowPicker,
 }: PropsType) {
@@ -44,6 +52,9 @@ function MessageSideOfChat({
     // Theme context
     const { theme } = useContext(ThemeContext) as IThemeContext;
 
+    // User context
+    const { user } = useContext(UserContext) as IUserContext;
+
     // Fetch apple emoji
     useEffect(() => {
         fetch("https://cdn.jsdelivr.net/npm/@emoji-mart/data/sets/14/apple.json")
@@ -51,16 +62,24 @@ function MessageSideOfChat({
             .then((json) => setEmojiData(json));
     }, []);
 
+    // Fetch messages 
+    useLayoutEffect(() => {
+        const fetchMessages = () => {
+            // const resp = axiosInstance.get()
+        };
+
+        fetchMessages();
+    }, []);
+
     // Scroll down when sending a messgae
     const messagesEndRef = useRef(null);
-
     useEffect(() => {
         if (messagesEndRef.current) {
             (messagesEndRef as any).current.scrollTop = (
                 messagesEndRef as any
             ).current.scrollHeight;
         }
-    }, [selectedChat?.messages?.length]);
+    }, [selectedChat]);
 
     return (
         <div
@@ -72,7 +91,7 @@ function MessageSideOfChat({
                 <div className="flex items-center gap-3">
                     {/* Avatar profile pic as button for profile sheet */}
                     <UserProfileSheet
-                        selectedUser={selectedChat as Chat}
+                        selectedUser={selectedUser as IUserChat}
                         button={
                             <motion.div
                                 initial={{ scale: 0.5, opacity: 0 }}
@@ -95,7 +114,7 @@ function MessageSideOfChat({
                         {/* Name and role */}
                         <div className="flex items-center gap-2">
                             <p className="text-lg text-foreground font-semibold truncate">
-                                {selectedChat?.sender}
+                                {selectedUser?.name}
                             </p>
                             <Badge className="hidden lg:block relative text-xs text-white font-semibold bg-zinc-900 dark:bg-muted hover:bg-zinc-900 rounded-full overflow-hidden">
                                 {"Admin"}
@@ -126,47 +145,33 @@ function MessageSideOfChat({
                         ref={messagesEndRef}
                         className="relative z-10 p-5 px-[68px] space-y-1 flex flex-col overflow-y-auto"
                     >
-                        {users &&
-                            selectedChat &&
+                        {selectedChat &&
+                            selectedChat.messages.length > 0 &&
                             selectedChat.messages.map((msg, index) => {
-                                if (msg.type === "text") {
-                                    if (msg.status === "recieved") {
-                                        // For received messages
-                                        return (
-                                            <TextCard
-                                                key={index}
-                                                msg={msg}
-                                                className="self-start bg-background dark:bg-muted"
-                                            />
-                                        );
-                                    } else if (msg.status === "sent") {
-                                        // For sent messages
-                                        return (
-                                            <TextCard
-                                                key={index}
-                                                msg={msg}
-                                                className="self-end bg-[#d9fdd3] dark:bg-[#005c4b]"
-                                            />
-                                        );
-                                    }
-                                } else if (msg.type === "image") {
-                                    if (msg.status === "recieved") {
-                                        return (
-                                            <MediaCard
-                                                key={index}
-                                                msg={msg}
-                                                className="self-start bg-background dark:bg-muted"
-                                            />
-                                        );
-                                    } else {
-                                        return (
-                                            <MediaCard
-                                                key={index}
-                                                msg={msg}
-                                                className="self-end bg-[#d9fdd3] dark:bg-[#005c4b]"
-                                            />
-                                        );
-                                    }
+                                if (msg.content === "text") {
+                                    return (
+                                        <TextCard
+                                            key={index}
+                                            msg={msg}
+                                            className={cn(
+                                                msg.status !== 'recieved'
+                                                    ? "self-end bg-[#d9fdd3] dark:bg-[#005c4b]"
+                                                    : "self-start bg-background dark:bg-muted"
+                                            )}
+                                        />
+                                    );
+                                } else if (msg.content === "image") {
+                                    return (
+                                        <MediaCard
+                                            key={index}
+                                            msg={msg}
+                                            className={cn(
+                                                msg.status !== 'recieved'
+                                                    ? "self-end bg-[#d9fdd3] dark:bg-[#005c4b]"
+                                                    : "self-start bg-background dark:bg-muted"
+                                            )}
+                                        />
+                                    );
                                 }
                             })}
                     </div>
@@ -178,11 +183,7 @@ function MessageSideOfChat({
                 onSubmit={(event) => {
                     event.preventDefault();
                     if (message) {
-                        handleSendMessage(
-                            message,
-                            message ? "text" : "image",
-                            selectedChat?.id as number
-                        );
+                        sendMessage();
                     }
                 }}
                 className="p-5 px-5 flex gap-2 items-center border-t bg-background relative z-10"

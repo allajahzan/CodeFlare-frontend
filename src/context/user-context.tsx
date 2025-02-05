@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 // Interface for User
 interface IUser {
+    _id: string;
     name: string;
     email: string;
     phoneNo?: string;
