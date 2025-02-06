@@ -110,13 +110,13 @@ function MessageSideOfChat({
     }, [selectedUser]);
 
     // Scroll down when sending a messgae
-    const messagesEndRef = useRef(null);
-    useEffect(() => {
-        if (messagesEndRef.current) {
-            (messagesEndRef as any).current.scrollTop = (
-                messagesEndRef as any
-            ).current.scrollHeight;
-        }
+    const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+    useLayoutEffect(() => {
+        messagesEndRef.current?.scrollIntoView({
+            behavior: "auto",
+            block: "start",
+        });
     }, [selectedChat]);
 
     return (
@@ -179,10 +179,7 @@ function MessageSideOfChat({
                     <div className="w-full h-full absolute z-0 top-0 left-0 bg-white/10 dark:bg-black/90"></div>
 
                     {/* List of messages */}
-                    <div
-                        ref={messagesEndRef}
-                        className="relative z-10 p-5 px-[68px] space-y-1 flex flex-col overflow-y-auto"
-                    >
+                    <div className="relative z-10 p-5 px-[68px] space-y-1 flex flex-col overflow-y-auto">
                         {selectedChat &&
                             selectedChat.messages.length > 0 &&
                             selectedChat.messages.map((msg, index) => {
@@ -191,6 +188,7 @@ function MessageSideOfChat({
                                         <TextCard
                                             key={index}
                                             msg={msg}
+                                            index={selectedChat.messages.length - 1 - index}
                                             className={cn(
                                                 msg.status === "sent"
                                                     ? "self-end bg-[#d9fdd3] dark:bg-[#005c4b]"
@@ -203,6 +201,7 @@ function MessageSideOfChat({
                                         <MediaCard
                                             key={index}
                                             msg={msg}
+                                            index={selectedChat.messages.length - 1 - index}
                                             className={cn(
                                                 msg.status === "sent"
                                                     ? "self-end bg-[#d9fdd3] dark:bg-[#005c4b]"
@@ -212,6 +211,9 @@ function MessageSideOfChat({
                                     );
                                 }
                             })}
+
+                        {/* Scroll to bottom */}
+                        <div className="mt-5" ref={messagesEndRef}></div>
                     </div>
                 </div>
             </div>

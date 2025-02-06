@@ -1,17 +1,22 @@
 import { cn } from "@/lib/utils";
 import { Message } from "./chat";
 import { CheckCheck, ChevronDown } from "lucide-react";
+import { motion } from "framer-motion";
 
 // Interface for Props
 interface PropsType {
     msg: Message;
     className?: string;
+    index: number
 }
 
 // Media card Component
-function MediaCard({ msg, className }: PropsType) {
+function MediaCard({ msg, className, index }: PropsType) {
     return (
-        <div
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.0 + index * 0.1 }}
             className={cn(
                 "group self-end relative p-1 shadow-md rounded-lg break-all",
                 className
@@ -34,7 +39,7 @@ function MediaCard({ msg, className }: PropsType) {
             <div className="absolute top-0 right-0 p-3 group-hover:visible invisible">
                 <ChevronDown className="w-5 h-5 text-white" />
             </div>
-        </div>
+        </motion.div>
     );
 }
 

@@ -17,6 +17,7 @@ import { Chat } from "./chat";
 // Interface for Props
 interface PropsType {
     users: IUserChat[];
+    selectedUser: IUserChat;
     setSelectedUser: React.Dispatch<React.SetStateAction<IUserChat | null>>;
     setSelectedChat: React.Dispatch<React.SetStateAction<Chat | {}>>;
     setMessage: React.Dispatch<React.SetStateAction<string>>;
@@ -25,6 +26,7 @@ interface PropsType {
 // Users list Component
 function UsersListOfChat({
     users,
+    selectedUser,
     setSelectedUser,
     setSelectedChat,
     setMessage,
@@ -96,6 +98,7 @@ function UsersListOfChat({
                             setSelectedChat={setSelectedChat}
                             setMessage={setMessage}
                             setIsOpen={setIsOpen}
+                            className={`${selectedUser?._id === user._id ? "bg-muted dark:bg-sidebar" : ""}`}
                             children1={(() => {
                                 const lastMessage = user.lastMessage; // Get the last message
                                 if (lastMessage) {

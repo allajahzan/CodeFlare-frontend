@@ -17,6 +17,7 @@ interface PropsType {
     setMessage: React.Dispatch<React.SetStateAction<string>>;
     children1?: ReactNode;
     children2?: ReactNode;
+    className?: string;
 }
 
 // User list card Component
@@ -29,6 +30,7 @@ function UserCard({
     setMessage,
     children1,
     children2,
+    className,
 }: PropsType) {
     // User context
     const { user: sender } = useContext(UserContext) as IUserContext;
@@ -68,7 +70,7 @@ function UserCard({
     return (
         <div
             onClick={() => handleSelectUserChat(user)}
-            className="px-5 dark:bg-transparent hover:bg-muted dark:hover:bg-sidebar"
+            className={cn("px-5 dark:bg-transparent hover:bg-muted dark:hover:bg-sidebar", className)}
         >
             <div className="flex items-center gap-3">
                 {/* Avatar profile pic */}

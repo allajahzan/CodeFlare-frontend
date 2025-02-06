@@ -1,17 +1,22 @@
 import { Check, CheckCheck, ChevronDown } from "lucide-react";
 import { Message } from "./chat";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 // Interface for Props
 interface PropsType {
     msg: Message;
     className?: string;
+    index: number;
 }
 
 // Text card Component
-function TextCard({ msg, className }: PropsType) {
+function TextCard({ msg, className, index }: PropsType) {
     return (
-        <div
+        <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.0 + index * 0.1 }}
             className={cn(
                 "group relative px-4 py-2 pr-20 shadow-md rounded-lg max-w-sm break-all",
                 className
@@ -41,7 +46,7 @@ function TextCard({ msg, className }: PropsType) {
             >
                 <ChevronDown className="w-4 h-4 text-foreground" />
             </div>
-        </div>
+        </motion.div>
     );
 }
 

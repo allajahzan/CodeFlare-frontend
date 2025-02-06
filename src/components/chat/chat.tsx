@@ -227,6 +227,7 @@ function Chat() {
             {/* Left side */}
             <UsersListOfChat
                 users={users as IUserChat[]}
+                selectedUser={selectedUser as IUserChat}
                 setSelectedUser={setSelectedUser}
                 setSelectedChat={setSelectedChat}
                 setMessage={setMessage}
