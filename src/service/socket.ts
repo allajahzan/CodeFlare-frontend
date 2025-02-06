@@ -29,11 +29,21 @@ export const sendPrivateMessage = (
  * @param receiverId - The ID of the user who should receive the message.
  * @param callback - The callback function to be triggered when a message is received.
  */
+// Interface for user details
+interface IUser {
+    _id: string;
+    name: string;
+    email: string;
+    role: string;
+    profilePic: string;
+}
+
 export const listenForMessages = (
     userId: string,
     callback: (data: {
         senderId: string;
         receiverId: string;
+        sender: IUser;
         message: string;
     }) => void
 ) => {
@@ -50,26 +60,20 @@ export const listenForMessages = (
  * @param senderId - The ID of one of the users in the chat.
  * @param callback - The callback function to be triggered when a chat is received that contains both the senderId and receiverId.
  */
-interface User {
-    _id: string;
-    name: string;
-    email: string;
-    role: string;
-    profilePic: string;
-}
-export const ListenForChats = (
+export const ListenForChatId = (
     userId: string,
     callback: (chat: {
         chatId: string;
-        sender: User;
-        receiver: User;
-        lastMessage: string;
-        updatedAt: Date;
+        senderId: string;
+        receiverId: string;
     }) => void
 ) => {
-    socket.on("chats", (data) => {
-        if (data.chat.sender._id === userId || data.chat.receiver._id === userId) {
-            callback(data.chat);
+    socket.on("chatInfo", (data) => {
+        if (
+            data.chatInfo.senderId === userId ||
+            data.chatInfo.receiverId === userId
+        ) {
+            callback(data.chatInfo);
         }
     });
 };

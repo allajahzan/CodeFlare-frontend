@@ -5,7 +5,7 @@ import UsersListOfChat from "./chat-users-list";
 import MessageSideOfChat from "./chat-message-side";
 import { IUserChat } from "./user-contact-sheet";
 import socket, {
-    ListenForChats,
+    ListenForChatId,
     listenForMessages,
     sendPrivateMessage,
 } from "@/service/socket";
@@ -108,53 +108,29 @@ function Chat() {
         fetchChats();
     }, []);
 
-    // Get updated user chat from socket
+    // Get new users-chatId from socket
     useEffect(() => {
-        ListenForChats(user?._id as string, (chat) => {
-            // Formatted user chat
-            const formattedUserChat: IUserChat = {
-                chatId: chat.chatId,
-                _id:
-                    chat.sender._id === user?._id ? chat.receiver._id : chat.sender._id,
-                name:
-                    chat.sender._id === user?._id ? chat.receiver.name : chat.sender.name,
-                role:
-                    chat.sender._id === user?._id ? chat.receiver.role : chat.sender.role,
-                email:
-                    chat.sender._id === user?._id
-                        ? chat.receiver.email
-                        : chat.sender.email,
-                profilePic:
-                    chat.sender._id === user?._id
-                        ? chat.receiver.profilePic
-                        : chat.sender.profilePic,
-                content: "text",
-                lastMessage: chat.lastMessage,
-                updatedAt: new Date(chat.updatedAt).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true,
-                }),
-            };
-
-            // Update users
+        ListenForChatId(user?._id as string, (chat) => {
+            // Update chatId
             setUser((prevUsers: IUserChat[]) => {
-                const filteredUserChats = prevUsers.filter(
-                    (userChat) => userChat._id !== formattedUserChat._id
-                );
-                return [formattedUserChat, ...filteredUserChats];
+                return prevUsers.map((u) => {
+                    if (u._id === chat.senderId || u._id === chat.receiverId) {
+                        return { ...u, chatId: chat.chatId };
+                    }
+                    return u;
+                });
             });
         });
 
         return () => {
-            socket.off("chats");
+            socket.off("chatInfo");
         };
     }, [selectedUser]);
 
-    // Listen for messages
+    // Listen for new messages
     useEffect(() => {
         listenForMessages(user?._id as string, (message) => {
-            console.log(message + "LISTENING MESSAGES");
+            console.log(message.message + "LISTENING MESSAGES");
 
             // Received message
             const newMessage: Message = {
@@ -168,7 +144,7 @@ function Chat() {
                 }),
             };
 
-            // Update chat
+            // Update chat with received messages
             setSelectedChat((prevChat: Chat) => {
                 if (prevChat.receiverId === message.senderId) {
                     return {
@@ -178,6 +154,31 @@ function Chat() {
                 } else {
                     return prevChat;
                 }
+            });
+
+            // Formatted user chat
+            const formattedUserChat: IUserChat = {
+                chatId: "",
+                _id: message.sender._id as string,
+                name: message.sender.name as string,
+                email: message.sender.email as string,
+                role: message.sender.role as string,
+                profilePic: message.sender.profilePic as string,
+                content: "text",
+                lastMessage: message.message,
+                updatedAt: new Date().toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                }),
+            };
+
+            // Update users with formatted user chat
+            setUser((prevUsers: IUserChat[]) => {
+                const filteredUserChats = prevUsers.filter(
+                    (userChat) => userChat._id !== formattedUserChat._id
+                );
+                return [formattedUserChat, ...filteredUserChats];
             });
         });
 
@@ -207,12 +208,37 @@ function Chat() {
             }),
         };
 
-        // Update chat
+        // Update chat with new messages
         setSelectedChat((prevChat: Chat) => {
             return {
                 ...prevChat,
                 messages: [...prevChat.messages, newMessage],
             };
+        });
+
+        // Formatted user chat
+        const formattedUserChat: IUserChat = {
+            chatId: selectedUser?.chatId as string,
+            _id: selectedUser?._id as string,
+            name: selectedUser?.name as string,
+            email: selectedUser?.email as string,
+            role: selectedUser?.role as string,
+            profilePic: selectedUser?.profilePic as string,
+            content: "text",
+            lastMessage: message,
+            updatedAt: new Date().toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+            }),
+        };
+
+        // Update users with formatted user chat
+        setUser((prevUsers: IUserChat[]) => {
+            const filteredUserChats = prevUsers.filter(
+                (userChat) => userChat._id !== formattedUserChat._id
+            );
+            return [formattedUserChat, ...filteredUserChats];
         });
 
         // Clear input box
