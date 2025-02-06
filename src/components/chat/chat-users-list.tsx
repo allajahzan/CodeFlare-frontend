@@ -144,6 +144,7 @@ function UsersListOfChat({
 
                 {/* Custom sheet for contacts */}
                 <UserContactSheet
+                    users={users}
                     isOpen={isOpen}
                     setIsOpen={setIsOpen}
                     setSelectedUser={setSelectedUser}

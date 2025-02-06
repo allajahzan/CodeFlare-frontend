@@ -17,6 +17,7 @@ enum ApiEndpoints {
 
     // Chat APIs - communication service
     CHAT = "/communication/chat",
+    MESSAGE = '/communication/message',
 }
 
 export default ApiEndpoints;

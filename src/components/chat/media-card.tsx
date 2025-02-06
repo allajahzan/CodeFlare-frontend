@@ -20,13 +20,13 @@ function MediaCard({ msg, className }: PropsType) {
             {/* Text */}
             <img
                 className="w-full h-full max-w-[250px] max-h-[400px] object-cover rounded-lg"
-                src={msg.text}
+                src={msg.message}
                 alt=""
             />
 
             {/* Time */}
             <small className="w-full absolute p-2 px-3 right-0 bottom-0 flex items-center justify-end gap-1 text-[10px] text-white font-semibold">
-                {msg.time}
+                {msg.createdAt}
                 <CheckCheck className="w-4 h-4 text-blue-400" />
             </small>
 

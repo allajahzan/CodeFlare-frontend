@@ -18,7 +18,7 @@ import { stateType } from "@/redux/store";
 
 export interface Message {
     content: "text" | "image" | "file";
-    status: "sent" | "seen" | "delivered" | "recieved";
+    status: "sent" | "seen" | "delivered" | "received";
     message: string;
     createdAt: String;
 }
@@ -111,6 +111,8 @@ function Chat() {
     // Get updated user chat from socket
     useEffect(() => {
         ListenForChats(user?._id as string, (chat) => {
+            console.log(chat);
+            
             // Formatted user chat
             const formattedUserChat: IUserChat = {
                 chatId: chat.chatId,
@@ -159,7 +161,7 @@ function Chat() {
             // Received message
             const newMessage: Message = {
                 content: "text",
-                status: "recieved",
+                status: "received",
                 message: message.message,
                 createdAt: new Date().toLocaleTimeString([], {
                     hour: "2-digit",
@@ -235,12 +237,12 @@ function Chat() {
             {/* Right side */}
             {selectedUser && (
                 <MessageSideOfChat
-                    users={users as IUserChat[]}
                     selectedUser={selectedUser}
                     message={message}
                     setMessage={setMessage}
                     sendMessage={sendMessage}
                     selectedChat={selectedChat as Chat}
+                    setSelectedChat={setSelectedChat}
                     showPicker={showPicker}
                     setShowPicker={setShowPicker}
                 />

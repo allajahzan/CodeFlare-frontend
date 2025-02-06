@@ -20,14 +20,18 @@ import IconButton from "../ui/icon-button";
 import { IUserChat } from "./user-contact-sheet";
 import { Chat, Message } from "./chat";
 import { IUserContext, UserContext } from "@/context/user-context";
-import axiosInstance from "@/service/axios-instance";
 import { cn } from "@/lib/utils";
+import { fetchData } from "@/service/api-service";
+import ApiEndpoints from "@/constants/api-endpoints";
+import { useSelector } from "react-redux";
+import { stateType } from "@/redux/store";
+import { handleCustomError } from "@/utils/error";
 
 // Iterface for Props
 interface PropsType {
-    users: IUserChat[];
     selectedUser: IUserChat | null;
     selectedChat: Chat;
+    setSelectedChat: React.Dispatch<React.SetStateAction<Chat>>;
     message: string;
     setMessage: React.Dispatch<React.SetStateAction<string>>;
     sendMessage: () => void;
@@ -37,9 +41,9 @@ interface PropsType {
 
 // Messaege side Component
 function MessageSideOfChat({
-    users,
     selectedUser,
     selectedChat,
+    setSelectedChat,
     message,
     setMessage,
     sendMessage,
@@ -48,6 +52,9 @@ function MessageSideOfChat({
 }: PropsType) {
     // Emoji data
     const [emojiData, setEmojiData] = useState<null | any>(null);
+
+    // Redux
+    const role = useSelector((state: stateType) => state.role);
 
     // Theme context
     const { theme } = useContext(ThemeContext) as IThemeContext;
@@ -62,14 +69,45 @@ function MessageSideOfChat({
             .then((json) => setEmojiData(json));
     }, []);
 
-    // Fetch messages 
+    // Fetch messages from server
     useLayoutEffect(() => {
-        const fetchMessages = () => {
-            // const resp = axiosInstance.get()
+        const fetchMessages = async () => {
+            try {
+                const resp = await fetchData(
+                    ApiEndpoints.MESSAGE + `/${selectedChat.chatId}`,
+                    role
+                );
+
+                if (resp && resp.status === 200) {
+                    console.log(resp.data.data);
+
+                    // Group all messages
+                    const messages: Message[] = resp.data.data.map((msg: any) => ({
+                        content: "text",
+                        status: user?._id === msg.senderId ? "sent" : "received",
+                        message: msg.message,
+                        createdAt: new Date(msg.createdAt).toLocaleTimeString([], {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: true,
+                        }),
+                    }));
+
+                    // Update chat with messages
+                    setSelectedChat((prev) => ({
+                        ...prev,
+                        messages: messages,
+                    }));
+                }
+            } catch (err: unknown) {
+                handleCustomError(err);
+            }
         };
 
-        fetchMessages();
-    }, []);
+        selectedChat.chatId ? fetchMessages() : null;
+
+        return () => { };
+    }, [selectedUser]);
 
     // Scroll down when sending a messgae
     const messagesEndRef = useRef(null);
@@ -145,7 +183,7 @@ function MessageSideOfChat({
                         ref={messagesEndRef}
                         className="relative z-10 p-5 px-[68px] space-y-1 flex flex-col overflow-y-auto"
                     >
-                        {selectedChat && 
+                        {selectedChat &&
                             selectedChat.messages.length > 0 &&
                             selectedChat.messages.map((msg, index) => {
                                 if (msg.content === "text") {
@@ -154,7 +192,7 @@ function MessageSideOfChat({
                                             key={index}
                                             msg={msg}
                                             className={cn(
-                                                msg.status !== 'recieved'
+                                                msg.status === "sent"
                                                     ? "self-end bg-[#d9fdd3] dark:bg-[#005c4b]"
                                                     : "self-start bg-background dark:bg-muted"
                                             )}
@@ -166,7 +204,7 @@ function MessageSideOfChat({
                                             key={index}
                                             msg={msg}
                                             className={cn(
-                                                msg.status !== 'recieved'
+                                                msg.status === "sent"
                                                     ? "self-end bg-[#d9fdd3] dark:bg-[#005c4b]"
                                                     : "self-start bg-background dark:bg-muted"
                                             )}

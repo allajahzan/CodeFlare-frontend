@@ -9,6 +9,7 @@ import { IUserContext, UserContext } from "@/context/user-context";
 
 // Interface for Props
 interface PropsType {
+    users?: IUserChat[];
     user: IUserChat;
     setSelectedUser: React.Dispatch<React.SetStateAction<IUserChat | null>>;
     setSelectedChat: React.Dispatch<React.SetStateAction<Chat | {}>>;
@@ -20,6 +21,7 @@ interface PropsType {
 
 // User list card Component
 function UserCard({
+    users,
     user,
     setSelectedUser,
     setSelectedChat,
@@ -28,31 +30,32 @@ function UserCard({
     children1,
     children2,
 }: PropsType) {
+    // User context
     const { user: sender } = useContext(UserContext) as IUserContext;
 
-    // Handle select chat
-    const handleSelectChat = (selectedUser: IUserChat) => {
-        // Close the sheet
+    // Handle select user chat
+    const handleSelectUserChat = (selectedUser: IUserChat) => {
+        // Close sheet
         setIsOpen(false);
 
         // Set user
-        setSelectedUser(user as IUserChat);
+        setSelectedUser(selectedUser as IUserChat);
 
         // Map chat
         const chat: Chat = {
-            chatId: "",
+            chatId: selectedUser.chatId as string,
             senderId: sender?._id as string,
             receiverId: selectedUser._id as string,
             messages: [],
         };
 
         // Set chat
-        setSelectedChat((prevChat: Chat) => {
-            if (
-                prevChat.senderId === chat.senderId &&
-                prevChat.receiverId === chat.receiverId
-            ) {
-                return prevChat;
+        setSelectedChat(() => {
+            const userChat = users?.find(
+                (userChat) => userChat._id === selectedUser._id
+            );
+            if (userChat) {
+                return { ...userChat, messages: [] };
             } else {
                 return chat;
             }
@@ -64,7 +67,7 @@ function UserCard({
 
     return (
         <div
-            onClick={() => handleSelectChat(user)}
+            onClick={() => handleSelectUserChat(user)}
             className="px-5 dark:bg-transparent hover:bg-muted dark:hover:bg-sidebar"
         >
             <div className="flex items-center gap-3">
@@ -79,20 +82,20 @@ function UserCard({
                 </Avatar>
 
                 <div className="flex-1 min-w-0 flex items-center justify-between gap-3 border-b-[1px]">
-                <div
-                    className={cn(
-                        "flex-1 py-4 min-w-[70px]"
-                        // index !== users.length - 1 ? "" : ""
-                    )}
-                >
-                    <div className="flex items-center gap-2">
-                        <p className="font-semibold text-foreground truncate">
-                            {user.name}
-                        </p>
+                    <div
+                        className={cn(
+                            "flex-1 py-4 min-w-[70px]"
+                            // index !== users.length - 1 ? "" : ""
+                        )}
+                    >
+                        <div className="flex items-center gap-2">
+                            <p className="font-semibold text-foreground truncate">
+                                {user.name}
+                            </p>
+                        </div>
+                        {children1}
                     </div>
-                    {children1}
-                </div>
-                {children2}
+                    {children2}
                 </div>
             </div>
         </div>

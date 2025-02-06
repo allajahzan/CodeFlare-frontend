@@ -13,7 +13,7 @@ function TextCard({ msg, className }: PropsType) {
     return (
         <div
             className={cn(
-                "group relative px-4 py-2 pr-[72px] shadow-md rounded-lg max-w-sm break-all",
+                "group relative px-4 py-2 pr-20 shadow-md rounded-lg max-w-sm break-all",
                 className
             )}
         >

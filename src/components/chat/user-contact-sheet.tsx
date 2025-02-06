@@ -28,6 +28,7 @@ export interface IUserChat {
 
 // Interface for Props
 interface PropsType {
+    users: IUserChat[];
     setSelectedUser: React.Dispatch<React.SetStateAction<IUserChat | null>>;
     setSelectedChat: React.Dispatch<React.SetStateAction<Chat | {}>>;
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -37,6 +38,7 @@ interface PropsType {
 
 // User contact Sheet
 function UserContactSheet({
+    users : userChats,
     setSelectedUser,
     setSelectedChat,
     isOpen,
@@ -63,6 +65,7 @@ function UserContactSheet({
                     // Formate users
                     const formattedUsers: IUserChat[] = users.map(
                         (user: Partial<User | Student>) => ({
+                            chatId: "",
                             _id: user._id,
                             name: user.name,
                             email: user.email,
@@ -136,6 +139,7 @@ function UserContactSheet({
                 {users.map((user: IUserChat, index: number) => (
                     <UserCard
                         key={index}
+                        users={userChats}
                         user={user}
                         setSelectedUser={setSelectedUser}
                         setSelectedChat={setSelectedChat}
