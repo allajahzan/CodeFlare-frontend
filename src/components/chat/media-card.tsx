@@ -16,7 +16,7 @@ function MediaCard({ msg, className, index }: PropsType) {
         <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.0 + index * 0.1 }}
+            transition={{ delay: 0.1 + index * 0.01 }}
             className={cn(
                 "group self-end relative p-1 shadow-md rounded-lg break-all",
                 className
