@@ -111,8 +111,6 @@ function Chat() {
     // Get updated user chat from socket
     useEffect(() => {
         ListenForChats(user?._id as string, (chat) => {
-            console.log(chat);
-            
             // Formatted user chat
             const formattedUserChat: IUserChat = {
                 chatId: chat.chatId,
