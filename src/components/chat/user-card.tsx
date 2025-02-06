@@ -78,9 +78,10 @@ function UserCard({
                     </AvatarFallback>
                 </Avatar>
 
+                <div className="flex-1 min-w-0 flex items-center justify-between gap-3 border-b-[1px]">
                 <div
                     className={cn(
-                        "flex-1 min-w-0 py-4 border-b-[1px]"
+                        "flex-1 py-4 min-w-[70px]"
                         // index !== users.length - 1 ? "" : ""
                     )}
                 >
@@ -92,6 +93,7 @@ function UserCard({
                     {children1}
                 </div>
                 {children2}
+                </div>
             </div>
         </div>
     );

@@ -11,8 +11,10 @@ import socket, {
 } from "@/service/socket";
 import { IUserContext, UserContext } from "@/context/user-context";
 import { handleCustomError } from "@/utils/error";
-import axiosInstance from "@/service/axios-instance";
 import ApiEndpoints from "@/constants/api-endpoints";
+import { fetchData } from "@/service/api-service";
+import { useSelector } from "react-redux";
+import { stateType } from "@/redux/store";
 
 export interface Message {
     content: "text" | "image" | "file";
@@ -41,6 +43,9 @@ function Chat() {
     // Message
     const [message, setMessage] = useState("");
 
+    // Redux
+    const role = useSelector((state: stateType) => state.role);
+
     // User context
     const { user } = useContext(UserContext) as IUserContext;
 
@@ -48,8 +53,53 @@ function Chat() {
     useLayoutEffect(() => {
         const fetchChats = async () => {
             try {
-                const resp = await axiosInstance.get(ApiEndpoints.CHAT);
-                console.log(resp);
+                const resp = await fetchData(ApiEndpoints.CHAT, role);
+
+                if (resp && resp.status === 200) {
+                    const chat = resp.data.data;
+
+                    if (chat) {
+                        // Formatted user chats
+                        const formattedUserChats: IUserChat[] = chat.map((chat: any) => {
+                            return {
+                                chatId: chat.chat._id,
+                                _id:
+                                    chat.sender._id === user?._id
+                                        ? chat.receiver._id
+                                        : chat.sender._id,
+                                name:
+                                    chat.sender._id === user?._id
+                                        ? chat.receiver.name
+                                        : chat.sender.name,
+                                role:
+                                    chat.sender._id === user?._id
+                                        ? chat.receiver.role
+                                        : chat.sender.role,
+                                email:
+                                    chat.sender._id === user?._id
+                                        ? chat.receiver.email
+                                        : chat.sender.email,
+                                profilePic:
+                                    chat.sender._id === user?._id
+                                        ? chat.receiver.profilePic
+                                        : chat.sender.profilePic,
+                                content: "text",
+                                lastMessage: chat.chat.lastMessage,
+                                updatedAt: new Date(chat.chat.updatedAt).toLocaleTimeString(
+                                    [],
+                                    {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                        hour12: true,
+                                    }
+                                ),
+                            };
+                        });
+
+                        // Update users
+                        setUser(() => [...new Set(formattedUserChats)]);
+                    }
+                }
             } catch (err: unknown) {
                 handleCustomError(err);
             }
@@ -58,7 +108,7 @@ function Chat() {
         fetchChats();
     }, []);
 
-    // Get updated chats from socket
+    // Get updated user chat from socket
     useEffect(() => {
         ListenForChats(user?._id as string, (chat) => {
             // Formatted user chat
@@ -105,8 +155,8 @@ function Chat() {
     useEffect(() => {
         listenForMessages(user?._id as string, (message) => {
             console.log(message + "LISTENING MESSAGES");
-            
-            // received message
+
+            // Received message
             const newMessage: Message = {
                 content: "text",
                 status: "recieved",

@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { Input } from "../ui/input";
 import IconButton from "../ui/icon-button";
 import UserContactSheet, { IUserChat } from "./user-contact-sheet";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import UserCard from "./user-card";
 import { Chat } from "./chat";
 
@@ -118,20 +118,22 @@ function UsersListOfChat({
                                 }
                             })()}
                             children2={
-                                <div className="w-[50px] flex flex-col justify-center items-end gap-1 ">
+                                <div className="w-[60px] flex flex-col justify-center items-end gap-1">
                                     {/* Time or date */}
-                                    <p className="w-full text-right text-xs text-foreground font-medium">
+                                    <p className="w-full text-end text-xs text-foreground font-medium">
                                         {user.updatedAt.toString()}
                                     </p>
 
                                     {/* Unread messages */}
                                     {(() => {
                                         return (
-                                            <div className="bg-foreground w-5 h-5 flex items-center justify-center text-center rounded-full">
-                                                <p className="text-xs text-background font-medium">
-                                                    { }
-                                                </p>
-                                            </div>
+                                            <Fragment>
+                                                <div className="h-5 w-5">
+                                                    {/* <div className="bg-foreground w-5 h-5 flex items-center justify-center text-center rounded-full">
+                                                      <p className="text-xs text-background font-medium">{}</p>
+                                                    </div> */}
+                                                </div>
+                                            </Fragment>
                                         );
                                     })()}
                                 </div>
