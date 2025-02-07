@@ -5,8 +5,8 @@ import UsersListOfChat from "./chat-users-list";
 import MessageSideOfChat from "./chat-message-side";
 import { IUserChat } from "./user-contact-sheet";
 import socket, {
-    ListenForChatId,
-    listenForMessages,
+    chatInfo,
+    receivePrivateMessage,
     sendPrivateMessage,
 } from "@/service/socket";
 import { IUserContext, UserContext } from "@/context/user-context";
@@ -83,7 +83,7 @@ function Chat() {
                                     chat.sender._id === user?._id
                                         ? chat.receiver.profilePic
                                         : chat.sender.profilePic,
-                                content: "text",
+                                content: chat.content,
                                 lastMessage: chat.lastMessage,
                                 updatedAt: new Date(chat.updatedAt).toLocaleTimeString([], {
                                     hour: "2-digit",
@@ -105,13 +105,17 @@ function Chat() {
         fetchChats();
     }, []);
 
-    // Get new users-chatId from socket ===================================================================
+    // Get new users-chatInfo from socket ===================================================================
     useEffect(() => {
-        ListenForChatId(user?._id as string, (chat) => {
+        chatInfo(user?._id as string, (chat) => {
+            console.log(chat);
+            
             // Update chatId
             setUser((prevUsers: IUserChat[]) => {
                 return prevUsers.map((u) => {
                     if (u._id === chat.senderId || u._id === chat.receiverId) {
+                        console.log('yes');
+                        
                         return { ...u, chatId: chat.chatId };
                     }
                     return u;
@@ -122,16 +126,14 @@ function Chat() {
         return () => {
             socket.off("chatInfo");
         };
-    }, [selectedUser]);
+    }, [selectedChat]);
 
     // Listen new messages ============================================================================
     useEffect(() => {
-        listenForMessages(user?._id as string, (message) => {
-            console.log(message.message + "LISTENING MESSAGES");
-
+        receivePrivateMessage(user?._id as string, async (message) => {
             // Received message
             const newMessage: Message = {
-                content: "text",
+                content: message.content,
                 status: "received",
                 message: message.message,
                 createdAt: new Date().toLocaleTimeString([], {
@@ -161,7 +163,7 @@ function Chat() {
                 email: message.sender.email as string,
                 role: message.sender.role as string,
                 profilePic: message.sender.profilePic as string,
-                content: "text",
+                content: message.content,
                 lastMessage: message.message,
                 updatedAt: new Date().toLocaleTimeString([], {
                     hour: "2-digit",
@@ -190,6 +192,7 @@ function Chat() {
         sendPrivateMessage(
             user?._id as string,
             selectedUser?._id as string,
+            "text",
             message
         );
 

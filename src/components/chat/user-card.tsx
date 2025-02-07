@@ -37,6 +37,8 @@ function UserCard({
 
     // Handle select user chat
     const handleSelectUserChat = (selectedUser: IUserChat) => {
+        console.log(selectedUser);
+        
         // Close sheet
         setIsOpen(false);
 

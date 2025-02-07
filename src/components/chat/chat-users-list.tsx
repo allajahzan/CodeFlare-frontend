@@ -98,7 +98,8 @@ function UsersListOfChat({
                             setSelectedChat={setSelectedChat}
                             setMessage={setMessage}
                             setIsOpen={setIsOpen}
-                            className={`${selectedUser?._id === user._id ? "bg-muted dark:bg-sidebar" : ""}`}
+                            className={`${selectedUser?._id === user._id ? "bg-muted dark:bg-sidebar" : ""
+                                }`}
                             children1={(() => {
                                 const lastMessage = user.lastMessage; // Get the last message
                                 if (lastMessage) {

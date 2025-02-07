@@ -26,7 +26,7 @@ import ApiEndpoints from "@/constants/api-endpoints";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import { handleCustomError } from "@/utils/error";
-import socket, { loadedMoreMessages, loadMoreMessages } from "@/service/socket";
+import socket, { loadedMessages, loadMoreMessages } from "@/service/socket";
 import PaperClip from "./paperClip";
 
 // Iterface for Props
@@ -90,7 +90,7 @@ function MessageSideOfChat({
                 if (resp && resp.status === 200) {
                     // Group all messages
                     const messages: Message[] = resp.data.data.map((msg: any) => ({
-                        content: "text",
+                        content: msg.content,
                         status: user?._id === msg.senderId ? "sent" : "received",
                         message: msg.message,
                         createdAt: new Date(msg.createdAt).toLocaleTimeString([], {
@@ -118,38 +118,50 @@ function MessageSideOfChat({
 
     // Emmit event for loading previous 20 messages on scroll, with socket io ==============================
     const chatContainerRef = useRef(null);
+    const loaderRef = useRef(null);
 
     const handleScroll = () => {
-        var container = chatContainerRef.current;
+        let container = chatContainerRef.current;
+        let loader = loaderRef.current;
 
-        // Check if scroll is at top only when we scroll, not on inital load
-        if (
-            selectedChat.messages.length &&
-            container &&
-            (container as any).scrollTop === 0
-        ) {
+        if (!selectedChat.messages.length || !container || !loader) return;
+
+        if ((container as any).scrollTop === 0) {
+            // Block scolling
+            (container as any).style.overflow = "hidden";
+            // (container as any).style.paddingRight = "84px";
+
+            // Set loading
             setLoading(true);
-            if ((container as any).scrollTop === 0) {
-                setTimeout(() => {
-                    loadMoreMessages(
-                        user?._id as string,
-                        selectedChat.chatId,
-                        selectedChat.messages.length
-                    );
-                }, 500);
-            }
+
+            setTimeout(() => {
+                loadMoreMessages(
+                    user?._id as string,
+                    selectedChat.chatId,
+                    selectedChat.messages.length
+                );
+            }, 500);
+
+            setTimeout(() => {
+                // Unblock scolling
+                (container as any).style.overflow = "auto";
+                // (container as any).style.paddingRight = "";
+
+                // Set loading
+                setLoading(false);
+            }, 500);
         }
     };
 
     // Listen for loaded messages on scroll ================================================================
     useEffect(() => {
-        loadedMoreMessages(
+        loadedMessages(
             user?._id as string,
             selectedChat.chatId,
             (loadedMessages: any) => {
                 // Format messages
                 const messages: Message[] = loadedMessages.map((msg: any) => ({
-                    content: "text",
+                    content: msg.content,
                     status: user?._id === msg.senderId ? "sent" : "received",
                     message: msg.message,
                     createdAt: new Date(msg.createdAt).toLocaleTimeString([], {
@@ -176,7 +188,7 @@ function MessageSideOfChat({
         );
 
         return () => {
-            socket.off("loadedMoreMessages");
+            socket.off("loadedMessages");
         };
     }, [selectedUser]);
 
@@ -229,7 +241,10 @@ function MessageSideOfChat({
                             <p className="text-lg text-foreground font-semibold truncate">
                                 {selectedUser?.name}
                             </p>
-                            <Badge className="hidden lg:block relative text-xs text-white font-semibold bg-zinc-900 dark:bg-muted hover:bg-zinc-900 rounded-full overflow-hidden">
+                            <Badge
+                                className="hidden lg:block relative text-xs text-white font-semibold
+                             bg-zinc-900 dark:bg-muted hover:bg-zinc-900 rounded-full overflow-hidden"
+                            >
                                 {"Admin"}
                             </Badge>
                         </div>
@@ -261,11 +276,14 @@ function MessageSideOfChat({
                             transition={{ delay: 0 }}
                             ref={chatContainerRef}
                             onScroll={handleScroll}
-                            className="relative z-10 p-5 px-[68px] space-y-1 flex flex-col overflow-y-auto"
+                            className="relative z-10 p-5 px-[68px] space-y-1 flex flex-col overflow-y-auto no-scrollbar"
                         >
                             {/* Loader */}
 
-                            <div className="p-3 absolute top-0 left-[50%] translate-x-[-50%]">
+                            <div
+                                ref={loaderRef}
+                                className="p-5 absolute z-50 top-0 left-[50%] translate-x-[-50%]"
+                            >
                                 {loading === true && (
                                     <Loader2 className="w-5 h-5 text-foreground animate-spin" />
                                 )}

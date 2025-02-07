@@ -25,10 +25,15 @@ export const fetchData = async (url: string, role?: string) => {
  * @returns The response data.
  * @throws The error if the request fails.
  */
-export const postData = async (url: string, data?: any, role?: string) => {
+export const postData = async (
+    url: string,
+    data?: any,
+    role?: string,
+    headers?: any
+) => {
     try {
         const resp = await axiosInstance.post(url, data || null, {
-            headers: { "x-user-role": JSON.stringify(role) },
+            headers: { "x-user-role": JSON.stringify(role), ...(headers && headers) },
         });
         return resp;
     } catch (err: any) {

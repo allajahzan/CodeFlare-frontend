@@ -11,7 +11,7 @@ export const registerUser = (userId: string) => {
 };
 
 /**
- * Emits a "privateMessage" event to the socket server with the provided senderId, receiverId, and message.
+ * Emits a "sendPrivateMessage" event to the socket server with the provided senderId, receiverId, and message.
  * @param senderId - The ID of the user who sent the message.
  * @param receiverId - The ID of the user who received the message.
  * @param message - The message to be sent.
@@ -19,9 +19,10 @@ export const registerUser = (userId: string) => {
 export const sendPrivateMessage = (
     senderId: string,
     receiverId: string,
+    content: "image" | "text" | "file",
     message: string
 ) => {
-    socket.emit("sendPrivateMessage", { senderId, receiverId, message });
+    socket.emit("sendPrivateMessage", { senderId, receiverId, content, message });
 };
 
 /**
@@ -38,12 +39,13 @@ interface IUser {
     profilePic: string;
 }
 
-export const listenForMessages = (
+export const receivePrivateMessage = (
     userId: string,
     callback: (data: {
         senderId: string;
         receiverId: string;
         sender: IUser;
+        content: "image" | "text" | "file";
         message: string;
     }) => void
 ) => {
@@ -55,12 +57,12 @@ export const listenForMessages = (
 };
 
 /**
- * Listens for "chats" events from the socket server and triggers the provided callback
+ * Listens for "chatInfo" events from the socket server and triggers the provided callback
  * only if the chat contains the senderId.
  * @param senderId - The ID of one of the users in the chat.
  * @param callback - The callback function to be triggered when a chat is received that contains both the senderId and receiverId.
  */
-export const ListenForChatId = (
+export const chatInfo = (
     userId: string,
     callback: (chat: {
         chatId: string;
@@ -92,17 +94,17 @@ export const loadMoreMessages = (
 };
 
 /**
- * Listens for "loadedMoreMessages" events from the socket server and triggers the provided callback
+ * Listens for "loadedMessages" events from the socket server and triggers the provided callback
  * when more messages are loaded for the provided chatId.
  * @param chatId - The ID of the chat for which more messages are to be loaded.
  * @param callback - The callback function to be triggered when more messages are loaded.
  */
-export const loadedMoreMessages = (
+export const loadedMessages = (
     userId: string,
     chatId: string,
     callback: ({ }) => void
 ) => {
-    socket.on("loadedMoreMessages", (data) => {
+    socket.on("loadedMessages", (data) => {
         if (chatId === data.chatId && userId === data.userId) {
             callback(data.messages);
         }

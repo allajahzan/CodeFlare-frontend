@@ -5,9 +5,14 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { useState } from "react";
 import { IUserChat } from "./user-contact-sheet";
 import { Chat, Message } from "./chat";
+import { useContext } from "react";
+import { IUserContext, UserContext } from "@/context/user-context";
+import { uploadImageToCloudinary } from "@/service/cloudinary";
+import { sendPrivateMessage } from "@/service/socket";
+import { title } from "process";
+import { toast } from "@/hooks/use-toast";
 
 // Interface for Props
 interface PropsType {
@@ -26,8 +31,8 @@ function PaperClip({
     selectedChat,
     setSelectedChat,
 }: PropsType) {
-    // Image
-    const [image, setImage] = useState<string>("");
+    // User context
+    const { user } = useContext(UserContext) as IUserContext;
 
     // Open gallery
     const openGallery = () => {
@@ -37,17 +42,18 @@ function PaperClip({
         input.multiple = true;
         input.style.display = "none";
 
+        // Event listener
         input.addEventListener("change", (event) => {
             const files = (event.target as HTMLInputElement).files;
             if (files) {
                 // Convert to base 64 format
                 const reader = new FileReader();
                 reader.readAsDataURL(files[0]);
-                reader.onload = () => {
+                reader.onload = async () => {
+                    // Base 64 formate
                     const imageUrl = reader.result as string;
-                    setImage(imageUrl); // Update image state
 
-                    // Formatted message for image
+                    // Formatted message with image data
                     const message: Message = {
                         content: "image",
                         status: "sent",
@@ -82,15 +88,35 @@ function PaperClip({
                         }),
                     };
 
-                    // Update users with formatted user chat
-                    setUser((prevUsers: IUserChat[]) => {
-                        const filteredUserChats = prevUsers.filter(
-                            (userChat) => userChat._id !== formattedUserChat._id
-                        );
-                        return [formattedUserChat, ...filteredUserChats];
-                    });
+                    // Get image url
+                    const status = await uploadImageToCloudinary(files[0]);
 
-                    setImage("");
+                    if (status) {
+                        // Update users with formatted user chat
+                        setUser((prevUsers: IUserChat[]) => {
+                            const filteredUserChats = prevUsers.filter(
+                                (userChat) => userChat._id !== formattedUserChat._id
+                            );
+                            return [formattedUserChat, ...filteredUserChats];
+                        });
+
+                        // Emit event to send image
+                        sendPrivateMessage(
+                            user?._id as string,
+                            selectedUser?._id as string,
+                            "image",
+                            status
+                        );
+                    } else {
+                        // Remove sent message from chat
+                        setSelectedChat((prevChat) => ({
+                            ...prevChat,
+                            messages: [...prevChat.messages.slice(0, -1)],
+                        }));
+
+                        // Toast
+                        toast({ title: "Network error, please try again later!" });
+                    }
                 };
                 reader.onerror = (err) => {
                     console.log(err);
@@ -119,8 +145,8 @@ function PaperClip({
                         <p className="text-sm text-foreground font-medium">Document</p>
                     </div>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                    <div onClick={openGallery} className="flex items-center gap-2">
+                <DropdownMenuItem onClick={openGallery}>
+                    <div className="flex items-center gap-2">
                         <div className="p-2 rounded-lg bg-blue-600/20">
                             <Image className="h-4 w-4 text-blue-600" />
                         </div>
