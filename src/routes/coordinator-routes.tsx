@@ -10,6 +10,7 @@ import ResetPassword from "@/pages/authentication/reset-password";
 import AuthenticationLayout from "@/components/layout/authentication-layout";
 import Students from "@/pages/coordinator/students";
 import AppRoutes from "@/constants/app-routes";
+import Chat from "@/pages/chat/chat";
 
 // Coordinator Routes
 function CoordinatorRoutes() {
@@ -28,6 +29,7 @@ function CoordinatorRoutes() {
 
             {/* Protected Routes */}
             <Route element={<ProtectedRoutes allowedRole={AppRoutes.COORDINATOR} />}>
+            <Route path={AppRoutes.CHATS} element={<Chat />} />
                 <Route element={<CoordinatorLayout isDrawerOpen={isDrawerOpen} />}>
                     <Route path={AppRoutes.DASHBOARD} element={<Dashboard />} />
                     <Route path={AppRoutes.COORDINATOR_STUDENTS} element={<Students isDrawerOpen={isDrawerOpen} setDrawerOpen={_setDrawerOpen} />}/>

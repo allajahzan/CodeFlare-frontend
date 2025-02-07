@@ -8,11 +8,13 @@ import {
     stateType,
 } from "@/redux/store";
 import {
+    Globe,
     //   CalendarDays,
     //   CreditCard,
     //   FileUser,
     //   Globe,
     LayoutDashboard,
+    MessageCircleMore,
     UsersRound,
 } from "lucide-react";
 import Shadow from "@/components/ui/shadow";
@@ -56,10 +58,11 @@ function CoordinatorLayout({ isDrawerOpen }: PropsType) {
                 icon: LayoutDashboard,
                 label: "Dashboard",
             },
-            { path: "/coordinator/students", icon: UsersRound, label: "Students" },
-            //   ...(isSmall
-            //     ? [{ path: "/community", icon: Globe, label: "Community" }]
-            //     : []),
+            { path: AppRoutes.COORDINATOR_STUDENTS, icon: UsersRound, label: "Students" },
+            { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
+            ...(isSmall
+                ? [{ path: "/community", icon: Globe, label: "Community" }]
+                : []),
             //   { path: "/coordinator/weeks", icon: CalendarDays, label: "Weeks" },
             //   { path: "/coordinator/batches", icon: FileUser, label: "Batches" },
             //   { path: "/coordinator/invoices", icon: CreditCard, label: "Invoices" },
