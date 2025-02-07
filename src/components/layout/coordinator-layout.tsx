@@ -53,15 +53,11 @@ function CoordinatorLayout({ isDrawerOpen }: PropsType) {
     // sidebar items
     const sideBarItems = useMemo(
         () => [
-            {
-                path: AppRoutes.DASHBOARD,
-                icon: LayoutDashboard,
-                label: "Dashboard",
-            },
+            { path: AppRoutes.DASHBOARD, icon: LayoutDashboard, label: AppRoutes.DASHBOARD },
             { path: AppRoutes.COORDINATOR_STUDENTS, icon: UsersRound, label: "Students" },
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
             ...(isSmall
-                ? [{ path: "/community", icon: Globe, label: "Community" }]
+                ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
                 : []),
             //   { path: "/coordinator/weeks", icon: CalendarDays, label: "Weeks" },
             //   { path: "/coordinator/batches", icon: FileUser, label: "Batches" },

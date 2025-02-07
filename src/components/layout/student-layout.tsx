@@ -54,16 +54,13 @@ function StudentLayout({ isDrawerOpen }: PropsType) {
     const sideBarItems = useMemo(
         () => [
             { path: AppRoutes.DASHBOARD, icon: LayoutDashboard, label: "Dashboard" },
-            ...(isSmall
-                ? [{ path: "/community", icon: Globe, label: "Community" }]
-                : []),
-            { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
             { path: AppRoutes.STUDENT_TASKS, icon: ListTodo, label: "Tasks" },
-            {
-                path: AppRoutes.STUDENT_REVIEWS,
-                icon: CalendarCheck2,
-                label: "Reviews",
-            },
+            { path: AppRoutes.STUDENT_REVIEWS, icon: CalendarCheck2, label: AppRoutes.STUDENT_REVIEWS},
+            { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
+            ...(isSmall
+                ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
+                : []),
+            
             { path: AppRoutes.STUDENT_LEAVES, icon: IdCard, label: "Leaves" },
             { path: AppRoutes.STUDENT_INVOICES, icon: CreditCard, label: "Invoices" },
             { path: AppRoutes.PROFILE, icon: FileUser, label: "Manifest" },

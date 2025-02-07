@@ -4,12 +4,15 @@ import Navbar from "@/components/common/navbar/navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { resizeAction, sideBarVisibilityAction, stateType } from "@/redux/store";
 import {
+    Globe,
     //   CalendarDays,
     //   CreditCard,
     //   FileUser,
     //   Globe,
     //   UsersRound,
     LayoutDashboard,
+    MessageCircleMore,
+    UsersRound,
 } from "lucide-react";
 import Shadow from "@/components/ui/shadow";
 import { useLayoutEffect, useMemo } from "react";
@@ -47,11 +50,12 @@ function InstructorLayout({ isDrawerOpen }: PropsType) {
     // sidebar items
     const sideBarItems = useMemo(
         () => [
-            {
-                path: AppRoutes.DASHBOARD,
-                icon: LayoutDashboard,
-                label: "Dashboard",
-            },
+            { path: AppRoutes.DASHBOARD, icon: LayoutDashboard, label: "Dashboard"},
+            { path: AppRoutes.COORDINATOR_STUDENTS, icon: UsersRound, label: "Students" },
+            { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
+            ...(isSmall
+                ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
+                : []),
         ],
         [isSmall]
     );
