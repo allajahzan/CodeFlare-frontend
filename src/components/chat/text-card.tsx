@@ -1,22 +1,17 @@
 import { Check, CheckCheck, ChevronDown } from "lucide-react";
 import { Message } from "./chat";
-import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
+import { cn } from "@/lib/utils"
 
 // Interface for Props
 interface PropsType {
     msg: Message;
     className?: string;
-    index: number;
 }
 
 // Text card Component
-function TextCard({ msg, className, index }: PropsType) {
+function TextCard({ msg, className }: PropsType) {
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 + index * 0.01 }}
+        <div
             className={cn(
                 "group relative px-4 py-2 pr-20 shadow-md rounded-lg max-w-sm break-all",
                 className
@@ -29,7 +24,8 @@ function TextCard({ msg, className, index }: PropsType) {
             <small className="absolute right-2 bottom-0.5 flex items-center gap-1 text-[10px] text-muted-foreground font-medium">
                 {msg.createdAt}
                 {msg.status === "sent" && (
-                    <Check className="w-4 h-4 text-muted-foreground" />
+                    // <Check className="w-4 h-4 text-muted-foreground" />
+                    <CheckCheck className="w-4 h-4 text-blue-400" />
                 )}
                 {msg.status === "delivered" && (
                     <CheckCheck className="w-4 h-4 text-muted-foreground" />
@@ -46,7 +42,7 @@ function TextCard({ msg, className, index }: PropsType) {
             >
                 <ChevronDown className="w-4 h-4 text-foreground" />
             </div>
-        </motion.div>
+        </div>
     );
 }
 

@@ -2,7 +2,7 @@ import UserProfileSheet from "./user-profile-sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { motion } from "framer-motion";
 import { Badge } from "../ui/badge";
-import { Mic, Paperclip, Send, Smile } from "lucide-react";
+import { Loader2, Mic, Send, Smile } from "lucide-react";
 import { Input } from "../ui/input";
 import profile from "@/assets/images/no-profile.svg";
 import Picker from "@emoji-mart/react";
@@ -26,10 +26,14 @@ import ApiEndpoints from "@/constants/api-endpoints";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import { handleCustomError } from "@/utils/error";
+import socket, { loadedMoreMessages, loadMoreMessages } from "@/service/socket";
+import PaperClip from "./paperClip";
 
 // Iterface for Props
 interface PropsType {
+    setUser: React.Dispatch<React.SetStateAction<[] | IUserChat[]>>;
     selectedUser: IUserChat | null;
+    setSelectedUser: React.Dispatch<React.SetStateAction<IUserChat | null>>;
     selectedChat: Chat;
     setSelectedChat: React.Dispatch<React.SetStateAction<Chat>>;
     message: string;
@@ -41,7 +45,9 @@ interface PropsType {
 
 // Messaege side Component
 function MessageSideOfChat({
+    setUser,
     selectedUser,
+    setSelectedUser,
     selectedChat,
     setSelectedChat,
     message,
@@ -62,6 +68,9 @@ function MessageSideOfChat({
     // User context
     const { user } = useContext(UserContext) as IUserContext;
 
+    // Message loading
+    const [loading, setLoading] = useState<boolean | null>(null);
+
     // Fetch apple emoji
     useEffect(() => {
         fetch("https://cdn.jsdelivr.net/npm/@emoji-mart/data/sets/14/apple.json")
@@ -69,7 +78,7 @@ function MessageSideOfChat({
             .then((json) => setEmojiData(json));
     }, []);
 
-    // Fetch messages from server
+    // Fetch 20 messages from server =======================================================================
     useLayoutEffect(() => {
         const fetchMessages = async () => {
             try {
@@ -79,8 +88,6 @@ function MessageSideOfChat({
                 );
 
                 if (resp && resp.status === 200) {
-                    console.log(resp.data.data);
-
                     // Group all messages
                     const messages: Message[] = resp.data.data.map((msg: any) => ({
                         content: "text",
@@ -109,15 +116,83 @@ function MessageSideOfChat({
         return () => { };
     }, [selectedUser]);
 
-    // Scroll down when sending a messgae
+    // Emmit event for loading previous 20 messages on scroll, with socket io ==============================
+    const chatContainerRef = useRef(null);
+
+    const handleScroll = () => {
+        var container = chatContainerRef.current;
+
+        // Check if scroll is at top only when we scroll, not on inital load
+        if (
+            selectedChat.messages.length &&
+            container &&
+            (container as any).scrollTop === 0
+        ) {
+            setLoading(true);
+            if ((container as any).scrollTop === 0) {
+                setTimeout(() => {
+                    loadMoreMessages(
+                        user?._id as string,
+                        selectedChat.chatId,
+                        selectedChat.messages.length
+                    );
+                }, 500);
+            }
+        }
+    };
+
+    // Listen for loaded messages on scroll ================================================================
+    useEffect(() => {
+        loadedMoreMessages(
+            user?._id as string,
+            selectedChat.chatId,
+            (loadedMessages: any) => {
+                // Format messages
+                const messages: Message[] = loadedMessages.map((msg: any) => ({
+                    content: "text",
+                    status: user?._id === msg.senderId ? "sent" : "received",
+                    message: msg.message,
+                    createdAt: new Date(msg.createdAt).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                    }),
+                }));
+
+                // Update chat with new messages
+                setSelectedChat((prev) => ({
+                    ...prev,
+                    messages: [...messages, ...(prev?.messages || [])],
+                }));
+
+                setLoading(null);
+
+                // Keep scroller as it is
+                let container = chatContainerRef.current;
+                if (container) {
+                    (container as any).scrollTop += 15 * messages.length;
+                }
+            }
+        );
+
+        return () => {
+            socket.off("loadedMoreMessages");
+        };
+    }, [selectedUser]);
+
+    // Scroll down when sending a new messgae ==============================================================
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-    useLayoutEffect(() => {
-        messagesEndRef.current?.scrollIntoView({
-            behavior: "auto",
+    useEffect(() => {
+        if (!messagesEndRef.current) return;
+
+        messagesEndRef.current.scrollIntoView({
+            behavior: "smooth",
             block: "start",
         });
-    }, [selectedChat]);
+    }, [selectedChat.messages[selectedChat.messages.length - 1]]); // When new messages comes at last
+
+    // =====================================================================================================
 
     return (
         <div
@@ -179,16 +254,30 @@ function MessageSideOfChat({
                     <div className="w-full h-full absolute z-0 top-0 left-0 bg-white/10 dark:bg-black/90"></div>
 
                     {/* List of messages */}
-                    <div className="relative z-10 p-5 px-[68px] space-y-1 flex flex-col overflow-y-auto">
-                        {selectedChat &&
-                            selectedChat.messages.length > 0 &&
-                            selectedChat.messages.map((msg, index) => {
+                    {selectedChat && selectedChat.messages.length > 0 && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0 }}
+                            ref={chatContainerRef}
+                            onScroll={handleScroll}
+                            className="relative z-10 p-5 px-[68px] space-y-1 flex flex-col overflow-y-auto"
+                        >
+                            {/* Loader */}
+
+                            <div className="p-3 absolute top-0 left-[50%] translate-x-[-50%]">
+                                {loading === true && (
+                                    <Loader2 className="w-5 h-5 text-foreground animate-spin" />
+                                )}
+                            </div>
+
+                            {/* Text card or Media card */}
+                            {selectedChat.messages.map((msg, index) => {
                                 if (msg.content === "text") {
                                     return (
                                         <TextCard
                                             key={index}
                                             msg={msg}
-                                            index={selectedChat.messages.length - 1 - index}
                                             className={cn(
                                                 msg.status === "sent"
                                                     ? "self-end bg-[#d9fdd3] dark:bg-[#005c4b]"
@@ -201,7 +290,6 @@ function MessageSideOfChat({
                                         <MediaCard
                                             key={index}
                                             msg={msg}
-                                            index={selectedChat.messages.length - 1 - index}
                                             className={cn(
                                                 msg.status === "sent"
                                                     ? "self-end bg-[#d9fdd3] dark:bg-[#005c4b]"
@@ -212,9 +300,10 @@ function MessageSideOfChat({
                                 }
                             })}
 
-                        {/* Scroll to bottom */}
-                        <div className="mt-5" ref={messagesEndRef}></div>
-                    </div>
+                            {/* Scroll to bottom */}
+                            <div className="mt-5" ref={messagesEndRef}></div>
+                        </motion.div>
+                    )}
                 </div>
             </div>
 
@@ -228,8 +317,14 @@ function MessageSideOfChat({
                 }}
                 className="p-5 px-5 flex gap-2 items-center border-t bg-background relative z-10"
             >
-                {/* Pin */}
-                <IconButton action={false} Icon={Paperclip} />
+                {/* Paper clip */}
+                <PaperClip
+                    setUser={setUser}
+                    selectedChat={selectedChat}
+                    setSelectedChat={setSelectedChat}
+                    selectedUser={selectedUser}
+                    setSelectedUser={setSelectedUser}
+                />
 
                 {/* Input */}
                 <div className="relative flex-1 flex items-center">

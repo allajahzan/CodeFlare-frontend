@@ -30,7 +30,7 @@ export interface Chat {
     messages: Message[];
 }
 
-// Chat page Component
+// Chat Component
 function Chat() {
     // Emoji picker
     const [showPicker, setShowPicker] = useState<boolean>(false);
@@ -49,7 +49,7 @@ function Chat() {
     // User context
     const { user } = useContext(UserContext) as IUserContext;
 
-    // Get chats from server
+    // Get users chat from server ==============================================================================
     useLayoutEffect(() => {
         const fetchChats = async () => {
             try {
@@ -62,7 +62,7 @@ function Chat() {
                         // Formatted user chats
                         const formattedUserChats: IUserChat[] = chat.map((chat: any) => {
                             return {
-                                chatId: chat.chat._id,
+                                chatId: chat._id,
                                 _id:
                                     chat.sender._id === user?._id
                                         ? chat.receiver._id
@@ -84,15 +84,12 @@ function Chat() {
                                         ? chat.receiver.profilePic
                                         : chat.sender.profilePic,
                                 content: "text",
-                                lastMessage: chat.chat.lastMessage,
-                                updatedAt: new Date(chat.chat.updatedAt).toLocaleTimeString(
-                                    [],
-                                    {
-                                        hour: "2-digit",
-                                        minute: "2-digit",
-                                        hour12: true,
-                                    }
-                                ),
+                                lastMessage: chat.lastMessage,
+                                updatedAt: new Date(chat.updatedAt).toLocaleTimeString([], {
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    hour12: true,
+                                }),
                             };
                         });
 
@@ -108,7 +105,7 @@ function Chat() {
         fetchChats();
     }, []);
 
-    // Get new users-chatId from socket
+    // Get new users-chatId from socket ===================================================================
     useEffect(() => {
         ListenForChatId(user?._id as string, (chat) => {
             // Update chatId
@@ -127,7 +124,7 @@ function Chat() {
         };
     }, [selectedUser]);
 
-    // Listen for new messages
+    // Listen new messages ============================================================================
     useEffect(() => {
         listenForMessages(user?._id as string, (message) => {
             console.log(message.message + "LISTENING MESSAGES");
@@ -187,7 +184,7 @@ function Chat() {
         };
     }, []);
 
-    // Send private messages
+    // Send new messages ==============================================================================
     const sendMessage = () => {
         // Send message to socket
         sendPrivateMessage(
@@ -245,6 +242,8 @@ function Chat() {
         setMessage("");
     };
 
+    // ====================================================================================================
+
     return (
         <div
             onClick={() => showPicker && setShowPicker(false)}
@@ -262,12 +261,14 @@ function Chat() {
             {/* Right side */}
             {selectedUser && (
                 <MessageSideOfChat
+                    setUser={setUser}
                     selectedUser={selectedUser}
+                    setSelectedUser={setSelectedUser}
+                    selectedChat={selectedChat as Chat}
+                    setSelectedChat={setSelectedChat}
                     message={message}
                     setMessage={setMessage}
                     sendMessage={sendMessage}
-                    selectedChat={selectedChat as Chat}
-                    setSelectedChat={setSelectedChat}
                     showPicker={showPicker}
                     setShowPicker={setShowPicker}
                 />

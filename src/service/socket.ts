@@ -78,4 +78,35 @@ export const ListenForChatId = (
     });
 };
 
+/**
+ * Emits a "loadMoreMessages" event to the socket server with the provided chatId and skip value.
+ * @param chatId - The ID of the chat for which more messages are to be loaded.
+ * @param skip - The number of messages to skip for pagination.
+ */
+export const loadMoreMessages = (
+    userId: string,
+    chatId: string,
+    skip: number
+) => {
+    socket.emit("loadMoreMessages", { userId, chatId, skip });
+};
+
+/**
+ * Listens for "loadedMoreMessages" events from the socket server and triggers the provided callback
+ * when more messages are loaded for the provided chatId.
+ * @param chatId - The ID of the chat for which more messages are to be loaded.
+ * @param callback - The callback function to be triggered when more messages are loaded.
+ */
+export const loadedMoreMessages = (
+    userId: string,
+    chatId: string,
+    callback: ({ }) => void
+) => {
+    socket.on("loadedMoreMessages", (data) => {
+        if (chatId === data.chatId && userId === data.userId) {
+            callback(data.messages);
+        }
+    });
+};
+
 export default socket;
