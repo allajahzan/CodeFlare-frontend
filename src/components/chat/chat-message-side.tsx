@@ -219,10 +219,11 @@ function MessageSideOfChat({
                         selectedUser={selectedUser as IUserChat}
                         button={
                             <motion.div
+                                key={selectedUser?.isOnline as any}
                                 initial={{ scale: 0.5, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
                                 transition={{ delay: 0.2 }}
-                                className="cursor-pointer"
+                                className="cursor-pointer relative"
                             >
                                 <Avatar className="bg-background w-16 h-16 border-2">
                                     {false && (
@@ -232,12 +233,19 @@ function MessageSideOfChat({
                                         <img src={profile || "/placeholder.svg"} alt="" />
                                     </AvatarFallback>
                                 </Avatar>
+
+                                <div
+                                    className={cn(
+                                        "absolute bottom-1 right-0 h-4 w-4 rounded-full border-2",
+                                        selectedUser?.isOnline ? "bg-green-600" : "opacity-0"
+                                    )}
+                                ></div>
                             </motion.div>
                         }
                     />
                     <div className="flex-1 flex flex-col justify-center gap-0 min-w-0 truncate">
                         {/* Name and role */}
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 transition-all duration-300">
                             <p className="text-lg text-foreground font-semibold truncate">
                                 {selectedUser?.name}
                             </p>
@@ -250,9 +258,18 @@ function MessageSideOfChat({
                         </div>
 
                         {/* Status */}
-                        <p className="text-sm text-muted-foreground font-medium truncate tracking-wide flex items-center gap-2">
-                            {"Online"}
-                        </p>
+                        <motion.p
+                            key={selectedUser?.isOnline as any}
+                            initial={{ scale: 1, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{ delay: 0.2 }}
+                            className={cn(
+                                "w-fit text-sm font-medium truncate tracking-wide flex items-center gap-2",
+                                selectedUser?.isOnline ? "text-green-600" : "text-foreground"
+                            )}
+                        >
+                            {selectedUser?.isOnline ? "Online" : "Offline"}
+                        </motion.p>
                     </div>
                 </div>
             </div>

@@ -6,6 +6,7 @@ import { ReactNode, useContext } from "react";
 import { IUserChat } from "./user-contact-sheet";
 import { Chat } from "./chat";
 import { IUserContext, UserContext } from "@/context/user-context";
+import { userOnline } from "@/service/socket";
 
 // Interface for Props
 interface PropsType {
@@ -37,10 +38,11 @@ function UserCard({
 
     // Handle select user chat
     const handleSelectUserChat = (selectedUser: IUserChat) => {
-        console.log(selectedUser);
-        
         // Close sheet
         setIsOpen(false);
+
+        // Check if receiver is in online
+        userOnline(selectedUser._id);
 
         // Set user
         setSelectedUser(selectedUser as IUserChat);
@@ -72,7 +74,10 @@ function UserCard({
     return (
         <div
             onClick={() => handleSelectUserChat(user)}
-            className={cn("px-5 dark:bg-transparent hover:bg-muted dark:hover:bg-sidebar", className)}
+            className={cn(
+                "px-5 dark:bg-transparent hover:bg-muted dark:hover:bg-sidebar",
+                className
+            )}
         >
             <div className="flex items-center gap-3">
                 {/* Avatar profile pic */}

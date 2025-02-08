@@ -11,6 +11,24 @@ export const registerUser = (userId: string) => {
 };
 
 /**
+ * Emits a "userOnline" event to the socket server to check the online status of a user.
+ * @param receiverId - The ID of the user to check the online status of.
+ */
+export const userOnline = (receiverId: string) => {
+    socket.emit("userOnline", receiverId);
+};
+
+/**
+ * Listens for "userOnline" events from the socket server and executes the given callback.
+ * @param callback - A function to be called with the online status of the user.
+ */
+export const listenUserOnline = (callback: (data : {receiverId: string, isOnline: boolean}) => void) => {
+    socket.on("userOnline", (data) => {
+        callback(data);
+    });
+};
+
+/**
  * Emits a "sendPrivateMessage" event to the socket server with the provided senderId, receiverId, and message.
  * @param senderId - The ID of the user who sent the message.
  * @param receiverId - The ID of the user who received the message.

@@ -6,6 +6,7 @@ import MessageSideOfChat from "./chat-message-side";
 import { IUserChat } from "./user-contact-sheet";
 import socket, {
     chatInfo,
+    listenUserOnline,
     receivePrivateMessage,
     sendPrivateMessage,
 } from "@/service/socket";
@@ -48,6 +49,23 @@ function Chat() {
 
     // User context
     const { user } = useContext(UserContext) as IUserContext;
+
+    // Get user online status =================================================================================
+    useEffect(() => {
+        listenUserOnline((data) => {
+            setSelectedUser((prevChat: IUserChat | null) => {
+                if (prevChat && prevChat._id === data.receiverId) {
+                    return { ...prevChat, isOnline: data.isOnline };
+                } else {
+                    return prevChat;
+                }
+            });
+        });
+
+        return () => {
+            socket.off("userOnline");
+        };
+    }, []);
 
     // Get users chat from server ==============================================================================
     useLayoutEffect(() => {
@@ -105,17 +123,17 @@ function Chat() {
         fetchChats();
     }, []);
 
-    // Get new users-chatInfo from socket ===================================================================
+    // Get users-chatInfo from socket ===================================================================
     useEffect(() => {
         chatInfo(user?._id as string, (chat) => {
             console.log(chat);
-            
+
             // Update chatId
             setUser((prevUsers: IUserChat[]) => {
                 return prevUsers.map((u) => {
                     if (u._id === chat.senderId || u._id === chat.receiverId) {
-                        console.log('yes');
-                        
+                        console.log("yes");
+
                         return { ...u, chatId: chat.chatId };
                     }
                     return u;

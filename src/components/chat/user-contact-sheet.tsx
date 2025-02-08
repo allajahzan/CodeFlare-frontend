@@ -24,6 +24,7 @@ export interface IUserChat {
     content: "text" | "image" | "file";
     lastMessage: string;
     updatedAt: string;
+    isOnline?: boolean; 
 }
 
 // Interface for Props
