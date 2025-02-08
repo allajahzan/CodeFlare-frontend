@@ -29,7 +29,7 @@ function UserNameCard({ data }: PropsType) {
                     </AvatarFallback>
                 </Avatar>
             </motion.div>
-            <div className="flex-1 flex flex-col justify-center gap-2 min-w-0 truncate">
+            <div className="flex-1 flex-col justify-center gap-2 min-w-0">
                 <div className="flex items-center gap-2">
                     <p className="text-lg text-foreground font-semibold truncate">
                         {data.name}
@@ -38,7 +38,7 @@ function UserNameCard({ data }: PropsType) {
                         {data.role[0].toUpperCase() + data.role.slice(1)}
                     </Badge>
                 </div>
-                <p className="text-sm text-muted-foreground font-medium truncate tracking-wide flex items-center gap-1">
+                <p className="text-sm text-muted-foreground font-medium  tracking-wide flex items-center gap-1 w-full truncate">
                     <Mail className="w-4 h-4 flex-shrink-0" />
                     {data.email}
                 </p>

@@ -11,6 +11,7 @@ enum ApiEndpoints {
     // User CRUD APIs - user service
     GET_USERS = "/user/users",
     USER = "/user",
+    USER_STATUS = "/user/status",
 
     // Admin APIs - admin service
     ADMIN = "/admin",

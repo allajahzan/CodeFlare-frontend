@@ -101,7 +101,7 @@ function UserDetails({
                                         setStudents={setUsers as any}
                                         setSelectedStudent={setSelectedUser as any}
                                         selecteStudent={selectedUser as Student}
-                                        batches={(user as User).batches}
+                                        batches={(user as any).batches}
                                     />
                                 )}
                             </div>

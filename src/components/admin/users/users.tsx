@@ -11,6 +11,7 @@ import {
     UserRoundCheck,
     UserRoundMinus,
     Send,
+    Loader,
 } from "lucide-react";
 import {
     DropdownMenu,
@@ -29,13 +30,14 @@ import { cn } from "@/lib/utils";
 import DrawerUsersList from "@/components/common/user/drawer-users-list";
 import UserDetails from "@/components/common/user/user-details";
 import AddUserSheet from "@/components/admin/users/sheet-add-user";
-import { fetchData } from "@/service/api-service";
+import { fetchData, patchData } from "@/service/api-service";
 import { handleCustomError } from "@/utils/error";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { User } from "@/types/admin";
 import { Student } from "@/types/coordinator";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
+import { toast } from "@/hooks/use-toast";
 
 // Interface for Props
 interface PropsType {
@@ -48,9 +50,12 @@ function Users({ setDrawerOpen }: PropsType) {
     // Users related states
     const [newUser, setNewUser] = useState<User | null>(null);
     const [users, setUsers] = useState<User[] | []>([]);
+    // const [filteredUsers, setFilteredUsers] = useState<User[] | []>([]);
     const [selectedUser, setSelectedUser] = useState<User | Student | null>(null);
     const [status, setStatus] = useState<boolean>(false);
     const [fetching, setFetching] = useState<boolean>(false);
+
+    const [changingStatus, setChangingStatus] = useState<boolean>(false);
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
@@ -88,8 +93,59 @@ function Users({ setDrawerOpen }: PropsType) {
     //         return matchesStatus && matchesSearch;
     //     });
 
-    //     setUsers(filteredUsers);
-    // }, [search, status]);
+    //     setFilteredUsers(filteredUsers);
+    // }, [search, status, users]);
+
+    // Handle blocking-unblocking user
+    const handleBlock = async (user: User) => {
+        try {
+            // Set blocking state
+            setChangingStatus(true);
+
+            // Send request
+            const resp = await patchData(
+                ApiEndpoints.USER_STATUS + `/${user._id}`,
+                {},
+                role
+            );
+
+            // Success response
+            if (resp && resp.status === 200) {
+                setTimeout(() => {
+                    // Update user in users list
+                    setUsers((prevUsers: User[]) => {
+                        return prevUsers.map((u) => {
+                            if (u._id === user._id) {
+                                return { ...u, isBlock: !u.isBlock };
+                            }
+                            return u;
+                        });
+                    });
+
+                    // Update user in selected user, if selected
+                    setSelectedUser((prevUser: User | Student | null) => {
+                        if (prevUser?._id === user._id) {
+                            return { ...prevUser, isBlock: !prevUser.isBlock };
+                        }
+                        return prevUser;
+                    });
+
+                    toast({
+                        title: user.isBlock
+                            ? "You have unblocked this user"
+                            : "You have blocked this user",
+                    });
+
+                    setChangingStatus(false);
+                }, 1000);
+            }
+        } catch (err: unknown) {
+            setTimeout(() => {
+                setChangingStatus(false);
+                handleCustomError(err);
+            }, 1000);
+        }
+    };
 
     // Add new user
     useEffect(() => {
@@ -108,10 +164,7 @@ function Users({ setDrawerOpen }: PropsType) {
                 setFetching(true);
 
                 // Send request
-                const resp = await fetchData(
-                    ApiEndpoints.GET_USERS,
-                    role
-                );
+                const resp = await fetchData(ApiEndpoints.GET_USERS, role);
 
                 const users = resp?.data.data;
 
@@ -264,13 +317,30 @@ function Users({ setDrawerOpen }: PropsType) {
                                                         View Profile
                                                     </DropdownMenuItem>
                                                     <DropdownMenuSeparator />
-                                                    <DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        disabled={changingStatus}
+                                                        onClick={() => handleBlock(user)}
+                                                        onSelect={(e) => e.preventDefault()}
+                                                        className="text-center"
+                                                    >
                                                         {user.isBlock ? (
-                                                            <UserRoundCheck />
+                                                            changingStatus ? (
+                                                                <Loader className="w-4 h-5 text-foreground animate-spin" />
+                                                            ) : (
+                                                                <UserRoundCheck />
+                                                            )
+                                                        ) : changingStatus ? (
+                                                            <Loader className="w-4 h-5 text-foreground animate-spin" />
                                                         ) : (
                                                             <UserRoundMinus />
                                                         )}
-                                                        {user.isBlock ? "Unblock" : "Block"}
+                                                        {user.isBlock
+                                                            ? changingStatus
+                                                                ? "Unblocking..."
+                                                                : "Unblock"
+                                                            : changingStatus
+                                                                ? "Blocking..."
+                                                                : "Block"}
                                                     </DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
