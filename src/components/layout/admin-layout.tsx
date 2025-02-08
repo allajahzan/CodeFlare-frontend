@@ -9,11 +9,13 @@ import {
     FileUser,
     Globe,
     LayoutDashboard,
+    MessageCircleMore,
     UsersRound,
 } from "lucide-react";
 import Shadow from "@/components/ui/shadow";
 import { useLayoutEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
+import AppRoutes from "@/constants/app-routes";
 
 // Interface for Props
 interface PropsType {
@@ -46,14 +48,15 @@ function AdminLayout({ isDrawerOpen }: PropsType) {
     // sidebar items
     const sideBarItems = useMemo(
         () => [
-            { path: "/admin/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-            { path: "/admin/users", icon: UsersRound, label: "Users" },
+            { path: AppRoutes.DASHBOARD, icon: LayoutDashboard, label: "Dashboard" },
+            { path: AppRoutes.ADMIN_USERS, icon: UsersRound, label: "Users" },
+            { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
             ...(isSmall
-                ? [{ path: "/community", icon: Globe, label: "Community" }]
+                ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
                 : []),
-            { path: "/admin/weeks", icon: CalendarDays, label: "Weeks" },
-            { path: "/admin/batches", icon: FileUser, label: "Batches" },
-            { path: "/admin/invoices", icon: CreditCard, label: "Invoices" },
+            { path: AppRoutes.ADMIN_WEEKS, icon: CalendarDays, label: "Weeks" },
+            { path: AppRoutes.ADMIN_BATCHES, icon: FileUser, label: "Batches" },
+            { path: AppRoutes.ADMIN_INVOICES, icon: CreditCard, label: "Invoices" },
         ],
         [isSmall]
     );
