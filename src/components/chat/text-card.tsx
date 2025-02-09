@@ -1,4 +1,4 @@
-import { Check, CheckCheck, ChevronDown } from "lucide-react";
+import { CheckCheck, ChevronDown } from "lucide-react";
 import { Message } from "./chat";
 import { cn } from "@/lib/utils"
 

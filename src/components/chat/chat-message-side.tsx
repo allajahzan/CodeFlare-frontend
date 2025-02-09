@@ -26,7 +26,12 @@ import ApiEndpoints from "@/constants/api-endpoints";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import { handleCustomError } from "@/utils/error";
-import socket, { loadedMessages, loadMoreMessages } from "@/service/socket";
+import socket, {
+    listenUserTyping,
+    loadedMessages,
+    loadMoreMessages,
+    userTyping,
+} from "@/service/socket";
 import PaperClip from "./paperClip";
 
 // Iterface for Props
@@ -70,6 +75,9 @@ function MessageSideOfChat({
 
     // Message loading
     const [loading, setLoading] = useState<boolean | null>(null);
+
+    // Message typing
+    const [typing, setTyping] = useState<boolean>(false);
 
     // Fetch apple emoji
     useEffect(() => {
@@ -204,6 +212,27 @@ function MessageSideOfChat({
         });
     }, [selectedChat.messages[selectedChat.messages.length - 1]]); // When new messages comes at last
 
+    // Emit user typing event ==============================================================================
+    useEffect(() => {
+        if (message.trim().length > 0) {
+            userTyping(user?._id as string, selectedUser?._id as string, true);
+        } else {
+            userTyping(user?._id as string, selectedUser?._id as string, false);
+        }
+    }, [message]);
+
+    // Listen for user typing event ========================================================================
+    useEffect(() => {
+        listenUserTyping((data) => {
+            if (data.senderId === selectedUser?._id) {
+                setTyping(data.isTyping);
+            }
+        });
+        return () => {
+            socket.off("userTyping");
+        };
+    }, [message]);
+
     // =====================================================================================================
 
     return (
@@ -237,7 +266,7 @@ function MessageSideOfChat({
                                 <div
                                     className={cn(
                                         "absolute bottom-1 right-0 h-4 w-4 rounded-full border-2",
-                                        selectedUser?.isOnline ? "bg-green-600" : "opacity-0"
+                                        selectedUser?.isOnline ? "bg-foreground" : "opacity-0"
                                     )}
                                 ></div>
                             </motion.div>
@@ -264,11 +293,16 @@ function MessageSideOfChat({
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ delay: 0.2 }}
                             className={cn(
-                                "w-fit text-sm font-medium truncate tracking-wide flex items-center gap-2",
-                                selectedUser?.isOnline ? "text-green-600" : "text-foreground"
+                                "w-fit text-sm text-foreground font-medium truncate tracking-wide flex items-center gap-2"
+                                // selectedUser?.isOnline ? "text-green-600" : "text-foreground"
                             )}
                         >
-                            {selectedUser?.isOnline ? "Online" : "Offline"}
+                            {/* Typing | Online | Offline */}
+                            {typing
+                                ? "typing..."
+                                : selectedUser?.isOnline
+                                    ? "online"
+                                    : "offline"}
                         </motion.p>
                     </div>
                 </div>

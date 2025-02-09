@@ -22,8 +22,26 @@ export const userOnline = (receiverId: string) => {
  * Listens for "userOnline" events from the socket server and executes the given callback.
  * @param callback - A function to be called with the online status of the user.
  */
-export const listenUserOnline = (callback: (data : {receiverId: string, isOnline: boolean}) => void) => {
+export const listenUserOnline = (
+    callback: (data: { receiverId: string; isOnline: boolean }) => void
+) => {
     socket.on("userOnline", (data) => {
+        callback(data);
+    });
+};
+
+export const userTyping = (
+    senderId: string,
+    receiverId: string,
+    isTyping: boolean
+) => {
+    socket.emit("userTyping", { senderId, receiverId, isTyping });
+};
+
+export const listenUserTyping = (
+    callback: (data: { senderId: string; isTyping: boolean }) => void
+) => {
+    socket.on("userTyping", (data) => {
         callback(data);
     });
 };
