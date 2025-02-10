@@ -9,9 +9,10 @@ interface PropsType {
     className?: string;
 }
 
-// Media card Component
+// Media Card Component
 function MediaCard({ msg, className }: PropsType) {
     const [loading, setLoading] = useState<boolean>(true);
+
     return (
         <div
             className={cn(
@@ -19,32 +20,40 @@ function MediaCard({ msg, className }: PropsType) {
                 className
             )}
         >
-            {/* Image */}
+            {/* Loader while image loads */}
             {loading && (
-                <div className="w-full h-full backdrop-blur-sm max-w-[250px] max-h-[400px] flex items-center justify-center">
+                <div className="w-[225px] h-[300px] flex items-center justify-center bg-background dark:bg-muted rounded-lg">
                     <Loader2 className="w-5 h-5 text-foreground animate-spin" />
                 </div>
             )}
 
+            {/* Image (hidden while loading) */}
             <img
-                className="w-full h-full max-w-[250px] max-h-[400px] object-cover rounded-lg"
+                className={cn(
+                    "w-[225px] h-[300px] object-cover rounded-lg transition-opacity duration-300",
+                    loading ? "hidden" : "block"
+                )}
                 src={msg.message}
-                alt=""
+                alt="media"
                 onLoad={() => setLoading(false)}
             />
 
-            {/* Time */}
+            {/* Time and Status (shown only after image loads) */}
             {!loading && (
                 <small className="w-full absolute p-2 px-3 right-0 bottom-0 flex items-center justify-end gap-1 text-[10px] text-white font-semibold">
                     {msg.createdAt}
-                    {msg.status === 'sent' && <CheckCheck className="w-4 h-4 text-blue-400" />}
+                    {msg.status === "sent" && (
+                        <CheckCheck className="w-4 h-4 text-blue-400" />
+                    )}
                 </small>
             )}
 
-            {/* Options */}
-            <div className="absolute top-0 right-0 p-3 group-hover:visible invisible">
-                <ChevronDown className="w-5 h-5 text-white" />
-            </div>
+            {/* Options (hidden while loading) */}
+            {!loading && (
+                <div className="absolute top-0 right-0 p-3 group-hover:visible invisible">
+                    <ChevronDown className="w-5 h-5 text-white" />
+                </div>
+            )}
         </div>
     );
 }

@@ -39,10 +39,17 @@ export const userTyping = (
 };
 
 export const listenUserTyping = (
-    callback: (data: { senderId: string; isTyping: boolean }) => void
+    receiverId: string,
+    callback: (data: {
+        senderId: string;
+        receiverId: string;
+        isTyping: boolean;
+    }) => void
 ) => {
     socket.on("userTyping", (data) => {
-        callback(data);
+        if (data.receiverId === receiverId) {
+            callback(data);
+        }
     });
 };
 

@@ -77,7 +77,9 @@ function MessageSideOfChat({
     const [loading, setLoading] = useState<boolean | null>(null);
 
     // Message typing
-    const [typing, setTyping] = useState<boolean>(false);
+    const [typing, setTyping] = useState<{ senderId: string; isTyping: boolean }>(
+        { senderId: "", isTyping: false }
+    );
 
     // Fetch apple emoji
     useEffect(() => {
@@ -214,24 +216,26 @@ function MessageSideOfChat({
 
     // Emit user typing event ==============================================================================
     useEffect(() => {
-        if (message.trim().length > 0) {
-            userTyping(user?._id as string, selectedUser?._id as string, true);
-        } else {
+        const typing = message.trim().length > 0;
+        userTyping(user?._id as string, selectedUser?._id as string, typing);
+
+        return () => {
             userTyping(user?._id as string, selectedUser?._id as string, false);
-        }
-    }, [message]);
+        };
+    }, [message, selectedUser]);
 
     // Listen for user typing event ========================================================================
     useEffect(() => {
-        listenUserTyping((data) => {
+        listenUserTyping(user?._id as string, (data) => {
             if (data.senderId === selectedUser?._id) {
-                setTyping(data.isTyping);
+                setTyping(data);
             }
         });
         return () => {
+            setTyping({ senderId: "", isTyping: false });
             socket.off("userTyping");
         };
-    }, [message]);
+    }, [selectedUser]);
 
     // =====================================================================================================
 
@@ -248,10 +252,10 @@ function MessageSideOfChat({
                         selectedUser={selectedUser as IUserChat}
                         button={
                             <motion.div
-                                key={selectedUser?.isOnline as any}
+                                key={selectedUser?._id}
                                 initial={{ scale: 0.5, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
-                                transition={{ delay: 0.2 }}
+                                transition={{ duration: 0.2 }}
                                 className="cursor-pointer relative"
                             >
                                 <Avatar className="bg-background w-16 h-16 border-2">
@@ -259,19 +263,24 @@ function MessageSideOfChat({
                                         <AvatarImage src={"allaj"} className="object-cover" />
                                     )}
                                     <AvatarFallback className="bg-transparent">
-                                        <img src={profile || "/placeholder.svg"} alt="" />
+                                        <img src={profile} alt="" />
                                     </AvatarFallback>
                                 </Avatar>
 
-                                <div
-                                    className={cn(
-                                        "absolute bottom-1 right-0 h-4 w-4 rounded-full border-2",
-                                        selectedUser?.isOnline ? "bg-foreground" : "opacity-0"
-                                    )}
-                                ></div>
+                                {/* Online Indicator */}
+                                <motion.div
+                                    initial={{ scale: 0, opacity: 0 }}
+                                    animate={{
+                                        scale: selectedUser?.isOnline ? 1 : 0,
+                                        opacity: selectedUser?.isOnline ? 1 : 0,
+                                    }}
+                                    transition={{ duration: 0.2 }}
+                                    className="absolute bottom-2 -right-1 h-5 w-5 rounded-full border-4 bg-green-400"
+                                ></motion.div>
                             </motion.div>
                         }
                     />
+
                     <div className="flex-1 flex flex-col justify-center gap-0 min-w-0 truncate">
                         {/* Name and role */}
                         <div className="flex items-center gap-2 transition-all duration-300">
@@ -289,16 +298,20 @@ function MessageSideOfChat({
                         {/* Status */}
                         <motion.p
                             key={selectedUser?.isOnline as any}
-                            initial={{ scale: 1, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ delay: 0.2 }}
-                            className={cn(
-                                "w-fit text-sm text-foreground font-medium truncate tracking-wide flex items-center gap-2"
-                                // selectedUser?.isOnline ? "text-green-600" : "text-foreground"
-                            )}
+                            initial={{
+                                opacity:
+                                    typing.senderId === selectedUser?._id && typing.isTyping
+                                        ? 1
+                                        : 0,
+                            }}
+                            animate={{
+                                opacity: 1,
+                            }}
+                            transition={{ delay: 0.1 }}
+                            className="w-fit text-sm text-foreground font-medium truncate tracking-wide flex items-center gap-2"
                         >
                             {/* Typing | Online | Offline */}
-                            {typing
+                            {typing.senderId === selectedUser?._id && typing.isTyping
                                 ? "typing..."
                                 : selectedUser?.isOnline
                                     ? "online"
