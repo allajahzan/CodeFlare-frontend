@@ -54,22 +54,26 @@ function UserCard({
         userOnline(selectedUser._id);
 
         // Set user
-        setSelectedUser(() => {
-            if (!selectedUser) return null; 
+        if (users) {
+            setSelectedUser(() => {
+                if (!selectedUser) return null;
 
-            const matchedUser = (users as IUserChat[]).find(
-                (user) => user._id === selectedUser._id
-            );
+                const matchedUser = (users as IUserChat[]).find(
+                    (user) => user._id === selectedUser._id
+                );
 
-            return matchedUser
-                ? {
-                    ...selectedUser,
-                    chatId: matchedUser.chatId,
-                    lastMessage: matchedUser.lastMessage,
-                    updatedAt: matchedUser.updatedAt,
-                }
-                : selectedUser;
-        });
+                return matchedUser
+                    ? {
+                        ...selectedUser,
+                        chatId: matchedUser.chatId,
+                        lastMessage: matchedUser.lastMessage,
+                        updatedAt: matchedUser.updatedAt,
+                    }
+                    : selectedUser;
+            });
+        } else {
+            setSelectedUser(selectedUser);
+        }
 
         // Map chat
         const chat: Chat = {

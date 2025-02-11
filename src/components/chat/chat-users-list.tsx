@@ -1,6 +1,6 @@
 import {
-    ArrowLeft,
     Camera,
+    ChevronLeft,
     EllipsisVertical,
     Filter,
     MessageCirclePlusIcon,
@@ -44,18 +44,16 @@ function UsersListOfChat({
     return (
         <div
             className={cn(
-                "sticky top-0 z-50 h-[calc(100vh)] flex flex-col gap-5 p-0 pt-5 bg-background",
+                "sticky top-0 z-50 h-[calc(100vh)] flex flex-col gap-5 p-0 bg-background",
                 "border-r border-border shadow-sm dark:shadow-customBorder dark:shadow-inner transition-all duration-0",
-                isUsersListSideOpen
-                    ? "translate-x-0"
-                    : "-translate-x-full"
+                isUsersListSideOpen ? "translate-x-0" : "-translate-x-full"
             )}
         >
             {/* Header */}
-            <div className="flex items-center gap-2 px-5">
+            <div className="flex items-center gap-2 px-5 py-5">
                 {/* Go back */}
-                <button onClick={() => navigate(-1)} className="p-3">
-                    <ArrowLeft className="w-4 h-4 text-foreground" />
+                <button onClick={() => navigate("dashboard")} className="p-2">
+                    <ChevronLeft className="w-5 h-5 text-foreground" />
                 </button>
 
                 <p className="flex-1 text-2xl text-foreground font-bold">Chats</p>
