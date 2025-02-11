@@ -2,7 +2,7 @@ import UserProfileSheet from "./user-profile-sheet";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { motion } from "framer-motion";
 import { Badge } from "../ui/badge";
-import { Loader2, Mic, Send, Smile } from "lucide-react";
+import { ChevronLeft, Loader2, Mic, Send, Smile } from "lucide-react";
 import { Input } from "../ui/input";
 import profile from "@/assets/images/no-profile.svg";
 import Picker from "@emoji-mart/react";
@@ -46,6 +46,7 @@ interface PropsType {
     sendMessage: () => void;
     showPicker: boolean;
     setShowPicker: React.Dispatch<React.SetStateAction<boolean>>;
+    setUsersListSideOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // Messaege side Component
@@ -60,6 +61,7 @@ function MessageSideOfChat({
     sendMessage,
     showPicker,
     setShowPicker,
+    setUsersListSideOpen,
 }: PropsType) {
     // Emoji data
     const [emojiData, setEmojiData] = useState<null | any>(null);
@@ -81,52 +83,74 @@ function MessageSideOfChat({
         { senderId: "", isTyping: false }
     );
 
-    // Fetch apple emoji
+    // Screen size ========================================================================================
+    const [isSmall, setSmall] = useState<boolean>(false);
+
+    useLayoutEffect(() => {
+        const updateScreenSize = () => {
+            if (window.innerWidth < 767.2) {
+                setSmall(true);
+                setShowPicker(false);
+            } else {
+                setSmall(false);
+                setUsersListSideOpen(true);
+                setShowPicker(false);
+            }
+        };
+
+        updateScreenSize();
+        window.addEventListener("resize", updateScreenSize);
+        return () => window.removeEventListener("resize", updateScreenSize);
+    }, [isSmall]);
+
+    // Fetch apple emoji ==================================================================================
     useEffect(() => {
         fetch("https://cdn.jsdelivr.net/npm/@emoji-mart/data/sets/14/apple.json")
             .then((response) => response.json())
             .then((json) => setEmojiData(json));
     }, []);
 
-    // Fetch 20 messages from server =======================================================================
+    // Fetch messages initialy from server =================================================================
     useLayoutEffect(() => {
-        const fetchMessages = async () => {
-            try {
-                const resp = await fetchData(
-                    ApiEndpoints.MESSAGE + `/${selectedChat.chatId}`,
-                    role
-                );
+        setTimeout(() => {
+            const fetchMessages = async () => {
+                try {
+                    const resp = await fetchData(
+                        ApiEndpoints.MESSAGE + `/${selectedUser?.chatId}`,
+                        role
+                    );
 
-                if (resp && resp.status === 200) {
-                    // Group all messages
-                    const messages: Message[] = resp.data.data.map((msg: any) => ({
-                        content: msg.content,
-                        status: user?._id === msg.senderId ? "sent" : "received",
-                        message: msg.message,
-                        createdAt: new Date(msg.createdAt).toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: true,
-                        }),
-                    }));
+                    if (resp && resp.status === 200) {
+                        // Group all messages
+                        const messages: Message[] = resp.data.data.map((msg: any) => ({
+                            content: msg.content,
+                            status: user?._id === msg.senderId ? "sent" : "received",
+                            message: msg.message,
+                            createdAt: new Date(msg.createdAt).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: true,
+                            }),
+                        }));
 
-                    // Update chat with messages
-                    setSelectedChat((prev) => ({
-                        ...prev,
-                        messages: messages,
-                    }));
+                        // Update chat with messages
+                        setSelectedChat((prev) => ({
+                            ...prev,
+                            messages: messages,
+                        }));
+                    }
+                } catch (err: unknown) {
+                    handleCustomError(err);
                 }
-            } catch (err: unknown) {
-                handleCustomError(err);
-            }
-        };
+            };
 
-        selectedChat.chatId ? fetchMessages() : null;
+            selectedUser?.chatId ? fetchMessages() : null;
 
-        return () => { };
+            return () => { };
+        }, 0);
     }, [selectedUser]);
 
-    // Emmit event for loading previous 20 messages on scroll, with socket io ==============================
+    // Emmit event for loading previous 15 messages on scroll, with socket io ==============================
     const chatContainerRef = useRef(null);
     const loaderRef = useRef(null);
 
@@ -147,7 +171,7 @@ function MessageSideOfChat({
             setTimeout(() => {
                 loadMoreMessages(
                     user?._id as string,
-                    selectedChat.chatId,
+                    selectedUser?.chatId as string,
                     selectedChat.messages.length
                 );
             }, 500);
@@ -167,7 +191,7 @@ function MessageSideOfChat({
     useEffect(() => {
         loadedMessages(
             user?._id as string,
-            selectedChat.chatId,
+            selectedUser?.chatId as string,
             (loadedMessages: any) => {
                 // Format messages
                 const messages: Message[] = loadedMessages.map((msg: any) => ({
@@ -206,6 +230,7 @@ function MessageSideOfChat({
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
+        // If messageEndRef is null don't scroll
         if (!messagesEndRef.current) return;
 
         messagesEndRef.current.scrollIntoView({
@@ -241,15 +266,23 @@ function MessageSideOfChat({
 
     return (
         <div
-            className="relative h-screen flex flex-col overflow-hidden col-span-2
-                  shadow-sm dark:shadow-customBorder dark:shadow-inner"
+            className="absolute top-0 md:relative h-screen w-full flex flex-col overflow-hidden col-span-2 
+                shadow-sm dark:shadow-customBorder dark:shadow-inner"
         >
             {/* User name card */}
             <div className="px-5 py-3 border-b sticky top-0 z-10 bg-background">
                 <div className="flex items-center gap-3">
+                    {/* Back button */}
+                    <div
+                        onClick={() => setUsersListSideOpen(true)}
+                        className="block md:hidden p-2 cursor-pointer"
+                    >
+                        <ChevronLeft className="text-foreground w-5 h-5" />
+                    </div>
                     {/* Avatar profile pic as button for profile sheet */}
                     <UserProfileSheet
                         selectedUser={selectedUser as IUserChat}
+                        selectedChat={selectedChat}
                         button={
                             <motion.div
                                 key={selectedUser?._id}
@@ -259,7 +292,7 @@ function MessageSideOfChat({
                                 className="cursor-pointer relative"
                             >
                                 <Avatar className="bg-background w-16 h-16 border-2">
-                                    {false && (
+                                    {selectedUser?.profilePic && (
                                         <AvatarImage src={"allaj"} className="object-cover" />
                                     )}
                                     <AvatarFallback className="bg-transparent">
@@ -288,10 +321,10 @@ function MessageSideOfChat({
                                 {selectedUser?.name}
                             </p>
                             <Badge
-                                className="hidden lg:block relative text-xs text-white font-semibold
+                                className="relative text-xs text-white font-semibold
                              bg-zinc-900 dark:bg-muted hover:bg-zinc-900 rounded-full overflow-hidden"
                             >
-                                {"Admin"}
+                                {selectedUser?.role}
                             </Badge>
                         </div>
 
@@ -340,13 +373,15 @@ function MessageSideOfChat({
                             transition={{ delay: 0 }}
                             ref={chatContainerRef}
                             onScroll={handleScroll}
-                            className="relative z-10 p-5 px-[68px] space-y-1 flex flex-col overflow-y-auto no-scrollbar"
+                            className="relative z-10 p-5 md:px-[68px] transition-all duration-300 ease-in-out space-y-1 flex flex-col overflow-y-auto no-scrollbar"
                         >
                             {/* Loader */}
-
                             <div
                                 ref={loaderRef}
-                                className="p-5 absolute z-50 top-0 left-[50%] translate-x-[-50%]"
+                                className={cn(
+                                    "p-2 absolute z-50 top-5 left-[50%] translate-x-[-50%] rounded-lg",
+                                    loading ? "bg-background dark:bg-sidebar" : ""
+                                )}
                             >
                                 {loading === true && (
                                     <Loader2 className="w-5 h-5 text-foreground animate-spin" />
@@ -372,6 +407,7 @@ function MessageSideOfChat({
                                         <MediaCard
                                             key={index}
                                             msg={msg}
+                                            messagesEndRef={messagesEndRef}
                                             className={cn(
                                                 msg.status === "sent"
                                                     ? "self-end bg-[#d9fdd3] dark:bg-[#005c4b]"
@@ -431,7 +467,8 @@ function MessageSideOfChat({
             {showPicker && (
                 <div
                     onClick={(event) => event.stopPropagation()}
-                    className="absolute bottom-24 left-[68px] z-50 shadow-md rounded-lg overflow-hidden"
+                    className="absolute bottom-24 left-5 md:left-[68px] z-50 shadow-md rounded-lg overflow-hidden 
+                    w-fit h-fit"
                 >
                     <Picker
                         data={emojiData}

@@ -174,7 +174,7 @@ function Students({ setDrawerOpen }: PropsType) {
                                 </div>
                             }
                             setNewStudent={setNewStudent}
-                            batches={(user as User).batches}
+                            batches={(user as any).batches}
                         />
                     }
                 />

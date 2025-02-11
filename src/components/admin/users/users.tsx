@@ -25,7 +25,6 @@ import { NotFoundOrbit } from "@/components/animation/fallbacks";
 import UserList from "@/components/common/user/user-list-card";
 import CardHeader from "@/components/common/data-card/header";
 import SearchFilterSort from "@/components/common/data-card/search-filter-sort";
-import { useMediaQuery } from "usehooks-ts";
 import { cn } from "@/lib/utils";
 import DrawerUsersList from "@/components/common/user/drawer-users-list";
 import UserDetails from "@/components/common/user/user-details";
@@ -38,6 +37,7 @@ import { Student } from "@/types/coordinator";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import { toast } from "@/hooks/use-toast";
+import { useMediaQuery } from "usehooks-ts";
 
 // Interface for Props
 interface PropsType {

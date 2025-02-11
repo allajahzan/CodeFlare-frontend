@@ -12,15 +12,17 @@ import { Ban, Info, Loader, Mail, Plus, Trash2 } from "lucide-react";
 import { ReactNode, useState } from "react";
 import profile from "@/assets/images/no-profile.svg";
 import { IUserChat } from "./user-contact-sheet";
+import { Chat } from "./chat";
 
 // Interface for Props
 interface PropsType {
     button: ReactNode;
     selectedUser: IUserChat;
+    selectedChat: Chat;
 }
 
 // User profile sheet Component
-function UserProfileSheet({ button, selectedUser }: PropsType) {
+function UserProfileSheet({ button, selectedUser, selectedChat }: PropsType) {
     const [open, setOpen] = useState<boolean | undefined>(undefined);
     return (
         <Sheet open={open} onOpenChange={setOpen}>
@@ -83,9 +85,9 @@ function UserProfileSheet({ button, selectedUser }: PropsType) {
 
                     <div className="w-full p-5 self-start flex flex-col items-start gap-3 bg-white dark:bg-sidebar shadow-sm">
                         <small className="text-foreground font-bold">Media</small>
-                        <div className="grid grid-cols-4 gap-5 w-full max-h-[210px] overflow-hidden">
-                            {/* {selectedUser?.messages
-                                ?.filter((msg) => msg.type === "image") // Only keep image messages
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-5 w-full max-h-[210px] overflow-auto no-scrollbar">
+                            {selectedChat?.messages
+                                ?.filter((msg) => msg.content === "image") // Only keep image messages
                                 .map((msg, index) => (
                                     <div
                                         key={index}
@@ -93,11 +95,11 @@ function UserProfileSheet({ button, selectedUser }: PropsType) {
                                     >
                                         <img
                                             className="w-full h-full object-cover"
-                                            src={msg.text}
+                                            src={msg.message}
                                             alt="Shared image"
                                         />
                                     </div>
-                                ))} */}
+                                ))}
                         </div>
                     </div>
 

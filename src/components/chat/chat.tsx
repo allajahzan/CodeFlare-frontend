@@ -25,7 +25,6 @@ export interface Message {
 }
 
 export interface Chat {
-    chatId: string;
     senderId: string;
     receiverId: string;
     messages: Message[];
@@ -43,6 +42,9 @@ function Chat() {
 
     // Message
     const [message, setMessage] = useState("");
+
+    // Slider
+    const [isUsersListSideOpen, setUsersListSideOpen] = useState<boolean>(true);
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
@@ -126,14 +128,10 @@ function Chat() {
     // Get users-chatInfo from socket ===================================================================
     useEffect(() => {
         chatInfo(user?._id as string, (chat) => {
-            console.log(chat);
-
             // Update chatId
             setUser((prevUsers: IUserChat[]) => {
                 return prevUsers.map((u) => {
                     if (u._id === chat.senderId || u._id === chat.receiverId) {
-                        console.log("yes");
-
                         return { ...u, chatId: chat.chatId };
                     }
                     return u;
@@ -268,7 +266,7 @@ function Chat() {
     return (
         <div
             onClick={() => showPicker && setShowPicker(false)}
-            className="h-full grid grid-cols-3 bg-background"
+            className="h-full grid grid-cols-1 md:grid-cols-3 bg-background"
         >
             {/* Left side */}
             <UsersListOfChat
@@ -277,6 +275,8 @@ function Chat() {
                 setSelectedUser={setSelectedUser}
                 setSelectedChat={setSelectedChat}
                 setMessage={setMessage}
+                isUsersListSideOpen={isUsersListSideOpen}
+                setUsersListSideOpen={setUsersListSideOpen}
             />
 
             {/* Right side */}
@@ -292,12 +292,13 @@ function Chat() {
                     sendMessage={sendMessage}
                     showPicker={showPicker}
                     setShowPicker={setShowPicker}
+                    setUsersListSideOpen={setUsersListSideOpen}
                 />
             )}
 
             {/* If no chat is selected  */}
             {!selectedUser && (
-                <div className="relative w-full min-h-screen col-span-2 bg-muted dark:bg-sidebar">
+                <div className="hidden md:block relative w-full min-h-screen col-span-2 bg-muted dark:bg-sidebar">
                     <NotSelected
                         className="h-full rounded-none bg-transparent border-none"
                         MainIcon={MessageCircle}

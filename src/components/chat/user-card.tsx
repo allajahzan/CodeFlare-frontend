@@ -7,6 +7,7 @@ import { IUserChat } from "./user-contact-sheet";
 import { Chat } from "./chat";
 import { IUserContext, UserContext } from "@/context/user-context";
 import { userOnline } from "@/service/socket";
+import { useMediaQuery } from "usehooks-ts";
 
 // Interface for Props
 interface PropsType {
@@ -16,6 +17,7 @@ interface PropsType {
     setSelectedChat: React.Dispatch<React.SetStateAction<Chat | {}>>;
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setMessage: React.Dispatch<React.SetStateAction<string>>;
+    setUsersListSideOpen: React.Dispatch<React.SetStateAction<boolean>>;
     children1?: ReactNode;
     children2?: ReactNode;
     className?: string;
@@ -29,27 +31,48 @@ function UserCard({
     setSelectedChat,
     setIsOpen,
     setMessage,
+    setUsersListSideOpen,
     children1,
     children2,
     className,
 }: PropsType) {
+    // Screen size
+    const isSmall = useMediaQuery("(max-width: 767.20px)");
+
     // User context
     const { user: sender } = useContext(UserContext) as IUserContext;
 
     // Handle select user chat
     const handleSelectUserChat = (selectedUser: IUserChat) => {
-        // Close sheet
-        setIsOpen(false);
+        if (isSmall) {
+            setUsersListSideOpen(false);
+        } else {
+            setIsOpen(false);
+        }
 
         // Check if receiver is in online
         userOnline(selectedUser._id);
 
         // Set user
-        setSelectedUser(selectedUser as IUserChat);
+        setSelectedUser(() => {
+            if (!selectedUser) return null; 
+
+            const matchedUser = (users as IUserChat[]).find(
+                (user) => user._id === selectedUser._id
+            );
+
+            return matchedUser
+                ? {
+                    ...selectedUser,
+                    chatId: matchedUser.chatId,
+                    lastMessage: matchedUser.lastMessage,
+                    updatedAt: matchedUser.updatedAt,
+                }
+                : selectedUser;
+        });
 
         // Map chat
         const chat: Chat = {
-            chatId: selectedUser.chatId as string,
             senderId: sender?._id as string,
             receiverId: selectedUser._id as string,
             messages: [],

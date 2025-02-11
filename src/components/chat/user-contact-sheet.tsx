@@ -24,7 +24,7 @@ export interface IUserChat {
     content: "text" | "image" | "file";
     lastMessage: string;
     updatedAt: string;
-    isOnline?: boolean; 
+    isOnline?: boolean;
 }
 
 // Interface for Props
@@ -34,17 +34,19 @@ interface PropsType {
     setSelectedChat: React.Dispatch<React.SetStateAction<Chat | {}>>;
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setMessage: React.Dispatch<React.SetStateAction<string>>;
+    setUsersListSideOpen: React.Dispatch<React.SetStateAction<boolean>>;
     isOpen: boolean;
 }
 
 // User contact Sheet
 function UserContactSheet({
-    users : userChats,
+    users: userChats,
     setSelectedUser,
     setSelectedChat,
     isOpen,
     setIsOpen,
     setMessage,
+    setUsersListSideOpen,
 }: PropsType) {
     // Users
     const [users, setUsers] = useState<IUserChat[]>([]);
@@ -92,8 +94,8 @@ function UserContactSheet({
     return (
         <div
             className={cn(
-                "h-full w-full bg-background absolute top-0 left-0 transition-all duration-300",
-                isOpen ? "translate-x-0 opacity-1" : "-translate-x-full opacity-0"
+                "h-full w-full bg-background absolute top-0 left-0 transition-all duration-300 ease-in-out",
+                isOpen ? "translate-x-0 opacity-1" : "-translate-x-full opacity-1"
             )}
         >
             {/* Header */}
@@ -146,6 +148,7 @@ function UserContactSheet({
                         setSelectedChat={setSelectedChat}
                         setMessage={setMessage}
                         setIsOpen={setIsOpen}
+                        setUsersListSideOpen={setUsersListSideOpen}
                         children1={
                             <p className="text-sm text-muted-foreground font-medium">
                                 {user.role[0].toUpperCase() + user.role.slice(1)}

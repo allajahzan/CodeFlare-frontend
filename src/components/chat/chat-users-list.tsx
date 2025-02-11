@@ -13,6 +13,7 @@ import UserContactSheet, { IUserChat } from "./user-contact-sheet";
 import { Fragment, useState } from "react";
 import UserCard from "./user-card";
 import { Chat } from "./chat";
+import { cn } from "@/lib/utils";
 
 // Interface for Props
 interface PropsType {
@@ -21,6 +22,8 @@ interface PropsType {
     setSelectedUser: React.Dispatch<React.SetStateAction<IUserChat | null>>;
     setSelectedChat: React.Dispatch<React.SetStateAction<Chat | {}>>;
     setMessage: React.Dispatch<React.SetStateAction<string>>;
+    isUsersListSideOpen: boolean;
+    setUsersListSideOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // Users list Component
@@ -30,6 +33,8 @@ function UsersListOfChat({
     setSelectedUser,
     setSelectedChat,
     setMessage,
+    isUsersListSideOpen,
+    setUsersListSideOpen,
 }: PropsType) {
     // Custom sheet states
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -38,8 +43,13 @@ function UsersListOfChat({
 
     return (
         <div
-            className="sticky top-0 h-[calc(100vh)] flex flex-col gap-5 p-0 pt-5 
-            border-r border-border shadow-sm dark:shadow-customBorder dark:shadow-inner"
+            className={cn(
+                "sticky top-0 z-50 h-[calc(100vh)] flex flex-col gap-5 p-0 pt-5 bg-background",
+                "border-r border-border shadow-sm dark:shadow-customBorder dark:shadow-inner transition-all duration-0",
+                isUsersListSideOpen
+                    ? "translate-x-0"
+                    : "-translate-x-full"
+            )}
         >
             {/* Header */}
             <div className="flex items-center gap-2 px-5">
@@ -98,6 +108,7 @@ function UsersListOfChat({
                             setSelectedChat={setSelectedChat}
                             setMessage={setMessage}
                             setIsOpen={setIsOpen}
+                            setUsersListSideOpen={setUsersListSideOpen}
                             className={`${selectedUser?._id === user._id ? "bg-muted dark:bg-sidebar" : ""
                                 }`}
                             children1={(() => {
@@ -154,6 +165,7 @@ function UsersListOfChat({
                     setSelectedUser={setSelectedUser}
                     setSelectedChat={setSelectedChat}
                     setMessage={setMessage}
+                    setUsersListSideOpen={setUsersListSideOpen}
                 />
             </div>
         </div>
