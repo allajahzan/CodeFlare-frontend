@@ -275,7 +275,7 @@ function MessageSideOfChat({
                     {/* Back button */}
                     <div
                         onClick={() => setUsersListSideOpen(true)}
-                        className="block md:hidden p-2 cursor-pointer"
+                        className="block md:hidden p-2 cursor-pointer relative bottom-0.5"
                     >
                         <ChevronLeft className="text-foreground w-5 h-5" />
                     </div>
