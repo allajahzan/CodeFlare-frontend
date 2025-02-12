@@ -4,7 +4,6 @@ import Dashboard from "@/pages/student/dashboard";
 import Chat from '@/components/chat/chat';
 import Invoice from "@/pages/student/invoice";
 import Leave from "@/pages/student/leave";
-import Manifest from "@/pages/student/manifest";
 import Reviews from "@/pages/student/reviews";
 import { Navigate, Route, Routes } from "react-router-dom";
 import PublicRoutes from "@/routes/public-routes";
@@ -14,6 +13,7 @@ import ForgotPassword from "@/pages/authentication/forgot-password";
 import ResetPassword from "@/pages/authentication/reset-password";
 import AppRoutes from "@/constants/app-routes";
 import { useState } from "react";
+import Profile from "@/pages/profile/profile";
 
 // Student Routes
 function StudentRoutes() {
@@ -37,8 +37,8 @@ function StudentRoutes() {
                     <Route path={AppRoutes.DASHBOARD} element={<Dashboard />} />
                     <Route path={AppRoutes.STUDENT_REVIEWS} element={<Reviews />} />
                     <Route path={AppRoutes.STUDENT_INVOICES} element={<Invoice />} />
-                    <Route path={AppRoutes.PROFILE} element={<Manifest />} />
                     <Route path={AppRoutes.STUDENT_LEAVES} element={<Leave />} />
+                    <Route path={AppRoutes.PROFILE} element={<Profile />} />
                 </Route>
             </Route>
 
