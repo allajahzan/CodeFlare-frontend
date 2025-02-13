@@ -25,7 +25,7 @@ function Account() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.2 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-5"
+            className="grid grid-cols-1 sm:grid-cols-2 gap-5"
         >
             {/* Left side */}
             <div className="flex flex-col gap-2">
@@ -47,7 +47,7 @@ function Account() {
                             placeholder="Full Name"
                             autoComplete="off"
                             required
-                            value={"Ahsan allaj pk"}
+                            defaultValue={"Ahsan allaj pk"}
                             className="p-5 pl-9 text-foreground font-medium"
                         />
                         <UserRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
@@ -76,7 +76,7 @@ function Account() {
                             autoComplete="off"
                             required
                             disabled
-                            value={"ahsanallajpk22@gmail.com"}
+                            defaultValue={"ahsanallajpk22@gmail.com"}
                             className="p-5 pl-9 text-foreground font-medium"
                         />
                         <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
@@ -129,7 +129,7 @@ function Account() {
                             autoComplete="off"
                             required
                             disabled
-                            value={"Student"}
+                            defaultValue={"Student"}
                             className="p-5 pl-9 text-foreground font-medium"
                         />
                         <Briefcase className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
@@ -156,7 +156,7 @@ function Account() {
                             type="text"
                             placeholder="Batch"
                             autoComplete="off"
-                            value={"Batch 1"}
+                            defaultValue={"Batch 1"}
                             disabled
                             className="p-5 pl-9 text-foreground font-medium"
                         />
@@ -243,30 +243,28 @@ function Account() {
                     </div>
                 </motion.div>
 
-                <div className="flex gap-3">
-                    <motion.div
-                        key={9}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: isSmall ? 1 : 0.6 }}
-                        className="pt-2 w-full"
+                <motion.div
+                    key={9}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: isSmall ? 1 : 0.6 }}
+                    className="pt-2 w-full"
+                >
+                    <Button
+                        variant="default"
+                        type="submit"
+                        className="w-full h-11 shadow-md disabled:cursor-not-allowed"
                     >
-                        <Button
-                            variant="default"
-                            type="submit"
-                            className="w-full h-11 shadow-lg disabled:cursor-not-allowed"
-                        >
-                            {false ? (
-                                <div className="flex items-center gap-2">
-                                    <Loader className="h-4 w-4 animate-spin" />
-                                    Processing...
-                                </div>
-                            ) : (
-                                "Save"
-                            )}
-                        </Button>
-                    </motion.div>
-                </div>
+                        {false ? (
+                            <div className="flex items-center gap-2">
+                                <Loader className="h-4 w-4 animate-spin" />
+                                Processing...
+                            </div>
+                        ) : (
+                            "Save"
+                        )}
+                    </Button>
+                </motion.div>
             </div>
         </motion.form>
     );
