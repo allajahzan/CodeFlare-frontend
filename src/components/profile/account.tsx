@@ -13,8 +13,13 @@ import {
 } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
+import { useMediaQuery } from "usehooks-ts";
 
+// Account Component
 function Account() {
+    // Screen size
+    const isSmall = useMediaQuery("(max-width: 767.20px)");
+
     return (
         <motion.form
             initial={{ opacity: 0 }}
@@ -168,7 +173,7 @@ function Account() {
                     key={6}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
+                    transition={{ delay: isSmall ? 0.7 : 0.2 }}
                 >
                     <Label htmlFor="bio" className="text-sm text-foreground font-medium">
                         Bio
@@ -179,6 +184,7 @@ function Account() {
                             type="text"
                             placeholder="Bio"
                             autoComplete="off"
+                            required
                             className="p-5 pl-9 text-foreground font-medium"
                         />
                         <Info className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
@@ -191,21 +197,22 @@ function Account() {
                     key={7}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
+                    transition={{ delay: isSmall ? 0.8 : 0.3 }}
                 >
                     <Label
-                        htmlFor="aboutme"
+                        htmlFor="about"
                         className="text-sm text-foreground font-medium"
                     >
-                        About Me
+                        About
                     </Label>
                     <div className="relative">
                         <Textarea
-                            id="aboutme"
+                            id="about"
                             autoComplete="off"
-                            className="text-foreground font-medium h-[145px] resize-none"
+                            placeholder="About"
+                            required
+                            className="text-foreground font-medium h-[145px] resize-none placeholder:text-[14.5px]"
                         />
-                        {/* <Info className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" /> */}
                     </div>
                 </motion.div>
 
@@ -215,7 +222,7 @@ function Account() {
                     key={8}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
+                    transition={{ delay: isSmall ? 0.9 : 0.5 }}
                 >
                     <Label
                         htmlFor="skills"
@@ -229,7 +236,8 @@ function Account() {
                             type="text"
                             placeholder="Skills"
                             autoComplete="off"
-                            className="p-5 pl-9 text-foreground font-medium"
+                            required
+                            className="p-5 pl-9 text-foreground font-medium "
                         />
                         <Book className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                     </div>
@@ -240,7 +248,7 @@ function Account() {
                         key={9}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6 }}
+                        transition={{ delay: isSmall ? 1 : 0.6 }}
                         className="pt-2 w-full"
                     >
                         <Button
