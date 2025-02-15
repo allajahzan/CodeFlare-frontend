@@ -18,7 +18,8 @@ function Password() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.2 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-5"
+            onClick={(event)=>event.preventDefault()}
+            className="grid grid-cols-1 md:grid-cols-1 gap-5"
         >
             {/* New password */}
             <motion.div
@@ -89,8 +90,6 @@ function Password() {
                 </div>
                 {/* <ValidationError message={errors.password?.message as string} /> */}
             </motion.div>
-
-            {!isSmall && <div></div>}
 
             {/* Button */}
             <motion.div

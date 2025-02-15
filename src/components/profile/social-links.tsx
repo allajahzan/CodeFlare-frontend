@@ -3,22 +3,18 @@ import { Github, Instagram, Linkedin, Loader, UserRound } from "lucide-react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { useMediaQuery } from "usehooks-ts";
 
 // Social links Components
 function SocialLinks() {
-    // Screen size
-    const isSmall = useMediaQuery("(max-width: 767.20px)");
-
     return (
         <motion.form
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.2 }}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-5"
+            className="grid grid-cols-1 sm:grid-cols-1 gap-5 outline-none"
         >
             {/* Left side */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-5">
                 {/* Portfolio */}
                 <motion.div
                     className="space-y-2 relative"
@@ -46,43 +42,13 @@ function SocialLinks() {
                     </div>
                 </motion.div>
 
-                {/* LinkedIn */}
-                <motion.div
-                    className="space-y-2 relative"
-                    key={2}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                >
-                    <Label
-                        htmlFor="linkedIn"
-                        className="text-sm text-foreground font-medium"
-                    >
-                        LinkedIn
-                    </Label>
-                    <div className="relative">
-                        <Input
-                            id="linkedIn"
-                            type="email"
-                            placeholder="LinkedIn URL"
-                            autoComplete="off"
-                            required
-                            className="p-5 pl-9 text-foreground font-medium"
-                        />
-                        <Linkedin className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
-                    </div>
-                </motion.div>
-            </div>
-
-            {/* Right side */}
-            <div className="flex flex-col gap-2">
                 {/* Github */}
                 <motion.div
                     className="space-y-2 relative"
                     key={1}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: isSmall ? 0.5 : 0.2 }}
+                    transition={{ delay: 0.3 }}
                 >
                     <Label
                         htmlFor="github"
@@ -102,6 +68,36 @@ function SocialLinks() {
                         <Github className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                     </div>
                 </motion.div>
+            </div>
+
+            {/* Right side */}
+            <div className="flex flex-col gap-5">
+                {/* LinkedIn */}
+                <motion.div
+                    className="space-y-2 relative"
+                    key={2}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                >
+                    <Label
+                        htmlFor="linkedIn"
+                        className="text-sm text-foreground font-medium"
+                    >
+                        LinkedIn
+                    </Label>
+                    <div className="relative">
+                        <Input
+                            id="linkedIn"
+                            type="email"
+                            placeholder="LinkedIn URL"
+                            autoComplete="off"
+                            required
+                            className="p-5 pl-9 text-foreground font-medium"
+                        />
+                        <Linkedin className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                    </div>
+                </motion.div>
 
                 {/* Instagram */}
                 <motion.div
@@ -109,7 +105,7 @@ function SocialLinks() {
                     key={1}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: isSmall ? 0.6 : 0.3 }}
+                    transition={{ delay: 0.5 }}
                 >
                     <Label
                         htmlFor="instagram"
@@ -135,7 +131,7 @@ function SocialLinks() {
                     key={9}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: isSmall ? 0.7 : 0.4 }}
+                    transition={{ delay: 0.6 }}
                     className="pt-2 w-full"
                 >
                     <Button

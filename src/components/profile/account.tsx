@@ -13,22 +13,18 @@ import {
 } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
-import { useMediaQuery } from "usehooks-ts";
 
 // Account Component
 function Account() {
-    // Screen size
-    const isSmall = useMediaQuery("(max-width: 767.20px)");
-
     return (
         <motion.form
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.2 }}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-5"
+            className="grid grid-cols-1 sm:grid-cols-1 gap-5"
         >
             {/* Left side */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-5">
                 {/* Full name */}
                 <motion.div
                     className="space-y-2 relative"
@@ -166,14 +162,14 @@ function Account() {
             </div>
 
             {/* Right side */}
-            <div className="col-span-1 flex flex-col gap-2">
+            <div className="col-span-1 flex flex-col gap-5">
                 {/* Bio */}
                 <motion.div
                     className="space-y-2 relative"
                     key={6}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: isSmall ? 0.7 : 0.2 }}
+                    transition={{ delay: 0.7 }}
                 >
                     <Label htmlFor="bio" className="text-sm text-foreground font-medium">
                         Bio
@@ -197,7 +193,7 @@ function Account() {
                     key={7}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: isSmall ? 0.8 : 0.3 }}
+                    transition={{ delay: 0.8 }}
                 >
                     <Label
                         htmlFor="about"
@@ -222,7 +218,7 @@ function Account() {
                     key={8}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: isSmall ? 0.9 : 0.5 }}
+                    transition={{ delay: 0.9 }}
                 >
                     <Label
                         htmlFor="skills"
@@ -247,7 +243,7 @@ function Account() {
                     key={9}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: isSmall ? 1 : 0.6 }}
+                    transition={{ delay: 1 }}
                     className="pt-2 w-full"
                 >
                     <Button

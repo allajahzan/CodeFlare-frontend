@@ -30,13 +30,13 @@ function Profile() {
                     )}
                     <div
                         className={cn(
-                            "absolute z-10 right-5 top-[50%] -translate-y-1/2 p-3 rounded-full cursor-pointer",
+                            "absolute z-10 right-5 top-[50%] -translate-y-1/2 p-2 rounded-full cursor-pointer",
                             bgImage ? "bg-white/10" : "bg-white dark:bg-muted"
                         )}
                     >
                         <Camera
                             className={cn(
-                                "w-5 h-5",
+                                "w-4 h-4",
                                 bgImage
                                     ? "text-background dark:text-foreground"
                                     : "text-foreground"
@@ -49,14 +49,23 @@ function Profile() {
                 <UserInfo />
 
                 {/* Tabs and tab content */}
-                <div className="relative top-10 pt-10 px-0 sm:px-5 flex flex-col gap-2 transition-all duration-300">
+                <div className="relative top-10 pt-10 px-0 sm:px-0 flex flex-col gap-2 transition-all duration-300">
                     <Tabs defaultValue="Account" className="w-full flex flex-col gap-4">
                         <TabsList className="grid w-full grid-cols-3 dark:bg-sidebar shadow-sm dark:shadow-customBorder dark:shadow-inner">
-                            <TabsTrigger value="Account">Account</TabsTrigger>
-                            <TabsTrigger value="Password">Password</TabsTrigger>
-                            <TabsTrigger value="Urls">Social Links</TabsTrigger>
+                            <TabsTrigger className="text-foreground" value="Account">
+                                Account
+                            </TabsTrigger>
+                            <TabsTrigger className="text-foreground" value="Password">
+                                Password
+                            </TabsTrigger>
+                            <TabsTrigger className="text-foreground" value="Urls">
+                                Social Links
+                            </TabsTrigger>
                         </TabsList>
-                        <div className="relative h-[calc(100vh-320px)]  overflow-auto no-scrollbar">
+                        <div
+                            className="relative p-5 h-[calc(100vh-320px)] border rounded-2xl overflow-auto no-scrollbar
+                        shadow-sm dark:shadow-customBorder dark:shadow-inner"
+                        >
                             {/* Account */}
                             <TabsContent value="Account">
                                 <Account />
@@ -67,8 +76,8 @@ function Profile() {
                                 <Password />
                             </TabsContent>
 
-                             {/* Social links */}
-                             <TabsContent value="Urls">
+                            {/* Social links */}
+                            <TabsContent value="Urls">
                                 <SocialLinks />
                             </TabsContent>
                         </div>
