@@ -15,7 +15,8 @@ export const formSchema = z
             .regex(
                 passwordRegex.specialSymbol,
                 "Password should contain at least 1 special symbol !"
-            ),
+            )
+            .nonempty("Password is required !"),
         confirmPassword: z.string(),
     })
     .refine((formData) => formData.password === formData.confirmPassword, {

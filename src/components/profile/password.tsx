@@ -108,7 +108,7 @@ function Password() {
             {/* New password */}
             <motion.div
                 className="space-y-2 relative"
-                key={1}
+                key={2}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
@@ -139,7 +139,7 @@ function Password() {
             {/* Confirm Password */}
             <motion.div
                 className="space-y-2 relative"
-                key={2}
+                key={3}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
@@ -173,7 +173,7 @@ function Password() {
 
             {/* Button */}
             <motion.div
-                key={3}
+                key={4}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
