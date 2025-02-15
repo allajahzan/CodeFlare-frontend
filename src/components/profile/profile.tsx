@@ -6,6 +6,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import UserInfo from "./user-info";
 import Password from "./password";
+import SocialLinks from "./social-links";
 
 // Profile Componet
 function Profile() {
@@ -64,6 +65,11 @@ function Profile() {
                             {/* Password */}
                             <TabsContent value="Password">
                                 <Password />
+                            </TabsContent>
+
+                             {/* Social links */}
+                             <TabsContent value="Urls">
+                                <SocialLinks />
                             </TabsContent>
                         </div>
                     </Tabs>

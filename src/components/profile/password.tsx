@@ -64,7 +64,7 @@ function Password() {
                 key={2}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
+                transition={{ delay: isSmall ? 0.3 : 0.2 }}
             >
                 <Label
                     htmlFor="password"
@@ -97,7 +97,7 @@ function Password() {
                 key={3}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
+                transition={{ delay: isSmall ? 0.4 : 0.3 }}
                 className="pt-2 w-full"
             >
                 <Button
