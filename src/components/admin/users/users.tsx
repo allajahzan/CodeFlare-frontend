@@ -55,6 +55,7 @@ function Users({ setDrawerOpen }: PropsType) {
     const [status, setStatus] = useState<boolean>(false);
     const [fetching, setFetching] = useState<boolean>(false);
 
+    // Blocking - unblocking
     const [changingStatus, setChangingStatus] = useState<boolean>(false);
 
     // Redux

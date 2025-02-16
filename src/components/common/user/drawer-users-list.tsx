@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
     EyeIcon,
+    Loader2,
     MoreHorizontal,
     Plus,
     Search,
@@ -25,8 +26,13 @@ import { NotFoundOrbit } from "@/components/animation/fallbacks";
 import UserDetails from "@/components/common/user/user-details";
 import { Student } from "@/types/coordinator";
 import { User } from "@/types/admin";
-import { useLocation } from "react-router-dom";
 import profile from "@/assets/images/no-profile.svg";
+import { toast } from "@/hooks/use-toast";
+import { handleCustomError } from "@/utils/error";
+import { patchData } from "@/service/api-service";
+import ApiEndpoints from "@/constants/api-endpoints";
+import { useSelector } from "react-redux";
+import { stateType } from "@/redux/store";
 
 // Interface for Props
 interface PropsType {
@@ -51,9 +57,62 @@ function DrawerUsersList({
     setDrawerOpen,
     isSmall,
 }: PropsType) {
-    // Get role
-    const pathname = useLocation().pathname;
-    const role = pathname.split("/")[2];
+    // Blocking - unblocking
+    const [changingStatus, setChangingStatus] = useState<boolean>(false);
+
+    // Redux
+    const role = useSelector((state: stateType) => state.role);
+
+    // Handle blocking-unblocking user
+    const handleBlock = async (user: User) => {
+        try {
+            // Set blocking state
+            setChangingStatus(true);
+
+            // Send request
+            const resp = await patchData(
+                ApiEndpoints.USER_STATUS + `/${user._id}`,
+                {},
+                role
+            );
+
+            // Success response
+            if (resp && resp.status === 200) {
+                setTimeout(() => {
+                    // Update user in users list
+                    setUsers((prevUsers: any) => {
+                        return prevUsers.map((u: any) => {
+                            if (u._id === user._id) {
+                                return { ...u, isBlock: !u.isBlock };
+                            }
+                            return u;
+                        });
+                    });
+
+                    // Update user in selected user, if selected
+                    setSelectedUser((prevUser: User | Student | null) => {
+                        if (prevUser?._id === user._id) {
+                            return { ...prevUser, isBlock: !prevUser.isBlock };
+                        }
+                        return prevUser;
+                    });
+
+                    toast({
+                        title: user.isBlock
+                            ? "You have unblocked this user"
+                            : "You have blocked this user",
+                    });
+
+                    setChangingStatus(false);
+                }, 1000);
+            }
+        } catch (err: unknown) {
+            setTimeout(() => {
+                setChangingStatus(false);
+                handleCustomError(err);
+            }, 1000);
+        }
+    };
 
     return (
         <Drawer
@@ -121,6 +180,7 @@ function DrawerUsersList({
                                             <DropdownMenuContent
                                                 // Change alignments in small size
                                                 align={isSmall ? "end" : "start"}
+                                                onClick={(event) => event.stopPropagation()}
                                                 className={cn(
                                                     "relative",
                                                     isSmall ? "left-[13px]" : "left-0"
@@ -141,14 +201,29 @@ function DrawerUsersList({
                                                 </DropdownMenuItem>
                                                 <DropdownMenuSeparator />
                                                 <DropdownMenuItem
-                                                    onClick={(event) => event.stopPropagation()}
+                                                    disabled={changingStatus}
+                                                    onClick={() => handleBlock(user as any)}
+                                                    onSelect={(e) => e.preventDefault()}
+                                                    className="text-center"
                                                 >
                                                     {user.isBlock ? (
-                                                        <UserRoundCheck />
+                                                        changingStatus ? (
+                                                            <Loader2 className="w-4 h-5 text-foreground animate-spin" />
+                                                        ) : (
+                                                            <UserRoundCheck />
+                                                        )
+                                                    ) : changingStatus ? (
+                                                        <Loader2 className="w-4 h-5 text-foreground animate-spin" />
                                                     ) : (
                                                         <UserRoundMinus />
                                                     )}
-                                                    {user.isBlock ? "Unblock" : "Block"}
+                                                    {user.isBlock
+                                                        ? changingStatus
+                                                            ? "Unblocking..."
+                                                            : "Unblock"
+                                                        : changingStatus
+                                                            ? "Blocking..."
+                                                            : "Block"}
                                                 </DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>

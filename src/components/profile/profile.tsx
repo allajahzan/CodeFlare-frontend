@@ -2,7 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import Account from "./account";
 import { Camera } from "lucide-react";
 import image from "@/assets/images/loginImage3.jpg";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import UserInfo from "./user-info";
 import Password from "./password";
@@ -113,42 +113,47 @@ function Profile() {
                 <UserInfo />
 
                 {/* Tabs and tab content */}
-                {!fetching && (
-                    <div className="relative top-10 pt-10 px-0 sm:px-0 flex flex-col gap-2 transition-all duration-300">
-                        <Tabs defaultValue="Account" className="w-full flex flex-col gap-4">
-                            <TabsList className="grid w-full grid-cols-3 dark:bg-sidebar shadow-sm dark:shadow-customBorder dark:shadow-inner">
-                                <TabsTrigger className="text-foreground" value="Account">
-                                    Account
-                                </TabsTrigger>
-                                <TabsTrigger className="text-foreground" value="Password">
-                                    Password
-                                </TabsTrigger>
-                                <TabsTrigger className="text-foreground" value="Urls">
-                                    Social Links
-                                </TabsTrigger>
-                            </TabsList>
-                            <div
-                                className="relative p-5 h-[calc(100vh-320px)] border rounded-2xl overflow-auto no-scrollbar
+
+                <div className="relative top-10 pt-10 px-0 sm:px-0 flex flex-col gap-2 transition-all duration-300">
+                    <Tabs defaultValue="Account" className="w-full flex flex-col gap-4">
+                        <TabsList className="grid w-full grid-cols-3 dark:bg-sidebar shadow-sm dark:shadow-customBorder dark:shadow-inner">
+                            <TabsTrigger className="text-foreground" value="Account">
+                                Account
+                            </TabsTrigger>
+                            <TabsTrigger className="text-foreground" value="Password">
+                                Password
+                            </TabsTrigger>
+                            <TabsTrigger className="text-foreground" value="Urls">
+                                Social Links
+                            </TabsTrigger>
+                        </TabsList>
+
+                        {/* Tab content */}
+                        <div
+                            className="relative p-5 h-[calc(100vh-320px)] border rounded-2xl overflow-auto no-scrollbar
                     shadow-sm dark:shadow-customBorder dark:shadow-inner"
-                            >
-                                {/* Account */}
-                                <TabsContent value="Account">
-                                    <Account profile={profile} />
-                                </TabsContent>
+                        >
+                            {!fetching && (
+                                <Fragment>
+                                    {/* Account */}
+                                    <TabsContent value="Account">
+                                        <Account profile={profile} />
+                                    </TabsContent>
 
-                                {/* Password */}
-                                <TabsContent value="Password">
-                                    <Password />
-                                </TabsContent>
+                                    {/* Password */}
+                                    <TabsContent value="Password">
+                                        <Password />
+                                    </TabsContent>
 
-                                {/* Social links */}
-                                <TabsContent value="Urls">
-                                    <SocialLinks profile={profile} />
-                                </TabsContent>
-                            </div>
-                        </Tabs>
-                    </div>
-                )}
+                                    {/* Social links */}
+                                    <TabsContent value="Urls">
+                                        <SocialLinks profile={profile} />
+                                    </TabsContent>
+                                </Fragment>
+                            )}
+                        </div>
+                    </Tabs>
+                </div>
             </div>
 
             <div
