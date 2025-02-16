@@ -20,7 +20,7 @@ function UserNameCard({ data }: PropsType) {
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.2 }}
             >
-                <Avatar className="bg-background w-16 h-16 border-2">
+                <Avatar className="bg-background w-16 h-16 border-2 border-background shadow-md">
                     {data.profilePic && (
                         <AvatarImage src={allaj} className="object-cover" />
                     )}

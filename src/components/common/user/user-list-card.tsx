@@ -47,7 +47,7 @@ function UserList({
         >
             <div className="flex items-center gap-3">
                 {/* Avatar profile pic */}
-                <Avatar className="bg-background w-12 h-12 border-2">
+                <Avatar className="bg-background w-12 h-12 border-2 border-background shadow-md">
                     {user.profilePic && (
                         <AvatarImage src={image} className="object-cover" />
                     )}
