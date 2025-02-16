@@ -10,6 +10,7 @@ import Reset from "@/pages/authentication/reset-password";
 import AuthenticationLayout from "@/components/layout/authentication-layout";
 import AppRoutes from "@/constants/app-routes";
 import Chat from "@/pages/chat/chat";
+import Profile from "@/pages/profile/profile";
 
 // Instructor Routes
 function InstructorRoutes() {
@@ -31,6 +32,7 @@ function InstructorRoutes() {
             <Route path={AppRoutes.CHATS} element={<Chat />} />
                 <Route element={<InstructorLayout isDrawerOpen={isDrawerOpen} />}>
                     <Route path={AppRoutes.DASHBOARD} element={<Dashboard />} />
+                    <Route path={AppRoutes.PROFILE} element={<Profile />} />
                 </Route>
             </Route>
 

@@ -61,6 +61,16 @@ function Account({ profile }: PropsType) {
         if (resp && resp.status === 200) {
             setSubmiting(false);
 
+            // Update the local storage
+            const user = localStorage.getItem("user") || {};
+            localStorage.setItem(
+                "user",
+                JSON.stringify({
+                    ...JSON.parse(user as string),
+                    name: formData.name,
+                })
+            );
+
             toast({ title: "Successfully updated profile." });
         }
     };
@@ -68,7 +78,7 @@ function Account({ profile }: PropsType) {
     // Fetch social links
     useEffect(() => {
         reset({
-            name: profile.name,
+            name: user?.name,
             phoneNumber: profile.phoneNumber,
             bio: profile.bio,
             about: profile.about,
@@ -195,30 +205,37 @@ function Account({ profile }: PropsType) {
                 </div>
             </motion.div>
 
-            {/* Batch */}
-            <motion.div
-                className="space-y-2 relative"
-                key={5}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-            >
-                <Label htmlFor="batch" className="text-sm text-foreground font-medium">
-                    {user?.batch? 'Batch' : 'Batches'}
-                </Label>
-                <div className="relative">
-                    <Input
-                        id="batch"
-                        type="text"
-                        placeholder= {user?.batch? 'Batch' : 'Batches'}
-                        autoComplete="off"
-                        defaultValue={user?.batch || user?.batches}
-                        disabled
-                        className="p-5 pl-9 text-foreground font-medium"
-                    />
-                    <UsersRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
-                </div>
-            </motion.div>
+            {/* Batch / Batches - if not admin */}
+            {role !== "admin" && (
+                <motion.div
+                    className="space-y-2 relative"
+                    key={5}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6 }}
+                >
+                    <Label
+                        htmlFor="batch"
+                        className="text-sm text-foreground font-medium"
+                    >
+                        {user?.batch ? "Batch" : "Batches"}
+                    </Label>
+                    <div className="relative">
+                        <Input
+                            id="batch"
+                            type="text"
+                            placeholder={user?.batch ? "Batch" : "Batches"}
+                            autoComplete="off"
+                            defaultValue={
+                                user?.batch || (user?.batches as string[])?.join(", ")
+                            }
+                            disabled
+                            className="p-5 pl-9 text-foreground font-medium"
+                        />
+                        <UsersRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                    </div>
+                </motion.div>
+            )}
 
             {/* Bio */}
             <motion.div

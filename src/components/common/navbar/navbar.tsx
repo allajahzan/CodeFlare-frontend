@@ -11,7 +11,7 @@ import NavbarItem from "./navbar-item";
 import Heading from "@/components/ui/heading";
 import { Bell, ChevronDown, Globe, Search, Moon, Sun } from "lucide-react";
 import avatar_boy from "@/assets/images/avatar_boy.jpg";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
@@ -29,10 +29,15 @@ const Navbar = () => {
     // Theme context
     const { theme, setTheme } = useContext(ThemeContext) as IThemeContext;
 
+    // Naviagate
+    const navigate = useNavigate();
+
+    // Path
     const [path, setPath] = useState<string>("");
     const location = useLocation();
     const pathname = location.pathname;
 
+    // Handle theme
     const handleTheme = useCallback(() => {
         setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
     }, [theme]);
@@ -112,6 +117,7 @@ const Navbar = () => {
 
                 {/* Profile Section */}
                 <div
+                    onClick={() => navigate("profile")}
                     className="group relative p-2 w-[120px] h-12 flex items-center rounded-full bg-muted"
                     aria-label="Profile Dropdown"
                 >

@@ -10,7 +10,6 @@ import {
 import {
     CalendarCheck2,
     CreditCard,
-    FileUser,
     Globe,
     IdCard,
     LayoutDashboard,
@@ -55,15 +54,18 @@ function StudentLayout({ isDrawerOpen }: PropsType) {
         () => [
             { path: AppRoutes.DASHBOARD, icon: LayoutDashboard, label: "Dashboard" },
             { path: AppRoutes.STUDENT_TASKS, icon: ListTodo, label: "Tasks" },
-            { path: AppRoutes.STUDENT_REVIEWS, icon: CalendarCheck2, label: AppRoutes.STUDENT_REVIEWS},
+            {
+                path: AppRoutes.STUDENT_REVIEWS,
+                icon: CalendarCheck2,
+                label: AppRoutes.STUDENT_REVIEWS,
+            },
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
             ...(isSmall
                 ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
                 : []),
-            
+
             { path: AppRoutes.STUDENT_LEAVES, icon: IdCard, label: "Leaves" },
             { path: AppRoutes.STUDENT_INVOICES, icon: CreditCard, label: "Invoices" },
-            { path: AppRoutes.PROFILE, icon: FileUser, label: "Manifest" },
         ],
         [isSmall]
     );

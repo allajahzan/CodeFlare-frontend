@@ -217,7 +217,7 @@ function SocialLinks({ profile }: PropsType) {
                             Processing...
                         </div>
                     ) : (
-                        "Save"
+                        "Add"
                     )}
                 </Button>
             </motion.div>

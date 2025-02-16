@@ -9,11 +9,12 @@ import { uploadImageToCloudinary } from "@/service/cloudinary";
 import { patchData } from "@/service/api-service";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { toast } from "@/hooks/use-toast";
+import { handleCustomError } from "@/utils/error";
 
 // UserInfo Component
 function UserInfo() {
     // User context
-    const { user } = useContext(UserContext) as IUserContext;
+    const { user, setUser } = useContext(UserContext) as IUserContext;
 
     //Image
     const [imageUrl, setImageUrl] = useState<string>(user?.profilePic as string);
@@ -37,40 +38,59 @@ function UserInfo() {
                 reader.readAsDataURL(files[0]);
                 reader.onload = async () => {
                     // Upload image to cloudinary
-                    const imageUrl = await uploadImageToCloudinary(files[0]);
+                    try {
+                        const imageUrl = await uploadImageToCloudinary(files[0]);
 
-                    if (imageUrl) {
-                        // Change profile pic
-                        const resp = await patchData(
-                            ApiEndpoints.CHANGE_PROFILE_PIC,
-                            { imageUrl },
-                            user?.role
-                        );
-
-                        // Success response
-                        if (resp && resp.status === 200) {
-                            setUploading(false);
-
-                            // Base 64 formate
-                            setImageUrl(reader.result as string);
-
-                            // Update the local storage
-                            const user = localStorage.getItem("user") || {};
-                            localStorage.setItem(
-                                "user",
-                                JSON.stringify({
-                                    ...JSON.parse(user as string),
-                                    profilePic: imageUrl,
-                                })
+                        if (imageUrl) {
+                            // Change profile pic
+                            const resp = await patchData(
+                                ApiEndpoints.CHANGE_PROFILE_PIC,
+                                { imageUrl },
+                                user?.role
                             );
 
-                            toast({ title: "Successfully changed profile picture." });
+                            // Success response
+                            if (resp && resp.status === 200) {
+                                setUploading(false);
+
+                                // Base 64 formate
+                                setImageUrl(reader.result as string);
+
+                                // Update the local storage
+                                const user = localStorage.getItem("user") || {};
+                                localStorage.setItem(
+                                    "user",
+                                    JSON.stringify({
+                                        ...JSON.parse(user as string),
+                                        profilePic: imageUrl,
+                                    })
+                                );
+
+                                //  Update user context
+                                setUser((prevUser) => {
+                                    if (prevUser) {
+                                        return {
+                                            ...prevUser,
+                                            profilePic: imageUrl,
+                                        };
+                                    } else {
+                                        return prevUser;
+                                    }
+                                });
+
+                                toast({ title: "Successfully changed profile picture." });
+                            }
+                        } else {
+                            setImageUrl("");
+                            setUploading(false);
+
+                            toast({ title: "Failed to changed profile picture." });
                         }
-                    } else {
+                    } catch (err: unknown) {
                         setImageUrl("");
                         setUploading(false);
 
-                        toast({ title: "Failed to changed profile picture." });
+                        handleCustomError(err);
                     }
                 };
             }
@@ -82,7 +102,7 @@ function UserInfo() {
     };
 
     return (
-        <div className="absolute z-20 w-fit top-11 sm:top-6 flex items-end px-0 sm:px-5 gap-3">
+        <div className="absolute z-20 w-fit top-11 sm:top-7 flex items-end px-0 sm:px-5 gap-3">
             {/* Avatar pic */}
             <motion.div
                 initial={{ scale: 0.5, opacity: 0 }}

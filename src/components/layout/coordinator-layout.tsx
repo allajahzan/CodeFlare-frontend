@@ -59,9 +59,6 @@ function CoordinatorLayout({ isDrawerOpen }: PropsType) {
             ...(isSmall
                 ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
                 : []),
-            //   { path: "/coordinator/weeks", icon: CalendarDays, label: "Weeks" },
-            //   { path: "/coordinator/batches", icon: FileUser, label: "Batches" },
-            //   { path: "/coordinator/invoices", icon: CreditCard, label: "Invoices" },
         ],
         [isSmall]
     );

@@ -34,6 +34,7 @@ function Profile() {
         linkedin: "",
         instagram: "",
     });
+
     const [fetching, setFetching] = useState<boolean>(true);
 
     // Redux
@@ -48,7 +49,6 @@ function Profile() {
                 if (resp && resp.status === 200) {
                     const data = resp.data.data;
                     if (data) {
-                        setFetching(false);
                         setProfile(() => {
                             return {
                                 name: data.userDetails.name,
@@ -66,6 +66,7 @@ function Profile() {
                             };
                         });
                     }
+                    setFetching(false);
                 }
             } catch (err: unknown) {
                 setFetching(false);
