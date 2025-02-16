@@ -13,7 +13,7 @@ interface IUser {
     _id: string;
     name: string;
     email: string;
-    phoneNo?: string;
+    phoneNumber?: string;
     profilePic?: string;
     role: string;
     batch?: string;
