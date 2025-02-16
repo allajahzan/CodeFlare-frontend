@@ -15,8 +15,8 @@ enum ApiEndpoints {
 
     // Profile APIs - user service
     PROFILE = "/user/profile",
-    CHANGE_PROFILE_PIC = "/user/profile/profile-pic",
-    CHANGE_PASSWORD = "/user/profile/password",
+    CHANGE_PROFILE_PIC = "/user/profile-pic",
+    CHANGE_PASSWORD = "/user/change-password",
 
     // Admin APIs - admin service
     ADMIN = "/admin",

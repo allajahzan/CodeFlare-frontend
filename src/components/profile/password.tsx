@@ -62,7 +62,7 @@ function Password() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.2 }}
             onSubmit={handleSubmit(OnSubmit)}
-            className="grid grid-cols-1 md:grid-cols-1 gap-5"
+            className="space-y-5"
         >
             {/* Current password */}
             <motion.div

@@ -9,14 +9,20 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { stateType } from "@/redux/store";
 import { handleCustomError } from "@/utils/error";
-import { fetchData, postData } from "@/service/api-service";
+import { postData } from "@/service/api-service";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { toast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ValidationError from "../ui/validation-error";
+import { IProfile } from "@/types/profile";
+
+// Interface for Props
+interface PropsType {
+    profile: IProfile;
+}
 
 // Social links Components
-function SocialLinks() {
+function SocialLinks({ profile }: PropsType) {
     // Form related states
     const [submiting, setSubmiting] = useState(false);
 
@@ -56,27 +62,14 @@ function SocialLinks() {
         }
     };
 
-    // Fetch social links
+    // Reset social links
     useEffect(() => {
-        const fetchSocialLinks = async () => {
-            try {
-                const resp = await fetchData(ApiEndpoints.PROFILE, role);
-
-                if (resp && resp.status === 200) {
-                    const data = resp.data.data;
-                    reset({
-                        portfolio: data.porfolio,
-                        github: data.github,
-                        linkedin: data.linkedin,
-                        instagram: data.instagram,
-                    });
-                }
-            } catch (err: unknown) {
-                handleCustomError(err);
-            }
-        };
-
-        fetchSocialLinks();
+        reset({
+            portfolio: profile.portfolio,
+            github: profile.github,
+            linkedin: profile.linkedin,
+            instagram: profile.instagram,
+        });
     }, []);
 
     return (
@@ -104,7 +97,7 @@ function SocialLinks() {
                 <div className="relative">
                     <Input
                         id="portfolio"
-                        type="email"
+                        type="text"
                         placeholder="Portfolio URL"
                         autoComplete="off"
                         {...register("portfolio")}
@@ -161,7 +154,7 @@ function SocialLinks() {
                 <div className="relative">
                     <Input
                         id="linkedIn"
-                        type="email"
+                        type="text"
                         placeholder="LinkedIn URL"
                         autoComplete="off"
                         {...register("linkedin")}
