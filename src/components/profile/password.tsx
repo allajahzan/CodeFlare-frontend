@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useState } from "react";
-import { Eye, EyeOff, KeyRound, Loader } from "lucide-react";
+import { Eye, EyeOff, KeyRound, Loader2 } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formSchema, FormType } from "@/validations/profile/change-password";
@@ -187,7 +187,7 @@ function Password() {
                 >
                     {submiting ? (
                         <div className="flex items-center gap-2">
-                            <Loader className="h-4 w-4 animate-spin" />
+                            <Loader2 className="h-4 w-4 animate-spin" />
                             Processing...
                         </div>
                     ) : (

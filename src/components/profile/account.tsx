@@ -6,7 +6,7 @@ import {
     Briefcase,
     Building,
     Info,
-    Loader,
+    Loader2,
     Mail,
     Phone,
     School,
@@ -407,7 +407,7 @@ function Account({ profile }: PropsType) {
                 >
                     {submiting ? (
                         <div className="flex items-center gap-2">
-                            <Loader className="h-4 w-4 animate-spin" />
+                            <Loader2 className="h-4 w-4 animate-spin" />
                             Processing...
                         </div>
                     ) : (

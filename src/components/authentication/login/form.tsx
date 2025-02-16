@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
-import { Eye, EyeOff, KeyRound, Loader, Mail } from "lucide-react";
+import { Eye, EyeOff, KeyRound, Loader2, Mail } from "lucide-react";
 import { useContext, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import bgImage from "@/assets/images/login.jpg";
@@ -258,7 +258,7 @@ function Form() {
                                 >
                                     {submiting ? (
                                         <div className="flex items-center gap-2">
-                                            <Loader className="h-4 w-4 animate-spin" />
+                                            <Loader2 className="h-4 w-4 animate-spin" />
                                             Processing...
                                         </div>
                                     ) : (

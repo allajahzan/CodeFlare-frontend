@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Github, Instagram, Linkedin, Loader, UserRound } from "lucide-react";
+import { Github, Instagram, Linkedin, Loader2, UserRound } from "lucide-react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -213,7 +213,7 @@ function SocialLinks({ profile }: PropsType) {
                 >
                     {submiting ? (
                         <div className="flex items-center gap-2">
-                            <Loader className="h-4 w-4 animate-spin" />
+                            <Loader2 className="h-4 w-4 animate-spin" />
                             Processing...
                         </div>
                     ) : (

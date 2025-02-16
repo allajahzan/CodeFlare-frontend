@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
-import { ArrowLeft, Loader, Mail } from "lucide-react";
+import { ArrowLeft, Loader2,  Mail } from "lucide-react";
 import { useContext, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import bgImage from "@/assets/images/verifyEmail.jpg";
@@ -163,7 +163,7 @@ function Form() {
                                 >
                                     {submiting ? (
                                         <div className="flex items-center gap-2">
-                                            <Loader className="h-4 w-4 animate-spin" />
+                                            <Loader2 className="h-4 w-4 animate-spin" />
                                             Processing...
                                         </div>
                                     ) : (

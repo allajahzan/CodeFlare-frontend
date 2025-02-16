@@ -11,7 +11,7 @@ import {
     UserRoundCheck,
     UserRoundMinus,
     Send,
-    Loader,
+    Loader2,
 } from "lucide-react";
 import {
     DropdownMenu,
@@ -325,12 +325,12 @@ function Users({ setDrawerOpen }: PropsType) {
                                                     >
                                                         {user.isBlock ? (
                                                             changingStatus ? (
-                                                                <Loader className="w-4 h-5 text-foreground animate-spin" />
+                                                                <Loader2 className="w-4 h-5 text-foreground animate-spin" />
                                                             ) : (
                                                                 <UserRoundCheck />
                                                             )
                                                         ) : changingStatus ? (
-                                                            <Loader className="w-4 h-5 text-foreground animate-spin" />
+                                                            <Loader2 className="w-4 h-5 text-foreground animate-spin" />
                                                         ) : (
                                                             <UserRoundMinus />
                                                         )}

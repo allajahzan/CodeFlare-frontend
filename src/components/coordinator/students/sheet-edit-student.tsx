@@ -19,7 +19,7 @@ import {
 import { motion } from "framer-motion";
 import {
     BriefcaseIcon,
-    Loader,
+    Loader2,
     Mail,
     Pencil,
     UserRoundPlus,
@@ -310,7 +310,7 @@ function EditStudentSheet({
                         >
                             {submiting ? (
                                 <div className="flex items-center gap-2">
-                                    <Loader className="h-4 w-4 animate-spin" />
+                                    <Loader2 className="h-4 w-4 animate-spin" />
                                     Processing...
                                 </div>
                             ) : (

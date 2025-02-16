@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/sheet";
 import { Avatar } from "@radix-ui/react-avatar";
 import { motion } from "framer-motion";
-import { Ban, Info, Loader, Mail, Plus, Trash2 } from "lucide-react";
+import { Ban, Info, Mail, Plus, Trash2, Loader2 } from "lucide-react";
 import { ReactNode, useState } from "react";
 import profile from "@/assets/images/no-profile.svg";
 import { IUserChat } from "./user-contact-sheet";
@@ -107,7 +107,7 @@ function UserProfileSheet({ button, selectedUser, selectedChat }: PropsType) {
                         <div className="w-full p-5 h-11 flex items-center justify-start hover:bg-muted">
                             {false ? (
                                 <div className="flex items-center gap-2">
-                                    <Loader className="h-4 w-4 animate-spin" />
+                                    <Loader2 className="h-4 w-4 animate-spin" />
                                     Processing...
                                 </div>
                             ) : (
@@ -121,7 +121,7 @@ function UserProfileSheet({ button, selectedUser, selectedChat }: PropsType) {
                         <div className="w-full p-5 h-11 flex items-center justify-start hover:bg-muted">
                             {false ? (
                                 <div className="flex items-center gap-2">
-                                    <Loader className="h-4 w-4 animate-spin" />
+                                    <Loader2 className="h-4 w-4 animate-spin" />
                                     Processing...
                                 </div>
                             ) : (
