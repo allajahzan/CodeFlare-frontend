@@ -110,44 +110,40 @@ function Students({ setDrawerOpen }: PropsType) {
 
             // Success response
             if (resp && resp.status === 200) {
-                setTimeout(() => {
-                    // Update students in students list
-                    setStudents((prevUsers: Student[]) => {
-                        return prevUsers.map((u) => {
-                            if (u._id === user._id) {
-                                return { ...u, isBlock: !u.isBlock };
-                            }
-                            return u;
-                        });
-                    });
-
-                    // Update student in selected student, if selected
-                    setSelectedStudent((prevUser: User | Student | null) => {
-                        if (prevUser?._id === user._id) {
-                            return { ...prevUser, isBlock: !prevUser.isBlock };
+                // Update students in students list
+                setStudents((prevUsers: Student[]) => {
+                    return prevUsers.map((u) => {
+                        if (u._id === user._id) {
+                            return { ...u, isBlock: !u.isBlock };
                         }
-                        return prevUser;
+                        return u;
                     });
+                });
 
-                    // Remove user from users list - becuase we changed status
-                    setStudents((prevUsers: Student[]) => {
-                        return prevUsers.filter((u) => u._id !== user._id);
-                    });
+                // Update student in selected student, if selected
+                setSelectedStudent((prevUser: User | Student | null) => {
+                    if (prevUser?._id === user._id) {
+                        return { ...prevUser, isBlock: !prevUser.isBlock };
+                    }
+                    return prevUser;
+                });
 
-                    toast({
-                        title: user.isBlock
-                            ? "You have unblocked this student."
-                            : "You have blocked this student.",
-                    });
+                // Remove user from users list - becuase we changed status
+                setStudents((prevUsers: Student[]) => {
+                    return prevUsers.filter((u) => u._id !== user._id);
+                });
 
-                    setChangingStatus(false);
-                }, 1000);
+                toast({
+                    title: user.isBlock
+                        ? "You have unblocked this student."
+                        : "You have blocked this student.",
+                });
+
+                setChangingStatus(false);
             }
         } catch (err: unknown) {
-            setTimeout(() => {
-                setChangingStatus(false);
-                handleCustomError(err);
-            }, 1000);
+            setChangingStatus(false);
+            handleCustomError(err);
         }
     };
 
@@ -170,7 +166,8 @@ function Students({ setDrawerOpen }: PropsType) {
 
                 // Send request
                 const resp = await fetchData(
-                    ApiEndpoints.SEARCH_USER + `?keyword=${search}&isBlocked=${isBlocked}`,
+                    ApiEndpoints.SEARCH_USER +
+                    `?keyword=${search}&isBlocked=${isBlocked}`,
                     role
                 );
 
@@ -178,18 +175,14 @@ function Students({ setDrawerOpen }: PropsType) {
                 if (resp && resp.status === 200) {
                     const users = resp?.data.data;
 
-                    setTimeout(() => {
-                        // Set students
-                        setStudents(users);
+                    // Set students
+                    setStudents(users);
 
-                        setFetching(false);
-                    }, 1000);
+                    setFetching(false);
                 }
             } catch (err: unknown) {
-                setTimeout(() => {
-                    setFetching(false);
-                    handleCustomError(err);
-                }, 1000);
+                setFetching(false);
+                handleCustomError(err);
             }
         };
         fetchStudents();

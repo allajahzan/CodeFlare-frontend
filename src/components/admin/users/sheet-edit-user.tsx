@@ -101,28 +101,23 @@ function EditUserSheet({
 
             // Success response
             if (resp && resp.status === 200) {
-                setTimeout(() => {
-                    setSubmiting(false);
+                setOpen(false);
+                setSubmiting(false);
+                reset();
 
-                    // Set updated user in selected user
-                    setSelectedUser(user);
+                // Set updated user in selected user
+                setSelectedUser(user);
 
-                    // Set updated user in users list
-                    setUsers((prevUsers) =>
-                        prevUsers.map((u) => (u._id === user._id ? { ...u, ...user } : u))
-                    );
+                // Set updated user in users list
+                setUsers((prevUsers) =>
+                    prevUsers.map((u) => (u._id === user._id ? { ...u, ...user } : u))
+                );
 
-                    // Close sheet
-                    setOpen(false);
-
-                    toast({ title: "User updated successfully." });
-                }, 1000);
+                toast({ title: "User updated successfully." });
             }
         } catch (err: unknown) {
-            setTimeout(() => {
-                setSubmiting(false);
-                handleCustomError(err);
-            }, 1000);
+            setSubmiting(false);
+            handleCustomError(err);
         }
     };
 
@@ -210,6 +205,7 @@ function EditUserSheet({
                             />
                             <UserRoundPlus className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
+
                         {/* Name error message */}
                         <ValidationError message={errors.name?.message as string} />
                     </motion.div>
@@ -239,15 +235,46 @@ function EditUserSheet({
                             />
                             <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
+
                         {/* Email error message */}
                         <ValidationError message={errors.email?.message as string} />
+                    </motion.div>
+
+                     {/* Confirm email */}
+                     <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5 }}
+                        className="space-y-2"
+                    >
+                        <Label
+                            htmlFor="confirmEmail"
+                            className="text-sm text-foreground font-medium"
+                        >
+                            Confirm Email Address
+                        </Label>
+                        <div className="relative">
+                            <Input
+                                id="confirmEmail"
+                                type="email"
+                                placeholder="student@gmail.com"
+                                required
+                                autoComplete="off"
+                                {...register("confirmEmail")}
+                                className="text-foreground font-medium p-5 pl-9"
+                            />
+                            <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                        </div>
+
+                        {/* Confirm email error message */}
+                        <ValidationError message={errors.confirmEmail?.message as string} />
                     </motion.div>
 
                     {/* Input for role */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5 }}
+                        transition={{ delay: 0.6 }}
                         className="space-y-2"
                     >
                         <Label
@@ -279,6 +306,7 @@ function EditUserSheet({
                             </Select>
                             <BriefcaseIcon className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
+
                         {/* Role error message */}
                         <ValidationError message={errors.role?.message as string} />
                     </motion.div>
@@ -287,7 +315,7 @@ function EditUserSheet({
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6 }}
+                        transition={{ delay: 0.7 }}
                         className="space-y-2"
                     >
                         <Label
@@ -316,6 +344,7 @@ function EditUserSheet({
                                 />
                             }
                         />
+
                         {/* Batches error message */}
                         <ValidationError message={errors.batches?.message as string} />
                     </motion.div>
@@ -324,7 +353,7 @@ function EditUserSheet({
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.7 }}
+                        transition={{ delay: 0.8 }}
                         className="pt-4"
                     >
                         <Button

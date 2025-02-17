@@ -96,31 +96,25 @@ function EditStudentSheet({
 
             // Success response
             if (resp && resp.status === 200) {
-                setTimeout(() => {
-                    setSubmiting(false);
-                    reset();
+                setOpen(false);
+                setSubmiting(false);
+                reset();
 
-                    // Set updated student in selected student
-                    setSelectedStudent(student);
+                // Set updated student in selected student
+                setSelectedStudent(student);
 
-                    // Set updated student in students list
-                    setStudents((prevStudents) =>
-                        prevStudents.map((u) =>
-                            u._id === student._id ? { ...u, ...student } : u
-                        )
-                    );
+                // Set updated student in students list
+                setStudents((prevStudents) =>
+                    prevStudents.map((u) =>
+                        u._id === student._id ? { ...u, ...student } : u
+                    )
+                );
 
-                    // Close sheet
-                    setOpen(false);
-
-                    toast({ title: "Student updated successfully." });
-                }, 1000);
+                toast({ title: "Student updated successfully." });
             }
         } catch (err: unknown) {
-            setTimeout(() => {
-                setSubmiting(false);
-                handleCustomError(err);
-            }, 1000);
+            setSubmiting(false);
+            handleCustomError(err);
         }
     };
 
@@ -188,6 +182,7 @@ function EditStudentSheet({
                             />
                             <UserRoundPlus className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
+
                         {/* Name error message */}
                         <ValidationError message={errors.name?.message as string} />
                     </motion.div>
@@ -217,15 +212,46 @@ function EditStudentSheet({
                             />
                             <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
+
                         {/* Email error message */}
                         <ValidationError message={errors.email?.message as string} />
+                    </motion.div>
+
+                    {/* Confirm email */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5 }}
+                        className="space-y-2"
+                    >
+                        <Label
+                            htmlFor="confirmEmail"
+                            className="text-sm text-foreground font-medium"
+                        >
+                            Confirm Email Address
+                        </Label>
+                        <div className="relative">
+                            <Input
+                                id="confirmEmail"
+                                type="email"
+                                placeholder="student@gmail.com"
+                                required
+                                autoComplete="off"
+                                {...register("confirmEmail")}
+                                className="text-foreground font-medium p-5 pl-9"
+                            />
+                            <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                        </div>
+
+                        {/* Confirm email error message */}
+                        <ValidationError message={errors.confirmEmail?.message as string} />
                     </motion.div>
 
                     {/* Input for role */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5 }}
+                        transition={{ delay: 0.6 }}
                         className="space-y-2"
                     >
                         <Label
@@ -246,6 +272,7 @@ function EditStudentSheet({
                             />
                             <BriefcaseIcon className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
+
                         {/* Role error message */}
                         <ValidationError message={errors.role?.message as string} />
                     </motion.div>
@@ -254,7 +281,7 @@ function EditStudentSheet({
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6 }}
+                        transition={{ delay: 0.7 }}
                         className="space-y-2"
                     >
                         <Label
@@ -292,6 +319,7 @@ function EditStudentSheet({
                             </Select>
                             <UsersRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
+
                         {/* Batch error message */}
                         <ValidationError message={errors.batch?.message as string} />
                     </motion.div>

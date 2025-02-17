@@ -95,25 +95,19 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
 
             // Success response
             if (resp && resp.status === 200) {
-                setTimeout(() => {
-                    setSubmiting(false);
-                    reset();
-                    setSelectedBatches([]);
+                setOpen(false);
+                setSubmiting(false);
+                reset();
+                setSelectedBatches([]);
 
-                    // Set new user
-                    setNewUser(user);
+                // Set new user
+                setNewUser(user);
 
-                    // Close sheet
-                    setOpen(false);
-
-                    toast({ title: "User added successfully." });
-                }, 1000);
+                toast({ title: "User added successfully." });
             }
         } catch (err: unknown) {
-            setTimeout(() => {
-                setSubmiting(false);
-                handleCustomError(err);
-            }, 1000);
+            setSubmiting(false);
+            handleCustomError(err);
         }
     };
 
@@ -189,6 +183,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                             />
                             <UserRoundPlus className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
+
                         {/* Name error message */}
                         <ValidationError message={errors.name?.message as string} />
                     </motion.div>
@@ -218,15 +213,46 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                             />
                             <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
+
                         {/* Email error message */}
                         <ValidationError message={errors.email?.message as string} />
+                    </motion.div>
+
+                    {/* Confirm email */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5 }}
+                        className="space-y-2"
+                    >
+                        <Label
+                            htmlFor="confirmEmail"
+                            className="text-sm text-foreground font-medium"
+                        >
+                            Confirm Email Address
+                        </Label>
+                        <div className="relative">
+                            <Input
+                                id="confirmEmail"
+                                type="email"
+                                placeholder="student@gmail.com"
+                                required
+                                autoComplete="off"
+                                {...register("confirmEmail")}
+                                className="text-foreground font-medium p-5 pl-9"
+                            />
+                            <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                        </div>
+
+                        {/* Confirm email error message */}
+                        <ValidationError message={errors.confirmEmail?.message as string} />
                     </motion.div>
 
                     {/* Input for role */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5 }}
+                        transition={{ delay: 0.6 }}
                         className="space-y-2"
                     >
                         <Label
@@ -256,6 +282,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                             </Select>
                             <BriefcaseIcon className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
+
                         {/* Role error message */}
                         <ValidationError message={errors.role?.message as string} />
                     </motion.div>
@@ -264,7 +291,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6 }}
+                        transition={{ delay: 0.7 }}
                         className="space-y-2"
                     >
                         <Label
@@ -292,6 +319,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                                 />
                             }
                         />
+
                         {/* Batches error message */}
                         <ValidationError message={errors.batches?.message as string} />
                     </motion.div>
@@ -300,7 +328,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.7 }}
+                        transition={{ delay: 0.8 }}
                         className="space-y-2"
                     >
                         <Label
@@ -325,7 +353,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.8 }}
+                        transition={{ delay: 0.9 }}
                         className="pt-4"
                     >
                         <Button

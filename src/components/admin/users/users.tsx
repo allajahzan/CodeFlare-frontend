@@ -98,47 +98,40 @@ function Users({ setDrawerOpen }: PropsType) {
 
             // Success response
             if (resp && resp.status === 200) {
-                setTimeout(() => {
-                    // Update user in users list
-                    setUsers((prevUsers: User[]) => {
-                        return prevUsers.map((u) => {
-                            if (u._id === user._id) {
-                                return { ...u, isBlock: !u.isBlock };
-                            }
-                            return u;
-                        });
-                    });
-
-                    // Update user in selected user, if selected
-                    setSelectedUser((prevUser: User | Student | null) => {
-                        if (prevUser?._id === user._id) {
-                            return { ...prevUser, isBlock: !prevUser.isBlock };
+                // Update user in users list
+                setUsers((prevUsers: User[]) => {
+                    return prevUsers.map((u) => {
+                        if (u._id === user._id) {
+                            return { ...u, isBlock: !u.isBlock };
                         }
-                        return prevUser;
+                        return u;
                     });
+                });
 
-                    // Remove user from users list - becuase we changed status
-                    setUsers((prevUsers: User[]) => {
-                        return prevUsers.filter((u) => u._id !== user._id);
-                    });
+                // Update user in selected user, if selected
+                setSelectedUser((prevUser: User | Student | null) => {
+                    if (prevUser?._id === user._id) {
+                        return { ...prevUser, isBlock: !prevUser.isBlock };
+                    }
+                    return prevUser;
+                });
 
-                    toast({
-                        title: user.isBlock
-                            ? "You have unblocked this user."
-                            : "You have blocked this user.",
-                    });
+                // Remove user from users list - becuase we changed status
+                setUsers((prevUsers: User[]) => {
+                    return prevUsers.filter((u) => u._id !== user._id);
+                });
 
-                    setChangingStatus(false);
+                toast({
+                    title: user.isBlock
+                        ? "You have unblocked this user."
+                        : "You have blocked this user.",
+                });
 
-                    // Close dropdown
-                    // ((menuRef?.current as unknown) as HTMLDivElement).click();
-                }, 1000);
+                setChangingStatus(false);
             }
         } catch (err: unknown) {
-            setTimeout(() => {
-                setChangingStatus(false);
-                handleCustomError(err);
-            }, 1000);
+            setChangingStatus(false);
+            handleCustomError(err);
         }
     };
 
@@ -161,7 +154,8 @@ function Users({ setDrawerOpen }: PropsType) {
 
                 // Send request
                 const resp = await fetchData(
-                    ApiEndpoints.SEARCH_USER + `?keyword=${search}&isBlocked=${isBlocked}`,
+                    ApiEndpoints.SEARCH_USER +
+                    `?keyword=${search}&isBlocked=${isBlocked}`,
                     role
                 );
 
@@ -169,18 +163,14 @@ function Users({ setDrawerOpen }: PropsType) {
 
                 // Success response
                 if (resp && resp.status === 200) {
-                    setTimeout(() => {
-                        // Set users
-                        setUsers(users);
+                    // Set users
+                    setUsers(users);
 
-                        setFetching(false);
-                    }, 1000);
+                    setFetching(false);
                 }
             } catch (err: unknown) {
-                setTimeout(() => {
-                    setFetching(false);
-                    handleCustomError(err);
-                }, 1000);
+                setFetching(false);
+                handleCustomError(err);
             }
         };
         fetchUsers();

@@ -6,7 +6,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -85,26 +85,27 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
 
             // Success response
             if (resp && resp.status === 200) {
-                setTimeout(() => {
-                    setSubmiting(false);
-                    reset();
+                setOpen(false);
+                setSubmiting(false);
+                reset();
 
-                    // Set new user
-                    setNewStudent(user);
+                // Set new user
+                setNewStudent(user);
 
-                    // Close sheet
-                    setOpen(false);
-
-                    toast({ title: "Student added successfully." });
-                }, 1000);
+                toast({ title: "Student added successfully." });
             }
         } catch (err: unknown) {
-            setTimeout(() => {
-                setSubmiting(false);
-                handleCustomError(err);
-            }, 1000);
+            setSubmiting(false);
+            handleCustomError(err);
         }
     };
+
+    // Clear fields when sheet closes
+    useEffect(() => {
+        if (!open) {
+            reset();
+        }
+    }, [open]);
 
     return (
         <Sheet open={open} onOpenChange={setOpen}>
@@ -113,7 +114,7 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                 {/* Header */}
                 <SheetHeader className="p-5 bg-zinc-0">
                     <SheetTitle className="flex items-center gap-3 text-foreground">
-                        <div className="p-2 bg-muted rounded-full"> 
+                        <div className="p-2 bg-muted rounded-full">
                             <UserRoundPlus className="w-4 h-4" />
                         </div>
                         <span>Add new student</span>
@@ -138,7 +139,10 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                         transition={{ delay: 0.3 }}
                         className="space-y-2"
                     >
-                        <Label htmlFor="name" className="text-sm text-foreground font-medium">
+                        <Label
+                            htmlFor="name"
+                            className="text-sm text-foreground font-medium"
+                        >
                             Full Name
                         </Label>
                         <div className="relative">
@@ -152,6 +156,7 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                             />
                             <UserRoundPlus className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
+
                         {/* Name error message */}
                         <ValidationError message={errors.name?.message as string} />
                     </motion.div>
@@ -163,7 +168,10 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                         transition={{ delay: 0.4 }}
                         className="space-y-2"
                     >
-                        <Label htmlFor="email" className="text-sm text-foreground font-medium">
+                        <Label
+                            htmlFor="email"
+                            className="text-sm text-foreground font-medium"
+                        >
                             Email Address
                         </Label>
                         <div className="relative">
@@ -178,18 +186,52 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                             />
                             <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
+
                         {/* Email error message */}
                         <ValidationError message={errors.email?.message as string} />
                     </motion.div>
 
-                    {/* Input for role */}
+                    {/* Confirm email */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5 }}
                         className="space-y-2"
                     >
-                        <Label htmlFor="role" className="text-sm text-foreground font-medium">
+                        <Label
+                            htmlFor="confirmEmail"
+                            className="text-sm text-foreground font-medium"
+                        >
+                            Confirm Email Address
+                        </Label>
+                        <div className="relative">
+                            <Input
+                                id="confirmEmail"
+                                type="email"
+                                placeholder="student@gmail.com"
+                                required
+                                autoComplete="off"
+                                {...register("confirmEmail")}
+                                className="text-foreground font-medium p-5 pl-9"
+                            />
+                            <Mail className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                        </div>
+
+                        {/* Confirm email error message */}
+                        <ValidationError message={errors.confirmEmail?.message as string} />
+                    </motion.div>
+
+                    {/* Input for role */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.6 }}
+                        className="space-y-2"
+                    >
+                        <Label
+                            htmlFor="role"
+                            className="text-sm text-foreground font-medium"
+                        >
                             Role
                         </Label>
                         <div className="relative">
@@ -205,6 +247,7 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                             />
                             <BriefcaseIcon className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
+
                         {/* Role error message */}
                         <ValidationError message={errors.role?.message as string} />
                     </motion.div>
@@ -213,10 +256,13 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6 }}
+                        transition={{ delay: 0.7 }}
                         className="space-y-2"
                     >
-                        <Label htmlFor="role" className="text-sm text-foreground font-medium">
+                        <Label
+                            htmlFor="role"
+                            className="text-sm text-foreground font-medium"
+                        >
                             Batches
                         </Label>
                         <div className="relative">
@@ -246,6 +292,7 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                             </Select>
                             <UsersRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
+
                         {/* Batch error message */}
                         <ValidationError message={errors.batch?.message as string} />
                     </motion.div>
@@ -254,10 +301,13 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.7 }}
+                        transition={{ delay: 0.8 }}
                         className="space-y-2"
                     >
-                        <Label htmlFor="message" className="text-sm text-foreground font-medium">
+                        <Label
+                            htmlFor="message"
+                            className="text-sm text-foreground font-medium"
+                        >
                             Personal Message (Optional)
                         </Label>
                         <div className="relative">
@@ -276,7 +326,7 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.8 }}
+                        transition={{ delay: 0.9 }}
                         className="pt-4"
                     >
                         <Button
