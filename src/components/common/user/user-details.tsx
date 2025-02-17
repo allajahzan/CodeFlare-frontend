@@ -68,7 +68,7 @@ function UserDetails({
                     >
                         <div className="flex items-center justify-between gap-3 relative">
                             {/* User name card */}
-                            <UserNameCard data={selectedUser}/>
+                            <UserNameCard data={selectedUser} />
 
                             {/* Edit button */}
                             <div className="self-start">

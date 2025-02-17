@@ -1,12 +1,10 @@
 import { motion } from "framer-motion";
-import image from "@/assets/images/allaj.jpeg";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
-import React, { useContext } from "react";
+import React from "react";
 import { User } from "@/types/admin";
 import { Student } from "@/types/coordinator";
-import profileLight from "@/assets/images/no-profile.svg";
-import { IThemeContext, ThemeContext } from "@/context/theme-context";
+import profile from "@/assets/images/no-profile.svg";
 
 // Interface for Props
 interface PropsType {
@@ -29,9 +27,6 @@ function UserList({
     children2,
     className,
 }: PropsType) {
-    // Them context
-    const { theme } = useContext(ThemeContext) as IThemeContext;
-
     return (
         <motion.div
             key={index}
@@ -48,15 +43,9 @@ function UserList({
             <div className="flex items-center gap-3">
                 {/* Avatar profile pic */}
                 <Avatar className="bg-background w-12 h-12 border-2 border-background shadow-md">
-                    {user.profilePic && (
-                        <AvatarImage src={image} className="object-cover" />
-                    )}
+                    <AvatarImage src={user.profilePic} className="object-cover" />
                     <AvatarFallback className="bg-transparent">
-                        {theme === "dark" ? (
-                            <img className="w-full" src={profileLight} alt="" />
-                        ) : (
-                            <img className="w-full" src={profileLight} alt="" />
-                        )}
+                        <img className="w-full" src={profile} alt="" />
                     </AvatarFallback>
                 </Avatar>
 

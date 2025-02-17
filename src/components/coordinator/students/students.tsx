@@ -10,6 +10,8 @@ import {
     User2,
     UserRoundCheck,
     UserRoundMinus,
+    Loader2,
+    Send,
 } from "lucide-react";
 import {
     DropdownMenu,
@@ -30,7 +32,6 @@ import {
     ChangeEvent,
     useContext,
     useEffect,
-    useLayoutEffect,
     useState,
 } from "react";
 import { NotFoundOrbit } from "@/components/animation/fallbacks";
@@ -41,7 +42,7 @@ import { useMediaQuery } from "usehooks-ts";
 import { cn } from "@/lib/utils";
 import DrawerUsersList from "@/components/common/user/drawer-users-list";
 import UserDetails from "@/components/common/user/user-details";
-import { fetchData } from "@/service/api-service";
+import { fetchData, patchData } from "@/service/api-service";
 import { handleCustomError } from "@/utils/error";
 import ApiEndpoints from "@/constants/api-endpoints";
 import AddStudentSheet from "./sheet-add-student";
@@ -50,6 +51,7 @@ import { User } from "@/types/admin";
 import { IUserContext, UserContext } from "@/context/user-context";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
+import { toast } from "@/hooks/use-toast";
 
 // Interface for Props
 interface PropsType {
@@ -65,8 +67,11 @@ function Students({ setDrawerOpen }: PropsType) {
     const [selectedStudent, setSelectedStudent] = useState<Student | User | null>(
         null
     );
-    const [status, setStatus] = useState<boolean>(false);
+    const [isBlocked, setIsBlocked] = useState<boolean>(false);
     const [fetching, setFetching] = useState<boolean>(false);
+
+    // Blocking - unblocking
+    const [changingStatus, setChangingStatus] = useState<boolean>(false);
 
     // User details
     const { user } = useContext(UserContext) as IUserContext;
@@ -92,23 +97,64 @@ function Students({ setDrawerOpen }: PropsType) {
 
     // handle blocked-unblocked
     const handleStatus = () => {
-        setStatus(!status);
+        setIsBlocked(!isBlocked);
     };
 
-    // Search filter sort
-    // useLayoutEffect(() => {
-    //     const trimmed = search.trim();
-    //     const regex = trimmed ? new RegExp(trimmed, "i") : null;
+    // Handle blocking-unblocking user
+    const handleBlock = async (user: User) => {
+        try {
+            // Set blocking state
+            setChangingStatus(true);
 
-    //     const filteredUsers = users.filter((user) => {
-    //         const matchesStatus =
-    //             status !== undefined ? user.isBlock === status : true;
-    //         const matchesSearch = regex ? regex.test(user.name) : true;
-    //         return matchesStatus && matchesSearch;
-    //     });
+            // Send request
+            const resp = await patchData(
+                ApiEndpoints.USER_STATUS + `/${user._id}`,
+                {},
+                role
+            );
 
-    //     setStudents(filteredUsers);
-    // }, [search, status]);
+            // Success response
+            if (resp && resp.status === 200) {
+                setTimeout(() => {
+                    // Update students in students list
+                    setStudents((prevUsers: Student[]) => {
+                        return prevUsers.map((u) => {
+                            if (u._id === user._id) {
+                                return { ...u, isBlock: !u.isBlock };
+                            }
+                            return u;
+                        });
+                    });
+
+                    // Update student in selected student, if selected
+                    setSelectedStudent((prevUser: User | Student | null) => {
+                        if (prevUser?._id === user._id) {
+                            return { ...prevUser, isBlock: !prevUser.isBlock };
+                        }
+                        return prevUser;
+                    });
+
+                    // Remove user from users list - becuase we changed status
+                    setStudents((prevUsers: Student[]) => {
+                        return prevUsers.filter((u) => u._id !== user._id);
+                    });
+
+                    toast({
+                        title: user.isBlock
+                            ? "You have unblocked this student."
+                            : "You have blocked this student.",
+                    });
+
+                    setChangingStatus(false);
+                }, 1000);
+            }
+        } catch (err: unknown) {
+            setTimeout(() => {
+                setChangingStatus(false);
+                handleCustomError(err);
+            }, 1000);
+        }
+    };
 
     // Add new students
     useEffect(() => {
@@ -121,13 +167,17 @@ function Students({ setDrawerOpen }: PropsType) {
     }, [newStudent]);
 
     // Fetch students
-    useLayoutEffect(() => {
+    useEffect(() => {
         const fetchStudents = async () => {
             try {
                 setFetching(true);
+                setStudents([]);
 
                 // Send request
-                const resp = await fetchData(ApiEndpoints.GET_USERS, role);
+                const resp = await fetchData(
+                    ApiEndpoints.GET_USERS + `/${isBlocked}`,
+                    role
+                );
 
                 const users = resp?.data.data;
 
@@ -148,7 +198,7 @@ function Students({ setDrawerOpen }: PropsType) {
             }
         };
         fetchStudents();
-    }, []);
+    }, [isBlocked]);
 
     // Close drawer on screen size change
     useEffect(() => {
@@ -182,7 +232,7 @@ function Students({ setDrawerOpen }: PropsType) {
                 {/* Search filter sort  */}
                 <SearchFilterSort
                     search={search}
-                    status={status}
+                    status={isBlocked}
                     handleSearch={handleSearch}
                     hanldeStatus={handleStatus}
                     children1={
@@ -266,6 +316,10 @@ function Students({ setDrawerOpen }: PropsType) {
                                                         isSmall ? "left-[13px]" : "left-0"
                                                     )}
                                                 >
+                                                    <DropdownMenuItem>
+                                                        <Send />
+                                                        Send Invitation
+                                                    </DropdownMenuItem>
                                                     <DropdownMenuItem
                                                         onClick={() => setSelectedStudent(students[index])}
                                                     >
@@ -273,13 +327,30 @@ function Students({ setDrawerOpen }: PropsType) {
                                                         View Profile
                                                     </DropdownMenuItem>
                                                     <DropdownMenuSeparator />
-                                                    <DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        disabled={changingStatus}
+                                                        onClick={() => handleBlock(student as any)}
+                                                        onSelect={(e) => e.preventDefault()}
+                                                        className="text-center"
+                                                    >
                                                         {student.isBlock ? (
-                                                            <UserRoundCheck />
+                                                            changingStatus ? (
+                                                                <Loader2 className="w-4 h-5 text-foreground animate-spin" />
+                                                            ) : (
+                                                                <UserRoundCheck />
+                                                            )
+                                                        ) : changingStatus ? (
+                                                            <Loader2 className="w-4 h-5 text-foreground animate-spin" />
                                                         ) : (
                                                             <UserRoundMinus />
                                                         )}
-                                                        {student.isBlock ? "Unblock" : "Block"}
+                                                        {student.isBlock
+                                                            ? changingStatus
+                                                                ? "Unblocking..."
+                                                                : "Unblock"
+                                                            : changingStatus
+                                                                ? "Blocking..."
+                                                                : "Block"}
                                                     </DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>

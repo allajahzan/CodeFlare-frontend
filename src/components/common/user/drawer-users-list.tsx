@@ -14,7 +14,6 @@ import {
     UserRoundCheck,
     UserRoundMinus,
 } from "lucide-react";
-import image from "@/assets/images/allaj.jpeg";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -97,6 +96,11 @@ function DrawerUsersList({
                         return prevUser;
                     });
 
+                    // Remove user from users list - becuase we changed status
+                    setUsers((prevUsers: any[]) => {
+                        return prevUsers.filter((u) => u._id !== user._id);
+                    });
+
                     toast({
                         title: user.isBlock
                             ? "You have unblocked this user"
@@ -154,9 +158,10 @@ function DrawerUsersList({
                                     <div className="flex items-center gap-3">
                                         {/* Avatar profile pic */}
                                         <Avatar className="border-2 bg-background w-12 h-12">
-                                            {user.profilePic && (
-                                                <AvatarImage src={image} className="object-cover" />
-                                            )}
+                                            <AvatarImage
+                                                src={user.profilePic}
+                                                className="object-cover"
+                                            />
                                             <AvatarFallback className="bg-transparent">
                                                 <img className="w-full" src={profile} alt="" />
                                             </AvatarFallback>

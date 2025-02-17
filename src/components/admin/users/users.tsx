@@ -20,7 +20,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChangeEvent, useEffect, useLayoutEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { NotFoundOrbit } from "@/components/animation/fallbacks";
 import UserList from "@/components/common/user/user-list-card";
 import CardHeader from "@/components/common/data-card/header";
@@ -50,13 +50,14 @@ function Users({ setDrawerOpen }: PropsType) {
     // Users related states
     const [newUser, setNewUser] = useState<User | null>(null);
     const [users, setUsers] = useState<User[] | []>([]);
-    // const [filteredUsers, setFilteredUsers] = useState<User[] | []>([]);
     const [selectedUser, setSelectedUser] = useState<User | Student | null>(null);
-    const [status, setStatus] = useState<boolean>(false);
+    const [isBlocked, setIsBlocked] = useState<boolean>(false);
     const [fetching, setFetching] = useState<boolean>(false);
 
     // Blocking - unblocking
     const [changingStatus, setChangingStatus] = useState<boolean>(false);
+
+    const menuRef = useRef(null);
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
@@ -79,23 +80,8 @@ function Users({ setDrawerOpen }: PropsType) {
 
     // Handle blocked-unblocked
     const handleStatus = () => {
-        setStatus(!status);
+        setIsBlocked(!isBlocked);
     };
-
-    // Search filter sort
-    // useLayoutEffect(() => {
-    //     const trimmed = search.trim();
-    //     const regex = trimmed ? new RegExp(trimmed, "i") : null;
-
-    //     const filteredUsers = users.filter((user) => {
-    //         const matchesStatus =
-    //             status !== undefined ? user.isBlock === status : true;
-    //         const matchesSearch = regex ? regex.test(user.name) : true;
-    //         return matchesStatus && matchesSearch;
-    //     });
-
-    //     setFilteredUsers(filteredUsers);
-    // }, [search, status, users]);
 
     // Handle blocking-unblocking user
     const handleBlock = async (user: User) => {
@@ -131,13 +117,21 @@ function Users({ setDrawerOpen }: PropsType) {
                         return prevUser;
                     });
 
+                    // Remove user from users list - becuase we changed status
+                    setUsers((prevUsers: User[]) => {
+                        return prevUsers.filter((u) => u._id !== user._id);
+                    });
+
                     toast({
                         title: user.isBlock
-                            ? "You have unblocked this user"
-                            : "You have blocked this user",
+                            ? "You have unblocked this user."
+                            : "You have blocked this user.",
                     });
 
                     setChangingStatus(false);
+
+                    // Close dropdown
+                    // ((menuRef?.current as unknown) as HTMLDivElement).click();
                 }, 1000);
             }
         } catch (err: unknown) {
@@ -159,13 +153,17 @@ function Users({ setDrawerOpen }: PropsType) {
     }, [newUser]);
 
     // Fetch users
-    useLayoutEffect(() => {
+    useEffect(() => {
         const fetchUsers = async () => {
             try {
                 setFetching(true);
+                setUsers([]);
 
                 // Send request
-                const resp = await fetchData(ApiEndpoints.GET_USERS, role);
+                const resp = await fetchData(
+                    ApiEndpoints.GET_USERS + `/${isBlocked}`,
+                    role
+                );
 
                 const users = resp?.data.data;
 
@@ -186,7 +184,7 @@ function Users({ setDrawerOpen }: PropsType) {
             }
         };
         fetchUsers();
-    }, []);
+    }, [isBlocked]);
 
     // Close drawer on screen size change
     useEffect(() => {
@@ -197,6 +195,7 @@ function Users({ setDrawerOpen }: PropsType) {
         <div className="p-5 pt-0 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {/*Left side  */}
             <div
+                ref={menuRef}
                 className="p-5 sticky z-0 top-[20px] md:top-5 w-full h-[calc(100vh-108px)] flex flex-col gap-5 items-center rounded-2xl
             bg-background border border-border shadow-sm dark:shadow-customBorder dark:shadow-inner"
             >
@@ -222,7 +221,7 @@ function Users({ setDrawerOpen }: PropsType) {
                 {/* Search filter sort  */}
                 <SearchFilterSort
                     search={search}
-                    status={status}
+                    status={isBlocked}
                     handleSearch={handleSearch}
                     hanldeStatus={handleStatus}
                     children1={

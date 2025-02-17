@@ -1,6 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Mail } from "lucide-react";
-import allaj from "@/assets/images/allaj.jpeg";
 import profile from "@/assets/images/no-profile.svg";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
@@ -21,9 +20,7 @@ function UserNameCard({ data }: PropsType) {
                 transition={{ delay: 0.2 }}
             >
                 <Avatar className="bg-background w-16 h-16 border-2 border-background shadow-md">
-                    {data.profilePic && (
-                        <AvatarImage src={allaj} className="object-cover" />
-                    )}
+                    <AvatarImage src={data.profilePic} className="object-cover" />
                     <AvatarFallback className="bg-transparent">
                         <img src={profile} alt="" />
                     </AvatarFallback>
