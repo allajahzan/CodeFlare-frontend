@@ -107,7 +107,7 @@ function UserCard({
         >
             <div className="flex items-center gap-3">
                 {/* Avatar profile pic */}
-                <Avatar className="bg-background w-12 h-12 border-2 border-white dark:border-border shadow-md">
+                <Avatar className="bg-background w-12 h-12 border-2 border-background dark:border-border shadow-md">
                     <AvatarImage src={user.profilePic} className="object-cover" />
                     <AvatarFallback className="bg-transparent">
                         <img className="w-full" src={profile} alt="" />

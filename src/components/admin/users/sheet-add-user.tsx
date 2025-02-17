@@ -86,7 +86,6 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                     email: formData.email,
                     role: formData.role,
                     batches: formData.batches.split(", "),
-                    message: formData.message,
                 },
                 role
             );
