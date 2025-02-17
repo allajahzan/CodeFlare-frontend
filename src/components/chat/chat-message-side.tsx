@@ -291,10 +291,11 @@ function MessageSideOfChat({
                                 transition={{ duration: 0.2 }}
                                 className="cursor-pointer relative"
                             >
-                                <Avatar className="bg-background w-16 h-16 border-2">
-                                    {selectedUser?.profilePic && (
-                                        <AvatarImage src={"allaj"} className="object-cover" />
-                                    )}
+                                <Avatar className="bg-background w-16 h-16 border-4 border-white dark:border-border shadow-md">
+                                    <AvatarImage
+                                        src={selectedUser?.profilePic}
+                                        className="object-cover"
+                                    />
                                     <AvatarFallback className="bg-transparent">
                                         <img src={profile} alt="" />
                                     </AvatarFallback>
@@ -308,7 +309,7 @@ function MessageSideOfChat({
                                         opacity: selectedUser?.isOnline ? 1 : 0,
                                     }}
                                     transition={{ duration: 0.2 }}
-                                    className="absolute bottom-2 -right-1 h-5 w-5 rounded-full border-4 bg-green-400"
+                                    className="absolute bottom-0 right-0 h-4 w-4 rounded-full border-[3px] bg-green-600"
                                 ></motion.div>
                             </motion.div>
                         }

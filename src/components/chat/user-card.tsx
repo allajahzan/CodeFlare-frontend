@@ -1,5 +1,4 @@
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import image from "@/assets/images/allaj.jpeg";
 import profile from "@/assets/images/no-profile.svg";
 import { cn } from "@/lib/utils";
 import { ReactNode, useContext } from "react";
@@ -108,10 +107,8 @@ function UserCard({
         >
             <div className="flex items-center gap-3">
                 {/* Avatar profile pic */}
-                <Avatar className="bg-background w-12 h-12 border-2">
-                    {user.profilePic && (
-                        <AvatarImage src={image} className="object-cover" />
-                    )}
+                <Avatar className="bg-background w-12 h-12 border-2 border-white dark:border-border shadow-md">
+                    <AvatarImage src={user.profilePic} className="object-cover" />
                     <AvatarFallback className="bg-transparent">
                         <img className="w-full" src={profile} alt="" />
                     </AvatarFallback>
