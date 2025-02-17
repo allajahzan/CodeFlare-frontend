@@ -6,7 +6,7 @@ export interface User {
     role: string;
     profilePic: string;
     batches: string[];
-    isBlock: boolean;
+    isblock: boolean;
     createdAt: string;
     lastActive: string;
 }

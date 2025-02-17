@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
-    EyeIcon,
     Loader2,
     MoreHorizontal,
     Plus,
@@ -82,7 +81,7 @@ function DrawerUsersList({
                     setUsers((prevUsers: any) => {
                         return prevUsers.map((u: any) => {
                             if (u._id === user._id) {
-                                return { ...u, isBlock: !u.isBlock };
+                                return { ...u, isblock: !u.isblock };
                             }
                             return u;
                         });
@@ -91,7 +90,7 @@ function DrawerUsersList({
                     // Update user in selected user, if selected
                     setSelectedUser((prevUser: User | Student | null) => {
                         if (prevUser?._id === user._id) {
-                            return { ...prevUser, isBlock: !prevUser.isBlock };
+                            return { ...prevUser, isblock: !prevUser.isblock };
                         }
                         return prevUser;
                     });
@@ -102,7 +101,7 @@ function DrawerUsersList({
                     });
 
                     toast({
-                        title: user.isBlock
+                        title: user.isblock
                             ? "You have unblocked this user"
                             : "You have blocked this user",
                     });
@@ -195,7 +194,7 @@ function DrawerUsersList({
                                                     <Send />
                                                     Send Invitation
                                                 </DropdownMenuItem>
-                                                <DropdownMenuItem
+                                                {/* <DropdownMenuItem
                                                     onClick={() => {
                                                         setDrawerOpen(true);
                                                         setSelectedUser(user);
@@ -203,7 +202,7 @@ function DrawerUsersList({
                                                 >
                                                     <EyeIcon />
                                                     View Profile
-                                                </DropdownMenuItem>
+                                                </DropdownMenuItem> */}
                                                 <DropdownMenuSeparator />
                                                 <DropdownMenuItem
                                                     disabled={changingStatus}
@@ -211,7 +210,7 @@ function DrawerUsersList({
                                                     onSelect={(e) => e.preventDefault()}
                                                     className="text-center"
                                                 >
-                                                    {user.isBlock ? (
+                                                    {user.isblock ? (
                                                         changingStatus ? (
                                                             <Loader2 className="w-4 h-5 text-foreground animate-spin" />
                                                         ) : (
@@ -222,7 +221,7 @@ function DrawerUsersList({
                                                     ) : (
                                                         <UserRoundMinus />
                                                     )}
-                                                    {user.isBlock
+                                                    {user.isblock
                                                         ? changingStatus
                                                             ? "Unblocking..."
                                                             : "Unblock"

@@ -114,7 +114,7 @@ function Students({ setDrawerOpen }: PropsType) {
                 setStudents((prevUsers: Student[]) => {
                     return prevUsers.map((u) => {
                         if (u._id === user._id) {
-                            return { ...u, isBlock: !u.isBlock };
+                            return { ...u, isblock: !u.isblock };
                         }
                         return u;
                     });
@@ -123,7 +123,7 @@ function Students({ setDrawerOpen }: PropsType) {
                 // Update student in selected student, if selected
                 setSelectedStudent((prevUser: User | Student | null) => {
                     if (prevUser?._id === user._id) {
-                        return { ...prevUser, isBlock: !prevUser.isBlock };
+                        return { ...prevUser, isblock: !prevUser.isblock };
                     }
                     return prevUser;
                 });
@@ -134,7 +134,7 @@ function Students({ setDrawerOpen }: PropsType) {
                 });
 
                 toast({
-                    title: user.isBlock
+                    title: user.isblock
                         ? "You have unblocked this student."
                         : "You have blocked this student.",
                 });
@@ -177,6 +177,9 @@ function Students({ setDrawerOpen }: PropsType) {
 
                     // Set students
                     setStudents(users);
+
+                    console.log(users);
+
 
                     setFetching(false);
                 }
@@ -290,7 +293,7 @@ function Students({ setDrawerOpen }: PropsType) {
                                     <UserList
                                         key={index}
                                         index={index}
-                                        action={handleSelect}
+                                        action={() => handleSelect(index)}
                                         user={student}
                                         selectedUser={selectedStudent}
                                         children1={
@@ -329,7 +332,7 @@ function Students({ setDrawerOpen }: PropsType) {
                                                         onSelect={(e) => e.preventDefault()}
                                                         className="text-center"
                                                     >
-                                                        {student.isBlock ? (
+                                                        {student.isblock ? (
                                                             changingStatus ? (
                                                                 <Loader2 className="w-4 h-5 text-foreground animate-spin" />
                                                             ) : (
@@ -340,7 +343,7 @@ function Students({ setDrawerOpen }: PropsType) {
                                                         ) : (
                                                             <UserRoundMinus />
                                                         )}
-                                                        {student.isBlock
+                                                        {student.isblock
                                                             ? changingStatus
                                                                 ? "Unblocking..."
                                                                 : "Unblock"

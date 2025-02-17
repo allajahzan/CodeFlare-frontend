@@ -51,12 +51,14 @@ function UserProfileSheet({ button, selectedUser, selectedChat }: PropsType) {
                             initial={{ scale: 0.5, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ delay: 0.3 }}
-                            className="w-32 h-32 border-2 rounded-full"
+                            className="w-32 h-32 rounded-full overflow-hidden
+                            border-4 border-background dark:border-border shadow-md"
                         >
                             <Avatar className="bg-background">
-                                {false && (
-                                    <AvatarImage src={"allaj"} className="object-cover" />
-                                )}
+                                <AvatarImage
+                                    src={selectedUser.profilePic}
+                                    className="object-cover"
+                                />
                                 <AvatarFallback className="bg-transparent">
                                     <img src={profile} alt="" />
                                 </AvatarFallback>

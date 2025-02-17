@@ -45,9 +45,9 @@ function UserCard({
     const handleSelectUserChat = (selectedUser: IUserChat) => {
         if (isSmall) {
             setUsersListSideOpen(false);
-        } else {
-            setIsOpen(false);
         }
+
+        setIsOpen(false);
 
         // Check if receiver is in online
         userOnline(selectedUser._id);

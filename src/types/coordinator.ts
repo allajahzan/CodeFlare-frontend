@@ -7,7 +7,7 @@ export interface Student {
     profilePic: string;
     batch: string;
     week: string;
-    isBlock: boolean;
+    isblock: boolean;
     lastActive: string;
     createdAt: string;
 }

@@ -112,9 +112,9 @@ function UserDetails({
                             {[
                                 // Active or blocked status
                                 {
-                                    icon: selectedUser.isBlock ? UserRoundMinus : UserRoundCheck,
+                                    icon: selectedUser.isblock ? UserRoundMinus : UserRoundCheck,
                                     label: "Role Status",
-                                    value: selectedUser.isBlock ? "Blocked" : "Active",
+                                    value: selectedUser.isblock ? "Blocked" : "Active",
                                 },
 
                                 // Last active or week depends on role
