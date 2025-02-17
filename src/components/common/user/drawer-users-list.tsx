@@ -70,7 +70,7 @@ function DrawerUsersList({
 
             // Send request
             const resp = await patchData(
-                ApiEndpoints.USER_STATUS + `/${user._id}`,
+                ApiEndpoints.CHANGE_USER_STATUS + `/${user._id}`,
                 {},
                 role
             );

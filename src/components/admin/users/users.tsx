@@ -91,7 +91,7 @@ function Users({ setDrawerOpen }: PropsType) {
 
             // Send request
             const resp = await patchData(
-                ApiEndpoints.USER_STATUS + `/${user._id}`,
+                ApiEndpoints.CHANGE_USER_STATUS + `/${user._id}`,
                 {},
                 role
             );
@@ -161,7 +161,7 @@ function Users({ setDrawerOpen }: PropsType) {
 
                 // Send request
                 const resp = await fetchData(
-                    ApiEndpoints.GET_USERS + `/${isBlocked}`,
+                    ApiEndpoints.SEARCH_USER + `?keyword=${search}&isBlocked=${isBlocked}`,
                     role
                 );
 
@@ -184,7 +184,7 @@ function Users({ setDrawerOpen }: PropsType) {
             }
         };
         fetchUsers();
-    }, [isBlocked]);
+    }, [isBlocked, search]);
 
     // Close drawer on screen size change
     useEffect(() => {

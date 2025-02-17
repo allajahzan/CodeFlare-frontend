@@ -9,9 +9,10 @@ enum ApiEndpoints {
     LOGOUT = "/user/logout",
 
     // User CRUD APIs - user service
-    GET_USERS = "/user/users",
     USER = "/user",
-    USER_STATUS = "/user/status",
+    GET_USERS = "/user/users",
+    CHANGE_USER_STATUS = "/user/status",
+    SEARCH_USER = '/user/search',
 
     // Profile APIs - user service
     PROFILE = "/user/profile",

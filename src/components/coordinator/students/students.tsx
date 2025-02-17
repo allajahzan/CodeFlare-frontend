@@ -28,12 +28,7 @@ import {
     SelectLabel,
     SelectTrigger,
 } from "@/components/ui/select";
-import {
-    ChangeEvent,
-    useContext,
-    useEffect,
-    useState,
-} from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { NotFoundOrbit } from "@/components/animation/fallbacks";
 import UserList from "@/components/common/user/user-list-card";
 import CardHeader from "@/components/common/data-card/header";
@@ -91,7 +86,7 @@ function Students({ setDrawerOpen }: PropsType) {
     };
 
     // handle search
-    const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleSearch = async (event: ChangeEvent<HTMLInputElement>) => {
         setSearch(event.target.value);
     };
 
@@ -108,7 +103,7 @@ function Students({ setDrawerOpen }: PropsType) {
 
             // Send request
             const resp = await patchData(
-                ApiEndpoints.USER_STATUS + `/${user._id}`,
+                ApiEndpoints.CHANGE_USER_STATUS + `/${user._id}`,
                 {},
                 role
             );
@@ -175,14 +170,14 @@ function Students({ setDrawerOpen }: PropsType) {
 
                 // Send request
                 const resp = await fetchData(
-                    ApiEndpoints.GET_USERS + `/${isBlocked}`,
+                    ApiEndpoints.SEARCH_USER + `?keyword=${search}&isBlocked=${isBlocked}`,
                     role
                 );
 
-                const users = resp?.data.data;
-
                 // Success response
                 if (resp && resp.status === 200) {
+                    const users = resp?.data.data;
+
                     setTimeout(() => {
                         // Set students
                         setStudents(users);
@@ -198,7 +193,7 @@ function Students({ setDrawerOpen }: PropsType) {
             }
         };
         fetchStudents();
-    }, [isBlocked]);
+    }, [isBlocked, search]);
 
     // Close drawer on screen size change
     useEffect(() => {
@@ -237,7 +232,10 @@ function Students({ setDrawerOpen }: PropsType) {
                     hanldeStatus={handleStatus}
                     children1={
                         <Select>
-                            <SelectTrigger className="w-[41.6px] h-[41.6px] flex justify-center p-0 py-5 shadow-sm">
+                            <SelectTrigger
+                                className="w-[41.6px] h-[41.6px] flex justify-center p-0 py-5 
+                            hover:bg-muted dark:hover:bg-sidebar shadow-sm"
+                            >
                                 <Filter className="h-4 w-4 text-foreground" />
                             </SelectTrigger>
                             <SelectContent align={isSmall ? "start" : "end"}>
@@ -253,21 +251,26 @@ function Students({ setDrawerOpen }: PropsType) {
                         </Select>
                     }
                     children2={
-                        <DropdownMenu>
-                            <DropdownMenuTrigger className="p-3 rounded-lg border hover:bg-sidebar shadow-sm">
+                        <Select>
+                            <SelectTrigger
+                                className="w-[41.6px] h-[41.6px] flex justify-center p-0 py-5 
+                        hover:bg-muted dark:hover:bg-sidebar shadow-sm"
+                            >
                                 <SortAsc className="h-4 w-4 text-foreground" />
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align={isSmall ? "end" : "start"}>
-                                <DropdownMenuItem>
-                                    <ArrowUpAZ />
-                                    Name
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <CalendarArrowUp />
-                                    Date
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                            </SelectTrigger>
+                            <SelectContent align={isSmall ? "start" : "end"}>
+                                <SelectGroup>
+                                    <SelectItem className="flex text-center" value="name">
+                                        <ArrowUpAZ className="w-4 h-4 text-foreground" />
+                                        <span>Name</span>
+                                    </SelectItem>
+                                    <SelectItem className="flex text-center" value="date">
+                                        <CalendarArrowUp className="w-4 h-4 text-foreground" />
+                                        <span>Date</span>
+                                    </SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
                     }
                 />
 
