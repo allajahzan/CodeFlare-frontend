@@ -41,7 +41,7 @@ function SideBarItem({ Image, text, handleSideBarItems, path }: PropsType) {
                         </div>
                     </li>
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent className="text-foreground dark:bg-sidebar border borer-2">
                     <p style={{ fontSize: "13px" }}>{text}</p>
                 </TooltipContent>
             </Tooltip>

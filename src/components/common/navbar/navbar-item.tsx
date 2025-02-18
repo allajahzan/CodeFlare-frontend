@@ -34,7 +34,7 @@ function NavbarItem({ Image, action, text }: PropsType) {
                         <Image className="w-5 h-5 text-foreground" />
                     </div>
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent className="text-foreground dark:bg-sidebar border borer-2">
                     <p style={{ fontSize: "13px" }}>{text}</p>
                 </TooltipContent>
             </Tooltip>

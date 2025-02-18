@@ -1,6 +1,4 @@
 import {
-    ArrowUpAZ,
-    CalendarArrowUp,
     EyeIcon,
     Filter,
     Search,
@@ -12,11 +10,13 @@ import {
     UserRoundMinus,
     Loader2,
     Send,
+    Check,
 } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -47,6 +47,7 @@ import { IUserContext, UserContext } from "@/context/user-context";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import { toast } from "@/hooks/use-toast";
+import { Checkbox } from "@/components/ui/checkbox";
 
 // Interface for Props
 interface PropsType {
@@ -62,11 +63,21 @@ function Students({ setDrawerOpen }: PropsType) {
     const [selectedStudent, setSelectedStudent] = useState<Student | User | null>(
         null
     );
-    const [isBlocked, setIsBlocked] = useState<boolean>(false);
+
     const [fetching, setFetching] = useState<boolean>(false);
 
     // Blocking - unblocking
+    const [isBlocked, setIsBlocked] = useState<boolean>(false);
     const [changingStatus, setChangingStatus] = useState<boolean>(false);
+
+    // Search
+    const [search, setSearch] = useState<string>("");
+
+    // Sort
+    const [sort, setSort] = useState<{ key: string; order: number }>({
+        key: "createdAt",
+        order: 1,
+    });
 
     // User details
     const { user } = useContext(UserContext) as IUserContext;
@@ -74,13 +85,10 @@ function Students({ setDrawerOpen }: PropsType) {
     // Redux
     const role = useSelector((state: stateType) => state.role);
 
-    // Search student
-    const [search, setSearch] = useState<string>("");
-
     // Small screen
     const isSmall = useMediaQuery("(max-width: 767.20px)");
 
-    // select student
+    // Handle select
     const handleSelect = (index: number) => {
         setSelectedStudent(students[index]);
     };
@@ -147,7 +155,7 @@ function Students({ setDrawerOpen }: PropsType) {
         }
     };
 
-    // Add new students
+    // Add new student
     useEffect(() => {
         if (newStudent) {
             setStudents((prevStudents: Student[]) => {
@@ -167,7 +175,7 @@ function Students({ setDrawerOpen }: PropsType) {
                 // Send request
                 const resp = await fetchData(
                     ApiEndpoints.SEARCH_USER +
-                    `?keyword=${search}&isBlocked=${isBlocked}`,
+                    `?keyword=${search}&isBlocked=${isBlocked}&sort=${sort.key}&order=${sort.order}`,
                     role
                 );
 
@@ -176,12 +184,10 @@ function Students({ setDrawerOpen }: PropsType) {
                     const users = resp?.data.data;
 
                     // Set students
-                    setStudents(users);
-
-                    console.log(users);
-
-
-                    setFetching(false);
+                    setTimeout(() => {
+                        setStudents(users);
+                        setFetching(false);
+                    }, 1000);
                 }
             } catch (err: unknown) {
                 setFetching(false);
@@ -189,7 +195,7 @@ function Students({ setDrawerOpen }: PropsType) {
             }
         };
         fetchStudents();
-    }, [isBlocked, search]);
+    }, [isBlocked, search, sort]);
 
     // Close drawer on screen size change
     useEffect(() => {
@@ -223,18 +229,18 @@ function Students({ setDrawerOpen }: PropsType) {
                 {/* Search filter sort  */}
                 <SearchFilterSort
                     search={search}
-                    status={isBlocked}
+                    isBlocked={isBlocked}
                     handleSearch={handleSearch}
                     hanldeStatus={handleStatus}
                     children1={
                         <Select>
                             <SelectTrigger
                                 className="w-[41.6px] h-[41.6px] flex justify-center p-0 py-5 
-                            hover:bg-muted dark:hover:bg-sidebar shadow-sm"
+                                    hover:bg-muted dark:hover:bg-sidebar shadow-sm"
                             >
                                 <Filter className="h-4 w-4 text-foreground" />
                             </SelectTrigger>
-                            <SelectContent align={isSmall ? "start" : "end"}>
+                            <SelectContent align={"end"}>
                                 <SelectGroup>
                                     <SelectLabel>Category</SelectLabel>
                                     <SelectItem value="all">All</SelectItem>
@@ -247,26 +253,74 @@ function Students({ setDrawerOpen }: PropsType) {
                         </Select>
                     }
                     children2={
-                        <Select>
-                            <SelectTrigger
-                                className="w-[41.6px] h-[41.6px] flex justify-center p-0 py-5 
-                        hover:bg-muted dark:hover:bg-sidebar shadow-sm"
+                        <DropdownMenu>
+                            <DropdownMenuTrigger
+                                className="flex items-center justify-center w-[41.6px] rounded-lg
+                                    border hover:bg-muted dark:hover:bg-sidebar shadow-sm"
                             >
                                 <SortAsc className="h-4 w-4 text-foreground" />
-                            </SelectTrigger>
-                            <SelectContent align={isSmall ? "start" : "end"}>
-                                <SelectGroup>
-                                    <SelectItem className="flex text-center" value="name">
-                                        <ArrowUpAZ className="w-4 h-4 text-foreground" />
-                                        <span>Name</span>
-                                    </SelectItem>
-                                    <SelectItem className="flex text-center" value="date">
-                                        <CalendarArrowUp className="w-4 h-4 text-foreground" />
-                                        <span>Date</span>
-                                    </SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
+                            </DropdownMenuTrigger>
+
+                            <DropdownMenuContent
+                                align="end"
+                                onClick={(event) => event.stopPropagation()}
+                            >
+                                <DropdownMenuLabel>Sort</DropdownMenuLabel>
+
+                                {/* Checkbox for sorting order */}
+                                <div className="flex items-center gap-2 py-1.5 pl-2 cursor-pointer">
+                                    <Checkbox
+                                        checked={sort.order === 1}
+                                        onCheckedChange={() => {
+                                            setSort((prev) => ({
+                                                ...prev,
+                                                order: prev.order === 1 ? -1 : 1,
+                                            }));
+                                        }}
+                                        id="ascending"
+                                        className="border-border"
+                                    />
+                                    <label
+                                        htmlFor="ascending"
+                                        className="text-sm font-medium cursor-pointer"
+                                    >
+                                        Ascending
+                                    </label>
+                                </div>
+
+                                <DropdownMenuSeparator />
+
+                                {/* Sorting options */}
+                                <DropdownMenuItem
+                                    textValue="name"
+                                    onClick={() => setSort((prev) => ({ ...prev, key: "name" }))}
+                                    onSelect={(e) => e.preventDefault()}
+                                    className="cursor-pointer flex justify-between"
+                                >
+                                    <span>Name</span>
+                                    <span>
+                                        {sort.key === "name" && (
+                                            <Check className="w-4 h-4 text-foreground" />
+                                        )}
+                                    </span>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    textValue="createdAt"
+                                    onClick={() =>
+                                        setSort((prev) => ({ ...prev, key: "createdAt" }))
+                                    }
+                                    onSelect={(e) => e.preventDefault()}
+                                    className="cursor-pointer flex justify-between"
+                                >
+                                    <span>Date</span>
+                                    <span>
+                                        {sort.key === "createdAt" && (
+                                            <Check className="w-4 h-4 text-foreground" />
+                                        )}
+                                    </span>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     }
                 />
 

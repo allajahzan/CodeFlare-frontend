@@ -1,12 +1,13 @@
 import { Input } from "@/components/ui/input";
 import { Search, UserRoundCheck, UserRoundMinus } from "lucide-react";
 import { ChangeEvent } from "react";
+import ToolTip from "../tooltip/tooltip";
 
 // Interface for Props
 interface PropsType {
     search?: string;
     handleSearch?: (event: ChangeEvent<HTMLInputElement>) => void;
-    status?: boolean;
+    isBlocked?: boolean;
     hanldeStatus?: () => void;
     children1?: React.ReactNode;
     children2?: React.ReactNode;
@@ -15,7 +16,7 @@ interface PropsType {
 // SearchFilterSort Component
 function SearchFilterSort({
     search,
-    status,
+    isBlocked,
     handleSearch,
     hanldeStatus,
     children1,
@@ -38,17 +39,23 @@ function SearchFilterSort({
                         className="p-5 pl-9 text-foreground font-medium rounded-lg dark:shadow-customBorder dark:shadow-inner"
                     />
                 </div>
-                <button
-                    onClick={hanldeStatus}
-                    className="p-3 rounded-lg border hover:bg-muted dark:hover:bg-sidebar 
-                    shadow-sm dark:shadow-customBorder dark:shadow-inner"
-                >
-                    {status ? (
-                        <UserRoundMinus className="h-4 w-4 text-foreground" />
-                    ) : (
-                        <UserRoundCheck className="h-4 w-4 text-foreground" />
-                    )}
-                </button>
+                <ToolTip
+                    action={hanldeStatus}
+                    text={isBlocked ? "Blocked Users" : "Active Users"}
+                    children={
+                        <div
+                            onClick={hanldeStatus}
+                            className="p-3 rounded-lg border hover:bg-muted dark:hover:bg-sidebar 
+                     shadow-sm dark:shadow-customBorder dark:shadow-inner"
+                        >
+                            {isBlocked ? (
+                                <UserRoundMinus className="h-4 w-4 text-foreground" />
+                            ) : (
+                                <UserRoundCheck className="h-4 w-4 text-foreground" />
+                            )}
+                        </div>
+                    }
+                />
                 {children1}
                 {children2}
             </div>
