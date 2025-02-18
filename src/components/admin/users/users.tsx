@@ -1,6 +1,4 @@
 import {
-    ArrowUpAZ,
-    CalendarArrowUp,
     EyeIcon,
     Filter,
     Search,
@@ -12,15 +10,17 @@ import {
     UserRoundMinus,
     Send,
     Loader2,
+    Check,
 } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { NotFoundOrbit } from "@/components/animation/fallbacks";
 import UserList from "@/components/common/user/user-list-card";
 import CardHeader from "@/components/common/data-card/header";
@@ -38,6 +38,8 @@ import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import { toast } from "@/hooks/use-toast";
 import { useMediaQuery } from "usehooks-ts";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 // Interface for Props
 interface PropsType {
@@ -51,24 +53,32 @@ function Users({ setDrawerOpen }: PropsType) {
     const [newUser, setNewUser] = useState<User | null>(null);
     const [users, setUsers] = useState<User[] | []>([]);
     const [selectedUser, setSelectedUser] = useState<User | Student | null>(null);
-    const [isBlocked, setIsBlocked] = useState<boolean>(false);
+
     const [fetching, setFetching] = useState<boolean>(false);
 
     // Blocking - unblocking
+    const [isBlocked, setIsBlocked] = useState<boolean>(false);
     const [changingStatus, setChangingStatus] = useState<boolean>(false);
 
-    const menuRef = useRef(null);
+    // Search
+    const [search, setSearch] = useState<string>("");
+
+    // Sort
+    const [sort, setSort] = useState<{ key: string; order: number }>({
+        key: "createdAt",
+        order: 1,
+    });
+
+    // Category
+    const [category, setCategory] = useState<string>("");
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
 
-    // Search user
-    const [search, setSearch] = useState<string>("");
-
     // Small screen
     const isSmall = useMediaQuery("(max-width: 767.20px)");
 
-    // Select user
+    // Handle select
     const handleSelect = (index: number) => {
         setSelectedUser(users[index]);
     };
@@ -102,7 +112,7 @@ function Users({ setDrawerOpen }: PropsType) {
                 setUsers((prevUsers: User[]) => {
                     return prevUsers.map((u) => {
                         if (u._id === user._id) {
-                            return { ...u, isBlock: !u.isBlock };
+                            return { ...u, isblock: !u.isblock };
                         }
                         return u;
                     });
@@ -111,7 +121,7 @@ function Users({ setDrawerOpen }: PropsType) {
                 // Update user in selected user, if selected
                 setSelectedUser((prevUser: User | Student | null) => {
                     if (prevUser?._id === user._id) {
-                        return { ...prevUser, isBlock: !prevUser.isBlock };
+                        return { ...prevUser, isblock: !prevUser.isblock };
                     }
                     return prevUser;
                 });
@@ -122,7 +132,7 @@ function Users({ setDrawerOpen }: PropsType) {
                 });
 
                 toast({
-                    title: user.isBlock
+                    title: user.isblock
                         ? "You have unblocked this user."
                         : "You have blocked this user.",
                 });
@@ -155,18 +165,19 @@ function Users({ setDrawerOpen }: PropsType) {
                 // Send request
                 const resp = await fetchData(
                     ApiEndpoints.SEARCH_USER +
-                    `?keyword=${search}&isBlocked=${isBlocked}`,
+                    `?keyword=${search}&isBlocked=${isBlocked}&sort=${sort.key}&order=${sort.order}&category=${category}`,
                     role
                 );
 
-                const users = resp?.data.data;
-
                 // Success response
                 if (resp && resp.status === 200) {
-                    // Set users
-                    setUsers(users);
+                    const users = resp?.data.data;
 
-                    setFetching(false);
+                    // Set users
+                    setTimeout(() => {
+                        setUsers(users);
+                        setFetching(false);
+                    }, 1000);
                 }
             } catch (err: unknown) {
                 setFetching(false);
@@ -174,7 +185,7 @@ function Users({ setDrawerOpen }: PropsType) {
             }
         };
         fetchUsers();
-    }, [isBlocked, search]);
+    }, [isBlocked, search, sort, category]);
 
     // Close drawer on screen size change
     useEffect(() => {
@@ -185,7 +196,6 @@ function Users({ setDrawerOpen }: PropsType) {
         <div className="p-5 pt-0 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {/*Left side  */}
             <div
-                ref={menuRef}
                 className="p-5 sticky z-0 top-[20px] md:top-5 w-full h-[calc(100vh-108px)] flex flex-col gap-5 items-center rounded-2xl
             bg-background border border-border shadow-sm dark:shadow-customBorder dark:shadow-inner"
             >
@@ -211,7 +221,7 @@ function Users({ setDrawerOpen }: PropsType) {
                 {/* Search filter sort  */}
                 <SearchFilterSort
                     search={search}
-                    status={isBlocked}
+                    isBlocked={isBlocked}
                     handleSearch={handleSearch}
                     hanldeStatus={handleStatus}
                     children1={
@@ -222,29 +232,120 @@ function Users({ setDrawerOpen }: PropsType) {
                             >
                                 <Filter className="h-4 w-4 text-foreground" />
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align={isSmall ? "end" : "start"}>
-                                <DropdownMenuItem>All Roles</DropdownMenuItem>
-                                <DropdownMenuItem>Coordinators</DropdownMenuItem>
-                                <DropdownMenuItem>Instructors</DropdownMenuItem>
+                            <DropdownMenuContent
+                                align={"end"}
+                                onClick={(event) => event.stopPropagation()}
+                            >
+                                <DropdownMenuLabel>Role</DropdownMenuLabel>
+                                <DropdownMenuItem
+                                    onClick={() => setCategory("")}
+                                    onSelect={(e) => e.preventDefault()}
+                                    className="flex justify-between"
+                                >
+                                    <span>All</span>
+                                    {category === "" && (
+                                        <Check className="w-4 h-4 text-foreground" />
+                                    )}
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => setCategory("coordinator")}
+                                    onSelect={(e) => e.preventDefault()}
+                                    className="flex justify-between"
+                                >
+                                    <span>Coordinator</span>
+                                    {category === "coordinator" && (
+                                        <Check className="w-4 h-4 text-foreground" />
+                                    )}
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => setCategory("instructor")}
+                                    onSelect={(e) => e.preventDefault()}
+                                    className="flex justify-between"
+                                >
+                                    <span>Instructor</span>
+                                    {category === "instructor" && (
+                                        <Check className="w-4 h-4 text-foreground" />
+                                    )}
+                                </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     }
                     children2={
                         <DropdownMenu>
                             <DropdownMenuTrigger
-                                className="p-3 rounded-lg border hover:bg-muted dark:hover:bg-sidebar 
-                            shadow-sm dark:shadow-customBorder dark:shadow-inner"
+                                className="flex items-center justify-center w-[41.6px] rounded-lg
+                                    border hover:bg-muted dark:hover:bg-sidebar shadow-sm"
                             >
                                 <SortAsc className="h-4 w-4 text-foreground" />
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align={isSmall ? "end" : "start"}>
-                                <DropdownMenuItem>
-                                    <ArrowUpAZ />
-                                    Name
+
+                            <DropdownMenuContent
+                                align="end"
+                                onClick={(event) => event.stopPropagation()}
+                            >
+                                <DropdownMenuLabel>Sort</DropdownMenuLabel>
+
+                                {/* Checkbox for sorting order */}
+                                <div className="flex items-center gap-2 py-1.5 pl-2 cursor-pointer">
+                                    <Checkbox
+                                        checked={sort.order === 1}
+                                        onCheckedChange={() => {
+                                            setSort((prev) => ({
+                                                ...prev,
+                                                order: prev.order === 1 ? -1 : 1,
+                                            }));
+                                        }}
+                                        id="ascending"
+                                        className="border-border"
+                                    />
+                                    <Label
+                                        htmlFor="ascending"
+                                        className="text-sm font-medium cursor-pointer w-full"
+                                    >
+                                        Ascending
+                                    </Label>
+                                </div>
+
+                                <DropdownMenuSeparator />
+
+                                {/* Sorting options */}
+                                <DropdownMenuItem
+                                    textValue="name"
+                                    onClick={() =>
+                                        setSort((prev) =>
+                                            prev.key !== "name"
+                                                ? { key: "name", order: prev.order }
+                                                : prev
+                                        )
+                                    }
+                                    onSelect={(e) => e.preventDefault()}
+                                    className="flex justify-between"
+                                >
+                                    <span>Name</span>
+                                    <span>
+                                        {sort.key === "name" && (
+                                            <Check className="w-4 h-4 text-foreground" />
+                                        )}
+                                    </span>
                                 </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <CalendarArrowUp />
-                                    Date
+                                <DropdownMenuItem
+                                    textValue="createdAt"
+                                    onClick={() =>
+                                        setSort((prev) =>
+                                            prev.key !== "createdAt"
+                                                ? { key: "createdAt", order: prev.order }
+                                                : prev
+                                        )
+                                    }
+                                    onSelect={(e) => e.preventDefault()}
+                                    className="flex justify-between"
+                                >
+                                    <span>Date</span>
+                                    <span>
+                                        {sort.key === "createdAt" && (
+                                            <Check className="w-4 h-4 text-foreground" />
+                                        )}
+                                    </span>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
@@ -313,7 +414,7 @@ function Users({ setDrawerOpen }: PropsType) {
                                                         onSelect={(e) => e.preventDefault()}
                                                         className="text-center"
                                                     >
-                                                        {user.isBlock ? (
+                                                        {user.isblock ? (
                                                             changingStatus ? (
                                                                 <Loader2 className="w-4 h-5 text-foreground animate-spin" />
                                                             ) : (
@@ -324,7 +425,7 @@ function Users({ setDrawerOpen }: PropsType) {
                                                         ) : (
                                                             <UserRoundMinus />
                                                         )}
-                                                        {user.isBlock
+                                                        {user.isblock
                                                             ? changingStatus
                                                                 ? "Unblocking..."
                                                                 : "Unblock"
