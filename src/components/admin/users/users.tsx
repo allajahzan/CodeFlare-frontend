@@ -196,7 +196,7 @@ function Users({ setDrawerOpen }: PropsType) {
         <div className="p-5 pt-0 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {/*Left side  */}
             <div
-                className="p-5 sticky z-0 top-[20px] md:top-5 w-full h-[calc(100vh-108px)] flex flex-col gap-5 items-center rounded-2xl
+                className="p-5 sticky z-0 top-5 w-full h-[calc(100vh-108px)] flex flex-col gap-5 items-center rounded-2xl
             bg-background border border-border shadow-sm dark:shadow-customBorder dark:shadow-inner"
             >
                 {/* Heading */}
@@ -274,7 +274,8 @@ function Users({ setDrawerOpen }: PropsType) {
                         <DropdownMenu>
                             <DropdownMenuTrigger
                                 className="flex items-center justify-center w-[41.6px] rounded-lg
-                                    border hover:bg-muted dark:hover:bg-sidebar shadow-sm"
+                                    border hover:bg-muted dark:hover:bg-sidebar 
+                                    shadow-sm dark:shadow-customBorder dark:shadow-inner"
                             >
                                 <SortAsc className="h-4 w-4 text-foreground" />
                             </DropdownMenuTrigger>

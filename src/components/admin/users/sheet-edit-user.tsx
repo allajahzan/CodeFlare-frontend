@@ -166,7 +166,7 @@ function EditUserSheet({
                         </div>
                         <span>Update selected user</span>
                     </SheetTitle>
-                    <SheetDescription className="text-foreground font-medium">
+                    <SheetDescription className="text-muted-foreground font-medium">
                         Update the information below to change user's details.
                     </SheetDescription>
                 </SheetHeader>

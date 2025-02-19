@@ -145,7 +145,7 @@ function EditStudentSheet({
                         </div>
                         Update selected student
                     </SheetTitle>
-                    <SheetDescription className="text-foreground font-medium">
+                    <SheetDescription className="text-muted-foreground font-medium">
                         Update the information below to change student's details.
                     </SheetDescription>
                 </SheetHeader>

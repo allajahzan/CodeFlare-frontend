@@ -4,12 +4,11 @@ import Navbar from "@/components/common/navbar/navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { resizeAction, sideBarVisibilityAction, stateType } from "@/redux/store";
 import {
-    CalendarDays,
-    CreditCard,
-    FileUser,
+    // CreditCard,
     Globe,
     LayoutDashboard,
     MessageCircleMore,
+    Settings2,
     UsersRound,
 } from "lucide-react";
 import Shadow from "@/components/ui/shadow";
@@ -54,9 +53,8 @@ function AdminLayout({ isDrawerOpen }: PropsType) {
             ...(isSmall
                 ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
                 : []),
-            { path: AppRoutes.ADMIN_WEEKS, icon: CalendarDays, label: "Weeks" },
-            { path: AppRoutes.ADMIN_BATCHES, icon: FileUser, label: "Batches" },
-            { path: AppRoutes.ADMIN_INVOICES, icon: CreditCard, label: "Invoices" },
+            { path: AppRoutes.ADMIN_GENERAL, icon: Settings2, label: "General" },
+            // { path: AppRoutes.ADMIN_INVOICES, icon: CreditCard, label: "Invoices" },
         ],
         [isSmall]
     );

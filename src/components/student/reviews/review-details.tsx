@@ -13,7 +13,7 @@ import LineCharts from "@/components/common/charts/Line-chart";
 import { useCallback } from "react";
 import { toast } from "@/hooks/use-toast";
 import UserNameCard from "@/components/common/user/user-name-card";
-import InfoCard from "@/components/common/info-card/info-card";
+import InfoCard from "@/components/common/other-cards/info-card";
 
 // Interface for Props
 interface PropsType {
