@@ -143,7 +143,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                         </div>
                         <span>Add new user</span>
                     </SheetTitle>
-                    <SheetDescription className="text-foreground font-medium">
+                    <SheetDescription className="text-muted-foreground font-medium">
                         Fill in the information below to add a new user.
                     </SheetDescription>
                 </SheetHeader>

@@ -5,11 +5,12 @@ interface PropsType {
     className?: string;
     iconClassName?: string;
     action?: any;
-    Icon: React.ForwardRefExoticComponent<
+    Icon?: React.ForwardRefExoticComponent<
         Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
     >;
+    text?: string;
 }
-function IconButton({ className, action, Icon, iconClassName }: PropsType) {
+function IconButton({ className, action, Icon, iconClassName, text }: PropsType) {
     return (
         <button
             onClick={
@@ -22,7 +23,8 @@ function IconButton({ className, action, Icon, iconClassName }: PropsType) {
                 className
             )}
         >
-            <Icon className={cn("w-4 h-4 text-foreground", iconClassName)} />
+            {Icon && <Icon className={cn("w-4 h-4 text-foreground", iconClassName)} />}
+            {text && <p>{text}</p>}
         </button>
     );
 }

@@ -119,7 +119,7 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                         </div>
                         <span>Add new student</span>
                     </SheetTitle>
-                    <SheetDescription className="font-medium text-foreground">
+                    <SheetDescription className="font-medium text-muted-foreground">
                         Fill in the information below to add a new student.
                     </SheetDescription>
                 </SheetHeader>

@@ -72,12 +72,12 @@ function NotFoundOrbit({ MainIcon, SubIcon, message, text, className }: PropsTyp
         >
             <div className="relative w-[185px] h-[185px]">
                 {/* Inner orbit */}
-                <div className="absolute inset-10 rounded-full border border-dashed border-muted-foreground/20">
+                <div className="absolute top-[50%] -translate-y-1/2 right-[50%] translate-x-1/2 w-[185px] h-[185px] rounded-full border border-dashed border-muted-foreground/20">
                     <OrbitingIcon rotation={180} delay={0.3} SubIcon={SubIcon} />
                 </div>
 
                 {/* Inner orbit */}
-                <div className="absolute inset-2 rounded-full border border-dashed border-muted-foreground/20">
+                <div className="absolute top-[50%] -translate-y-1/2 right-[50%] translate-x-1/2 w-[125px] h-[125px] rounded-full border border-dashed border-muted-foreground/20">
                     <OrbitingIcon rotation={90} delay={0.5} SubIcon={SubIcon} />
                     <OrbitingIcon rotation={270} delay={0.7} SubIcon={SubIcon} />
                     <OrbitingIcon rotation={360} delay={0.9} SubIcon={SubIcon} />
