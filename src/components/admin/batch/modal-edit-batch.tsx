@@ -144,7 +144,7 @@ function EditBatchModal({ batchToEdit, open, setOpen, setBatches }: PropsType) {
                                     Processing...
                                 </div>
                             ) : (
-                                "update"
+                                "Update"
                             )}
                         </Button>
                     </div>

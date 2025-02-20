@@ -1,15 +1,27 @@
 import CardHeader from "@/components/common/data-card/header";
 import { cn } from "@/lib/utils";
-import { Edit, MoreHorizontal, Plus, Search, UsersRound } from "lucide-react";
+import {
+    Check,
+    Edit,
+    MoreHorizontal,
+    Plus,
+    Search,
+    SortAsc,
+    UsersRound,
+} from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import {
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import AddBatchModal from "@/components/admin/batch/modal-add-batch";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import ListCard from "@/components/common/other-cards/list-card";
 import { NotFoundOrbit } from "@/components/animation/fallbacks";
 import EditBatchModal from "./modal-edit-batch";
@@ -18,6 +30,8 @@ import ApiEndpoints from "@/constants/api-endpoints";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import { handleCustomError } from "@/utils/error";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 
 // Interface for batch
 export interface IBatch {
@@ -36,15 +50,36 @@ function Batches() {
 
     const [fetching, setFetching] = useState<boolean>(true);
 
+    // Search
+    const [search, setSearch] = useState<string>("");
+
+    // Sort
+    const [sort, setSort] = useState<{ key: string; order: number }>({
+        key: "createdAt",
+        order: 1,
+    });
+
     // Redux
     const role = useSelector((state: stateType) => state.role);
+
+    // Handle search
+    const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+        setSearch(event.target.value);
+    };
 
     // Fetch batches
     useEffect(() => {
         const fetchBatches = async () => {
             try {
+                setFetching(true);
+                setBatches([]);
+
                 // Send request
-                const resp = await fetchData(ApiEndpoints.BATCH, role);
+                const resp = await fetchData(
+                    ApiEndpoints.SEARCH_BATCH +
+                    `?keyword=${search}&sort=${sort.key}&order=${sort.order}`,
+                    role
+                );
 
                 // Success response
                 if (resp && resp.status === 200) {
@@ -63,7 +98,7 @@ function Batches() {
         };
 
         fetchBatches();
-    }, []);
+    }, [search, sort]);
 
     // Update new batch
     useEffect(() => {
@@ -79,10 +114,6 @@ function Batches() {
         document.body.style.pointerEvents = "auto";
     }, [open]);
 
-    useEffect(() => {
-        console.log(batchToEdit);
-    }, [batchToEdit]);
-
     return (
         <div className="p-5 pt-0 grid grid-cols-3 gap-5">
             {/* Weeks */}
@@ -97,9 +128,9 @@ function Batches() {
                     children={<AddBatchModal setNewBatch={setNewBatch} />}
                 />
 
-                <div className="relative h-[52px] overflow-hidden">
+                <div className="w-full flex gap-2">
                     {/* Search bar */}
-                    <div className={cn("absolute inset-0 flex items-center")}>
+                    <div className="relative flex-1">
                         <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                         <Input
                             id="search"
@@ -107,9 +138,91 @@ function Batches() {
                             placeholder="Search"
                             autoComplete="off"
                             required
+                            value={search}
+                            onChange={handleSearch}
                             className="w-full p-5 pl-9 text-foreground font-medium rounded-lg dark:shadow-customBorder dark:shadow-inner"
                         />
                     </div>
+
+                    <DropdownMenu>
+                        <DropdownMenuTrigger
+                            className="flex items-center justify-center w-[41.6px] rounded-lg
+                                    border hover:bg-muted dark:hover:bg-sidebar 
+                                    shadow-sm dark:shadow-customBorder dark:shadow-inner"
+                        >
+                            <SortAsc className="h-4 w-4 text-foreground" />
+                        </DropdownMenuTrigger>
+
+                        <DropdownMenuContent
+                            align="end"
+                            onClick={(event) => event.stopPropagation()}
+                        >
+                            <DropdownMenuLabel>Sort</DropdownMenuLabel>
+
+                            {/* Checkbox for sorting order */}
+                            <div className="flex items-center gap-2 py-1.5 pl-2 cursor-pointer">
+                                <Checkbox
+                                    id="ascending"
+                                    checked={sort.order === 1}
+                                    onCheckedChange={() => {
+                                        setSort((prev) => ({
+                                            ...prev,
+                                            order: prev.order === 1 ? -1 : 1,
+                                        }));
+                                    }}
+                                    className="border-border"
+                                />
+                                <Label
+                                    htmlFor="ascending"
+                                    className="text-sm font-medium cursor-pointer w-full"
+                                >
+                                    Ascending
+                                </Label>
+                            </div>
+
+                            <DropdownMenuSeparator />
+
+                            {/* Sorting options */}
+                            {/* <DropdownMenuItem
+                                textValue="name"
+                                onClick={() =>
+                                    setSort((prev) =>
+                                        prev.key !== "name"
+                                            ? { key: "name", order: prev.order }
+                                            : prev
+                                    )
+                                }
+                                onSelect={(e) => e.preventDefault()}
+                                className="flex justify-between"
+                            >
+                                <span>Name</span>
+                                <span>
+                                    {sort.key === "name" && (
+                                        <Check className="w-4 h-4 text-foreground" />
+                                    )}
+                                </span>
+                            </DropdownMenuItem> */}
+                            <DropdownMenuItem
+                                textValue="createdAt"
+                                onClick={() =>
+                                    setSort((prev) =>
+                                        prev.key !== "createdAt"
+                                            ? { key: "createdAt", order: prev.order }
+                                            : prev
+                                    )
+                                }
+                                onSelect={(e) => e.preventDefault()}
+                                className="flex justify-between"
+                            >
+                                <span>Date</span>
+                                <span>
+                                    {sort.key === "createdAt" && (
+                                        <Check className="w-4 h-4 text-foreground" />
+                                    )}
+                                </span>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
 
                 <div className="h-full w-full flex flex-col gap-[9px] overflow-auto bg-transparent no-scrollbar pb-0.5">

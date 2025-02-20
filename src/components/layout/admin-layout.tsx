@@ -8,7 +8,7 @@ import {
     Globe,
     LayoutDashboard,
     MessageCircleMore,
-    Settings2,
+    School,
     UsersRound,
 } from "lucide-react";
 import Shadow from "@/components/ui/shadow";
@@ -53,7 +53,7 @@ function AdminLayout({ isDrawerOpen }: PropsType) {
             ...(isSmall
                 ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
                 : []),
-            { path: AppRoutes.ADMIN_GENERAL, icon: Settings2, label: "General" },
+            { path: AppRoutes.ADMIN_BATCHES, icon: School, label: "Batches" },
             // { path: AppRoutes.ADMIN_INVOICES, icon: CreditCard, label: "Invoices" },
         ],
         [isSmall]
