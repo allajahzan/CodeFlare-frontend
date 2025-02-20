@@ -18,7 +18,7 @@ function ListCard({ index, text, children }: PropsType) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 + index * 0.1 }}
             className={cn(
-                "group p-2 px-3 w-full flex flex-col rounded-lg cursor-pointer border border-border hover:bg-muted dark:hover:bg-sidebar"
+                "group p-2 px-3 w-full flex flex-col rounded-xl cursor-pointer border border-border hover:bg-muted dark:hover:bg-sidebar"
             )}
         >
             <div className="flex items-center">

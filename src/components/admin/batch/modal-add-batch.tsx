@@ -9,13 +9,78 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import ValidationError from "@/components/ui/validation-error";
+import ApiEndpoints from "@/constants/api-endpoints";
 import { cn } from "@/lib/utils";
+import { stateType } from "@/redux/store";
+import { postData } from "@/service/api-service";
+import { handleCustomError } from "@/utils/error";
+import { formSchema, FormType } from "@/validations/admin/batch";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, UsersRound, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { IBatch } from "./batches";
+import { toast } from "@/hooks/use-toast";
+
+// Interface for Props
+interface Propstype {
+    setNewBatch: React.Dispatch<React.SetStateAction<IBatch | null>>;
+}
 
 // Add batch modal
-function AddBatchModal() {
+function AddBatchModal({ setNewBatch }: Propstype) {
+    // Modal state
+    const [open, setOpen] = useState<boolean>(false);
+    const [submiting, setSubmiting] = useState<boolean>(false);
+
+    // Redux
+    const role = useSelector((state: stateType) => state.role);
+
+    // Form validator
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm<FormType>({ resolver: zodResolver(formSchema) });
+
+    // Onsubmit
+    const OnSubmit: SubmitHandler<FormType> = async (formData) => {
+        setSubmiting(true);
+
+        try {
+            // Send request
+            const resp = await postData(ApiEndpoints.BATCH, formData, role);
+
+            // Success response
+            if (resp && resp.status === 200) {
+                const data = resp.data.data;
+
+                // Set new batch
+                setNewBatch(() => {
+                    return {
+                        _id: data._id,
+                        name: data.name,
+                    };
+                });
+
+                toast({ title: "Batch added successfully." });
+
+                // Clear
+                setSubmiting(false);
+                setOpen(false);
+                reset();
+            }
+        } catch (err: unknown) {
+            setSubmiting(false);
+            handleCustomError(err);
+        }
+    };
+
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger>
                 <div
                     className="p-2 rounded-full bg-foreground dark:bg-muted hover:bg-zinc-800 dark:hover:bg-zinc-700 
@@ -37,7 +102,7 @@ function AddBatchModal() {
                     </DialogDescription>
                 </DialogHeader>
 
-                <form className="space-y-3">
+                <form onSubmit={handleSubmit(OnSubmit)} className="space-y-3">
                     {/* Input for name */}
                     <div className="space-y-2">
                         <Label
@@ -52,22 +117,23 @@ function AddBatchModal() {
                                 placeholder="Enter batch's name"
                                 required
                                 autoComplete="off"
+                                {...register("name")}
                                 className="text-foreground font-medium p-5 pl-9"
                             />
                             <UsersRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
 
                         {/* Name error message */}
-                        {/* <ValidationError message={errors.name?.message as string} /> */}
+                        <ValidationError message={errors.name?.message as string} />
                     </div>
                     {/* Submit button */}
                     <div className="pt-4">
                         <Button
                             type="submit"
-                            disabled={false}
+                            disabled={submiting}
                             className="w-full h-11 transition-all duration-200 disabled:cursor-not-allowed"
                         >
-                            {false ? (
+                            {submiting ? (
                                 <div className="flex items-center gap-2">
                                     <Loader2 className="h-4 w-4 animate-spin" />
                                     Processing...

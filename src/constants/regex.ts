@@ -15,3 +15,9 @@ export const nameRegex = {
     capitalLetter: /^[A-Z]/,
     alphabet: /^[a-zA-Z]+(?: [a-zA-Z]+)*$/
 };
+
+// Digits regex
+export const batch = {    
+    capitalLetter: /^[A-Z]/,
+    batchName: /^Batch \d+$/
+};
