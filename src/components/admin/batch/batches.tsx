@@ -116,7 +116,7 @@ function Batches() {
 
     return (
         <div className="p-5 pt-0 grid grid-cols-3 gap-5">
-            {/* Weeks */}
+            {/* Left side */}
             <div
                 className="h-[calc(100vh-108px)] p-5 flex flex-col gap-5 border rounded-2xl 
             shadow-sm dark:shadow-customBorder dark:shadow-inner"
@@ -278,15 +278,18 @@ function Batches() {
                         />
                     )}
                 </div>
+
+                {/* Edit modal */}
+                <EditBatchModal
+                    batchToEdit={batchToEdit as IBatch}
+                    open={open}
+                    setOpen={setOpen}
+                    setBatches={setBatches}
+                />
             </div>
 
-            {/* Edit modal */}
-            <EditBatchModal
-                batchToEdit={batchToEdit as IBatch}
-                open={open}
-                setOpen={setOpen}
-                setBatches={setBatches}
-            />
+            {/* Right side */}
+            <div className="border rounded-2xl col-span-2"></div>
         </div>
     );
 }
