@@ -8,6 +8,7 @@ export interface IBatch {
     name: string;
 }
 
+// Batches Component
 function Batches() {
     const handleSelect = () => { };
     const [selectedBatch, setSelectedBatch] = useState<IBatch | null>(null);
@@ -20,7 +21,7 @@ function Batches() {
             {/* Right side */}
             <BatchesDetailsSide
                 handleSelect={handleSelect}
-                selectedBatch={selectedBatch as IBatch}
+                selectedBatch={selectedBatch}
             />
         </div>
     );

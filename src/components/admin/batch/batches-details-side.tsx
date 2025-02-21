@@ -27,7 +27,7 @@ import { fetchData } from "@/service/api-service";
 // Interface for Props
 interface Propstype {
     handleSelect: () => void;
-    selectedBatch: IBatch;
+    selectedBatch: IBatch | null;
 }
 
 // Batches details side Component
@@ -78,7 +78,8 @@ function BatchesDetailsSide({ handleSelect, selectedBatch }: Propstype) {
                 const resp = await fetchData(
                     ApiEndpoints.SEARCH_USER +
                     `?keyword=${search.trim()}&isBlocked=${isBlocked}&sort=${sort.key
-                    }&order=${sort.order}&category=${category}`,
+                    }&order=${sort.order}&category=${category}&batchId=${selectedBatch?._id
+                    }`,
                     role
                 );
 
@@ -97,8 +98,8 @@ function BatchesDetailsSide({ handleSelect, selectedBatch }: Propstype) {
                 handleCustomError(err);
             }
         };
-        fetchUsers();
-    }, [isBlocked, search, sort, category]);
+        selectedBatch && fetchUsers();
+    }, [isBlocked, search, sort, category, selectedBatch]);
 
     return (
         <>
