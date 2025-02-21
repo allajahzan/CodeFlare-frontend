@@ -20,8 +20,6 @@ function MultiSelectorContent({
     values,
     selectedBatches,
 }: PropsMultiSelectorContent) {
-    console.log(selectedBatches, values);
-
     return (
         <div>
             {dropDownOpen && (
