@@ -1,3 +1,4 @@
+import { IBatch } from "@/components/admin/batch/batches";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { toast } from "@/hooks/use-toast";
 import { sideBarVisibilityAction, stateType } from "@/redux/store";
@@ -16,8 +17,8 @@ interface IUser {
     phoneNumber?: string;
     profilePic?: string;
     role: string;
-    batch?: string;
-    batches?: string[] | string;
+    batch?: IBatch;
+    batches?: IBatch[];
     createdAt?: string;
     updatedAt?: string;
 }

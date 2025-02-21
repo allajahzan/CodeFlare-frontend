@@ -101,7 +101,7 @@ function UserDetails({
                                         setStudents={setUsers as any}
                                         setSelectedStudent={setSelectedUser as any}
                                         selecteStudent={selectedUser as Student}
-                                        batches={(user as any).batches}
+                                        batches={(user as any).batches.map((b: any) => b.name)}
                                     />
                                 )}
                             </div>
@@ -167,7 +167,7 @@ function UserDetails({
                                                             )}
                                                         </p>
                                                         <p className="text-foreground font-semibold">
-                                                            {item.value}
+                                                            {item.value as string}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -199,8 +199,8 @@ function UserDetails({
                                     >
                                         {(selectedUser as User).batches.map((batch, index) => {
                                             return (
-                                                <DropdownMenuItem key={index} textValue={batch}>
-                                                    {batch}
+                                                <DropdownMenuItem key={index} textValue={batch.name}>
+                                                    {batch.name}
                                                 </DropdownMenuItem>
                                             );
                                         })}

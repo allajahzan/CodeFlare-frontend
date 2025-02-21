@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { handleCustomError } from "@/utils/error";
-import { updateData } from "@/service/api-service";
+import { fetchData, updateData } from "@/service/api-service";
 import { toast } from "@/hooks/use-toast";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { User } from "@/types/admin";
@@ -42,6 +42,7 @@ import {
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import ValidationError from "@/components/ui/validation-error";
+import { IBatch } from "../batch/batches";
 
 // Interface for Props
 interface PropsType {
@@ -68,8 +69,10 @@ function EditUserSheet({
     // Drop down for batches
     const [dropDownOpen, setDropDownOpen] = useState<boolean>(false);
 
+    const [batches, setBatches] = useState<IBatch[]>([]);
+
     // Inputs
-    const [selectedBatches, setSelectedBatches] = useState<string[]>([]);
+    const [selectedBatches, setSelectedBatches] = useState<IBatch[]>([]);
 
     // Form validator
     const {
@@ -92,7 +95,7 @@ function EditUserSheet({
                     name: formData.name,
                     email: formData.email,
                     role: formData.role,
-                    batches: formData.batches.split(", "),
+                    batches: selectedBatches.map((b) => b._id),
                 },
                 role
             );
@@ -122,16 +125,43 @@ function EditUserSheet({
     };
 
     // Handle select batches
-    const handleSelectBatches = (value: string) => {
+    const handleSelectBatches = (value: IBatch) => {
         setSelectedBatches((batches) => {
-            const updatedBatches = batches.includes(value)
-                ? batches.filter((batch) => batch !== value)
-                : [...batches, value];
+            const isSelected = batches.some((batch) => batch._id === value._id);
 
-            setValue("batches", updatedBatches.join(", "));
+            const updatedBatches = isSelected
+                ? batches.filter((batch) => batch._id !== value._id) // Remove if already selected
+                : [...batches, value]; // Add if not selected
+
+            setValue("batches", updatedBatches.map((b) => b.name).join(", "));
+
             return updatedBatches;
         });
     };
+
+    // Fetch batches
+    useEffect(() => {
+        const fetchBatches = async () => {
+            try {
+                setBatches([]);
+
+                // Send request
+                const resp = await fetchData(ApiEndpoints.BATCH, role);
+
+                // Success response
+                if (resp && resp.status === 200) {
+                    const data = resp.data.data;
+
+                    // Set batches
+                    setBatches(data);
+                }
+            } catch (err: unknown) {
+                handleCustomError(err);
+            }
+        };
+
+        fetchBatches();
+    }, []);
 
     // Reset form values
     useLayoutEffect(() => {
@@ -140,7 +170,7 @@ function EditUserSheet({
                 name: selectedUser.name || "",
                 email: selectedUser.email || "",
                 role: selectedUser.role || "",
-                batches: selectedUser.batches?.join(", ") || "",
+                batches: selectedUser.batches.map((b) => b.name).join(", ") || "",
             });
             // Set selected batches
             setSelectedBatches(selectedUser.batches);
@@ -240,8 +270,8 @@ function EditUserSheet({
                         <ValidationError message={errors.email?.message as string} />
                     </motion.div>
 
-                     {/* Confirm email */}
-                     <motion.div
+                    {/* Confirm email */}
+                    <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5 }}
@@ -339,7 +369,7 @@ function EditUserSheet({
                                 <MultiSelectorContent
                                     dropDownOpen={dropDownOpen}
                                     handleSelect={handleSelectBatches}
-                                    values={["Batch 1", "Batch 2", "Batch 3"]}
+                                    values={batches}
                                     selectedBatches={selectedBatches}
                                 />
                             }

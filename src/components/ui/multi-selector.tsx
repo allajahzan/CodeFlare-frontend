@@ -3,13 +3,14 @@ import { Check, LucideProps } from "lucide-react";
 import { Input } from "./input";
 import { UseFormRegister } from "react-hook-form";
 import { ReactNode } from "react";
+import { IBatch } from "../admin/batch/batches";
 
 // Interface for MultiSelectorContent
 interface PropsMultiSelectorContent {
-    handleSelect: (value: string) => void;
+    handleSelect: (value: IBatch) => void;
     dropDownOpen: boolean;
-    values: string[];
-    selectedBatches: string[];
+    values: IBatch[];
+    selectedBatches: IBatch[];
 }
 
 // Multi Selector Content Component
@@ -19,6 +20,8 @@ function MultiSelectorContent({
     values,
     selectedBatches,
 }: PropsMultiSelectorContent) {
+    console.log(selectedBatches, values);
+
     return (
         <div>
             {dropDownOpen && (
@@ -30,9 +33,13 @@ function MultiSelectorContent({
                     className="absolute z-10 max-h-[174px] top-[46px] w-full bg-popover p-1 border rounded-md shadow-md overflow-y-auto no-scrollbar"
                 >
                     {values?.map((value, index) => {
+                        const isSelected = selectedBatches.some(
+                            (batch) => batch._id === value._id
+                        );
+
                         return (
                             // Lists
-                            <div key={index} className="relative">
+                            <div key={value._id || index} className="relative">
                                 <p
                                     onClick={(event) => {
                                         event.stopPropagation();
@@ -40,10 +47,10 @@ function MultiSelectorContent({
                                     }}
                                     className="p-2 py-[5.5px] text-popover-foreground font-medium hover:bg-muted rounded-sm"
                                 >
-                                    {value}
+                                    {value.name}
                                 </p>
                                 {/* Tick */}
-                                {selectedBatches?.includes(value) && (
+                                {isSelected && (
                                     <Check className="absolute right-1 top-1 w-4 h-4 text-foreground" />
                                 )}
                             </div>
@@ -88,7 +95,7 @@ function TriggerMultiSelector({
                     event.stopPropagation();
                     setDropDownOpen?.(!dropDownOpen);
                 }}
-                onKeyDown={(event)=>event.preventDefault()}
+                onKeyDown={(event) => event.preventDefault()}
                 className="text-foreground font-medium p-5 pl-9 cursor-pointer placeholder:text-muted-foreground"
             />
             {Icon && (

@@ -1,3 +1,5 @@
+import { IBatch } from "@/components/admin/batch/batches";
+
 // Interface for User
 export interface User {
     _id: number;
@@ -5,7 +7,7 @@ export interface User {
     email: string;
     role: string;
     profilePic: string;
-    batches: string[];
+    batches: IBatch[];
     isblock: boolean;
     createdAt: string;
     lastActive: string;

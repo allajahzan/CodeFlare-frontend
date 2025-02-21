@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { handleCustomError } from "@/utils/error";
-import { postData } from "@/service/api-service";
+import { fetchData, postData } from "@/service/api-service";
 import { toast } from "@/hooks/use-toast";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { User } from "@/types/admin";
@@ -42,6 +42,7 @@ import {
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import ValidationError from "@/components/ui/validation-error";
+import { IBatch } from "../batch/batches";
 
 // Interface for Props
 interface PropsType {
@@ -61,8 +62,10 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
     // Drop down for batches
     const [dropDownOpen, setDropDownOpen] = useState<boolean>(false);
 
+    const [batches, setBatches] = useState<IBatch[]>([]);
+
     // Inputs
-    const [selectedBatches, setSelectedBatches] = useState<string[]>([]);
+    const [selectedBatches, setSelectedBatches] = useState<IBatch[]>([]);
 
     // Form validator
     const {
@@ -85,7 +88,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                     name: formData.name,
                     email: formData.email,
                     role: formData.role,
-                    batches: formData.batches.split(", "),
+                    batches: selectedBatches.map((b) => b._id),
                 },
                 role
             );
@@ -111,16 +114,40 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
     };
 
     // Handle select batches
-    const handleSelectBatches = (value: string) => {
+    const handleSelectBatches = (value: IBatch) => {
         setSelectedBatches((batches) => {
             const updatedBatches = batches.includes(value)
                 ? batches.filter((batch) => batch !== value)
                 : [...batches, value];
 
-            setValue("batches", updatedBatches.join(", "));
+            setValue("batches", updatedBatches.map((b) => b.name).join(", "));
             return updatedBatches;
         });
     };
+
+    // Fetch batches
+    useEffect(() => {
+        const fetchBatches = async () => {
+            try {
+                setBatches([]);
+
+                // Send request
+                const resp = await fetchData(ApiEndpoints.BATCH, role);
+
+                // Success response
+                if (resp && resp.status === 200) {
+                    const data = resp.data.data;
+
+                    // Set batches
+                    setBatches(data);
+                }
+            } catch (err: unknown) {
+                handleCustomError(err);
+            }
+        };
+
+        fetchBatches();
+    }, []);
 
     // Clear fields when sheet closes
     useEffect(() => {
@@ -313,7 +340,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                                 <MultiSelectorContent
                                     dropDownOpen={dropDownOpen}
                                     handleSelect={handleSelectBatches}
-                                    values={["Batch 1", "Batch 2", "Batch 3"]}
+                                    values={batches}
                                     selectedBatches={selectedBatches}
                                 />
                             }
