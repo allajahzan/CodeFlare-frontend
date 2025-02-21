@@ -15,6 +15,7 @@ enum AppRoutes {
     ADMIN = "admin",
     ADMIN_USERS = "users",
     ADMIN_BATCHES = "batches",
+    ADMIN_WEEKS = 'weeks',
     ADMIN_INVOICES = "invoices",
 
     // Coordinator Routes

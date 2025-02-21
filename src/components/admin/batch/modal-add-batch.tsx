@@ -18,7 +18,7 @@ import { handleCustomError } from "@/utils/error";
 import { formSchema, FormType } from "@/validations/admin/batch";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, UsersRound, Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { IBatch } from "./batches";
@@ -78,6 +78,11 @@ function AddBatchModal({ setNewBatch }: Propstype) {
             handleCustomError(err);
         }
     };
+
+    // Clear form
+    useEffect(() => {
+        !open ? reset() : null;
+    }, [open]);
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>

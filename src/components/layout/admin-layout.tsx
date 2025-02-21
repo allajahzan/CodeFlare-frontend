@@ -4,6 +4,7 @@ import Navbar from "@/components/common/navbar/navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { resizeAction, sideBarVisibilityAction, stateType } from "@/redux/store";
 import {
+    CalendarDaysIcon,
     // CreditCard,
     Globe,
     LayoutDashboard,
@@ -54,6 +55,7 @@ function AdminLayout({ isDrawerOpen }: PropsType) {
                 ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
                 : []),
             { path: AppRoutes.ADMIN_BATCHES, icon: School, label: "Batches" },
+            { path: AppRoutes.ADMIN_WEEKS, icon: CalendarDaysIcon, label: "Weeks" },
             // { path: AppRoutes.ADMIN_INVOICES, icon: CreditCard, label: "Invoices" },
         ],
         [isSmall]
