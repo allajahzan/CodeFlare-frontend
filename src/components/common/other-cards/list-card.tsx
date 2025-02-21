@@ -7,16 +7,18 @@ interface PropsType {
     index: number;
     text: string;
     children: ReactNode;
+    action: any;
 }
 
 // List card Component
-function ListCard({ index, text, children }: PropsType) {
+function ListCard({ index, text, children, action }: PropsType) {
     return (
         <motion.div
             key={1}
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 + index * 0.1 }}
+            onClick={action}
             className={cn(
                 "group p-2 px-3 w-full flex flex-col rounded-xl cursor-pointer border border-border hover:bg-muted dark:hover:bg-sidebar"
             )}

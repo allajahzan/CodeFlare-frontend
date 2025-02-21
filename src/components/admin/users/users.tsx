@@ -165,7 +165,7 @@ function Users({ setDrawerOpen }: PropsType) {
                 // Send request
                 const resp = await fetchData(
                     ApiEndpoints.SEARCH_USER +
-                    `?keyword=${search}&isBlocked=${isBlocked}&sort=${sort.key}&order=${sort.order}&category=${category}`,
+                    `?keyword=${search.trim()}&isBlocked=${isBlocked}&sort=${sort.key}&order=${sort.order}&category=${category}`,
                     role
                 );
 

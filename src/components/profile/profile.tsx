@@ -116,7 +116,7 @@ function Profile() {
 
                 <div className="relative top-10 pt-10 px-0 sm:px-0 flex flex-col gap-2 transition-all duration-300">
                     <Tabs defaultValue="Account" className="w-full flex flex-col gap-4">
-                        <TabsList className="grid w-full grid-cols-3 dark:bg-sidebar shadow-sm dark:shadow-customBorder dark:shadow-inner">
+                        <TabsList className="grid w-full grid-cols-3">
                             <TabsTrigger className="text-foreground" value="Account">
                                 Account
                             </TabsTrigger>

@@ -13,7 +13,7 @@ interface PropsType {
     user: User | Student | any;
     children1?: React.ReactNode;
     children2?: React.ReactNode;
-    selectedUser: any;
+    selectedUser?: any;
     className?: string;
 }
 
