@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/tooltip";
 import SideBarItem from "./sidebar-item";
 import { LogOut, LucideProps, Moon, Sun } from "lucide-react";
-import "./SideBar.css";
+import "./sidebar.css";
 import Slider from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 import React from "react";
