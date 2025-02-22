@@ -1,6 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
 import {
-    Calendar,
     CalendarDaysIcon,
     Clock,
     Edit2,
@@ -115,6 +114,12 @@ function UserDetails({
                                     icon: selectedUser.isblock ? UserRoundMinus : UserRoundCheck,
                                     label: "Role Status",
                                     value: selectedUser.isblock ? "Blocked" : "Active",
+                                    iconDivClassName: selectedUser.isblock
+                                        ? "bg-red-400/20 group-hover:bg-red-400/30"
+                                        : "bg-blue-400/20 group-hover:bg-blue-400/30",
+                                    iconClassName: selectedUser.isblock
+                                        ? "text-red-600"
+                                        : "text-blue-600",
                                 },
 
                                 // Last active or week depends on role
@@ -127,13 +132,17 @@ function UserDetails({
                                         selectedUser.role !== "student"
                                             ? selectedUser.lastActive || "Not recently"
                                             : (selectedUser as Student).week || "Fumigation",
+                                    iconDivClassName: "bg-green-400/20 group-hover:bg-green-400/30",
+                                    iconClassName:"text-green-600",
                                 },
 
                                 // Date joined
                                 {
-                                    icon: Calendar,
+                                    icon: CalendarDaysIcon,
                                     label: "Date Joined",
                                     value: selectedUser.createdAt || "20th Jan 2025",
+                                    iconDivClassName: "bg-orange-400/20 group-hover:bg-orange-400/30",
+                                    iconClassName:"text-orange-600",
                                 },
 
                                 // Batch - only for student
@@ -142,6 +151,8 @@ function UserDetails({
                                         icon: Home,
                                         label: "Batch",
                                         value: (selectedUser as Student).batch,
+                                        iconDivClassName: "bg-purple-400/20 group-hover:bg-purple-400/30",
+                                        iconClassName:"text-purple-600",
                                     }
                                     : null,
                             ]
@@ -149,10 +160,20 @@ function UserDetails({
                                 .map((item, index) => (
                                     <Fragment key={index}>
                                         {item?.icon && (
-                                            <div className="p-3 rounded-lg border border-border shadow-sm">
+                                            <div className="group p-3 rounded-lg border border-border shadow-sm">
                                                 <div className="flex items-center gap-3">
-                                                    <div className="p-2 rounded-lg bg-muted">
-                                                        <item.icon className="w-5 h-5 text-foreground" />
+                                                    <div
+                                                        className={cn(
+                                                            "p-2 rounded-lg",
+                                                            item.iconDivClassName
+                                                        )}
+                                                    >
+                                                        <item.icon
+                                                            className={cn(
+                                                                "w-5 h-5",
+                                                                item.iconClassName
+                                                            )}
+                                                        />
                                                     </div>
                                                     <div>
                                                         <p className="text-sm text-muted-foreground font-medium">
@@ -180,11 +201,11 @@ function UserDetails({
                             {selectedUser.role !== "student" && (
                                 <DropdownMenu>
                                     <DropdownMenuTrigger
-                                        className="flex items-center gap-3 text-start rounded-lg cursor-pointer p-3 border 
+                                        className="group flex items-center gap-3 text-start rounded-lg cursor-pointer p-3 border 
                                     border-border shadow-sm"
                                     >
-                                        <div className="p-2 rounded-lg bg-muted">
-                                            <PersonStanding className="w-5 h-5 text-foreground" />
+                                        <div className="p-2 rounded-lg bg-purple-400/20 group-hover:bg-purple-400/30">
+                                            <PersonStanding className="w-5 h-5 text-purple-600" />
                                         </div>
                                         <div>
                                             <p className="text-sm text-muted-foreground font-medium">

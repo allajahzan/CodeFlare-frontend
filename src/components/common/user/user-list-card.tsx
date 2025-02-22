@@ -9,7 +9,7 @@ import profile from "@/assets/images/no-profile.svg";
 // Interface for Props
 interface PropsType {
     index: number;
-    action: any;
+    action?: any;
     user: User | Student | any;
     children1?: React.ReactNode;
     children2?: React.ReactNode;
@@ -27,7 +27,6 @@ function UserList({
     children2,
     className,
 }: PropsType) {
-
     return (
         <motion.div
             key={index}

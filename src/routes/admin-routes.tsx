@@ -35,7 +35,7 @@ function AdminRoutes() {
                 <Route element={<AdminLayout isDrawerOpen={isDrawerOpen} />}>
                     <Route path={AppRoutes.DASHBOARD} element={<Dashboard />} />
                     <Route path={AppRoutes.ADMIN_USERS} element={<Users isDrawerOpen={isDrawerOpen} setDrawerOpen={setDrawerOpen} />} />
-                    <Route path={AppRoutes.ADMIN_BATCHES} element={<Batches/>}/>
+                    <Route path={AppRoutes.ADMIN_BATCHES} element={<Batches setDrawerOpen={setDrawerOpen} />}/>
                     <Route path={AppRoutes.PROFILE} element={<Profile />} />
                 </Route>
             </Route>

@@ -11,7 +11,17 @@ import {
     DropdownMenuSeparator,
     DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { SortAsc, Check, User2, Search, Plus, School } from "lucide-react";
+import {
+    SortAsc,
+    Check,
+    User2,
+    Search,
+    Plus,
+    School,
+    Mail,
+    UsersRound,
+    GraduationCap,
+} from "lucide-react";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Label } from "@/components/ui/label";
@@ -26,12 +36,11 @@ import { fetchData } from "@/service/api-service";
 
 // Interface for Props
 interface Propstype {
-    handleSelect: () => void;
     selectedBatch: IBatch | null;
 }
 
 // Batches details side Component
-function BatchesDetailsSide({ handleSelect, selectedBatch }: Propstype) {
+function BatchesDetailsSide({ selectedBatch }: Propstype) {
     // User related states
     const [users, setUsers] = useState<Student[] | User[] | []>([]);
 
@@ -105,17 +114,17 @@ function BatchesDetailsSide({ handleSelect, selectedBatch }: Propstype) {
         <>
             {selectedBatch && (
                 <div
-                    className="flex flex-col gap-5 p-5 cols-span-1 lg:col-span-2 border rounded-2xl 
-            shadow-sm dark:shadow-customBorder dark:shadow-inner"
+                    className="relative z-20 h-[calc(100vh-60px)] md:h-[calc(100vh-108px)] bg-background flex flex-col gap-5 p-5 cols-span-1 lg:col-span-2 md:border md:rounded-2xl 
+            shadow-sm md:dark:shadow-customBorder md:dark:shadow-inner"
                 >
                     <h1 className="text-lg text-foreground font-semibold">
                         {selectedBatch.name}
                     </h1>
                     {/* Batch details */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
-                        <CountCard count={1} heading="Coordinators" />
-                        <CountCard count={3} heading="Instructors" />
-                        <CountCard count={25} heading="Students" />
+                    <div className="grid grid-cols-3 lg:grid-cols-3 gap-3">
+                        <CountCard count={1} heading="Coordinators" Icon={UsersRound} />
+                        <CountCard count={3} heading="Instructors" Icon={UsersRound} />
+                        <CountCard count={25} heading="Students" Icon={GraduationCap} />
                     </div>
 
                     {/* Tabs */}
@@ -240,11 +249,12 @@ function BatchesDetailsSide({ handleSelect, selectedBatch }: Propstype) {
                                         <UserList
                                             key={index}
                                             index={index}
-                                            action={handleSelect}
                                             user={user}
+                                            className="bg-muted dark:bg-sidebar dark:hover:bg-muted border-none"
                                             children1={
-                                                <p className="text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
-                                                    {user.role[0].toUpperCase() + user.role.slice(1)}
+                                                <p className="text-sm text-muted-foreground font-medium flex items-center gap-1">
+                                                    <Mail className="w-4 h-4 " />
+                                                    <span>{user.role}</span>
                                                 </p>
                                             }
                                         />
@@ -275,7 +285,7 @@ function BatchesDetailsSide({ handleSelect, selectedBatch }: Propstype) {
                     MainIcon={School}
                     message={`Select a batch to see it's details`}
                     text={`No batch selected`}
-                    className="h-full col-span-2"
+                    className="hidden md:flex cols-span-1 lg:col-span-2"
                 />
             )}
         </>

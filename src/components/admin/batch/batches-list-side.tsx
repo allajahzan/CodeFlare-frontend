@@ -31,14 +31,22 @@ import { handleCustomError } from "@/utils/error";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { fetchData } from "@/service/api-service";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useMediaQuery } from "usehooks-ts";
+import DrawerBatchLists from "./drawer-batch-lists";
 
 // Interface for Props
 interface PropsType {
     setSelectedBatch: React.Dispatch<React.SetStateAction<IBatch | null>>;
+    selectedBatch: IBatch | null;
+    setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // Batches list side Component
-function BatchesListSide({ setSelectedBatch }: PropsType) {
+function BatchesListSide({
+    setSelectedBatch,
+    selectedBatch,
+    setDrawerOpen,
+}: PropsType) {
     // Batch related states
     const [batches, setBatches] = useState<IBatch[] | []>([]);
     const [newBatch, setNewBatch] = useState<IBatch | null>(null);
@@ -60,6 +68,9 @@ function BatchesListSide({ setSelectedBatch }: PropsType) {
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
+
+    // Small screen
+    const isSmall = useMediaQuery("(max-width: 767.20px)");
 
     // Handle search
     const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
@@ -112,6 +123,11 @@ function BatchesListSide({ setSelectedBatch }: PropsType) {
     useEffect(() => {
         document.body.style.pointerEvents = "auto";
     }, [open]);
+
+    // Close drawer on screen size change
+    useEffect(() => {
+        setDrawerOpen(false);
+    }, [isSmall]);
 
     return (
         <div
@@ -203,58 +219,76 @@ function BatchesListSide({ setSelectedBatch }: PropsType) {
             </div>
 
             {/* Batches list */}
-            <div className="h-full w-full flex flex-col gap-[9px] overflow-auto bg-transparent no-scrollbar pb-0.5">
-                {batches.length > 0 &&
-                    batches.map((batch, index) => {
-                        return (
-                            <ListCard
-                                key={index}
-                                index={index}
-                                text={batch.name}
-                                action={() => setSelectedBatch(batch)}
-                                children={
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger className="p-2 hover:bg-muted rounded-lg">
-                                            <MoreHorizontal className="w-4 h-4 text-foreground" />
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent
-                                            align="end"
-                                            onClick={(event) => {
-                                                event.stopPropagation();
-                                                setOpen(true);
-                                            }}
-                                            className={cn(
-                                                "relative",
-                                                false ? "left-[13px]" : "left-0"
-                                            )}
-                                        >
-                                            <DropdownMenuItem
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    setBatchNameToEdit(batch);
+            {!isSmall && (
+                <div className="h-full w-full flex flex-col gap-[9px] overflow-auto bg-transparent no-scrollbar pb-0.5">
+                    {batches.length > 0 &&
+                        batches.map((batch, index) => {
+                            return (
+                                <ListCard
+                                    key={index}
+                                    index={index}
+                                    text={batch.name}
+                                    action={() => setSelectedBatch(batch)}
+                                    selectedItem={selectedBatch}
+                                    children={
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger className="p-2 hover:bg-muted rounded-lg">
+                                                <MoreHorizontal className="w-4 h-4 text-foreground" />
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent
+                                                align={isSmall ? "end" : "start"}
+                                                onClick={(event) => {
+                                                    event.stopPropagation();
+                                                    setOpen(true);
                                                 }}
+                                                className={cn(
+                                                    "relative",
+                                                    isSmall ? "left-[13px]" : "left-0"
+                                                )}
                                             >
-                                                <Edit /> Edit
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                }
-                            />
-                        );
-                    })}
+                                                <DropdownMenuItem
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        setBatchNameToEdit(batch);
+                                                    }}
+                                                >
+                                                    <Edit /> Edit
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    }
+                                />
+                            );
+                        })}
 
-                {/* If not batches */}
-                {batches.length === 0 && (
-                    <NotFoundOrbit
-                        MainIcon={UsersRound}
-                        SubIcon={fetching ? Search : Plus}
-                        message={
-                            fetching ? "Please wait a moment" : "Add new batches to codeflare"
-                        }
-                        text={fetching ? "Fetching..." : "No batches found"}
-                    />
-                )}
-            </div>
+                    {/* If not batches */}
+                    {batches.length === 0 && (
+                        <NotFoundOrbit
+                            MainIcon={UsersRound}
+                            SubIcon={fetching ? Search : Plus}
+                            message={
+                                fetching
+                                    ? "Please wait a moment"
+                                    : "Add new batches to codeflare"
+                            }
+                            text={fetching ? "Fetching..." : "No batches found"}
+                        />
+                    )}
+                </div>
+            )}
+
+            {isSmall && (
+                <DrawerBatchLists
+                    batches={batches}
+                    selectedBatch={selectedBatch}
+                    setSelectedBatch={setSelectedBatch}
+                    setOpen={setOpen}
+                    setBatchNameToEdit={setBatchNameToEdit}
+                    fetching={fetching}
+                    isSmall={isSmall}
+                    setDrawerOpen={setDrawerOpen}
+                />
+            )}
 
             {/* Edit modal */}
             <EditBatchModal
