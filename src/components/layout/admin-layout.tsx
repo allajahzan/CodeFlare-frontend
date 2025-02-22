@@ -1,3 +1,4 @@
+import Sidebar from "@/components/common/sideBar/sidebar";
 import { Outlet } from "react-router-dom";
 import Navbar from "@/components/common/navbar/navbar";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,7 +16,6 @@ import Shadow from "@/components/ui/shadow";
 import { useLayoutEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import AppRoutes from "@/constants/app-routes";
-import Sidebar from "@/components/common/sideBar/sidebar";
 
 // Interface for Props
 interface PropsType {
