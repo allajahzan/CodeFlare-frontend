@@ -1,4 +1,4 @@
-import Sidebar from "@/components/common/sideBar/sidebar";
+import Sidebar from "../common/sideBar/sidebar";
 import { Outlet } from "react-router-dom";
 import Navbar from "@/components/common/navbar/navbar";
 import { useDispatch, useSelector } from "react-redux";
