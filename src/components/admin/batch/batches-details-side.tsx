@@ -132,7 +132,7 @@ function BatchesDetailsSide({ selectedBatch }: Propstype) {
                         defaultValue="coordinator"
                         className="w-full h-full flex flex-col gap-5"
                     >
-                        <TabsList className="grid w-full grid-cols-3 gap-3">
+                        <TabsList className="grid w-full grid-cols-3 gap-3 dark:bg-sidebar">
                             <TabsTrigger
                                 onClick={() => setCategory("coordinator")}
                                 value="coordinator"
@@ -250,7 +250,6 @@ function BatchesDetailsSide({ selectedBatch }: Propstype) {
                                             key={index}
                                             index={index}
                                             user={user}
-                                            className="bg-muted dark:bg-sidebar dark:hover:bg-muted border-none"
                                             children1={
                                                 <p className="text-sm text-muted-foreground font-medium flex items-center gap-1">
                                                     <Mail className="w-4 h-4 " />
