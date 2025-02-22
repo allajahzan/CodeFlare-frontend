@@ -19,7 +19,7 @@ import Shadow from "@/components/ui/shadow";
 import { useLayoutEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import AppRoutes from "@/constants/app-routes";
-import Sidebar from "../common/sidebar/sidebar";
+import Sidebar from "../common/sidebar/sideBar";
 
 // Interface for Props
 interface PropsType {
