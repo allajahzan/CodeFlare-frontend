@@ -1,4 +1,4 @@
-import SideBar from "../common/sideBar/sidebar";
+import Sidebar from "../common/sideBar/sidebar";
 import { Outlet } from "react-router-dom";
 import Navbar from "@/components/common/navbar/navbar";
 import { useDispatch, useSelector } from "react-redux";
@@ -88,7 +88,7 @@ function AdminLayout({ isDrawerOpen }: PropsType) {
             className="h-screen bg-background dark:bg-background"
         >
             <Shadow />
-            <SideBar sideBarItems={sideBarItems} />
+            <Sidebar sideBarItems={sideBarItems} />
             <div
                 className={cn(
                     "flex flex-col h-full relative transition-all duration-300",

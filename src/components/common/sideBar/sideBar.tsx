@@ -29,7 +29,7 @@ interface PropsType {
 }
 
 // SideBar Component
-function SideBar({ sideBarItems }: PropsType) {
+function Sidebar({ sideBarItems }: PropsType) {
     // Redux states
     const isSmall = useSelector((state: stateType) => state.isSmall);
     const isSideBarVisible = useSelector(
@@ -142,4 +142,4 @@ function SideBar({ sideBarItems }: PropsType) {
     );
 }
 
-export default React.memo(SideBar);
+export default React.memo(Sidebar);
