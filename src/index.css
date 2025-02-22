@@ -137,6 +137,7 @@
 
         /* Sidebar */
         --sidebar: 240, 5%, 6%;
+        --sidebar-background: 0 0% 4%;
         --sidebar-foreground: 0 0% 98%;
         --sidebar-border: 240, 6%, 10%;
 
