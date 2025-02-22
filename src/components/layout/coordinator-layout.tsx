@@ -1,4 +1,4 @@
-import Sidebar from "../common/sideBar/sidebar";
+import SideBar from "../common/sideBar/sidebar";
 import { Outlet } from "react-router-dom";
 import Navbar from "@/components/common/navbar/navbar";
 import { useDispatch, useSelector } from "react-redux";
@@ -90,7 +90,7 @@ function CoordinatorLayout({ isDrawerOpen }: PropsType) {
             className="h-screen bg-background"
         >
             <Shadow />
-            <Sidebar sideBarItems={sideBarItems} />
+            <SideBar sideBarItems={sideBarItems} />
             <div
                 className={cn(
                     "flex flex-col h-full relative transition-all duration-300",
