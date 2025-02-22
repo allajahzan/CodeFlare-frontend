@@ -124,12 +124,11 @@ function EditStudentSheet({
             reset({
                 name: selecteStudent.name || "",
                 email: selecteStudent.email || "",
-                role:
-                    selecteStudent.role[0].toUpperCase() + selecteStudent.role.slice(1) ||
-                    "",
-                batch: selecteStudent.batch || "",
+                role: selecteStudent.role || "",
+                batch: selecteStudent.batch.name || "",
             });
-            setSelectedBatch(selecteStudent.batch);
+            // Set selected batches
+            setSelectedBatch(selecteStudent.batch.name);
         }
     }, [selecteStudent, reset, open]);
 

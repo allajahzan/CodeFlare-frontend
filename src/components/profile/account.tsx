@@ -27,6 +27,7 @@ import { IUserContext, UserContext } from "@/context/user-context";
 import ValidationError from "../ui/validation-error";
 import { IProfile } from "@/types/profile";
 import { toast } from "@/hooks/use-toast";
+import { IBatch } from "../admin/batch/batches";
 
 // Interface for Props
 interface PropsType {
@@ -227,7 +228,7 @@ function Account({ profile }: PropsType) {
                             placeholder={user?.batch ? "Batch" : "Batches"}
                             autoComplete="off"
                             defaultValue={
-                                user?.batch || (user?.batches as string[])?.join(", ")
+                                user?.batch?.name || (user?.batches as IBatch[])?.join(", ")
                             }
                             disabled
                             className="p-5 pl-9 text-foreground font-medium"

@@ -17,7 +17,7 @@ import { IProfile } from "@/types/profile";
 // Profile Componet
 function Profile() {
     // bg-image state
-    const [bgImage, setBgImage] = useState<string | null>(null);
+    const [bgImage, _setBgImage] = useState<string | null>(null);
 
     // profile
     const [profile, setProfile] = useState<IProfile>({

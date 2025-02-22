@@ -11,7 +11,7 @@ interface PropsType {
 }
 
 // Media Card Component
-function MediaCard({ msg, className, messagesEndRef }: PropsType) {
+function MediaCard({ msg, className }: PropsType) {
     const [loading, setLoading] = useState<boolean>(true);
     const [imageHeight, setImageHeight] = useState<number | null>(null);
     const imageRef = useRef<HTMLImageElement | null>(null);

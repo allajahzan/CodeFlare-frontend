@@ -26,8 +26,6 @@ interface PropsType {
 function PaperClip({
     setUser,
     selectedUser,
-    setSelectedUser,
-    selectedChat,
     setSelectedChat,
 }: PropsType) {
     // User context
