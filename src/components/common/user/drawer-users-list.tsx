@@ -266,7 +266,7 @@ function DrawerUsersList({
                     setUsers={setUsers}
                     setSelectedUser={setSelectedUser}
                     selectedUser={selectedUser}
-                    role={role === "students" ? "student" : "user"}
+                    role={role === "admin" ? "user" : "student"}
                 />
             </DrawerContent>
         </Drawer>

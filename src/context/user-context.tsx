@@ -10,7 +10,7 @@ import { createContext, ReactNode, useState, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // Interface for User
-interface IUser {
+export interface IUser {
     _id: string;
     name: string;
     email: string;

@@ -37,12 +37,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import ValidationError from "@/components/ui/validation-error";
+import { IBatch } from "@/components/admin/batch/batches";
 
 // Interface for Props
 interface PropsType {
     button: ReactNode;
     setNewStudent: React.Dispatch<React.SetStateAction<Student | null>>;
-    batches: string[];
+    batches: IBatch[];
 }
 
 // Add user sheet
@@ -284,8 +285,8 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                                 </SelectTrigger>
                                 <SelectContent className="max-h-[200px]">
                                     {batches.map((batch, index) => (
-                                        <SelectItem key={index} value={batch}>
-                                            {batch}
+                                        <SelectItem key={index} value={batch._id}>
+                                            {batch.name}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>

@@ -37,6 +37,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import ValidationError from "@/components/ui/validation-error";
+import { IBatch } from "@/components/admin/batch/batches";
 
 // Interface for Props
 interface PropsType {
@@ -44,7 +45,7 @@ interface PropsType {
     setStudents: React.Dispatch<React.SetStateAction<[] | Student[]>>;
     setSelectedStudent: React.Dispatch<React.SetStateAction<Student>>;
     selecteStudent: Student;
-    batches: string[];
+    batches: IBatch[];
 }
 
 // Add user sheet
@@ -62,8 +63,8 @@ function EditStudentSheet({
     // Redux
     const role = useSelector((state: stateType) => state.role);
 
-    // Input
-    const [selectedBatch, setSelectedBatch] = useState<string>("");
+    // Inputs
+    const [selectedBatch, setSelectedBatch] = useState<IBatch | null>(null);
 
     // Form validator
     const {
@@ -86,7 +87,7 @@ function EditStudentSheet({
                     name: formData.name,
                     email: formData.email,
                     role: formData.role.toLowerCase(),
-                    batch: formData.batch,
+                    batch: (selectedBatch as IBatch)._id,
                     message: formData.message,
                 },
                 role
@@ -128,7 +129,7 @@ function EditStudentSheet({
                 batch: selecteStudent.batch.name || "",
             });
             // Set selected batches
-            setSelectedBatch(selecteStudent.batch.name);
+            setSelectedBatch(selecteStudent.batch);
         }
     }, [selecteStudent, reset, open]);
 
@@ -293,9 +294,10 @@ function EditStudentSheet({
                             <Select
                                 key={"batches"}
                                 required
-                                value={selectedBatch}
+                                value={selectedBatch?._id || ""} // Ensure a valid value is set
                                 onValueChange={(value) => {
-                                    setSelectedBatch(value);
+                                    const batch = batches.find((b) => b._id === value);
+                                    setSelectedBatch(batch as IBatch);
                                     setValue("batch", value);
                                 }}
                             >
@@ -303,19 +305,19 @@ function EditStudentSheet({
                                     id="batches"
                                     className="text-foreground font-medium p-5 pl-9 relative"
                                 >
-                                    <SelectValue
-                                        placeholder="Select a batch"
-                                        className="relative transition-opacity duration-200"
-                                    />
+                                    <SelectValue className="relative transition-opacity duration-200">
+                                        {selectedBatch ? selectedBatch.name : "Select a batch"}
+                                    </SelectValue>
                                 </SelectTrigger>
                                 <SelectContent className="max-h-[200px]">
-                                    {batches.map((batch, index) => (
-                                        <SelectItem key={index} value={batch}>
-                                            {batch}
+                                    {batches.map((batch) => (
+                                        <SelectItem key={batch._id} value={batch._id}>
+                                            {batch.name}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
+
                             <UsersRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
 

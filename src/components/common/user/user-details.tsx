@@ -25,6 +25,7 @@ import EditStudentSheet from "@/components/coordinator/students/sheet-edit-stude
 import { useContext } from "react";
 import { IUserContext, UserContext } from "@/context/user-context";
 import UserNameCard from "./user-name-card";
+import { IBatch } from "@/components/admin/batch/batches";
 
 // Interface for Props
 interface PropsType {
@@ -100,7 +101,7 @@ function UserDetails({
                                         setStudents={setUsers as any}
                                         setSelectedStudent={setSelectedUser as any}
                                         selecteStudent={selectedUser as Student}
-                                        batches={(user as any).batches.map((b: any) => b.name)}
+                                        batches={user?.batches as IBatch[]}
                                     />
                                 )}
                             </div>
@@ -150,7 +151,7 @@ function UserDetails({
                                     ? {
                                         icon: Home,
                                         label: "Batch",
-                                        value: (selectedUser as Student).batch,
+                                        value: (selectedUser as Student).batch.name,
                                         iconDivClassName: "bg-purple-400/20 group-hover:bg-purple-400/30",
                                         iconClassName:"text-purple-600",
                                     }
