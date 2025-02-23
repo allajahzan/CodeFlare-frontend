@@ -11,7 +11,7 @@ interface PropsType {
 function CountCard({ count, heading, Icon }: PropsType) {
     return (
         <div
-            className="group flex items-center gap-3 p-2 lg:p-3 bg-muted dark:bg-sidebar rounded-lg 
+            className="group flex items-center gap-3 p-2 lg:p-3 border border-transparent dark:border-border bg-muted dark:bg-sidebar rounded-lg 
         shadow-smr"
         >
             <div className="p-2 rounded-md lg:rounded-lg group-hover:border-white bg-blue-400/20 group-hover:bg-blue-400/30">

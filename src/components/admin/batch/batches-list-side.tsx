@@ -296,6 +296,7 @@ function BatchesListSide({
                 open={open}
                 setOpen={setOpen}
                 setBatches={setBatches}
+                setSelectedBatch = {setSelectedBatch}
             />
         </div>
     );

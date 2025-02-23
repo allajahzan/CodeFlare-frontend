@@ -28,10 +28,17 @@ interface PropsType {
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setBatches: React.Dispatch<React.SetStateAction<IBatch[]>>;
+    setSelectedBatch: React.Dispatch<React.SetStateAction<IBatch | null>>;
 }
 
 // Add batch modal
-function EditBatchModal({ batchToEdit, open, setOpen, setBatches }: PropsType) {
+function EditBatchModal({
+    batchToEdit,
+    open,
+    setOpen,
+    setBatches,
+    setSelectedBatch,
+}: PropsType) {
     // Modal state
     const [submiting, setSubmiting] = useState<boolean>(false);
 
@@ -71,6 +78,17 @@ function EditBatchModal({ batchToEdit, open, setOpen, setBatches }: PropsType) {
                         }
                         return batch;
                     });
+                });
+
+                // Update the selected batch if its selected
+                setSelectedBatch((batch: IBatch | null) => {
+                    if (batch && batch._id === batchToEdit._id) {
+                        return {
+                            ...batch,
+                            name: formData.name,
+                        };
+                    }
+                    return batch;
                 });
 
                 toast({ title: "Batch updated successfully." });

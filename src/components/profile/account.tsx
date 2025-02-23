@@ -228,7 +228,7 @@ function Account({ profile }: PropsType) {
                             placeholder={user?.batch ? "Batch" : "Batches"}
                             autoComplete="off"
                             defaultValue={
-                                user?.batch?.name || (user?.batches as IBatch[])?.join(", ")
+                                user?.batch?.name || (user?.batches as IBatch[])?.map((b)=>b.name).join(", ")
                             }
                             disabled
                             className="p-5 pl-9 text-foreground font-medium"

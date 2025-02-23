@@ -114,8 +114,8 @@ function BatchesDetailsSide({ selectedBatch }: Propstype) {
         <>
             {selectedBatch && (
                 <div
-                    className="relative z-20 h-[calc(100vh-60px)] md:h-[calc(100vh-108px)] bg-background flex flex-col gap-5 p-5 cols-span-1 lg:col-span-2 md:border md:rounded-2xl 
-            shadow-sm md:dark:shadow-customBorder md:dark:shadow-inner"
+                    className="relative z-20 h-[calc(100vh-60px)] md:h-[calc(100vh-108px)] flex flex-col gap-5 p-5 cols-span-1 lg:col-span-2 md:border md:rounded-2xl 
+            bg-background shadow-sm md:dark:shadow-customBorder md:dark:shadow-inner"
                 >
                     <h1 className="text-lg text-foreground font-semibold">
                         {selectedBatch.name}
@@ -253,7 +253,7 @@ function BatchesDetailsSide({ selectedBatch }: Propstype) {
                                             children1={
                                                 <p className="text-sm text-muted-foreground font-medium flex items-center gap-1">
                                                     <Mail className="w-4 h-4 " />
-                                                    <span>{user.role}</span>
+                                                    <span>{user.email}</span>
                                                 </p>
                                             }
                                         />
