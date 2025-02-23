@@ -293,9 +293,15 @@ function Students({ setDrawerOpen }: PropsType) {
                                 {/* Sorting options */}
                                 <DropdownMenuItem
                                     textValue="name"
-                                    onClick={() => setSort((prev) => ({ ...prev, key: "name" }))}
+                                    onClick={() =>
+                                        setSort((prev) =>
+                                            prev.key !== "name"
+                                                ? { key: "name", order: prev.order }
+                                                : prev
+                                        )
+                                    }
                                     onSelect={(e) => e.preventDefault()}
-                                    className="cursor-pointer flex justify-between"
+                                    className="flex justify-between"
                                 >
                                     <span>Name</span>
                                     <span>
@@ -307,10 +313,14 @@ function Students({ setDrawerOpen }: PropsType) {
                                 <DropdownMenuItem
                                     textValue="createdAt"
                                     onClick={() =>
-                                        setSort((prev) => ({ ...prev, key: "createdAt" }))
+                                        setSort((prev) =>
+                                            prev.key !== "createdAt"
+                                                ? { key: "createdAt", order: prev.order }
+                                                : prev
+                                        )
                                     }
                                     onSelect={(e) => e.preventDefault()}
-                                    className="cursor-pointer flex justify-between"
+                                    className="flex justify-between"
                                 >
                                     <span>Date</span>
                                     <span>
