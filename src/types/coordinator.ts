@@ -2,7 +2,7 @@ import { IBatch } from "@/components/admin/batch/batches";
 
 // Interface for Student
 export interface Student {
-    _id: number;
+    _id: string;
     name: string;
     email: string;
     role: string;
