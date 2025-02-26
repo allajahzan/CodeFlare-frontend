@@ -32,8 +32,6 @@ import { toast } from "@/hooks/use-toast";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { Student } from "@/types/coordinator";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { formSchema, FormType } from "@/validations/coordinator/student";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import ValidationError from "@/components/ui/validation-error";
@@ -41,6 +39,8 @@ import { IBatch } from "@/components/admin/batch/batches";
 import { Review } from "./reviews";
 import { DatePickerDemo } from "./date-picker";
 import { format } from "date-fns";
+import { formSchema, FormType } from "@/validations/instructor/schedule-review";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 // Interface for Props
 interface PropsType {
@@ -55,8 +55,12 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
     const [open, setOpen] = useState<boolean | undefined>(undefined);
     const [submiting, setSubmiting] = useState(false);
 
+    // Students
     const [students, setStudents] = useState<Student[]>([]);
+
+    // Batches
     const [batch, setBatch] = useState<IBatch | null>(null);
+
     const [fetching, setFetching] = useState(false);
 
     // Date
@@ -70,6 +74,33 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
+
+    // Form validator
+    const {
+        register,
+        reset,
+        setValue,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<FormType>({ resolver: zodResolver(formSchema) });
+
+    // OnSubmit
+    const OnSubmit: SubmitHandler<FormType> = async (formData) => {
+        setSubmiting(true);
+
+        try {
+            // Send request
+            const resp = await postData(ApiEndpoints.REVIEW, formData, role);
+
+            // Success response
+            if (resp && resp.status === 200) {
+                setSubmiting(false);
+            }
+        } catch (err: unknown) {
+            setSubmiting(false);
+            handleCustomError(err);
+        }
+    };
 
     // Fetch users based on the batch
     useEffect(() => {
@@ -105,6 +136,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
     // Clear fields when sheet closes
     useEffect(() => {
         if (!open) {
+            reset();
         }
     }, [open]);
 
@@ -133,7 +165,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.3, delay: 0.2 }}
-                    // onSubmit={handleSubmit(OnSubmit)}
+                    onSubmit={handleSubmit(OnSubmit)}
                     className="space-y-3 p-5 overflow-auto"
                 >
                     {/* Input for title */}
@@ -152,24 +184,53 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                         <div className="relative">
                             <Input
                                 id="title"
-                                placeholder="Enter a title"
+                                placeholder="Enter title"
                                 required
                                 autoComplete="off"
-                                // {...register("name")}
+                                {...register("title")}
                                 className="text-foreground font-medium p-5 pl-9"
                             />
                             <FolderPen className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
 
                         {/* Title error message */}
-                        {/* <ValidationError message={errors.name?.message as string} /> */}
+                        <ValidationError message={errors.title?.message as string} />
+                    </motion.div>
+
+                    {/* Input for week */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 }}
+                        className="space-y-2"
+                    >
+                        <Label
+                            htmlFor="week"
+                            className="text-sm text-foreground font-medium"
+                        >
+                            Week
+                        </Label>
+                        <div className="relative">
+                            <Input
+                                id="week"
+                                placeholder="Enter week"
+                                required
+                                autoComplete="off"
+                                {...register("week")}
+                                className="text-foreground font-medium p-5 pl-9"
+                            />
+                            <CalendarDays className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                        </div>
+
+                        {/* week error message */}
+                        <ValidationError message={errors.week?.message as string} />
                     </motion.div>
 
                     {/* Input for batches */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
+                        transition={{ delay: 0.5 }}
                         className="space-y-2"
                     >
                         <Label
@@ -183,7 +244,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                                 key={"batches"}
                                 required
                                 onValueChange={(value) => {
-                                    // setValue("batch", value);
+                                    setValue("batch", value);
                                     setBatch(batches.find((b) => b._id === value) as IBatch);
                                 }}
                             >
@@ -208,14 +269,14 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                         </div>
 
                         {/* Batch error message */}
-                        {/* <ValidationError message={errors.batch?.message as string} /> */}
+                        <ValidationError message={errors.batch?.message as string} />
                     </motion.div>
 
                     {/* Input for students */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5 }}
+                        transition={{ delay: 0.6 }}
                         className="space-y-2"
                     >
                         <Label
@@ -229,8 +290,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                                 key={"students"}
                                 required
                                 onValueChange={(value) => {
-                                    // setValue("batch", value);
-                                    console.log(value);
+                                    setValue("student", value);
                                 }}
                             >
                                 <SelectTrigger
@@ -240,7 +300,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                                     <SelectValue
                                         placeholder={
                                             fetching
-                                                ? "Fetching students"
+                                                ? "Fetching students..."
                                                 : students.length > 0
                                                     ? "Select a student"
                                                     : "No students in this batch"
@@ -261,15 +321,15 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                             <UsersRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
 
-                        {/* Batch error message */}
-                        {/* <ValidationError message={errors.batch?.message as string} /> */}
+                        {/* Studennt error message */}
+                        <ValidationError message={errors.student?.message as string} />
                     </motion.div>
 
                     {/* Date picker */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6 }}
+                        transition={{ delay: 0.7 }}
                         className="space-y-2"
                     >
                         <Label
@@ -291,7 +351,10 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                             <DatePickerDemo
                                 isOpen={isOpen}
                                 selectedDate={selectedDate}
-                                setSelectedDate={setSelectedDate}
+                                setSelectedDate={(date) => {
+                                    setValue("date", date);
+                                    setSelectedDate(date);
+                                }}
                             />
                             <p className="text-foreground font-medium">
                                 {selectedDate ? (
@@ -305,14 +368,14 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                         </div>
 
                         {/* Date error message */}
-                        {/* <ValidationError message={errors.confirmEmail?.message as string} /> */}
+                        <ValidationError message={errors.date?.message as string} />
                     </motion.div>
 
                     {/* Time picker */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.7 }}
+                        transition={{ delay: 0.8 }}
                         className="space-y-2"
                     >
                         <Label
@@ -325,8 +388,13 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                             Time
                         </Label>
                         <div className="relative">
-                            <Select onValueChange={setselectedTime}>
-                                <SelectTrigger className="w-full sm:w-[180px]">
+                            <Select
+                                onValueChange={(value) => {
+                                    setselectedTime(value);
+                                    setValue("time", value);
+                                }}
+                            >
+                                <SelectTrigger className="w-full p-3 py-5">
                                     <SelectValue placeholder="Pick a time">
                                         <Clock className="mr-2 h-4 w-4 inline" />
                                         {selectedTime}
@@ -352,14 +420,14 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                         </div>
 
                         {/* Time error message */}
-                        {/* <ValidationError message={errors.confirmEmail?.message as string} /> */}
+                        <ValidationError message={errors.time?.message as string} />
                     </motion.div>
 
                     {/* Submit button */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.8 }}
+                        transition={{ delay: 0.9 }}
                         className="pt-4"
                     >
                         <Button
@@ -373,7 +441,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                                     Processing...
                                 </div>
                             ) : (
-                                "Send Invitation"
+                                "Schedule review"
                             )}
                         </Button>
                     </motion.div>
