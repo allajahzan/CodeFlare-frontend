@@ -15,6 +15,7 @@ function UserNameCard({ data }: PropsType) {
         <div className="flex items-center gap-3">
             {/* Avatar profile pic */}
             <motion.div
+                key={data.email}
                 initial={{ scale: 0.5, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.2 }}

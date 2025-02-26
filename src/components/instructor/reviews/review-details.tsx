@@ -38,7 +38,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
                     className="h-full p-5 rounded-2xl overflow-hidden border border-border
                 dark:bg-background shadow-sm"
                 >
-                    <div key={selectedReview.id} className="space-y-5">
+                    <div key={selectedReview._id} className="space-y-5">
                         {/* Heading */}
                         <div className="flex items-center justify-between gap-3">
                             <div className="flex items-center gap-3">
@@ -57,15 +57,16 @@ function ReviewDetails({ selectedReview }: PropsType) {
                             {/* Name */}
                             <UserNameCard
                                 data={{
-                                    name: selectedReview.student.name,
-                                    email: selectedReview.student.email,
-                                    role: selectedReview.student.role,
-                                    profilePic: selectedReview.student.profilePic,
+                                    name: selectedReview.user.name,
+                                    email: selectedReview.user.email,
+                                    role: selectedReview.user.role,
+                                    profilePic: selectedReview.user.profilePic || "",
                                 }}
                             />
 
                             {/* Feedback */}
                             <motion.div
+                                key={selectedReview._id}
                                 initial={{ opacity: 0, y: -20 }}
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{
@@ -99,7 +100,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 <InfoCard
                                     Icon={CircleDashed}
                                     label="Status"
-                                    text={"Pending"}
+                                    text={selectedReview.status}
                                     iconDivClassName="bg-yellow-400/20 group-hover:bg-yellow-400/30"
                                     iconClassName="text-yellow-600"
                                 />
@@ -114,7 +115,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 <InfoCard
                                     Icon={CalendarDays}
                                     label="Sheduled Date"
-                                    text={selectedReview.date}
+                                    text={selectedReview.date as unknown as string}
                                     iconDivClassName="bg-blue-400/20 group-hover:bg-blue-400/30"
                                     iconClassName="text-blue-600"
                                 />
@@ -129,7 +130,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 <InfoCard
                                     Icon={CalendarDays}
                                     label="Reveiw Date"
-                                    text={selectedReview.date}
+                                    text={selectedReview.date as unknown as string}
                                     iconDivClassName="bg-orange-400/20 group-hover:bg-orange-400/30"
                                     iconClassName="text-orange-600"
                                 />
@@ -144,7 +145,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 <InfoCard
                                     Icon={Clock}
                                     label="Time"
-                                    text={selectedReview.date}
+                                    text={selectedReview.date as unknown as string}
                                     iconDivClassName="bg-green-400/20 group-hover:bg-green-400/30"
                                     iconClassName="text-green-600"
                                 />
@@ -159,7 +160,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 <InfoCard
                                     Icon={Hourglass}
                                     label="Duration"
-                                    text={selectedReview.date}
+                                    text={selectedReview.date as unknown as string}
                                     iconDivClassName="bg-purple-400/20 group-hover:bg-purple-400/30"
                                     iconClassName="text-purple-600"
                                 />{" "}

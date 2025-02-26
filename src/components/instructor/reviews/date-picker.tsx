@@ -18,7 +18,7 @@ export function DatePickerDemo({
         <div
             onClick={(event) => event.stopPropagation()}
             className={cn(
-                "absolute z-20 -top-[300px] -left-0.5 bg-background",
+                "absolute z-20 -top-[290px] -left-0.5 bg-background",
                 isOpen ? "block" : "hidden"
             )}
         >

@@ -19,6 +19,8 @@ import {
 } from "@/components/ui/select";
 import { motion } from "framer-motion";
 import {
+    CalendarDays,
+    CalendarIcon,
     Check,
     Filter,
     MoreHorizontal,
@@ -26,53 +28,53 @@ import {
     Search,
     SortAsc,
 } from "lucide-react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import profile from "@/assets/images/no-profile.svg";
 import ReviewDetails from "./review-details";
 import CardHeader from "@/components/common/data-card/header";
 import ScheduleReviewSheet from "./sheet-schedule-review";
 import { IUserContext, UserContext } from "@/context/user-context";
+import { NotFoundOrbit } from "@/components/animation/fallbacks";
+import { handleCustomError } from "@/utils/error";
+import { fetchData } from "@/service/api-service";
+import ApiEndpoints from "@/constants/api-endpoints";
+import { useSelector } from "react-redux";
+import { stateType } from "@/redux/store";
 
 // Interface for Review
 export interface Review {
-    id: number;
-    week: string;
-    title: string;
-    date: string;
-    status: "Pass" | "Fail";
-    student: {
+    _id: string;
+    user: {
+        userId: string;
         name: string;
         email: string;
         role: string;
-        profilePic: string;
+        profilePic?: string;
     };
-    details: string;
+    batchId: string;
+    title: string;
+    week: string;
+    date: Date;
+    time: string;
+    rating: number;
+    feedback: string;
     pendings: string[];
+    score: {
+        tech: number;
+        theory: number;
+    };
+    status: string;
+    result: string;
 }
-
-const reviews: Review[] = [
-    {
-        id: 1,
-        week: "Week 1",
-        title: "Javascript",
-        date: "20th Jun 2024",
-        status: "Pass",
-        student: {
-            name: "Ahsan allaj",
-            email: "ahsanallaj@gmail.com",
-            role: "Student",
-            profilePic: "",
-        },
-        details: "Successfully completed all tasks for Week 1.",
-        pendings: ["data", "data", "data"],
-    },
-];
 
 // Reviews Component
 function Reviews() {
     // Review related states
+    const [reviews, setReviews] = useState<Review[] | []>([]);
     const [selectedReview, setSelectedReview] = useState<Review | null>(null);
     const [newReview, setNewReview] = useState<Review | null>(null);
+
+    const [fetching, setFetching] = useState<boolean>(true);
 
     // Search
     const [search, setSearch] = useState<string>("");
@@ -85,6 +87,48 @@ function Reviews() {
 
     // User context
     const { user } = useContext(UserContext) as IUserContext;
+
+    // Redux
+    const role = useSelector((state: stateType) => state.role);
+
+    // Add new review
+    useEffect(() => {
+        if (newReview) {
+            setReviews((prevReviews: Review[]) => {
+                return [...prevReviews, newReview];
+            });
+            setNewReview(null);
+        }
+    }, [newReview]);
+
+    // Fetch reviews
+    useEffect(() => {
+        const fetchReviews = async () => {
+            try {
+                // Send request
+                const resp = await fetchData(
+                    ApiEndpoints.REVIEW + `?batchIds=${user?.batches?.map((b) => b._id)}`,
+                    role
+                );
+
+                // Success response
+                if (resp && resp.status === 200) {
+                    const data = resp.data?.data;
+
+                    // Update reviews
+                    setTimeout(() => {
+                        setReviews(data);
+                        setFetching(false);
+                    }, 1000);
+                }
+            } catch (err: unknown) {
+                setFetching(false);
+                handleCustomError(err);
+            }
+        };
+
+        fetchReviews();
+    }, []);
 
     return (
         <div className="p-5 pt-0 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -228,9 +272,9 @@ function Reviews() {
                 </div>
 
                 {/* Reviews lists */}
-                {reviews.length &&
-                    reviews.map((review, index) => {
-                        return (
+                {reviews.length > 0 && (
+                    <div className="h-full w-full flex flex-col gap-[9px] overflow-auto bg-transparent no-scrollbar">
+                        {reviews.map((review, index) => (
                             <motion.div
                                 key={index}
                                 initial={{ opacity: 0, y: -20 }}
@@ -239,13 +283,12 @@ function Reviews() {
                                 onClick={() => setSelectedReview(review)}
                                 className="group p-2 px-3 w-full flex flex-col rounded-xl cursor-pointer 
                                 border border-border hover:bg-muted dark:hover:bg-sidebar"
-                                >
+                            >
                                 <div className="flex items-center gap-3">
-                                    {/* Date and time */}
                                     {/* Avatar profile pic */}
                                     <Avatar className="bg-background w-12 h-12 border-2 border-background dark:border-border shadow-md">
                                         <AvatarImage
-                                            src={review.student.profilePic}
+                                            src={review.user?.profilePic || profile}
                                             className="object-cover"
                                         />
                                         <AvatarFallback className="bg-transparent">
@@ -257,20 +300,33 @@ function Reviews() {
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2">
                                             <p className="font-semibold text-foreground truncate">
-                                                {review.week}
+                                                {review.user?.name}
                                             </p>
                                         </div>
                                         <p className="text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
-                                            {review.date}
+                                            <CalendarDays className="w-3 h-3" /> {review.week}
                                         </p>
                                     </div>
 
                                     {/* Menu */}
-                                    <MoreHorizontal className="w-4 h-4 text-foreground" />
+                                    {/* <MoreHorizontal className="w-4 h-4 text-foreground" /> */}
                                 </div>
                             </motion.div>
-                        );
-                    })}
+                        ))}
+                    </div>
+                )}
+
+                {reviews.length === 0 && (
+                    <NotFoundOrbit
+                        MainIcon={CalendarDays}
+                        SubIcon={fetching ? Search : Plus}
+                        message={
+                            fetching ? "Please wait a moment" : "Schedule review for students"
+                        }
+                        text={fetching ? "Fetching..." : "No reviews found"}
+                        className="w-full"
+                    />
+                )}
             </div>
 
             {/* Right side */}

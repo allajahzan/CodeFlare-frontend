@@ -88,13 +88,26 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
     const OnSubmit: SubmitHandler<FormType> = async (formData) => {
         setSubmiting(true);
 
+        const data = {
+            userId: formData.student,
+            batchId: formData.batch,
+            title: formData.title,
+            week: formData.week,
+            date: formData.date,
+            time: formData.time,
+        };
+
         try {
             // Send request
-            const resp = await postData(ApiEndpoints.REVIEW, formData, role);
+            const resp = await postData(ApiEndpoints.REVIEW, data, role);
 
             // Success response
             if (resp && resp.status === 200) {
+                const data = resp.data?.data;
+
                 setSubmiting(false);
+
+                toast({ title: "Successfully a scheduled review !" });
             }
         } catch (err: unknown) {
             setSubmiting(false);
@@ -400,7 +413,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                                         {selectedTime}
                                     </SelectValue>
                                 </SelectTrigger>
-                                <SelectContent className="h-[160px]">
+                                <SelectContent className="h-[170px]">
                                     {Array.from({ length: 24 }, (_, hour) => (
                                         <Fragment key={hour}>
                                             <SelectItem

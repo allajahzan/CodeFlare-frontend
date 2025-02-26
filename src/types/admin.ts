@@ -2,7 +2,7 @@ import { IBatch } from "@/components/admin/batch/batches";
 
 // Interface for User
 export interface User {
-    _id: number;
+    _id: string;
     name: string;
     email: string;
     role: string;
