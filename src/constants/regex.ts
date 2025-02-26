@@ -16,8 +16,14 @@ export const nameRegex = {
     alphabet: /^[a-zA-Z]+(?: [a-zA-Z]+)*$/
 };
 
-// Digits regex
+// Batch regex
 export const batch = {    
     capitalLetter: /^[A-Z]/,
     batchName: /^Batch \d+$/
+};
+
+// Week regex
+export const week = {    
+    capitalLetter: /^[A-Z]/,
+    weekName: /^Week \d+$/
 };
