@@ -45,7 +45,7 @@ import { stateType } from "@/redux/store";
 export interface Review {
     _id: string;
     user: {
-        userId: string;
+        _id: string;
         name: string;
         email: string;
         role: string;
@@ -65,6 +65,7 @@ export interface Review {
     };
     status: string;
     result: string;
+    createdAt: Date
 }
 
 // Reviews Component

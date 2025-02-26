@@ -115,7 +115,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 <InfoCard
                                     Icon={CalendarDays}
                                     label="Sheduled Date"
-                                    text={selectedReview.date as unknown as string}
+                                    text={selectedReview.createdAt as unknown as string}
                                     iconDivClassName="bg-blue-400/20 group-hover:bg-blue-400/30"
                                     iconClassName="text-blue-600"
                                 />
@@ -145,7 +145,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 <InfoCard
                                     Icon={Clock}
                                     label="Time"
-                                    text={selectedReview.date as unknown as string}
+                                    text={selectedReview.time}
                                     iconDivClassName="bg-green-400/20 group-hover:bg-green-400/30"
                                     iconClassName="text-green-600"
                                 />
@@ -160,7 +160,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 <InfoCard
                                     Icon={Hourglass}
                                     label="Duration"
-                                    text={selectedReview.date as unknown as string}
+                                    text={'1 Hour'}
                                     iconDivClassName="bg-purple-400/20 group-hover:bg-purple-400/30"
                                     iconClassName="text-purple-600"
                                 />{" "}

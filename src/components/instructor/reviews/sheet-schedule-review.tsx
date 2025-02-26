@@ -106,6 +106,8 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                 const data = resp.data?.data;
 
                 setSubmiting(false);
+                setNewReview(data)
+                setOpen(false)
 
                 toast({ title: "Successfully a scheduled review !" });
             }
@@ -150,6 +152,8 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
     useEffect(() => {
         if (!open) {
             reset();
+            setselectedTime("");
+            setSelectedDate(undefined);
         }
     }, [open]);
 
@@ -407,7 +411,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                                     setValue("time", value);
                                 }}
                             >
-                                <SelectTrigger className="w-full p-3 py-5">
+                                <SelectTrigger className="w-full p-3 py-5 text-foreground">
                                     <SelectValue placeholder="Pick a time">
                                         <Clock className="mr-2 h-4 w-4 inline" />
                                         {selectedTime}

@@ -26,7 +26,7 @@ export function DatePickerDemo({
                 mode="single"
                 selected={selectedDate}
                 onSelect={setSelectedDate}
-                className="rounded-md border shadow"
+                className="rounded-md border shadow text-foreground"
             />
         </div>
     );
