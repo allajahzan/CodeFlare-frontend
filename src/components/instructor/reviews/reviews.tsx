@@ -22,10 +22,9 @@ import {
     CalendarDays,
     CalendarIcon,
     Check,
-    Filter,
     MoreHorizontal,
     Plus,
-    Search,
+    SearchIcon,
     SortAsc,
 } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
@@ -40,6 +39,9 @@ import { fetchData } from "@/service/api-service";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
+import Sort from "@/components/common/data-card/sort";
+import Filter from "@/components/common/data-card/filter";
+import Search from "@/components/common/data-card/search";
 
 // Interface for Review
 export interface Review {
@@ -65,7 +67,7 @@ export interface Review {
     };
     status: string;
     result: string;
-    createdAt: Date
+    createdAt: Date;
 }
 
 // Reviews Component
@@ -158,118 +160,16 @@ function Reviews() {
                 {/* Search sort filter */}
                 <div className="w-full flex gap-2">
                     {/* Search reviews */}
-                    <div className="relative flex-1">
-                        <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                        <Input
-                            id="search"
-                            type="search"
-                            placeholder="Search"
-                            autoComplete="off"
-                            required
-                            // value={search}
-                            // onChange={handleSearch}
-                            className="p-5 pl-9 text-foreground font-medium rounded-lg dark:shadow-customBorder dark:shadow-inner"
-                        />
-                    </div>
+                    <Search search={search} handleSearch={() => { }} />
 
                     {/* Sort */}
-                    <DropdownMenu>
-                        <DropdownMenuTrigger
-                            className="flex items-center justify-center w-[41.6px] rounded-lg
-                                    border hover:bg-muted dark:hover:bg-sidebar shadow-sm"
-                        >
-                            <SortAsc className="h-4 w-4 text-foreground" />
-                        </DropdownMenuTrigger>
-
-                        <DropdownMenuContent
-                            align="end"
-                            onClick={(event) => event.stopPropagation()}
-                        >
-                            <DropdownMenuLabel>Sort</DropdownMenuLabel>
-
-                            {/* Checkbox for sorting order */}
-                            <div className="flex items-center gap-2 py-1.5 pl-2 cursor-pointer">
-                                <Checkbox
-                                    checked={sort.order === 1}
-                                    onCheckedChange={() => {
-                                        setSort((prev) => ({
-                                            ...prev,
-                                            order: prev.order === 1 ? -1 : 1,
-                                        }));
-                                    }}
-                                    id="ascending"
-                                    className="border-border"
-                                />
-                                <label
-                                    htmlFor="ascending"
-                                    className="text-sm font-medium cursor-pointer"
-                                >
-                                    Ascending
-                                </label>
-                            </div>
-
-                            <DropdownMenuSeparator />
-
-                            {/* Sorting options */}
-                            <DropdownMenuItem
-                                textValue="name"
-                                onClick={() =>
-                                    setSort((prev) =>
-                                        prev.key !== "name"
-                                            ? { key: "name", order: prev.order }
-                                            : prev
-                                    )
-                                }
-                                onSelect={(e) => e.preventDefault()}
-                                className="flex justify-between"
-                            >
-                                <span>Name</span>
-                                <span>
-                                    {sort.key === "name" && (
-                                        <Check className="w-4 h-4 text-foreground" />
-                                    )}
-                                </span>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                textValue="createdAt"
-                                onClick={() =>
-                                    setSort((prev) =>
-                                        prev.key !== "createdAt"
-                                            ? { key: "createdAt", order: prev.order }
-                                            : prev
-                                    )
-                                }
-                                onSelect={(e) => e.preventDefault()}
-                                className="flex justify-between"
-                            >
-                                <span>Date</span>
-                                <span>
-                                    {sort.key === "createdAt" && (
-                                        <Check className="w-4 h-4 text-foreground" />
-                                    )}
-                                </span>
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <Sort sort={sort} setSort={setSort} />
 
                     {/* Filter */}
-                    <Select>
-                        <SelectTrigger
-                            className="w-[41.6px] h-[41.6px] flex justify-center p-0 py-5 
-                                    hover:bg-muted dark:hover:bg-sidebar shadow-sm"
-                        >
-                            <Filter className="h-4 w-4 text-foreground" />
-                        </SelectTrigger>
-                        <SelectContent align={"end"}>
-                            <SelectGroup>
-                                <SelectLabel>Status</SelectLabel>
-                                <SelectItem value="all">All</SelectItem>
-                                <SelectItem value="placement">Ongoing</SelectItem>
-                                <SelectItem value="ongoing">Completed</SelectItem>
-                                <SelectItem value="held">Pending</SelectItem>
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
+                    <Filter
+                        title="Status"
+                        fitlerData={["All", "Ongoing", "Completed", "Pending"]}
+                    />
                 </div>
 
                 {/* Reviews lists */}
@@ -320,7 +220,7 @@ function Reviews() {
                 {reviews.length === 0 && (
                     <NotFoundOrbit
                         MainIcon={CalendarDays}
-                        SubIcon={fetching ? Search : Plus}
+                        SubIcon={fetching ? SearchIcon : Plus}
                         message={
                             fetching ? "Please wait a moment" : "Schedule review for students"
                         }

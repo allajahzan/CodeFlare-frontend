@@ -109,7 +109,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                 setNewReview(data)
                 setOpen(false)
 
-                toast({ title: "Successfully a scheduled review !" });
+                toast({ title: "Successfully scheduled a review !" });
             }
         } catch (err: unknown) {
             setSubmiting(false);
@@ -154,6 +154,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
             reset();
             setselectedTime("");
             setSelectedDate(undefined);
+            setBatch(null)
         }
     }, [open]);
 
@@ -170,10 +171,10 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                         <div className="p-2 bg-muted rounded-full">
                             <UserRoundPlus className="w-4 h-4" />
                         </div>
-                        <span>Schedule reviews</span>
+                        <span>Schedule review</span>
                     </SheetTitle>
                     <SheetDescription className="font-medium text-muted-foreground">
-                        Fill in the information below to schedule new review.
+                        Fill in the information below to schedule a review.
                     </SheetDescription>
                 </SheetHeader>
 
@@ -316,11 +317,13 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                                 >
                                     <SelectValue
                                         placeholder={
-                                            fetching
-                                                ? "Fetching students..."
-                                                : students.length > 0
-                                                    ? "Select a student"
-                                                    : "No students in this batch"
+                                            batch === null
+                                            ? "Select a batch"
+                                            : fetching
+                                              ? "Fetching students..."
+                                              : students.length > 0
+                                                ? "Select a student"
+                                                : "No students in this batch"
                                         }
                                         className="relative transition-opacity duration-200"
                                     />
