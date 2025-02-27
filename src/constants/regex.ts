@@ -1,6 +1,6 @@
 // Email regex
 export const emailRegex = {
-    validEmail: /^[a-zA-Z0-9._%+-]+@gmail\.com$/,
+    validEmail: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
 };
 
 // Password regex

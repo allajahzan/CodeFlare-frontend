@@ -13,7 +13,7 @@ export const formSchema = z
         email: z
             .string()
             .email("Invalid email address !")
-            .regex(emailRegex.validEmail, "Enter a valid email (eg:user@gmail.com) !")
+            .regex(emailRegex.validEmail, "Enter a valid email !")
             .nonempty("Email is required !"),
         confirmEmail: z.string().nonempty("confirm Email is required !"),
         role: z.string().nonempty("Role is required !"),
