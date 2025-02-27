@@ -21,9 +21,10 @@ interface PropsType {
             order: number;
         }>
     >;
+    sortData: string[];
 }
 // Sort Component
-function Sort({ sort, setSort }: PropsType) {
+function Sort({ sort, setSort, sortData }: PropsType) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger
@@ -63,42 +64,28 @@ function Sort({ sort, setSort }: PropsType) {
                 <DropdownMenuSeparator />
 
                 {/* Sorting options */}
-                <DropdownMenuItem
-                    textValue="name"
-                    onClick={() =>
-                        setSort((prev) =>
-                            prev.key !== "name" ? { key: "name", order: prev.order } : prev
-                        )
-                    }
-                    onSelect={(e) => e.preventDefault()}
-                    className="flex justify-between"
-                >
-                    <span>Name</span>
-                    <span>
-                        {sort.key === "name" && (
-                            <Check className="w-4 h-4 text-foreground" />
-                        )}
-                    </span>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                    textValue="createdAt"
-                    onClick={() =>
-                        setSort((prev) =>
-                            prev.key !== "createdAt"
-                                ? { key: "createdAt", order: prev.order }
-                                : prev
-                        )
-                    }
-                    onSelect={(e) => e.preventDefault()}
-                    className="flex justify-between"
-                >
-                    <span>Date</span>
-                    <span>
-                        {sort.key === "createdAt" && (
-                            <Check className="w-4 h-4 text-foreground" />
-                        )}
-                    </span>
-                </DropdownMenuItem>
+                {sortData.map((data, index) => {
+                    return (
+                        <DropdownMenuItem
+                            key={index}
+                            textValue={data}
+                            onClick={() =>
+                                setSort((prev) =>
+                                    prev.key !== data ? { key: data, order: prev.order } : prev
+                                )
+                            }
+                            onSelect={(e) => e.preventDefault()}
+                            className="flex justify-between"
+                        >
+                            <span>Name</span>
+                            <span>
+                                {sort.key === data && (
+                                    <Check className="w-4 h-4 text-foreground" />
+                                )}
+                            </span>
+                        </DropdownMenuItem>
+                    );
+                })}
             </DropdownMenuContent>
         </DropdownMenu>
     );

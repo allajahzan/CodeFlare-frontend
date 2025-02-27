@@ -163,7 +163,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                     text={'1 Hour'}
                                     iconDivClassName="bg-purple-400/20 group-hover:bg-purple-400/30"
                                     iconClassName="text-purple-600"
-                                />{" "}
+                                />
                             </motion.div>
                         </div>
                     </div>
