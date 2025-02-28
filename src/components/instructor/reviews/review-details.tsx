@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { Review } from "./reviews";
 import { useEffect, useRef } from "react";
+import { convertTo12HourFormat } from "@/utils/time-converter";
 
 // Interface for Props
 interface PropsType {
@@ -115,7 +116,11 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 <InfoCard
                                     Icon={CalendarDays}
                                     label="Sheduled Date"
-                                    text={selectedReview.createdAt as unknown as string}
+                                    text={new Date(selectedReview.createdAt).toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "short",
+                                        year: "numeric",
+                                    })}
                                     iconDivClassName="bg-blue-400/20 group-hover:bg-blue-400/30"
                                     iconClassName="text-blue-600"
                                 />
@@ -130,7 +135,11 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 <InfoCard
                                     Icon={CalendarDays}
                                     label="Reveiw Date"
-                                    text={selectedReview.date as unknown as string}
+                                    text={new Date(selectedReview.date).toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "short",
+                                        year: "numeric",
+                                    })}
                                     iconDivClassName="bg-orange-400/20 group-hover:bg-orange-400/30"
                                     iconClassName="text-orange-600"
                                 />
@@ -145,7 +154,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 <InfoCard
                                     Icon={Clock}
                                     label="Time"
-                                    text={selectedReview.time}
+                                    text={convertTo12HourFormat(selectedReview.time)}
                                     iconDivClassName="bg-green-400/20 group-hover:bg-green-400/30"
                                     iconClassName="text-green-600"
                                 />

@@ -1,4 +1,4 @@
-import { CalendarDays, Plus, SearchIcon } from "lucide-react";
+import { CalendarCheck, CalendarDays, Plus, SearchIcon } from "lucide-react";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 import ReviewDetails from "./review-details";
 import CardHeader from "@/components/common/data-card/header";
@@ -15,7 +15,7 @@ import Filter from "@/components/common/data-card/filter";
 import Search from "@/components/common/data-card/search";
 import UserList from "@/components/common/user/user-list-card";
 import IconButton from "@/components/ui/icon-button";
-import { DatePickerDemo } from "./date-picker";
+import DatePicker from "./date-picker";
 
 // Interface for Review
 export interface Review {
@@ -90,15 +90,6 @@ function Reviews() {
         return () => clearTimeout(handler);
     }, [search]);
 
-    // Filter by date
-    useEffect(() => {
-        if (selectedDate) {
-            setSearch(selectedDate.toDateString());
-        } else {
-            setSearch("");
-        }
-    }, [selectedDate]);
-
     // Add new review
     useEffect(() => {
         if (newReview) {
@@ -111,16 +102,17 @@ function Reviews() {
 
     // Fetch reviews
     useEffect(() => {
+        setFetching(true);
+        setReviews([]);
+
         const fetchReviews = async () => {
             try {
-                setFetching(true);
-                setReviews([]);
-
                 // Send request
                 const resp = await fetchData(
                     ApiEndpoints.REVIEW +
                     `/search?keyword=${debouncedSearch}&sort=${sort.key}&order=${sort.order
-                    }&status=${filter}&batchIds=${user?.batches?.map((b) => b._id)}`,
+                    }&status=${filter}&date=${selectedDate?.toDateString() || ""
+                    }&batchIds=${user?.batches?.map((b) => b._id)}`,
                     role
                 );
 
@@ -141,7 +133,7 @@ function Reviews() {
         };
 
         fetchReviews();
-    }, [debouncedSearch, sort, filter]);
+    }, [debouncedSearch, sort, filter, selectedDate]);
 
     return (
         <div className="p-5 pt-0 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -181,12 +173,14 @@ function Reviews() {
                             setIsOpen(!isOpen);
                         }}
                     />
-                    <DatePickerDemo
+                    <DatePicker
                         isOpen={isOpen}
                         selectedDate={selectedDate}
                         setSelectedDate={(date) => {
                             setSelectedDate(date);
-                            setIsOpen(false);
+                            setTimeout(() => {
+                                setIsOpen(false);
+                            }, 0);
                         }}
                         className="absolute z-20 bg-background top-[45.5px]"
                     />
@@ -222,8 +216,17 @@ function Reviews() {
                                 action={() => setSelectedReview(review)}
                                 selectedUser={selectedReview}
                                 children1={
-                                    <p className="text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
+                                    <p className="relative text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
                                         <CalendarDays className="w-3 h-3" /> {review.week}
+                                        <span className="flex gap-1 items-center absolute left-20">
+                                            {" "}
+                                            <CalendarCheck className="w-3 h-3" />
+                                            {new Date(review?.date).toLocaleDateString("en-GB", {
+                                                day: "2-digit",
+                                                month: "short",
+                                                year: "numeric",
+                                            })}
+                                        </span>
                                     </p>
                                 }
                             />
@@ -231,6 +234,7 @@ function Reviews() {
                     </div>
                 )}
 
+                {/* If no reviews */}
                 {reviews.length === 0 && (
                     <NotFoundOrbit
                         MainIcon={CalendarDays}
@@ -246,7 +250,7 @@ function Reviews() {
 
             {/* Right side */}
             <div className="grid gap-5 col-auto lg:col-span-2 grid-rows-[auto_1fr] relative z-10">
-                {/* Student details */}
+                {/* Review details */}
                 <ReviewDetails selectedReview={selectedReview} />
                 <div className=""></div>
             </div>

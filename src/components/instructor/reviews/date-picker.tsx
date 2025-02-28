@@ -10,7 +10,8 @@ interface PropsType {
     className: string;
 }
 
-export function DatePickerDemo({
+// Date picker Component
+function DatePicker({
     isOpen,
     selectedDate,
     setSelectedDate,
@@ -33,3 +34,5 @@ export function DatePickerDemo({
         </div>
     );
 }
+
+export default DatePicker;
