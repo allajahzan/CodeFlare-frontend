@@ -38,7 +38,6 @@ import ValidationError from "@/components/ui/validation-error";
 import { IBatch } from "@/components/admin/batch/batches";
 import { Review } from "./reviews";
 import { DatePickerDemo } from "./date-picker";
-import { format } from "date-fns";
 import { formSchema, FormType } from "@/validations/instructor/schedule-review";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -109,7 +108,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                 setNewReview(data)
                 setOpen(false)
 
-                toast({ title: "Successfully scheduled a review !" });
+                toast({ title: "Successfully scheduled a review." });
             }
         } catch (err: unknown) {
             setSubmiting(false);
@@ -375,10 +374,11 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                                     setValue("date", date);
                                     setSelectedDate(date);
                                 }}
+                                className="absolute z-20 bottom-11 -left-0.5 bg-background"
                             />
                             <p className="text-foreground font-medium">
                                 {selectedDate ? (
-                                    format(selectedDate, "PPP")
+                                    selectedDate.toDateString()
                                 ) : (
                                     <span>Pick a date</span>
                                 )}

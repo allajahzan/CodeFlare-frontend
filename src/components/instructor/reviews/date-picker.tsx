@@ -7,18 +7,20 @@ interface PropsType {
     isOpen: boolean;
     selectedDate: Date | undefined;
     setSelectedDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+    className: string;
 }
 
 export function DatePickerDemo({
     isOpen,
     selectedDate,
     setSelectedDate,
+    className
 }: PropsType) {
     return (
         <div
             onClick={(event) => event.stopPropagation()}
             className={cn(
-                "absolute z-20 -top-[290px] -left-0.5 bg-background",
+                className,
                 isOpen ? "block" : "hidden"
             )}
         >

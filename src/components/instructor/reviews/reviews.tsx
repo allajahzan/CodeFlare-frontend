@@ -1,5 +1,5 @@
 import { CalendarDays, Plus, SearchIcon } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import ReviewDetails from "./review-details";
 import CardHeader from "@/components/common/data-card/header";
 import ScheduleReviewSheet from "./sheet-schedule-review";
@@ -14,6 +14,8 @@ import Sort from "@/components/common/data-card/sort";
 import Filter from "@/components/common/data-card/filter";
 import Search from "@/components/common/data-card/search";
 import UserList from "@/components/common/user/user-list-card";
+import IconButton from "@/components/ui/icon-button";
+import { DatePickerDemo } from "./date-picker";
 
 // Interface for Review
 export interface Review {
@@ -53,6 +55,7 @@ function Reviews() {
 
     // Search
     const [search, setSearch] = useState<string>("");
+    const [debouncedSearch, setDebouncedSearch] = useState<string>("");
 
     // Sort
     const [sort, setSort] = useState<{ key: string; order: number }>({
@@ -60,11 +63,41 @@ function Reviews() {
         order: 1,
     });
 
+    // Filter
+    const [filter, setFilter] = useState<string>("");
+
+    // Date
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+
     // User context
     const { user } = useContext(UserContext) as IUserContext;
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
+
+    // Handle search
+    const handleSearch = async (event: ChangeEvent<HTMLInputElement>) => {
+        setSearch(event.target.value);
+    };
+
+    // Debounce search
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedSearch(search);
+        }, 500);
+
+        return () => clearTimeout(handler);
+    }, [search]);
+
+    // Filter by date
+    useEffect(() => {
+        if (selectedDate) {
+            setSearch(selectedDate.toDateString());
+        } else {
+            setSearch("");
+        }
+    }, [selectedDate]);
 
     // Add new review
     useEffect(() => {
@@ -80,9 +113,14 @@ function Reviews() {
     useEffect(() => {
         const fetchReviews = async () => {
             try {
+                setFetching(true);
+                setReviews([]);
+
                 // Send request
                 const resp = await fetchData(
-                    ApiEndpoints.REVIEW + `?batchIds=${user?.batches?.map((b) => b._id)}`,
+                    ApiEndpoints.REVIEW +
+                    `/search?keyword=${debouncedSearch}&sort=${sort.key}&order=${sort.order
+                    }&status=${filter}&batchIds=${user?.batches?.map((b) => b._id)}`,
                     role
                 );
 
@@ -103,12 +141,13 @@ function Reviews() {
         };
 
         fetchReviews();
-    }, []);
+    }, [debouncedSearch, sort, filter]);
 
     return (
         <div className="p-5 pt-0 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {/* Left side */}
             <div
+                // onClick={() => setIsOpen(false)}
                 className="p-5 sticky z-0 top-0 md:top-5 w-full h-[calc(100vh-108px)] flex flex-col gap-5 items-center rounded-2xl
             bg-background border border-border shadow-sm dark:shadow-customBorder dark:shadow-inner"
             >
@@ -130,21 +169,41 @@ function Reviews() {
                 />
 
                 {/* Search sort filter */}
-                <div className="w-full flex gap-2">
+                <div className="w-full flex gap-2 relative">
                     {/* Search reviews */}
-                    <Search search={search} handleSearch={() => { }} />
+                    <Search search={search} handleSearch={handleSearch} />
+
+                    {/* Filter by date */}
+                    <IconButton
+                        Icon={CalendarDays}
+                        action={() => {
+                            // e.stopPropagation();
+                            setIsOpen(!isOpen);
+                        }}
+                    />
+                    <DatePickerDemo
+                        isOpen={isOpen}
+                        selectedDate={selectedDate}
+                        setSelectedDate={(date) => {
+                            setSelectedDate(date);
+                            setIsOpen(false);
+                        }}
+                        className="absolute z-20 bg-background top-[45.5px]"
+                    />
 
                     {/* Sort */}
                     <Sort
                         sort={sort}
                         setSort={setSort}
-                        sortData={["name", "createdAt"]}
+                        sortData={["name", "week", "createdAt"]}
                     />
 
                     {/* Filter */}
                     <Filter
                         title="Status"
-                        fitlerData={["All", "Ongoing", "Completed", "Pending"]}
+                        fitlerData={["", "Ongoing", "Completed", "Pending"]}
+                        filter={filter}
+                        setFilter={setFilter}
                     />
                 </div>
 
@@ -156,8 +215,9 @@ function Reviews() {
                                 key={index}
                                 index={index}
                                 user={{
-                                    _id: selectedReview?._id || "",
+                                    _id: review._id,
                                     name: review.user.name,
+                                    profilePic: review.user.profilePic,
                                 }}
                                 action={() => setSelectedReview(review)}
                                 selectedUser={selectedReview}
