@@ -10,8 +10,8 @@ export const formSchema = z.object({
         .nonempty("Title is required !"),
     week: z
         .string()
-        .regex(week.capitalLetter, "Week's first letter should be capital !")
-        .regex(week.weekName, "Enter a valid week (eg:Week 1) !")
+        // .regex(week.capitalLetter, "Week's first letter should be capital !")
+        .regex(week.weekName, "Enter a valid week (eg:week 1) !")
         .nonempty("Week is required !"),
     batch: z
         .string({

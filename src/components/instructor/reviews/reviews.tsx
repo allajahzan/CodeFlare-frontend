@@ -217,7 +217,7 @@ function Reviews() {
                                 selectedUser={selectedReview}
                                 children1={
                                     <p className="relative text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
-                                        <CalendarDays className="w-3 h-3" /> {review.week}
+                                        <CalendarDays className="w-3 h-3" /> {review.week[0].toUpperCase() + review.week.slice(1)}
                                         <span className="flex gap-1 items-center absolute left-20">
                                             {" "}
                                             <CalendarCheck className="w-3 h-3" />

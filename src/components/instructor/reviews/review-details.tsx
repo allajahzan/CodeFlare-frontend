@@ -9,10 +9,13 @@ import {
     Clock,
     Edit2,
     Hourglass,
+    Trophy,
 } from "lucide-react";
 import { Review } from "./reviews";
 import { useEffect, useRef } from "react";
 import { convertTo12HourFormat } from "@/utils/time-converter";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 // Interface for Props
 interface PropsType {
@@ -48,8 +51,23 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 </div>
                             </div>
 
-                            <div className="shadow-md bg-zinc-900 hover:bg-zinc-800 text-white rounded-full p-2">
-                                <Edit2 className="h-4 w-4" />
+                            <div className="flex items-center gap-3">
+                                <Badge
+                                    className={cn(
+                                        "text-sm font-semibold rounded-full duration-0",
+                                        selectedReview.result === "Pass"
+                                            ? "text-green-600 bg-green-400/20 hover:bg-green-400/30"
+                                            : selectedReview.result === "fail"
+                                                ? "text-red-600 bg-red-400/20 hover:bg-red-400/30"
+                                                : "text-yellow-600 bg-yellow-400/20 hover:bg-yellow-400/30"
+                                    )}
+                                >
+                                    {selectedReview.result || "Pending"}
+                                </Badge>
+
+                                <div className="shadow-md bg-zinc-900 hover:bg-zinc-800 text-white rounded-full p-2">
+                                    <Edit2 className="h-4 w-4" />
+                                </div>
                             </div>
                         </div>
 
@@ -107,6 +125,21 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 />
                             </motion.div>
 
+                            {/* Score */}
+                            <motion.div
+                                initial={{ opacity: 1, x: 0 }}
+                                animate={{ x: 0, opacity: 1 }}
+                                transition={{ delay: 0 }}
+                            >
+                                <InfoCard
+                                    Icon={Trophy}
+                                    label="Score"
+                                    text={selectedReview?.score?.tech.toString() || "NILL"}
+                                    iconDivClassName="bg-red-400/20 group-hover:bg-red-400/30"
+                                    iconClassName="text-red-600"
+                                />
+                            </motion.div>
+
                             {/* Sheduled date */}
                             <motion.div
                                 initial={{ opacity: 1, x: 0 }}
@@ -116,11 +149,14 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 <InfoCard
                                     Icon={CalendarDays}
                                     label="Sheduled Date"
-                                    text={new Date(selectedReview.createdAt).toLocaleDateString("en-GB", {
-                                        day: "2-digit",
-                                        month: "short",
-                                        year: "numeric",
-                                    })}
+                                    text={new Date(selectedReview.createdAt).toLocaleDateString(
+                                        "en-GB",
+                                        {
+                                            day: "2-digit",
+                                            month: "short",
+                                            year: "numeric",
+                                        }
+                                    )}
                                     iconDivClassName="bg-blue-400/20 group-hover:bg-blue-400/30"
                                     iconClassName="text-blue-600"
                                 />
@@ -135,11 +171,14 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 <InfoCard
                                     Icon={CalendarDays}
                                     label="Reveiw Date"
-                                    text={new Date(selectedReview.date).toLocaleDateString("en-GB", {
-                                        day: "2-digit",
-                                        month: "short",
-                                        year: "numeric",
-                                    })}
+                                    text={new Date(selectedReview.date).toLocaleDateString(
+                                        "en-GB",
+                                        {
+                                            day: "2-digit",
+                                            month: "short",
+                                            year: "numeric",
+                                        }
+                                    )}
                                     iconDivClassName="bg-orange-400/20 group-hover:bg-orange-400/30"
                                     iconClassName="text-orange-600"
                                 />
@@ -169,7 +208,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 <InfoCard
                                     Icon={Hourglass}
                                     label="Duration"
-                                    text={'1 Hour'}
+                                    text={"1 Hour"}
                                     iconDivClassName="bg-purple-400/20 group-hover:bg-purple-400/30"
                                     iconClassName="text-purple-600"
                                 />

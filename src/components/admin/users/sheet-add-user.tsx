@@ -261,7 +261,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                             <Input
                                 id="confirmEmail"
                                 type="email"
-                                placeholder="student@gmail.com"
+                                placeholder="user@gmail.com"
                                 required
                                 autoComplete="off"
                                 {...register("confirmEmail")}
