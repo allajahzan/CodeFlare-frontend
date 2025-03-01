@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { Input } from "../ui/input";
 import IconButton from "../ui/icon-button";
 import UserContactSheet, { IUserChat } from "./user-contact-sheet";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import UserCard from "./user-card";
 import { Chat } from "./chat";
 import { cn } from "@/lib/utils";
@@ -138,17 +138,13 @@ function UsersListOfChat({
                                     </p>
 
                                     {/* Unread messages */}
-                                    {(() => {
-                                        return (
-                                            <Fragment>
-                                                <div className="h-5 w-5">
-                                                    {/* <div className="bg-foreground w-5 h-5 flex items-center justify-center text-center rounded-full">
-                                                      <p className="text-xs text-background font-medium">{}</p>
-                                                    </div> */}
-                                                </div>
-                                            </Fragment>
-                                        );
-                                    })()}
+                                    {user.count ? (
+                                        <div className="bg-foreground w-5 h-5 flex items-center justify-center text-center rounded-full">
+                                            <p className="text-xs text-background font-medium">
+                                                {user.count}
+                                            </p>
+                                        </div>
+                                    ) : <div className="w-5 h-5"/>}
                                 </div>
                             }
                         />

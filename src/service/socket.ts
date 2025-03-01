@@ -19,6 +19,20 @@ export const userOnline = (receiverId: string) => {
 };
 
 /**
+ * Emits a "readMessages" event to the socket server with the provided chatId, senderId and receiverId.
+ * @param chatId - The ID of the chat to read messages from.
+ * @param senderId - The ID of the user who sent the messages.
+ * @param receiverId - The ID of the user who received the messages.
+ */
+export const readMessages = (
+    chatId: string,
+    senderId: string,
+    receiverId: string
+) => {
+    socket.emit("readMessages", chatId, senderId, receiverId);
+};
+
+/**
  * Listens for "userOnline" events from the socket server and executes the given callback.
  * @param callback - A function to be called with the online status of the user.
  */
@@ -111,6 +125,7 @@ export const chatInfo = (
         chatId: string;
         senderId: string;
         receiverId: string;
+        count: number;
     }) => void
 ) => {
     socket.on("chatInfo", (data) => {
