@@ -40,7 +40,7 @@ interface PropsType {
     selectedUser: IUserChat | null;
     setSelectedUser: React.Dispatch<React.SetStateAction<IUserChat | null>>;
     selectedChat: Chat;
-    setSelectedChat: React.Dispatch<React.SetStateAction<Chat>>;
+    setSelectedChat: React.Dispatch<React.SetStateAction<Chat | {}>>;
     message: string;
     setMessage: React.Dispatch<React.SetStateAction<string>>;
     sendMessage: () => void;
@@ -112,7 +112,7 @@ function MessageSideOfChat({
 
     // Fetch messages initialy from server =================================================================
     useLayoutEffect(() => {
-        setTimeout(() => {
+        const handler = setTimeout(() => {
             const fetchMessages = async () => {
                 try {
                     const resp = await fetchData(
@@ -146,7 +146,7 @@ function MessageSideOfChat({
 
             selectedUser?.chatId ? fetchMessages() : null;
 
-            return () => { };
+            return () => clearTimeout(handler);
         }, 0);
     }, [selectedUser]);
 
@@ -206,7 +206,7 @@ function MessageSideOfChat({
                 }));
 
                 // Update chat with new messages
-                setSelectedChat((prev) => ({
+                setSelectedChat((prev: Chat) => ({
                     ...prev,
                     messages: [...messages, ...(prev?.messages || [])],
                 }));
@@ -274,7 +274,11 @@ function MessageSideOfChat({
                 <div className="flex items-center gap-3">
                     {/* Back button */}
                     <div
-                        onClick={() => setUsersListSideOpen(true)}
+                        onClick={() => {
+                            setUsersListSideOpen(true);
+                            setSelectedChat({});
+                            setSelectedUser(null);
+                        }}
                         className="block md:hidden p-2 cursor-pointer relative bottom-0.5"
                     >
                         <ChevronLeft className="text-foreground w-5 h-5" />

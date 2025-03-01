@@ -110,6 +110,7 @@ function Chat() {
                                     minute: "2-digit",
                                     hour12: true,
                                 }),
+                                // count: chat.sender._id === user?._id ? chat.count : 0
                             };
                         });
 
@@ -132,17 +133,41 @@ function Chat() {
             setUser((prevUsers: IUserChat[]) => {
                 return prevUsers.map((u) => {
                     if (u._id === chat.senderId || u._id === chat.receiverId) {
-                        return { ...u, chatId: chat.chatId };
+                        return {
+                            ...u,
+                            chatId: chat.chatId,
+                            count:
+                                u._id === chat.senderId &&
+                                    (selectedUser as IUserChat)?._id !== chat.senderId
+                                    ? chat.count
+                                    : 0
+                        };
                     }
                     return u;
                 });
             });
+
+            // // Mark messages as read
+            // if (
+            //     selectedUser &&
+            //     selectedUser._id === chat.senderId &&
+            //     selectedUser.chatId !== chat.chatId 
+            // ) {
+            //     console.log("Eda mone its selected", selectedUser);
+    
+            //     readMessages(
+            //         selectedUser.chatId as string,
+            //         selectedUser._id as string,
+            //         user?._id as string
+            //     );
+            // }
         });
 
+        // Clean up
         return () => {
             socket.off("chatInfo");
         };
-    }, [selectedChat]);
+    }, [selectedUser]);
 
     // Listen new messages ============================================================================
     useEffect(() => {
@@ -164,12 +189,33 @@ function Chat() {
                 if (prevChat.receiverId === message.senderId) {
                     return {
                         ...prevChat,
+
                         messages: [...prevChat.messages, newMessage],
                     };
                 } else {
                     return prevChat;
                 }
             });
+
+            // ======================================================================
+
+            // Update selected user chat with user details
+            setSelectedUser((prevUserChat) => {
+                if (!prevUserChat) return null;
+
+                if (prevUserChat._id === message.senderId) {
+                    return {
+                        ...prevUserChat,
+                        name: message.sender.name,
+                        email: message.sender.email,
+                        profilePic: message.sender.profilePic,
+                    };
+                }
+
+                return prevUserChat;
+            });
+
+            // ======================================================================
 
             // Formatted user chat
             const formattedUserChat: IUserChat = {
@@ -200,7 +246,7 @@ function Chat() {
         return () => {
             socket.off("receivePrivateMessage");
         };
-    }, []);
+    }, [selectedUser]);
 
     // Send new messages ==============================================================================
     const sendMessage = () => {

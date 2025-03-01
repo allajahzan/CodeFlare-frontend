@@ -25,6 +25,7 @@ export interface IUserChat {
     lastMessage: string;
     updatedAt: string;
     isOnline?: boolean;
+    count? : number;
 }
 
 // Interface for Props

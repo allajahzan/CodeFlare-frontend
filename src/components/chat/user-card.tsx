@@ -5,7 +5,7 @@ import { ReactNode, useContext } from "react";
 import { IUserChat } from "./user-contact-sheet";
 import { Chat } from "./chat";
 import { IUserContext, UserContext } from "@/context/user-context";
-import { userOnline } from "@/service/socket";
+import { readMessages, userOnline } from "@/service/socket";
 import { useMediaQuery } from "usehooks-ts";
 
 // Interface for Props
@@ -25,7 +25,7 @@ interface PropsType {
 // User list card Component
 function UserCard({
     users,
-    user,
+    user : userData,
     setSelectedUser,
     setSelectedChat,
     setIsOpen,
@@ -39,7 +39,7 @@ function UserCard({
     const isSmall = useMediaQuery("(max-width: 767.20px)");
 
     // User context
-    const { user: sender } = useContext(UserContext) as IUserContext;
+    const { user } = useContext(UserContext) as IUserContext;
 
     // Handle select user chat
     const handleSelectUserChat = (selectedUser: IUserChat) => {
@@ -51,6 +51,13 @@ function UserCard({
 
         // Check if receiver is in online
         userOnline(selectedUser._id);
+
+        // Read messages
+        readMessages(
+            selectedUser.chatId,
+            selectedUser._id /** Sender (reciever) */,
+            user?._id as string /** Receiver (sender) */
+        );
 
         // Set user
         if (users) {
@@ -76,7 +83,7 @@ function UserCard({
 
         // Map chat
         const chat: Chat = {
-            senderId: sender?._id as string,
+            senderId: user?._id as string,
             receiverId: selectedUser._id as string,
             messages: [],
         };
@@ -99,7 +106,7 @@ function UserCard({
 
     return (
         <div
-            onClick={() => handleSelectUserChat(user)}
+            onClick={() => handleSelectUserChat(userData)}
             className={cn(
                 "px-5 dark:bg-transparent hover:bg-muted dark:hover:bg-sidebar",
                 className
@@ -108,7 +115,7 @@ function UserCard({
             <div className="flex items-center gap-3">
                 {/* Avatar profile pic */}
                 <Avatar className="bg-background w-12 h-12 border-2 border-background dark:border-border shadow-md">
-                    <AvatarImage src={user.profilePic} className="object-cover" />
+                    <AvatarImage src={userData.profilePic} className="object-cover" />
                     <AvatarFallback className="bg-transparent">
                         <img className="w-full" src={profile} alt="" />
                     </AvatarFallback>
@@ -123,7 +130,7 @@ function UserCard({
                     >
                         <div className="flex items-center gap-2">
                             <p className="font-semibold text-foreground truncate">
-                                {user.name}
+                                {userData.name}
                             </p>
                         </div>
                         {children1}
