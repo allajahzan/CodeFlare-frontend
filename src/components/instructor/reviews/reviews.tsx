@@ -16,6 +16,7 @@ import Search from "@/components/common/data-card/search";
 import UserList from "@/components/common/user/user-list-card";
 import IconButton from "@/components/ui/icon-button";
 import DatePicker from "./date-picker";
+import PaginationComponent from "@/components/common/data-card/pagination";
 
 // Interface for Review
 export interface Review {
@@ -216,18 +217,20 @@ function Reviews() {
                                 action={() => setSelectedReview(review)}
                                 selectedUser={selectedReview}
                                 children1={
-                                    <p className="relative text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
-                                        <CalendarDays className="w-3 h-3" /> {review.week[0].toUpperCase() + review.week.slice(1)}
-                                        <span className="flex gap-1 items-center absolute left-20">
-                                            {" "}
+                                    <div className="flex items-center relative overflow-auto no-scrollbar">
+                                        <p className="relative text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
+                                            <CalendarDays className="w-3 h-3" />{" "}
+                                            {review.week[0].toUpperCase() + review.week.slice(1)}
+                                        </p>
+                                        <p className="flex gap-1 items-center absolute left-20 text-sm text-muted-foreground font-medium truncate">
                                             <CalendarCheck className="w-3 h-3" />
                                             {new Date(review?.date).toLocaleDateString("en-GB", {
                                                 day: "2-digit",
                                                 month: "short",
                                                 year: "numeric",
                                             })}
-                                        </span>
-                                    </p>
+                                        </p>
+                                    </div>
                                 }
                             />
                         ))}
@@ -246,12 +249,21 @@ function Reviews() {
                         className="w-full"
                     />
                 )}
+
+                {/* Pagination */}
+                {/* <div className="w-full">
+                    <PaginationComponent totalPages={10}/>
+                </div> */}
             </div>
 
             {/* Right side */}
             <div className="grid gap-5 col-auto lg:col-span-2 grid-rows-[auto_1fr] relative z-10">
                 {/* Review details */}
-                <ReviewDetails selectedReview={selectedReview} />
+                <ReviewDetails
+                    setReviews={setReviews}
+                    selectedReview={selectedReview}
+                    setSelectedReview={setSelectedReview}
+                />
                 <div className=""></div>
             </div>
         </div>

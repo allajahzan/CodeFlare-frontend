@@ -12,18 +12,35 @@ import {
     Trophy,
 } from "lucide-react";
 import { Review } from "./reviews";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { convertTo12HourFormat } from "@/utils/time-converter";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { handleCustomError } from "@/utils/error";
+import { patchData } from "@/service/api-service";
+import ApiEndpoints from "@/constants/api-endpoints";
+import { useSelector } from "react-redux";
+import { stateType } from "@/redux/store";
 
 // Interface for Props
 interface PropsType {
+    setReviews: React.Dispatch<React.SetStateAction<[] | Review[]>>;
+    setSelectedReview: React.Dispatch<React.SetStateAction<Review | null>>;
     selectedReview: Review | null;
 }
 
 // Review details Component
-function ReviewDetails({ selectedReview }: PropsType) {
+function ReviewDetails({
+    setReviews,
+    selectedReview,
+    setSelectedReview,
+}: PropsType) {
+    const [feedback, setFeedback] = useState<string>("");
+    const [debouncedFeedback, setDebouncedFeedback] = useState<string>("");
+
+    // Redux
+    const role = useSelector((state: stateType) => state.role);
+
     // Horizontal scroll
     let cardsListsRef = useRef<HTMLDivElement | null>(null);
 
@@ -34,6 +51,59 @@ function ReviewDetails({ selectedReview }: PropsType) {
     useEffect(() => {
         cardsListsRef.current?.addEventListener("wheel", onwheel);
     }, []);
+
+    // Reset feedback
+    useEffect(() => {
+        setFeedback(selectedReview?.feedback || "");
+    }, [selectedReview]);
+
+    // Debounce feedback
+    useEffect(() => {
+        if (feedback === selectedReview?.feedback) return;
+
+        const handler = setTimeout(() => {
+            setDebouncedFeedback(feedback);
+        }, 500);
+
+        return () => clearTimeout(handler);
+    }, [feedback]);
+
+    // Update feedback
+    useEffect(() => {
+        const updateFeedback = async () => {
+            try {
+                // Send request
+                const resp = await patchData(
+                    ApiEndpoints.REVIEW + `/${selectedReview?._id}`,
+                    {
+                        feedback: debouncedFeedback,
+                    },
+                    role
+                );
+
+                // Success response
+                if (resp && resp.status === 200) {
+                    // Update selected review
+                    setSelectedReview((prevReview) =>
+                        prevReview ? { ...prevReview, feedback: debouncedFeedback } : null
+                    );
+
+                    // Update the reviews list
+                    setReviews((prevReviews: Review[]) => {
+                        return prevReviews.map((review) =>
+                            review._id === selectedReview?._id
+                                ? { ...review, feedback: debouncedFeedback }
+                                : { ...review }
+                        );
+                    });
+                }
+            } catch (err: unknown) {
+                handleCustomError(err);
+            }
+        };
+
+        selectedReview && updateFeedback();
+    }, [debouncedFeedback]);
 
     return (
         <AnimatePresence mode="wait">
@@ -99,6 +169,8 @@ function ReviewDetails({ selectedReview }: PropsType) {
                             before:border-l-2 before:border-t-2 before:border-border before:border-dashed border-2 border-border border-dashed"
                             >
                                 <Input
+                                    value={feedback}
+                                    onChange={(event) => setFeedback(event.target.value)}
                                     className="border-none shadow-none p-3 py-[22.9px] text-foreground dark:bg-sidebar"
                                     placeholder="Enter your feedback for this student"
                                 />
