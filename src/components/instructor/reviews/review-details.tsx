@@ -9,17 +9,38 @@ import {
     Clock,
     Edit2,
     Hourglass,
+    Trophy,
 } from "lucide-react";
 import { Review } from "./reviews";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { convertTo12HourFormat } from "@/utils/time-converter";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import { handleCustomError } from "@/utils/error";
+import { patchData } from "@/service/api-service";
+import ApiEndpoints from "@/constants/api-endpoints";
+import { useSelector } from "react-redux";
+import { stateType } from "@/redux/store";
 
 // Interface for Props
 interface PropsType {
+    setReviews: React.Dispatch<React.SetStateAction<[] | Review[]>>;
+    setSelectedReview: React.Dispatch<React.SetStateAction<Review | null>>;
     selectedReview: Review | null;
 }
 
 // Review details Component
-function ReviewDetails({ selectedReview }: PropsType) {
+function ReviewDetails({
+    setReviews,
+    selectedReview,
+    setSelectedReview,
+}: PropsType) {
+    const [feedback, setFeedback] = useState<string>("");
+    const [debouncedFeedback, setDebouncedFeedback] = useState<string>("");
+
+    // Redux
+    const role = useSelector((state: stateType) => state.role);
+
     // Horizontal scroll
     let cardsListsRef = useRef<HTMLDivElement | null>(null);
 
@@ -30,6 +51,59 @@ function ReviewDetails({ selectedReview }: PropsType) {
     useEffect(() => {
         cardsListsRef.current?.addEventListener("wheel", onwheel);
     }, []);
+
+    // Reset feedback
+    useEffect(() => {
+        setFeedback(selectedReview?.feedback || "");
+    }, [selectedReview]);
+
+    // Debounce feedback
+    useEffect(() => {
+        if (feedback === selectedReview?.feedback) return;
+
+        const handler = setTimeout(() => {
+            setDebouncedFeedback(feedback);
+        }, 500);
+
+        return () => clearTimeout(handler);
+    }, [feedback]);
+
+    // Update feedback
+    useEffect(() => {
+        const updateFeedback = async () => {
+            try {
+                // Send request
+                const resp = await patchData(
+                    ApiEndpoints.REVIEW + `/${selectedReview?._id}`,
+                    {
+                        feedback: debouncedFeedback,
+                    },
+                    role
+                );
+
+                // Success response
+                if (resp && resp.status === 200) {
+                    // Update selected review
+                    setSelectedReview((prevReview) =>
+                        prevReview ? { ...prevReview, feedback: debouncedFeedback } : null
+                    );
+
+                    // Update the reviews list
+                    setReviews((prevReviews: Review[]) => {
+                        return prevReviews.map((review) =>
+                            review._id === selectedReview?._id
+                                ? { ...review, feedback: debouncedFeedback }
+                                : { ...review }
+                        );
+                    });
+                }
+            } catch (err: unknown) {
+                handleCustomError(err);
+            }
+        };
+
+        selectedReview && updateFeedback();
+    }, [debouncedFeedback]);
 
     return (
         <AnimatePresence mode="wait">
@@ -47,8 +121,23 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 </div>
                             </div>
 
-                            <div className="shadow-md bg-zinc-900 hover:bg-zinc-800 text-white rounded-full p-2">
-                                <Edit2 className="h-4 w-4" />
+                            <div className="flex items-center gap-3">
+                                <Badge
+                                    className={cn(
+                                        "text-sm font-semibold rounded-full duration-0",
+                                        selectedReview.result === "Pass"
+                                            ? "text-green-600 bg-green-400/20 hover:bg-green-400/30"
+                                            : selectedReview.result === "fail"
+                                                ? "text-red-600 bg-red-400/20 hover:bg-red-400/30"
+                                                : "text-yellow-600 bg-yellow-400/20 hover:bg-yellow-400/30"
+                                    )}
+                                >
+                                    {selectedReview.result || "Pending"}
+                                </Badge>
+
+                                <div className="shadow-md bg-zinc-900 hover:bg-zinc-800 text-white rounded-full p-2">
+                                    <Edit2 className="h-4 w-4" />
+                                </div>
                             </div>
                         </div>
 
@@ -80,6 +169,8 @@ function ReviewDetails({ selectedReview }: PropsType) {
                             before:border-l-2 before:border-t-2 before:border-border before:border-dashed border-2 border-border border-dashed"
                             >
                                 <Input
+                                    value={feedback}
+                                    onChange={(event) => setFeedback(event.target.value)}
                                     className="border-none shadow-none p-3 py-[22.9px] text-foreground dark:bg-sidebar"
                                     placeholder="Enter your feedback for this student"
                                 />
@@ -106,6 +197,21 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 />
                             </motion.div>
 
+                            {/* Score */}
+                            <motion.div
+                                initial={{ opacity: 1, x: 0 }}
+                                animate={{ x: 0, opacity: 1 }}
+                                transition={{ delay: 0 }}
+                            >
+                                <InfoCard
+                                    Icon={Trophy}
+                                    label="Score"
+                                    text={selectedReview?.score?.tech.toString() || "NILL"}
+                                    iconDivClassName="bg-red-400/20 group-hover:bg-red-400/30"
+                                    iconClassName="text-red-600"
+                                />
+                            </motion.div>
+
                             {/* Sheduled date */}
                             <motion.div
                                 initial={{ opacity: 1, x: 0 }}
@@ -115,7 +221,14 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 <InfoCard
                                     Icon={CalendarDays}
                                     label="Sheduled Date"
-                                    text={selectedReview.createdAt as unknown as string}
+                                    text={new Date(selectedReview.createdAt).toLocaleDateString(
+                                        "en-GB",
+                                        {
+                                            day: "2-digit",
+                                            month: "short",
+                                            year: "numeric",
+                                        }
+                                    )}
                                     iconDivClassName="bg-blue-400/20 group-hover:bg-blue-400/30"
                                     iconClassName="text-blue-600"
                                 />
@@ -130,7 +243,14 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 <InfoCard
                                     Icon={CalendarDays}
                                     label="Reveiw Date"
-                                    text={selectedReview.date as unknown as string}
+                                    text={new Date(selectedReview.date).toLocaleDateString(
+                                        "en-GB",
+                                        {
+                                            day: "2-digit",
+                                            month: "short",
+                                            year: "numeric",
+                                        }
+                                    )}
                                     iconDivClassName="bg-orange-400/20 group-hover:bg-orange-400/30"
                                     iconClassName="text-orange-600"
                                 />
@@ -145,7 +265,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 <InfoCard
                                     Icon={Clock}
                                     label="Time"
-                                    text={selectedReview.time}
+                                    text={convertTo12HourFormat(selectedReview.time)}
                                     iconDivClassName="bg-green-400/20 group-hover:bg-green-400/30"
                                     iconClassName="text-green-600"
                                 />
@@ -160,7 +280,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 <InfoCard
                                     Icon={Hourglass}
                                     label="Duration"
-                                    text={'1 Hour'}
+                                    text={"1 Hour"}
                                     iconDivClassName="bg-purple-400/20 group-hover:bg-purple-400/30"
                                     iconClassName="text-purple-600"
                                 />

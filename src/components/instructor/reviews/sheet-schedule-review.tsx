@@ -37,8 +37,7 @@ import { stateType } from "@/redux/store";
 import ValidationError from "@/components/ui/validation-error";
 import { IBatch } from "@/components/admin/batch/batches";
 import { Review } from "./reviews";
-import { DatePickerDemo } from "./date-picker";
-import { format } from "date-fns";
+import DatePicker from "./date-picker";
 import { formSchema, FormType } from "@/validations/instructor/schedule-review";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -106,10 +105,10 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                 const data = resp.data?.data;
 
                 setSubmiting(false);
-                setNewReview(data)
-                setOpen(false)
+                setNewReview(data);
+                setOpen(false);
 
-                toast({ title: "Successfully scheduled a review !" });
+                toast({ title: "Successfully scheduled a review." });
             }
         } catch (err: unknown) {
             setSubmiting(false);
@@ -119,11 +118,10 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
 
     // Fetch users based on the batch
     useEffect(() => {
+        setFetching(true);
+        setStudents([]);
         const fetchUsers = async () => {
             try {
-                setFetching(true);
-                setStudents([]);
-
                 // Send request
                 const resp = await fetchData(
                     ApiEndpoints.SEARCH_USER + `?category=student&batchId=${batch?._id}`,
@@ -154,7 +152,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
             reset();
             setselectedTime("");
             setSelectedDate(undefined);
-            setBatch(null)
+            setBatch(null);
         }
     }, [open]);
 
@@ -307,6 +305,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                             <Select
                                 key={"students"}
                                 required
+                                disabled={!students.length}
                                 onValueChange={(value) => {
                                     setValue("student", value);
                                 }}
@@ -317,13 +316,18 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                                 >
                                     <SelectValue
                                         placeholder={
-                                            batch === null
-                                            ? "Select a batch"
-                                            : fetching
-                                              ? "Fetching students..."
-                                              : students.length > 0
-                                                ? "Select a student"
-                                                : "No students in this batch"
+                                            batch === null ? (
+                                                "Select a batch"
+                                            ) : fetching ? (
+                                                <span className="flex items-center gap-2">
+                                                    <Loader2 className="w-4 h-5 animate-spin" />
+                                                    <p>Fetching students...</p>
+                                                </span>
+                                            ) : students.length > 0 ? (
+                                                "Select a student"
+                                            ) : (
+                                                "No students in this batch"
+                                            )
                                         }
                                         className="relative transition-opacity duration-200"
                                     />
@@ -368,17 +372,22 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                             }}
                             className="relative border p-[9.2px] pl-9 rounded-lg cursor-pointer"
                         >
-                            <DatePickerDemo
+                            <DatePicker
                                 isOpen={isOpen}
                                 selectedDate={selectedDate}
                                 setSelectedDate={(date) => {
                                     setValue("date", date);
                                     setSelectedDate(date);
                                 }}
+                                className="absolute z-20 bottom-11 -left-0.5 bg-background"
                             />
                             <p className="text-foreground font-medium">
                                 {selectedDate ? (
-                                    format(selectedDate, "PPP")
+                                    selectedDate.toLocaleDateString("en-GB", {
+                                        day: "2-digit",
+                                        month: "short",
+                                        year: "numeric",
+                                    })
                                 ) : (
                                     <span>Pick a date</span>
                                 )}

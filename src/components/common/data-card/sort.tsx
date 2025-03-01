@@ -77,7 +77,11 @@ function Sort({ sort, setSort, sortData }: PropsType) {
                             onSelect={(e) => e.preventDefault()}
                             className="flex justify-between"
                         >
-                            <span>Name</span>
+                            <span>
+                                {data === "createdAt"
+                                    ? "Date"
+                                    : data[0].toUpperCase() + data.slice(1)}
+                            </span>
                             <span>
                                 {sort.key === data && (
                                     <Check className="w-4 h-4 text-foreground" />

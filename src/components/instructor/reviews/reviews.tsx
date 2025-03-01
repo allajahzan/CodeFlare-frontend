@@ -1,5 +1,5 @@
-import { CalendarDays, Plus, SearchIcon } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
+import { CalendarCheck, CalendarDays, Plus, SearchIcon } from "lucide-react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import ReviewDetails from "./review-details";
 import CardHeader from "@/components/common/data-card/header";
 import ScheduleReviewSheet from "./sheet-schedule-review";
@@ -14,6 +14,9 @@ import Sort from "@/components/common/data-card/sort";
 import Filter from "@/components/common/data-card/filter";
 import Search from "@/components/common/data-card/search";
 import UserList from "@/components/common/user/user-list-card";
+import IconButton from "@/components/ui/icon-button";
+import DatePicker from "./date-picker";
+import PaginationComponent from "@/components/common/data-card/pagination";
 
 // Interface for Review
 export interface Review {
@@ -53,6 +56,7 @@ function Reviews() {
 
     // Search
     const [search, setSearch] = useState<string>("");
+    const [debouncedSearch, setDebouncedSearch] = useState<string>("");
 
     // Sort
     const [sort, setSort] = useState<{ key: string; order: number }>({
@@ -60,11 +64,32 @@ function Reviews() {
         order: 1,
     });
 
+    // Filter
+    const [filter, setFilter] = useState<string>("");
+
+    // Date
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+
     // User context
     const { user } = useContext(UserContext) as IUserContext;
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
+
+    // Handle search
+    const handleSearch = async (event: ChangeEvent<HTMLInputElement>) => {
+        setSearch(event.target.value);
+    };
+
+    // Debounce search
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedSearch(search);
+        }, 500);
+
+        return () => clearTimeout(handler);
+    }, [search]);
 
     // Add new review
     useEffect(() => {
@@ -78,11 +103,17 @@ function Reviews() {
 
     // Fetch reviews
     useEffect(() => {
+        setFetching(true);
+        setReviews([]);
+
         const fetchReviews = async () => {
             try {
                 // Send request
                 const resp = await fetchData(
-                    ApiEndpoints.REVIEW + `?batchIds=${user?.batches?.map((b) => b._id)}`,
+                    ApiEndpoints.REVIEW +
+                    `/search?keyword=${debouncedSearch}&sort=${sort.key}&order=${sort.order
+                    }&status=${filter}&date=${selectedDate?.toDateString() || ""
+                    }&batchIds=${user?.batches?.map((b) => b._id)}`,
                     role
                 );
 
@@ -103,12 +134,13 @@ function Reviews() {
         };
 
         fetchReviews();
-    }, []);
+    }, [debouncedSearch, sort, filter, selectedDate]);
 
     return (
         <div className="p-5 pt-0 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {/* Left side */}
             <div
+                // onClick={() => setIsOpen(false)}
                 className="p-5 sticky z-0 top-0 md:top-5 w-full h-[calc(100vh-108px)] flex flex-col gap-5 items-center rounded-2xl
             bg-background border border-border shadow-sm dark:shadow-customBorder dark:shadow-inner"
             >
@@ -130,21 +162,43 @@ function Reviews() {
                 />
 
                 {/* Search sort filter */}
-                <div className="w-full flex gap-2">
+                <div className="w-full flex gap-2 relative">
                     {/* Search reviews */}
-                    <Search search={search} handleSearch={() => { }} />
+                    <Search search={search} handleSearch={handleSearch} />
+
+                    {/* Filter by date */}
+                    <IconButton
+                        Icon={CalendarDays}
+                        action={() => {
+                            // e.stopPropagation();
+                            setIsOpen(!isOpen);
+                        }}
+                    />
+                    <DatePicker
+                        isOpen={isOpen}
+                        selectedDate={selectedDate}
+                        setSelectedDate={(date) => {
+                            setSelectedDate(date);
+                            setTimeout(() => {
+                                setIsOpen(false);
+                            }, 0);
+                        }}
+                        className="absolute z-20 bg-background top-[45.5px]"
+                    />
 
                     {/* Sort */}
                     <Sort
                         sort={sort}
                         setSort={setSort}
-                        sortData={["name", "createdAt"]}
+                        sortData={["name", "week", "createdAt"]}
                     />
 
                     {/* Filter */}
                     <Filter
                         title="Status"
-                        fitlerData={["All", "Ongoing", "Completed", "Pending"]}
+                        fitlerData={["", "Ongoing", "Completed", "Pending"]}
+                        filter={filter}
+                        setFilter={setFilter}
                     />
                 </div>
 
@@ -156,21 +210,34 @@ function Reviews() {
                                 key={index}
                                 index={index}
                                 user={{
-                                    _id: selectedReview?._id || "",
+                                    _id: review._id,
                                     name: review.user.name,
+                                    profilePic: review.user.profilePic,
                                 }}
                                 action={() => setSelectedReview(review)}
                                 selectedUser={selectedReview}
                                 children1={
-                                    <p className="text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
-                                        <CalendarDays className="w-3 h-3" /> {review.week}
-                                    </p>
+                                    <div className="flex items-center relative overflow-auto no-scrollbar">
+                                        <p className="relative text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
+                                            <CalendarDays className="w-3 h-3" />{" "}
+                                            {review.week[0].toUpperCase() + review.week.slice(1)}
+                                        </p>
+                                        <p className="flex gap-1 items-center absolute left-20 text-sm text-muted-foreground font-medium truncate">
+                                            <CalendarCheck className="w-3 h-3" />
+                                            {new Date(review?.date).toLocaleDateString("en-GB", {
+                                                day: "2-digit",
+                                                month: "short",
+                                                year: "numeric",
+                                            })}
+                                        </p>
+                                    </div>
                                 }
                             />
                         ))}
                     </div>
                 )}
 
+                {/* If no reviews */}
                 {reviews.length === 0 && (
                     <NotFoundOrbit
                         MainIcon={CalendarDays}
@@ -182,12 +249,21 @@ function Reviews() {
                         className="w-full"
                     />
                 )}
+
+                {/* Pagination */}
+                {/* <div className="w-full">
+                    <PaginationComponent totalPages={10}/>
+                </div> */}
             </div>
 
             {/* Right side */}
             <div className="grid gap-5 col-auto lg:col-span-2 grid-rows-[auto_1fr] relative z-10">
-                {/* Student details */}
-                <ReviewDetails selectedReview={selectedReview} />
+                {/* Review details */}
+                <ReviewDetails
+                    setReviews={setReviews}
+                    selectedReview={selectedReview}
+                    setSelectedReview={setSelectedReview}
+                />
                 <div className=""></div>
             </div>
         </div>
