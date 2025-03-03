@@ -1,5 +1,5 @@
 import { CalendarCheck, CalendarDays, Plus, SearchIcon } from "lucide-react";
-import { ChangeEvent, useContext, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import ReviewDetails from "./review-details";
 import CardHeader from "@/components/common/data-card/header";
 import ScheduleReviewSheet from "./sheet-schedule-review";
@@ -16,7 +16,7 @@ import Search from "@/components/common/data-card/search";
 import UserList from "@/components/common/user/user-list-card";
 import IconButton from "@/components/ui/icon-button";
 import DatePicker from "./date-picker";
-import PaginationComponent from "@/components/common/data-card/pagination";
+import { loadedReviews, loadReviews, socket } from "@/socket/instructorSocket";
 
 // Interface for Review
 export interface Review {
@@ -61,7 +61,7 @@ function Reviews() {
     // Sort
     const [sort, setSort] = useState<{ key: string; order: number }>({
         key: "createdAt",
-        order: 1,
+        order: -1,
     });
 
     // Filter
@@ -77,10 +77,57 @@ function Reviews() {
     // Redux
     const role = useSelector((state: stateType) => state.role);
 
+    // Div ref
+    const divRef = useRef<HTMLDivElement>(null);
+
     // Handle search
     const handleSearch = async (event: ChangeEvent<HTMLInputElement>) => {
         setSearch(event.target.value);
     };
+
+    // Emmit Load reviews event when scroll to bottom - socket
+    const handleScroll = () => {
+        const divCurrent = divRef.current;
+
+        if (divCurrent) {
+            const isBottom =
+                divCurrent.scrollHeight - divCurrent.scrollTop <=
+                divCurrent.clientHeight + 1;
+
+            if (isBottom) {
+                // Disable scrolling
+                divCurrent.style.overflow = "hidden";
+
+                loadReviews(
+                    debouncedSearch,
+                    sort.key,
+                    sort.order,
+                    selectedDate?.toDateString() || "",
+                    filter,
+                    user?.batches?.map((b) => b._id) as string[],
+                    reviews.length
+                );
+            }
+        }
+    };
+
+    // Listen loaded reviews event when scroll to bottom - socket
+    useEffect(() => {
+        loadedReviews((data: Review[]) => {
+            setReviews((prevReviews) => [...prevReviews, ...data]);
+
+            // Enable scrolling
+            const divCurrent = divRef.current;
+
+            if (divCurrent) {
+                divCurrent.style.overflow = "auto";
+            }
+        });
+
+        return () => {
+            socket.off("loadedReviews");
+        };
+    }, []);
 
     // Debounce search
     useEffect(() => {
@@ -95,13 +142,13 @@ function Reviews() {
     useEffect(() => {
         if (newReview) {
             setReviews((prevReviews: Review[]) => {
-                return [...prevReviews, newReview];
+                return [newReview, ...prevReviews];
             });
             setNewReview(null);
         }
     }, [newReview]);
 
-    // Fetch reviews
+    // Fetch reviews initially
     useEffect(() => {
         setFetching(true);
         setReviews([]);
@@ -113,7 +160,8 @@ function Reviews() {
                     ApiEndpoints.REVIEW +
                     `/search?keyword=${debouncedSearch}&sort=${sort.key}&order=${sort.order
                     }&status=${filter}&date=${selectedDate?.toDateString() || ""
-                    }&batchIds=${user?.batches?.map((b) => b._id)}`,
+                    }&batchIds=${user?.batches?.map((b) => b._id)}&skip=${reviews.length
+                    }`,
                     role
                 );
 
@@ -204,7 +252,11 @@ function Reviews() {
 
                 {/* Reviews lists */}
                 {reviews.length > 0 && (
-                    <div className="h-full w-full flex flex-col gap-[9px] overflow-auto bg-transparent no-scrollbar">
+                    <div
+                        ref={divRef}
+                        onScroll={handleScroll}
+                        className="h-full w-full flex flex-col gap-[9px] overflow-auto bg-transparent no-scrollbar"
+                    >
                         {reviews.map((review, index) => (
                             <UserList
                                 key={index}
@@ -249,11 +301,6 @@ function Reviews() {
                         className="w-full"
                     />
                 )}
-
-                {/* Pagination */}
-                {/* <div className="w-full">
-                    <PaginationComponent totalPages={10}/>
-                </div> */}
             </div>
 
             {/* Right side */}

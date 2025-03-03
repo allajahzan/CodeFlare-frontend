@@ -206,7 +206,7 @@ function ReviewDetails({
                                 <InfoCard
                                     Icon={Trophy}
                                     label="Score"
-                                    text={selectedReview?.score?.tech.toString() || "NILL"}
+                                    text={selectedReview?.score?.tech?.toString() || "NILL"}
                                     iconDivClassName="bg-red-400/20 group-hover:bg-red-400/30"
                                     iconClassName="text-red-600"
                                 />

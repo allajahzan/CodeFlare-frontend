@@ -4,7 +4,7 @@ import { toast } from "@/hooks/use-toast";
 import { sideBarVisibilityAction, stateType } from "@/redux/store";
 import { fetchData } from "@/service/api-service";
 import axiosInstance from "@/service/axios-instance";
-import { registerUser } from "@/service/socket";
+import { registerUser } from "@/socket/chatSocket";
 import { handleCustomError } from "@/utils/error";
 import { createContext, ReactNode, useState, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";

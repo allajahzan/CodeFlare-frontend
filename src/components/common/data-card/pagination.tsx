@@ -12,11 +12,6 @@ import { cn } from "@/lib/utils";
 const PaginationComponent = ({ totalPages }: { totalPages: number }) => {
     const [currentPage, setCurrentPage] = useState(1);
 
-    // const handlePageChange = (page: number) => {
-    //     if (page >= 1 && page <= totalPages) {
-    //         setCurrentPage(page);
-    //     }
-    // };
     const nextPage = () => {
         if (currentPage < totalPages) {
             setCurrentPage(currentPage + 1);
@@ -31,7 +26,7 @@ const PaginationComponent = ({ totalPages }: { totalPages: number }) => {
 
     return (
         <Pagination>
-            <PaginationContent className="flex items-end justify-center">
+            <PaginationContent className="w-full flex items-center justify-center">
                 {/* Previous Button */}
                 <PaginationItem className="p-0">
                     <PaginationPrevious
@@ -51,7 +46,7 @@ const PaginationComponent = ({ totalPages }: { totalPages: number }) => {
                         onClick={(e) => {
                             e.preventDefault();
                         }}
-                        className="bg-muted text-foreground"
+                        className="duration-0 bg-muted text-foreground"
                     >
                         {currentPage}
                     </PaginationLink>

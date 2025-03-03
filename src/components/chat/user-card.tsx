@@ -5,7 +5,7 @@ import { ReactNode, useContext } from "react";
 import { IUserChat } from "./user-contact-sheet";
 import { Chat } from "./chat";
 import { IUserContext, UserContext } from "@/context/user-context";
-import { readMessages, userOnline } from "@/service/socket";
+import { readMessages, userOnline } from "@/socket/chatSocket";
 import { useMediaQuery } from "usehooks-ts";
 
 // Interface for Props

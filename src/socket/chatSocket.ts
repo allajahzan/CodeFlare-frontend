@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const socket = io(import.meta.env.VITE_SOCKET_IO_SERVER_URL);
+const socket = io(import.meta.env.VITE_CHAT_SOCKET);
 
 /**
  * Emits a "registerUser" event to the socket server with the provided userId.

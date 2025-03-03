@@ -9,7 +9,7 @@ import socket, {
     listenUserOnline,
     receivePrivateMessage,
     sendPrivateMessage,
-} from "@/service/socket";
+} from "@/socket/chatSocket";
 import { IUserContext, UserContext } from "@/context/user-context";
 import { handleCustomError } from "@/utils/error";
 import ApiEndpoints from "@/constants/api-endpoints";
