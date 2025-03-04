@@ -18,11 +18,12 @@ import {
 } from "@/components/ui/select";
 import { motion } from "framer-motion";
 import {
-    CalendarDays,
+    Calendar1,
+    CalendarCheck2,
+    CalendarRange,
     Clock,
     FolderPen,
     Loader2,
-    UserRoundPlus,
     UsersRound,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -56,11 +57,14 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
 
     // Students
     const [students, setStudents] = useState<Student[]>([]);
+    const [selectedStudent, setSelectedStudent] = useState<string | null>(null);
+    const [fetchingStudents, setFetchingStudents] = useState(false);
 
     // Batches
     const [batch, setBatch] = useState<IBatch | null>(null);
 
-    const [fetching, setFetching] = useState(false);
+    // Week
+    const [fetchingWeek, setFetchingWeek] = useState<boolean>(false);
 
     // Date
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -91,7 +95,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
             userId: formData.student,
             batchId: formData.batch,
             title: formData.title,
-            week: formData.week,
+            week: formData.week.toLowerCase(),
             date: formData.date,
             time: formData.time,
         };
@@ -118,33 +122,63 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
 
     // Fetch users based on the batch
     useEffect(() => {
-        setFetching(true);
-        setStudents([]);
         const fetchUsers = async () => {
             try {
-                // Send request
+                setFetchingStudents(true);
+                setStudents([]);
+                reset({ student: "" });
+                setSelectedStudent("");
+
+                // Fetch data
                 const resp = await fetchData(
                     ApiEndpoints.SEARCH_USER + `?category=student&batchId=${batch?._id}`,
                     role
                 );
 
+                if (resp?.status === 200) {
+                    setStudents(resp.data.data); // Update students list
+                }
+            } catch (err) {
+                handleCustomError(err);
+            } finally {
+                setFetchingStudents(false); // Always set fetching to false after request
+            }
+        };
+
+        if (batch) fetchUsers();
+    }, [batch]);
+
+    // Fetch week based on the  batch and student
+    useEffect(() => {
+        const fetchStudentWeek = async () => {
+            try {
+                setFetchingWeek(true);
+                reset({ week: "" });
+
+                // Send request
+                const resp = await fetchData(
+                    ApiEndpoints.USER + `?batchId=${batch?._id}&_id=${selectedStudent}`,
+                    role
+                );
+
                 // Success response
                 if (resp && resp.status === 200) {
-                    const users = resp?.data.data;
+                    const data = resp?.data.data;
 
-                    // Set users
-                    setTimeout(() => {
-                        setStudents(users);
-                        setFetching(false);
-                    }, 1000);
+                    setValue(
+                        "week",
+                        (data.week && data.week[0] + data.week.slice(1)) || "Week 1"
+                    );
+
+                    setFetchingWeek(false);
                 }
             } catch (err: unknown) {
-                setFetching(false);
                 handleCustomError(err);
             }
         };
-        batch && fetchUsers();
-    }, [batch]);
+
+        selectedStudent && fetchStudentWeek();
+    }, [selectedStudent]);
 
     // Clear fields when sheet closes
     useEffect(() => {
@@ -167,7 +201,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                 <SheetHeader className="p-5 bg-zinc-0">
                     <SheetTitle className="flex items-center gap-3 text-foreground">
                         <div className="p-2 bg-muted rounded-full">
-                            <UserRoundPlus className="w-4 h-4" />
+                            <CalendarCheck2 className="w-4 h-4" />
                         </div>
                         <span>Schedule review</span>
                     </SheetTitle>
@@ -213,40 +247,11 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                         <ValidationError message={errors.title?.message as string} />
                     </motion.div>
 
-                    {/* Input for week */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
-                        className="space-y-2"
-                    >
-                        <Label
-                            htmlFor="week"
-                            className="text-sm text-foreground font-medium"
-                        >
-                            Week
-                        </Label>
-                        <div className="relative">
-                            <Input
-                                id="week"
-                                placeholder="Enter week"
-                                required
-                                autoComplete="off"
-                                {...register("week")}
-                                className="text-foreground font-medium p-5 pl-9"
-                            />
-                            <CalendarDays className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
-                        </div>
-
-                        {/* week error message */}
-                        <ValidationError message={errors.week?.message as string} />
-                    </motion.div>
-
                     {/* Input for batches */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5 }}
+                        transition={{ delay: 0.4 }}
                         className="space-y-2"
                     >
                         <Label
@@ -292,61 +297,109 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6 }}
+                        transition={{ delay: 0.5 }}
                         className="space-y-2"
                     >
+                        {/* Label */}
                         <Label
-                            htmlFor="role"
+                            htmlFor="students"
                             className="text-sm text-foreground font-medium"
                         >
                             Students
                         </Label>
+
                         <div className="relative">
                             <Select
-                                key={"students"}
+                                key="students"
                                 required
-                                disabled={!students.length}
+                                disabled={!students.length || fetchingStudents}
                                 onValueChange={(value) => {
                                     setValue("student", value);
+                                    setSelectedStudent(value);
                                 }}
                             >
+                                {/* Select Trigger */}
                                 <SelectTrigger
                                     id="students"
                                     className="text-foreground font-medium p-5 pl-9 relative"
+                                    value={selectedStudent as string}
                                 >
                                     <SelectValue
                                         placeholder={
-                                            batch === null ? (
-                                                "Select a batch"
-                                            ) : fetching ? (
-                                                <span className="flex items-center gap-2">
-                                                    <Loader2 className="w-4 h-5 animate-spin" />
-                                                    <p>Fetching students...</p>
-                                                </span>
-                                            ) : students.length > 0 ? (
-                                                "Select a student"
-                                            ) : (
-                                                "No students in this batch"
-                                            )
+                                            fetchingStudents
+                                                ? "Fetching students..."
+                                                : students.length === 0
+                                                    ? "No students available"
+                                                    : "Select a student"
                                         }
                                         className="relative transition-opacity duration-200"
                                     />
                                 </SelectTrigger>
-                                {!fetching && students.length > 0 && (
+
+                                {/* Student List */}
+                                {!fetchingStudents && students.length > 0 && (
                                     <SelectContent className="max-h-[200px]">
-                                        {students.map((student, index) => (
-                                            <SelectItem key={index} value={student._id}>
+                                        {students.map((student) => (
+                                            <SelectItem key={student._id} value={student._id}>
                                                 {student.name}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
                                 )}
                             </Select>
-                            <UsersRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+
+                            {/* Loader Icon */}
+                            {fetchingStudents && (
+                                <Loader2 className="w-4 h-4 absolute left-3 top-[13px] text-foreground animate-spin" />
+                            )}
+
+                            {/* Default User Icon (Only Show When Not Fetching) */}
+                            {!fetchingStudents && (
+                                <UsersRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                            )}
                         </div>
 
-                        {/* Studennt error message */}
+                        {/* Error Message */}
                         <ValidationError message={errors.student?.message as string} />
+                    </motion.div>
+
+                    {/* Input for week */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.6 }}
+                        className="space-y-2"
+                    >
+                        <Label
+                            htmlFor="week"
+                            className="text-sm text-foreground font-medium"
+                        >
+                            Week
+                        </Label>
+                        <div className="relative">
+                            <Input
+                                id="week"
+                                placeholder={fetchingWeek ? "Finding week" : "Week 1"}
+                                required
+                                disabled
+                                autoComplete="off"
+                                {...register("week")}
+                                className="text-foreground font-medium p-5 pl-9"
+                            />
+
+                            {/* Loader icon */}
+                            {fetchingWeek && (
+                                <Loader2 className="w-4 h-4 absolute left-3 top-[13px] text-foreground animate-spin" />
+                            )}
+
+                            {/* Default icon */}
+                            {!fetchingWeek && (
+                                <CalendarRange className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                            )}
+                        </div>
+
+                        {/* week error message */}
+                        <ValidationError message={errors.week?.message as string} />
                     </motion.div>
 
                     {/* Date picker */}
@@ -393,7 +446,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                                 )}
                             </p>
 
-                            <CalendarDays className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                            <Calendar1 className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
 
                         {/* Date error message */}
@@ -423,7 +476,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                                     setValue("time", value);
                                 }}
                             >
-                                <SelectTrigger className="w-full p-3 py-5 text-foreground">
+                                <SelectTrigger className="w-full p-3 pl-9 py-5 text-foreground">
                                     <SelectValue placeholder="Pick a time">
                                         <Clock className="mr-2 h-4 w-4 inline" />
                                         {selectedTime}
@@ -446,6 +499,8 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                                     ))}
                                 </SelectContent>
                             </Select>
+
+                            <Clock className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
 
                         {/* Time error message */}

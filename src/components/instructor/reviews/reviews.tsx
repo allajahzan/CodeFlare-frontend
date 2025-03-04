@@ -160,8 +160,7 @@ function Reviews() {
                     ApiEndpoints.REVIEW +
                     `/search?keyword=${debouncedSearch}&sort=${sort.key}&order=${sort.order
                     }&status=${filter}&date=${selectedDate?.toDateString() || ""
-                    }&batchIds=${user?.batches?.map((b) => b._id)}&skip=${reviews.length
-                    }`,
+                    }&batchIds=${user?.batches?.map((b) => b._id)}&skip=${0}`,
                     role
                 );
 
