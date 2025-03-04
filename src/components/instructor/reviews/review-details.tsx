@@ -117,7 +117,8 @@ function ReviewDetails({
                         <div className="flex items-center justify-between gap-3">
                             <div className="flex items-center gap-3">
                                 <div className="text-lg text-foreground font-semibold">
-                                    {selectedReview.week}
+                                    {selectedReview.week[0].toUpperCase() +
+                                        selectedReview.week.slice(1)}
                                 </div>
                             </div>
 

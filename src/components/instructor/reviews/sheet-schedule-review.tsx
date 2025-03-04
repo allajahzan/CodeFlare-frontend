@@ -57,7 +57,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
 
     // Students
     const [students, setStudents] = useState<Student[]>([]);
-    const [selectedStudent, setSelectedStudent] = useState<string | null>(null);
+    const [selectedStudent, setSelectedStudent] = useState<string>("");
     const [fetchingStudents, setFetchingStudents] = useState(false);
 
     // Batches
@@ -126,8 +126,8 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
             try {
                 setFetchingStudents(true);
                 setStudents([]);
-                reset({ student: "" });
-                setSelectedStudent("");
+                setValue("student", "");
+                setSelectedStudent("")
 
                 // Fetch data
                 const resp = await fetchData(
@@ -153,7 +153,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
         const fetchStudentWeek = async () => {
             try {
                 setFetchingWeek(true);
-                reset({ week: "" });
+                setValue("week", "");
 
                 // Send request
                 const resp = await fetchData(
@@ -167,7 +167,8 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
 
                     setValue(
                         "week",
-                        (data.week && data.week[0] + data.week.slice(1)) || "Week 1"
+                        (data.week && data.week[0].toUpperCase() + data.week.slice(1)) ||
+                        "Week 1"
                     );
 
                     setFetchingWeek(false);
@@ -187,6 +188,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
             setselectedTime("");
             setSelectedDate(undefined);
             setBatch(null);
+            setStudents([]);
         }
     }, [open]);
 
@@ -313,6 +315,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                                 key="students"
                                 required
                                 disabled={!students.length || fetchingStudents}
+                                value={selectedStudent}
                                 onValueChange={(value) => {
                                     setValue("student", value);
                                     setSelectedStudent(value);
@@ -322,7 +325,6 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                                 <SelectTrigger
                                     id="students"
                                     className="text-foreground font-medium p-5 pl-9 relative"
-                                    value={selectedStudent as string}
                                 >
                                     <SelectValue
                                         placeholder={
@@ -478,7 +480,6 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                             >
                                 <SelectTrigger className="w-full p-3 pl-9 py-5 text-foreground">
                                     <SelectValue placeholder="Pick a time">
-                                        <Clock className="mr-2 h-4 w-4 inline" />
                                         {selectedTime}
                                     </SelectValue>
                                 </SelectTrigger>

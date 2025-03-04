@@ -1,4 +1,4 @@
-import { nameRegex, week } from "@/constants/regex";
+import { nameRegex } from "@/constants/regex";
 import z from "zod";
 
 // Schedule review form validation schema
@@ -8,11 +8,7 @@ export const formSchema = z.object({
         .trim()
         .regex(nameRegex.alphabet, "Title should contain only alphabets !")
         .nonempty("Title is required !"),
-    week: z
-        .string()
-        // .regex(week.capitalLetter, "Week's first letter should be capital !")
-        .regex(week.weekName, "Enter a valid week (eg:week 1) !")
-        .nonempty("Week is required !"),
+    week: z.string().nonempty("Week is required !"),
     batch: z
         .string({
             required_error: "Batch is required!",
@@ -23,9 +19,14 @@ export const formSchema = z.object({
             required_error: "Student is required!",
         })
         .min(1, "Student is required !"),
-    date: z.any().refine((val) => val instanceof Date && !isNaN(val.getTime()), {
-        message: "Please select a valid date !",
-    }),
+    date: z
+        .any()
+        .refine((val) => val instanceof Date && !isNaN(val.getTime()), {
+            message: "Please select a valid date !",
+        })
+        .refine((val) => val > new Date(), {
+            message: "Please select a future date !",
+        }),
     time: z
         .string({
             required_error: "Time is required!",
