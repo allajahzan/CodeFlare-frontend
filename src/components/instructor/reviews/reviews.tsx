@@ -1,4 +1,10 @@
-import { CalendarCheck, CalendarDays, Plus, SearchIcon } from "lucide-react";
+import {
+    Calendar1,
+    CalendarCheck,
+    CalendarDays,
+    Plus,
+    SearchIcon,
+} from "lucide-react";
 import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import ReviewDetails from "./review-details";
 import CardHeader from "@/components/common/data-card/header";
@@ -42,7 +48,7 @@ export interface Review {
     };
     status: string;
     result: string;
-    createdAt: Date;
+    updatedAt: Date;
 }
 
 // Reviews Component
@@ -274,7 +280,7 @@ function Reviews() {
                                             {review.week[0].toUpperCase() + review.week.slice(1)}
                                         </p>
                                         <p className="flex gap-1 items-center absolute left-20 text-sm text-muted-foreground font-medium truncate">
-                                            <CalendarCheck className="w-3 h-3" />
+                                            <Calendar1 className="w-3 h-3" />
                                             {new Date(review?.date).toLocaleDateString("en-GB", {
                                                 day: "2-digit",
                                                 month: "short",

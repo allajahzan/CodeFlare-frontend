@@ -21,6 +21,7 @@ import { patchData } from "@/service/api-service";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
+import UpdateReviewsheet from "./sheet-update-review";
 
 // Interface for Props
 interface PropsType {
@@ -123,6 +124,7 @@ function ReviewDetails({
                             </div>
 
                             <div className="flex items-center gap-3">
+                                {/* Role badge */}
                                 <Badge
                                     className={cn(
                                         "text-sm font-semibold rounded-full duration-0",
@@ -136,9 +138,17 @@ function ReviewDetails({
                                     {selectedReview.result || "Pending"}
                                 </Badge>
 
-                                <div className="shadow-md bg-zinc-900 hover:bg-zinc-800 text-white rounded-full p-2">
-                                    <Edit2 className="h-4 w-4" />
-                                </div>
+                                {/* Update review sheet */}
+                                <UpdateReviewsheet
+                                    button={
+                                        <div className="shadow-md bg-zinc-900 hover:bg-zinc-800 text-white rounded-full p-2">
+                                            <Edit2 className="h-4 w-4" />
+                                        </div>
+                                    }
+                                    selectedReview={selectedReview}
+                                    setSelectedReview={setSelectedReview}
+                                    setReviews={setReviews}
+                                />
                             </div>
                         </div>
 
@@ -222,7 +232,7 @@ function ReviewDetails({
                                 <InfoCard
                                     Icon={CalendarDays}
                                     label="Sheduled Date"
-                                    text={new Date(selectedReview.createdAt).toLocaleDateString(
+                                    text={new Date(selectedReview.updatedAt).toLocaleDateString(
                                         "en-GB",
                                         {
                                             day: "2-digit",

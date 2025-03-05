@@ -41,6 +41,7 @@ import { Review } from "./reviews";
 import DatePicker from "./date-picker";
 import { formSchema, FormType } from "@/validations/instructor/schedule-review";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { convertTo12HourFormat } from "@/utils/time-converter";
 
 // Interface for Props
 interface PropsType {
@@ -127,7 +128,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                 setFetchingStudents(true);
                 setStudents([]);
                 setValue("student", "");
-                setSelectedStudent("")
+                setSelectedStudent("");
 
                 // Fetch data
                 const resp = await fetchData(
@@ -189,6 +190,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
             setSelectedDate(undefined);
             setBatch(null);
             setStudents([]);
+            setSelectedStudent("");
         }
     }, [open]);
 
@@ -489,12 +491,16 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                                             <SelectItem
                                                 value={`${hour.toString().padStart(2, "0")}:00`}
                                             >
-                                                {`${hour.toString().padStart(2, "0")}:00`}
+                                                {convertTo12HourFormat(
+                                                    `${hour.toString().padStart(2, "0")}:00`
+                                                )}
                                             </SelectItem>
                                             <SelectItem
                                                 value={`${hour.toString().padStart(2, "0")}:30`}
                                             >
-                                                {`${hour.toString().padStart(2, "0")}:30`}
+                                                {convertTo12HourFormat(
+                                                    `${hour.toString().padStart(2, "0")}:30`
+                                                )}
                                             </SelectItem>
                                         </Fragment>
                                     ))}
