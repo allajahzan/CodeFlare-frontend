@@ -33,7 +33,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import {
     formSchema,
     FormType,
-} from "@/validations/instructor/reschedule-review";
+} from "@/validations/instructor/update-review";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Review } from "./reviews";
 import { useSelector } from "react-redux";

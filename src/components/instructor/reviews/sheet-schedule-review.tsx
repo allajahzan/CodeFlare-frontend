@@ -74,7 +74,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
     );
 
     // Time
-    const [selectedTime, setselectedTime] = useState<String>("");
+    const [selectedTime, setselectedTime] = useState<string>("");
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
@@ -482,7 +482,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                             >
                                 <SelectTrigger className="w-full p-3 pl-9 py-5 text-foreground">
                                     <SelectValue placeholder="Pick a time">
-                                        {selectedTime}
+                                        {convertTo12HourFormat(selectedTime)}
                                     </SelectValue>
                                 </SelectTrigger>
                                 <SelectContent className="h-[170px]">

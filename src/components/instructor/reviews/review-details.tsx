@@ -5,10 +5,12 @@ import { Input } from "@/components/ui/input";
 import { AnimatePresence, motion } from "framer-motion";
 import {
     CalendarDays,
+    Check,
     CircleDashed,
     Clock,
     Edit2,
     Hourglass,
+    Loader2,
     Trophy,
 } from "lucide-react";
 import { Review } from "./reviews";
@@ -22,6 +24,15 @@ import ApiEndpoints from "@/constants/api-endpoints";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import UpdateReviewsheet from "./sheet-update-review";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import AddMarkModal from "./modal-add-mark";
+import { toast } from "@/hooks/use-toast";
 
 // Interface for Props
 interface PropsType {
@@ -36,8 +47,13 @@ function ReviewDetails({
     selectedReview,
     setSelectedReview,
 }: PropsType) {
+    // Feedback
     const [feedback, setFeedback] = useState<string>("");
     const [debouncedFeedback, setDebouncedFeedback] = useState<string>("");
+
+    // Status
+    const [status, setStatus] = useState<string>(selectedReview?.status || "");
+    const [changingStatus, setChangingStatus] = useState<boolean>(false);
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
@@ -69,6 +85,54 @@ function ReviewDetails({
         return () => clearTimeout(handler);
     }, [feedback]);
 
+    // Update status
+    const updateStatus = async (status: string) => {
+        try {
+            if (selectedReview?.status === status) return;
+
+            setChangingStatus(true);
+            setStatus(status);
+
+            // Send request
+            const resp = await patchData(
+                ApiEndpoints.REVIEW_STATUS + `/${selectedReview?._id}`,
+                {
+                    userId: selectedReview?.user._id,
+                    week: selectedReview?.week,
+                    status: status,
+                },
+                role
+            );
+
+            // Success response
+            if (resp && resp.status === 200) {
+                // Update selected review
+                setSelectedReview((prevReview: Review | null) => {
+                    return prevReview
+                        ? { ...prevReview, status: status as string }
+                        : null;
+                });
+
+                // Update review list
+                setReviews((reviews: Review[]) => {
+                    return reviews.map((review) =>
+                        review._id === selectedReview?._id
+                            ? { ...review, status: status as string }
+                            : { ...review }
+                    );
+                });
+
+                setChangingStatus(false);
+
+                toast({ title: "Status updated successfully." });
+            }
+        } catch (err: unknown) {
+            setStatus(selectedReview?.status as string);
+            setChangingStatus(false);
+            handleCustomError(err);
+        }
+    };
+
     // Update feedback
     useEffect(() => {
         const updateFeedback = async () => {
@@ -85,7 +149,7 @@ function ReviewDetails({
                 // Success response
                 if (resp && resp.status === 200) {
                     // Update selected review
-                    setSelectedReview((prevReview) =>
+                    setSelectedReview((prevReview: Review | null) =>
                         prevReview ? { ...prevReview, feedback: debouncedFeedback } : null
                     );
 
@@ -119,7 +183,11 @@ function ReviewDetails({
                             <div className="flex items-center gap-3">
                                 <div className="text-lg text-foreground font-semibold">
                                     {selectedReview.week[0].toUpperCase() +
-                                        selectedReview.week.slice(1)}
+                                        selectedReview.week.slice(1) +
+                                        " " +
+                                        `(${selectedReview.title[0].toUpperCase() +
+                                        selectedReview.title.slice(1)
+                                        })`}
                                 </div>
                             </div>
 
@@ -194,19 +262,52 @@ function ReviewDetails({
                             className="flex gap-[13px] relative -top-1 w-full overflow-scroll overflow-y-hidden no-scrollbar whitespace-nowrap scrollbar-hide"
                         >
                             {/* Status */}
-                            <motion.div
-                                initial={{ opacity: 1, x: 0 }}
-                                animate={{ x: 0, opacity: 1 }}
-                                transition={{ delay: 0 }}
-                            >
-                                <InfoCard
-                                    Icon={CircleDashed}
-                                    label="Status"
-                                    text={selectedReview.status}
-                                    iconDivClassName="bg-yellow-400/20 group-hover:bg-yellow-400/30"
-                                    iconClassName="text-yellow-600"
-                                />
-                            </motion.div>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger>
+                                    <motion.div
+                                        initial={{ opacity: 1, x: 0 }}
+                                        animate={{ x: 0, opacity: 1 }}
+                                        transition={{ delay: 0 }}
+                                    >
+                                        <InfoCard
+                                            Icon={CircleDashed}
+                                            label="Status"
+                                            text={selectedReview.status}
+                                            iconDivClassName="bg-yellow-400/20 group-hover:bg-yellow-400/30"
+                                            iconClassName="text-yellow-600"
+                                        />
+                                    </motion.div>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent
+                                    align="end"
+                                    onClick={(event) => event.stopPropagation()}
+                                >
+                                    <DropdownMenuLabel>Status</DropdownMenuLabel>
+                                    {["Absent", "Pending", "Completed", "Cancelled"].map(
+                                        (item, index) => (
+                                            <DropdownMenuItem
+                                                key={index}
+                                                onClick={(event) => {
+                                                    event.preventDefault();
+                                                    updateStatus(item);
+                                                }}
+                                                className="relative"
+                                            >
+                                                {status === item && changingStatus && (
+                                                    <Loader2 className="w-4 h-5 text-foreground animate-spin" />
+                                                )}
+                                                {status === item && changingStatus
+                                                    ? "Processing"
+                                                    : item}
+
+                                                {selectedReview.status === item && (
+                                                    <Check className="absolute right-2 w-4 h-4 text-foreground" />
+                                                )}
+                                            </DropdownMenuItem>
+                                        )
+                                    )}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
 
                             {/* Score */}
                             <motion.div
@@ -214,13 +315,25 @@ function ReviewDetails({
                                 animate={{ x: 0, opacity: 1 }}
                                 transition={{ delay: 0 }}
                             >
-                                <InfoCard
-                                    Icon={Trophy}
-                                    label="Score"
-                                    text={selectedReview?.score?.tech?.toString() || "NILL"}
-                                    iconDivClassName="bg-red-400/20 group-hover:bg-red-400/30"
-                                    iconClassName="text-red-600"
-                                />
+                                <div className="group min-w-[250px] p-3 rounded-lg border border-border bg-background shadow-sm">
+                                    <div className="relative flex items-center gap-3">
+                                        <div className="p-2 rounded-lg bg-red-400/20 group-hover:bg-red-400/30">
+                                            <Trophy className="w-5 h-5 text-red-600" />
+                                        </div>
+                                        <div className="text-start">
+                                            <p className="text-sm text-muted-foreground font-medium">
+                                                {"Score"}
+                                            </p>
+                                            <p className="text-foreground font-semibold">
+                                                {selectedReview?.score?.tech?.toString() || "NILL"}
+                                            </p>
+                                        </div>
+                                        <AddMarkModal
+                                            className="absolute top-2 right-2"
+                                            selectedReview={selectedReview}
+                                        />
+                                    </div>
+                                </div>
                             </motion.div>
 
                             {/* Sheduled date */}

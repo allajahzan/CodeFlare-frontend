@@ -1,6 +1,5 @@
 import {
     Calendar1,
-    CalendarCheck,
     CalendarDays,
     Plus,
     SearchIcon,
@@ -264,7 +263,7 @@ function Reviews() {
                     >
                         {reviews.map((review, index) => (
                             <UserList
-                                key={index}
+                                key={review._id}
                                 index={index}
                                 user={{
                                     _id: review._id,
