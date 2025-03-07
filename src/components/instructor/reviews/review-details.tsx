@@ -198,7 +198,7 @@ function ReviewDetails({
                                         "text-sm font-semibold rounded-full duration-0",
                                         selectedReview.result === "Pass"
                                             ? "text-green-600 bg-green-400/20 hover:bg-green-400/30"
-                                            : selectedReview.result === "fail"
+                                            : selectedReview.result === "Fail"
                                                 ? "text-red-600 bg-red-400/20 hover:bg-red-400/30"
                                                 : "text-yellow-600 bg-yellow-400/20 hover:bg-yellow-400/30"
                                     )}
@@ -325,12 +325,15 @@ function ReviewDetails({
                                                 {"Score"}
                                             </p>
                                             <p className="text-foreground font-semibold">
-                                                {selectedReview?.score?.tech?.toString() || "NILL"}
+                                                {selectedReview?.score?.practical +
+                                                    selectedReview?.score?.theory || "NILL"}
                                             </p>
                                         </div>
                                         <AddMarkModal
-                                            className="absolute top-2 right-2"
+                                            className="absolute top-1.5 right-1"
                                             selectedReview={selectedReview}
+                                            setSelectedReview={setSelectedReview}
+                                            setReviews={setReviews}
                                         />
                                     </div>
                                 </div>

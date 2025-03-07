@@ -42,7 +42,7 @@ export interface Review {
     feedback: string;
     pendings: string[];
     score: {
-        tech: number;
+        practical: number;
         theory: number;
     };
     status: string;
