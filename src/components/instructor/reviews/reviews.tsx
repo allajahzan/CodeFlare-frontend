@@ -238,7 +238,7 @@ function Reviews() {
                     {/* Filter */}
                     <Filter
                         title="Status"
-                        fitlerData={["", "Ongoing", "Completed", "Pending"]}
+                        fitlerData={["", "Absent", "Pending", "Completed", "Cancelled"]}
                         filter={filter}
                         setFilter={setFilter}
                     />

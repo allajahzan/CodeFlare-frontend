@@ -142,7 +142,9 @@ function ReviewDetails({
             }
         };
 
-        selectedReview && updateFeedback();
+        selectedReview &&
+            selectedReview.feedback !== debouncedFeedback &&
+            updateFeedback();
     }, [debouncedFeedback]);
 
     // Update status
@@ -240,7 +242,7 @@ function ReviewDetails({
                 >
                     {/* Overlay to restrict action */}
                     {selectedReview.instructor._id !== user?._id && (
-                        <div className="absolute z-50 inset-0 top-0 left-0 cursor-not-allowed"></div>
+                        <div className="absolute z-50 inset-0 top-0 left-0 cursor-not-allowed bg-white/30 dark:bg-black/50"></div>
                     )}
 
                     <div key={selectedReview._id} className="space-y-5">
