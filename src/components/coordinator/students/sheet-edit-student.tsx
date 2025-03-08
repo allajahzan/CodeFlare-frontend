@@ -30,7 +30,6 @@ import { handleCustomError } from "@/utils/error";
 import { updateData } from "@/service/api-service";
 import { toast } from "@/hooks/use-toast";
 import ApiEndpoints from "@/constants/api-endpoints";
-import { Student } from "@/types/coordinator";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { formSchema, FormType } from "@/validations/coordinator/student";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,13 +37,14 @@ import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import ValidationError from "@/components/ui/validation-error";
 import { IBatch } from "@/components/admin/batch/batches";
+import { IStudent } from "@/types/student";
 
 // Interface for Props
 interface PropsType {
     button: ReactNode;
-    setStudents: React.Dispatch<React.SetStateAction<[] | Student[]>>;
-    setSelectedStudent: React.Dispatch<React.SetStateAction<Student>>;
-    selecteStudent: Student;
+    setStudents: React.Dispatch<React.SetStateAction<[] | IStudent[]>>;
+    setSelectedStudent: React.Dispatch<React.SetStateAction<IStudent>>;
+    selecteStudent: IStudent;
     batches: IBatch[];
 }
 

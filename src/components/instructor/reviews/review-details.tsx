@@ -17,7 +17,6 @@ import {
     LucideProps,
     Trophy,
 } from "lucide-react";
-import { Review } from "./reviews";
 import { useContext, useEffect, useRef, useState } from "react";
 import { convertTo12HourFormat } from "@/utils/time-converter";
 import { Badge } from "@/components/ui/badge";
@@ -38,12 +37,13 @@ import {
 import AddMarkModal from "./modal-add-mark";
 import { toast } from "@/hooks/use-toast";
 import { IUserContext, UserContext } from "@/context/user-context";
+import { IReview } from "@/types/review";
 
 // Interface for Props
 interface PropsType {
-    setReviews: React.Dispatch<React.SetStateAction<[] | Review[]>>;
-    setSelectedReview: React.Dispatch<React.SetStateAction<Review | null>>;
-    selectedReview: Review | null;
+    setReviews: React.Dispatch<React.SetStateAction<[] | IReview[]>>;
+    setSelectedReview: React.Dispatch<React.SetStateAction<IReview | null>>;
+    selectedReview: IReview | null;
 }
 
 // Review details Component
@@ -124,12 +124,12 @@ function ReviewDetails({
                 // Success response
                 if (resp && resp.status === 200) {
                     // Update selected review
-                    setSelectedReview((prevReview: Review | null) =>
+                    setSelectedReview((prevReview: IReview | null) =>
                         prevReview ? { ...prevReview, feedback: debouncedFeedback } : null
                     );
 
                     // Update the reviews list
-                    setReviews((prevReviews: Review[]) => {
+                    setReviews((prevReviews: IReview[]) => {
                         return prevReviews.map((review) =>
                             review._id === selectedReview?._id
                                 ? { ...review, feedback: debouncedFeedback }
@@ -175,7 +175,7 @@ function ReviewDetails({
             // Success response
             if (resp && resp.status === 200) {
                 // Update selected review
-                setSelectedReview((prevReview: Review | null) => {
+                setSelectedReview((prevReview: IReview | null) => {
                     return prevReview
                         ? {
                             ...prevReview,
@@ -189,7 +189,7 @@ function ReviewDetails({
                 });
 
                 // Update review list
-                setReviews((reviews: Review[]) => {
+                setReviews((reviews: IReview[]) => {
                     return reviews.map((review) =>
                         review._id === selectedReview?._id
                             ? {
@@ -416,7 +416,7 @@ function ReviewDetails({
                                 <InfoCard
                                     Icon={CalendarDays}
                                     label="Sheduled Date"
-                                    text={new Date(selectedReview.updatedAt).toLocaleDateString(
+                                    text={new Date(selectedReview.createdAt).toLocaleDateString(
                                         "en-GB",
                                         {
                                             day: "2-digit",

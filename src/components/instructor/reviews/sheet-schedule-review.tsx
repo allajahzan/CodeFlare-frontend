@@ -31,22 +31,22 @@ import { handleCustomError } from "@/utils/error";
 import { fetchData, postData } from "@/service/api-service";
 import { toast } from "@/hooks/use-toast";
 import ApiEndpoints from "@/constants/api-endpoints";
-import { Student } from "@/types/coordinator";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import ValidationError from "@/components/ui/validation-error";
 import { IBatch } from "@/components/admin/batch/batches";
-import { Review } from "./reviews";
 import DatePicker from "./date-picker";
 import { formSchema, FormType } from "@/validations/instructor/schedule-review";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { convertTo12HourFormat } from "@/utils/time-converter";
+import { IStudent } from "@/types/student";
+import { IReview } from "@/types/review";
 
 // Interface for Props
 interface PropsType {
     button: ReactNode;
-    setNewReview: React.Dispatch<React.SetStateAction<Review | null>>;
+    setNewReview: React.Dispatch<React.SetStateAction<IReview | null>>;
     batches: IBatch[];
 }
 
@@ -57,7 +57,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
     const [submiting, setSubmiting] = useState(false);
 
     // Students
-    const [students, setStudents] = useState<Student[]>([]);
+    const [students, setStudents] = useState<IStudent[]>([]);
     const [selectedStudent, setSelectedStudent] = useState<string>("");
     const [fetchingStudents, setFetchingStudents] = useState(false);
 

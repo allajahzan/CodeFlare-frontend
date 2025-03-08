@@ -30,7 +30,6 @@ import { handleCustomError } from "@/utils/error";
 import { fetchData, postData } from "@/service/api-service";
 import { toast } from "@/hooks/use-toast";
 import ApiEndpoints from "@/constants/api-endpoints";
-import { User } from "@/types/admin";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { formSchema, FormType } from "@/validations/admin/user";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -43,11 +42,12 @@ import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import ValidationError from "@/components/ui/validation-error";
 import { IBatch } from "../batch/batches";
+import { IUser } from "@/types/user";
 
 // Interface for Props
 interface PropsType {
     button: ReactNode;
-    setNewUser: React.Dispatch<React.SetStateAction<User | null>>;
+    setNewUser: React.Dispatch<React.SetStateAction<IUser | null>>;
 }
 
 // Add user sheet

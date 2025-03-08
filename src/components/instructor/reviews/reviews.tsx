@@ -3,7 +3,7 @@ import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import ReviewDetails from "./review-details";
 import CardHeader from "@/components/common/data-card/header";
 import ScheduleReviewSheet from "./sheet-schedule-review";
-import { IUser, IUserContext, UserContext } from "@/context/user-context";
+import { IUserContext, UserContext } from "@/context/user-context";
 import { NotFoundOrbit } from "@/components/animation/fallbacks";
 import { handleCustomError } from "@/utils/error";
 import { fetchData } from "@/service/api-service";
@@ -17,35 +17,14 @@ import UserList from "@/components/common/user/user-list-card";
 import IconButton from "@/components/ui/icon-button";
 import DatePicker from "./date-picker";
 import { loadedReviews, loadReviews, socket } from "@/socket/instructorSocket";
-
-// Interface for Review
-export interface Review {
-    _id: string;
-    instructor: IUser;
-    user: IUser;
-    batchId: string;
-    title: string;
-    week: string;
-    date: Date;
-    time: string;
-    rating: number;
-    feedback: string;
-    pendings: string[];
-    score: {
-        practical: number;
-        theory: number;
-    } | null;
-    status: string;
-    result: string | null;
-    updatedAt: Date;
-}
+import { IReview } from "@/types/review";
 
 // Reviews Component
 function Reviews() {
     // Review related states
-    const [reviews, setReviews] = useState<Review[] | []>([]);
-    const [selectedReview, setSelectedReview] = useState<Review | null>(null);
-    const [newReview, setNewReview] = useState<Review | null>(null);
+    const [reviews, setReviews] = useState<IReview[] | []>([]);
+    const [selectedReview, setSelectedReview] = useState<IReview | null>(null);
+    const [newReview, setNewReview] = useState<IReview | null>(null);
 
     const [fetching, setFetching] = useState<boolean>(true);
 
@@ -108,7 +87,7 @@ function Reviews() {
 
     // Listen loaded reviews event when scroll to bottom - socket
     useEffect(() => {
-        loadedReviews((data: Review[]) => {
+        loadedReviews((data: IReview[]) => {
             setReviews((prevReviews) => [...prevReviews, ...data]);
 
             // Enable scrolling
@@ -136,7 +115,7 @@ function Reviews() {
     // Add new review
     useEffect(() => {
         if (newReview) {
-            setReviews((prevReviews: Review[]) => {
+            setReviews((prevReviews: IReview[]) => {
                 return [newReview, ...prevReviews];
             });
             setNewReview(null);

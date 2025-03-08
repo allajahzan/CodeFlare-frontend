@@ -21,16 +21,16 @@ import { useContext, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { toast } from "@/hooks/use-toast";
-import { Review } from "./reviews";
 import { formSchema, FormType } from "@/validations/instructor/update-score";
 import { IUserContext, UserContext } from "@/context/user-context";
+import { IReview } from "@/types/review";
 
 // Interface for Props
 interface Propstype {
     className: string;
-    selectedReview: Review;
-    setSelectedReview: React.Dispatch<React.SetStateAction<Review | null>>;
-    setReviews: React.Dispatch<React.SetStateAction<Review[]>>;
+    selectedReview: IReview;
+    setSelectedReview: React.Dispatch<React.SetStateAction<IReview | null>>;
+    setReviews: React.Dispatch<React.SetStateAction<IReview[]>>;
 }
 
 // Add batch modal
@@ -90,14 +90,14 @@ function AddMarkModal({
                     Number(formData.practical) >= 5 && Number(formData.theory) >= 5;
 
                 // Update selected review
-                setSelectedReview((prevReview: Review | null) => {
+                setSelectedReview((prevReview: IReview | null) => {
                     return prevReview
                         ? { ...prevReview, score, result: flag ? "Pass" : "Fail" }
                         : null;
                 });
 
                 // Update reviews list
-                setReviews((prevReviews: Review[]) => {
+                setReviews((prevReviews: IReview[]) => {
                     return prevReviews.map((review) =>
                         review._id === selectedReview._id
                             ? { ...review, score, result: flag ? "Pass" : "Fail" }

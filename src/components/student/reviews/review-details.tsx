@@ -7,17 +7,18 @@ import {
     Copy,
     Hourglass,
 } from "lucide-react";
-import { Review } from "./reviews";
 import { cn } from "@/lib/utils";
 import LineCharts from "@/components/common/charts/Line-chart";
 import { useCallback } from "react";
 import { toast } from "@/hooks/use-toast";
 import UserNameCard from "@/components/common/user/user-name-card";
 import InfoCard from "@/components/common/other-cards/info-card";
+import { IReview } from "@/types/review";
+import { convertTo12HourFormat } from "@/utils/time-converter";
 
 // Interface for Props
 interface PropsType {
-    selectedReview: Review;
+    selectedReview: IReview;
 }
 
 // Review details
@@ -27,7 +28,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
             className="h-full p-5 rounded-2xl overflow-hidden border border-border dark:border-customBorder
         shadow-sm dark:shadow-customBorder dark:shadow-inner"
         >
-            <div key={selectedReview.id} className="space-y-5">
+            <div key={selectedReview._id} className="space-y-5">
                 {/* Heading */}
                 <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
@@ -52,10 +53,10 @@ function ReviewDetails({ selectedReview }: PropsType) {
                     {/* Name */}
                     <UserNameCard
                         data={{
-                            name: selectedReview.instructor,
-                            email: selectedReview.instructorEmail,
+                            name: selectedReview.instructor.name,
+                            email: selectedReview.instructor.name,
                             role: "Instructor",
-                            profilePic: selectedReview.instructorProfilePic,
+                            profilePic: selectedReview.instructor.profilePic,
                         }}
                     />
 
@@ -74,7 +75,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 before:border-l-2 before:border-t-2 before:border-border before:border-dashed border-2 border-border border-dashed"
                     >
                         <p className="text-foreground font-medium md:text-nowrap overflow-x-auto no-scrollbar">
-                            {selectedReview.details}
+                            {selectedReview.feedback}
                         </p>
                     </motion.div>
                 </div>
@@ -105,7 +106,14 @@ function ReviewDetails({ selectedReview }: PropsType) {
                         <InfoCard
                             Icon={CalendarDays}
                             label="Sheduled Date"
-                            text={selectedReview.date}
+                            text={new Date(selectedReview.createdAt).toLocaleDateString(
+                                "en-GB",
+                                {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric",
+                                }
+                            )}
                             iconDivClassName="bg-blue-400/20 group-hover:bg-blue-400/30"
                             iconClassName="text-blue-600"
                         />
@@ -121,7 +129,11 @@ function ReviewDetails({ selectedReview }: PropsType) {
                         <InfoCard
                             Icon={CalendarDays}
                             label="Reveiw Date"
-                            text={selectedReview.date}
+                            text={new Date(selectedReview.date).toLocaleDateString("en-GB", {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                            })}
                             iconDivClassName="bg-orange-400/20 group-hover:bg-orange-400/30"
                             iconClassName="text-orange-600"
                         />
@@ -137,7 +149,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
                         <InfoCard
                             Icon={Clock}
                             label="Time"
-                            text={selectedReview.date}
+                            text={convertTo12HourFormat(selectedReview.time)}
                             iconDivClassName="bg-green-400/20 group-hover:bg-green-400/30"
                             iconClassName="text-green-600"
                         />
@@ -152,7 +164,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
                         <InfoCard
                             Icon={Hourglass}
                             label="Duration"
-                            text={selectedReview.date}
+                            text={"1 Hour"}
                             iconDivClassName="bg-purple-400/20 group-hover:bg-purple-400/30"
                             iconClassName="text-purple-600"
                         />{" "}
@@ -195,7 +207,7 @@ function PendingsAndChart({ selectedReview }: PropsType) {
             >
                 <div
                     className="h-full w-full flex flex-col gap-5"
-                    key={selectedReview.id}
+                    key={selectedReview._id}
                 >
                     {/* Heading */}
                     <div className="flex items-start justify-between relative">

@@ -9,9 +9,9 @@ import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import { handleCustomError } from "@/utils/error";
 import UserCard from "./user-card";
-import { Student } from "@/types/coordinator";
-import { User } from "@/types/admin";
 import { Chat } from "./chat";
+import { IUser } from "@/types/user";
+import { IStudent } from "@/types/student";
 
 // Interface for Contact User
 export interface IUserChat {
@@ -68,7 +68,7 @@ function UserContactSheet({
                 if (resp && resp.status === 200) {
                     // Formate users
                     const formattedUsers: IUserChat[] = users.map(
-                        (user: Partial<User | Student>) => ({
+                        (user: Partial<IUser | IStudent>) => ({
                             chatId: "",
                             _id: user._id,
                             name: user.name,

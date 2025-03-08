@@ -32,7 +32,6 @@ import { convertTo12HourFormat } from "@/utils/time-converter";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { formSchema, FormType } from "@/validations/instructor/update-review";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Review } from "./reviews";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import ApiEndpoints from "@/constants/api-endpoints";
@@ -40,13 +39,14 @@ import { patchData } from "@/service/api-service";
 import { handleCustomError } from "@/utils/error";
 import { toast } from "@/hooks/use-toast";
 import { IUserContext, UserContext } from "@/context/user-context";
+import { IReview } from "@/types/review";
 
 // Interface for Props
 interface PropsType {
     button: ReactNode;
-    selectedReview: Review;
-    setSelectedReview: React.Dispatch<React.SetStateAction<Review | null>>;
-    setReviews: React.Dispatch<React.SetStateAction<Review[]>>;
+    selectedReview: IReview;
+    setSelectedReview: React.Dispatch<React.SetStateAction<IReview | null>>;
+    setReviews: React.Dispatch<React.SetStateAction<IReview[]>>;
 }
 
 // Update review sheet
@@ -106,7 +106,7 @@ function UpdateReviewsheet({
             // Success response
             if (resp && resp.status === 200) {
                 // Update selected review
-                setSelectedReview((prevReview) =>
+                setSelectedReview((prevReview: IReview | null) =>
                     prevReview
                         ? {
                             ...prevReview,
@@ -116,7 +116,7 @@ function UpdateReviewsheet({
                 );
 
                 // Update the reviews list
-                setReviews((prevReviews: Review[]) => {
+                setReviews((prevReviews: IReview[]) => {
                     return prevReviews.map((review) =>
                         review._id === selectedReview?._id
                             ? { ...review, ...formData }
@@ -124,7 +124,7 @@ function UpdateReviewsheet({
                     );
                 });
 
-                toast({ title: 'Review updated successfully !' });
+                toast({ title: "Review updated successfully !" });
 
                 setSubmiting(false);
                 setOpen(false);

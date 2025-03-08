@@ -1,14 +1,15 @@
 import { IBatch } from "@/components/admin/batch/batches";
 
-// Interface for User
-export interface User {
+// Interface for Student
+export interface IStudent {
     _id: string;
     name: string;
     email: string;
     role: string;
     profilePic: string;
-    batches: IBatch[];
+    batch: IBatch;
+    week: string;
     isblock: boolean;
-    createdAt: string;
     lastActive: string;
+    createdAt: string;
 }

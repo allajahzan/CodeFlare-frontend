@@ -28,11 +28,11 @@ import { Label } from "@/components/ui/label";
 import { IBatch } from "./batches";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Student } from "@/types/coordinator";
-import { User } from "@/types/admin";
 import { handleCustomError } from "@/utils/error";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { fetchData } from "@/service/api-service";
+import { IStudent } from "@/types/student";
+import { IUser } from "@/types/user";
 
 // Interface for Props
 interface Propstype {
@@ -42,7 +42,7 @@ interface Propstype {
 // Batches details side Component
 function BatchesDetailsSide({ selectedBatch }: Propstype) {
     // User related states
-    const [users, setUsers] = useState<Student[] | User[] | []>([]);
+    const [users, setUsers] = useState<IStudent[] | IUser[] | []>([]);
 
     const [fetching, setFetching] = useState<boolean>(true);
 

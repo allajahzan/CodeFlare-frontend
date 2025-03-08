@@ -2,15 +2,15 @@ import { motion } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import React from "react";
-import { User } from "@/types/admin";
-import { Student } from "@/types/coordinator";
 import profile from "@/assets/images/no-profile.svg";
+import { IStudent } from "@/types/student";
+import { IUser } from "@/types/user";
 
 // Interface for Props
 interface PropsType {
     index: number;
     action?: any;
-    user: User | Student | any;
+    user: IUser | IStudent | any;
     children1?: React.ReactNode;
     children2?: React.ReactNode;
     selectedUser?: any;
