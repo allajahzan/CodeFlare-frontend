@@ -28,7 +28,7 @@ export function Toaster() {
                 </ToastTitle>
               )}
               {description && (
-                <ToastDescription>{description}</ToastDescription>
+                <ToastDescription className="text-xs font-medium tracking-wider">{description}</ToastDescription>
               )}
             </div>
             {action}

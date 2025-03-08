@@ -16,20 +16,14 @@ import { stateType } from "@/redux/store";
 import { patchData } from "@/service/api-service";
 import { handleCustomError } from "@/utils/error";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UsersRound, Loader2, Pencil, Trophy, ChartLine } from "lucide-react";
-import { useEffect, useState } from "react";
+import { UsersRound, Loader2, Pencil, Trophy } from "lucide-react";
+import { useContext, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { toast } from "@/hooks/use-toast";
 import { Review } from "./reviews";
 import { formSchema, FormType } from "@/validations/instructor/update-score";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
+import { IUserContext, UserContext } from "@/context/user-context";
 
 // Interface for Props
 interface Propstype {
@@ -50,23 +44,30 @@ function AddMarkModal({
     const [open, setOpen] = useState<boolean>(false);
     const [submiting, setSubmiting] = useState<boolean>(false);
 
-    // Result
-    const [result, setResult] = useState<string>("");
-
     // Redux
     const role = useSelector((state: stateType) => state.role);
+
+    // User context
+    const { user } = useContext(UserContext) as IUserContext;
 
     // Form validator
     const {
         register,
         handleSubmit,
         reset,
-        setValue,
         formState: { errors },
     } = useForm<FormType>({ resolver: zodResolver(formSchema) });
 
     // Onsubmit
     const OnSubmit: SubmitHandler<FormType> = async (formData) => {
+        // Check if instructor is authorized
+        if (selectedReview?.instructor._id !== user?._id) {
+            toast({
+                title: "You are restricted to update this score !",
+            });
+            return;
+        }
+
         setSubmiting(true);
 
         try {
@@ -85,10 +86,13 @@ function AddMarkModal({
                     theory: Number(formData.theory),
                 };
 
+                const flag =
+                    Number(formData.practical) >= 5 && Number(formData.theory) >= 5;
+
                 // Update selected review
                 setSelectedReview((prevReview: Review | null) => {
                     return prevReview
-                        ? { ...prevReview, score, result: formData.result }
+                        ? { ...prevReview, score, result: flag ? "Pass" : "Fail" }
                         : null;
                 });
 
@@ -96,7 +100,7 @@ function AddMarkModal({
                 setReviews((prevReviews: Review[]) => {
                     return prevReviews.map((review) =>
                         review._id === selectedReview._id
-                            ? { ...review, score, result: formData.result }
+                            ? { ...review, score, result: flag ? "Pass" : "Fail" }
                             : review
                     );
                 });
@@ -117,13 +121,9 @@ function AddMarkModal({
     useEffect(() => {
         if (open) {
             reset({
-                practical: selectedReview.score?.practical.toString() || "",
-                theory: selectedReview.score?.theory.toString() || "",
-                result: selectedReview.result || "",
+                practical: selectedReview.score?.practical?.toString() || "",
+                theory: selectedReview.score?.theory?.toString() || "",
             });
-
-            // Set result
-            setResult(selectedReview.result || "");
         }
     }, [open]);
 
@@ -195,38 +195,6 @@ function AddMarkModal({
                         </div>
                         {/* Theory error message */}
                         <ValidationError message={errors.theory?.message as string} />
-                    </div>
-
-                    <div className="space-y-2">
-                        <Label
-                            htmlFor="practical"
-                            className="text-sm text-foreground font-medium"
-                        >
-                            Result
-                        </Label>
-
-                        <div className="relative">
-                            <Select
-                                required
-                                value={result}
-                                onValueChange={(value) => {
-                                    setResult(value);
-                                    setValue("result", value);
-                                }}
-                            >
-                                <SelectTrigger className="w-full p-3 pl-9 py-5 text-foreground">
-                                    <SelectValue placeholder="Result" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="Pass">Pass</SelectItem>
-                                    <SelectItem value="Fail">Fail</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <ChartLine className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
-                        </div>
-
-                        {/* Result error message */}
-                        <ValidationError message={errors.result?.message as string} />
                     </div>
 
                     {/* Submit button */}

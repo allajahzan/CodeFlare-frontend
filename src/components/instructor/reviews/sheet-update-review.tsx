@@ -26,14 +26,11 @@ import {
     FolderPen,
     Loader2,
 } from "lucide-react";
-import { Fragment, ReactNode, useEffect, useState } from "react";
+import { Fragment, ReactNode, useContext, useEffect, useState } from "react";
 import DatePicker from "./date-picker";
 import { convertTo12HourFormat } from "@/utils/time-converter";
 import { SubmitHandler, useForm } from "react-hook-form";
-import {
-    formSchema,
-    FormType,
-} from "@/validations/instructor/update-review";
+import { formSchema, FormType } from "@/validations/instructor/update-review";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Review } from "./reviews";
 import { useSelector } from "react-redux";
@@ -41,6 +38,8 @@ import { stateType } from "@/redux/store";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { patchData } from "@/service/api-service";
 import { handleCustomError } from "@/utils/error";
+import { toast } from "@/hooks/use-toast";
+import { IUserContext, UserContext } from "@/context/user-context";
 
 // Interface for Props
 interface PropsType {
@@ -71,6 +70,9 @@ function UpdateReviewsheet({
     // Redux
     const role = useSelector((state: stateType) => state.role);
 
+    // User context
+    const { user } = useContext(UserContext) as IUserContext;
+
     // Form validation
     const {
         register,
@@ -82,9 +84,16 @@ function UpdateReviewsheet({
 
     // OnSubmit
     const OnSubmit: SubmitHandler<FormType> = async (formData) => {
-        setSubmiting(true);
+        // Check if instructor is authorized
+        if (selectedReview?.instructor._id !== user?._id) {
+            toast({
+                title: "You are restricted to update this review !",
+            });
+            setSubmiting(false);
+            return;
+        }
 
-        console.log(formData);
+        setSubmiting(true);
 
         try {
             // Send request
@@ -115,6 +124,8 @@ function UpdateReviewsheet({
                     );
                 });
 
+                toast({ title: 'Review updated successfully !' });
+
                 setSubmiting(false);
                 setOpen(false);
             }
@@ -135,6 +146,7 @@ function UpdateReviewsheet({
 
         setSelectedDate(new Date(selectedReview.date));
         setselectedTime(selectedReview.time);
+        setSubmiting(false);
     }, [open, reset, selectedReview]);
 
     return (

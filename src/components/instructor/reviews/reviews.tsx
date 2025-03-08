@@ -1,14 +1,9 @@
-import {
-    Calendar1,
-    CalendarDays,
-    Plus,
-    SearchIcon,
-} from "lucide-react";
+import { Calendar1, CalendarDays, Plus, SearchIcon } from "lucide-react";
 import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import ReviewDetails from "./review-details";
 import CardHeader from "@/components/common/data-card/header";
 import ScheduleReviewSheet from "./sheet-schedule-review";
-import { IUserContext, UserContext } from "@/context/user-context";
+import { IUser, IUserContext, UserContext } from "@/context/user-context";
 import { NotFoundOrbit } from "@/components/animation/fallbacks";
 import { handleCustomError } from "@/utils/error";
 import { fetchData } from "@/service/api-service";
@@ -26,13 +21,8 @@ import { loadedReviews, loadReviews, socket } from "@/socket/instructorSocket";
 // Interface for Review
 export interface Review {
     _id: string;
-    user: {
-        _id: string;
-        name: string;
-        email: string;
-        role: string;
-        profilePic?: string;
-    };
+    instructor: IUser;
+    user: IUser;
     batchId: string;
     title: string;
     week: string;
@@ -44,9 +34,9 @@ export interface Review {
     score: {
         practical: number;
         theory: number;
-    };
+    } | null;
     status: string;
-    result: string;
+    result: string | null;
     updatedAt: Date;
 }
 

@@ -4,17 +4,21 @@ import UserNameCard from "@/components/common/user/user-name-card";
 import { Input } from "@/components/ui/input";
 import { AnimatePresence, motion } from "framer-motion";
 import {
+    Ban,
     CalendarDays,
     Check,
+    CircleCheckBig,
     CircleDashed,
+    CircleX,
     Clock,
     Edit2,
     Hourglass,
     Loader2,
+    LucideProps,
     Trophy,
 } from "lucide-react";
 import { Review } from "./reviews";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { convertTo12HourFormat } from "@/utils/time-converter";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -33,6 +37,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import AddMarkModal from "./modal-add-mark";
 import { toast } from "@/hooks/use-toast";
+import { IUserContext, UserContext } from "@/context/user-context";
 
 // Interface for Props
 interface PropsType {
@@ -54,9 +59,19 @@ function ReviewDetails({
     // Status
     const [status, setStatus] = useState<string>(selectedReview?.status || "");
     const [changingStatus, setChangingStatus] = useState<boolean>(false);
+    const [statusColor, setStatusColor] = useState<string>("");
+    const [statusIcon, setStatusIcon] =
+        useState<
+            React.ForwardRefExoticComponent<
+                Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
+            >
+        >(CircleDashed);
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
+
+    // User context
+    const { user } = useContext(UserContext) as IUserContext;
 
     // Horizontal scroll
     let cardsListsRef = useRef<HTMLDivElement | null>(null);
@@ -85,57 +100,17 @@ function ReviewDetails({
         return () => clearTimeout(handler);
     }, [feedback]);
 
-    // Update status
-    const updateStatus = async (status: string) => {
-        try {
-            if (selectedReview?.status === status) return;
-
-            setChangingStatus(true);
-            setStatus(status);
-
-            // Send request
-            const resp = await patchData(
-                ApiEndpoints.REVIEW_STATUS + `/${selectedReview?._id}`,
-                {
-                    userId: selectedReview?.user._id,
-                    week: selectedReview?.week,
-                    status: status,
-                },
-                role
-            );
-
-            // Success response
-            if (resp && resp.status === 200) {
-                // Update selected review
-                setSelectedReview((prevReview: Review | null) => {
-                    return prevReview
-                        ? { ...prevReview, status: status as string }
-                        : null;
-                });
-
-                // Update review list
-                setReviews((reviews: Review[]) => {
-                    return reviews.map((review) =>
-                        review._id === selectedReview?._id
-                            ? { ...review, status: status as string }
-                            : { ...review }
-                    );
-                });
-
-                setChangingStatus(false);
-
-                toast({ title: "Status updated successfully." });
-            }
-        } catch (err: unknown) {
-            setStatus(selectedReview?.status as string);
-            setChangingStatus(false);
-            handleCustomError(err);
-        }
-    };
-
     // Update feedback
     useEffect(() => {
         const updateFeedback = async () => {
+            // Check if instructor is authorized
+            if (selectedReview?.instructor._id !== user?._id) {
+                toast({
+                    title: "You are restricted to update this feedback !",
+                });
+                return;
+            }
+
             try {
                 // Send request
                 const resp = await patchData(
@@ -170,13 +145,104 @@ function ReviewDetails({
         selectedReview && updateFeedback();
     }, [debouncedFeedback]);
 
+    // Update status
+    const updateStatus = async (status: string) => {
+        try {
+            // Check if instructor is authorized
+            if (selectedReview?.instructor._id !== user?._id) {
+                toast({
+                    title: "You are restricted to update this status !",
+                });
+                return;
+            }
+
+            if (selectedReview?.status === status) return;
+
+            setChangingStatus(true);
+            setStatus(status);
+
+            // Send request
+            const resp = await patchData(
+                ApiEndpoints.REVIEW_STATUS + `/${selectedReview?._id}`,
+                {
+                    status: status,
+                },
+                role
+            );
+
+            // Success response
+            if (resp && resp.status === 200) {
+                // Update selected review
+                setSelectedReview((prevReview: Review | null) => {
+                    return prevReview
+                        ? {
+                            ...prevReview,
+                            status,
+                            ...(status !== "Completed" && {
+                                score: null,
+                                result: null,
+                            }),
+                        }
+                        : null;
+                });
+
+                // Update review list
+                setReviews((reviews: Review[]) => {
+                    return reviews.map((review) =>
+                        review._id === selectedReview?._id
+                            ? {
+                                ...review,
+                                status,
+                                ...(status !== "Completed" && {
+                                    score: null,
+                                    result: null,
+                                }),
+                            }
+                            : { ...review }
+                    );
+                });
+
+                setChangingStatus(false);
+
+                toast({ title: `Status updated as ${status.toLowerCase()}.` });
+            }
+        } catch (err: unknown) {
+            setStatus(selectedReview?.status as string);
+            setChangingStatus(false);
+            handleCustomError(err);
+        }
+    };
+
+    // Update status color
+    useEffect(() => {
+        if (selectedReview?.status === "Pending") {
+            setStatusColor("yellow");
+            setStatusIcon(CircleDashed);
+        } else if (selectedReview?.status === "Completed") {
+            setStatusColor("green");
+            setStatusIcon(CircleCheckBig);
+        } else if (selectedReview?.status === "Absent") {
+            setStatusColor("red");
+            setStatusIcon(CircleX);
+        } else {
+            setStatusColor("purple");
+            setStatusIcon(Ban);
+        }
+    }, [selectedReview?.status]);
+
     return (
         <AnimatePresence mode="wait">
             {selectedReview && (
                 <div
-                    className="h-full p-5 rounded-2xl overflow-hidden border border-border
-                dark:bg-background shadow-sm"
+                    className={
+                        "realtive h-full p-5 rounded-2xl overflow-hidden border border-border dark:bg-background shadow-sm"
+                    }
                 >
+                    {/* Overlay to restrict action */}
+                    {selectedReview.instructor._id !== user?._id && (
+                        <div className="absolute z-50 inset-0 top-0 left-0 cursor-not-allowed"></div>
+                    )}
+
                     <div key={selectedReview._id} className="space-y-5">
                         {/* Heading */}
                         <div className="flex items-center justify-between gap-3">
@@ -185,9 +251,7 @@ function ReviewDetails({
                                     {selectedReview.week[0].toUpperCase() +
                                         selectedReview.week.slice(1) +
                                         " " +
-                                        `(${selectedReview.title[0].toUpperCase() +
-                                        selectedReview.title.slice(1)
-                                        })`}
+                                        `(${selectedReview.title.toUpperCase()})`}
                                 </div>
                             </div>
 
@@ -270,11 +334,11 @@ function ReviewDetails({
                                         transition={{ delay: 0 }}
                                     >
                                         <InfoCard
-                                            Icon={CircleDashed}
+                                            Icon={statusIcon}
                                             label="Status"
                                             text={selectedReview.status}
-                                            iconDivClassName="bg-yellow-400/20 group-hover:bg-yellow-400/30"
-                                            iconClassName="text-yellow-600"
+                                            iconDivClassName={`bg-${statusColor}-400/20 group-hover:bg-${statusColor}-400/30`}
+                                            iconClassName={`text-${statusColor}-600`}
                                         />
                                     </motion.div>
                                 </DropdownMenuTrigger>
@@ -283,7 +347,7 @@ function ReviewDetails({
                                     onClick={(event) => event.stopPropagation()}
                                 >
                                     <DropdownMenuLabel>Status</DropdownMenuLabel>
-                                    {["Absent", "Pending", "Completed", "Cancelled"].map(
+                                    {["Absent", "Pending", "Cancelled", "Completed"].map(
                                         (item, index) => (
                                             <DropdownMenuItem
                                                 key={index}
@@ -317,16 +381,18 @@ function ReviewDetails({
                             >
                                 <div className="group min-w-[250px] p-3 rounded-lg border border-border bg-background shadow-sm">
                                     <div className="relative flex items-center gap-3">
-                                        <div className="p-2 rounded-lg bg-red-400/20 group-hover:bg-red-400/30">
-                                            <Trophy className="w-5 h-5 text-red-600" />
+                                        <div className="p-2 rounded-lg bg-pink-400/20 group-hover:bg-pink-400/30">
+                                            <Trophy className="w-5 h-5 text-pink-600" />
                                         </div>
                                         <div className="text-start">
                                             <p className="text-sm text-muted-foreground font-medium">
                                                 {"Score"}
                                             </p>
                                             <p className="text-foreground font-semibold">
-                                                {selectedReview?.score?.practical +
-                                                    selectedReview?.score?.theory || "NILL"}
+                                                {selectedReview.score !== null
+                                                    ? (selectedReview?.score?.practical as number) +
+                                                    (selectedReview?.score?.theory as number)
+                                                    : "NILL"}
                                             </p>
                                         </div>
                                         <AddMarkModal
