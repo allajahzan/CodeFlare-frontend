@@ -61,7 +61,7 @@ function UpdateReviewsheet({
     const [submiting, setSubmiting] = useState(false);
 
     // Date
-    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [isDatePickerOpen, setDatePickerOpen] = useState<boolean>(false);
     const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
 
     // Time
@@ -147,13 +147,14 @@ function UpdateReviewsheet({
         setSelectedDate(new Date(selectedReview.date));
         setselectedTime(selectedReview.time);
         setSubmiting(false);
+        setDatePickerOpen(false)
     }, [open, reset, selectedReview]);
 
     return (
         <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger>{button}</SheetTrigger>
             <SheetContent
-                onClick={() => setIsOpen(false)}
+                onClick={() => setDatePickerOpen(false)}
                 className="p-0 flex flex-col gap-0"
             >
                 {/* Header */}
@@ -245,7 +246,7 @@ function UpdateReviewsheet({
                         <Label
                             onClick={(event) => {
                                 event.stopPropagation();
-                                setIsOpen(!isOpen);
+                                setDatePickerOpen(!isDatePickerOpen);
                             }}
                             className="text-sm text-foreground font-medium"
                         >
@@ -254,12 +255,12 @@ function UpdateReviewsheet({
                         <div
                             onClick={(event) => {
                                 event.stopPropagation();
-                                setIsOpen(!isOpen);
+                                setDatePickerOpen(!isDatePickerOpen);
                             }}
                             className="relative border p-[9.2px] pl-9 rounded-lg cursor-pointer"
                         >
                             <DatePicker
-                                isOpen={isOpen}
+                                isDatePickerOpen={isDatePickerOpen}
                                 selectedDate={selectedDate}
                                 setSelectedDate={(date) => {
                                     setValue("date", date);
@@ -296,7 +297,7 @@ function UpdateReviewsheet({
                         <Label
                             onClick={(event) => {
                                 event.stopPropagation();
-                                setIsOpen(!isOpen);
+                                setDatePickerOpen(!isDatePickerOpen);
                             }}
                             className="text-sm text-foreground font-medium"
                         >

@@ -42,7 +42,7 @@ function Reviews() {
     const [filter, setFilter] = useState<string>("");
 
     // Date
-    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [isDatePickerOpen, setDatePickerOpen] = useState<boolean>(false);
     const [selectedDate, setSelectedDate] = useState<Date | undefined>();
 
     // User context
@@ -161,7 +161,7 @@ function Reviews() {
         <div className="p-5 pt-0 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {/* Left side */}
             <div
-                // onClick={() => setIsOpen(false)}
+                // onClick={() => setDatePickerOpen(false)}
                 className="p-5 sticky z-0 top-0 md:top-5 w-full h-[calc(100vh-108px)] flex flex-col gap-5 items-center rounded-2xl
             bg-background border border-border shadow-sm dark:shadow-customBorder dark:shadow-inner"
             >
@@ -192,16 +192,16 @@ function Reviews() {
                         Icon={CalendarDays}
                         action={() => {
                             // e.stopPropagation();
-                            setIsOpen(!isOpen);
+                            setDatePickerOpen(!isDatePickerOpen);
                         }}
                     />
                     <DatePicker
-                        isOpen={isOpen}
+                        isDatePickerOpen={isDatePickerOpen}
                         selectedDate={selectedDate}
                         setSelectedDate={(date) => {
                             setSelectedDate(date);
                             setTimeout(() => {
-                                setIsOpen(false);
+                                setDatePickerOpen(false);
                             }, 0);
                         }}
                         className="absolute z-20 bg-background top-[45.5px]"

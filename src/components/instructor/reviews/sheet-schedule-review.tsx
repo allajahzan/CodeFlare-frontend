@@ -68,7 +68,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
     const [fetchingWeek, setFetchingWeek] = useState<boolean>(false);
 
     // Date
-    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [isDatePickerOpen, setDatePickerOpen] = useState<boolean>(false);
     const [selectedDate, setSelectedDate] = useState<Date | undefined>(
         new Date()
     );
@@ -166,6 +166,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                 if (resp && resp.status === 200) {
                     const data = resp?.data.data;
 
+                    // Update week
                     setValue(
                         "week",
                         (data.week && data.week[0].toUpperCase() + data.week.slice(1)) ||
@@ -191,6 +192,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
             setBatch(null);
             setStudents([]);
             setSelectedStudent("");
+            setDatePickerOpen(false)
         }
     }, [open]);
 
@@ -198,7 +200,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
         <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger>{button}</SheetTrigger>
             <SheetContent
-                onClick={() => setIsOpen(false)}
+                onClick={() => setDatePickerOpen(false)}
                 className="p-0 flex flex-col gap-0"
             >
                 {/* Header */}
@@ -416,7 +418,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                         <Label
                             onClick={(event) => {
                                 event.stopPropagation();
-                                setIsOpen(!isOpen);
+                                setDatePickerOpen(!isDatePickerOpen);
                             }}
                             className="text-sm text-foreground font-medium"
                         >
@@ -425,12 +427,12 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                         <div
                             onClick={(event) => {
                                 event.stopPropagation();
-                                setIsOpen(!isOpen);
+                                setDatePickerOpen(!isDatePickerOpen);
                             }}
                             className="relative border p-[9.2px] pl-9 rounded-lg cursor-pointer"
                         >
                             <DatePicker
-                                isOpen={isOpen}
+                                isDatePickerOpen={isDatePickerOpen}
                                 selectedDate={selectedDate}
                                 setSelectedDate={(date) => {
                                     setValue("date", date);
@@ -467,7 +469,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                         <Label
                             onClick={(event) => {
                                 event.stopPropagation();
-                                setIsOpen(!isOpen);
+                                setDatePickerOpen(!isDatePickerOpen);
                             }}
                             className="text-sm text-foreground font-medium"
                         >

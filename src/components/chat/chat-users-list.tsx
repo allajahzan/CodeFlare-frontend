@@ -138,13 +138,15 @@ function UsersListOfChat({
                                     </p>
 
                                     {/* Unread messages */}
-                                    {user.count ? (
+                                    {/* {user.count ? (
                                         <div className="bg-foreground w-5 h-5 flex items-center justify-center text-center rounded-full">
                                             <p className="text-xs text-background font-medium">
                                                 {user.count}
                                             </p>
                                         </div>
-                                    ) : <div className="w-5 h-5"/>}
+                                    ) : */}
+                                    
+                                    <div className="w-5 h-5"/>
                                 </div>
                             }
                         />

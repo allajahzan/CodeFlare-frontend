@@ -135,6 +135,7 @@ function AddMarkModal({
                 </div>
             </DialogTrigger>
             <DialogContent className="flex flex-col gap-10">
+                {/* Header */}
                 <DialogHeader>
                     <DialogTitle className="text-foreground flex items-center gap-3">
                         <div className="p-2 bg-muted rounded-full">
@@ -147,6 +148,7 @@ function AddMarkModal({
                     </DialogDescription>
                 </DialogHeader>
 
+                {/* Form */}
                 <form onSubmit={handleSubmit(OnSubmit)} className="space-y-3">
                     {/* Input for theory score */}
                     <div className="space-y-2">

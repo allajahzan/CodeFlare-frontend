@@ -13,7 +13,7 @@ export const fetchData = async (url: string, role?: string) => {
             headers: { "x-user-role": JSON.stringify(role) },
         });
         return resp;
-    } catch (err: any) {
+    } catch (err: unknown) {
         throwCustomError(err);
     }
 };
@@ -36,7 +36,7 @@ export const postData = async (
             headers: { "x-user-role": JSON.stringify(role), ...(headers && headers) },
         });
         return resp;
-    } catch (err: any) {
+    } catch (err: unknown) {
         throwCustomError(err);
     }
 };
@@ -54,7 +54,7 @@ export const updateData = async (url: string, data?: any, role?: string) => {
             headers: { "x-user-role": JSON.stringify(role) },
         });
         return resp;
-    } catch (err: any) {
+    } catch (err: unknown) {
         throwCustomError(err);
     }
 };
@@ -72,7 +72,7 @@ export const patchData = async (url: string, data?: any, role?: string) => {
             headers: { "x-user-role": JSON.stringify(role) },
         });
         return resp;
-    } catch (err: any) {
+    } catch (err: unknown) {
         throwCustomError(err);
     }
 };
@@ -89,7 +89,7 @@ export const deleteData = async (url: string, role?: string) => {
             headers: { "x-user-role": JSON.stringify(role) },
         });
         return resp;
-    } catch (err: any) {
+    } catch (err: unknown) {
         throwCustomError(err);
     }
 };

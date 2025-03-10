@@ -56,7 +56,7 @@ function ReviewDetails({
     const [feedback, setFeedback] = useState<string>("");
     const [debouncedFeedback, setDebouncedFeedback] = useState<string>("");
 
-    // Status
+    // Status related states
     const [status, setStatus] = useState<string>(selectedReview?.status || "");
     const [changingStatus, setChangingStatus] = useState<boolean>(false);
     const [statusColor, setStatusColor] = useState<string>("");
@@ -386,19 +386,28 @@ function ReviewDetails({
                                         <div className="p-2 rounded-lg bg-pink-400/20 group-hover:bg-pink-400/30">
                                             <Trophy className="w-5 h-5 text-pink-600" />
                                         </div>
-                                        <div className="text-start">
+
+                                        <div className="text-start w-full">
                                             <p className="text-sm text-muted-foreground font-medium">
-                                                {"Score"}
+                                                Score
                                             </p>
-                                            <p className="text-foreground font-semibold">
-                                                {selectedReview.score !== null
-                                                    ? (selectedReview?.score?.practical as number) +
-                                                    (selectedReview?.score?.theory as number)
-                                                    : "NILL"}
-                                            </p>
+                                            {selectedReview.score ? (
+                                                <div className="flex-1 flex items-center gap-2">
+                                                    <p className="text-foreground font-semibold">
+                                                        Practical :
+                                                        {selectedReview?.score?.practical as number}
+                                                    </p>
+                                                    <p className="text-foreground font-semibold">
+                                                        Theory : {selectedReview?.score?.theory as number}
+                                                    </p>
+                                                </div>
+                                            ) : (
+                                                <p className="text-foreground font-semibold">NILL</p>
+                                            )}
                                         </div>
+
                                         <AddMarkModal
-                                            className="absolute top-1.5 right-1"
+                                            className="absolute -top-3 -right-3"
                                             selectedReview={selectedReview}
                                             setSelectedReview={setSelectedReview}
                                             setReviews={setReviews}
