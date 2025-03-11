@@ -7,7 +7,7 @@ import {
     stateType,
 } from "@/redux/store";
 import {
-    CalendarCheck2,
+    CalendarDays,
     CreditCard,
     Globe,
     IdCard,
@@ -19,7 +19,7 @@ import Shadow from "@/components/ui/shadow";
 import { useLayoutEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import AppRoutes from "@/constants/app-routes";
-import Sidebar from "../common/sidebar/sideBar";
+import Sidebar from "../components/common/sidebar/sideBar";
 
 // Interface for Props
 interface PropsType {
@@ -56,7 +56,7 @@ function StudentLayout({ isDrawerOpen }: PropsType) {
             { path: AppRoutes.STUDENT_TASKS, icon: ListTodo, label: "Tasks" },
             {
                 path: AppRoutes.STUDENT_REVIEWS,
-                icon: CalendarCheck2,
+                icon: CalendarDays,
                 label: AppRoutes.STUDENT_REVIEWS,
             },
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },

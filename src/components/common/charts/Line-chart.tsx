@@ -11,7 +11,7 @@ import {
 
 // Interface for Props
 interface PropsType {
-    data: object[];
+    data: any[];
     text: string;
     className: string;
 }

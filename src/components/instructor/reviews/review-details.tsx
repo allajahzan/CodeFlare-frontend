@@ -4,15 +4,20 @@ import UserNameCard from "@/components/common/user/user-name-card";
 import { Input } from "@/components/ui/input";
 import { AnimatePresence, motion } from "framer-motion";
 import {
+    Ban,
     CalendarDays,
+    Check,
+    CircleCheckBig,
     CircleDashed,
+    CircleX,
     Clock,
     Edit2,
     Hourglass,
+    Loader2,
+    LucideProps,
     Trophy,
 } from "lucide-react";
-import { Review } from "./reviews";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { convertTo12HourFormat } from "@/utils/time-converter";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -21,12 +26,24 @@ import { patchData } from "@/service/api-service";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
+import UpdateReviewsheet from "./sheet-update-review";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import AddMarkModal from "./modal-add-mark";
+import { toast } from "@/hooks/use-toast";
+import { IUserContext, UserContext } from "@/context/user-context";
+import { IReview } from "@/types/review";
 
 // Interface for Props
 interface PropsType {
-    setReviews: React.Dispatch<React.SetStateAction<[] | Review[]>>;
-    setSelectedReview: React.Dispatch<React.SetStateAction<Review | null>>;
-    selectedReview: Review | null;
+    setReviews: React.Dispatch<React.SetStateAction<[] | IReview[]>>;
+    setSelectedReview: React.Dispatch<React.SetStateAction<IReview | null>>;
+    selectedReview: IReview | null;
 }
 
 // Review details Component
@@ -35,11 +52,26 @@ function ReviewDetails({
     selectedReview,
     setSelectedReview,
 }: PropsType) {
+    // Feedback
     const [feedback, setFeedback] = useState<string>("");
     const [debouncedFeedback, setDebouncedFeedback] = useState<string>("");
 
+    // Status related states
+    const [status, setStatus] = useState<string>(selectedReview?.status || "");
+    const [changingStatus, setChangingStatus] = useState<boolean>(false);
+    const [statusColor, setStatusColor] = useState<string>("");
+    const [statusIcon, setStatusIcon] =
+        useState<
+            React.ForwardRefExoticComponent<
+                Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
+            >
+        >(CircleDashed);
+
     // Redux
     const role = useSelector((state: stateType) => state.role);
+
+    // User context
+    const { user } = useContext(UserContext) as IUserContext;
 
     // Horizontal scroll
     let cardsListsRef = useRef<HTMLDivElement | null>(null);
@@ -48,9 +80,9 @@ function ReviewDetails({
         (cardsListsRef.current as HTMLDivElement).scrollLeft += event.deltaY;
     };
 
-    useEffect(() => {
-        cardsListsRef.current?.addEventListener("wheel", onwheel);
-    }, []);
+    // useEffect(() => {
+    //     cardsListsRef.current?.addEventListener("wheel", onwheel);
+    // }, []);
 
     // Reset feedback
     useEffect(() => {
@@ -71,6 +103,14 @@ function ReviewDetails({
     // Update feedback
     useEffect(() => {
         const updateFeedback = async () => {
+            // Check if instructor is authorized
+            if (selectedReview?.instructor._id !== user?._id) {
+                toast({
+                    title: "You are restricted to update this feedback !",
+                });
+                return;
+            }
+
             try {
                 // Send request
                 const resp = await patchData(
@@ -84,12 +124,12 @@ function ReviewDetails({
                 // Success response
                 if (resp && resp.status === 200) {
                     // Update selected review
-                    setSelectedReview((prevReview) =>
+                    setSelectedReview((prevReview: IReview | null) =>
                         prevReview ? { ...prevReview, feedback: debouncedFeedback } : null
                     );
 
                     // Update the reviews list
-                    setReviews((prevReviews: Review[]) => {
+                    setReviews((prevReviews: IReview[]) => {
                         return prevReviews.map((review) =>
                             review._id === selectedReview?._id
                                 ? { ...review, feedback: debouncedFeedback }
@@ -102,32 +142,129 @@ function ReviewDetails({
             }
         };
 
-        selectedReview && updateFeedback();
+        selectedReview &&
+            selectedReview.feedback !== debouncedFeedback &&
+            updateFeedback();
     }, [debouncedFeedback]);
+
+    // Update status
+    const updateStatus = async (status: string) => {
+        try {
+            // Check if instructor is authorized
+            if (selectedReview?.instructor._id !== user?._id) {
+                toast({
+                    title: "You are restricted to update this status !",
+                });
+                return;
+            }
+
+            if (selectedReview?.status === status) return;
+
+            setChangingStatus(true);
+            setStatus(status);
+
+            // Send request
+            const resp = await patchData(
+                ApiEndpoints.REVIEW_STATUS + `/${selectedReview?._id}`,
+                {
+                    status: status,
+                },
+                role
+            );
+
+            // Success response
+            if (resp && resp.status === 200) {
+                // Update selected review
+                setSelectedReview((prevReview: IReview | null) => {
+                    return prevReview
+                        ? {
+                            ...prevReview,
+                            status,
+                            ...(status !== "Completed" && {
+                                score: null,
+                                result: null,
+                            }),
+                        }
+                        : null;
+                });
+
+                // Update review list
+                setReviews((reviews: IReview[]) => {
+                    return reviews.map((review) =>
+                        review._id === selectedReview?._id
+                            ? {
+                                ...review,
+                                status,
+                                ...(status !== "Completed" && {
+                                    score: null,
+                                    result: null,
+                                }),
+                            }
+                            : { ...review }
+                    );
+                });
+
+                setChangingStatus(false);
+
+                toast({ title: `Status updated as ${status.toLowerCase()}.` });
+            }
+        } catch (err: unknown) {
+            setStatus(selectedReview?.status as string);
+            setChangingStatus(false);
+            handleCustomError(err);
+        }
+    };
+
+    // Update status color
+    useEffect(() => {
+        if (selectedReview?.status === "Pending") {
+            setStatusColor("yellow");
+            setStatusIcon(CircleDashed);
+        } else if (selectedReview?.status === "Completed") {
+            setStatusColor("green");
+            setStatusIcon(CircleCheckBig);
+        } else if (selectedReview?.status === "Absent") {
+            setStatusColor("red");
+            setStatusIcon(CircleX);
+        } else {
+            setStatusColor("purple");
+            setStatusIcon(Ban);
+        }
+    }, [selectedReview?.status]);
 
     return (
         <AnimatePresence mode="wait">
             {selectedReview && (
                 <div
-                    className="h-full p-5 rounded-2xl overflow-hidden border border-border
-                dark:bg-background shadow-sm"
+                    className={
+                        "realtive h-full p-5 rounded-2xl overflow-hidden border border-border dark:bg-background shadow-sm"
+                    }
                 >
+                    {/* Overlay to restrict action */}
+                    {selectedReview.instructor._id !== user?._id && (
+                        <div className="absolute z-50 inset-0 top-0 left-0 cursor-not-allowed bg-white/30 dark:bg-black/50"></div>
+                    )}
+
                     <div key={selectedReview._id} className="space-y-5">
                         {/* Heading */}
                         <div className="flex items-center justify-between gap-3">
                             <div className="flex items-center gap-3">
                                 <div className="text-lg text-foreground font-semibold">
-                                    {selectedReview.week}
+                                    {selectedReview.week[0].toUpperCase() +
+                                        selectedReview.week.slice(1) +
+                                        " " +
+                                        `(${selectedReview.title.toUpperCase()})`}
                                 </div>
                             </div>
 
                             <div className="flex items-center gap-3">
+                                {/* Role badge */}
                                 <Badge
                                     className={cn(
                                         "text-sm font-semibold rounded-full duration-0",
                                         selectedReview.result === "Pass"
                                             ? "text-green-600 bg-green-400/20 hover:bg-green-400/30"
-                                            : selectedReview.result === "fail"
+                                            : selectedReview.result === "Fail"
                                                 ? "text-red-600 bg-red-400/20 hover:bg-red-400/30"
                                                 : "text-yellow-600 bg-yellow-400/20 hover:bg-yellow-400/30"
                                     )}
@@ -135,9 +272,17 @@ function ReviewDetails({
                                     {selectedReview.result || "Pending"}
                                 </Badge>
 
-                                <div className="shadow-md bg-zinc-900 hover:bg-zinc-800 text-white rounded-full p-2">
-                                    <Edit2 className="h-4 w-4" />
-                                </div>
+                                {/* Update review sheet */}
+                                <UpdateReviewsheet
+                                    button={
+                                        <div className="shadow-md bg-zinc-900 hover:bg-zinc-800 text-white rounded-full p-2">
+                                            <Edit2 className="h-4 w-4" />
+                                        </div>
+                                    }
+                                    selectedReview={selectedReview}
+                                    setSelectedReview={setSelectedReview}
+                                    setReviews={setReviews}
+                                />
                             </div>
                         </div>
 
@@ -180,22 +325,56 @@ function ReviewDetails({
                         {/* Info cards */}
                         <div
                             ref={cardsListsRef}
+                            onWheel={onwheel}
                             className="flex gap-[13px] relative -top-1 w-full overflow-scroll overflow-y-hidden no-scrollbar whitespace-nowrap scrollbar-hide"
                         >
                             {/* Status */}
-                            <motion.div
-                                initial={{ opacity: 1, x: 0 }}
-                                animate={{ x: 0, opacity: 1 }}
-                                transition={{ delay: 0 }}
-                            >
-                                <InfoCard
-                                    Icon={CircleDashed}
-                                    label="Status"
-                                    text={selectedReview.status}
-                                    iconDivClassName="bg-yellow-400/20 group-hover:bg-yellow-400/30"
-                                    iconClassName="text-yellow-600"
-                                />
-                            </motion.div>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger>
+                                    <motion.div
+                                        initial={{ opacity: 1, x: 0 }}
+                                        animate={{ x: 0, opacity: 1 }}
+                                        transition={{ delay: 0 }}
+                                    >
+                                        <InfoCard
+                                            Icon={statusIcon}
+                                            label="Status"
+                                            text={selectedReview.status}
+                                            iconDivClassName={`bg-${statusColor}-400/20 group-hover:bg-${statusColor}-400/30`}
+                                            iconClassName={`text-${statusColor}-600`}
+                                        />
+                                    </motion.div>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent
+                                    align="end"
+                                    onClick={(event) => event.stopPropagation()}
+                                >
+                                    <DropdownMenuLabel>Status</DropdownMenuLabel>
+                                    {["Absent", "Pending", "Cancelled", "Completed"].map(
+                                        (item, index) => (
+                                            <DropdownMenuItem
+                                                key={index}
+                                                onClick={(event) => {
+                                                    event.preventDefault();
+                                                    updateStatus(item);
+                                                }}
+                                                className="relative"
+                                            >
+                                                {status === item && changingStatus && (
+                                                    <Loader2 className="w-4 h-5 text-foreground animate-spin" />
+                                                )}
+                                                {status === item && changingStatus
+                                                    ? "Processing"
+                                                    : item}
+
+                                                {selectedReview.status === item && (
+                                                    <Check className="absolute right-2 w-4 h-4 text-foreground" />
+                                                )}
+                                            </DropdownMenuItem>
+                                        )
+                                    )}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
 
                             {/* Score */}
                             <motion.div
@@ -203,13 +382,39 @@ function ReviewDetails({
                                 animate={{ x: 0, opacity: 1 }}
                                 transition={{ delay: 0 }}
                             >
-                                <InfoCard
-                                    Icon={Trophy}
-                                    label="Score"
-                                    text={selectedReview?.score?.tech?.toString() || "NILL"}
-                                    iconDivClassName="bg-red-400/20 group-hover:bg-red-400/30"
-                                    iconClassName="text-red-600"
-                                />
+                                <div className="group min-w-[250px] p-3 rounded-lg border border-border bg-background shadow-sm">
+                                    <div className="relative flex items-center gap-3">
+                                        <div className="p-2 rounded-lg bg-pink-400/20 group-hover:bg-pink-400/30">
+                                            <Trophy className="w-5 h-5 text-pink-600" />
+                                        </div>
+
+                                        <div className="text-start w-full">
+                                            <p className="text-sm text-muted-foreground font-medium">
+                                                Score
+                                            </p>
+                                            {selectedReview.score ? (
+                                                <div className="flex-1 flex items-center gap-2">
+                                                    <p className="text-foreground font-semibold">
+                                                        Practical :
+                                                        {selectedReview?.score?.practical as number}
+                                                    </p>
+                                                    <p className="text-foreground font-semibold">
+                                                        Theory : {selectedReview?.score?.theory as number}
+                                                    </p>
+                                                </div>
+                                            ) : (
+                                                <p className="text-foreground font-semibold">NILL</p>
+                                            )}
+                                        </div>
+
+                                        <AddMarkModal
+                                            className="absolute -top-3 -right-3"
+                                            selectedReview={selectedReview}
+                                            setSelectedReview={setSelectedReview}
+                                            setReviews={setReviews}
+                                        />
+                                    </div>
+                                </div>
                             </motion.div>
 
                             {/* Sheduled date */}

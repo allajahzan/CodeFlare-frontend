@@ -5,8 +5,8 @@ import { ReactNode, useContext } from "react";
 import { IUserChat } from "./user-contact-sheet";
 import { Chat } from "./chat";
 import { IUserContext, UserContext } from "@/context/user-context";
-import { readMessages, userOnline } from "@/socket/chatSocket";
 import { useMediaQuery } from "usehooks-ts";
+import { userOnline } from "@/socket/chatSocket";
 
 // Interface for Props
 interface PropsType {
@@ -51,13 +51,6 @@ function UserCard({
 
         // Check if receiver is in online
         userOnline(selectedUser._id);
-
-        // Read messages
-        readMessages(
-            selectedUser.chatId,
-            selectedUser._id /** Sender (reciever) */,
-            user?._id as string /** Receiver (sender) */
-        );
 
         // Set user
         if (users) {

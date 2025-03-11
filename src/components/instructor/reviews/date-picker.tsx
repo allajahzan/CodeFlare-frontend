@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 // Interface for Props
 interface PropsType {
-    isOpen: boolean;
+    isDatePickerOpen: boolean;
     selectedDate: Date | undefined;
     setSelectedDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
     className: string;
@@ -12,7 +12,7 @@ interface PropsType {
 
 // Date picker Component
 function DatePicker({
-    isOpen,
+    isDatePickerOpen,
     selectedDate,
     setSelectedDate,
     className
@@ -22,7 +22,7 @@ function DatePicker({
             onClick={(event) => event.stopPropagation()}
             className={cn(
                 className,
-                isOpen ? "block" : "hidden"
+                isDatePickerOpen ? "block" : "hidden"
             )}
         >
             <Calendar

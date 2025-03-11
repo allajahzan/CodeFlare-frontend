@@ -1,4 +1,4 @@
-import { CalendarCheck, CalendarDays, Plus, SearchIcon } from "lucide-react";
+import { Calendar1, CalendarDays, Plus, SearchIcon } from "lucide-react";
 import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
 import ReviewDetails from "./review-details";
 import CardHeader from "@/components/common/data-card/header";
@@ -17,40 +17,14 @@ import UserList from "@/components/common/user/user-list-card";
 import IconButton from "@/components/ui/icon-button";
 import DatePicker from "./date-picker";
 import { loadedReviews, loadReviews, socket } from "@/socket/instructorSocket";
-
-// Interface for Review
-export interface Review {
-    _id: string;
-    user: {
-        _id: string;
-        name: string;
-        email: string;
-        role: string;
-        profilePic?: string;
-    };
-    batchId: string;
-    title: string;
-    week: string;
-    date: Date;
-    time: string;
-    rating: number;
-    feedback: string;
-    pendings: string[];
-    score: {
-        tech: number;
-        theory: number;
-    };
-    status: string;
-    result: string;
-    createdAt: Date;
-}
+import { IReview } from "@/types/review";
 
 // Reviews Component
 function Reviews() {
     // Review related states
-    const [reviews, setReviews] = useState<Review[] | []>([]);
-    const [selectedReview, setSelectedReview] = useState<Review | null>(null);
-    const [newReview, setNewReview] = useState<Review | null>(null);
+    const [reviews, setReviews] = useState<IReview[] | []>([]);
+    const [selectedReview, setSelectedReview] = useState<IReview | null>(null);
+    const [newReview, setNewReview] = useState<IReview | null>(null);
 
     const [fetching, setFetching] = useState<boolean>(true);
 
@@ -68,7 +42,7 @@ function Reviews() {
     const [filter, setFilter] = useState<string>("");
 
     // Date
-    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [isDatePickerOpen, setDatePickerOpen] = useState<boolean>(false);
     const [selectedDate, setSelectedDate] = useState<Date | undefined>();
 
     // User context
@@ -113,7 +87,7 @@ function Reviews() {
 
     // Listen loaded reviews event when scroll to bottom - socket
     useEffect(() => {
-        loadedReviews((data: Review[]) => {
+        loadedReviews((data: IReview[]) => {
             setReviews((prevReviews) => [...prevReviews, ...data]);
 
             // Enable scrolling
@@ -141,7 +115,7 @@ function Reviews() {
     // Add new review
     useEffect(() => {
         if (newReview) {
-            setReviews((prevReviews: Review[]) => {
+            setReviews((prevReviews: IReview[]) => {
                 return [newReview, ...prevReviews];
             });
             setNewReview(null);
@@ -160,8 +134,7 @@ function Reviews() {
                     ApiEndpoints.REVIEW +
                     `/search?keyword=${debouncedSearch}&sort=${sort.key}&order=${sort.order
                     }&status=${filter}&date=${selectedDate?.toDateString() || ""
-                    }&batchIds=${user?.batches?.map((b) => b._id)}&skip=${reviews.length
-                    }`,
+                    }&batchIds=${user?.batches?.map((b) => b._id)}&skip=${0}`,
                     role
                 );
 
@@ -188,7 +161,7 @@ function Reviews() {
         <div className="p-5 pt-0 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {/* Left side */}
             <div
-                // onClick={() => setIsOpen(false)}
+                // onClick={() => setDatePickerOpen(false)}
                 className="p-5 sticky z-0 top-0 md:top-5 w-full h-[calc(100vh-108px)] flex flex-col gap-5 items-center rounded-2xl
             bg-background border border-border shadow-sm dark:shadow-customBorder dark:shadow-inner"
             >
@@ -219,16 +192,16 @@ function Reviews() {
                         Icon={CalendarDays}
                         action={() => {
                             // e.stopPropagation();
-                            setIsOpen(!isOpen);
+                            setDatePickerOpen(!isDatePickerOpen);
                         }}
                     />
                     <DatePicker
-                        isOpen={isOpen}
+                        isDatePickerOpen={isDatePickerOpen}
                         selectedDate={selectedDate}
                         setSelectedDate={(date) => {
                             setSelectedDate(date);
                             setTimeout(() => {
-                                setIsOpen(false);
+                                setDatePickerOpen(false);
                             }, 0);
                         }}
                         className="absolute z-20 bg-background top-[45.5px]"
@@ -244,7 +217,7 @@ function Reviews() {
                     {/* Filter */}
                     <Filter
                         title="Status"
-                        fitlerData={["", "Ongoing", "Completed", "Pending"]}
+                        fitlerData={["", "Absent", "Pending", "Completed", "Cancelled"]}
                         filter={filter}
                         setFilter={setFilter}
                     />
@@ -259,7 +232,7 @@ function Reviews() {
                     >
                         {reviews.map((review, index) => (
                             <UserList
-                                key={index}
+                                key={review._id}
                                 index={index}
                                 user={{
                                     _id: review._id,
@@ -275,13 +248,40 @@ function Reviews() {
                                             {review.week[0].toUpperCase() + review.week.slice(1)}
                                         </p>
                                         <p className="flex gap-1 items-center absolute left-20 text-sm text-muted-foreground font-medium truncate">
-                                            <CalendarCheck className="w-3 h-3" />
+                                            <Calendar1 className="w-3 h-3" />
                                             {new Date(review?.date).toLocaleDateString("en-GB", {
                                                 day: "2-digit",
                                                 month: "short",
                                                 year: "numeric",
                                             })}
                                         </p>
+                                    </div>
+                                }
+                                children2={
+                                    <div className="flex items-center p-2 rounded-full">
+                                        {(() => {
+                                            switch (review.status) {
+                                                case "Pending":
+                                                    return (
+                                                        <div className="p-1 rounded-full bg-yellow-400/40 group-hover:bg-yellow-400/50"></div>
+                                                    );
+                                                case "Cancelled":
+                                                    return (
+                                                        <div className="p-1 rounded-full bg-purple-400/40 group-hover:bg-purple-400/50"></div>
+                                                    );
+                                                case "Absent":
+                                                    return (
+                                                        <div className="p-1 rounded-full bg-red-400/40 group-hover:bg-red-400/50"></div>
+                                                    );
+                                                case "Completed":
+                                                    return (
+                                                        <div className="p-1 rounded-full bg-green-400/40 group-hover:bg-green-400/50"></div>
+                                                    );
+
+                                                default:
+                                                    return null;
+                                            }
+                                        })()}
                                     </div>
                                 }
                             />

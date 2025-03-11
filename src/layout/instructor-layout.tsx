@@ -3,7 +3,7 @@ import Navbar from "@/components/common/navbar/navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { resizeAction, sideBarVisibilityAction, stateType } from "@/redux/store";
 import {
-    CalendarCheck2,
+    CalendarDays,
     Globe,
     //   CalendarDays,
     //   CreditCard,
@@ -18,7 +18,7 @@ import Shadow from "@/components/ui/shadow";
 import { useLayoutEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import AppRoutes from "@/constants/app-routes";
-import Sidebar from "../common/sidebar/sideBar";
+import Sidebar from "../components/common/sidebar/sideBar";
 
 // Interface for Props
 interface PropsType {
@@ -53,7 +53,7 @@ function InstructorLayout({ isDrawerOpen }: PropsType) {
         () => [
             { path: AppRoutes.DASHBOARD, icon: LayoutDashboard, label: "Dashboard"},
             { path: AppRoutes.COORDINATOR_STUDENTS, icon: UsersRound, label: "Students" },
-            { path: AppRoutes.STUDENT_REVIEWS, icon: CalendarCheck2, label: "Reviews" },
+            { path: AppRoutes.STUDENT_REVIEWS, icon: CalendarDays, label: "Reviews" },
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
             ...(isSmall
                 ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]

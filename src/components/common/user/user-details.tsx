@@ -17,8 +17,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { NotSelected } from "@/components/animation/fallbacks";
 import { cn } from "@/lib/utils";
-import { Student } from "@/types/coordinator";
-import { User } from "@/types/admin";
 import { Fragment } from "react/jsx-runtime";
 import EditUserSheet from "@/components/admin/users/sheet-edit-user";
 import EditStudentSheet from "@/components/coordinator/students/sheet-edit-student";
@@ -26,12 +24,16 @@ import { useContext } from "react";
 import { IUserContext, UserContext } from "@/context/user-context";
 import UserNameCard from "./user-name-card";
 import { IBatch } from "@/components/admin/batch/batches";
+import { IStudent } from "@/types/student";
+import { IUser } from "@/types/user";
 
 // Interface for Props
 interface PropsType {
-    setUsers: React.Dispatch<React.SetStateAction<[] | Student[] | User[]>>;
-    setSelectedUser: React.Dispatch<React.SetStateAction<User | Student | null>>;
-    selectedUser: User | Student;
+    setUsers: React.Dispatch<React.SetStateAction<[] | IStudent[] | IUser[]>>;
+    setSelectedUser: React.Dispatch<
+        React.SetStateAction<IUser | IStudent | null>
+    >;
+    selectedUser: IUser | IStudent;
     className?: string;
     role: string;
 }
@@ -85,7 +87,7 @@ function UserDetails({
                                         }
                                         setUsers={setUsers as any}
                                         setSelectedUser={setSelectedUser as any}
-                                        selectedUser={selectedUser as User}
+                                        selectedUser={selectedUser as IUser}
                                     />
                                 ) : (
                                     // Edit student
@@ -100,7 +102,7 @@ function UserDetails({
                                         }
                                         setStudents={setUsers as any}
                                         setSelectedStudent={setSelectedUser as any}
-                                        selecteStudent={selectedUser as Student}
+                                        selecteStudent={selectedUser as IStudent}
                                         batches={user?.batches as IBatch[]}
                                     />
                                 )}
@@ -132,9 +134,10 @@ function UserDetails({
                                     value:
                                         selectedUser.role !== "student"
                                             ? selectedUser.lastActive || "Not recently"
-                                            : (selectedUser as Student).week || "Fumigation",
-                                    iconDivClassName: "bg-green-400/20 group-hover:bg-green-400/30",
-                                    iconClassName:"text-green-600",
+                                            : (selectedUser as IStudent).week || "Fumigation",
+                                    iconDivClassName:
+                                        "bg-green-400/20 group-hover:bg-green-400/30",
+                                    iconClassName: "text-green-600",
                                 },
 
                                 // Date joined
@@ -142,8 +145,9 @@ function UserDetails({
                                     icon: CalendarDaysIcon,
                                     label: "Date Joined",
                                     value: selectedUser.createdAt || "20th Jan 2025",
-                                    iconDivClassName: "bg-orange-400/20 group-hover:bg-orange-400/30",
-                                    iconClassName:"text-orange-600",
+                                    iconDivClassName:
+                                        "bg-orange-400/20 group-hover:bg-orange-400/30",
+                                    iconClassName: "text-orange-600",
                                 },
 
                                 // Batch - only for student
@@ -151,9 +155,10 @@ function UserDetails({
                                     ? {
                                         icon: Home,
                                         label: "Batch",
-                                        value: (selectedUser as Student).batch.name,
-                                        iconDivClassName: "bg-purple-400/20 group-hover:bg-purple-400/30",
-                                        iconClassName:"text-purple-600",
+                                        value: (selectedUser as IStudent).batch.name,
+                                        iconDivClassName:
+                                            "bg-purple-400/20 group-hover:bg-purple-400/30",
+                                        iconClassName: "text-purple-600",
                                     }
                                     : null,
                             ]
@@ -170,10 +175,7 @@ function UserDetails({
                                                         )}
                                                     >
                                                         <item.icon
-                                                            className={cn(
-                                                                "w-5 h-5",
-                                                                item.iconClassName
-                                                            )}
+                                                            className={cn("w-5 h-5", item.iconClassName)}
                                                         />
                                                     </div>
                                                     <div>
@@ -219,7 +221,7 @@ function UserDetails({
                                         align="end"
                                         className="max-h-[200px] overflow-auto"
                                     >
-                                        {(selectedUser as User).batches.map((batch, index) => {
+                                        {(selectedUser as IUser).batches.map((batch, index) => {
                                             return (
                                                 <DropdownMenuItem key={index} textValue={batch.name}>
                                                     {batch.name}

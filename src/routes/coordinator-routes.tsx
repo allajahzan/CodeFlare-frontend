@@ -1,4 +1,4 @@
-import CoordinatorLayout from "@/components/layout/coordinator-layout";
+import CoordinatorLayout from "@/layout/coordinator-layout";
 import Dashboard from "@/pages/coordinator/dashboard";
 import Login from "@/pages/authentication/login";
 import { useState } from "react";
@@ -7,7 +7,7 @@ import PublicRoutes from "@/routes/public-routes";
 import ProtectedRoutes from "@/routes/protected-routes";
 import ForgotPassword from "@/pages/authentication/forgot-password";
 import ResetPassword from "@/pages/authentication/reset-password";
-import AuthenticationLayout from "@/components/layout/authentication-layout";
+import AuthenticationLayout from "@/layout/authentication-layout";
 import Students from "@/pages/coordinator/students";
 import AppRoutes from "@/constants/app-routes";
 import Chat from "@/pages/chat/chat";

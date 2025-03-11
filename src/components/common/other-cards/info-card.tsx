@@ -20,7 +20,7 @@ function InfoCard({ Icon, label, text, iconDivClassName, iconClassName }: PropsT
                 <div className={cn("p-2 rounded-lg bg-muted", iconDivClassName)}>
                     <Icon className={cn("w-5 h-5 text-foreground",iconClassName)} />
                 </div>
-                <div>
+                <div className="text-start">
                     <p className="text-sm text-muted-foreground font-medium">{label}</p>
                     <p className="text-foreground font-semibold">{text}</p>
                 </div>

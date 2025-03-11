@@ -22,8 +22,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { NotFoundOrbit } from "@/components/animation/fallbacks";
 import UserDetails from "@/components/common/user/user-details";
-import { Student } from "@/types/coordinator";
-import { User } from "@/types/admin";
 import profile from "@/assets/images/no-profile.svg";
 import { toast } from "@/hooks/use-toast";
 import { handleCustomError } from "@/utils/error";
@@ -31,14 +29,16 @@ import { patchData } from "@/service/api-service";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
+import { IUser } from "@/types/user";
+import { IStudent } from "@/types/student";
 
 // Interface for Props
 interface PropsType {
     fetching: boolean;
-    setUsers: React.Dispatch<React.SetStateAction<[] | User[] | Student[]>>;
-    users: User[] | Student[];
-    setSelectedUser: React.Dispatch<React.SetStateAction<User | Student | null>>;
-    selectedUser: User | Student;
+    setUsers: React.Dispatch<React.SetStateAction<[] | IUser[] | IStudent[]>>;
+    users: IUser[] | IStudent[];
+    setSelectedUser: React.Dispatch<React.SetStateAction<IUser | IStudent | null>>;
+    selectedUser: IUser | IStudent;
     action: (index: number) => void;
     setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
     isSmall: boolean;
@@ -62,7 +62,7 @@ function DrawerUsersList({
     const role = useSelector((state: stateType) => state.role);
 
     // Handle blocking-unblocking user
-    const handleBlock = async (user: User) => {
+    const handleBlock = async (user: IUser) => {
         try {
             // Set blocking state
             setChangingStatus(true);
@@ -88,7 +88,7 @@ function DrawerUsersList({
                     });
 
                     // Update user in selected user, if selected
-                    setSelectedUser((prevUser: User | Student | null) => {
+                    setSelectedUser((prevUser: IUser | IStudent | null) => {
                         if (prevUser?._id === user._id) {
                             return { ...prevUser, isblock: !prevUser.isblock };
                         }

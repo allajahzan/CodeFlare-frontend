@@ -1,4 +1,4 @@
-import AdminLayout from "@/components/layout/admin-layout";
+import AdminLayout from "@/layout/admin-layout";
 import Dashboard from "@/pages/admin/dashboard";
 import Users from "@/pages/admin/users";
 import Login from "@/pages/authentication/login";
@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import PublicRoutes from "@/routes/public-routes";
 import ProtectedRoutes from "@/routes/protected-routes";
-import AuthenticationLayout from "@/components/layout/authentication-layout";
+import AuthenticationLayout from "@/layout/authentication-layout";
 import ForgotPassword from "@/pages/authentication/forgot-password";
 import ResetPassword from "@/pages/authentication/reset-password";
 import AppRoutes from "@/constants/app-routes";

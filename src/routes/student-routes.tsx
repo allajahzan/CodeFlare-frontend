@@ -1,4 +1,4 @@
-import StudentLayout from "@/components/layout/student-layout";
+import StudentLayout from "@/layout/student-layout";
 import Login from "@/pages/authentication/login";
 import Dashboard from "@/pages/student/dashboard";
 import Chat from '@/components/chat/chat';
@@ -8,7 +8,7 @@ import Reviews from "@/pages/student/reviews";
 import { Navigate, Route, Routes } from "react-router-dom";
 import PublicRoutes from "@/routes/public-routes";
 import ProtectedRoutes from "@/routes/protected-routes";
-import AuthenticationLayout from "@/components/layout/authentication-layout";
+import AuthenticationLayout from "@/layout/authentication-layout";
 import ForgotPassword from "@/pages/authentication/forgot-password";
 import ResetPassword from "@/pages/authentication/reset-password";
 import AppRoutes from "@/constants/app-routes";

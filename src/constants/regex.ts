@@ -27,3 +27,9 @@ export const week = {
     capitalLetter: /^[A-Z]/,
     weekName: /^Week \d+$/
 };
+
+// Score regex
+export const score = {
+    digits: /^[0-9]+$/,         
+    range: /^(10|[0-9])$/  
+};

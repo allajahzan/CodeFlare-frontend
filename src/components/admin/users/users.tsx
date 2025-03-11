@@ -32,14 +32,14 @@ import AddUserSheet from "@/components/admin/users/sheet-add-user";
 import { fetchData, patchData } from "@/service/api-service";
 import { handleCustomError } from "@/utils/error";
 import ApiEndpoints from "@/constants/api-endpoints";
-import { User } from "@/types/admin";
-import { Student } from "@/types/coordinator";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import { toast } from "@/hooks/use-toast";
 import { useMediaQuery } from "usehooks-ts";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { IUser } from "@/types/user";
+import { IStudent } from "@/types/student";
 
 // Interface for Props
 interface PropsType {
@@ -50,9 +50,9 @@ interface PropsType {
 // Users Component
 function Users({ setDrawerOpen }: PropsType) {
     // Users related states
-    const [newUser, setNewUser] = useState<User | null>(null);
-    const [users, setUsers] = useState<User[] | []>([]);
-    const [selectedUser, setSelectedUser] = useState<User | Student | null>(null);
+    const [newUser, setNewUser] = useState<IUser | null>(null);
+    const [users, setUsers] = useState<IUser[] | []>([]);
+    const [selectedUser, setSelectedUser] = useState<IUser | IStudent | null>(null);
 
     const [fetching, setFetching] = useState<boolean>(false);
 
@@ -94,7 +94,7 @@ function Users({ setDrawerOpen }: PropsType) {
     };
 
     // Handle blocking-unblocking user
-    const handleBlock = async (user: User) => {
+    const handleBlock = async (user: IUser) => {
         try {
             // Set blocking state
             setChangingStatus(true);
@@ -109,7 +109,7 @@ function Users({ setDrawerOpen }: PropsType) {
             // Success response
             if (resp && resp.status === 200) {
                 // Update user in users list
-                setUsers((prevUsers: User[]) => {
+                setUsers((prevUsers: IUser[]) => {
                     return prevUsers.map((u) => {
                         if (u._id === user._id) {
                             return { ...u, isblock: !u.isblock };
@@ -119,7 +119,7 @@ function Users({ setDrawerOpen }: PropsType) {
                 });
 
                 // Update user in selected user, if selected
-                setSelectedUser((prevUser: User | Student | null) => {
+                setSelectedUser((prevUser: IUser | IStudent | null) => {
                     if (prevUser?._id === user._id) {
                         return { ...prevUser, isblock: !prevUser.isblock };
                     }
@@ -127,7 +127,7 @@ function Users({ setDrawerOpen }: PropsType) {
                 });
 
                 // Remove user from users list - becuase we changed status
-                setUsers((prevUsers: User[]) => {
+                setUsers((prevUsers: IUser[]) => {
                     return prevUsers.filter((u) => u._id !== user._id);
                 });
 
@@ -148,7 +148,7 @@ function Users({ setDrawerOpen }: PropsType) {
     // Add new user
     useEffect(() => {
         if (newUser) {
-            setUsers((prevUsers: User[]) => {
+            setUsers((prevUsers: IUser[]) => {
                 return [...prevUsers, newUser];
             });
             setNewUser(null);
@@ -360,7 +360,7 @@ function Users({ setDrawerOpen }: PropsType) {
                         setUsers={setUsers as any}
                         users={users}
                         setSelectedUser={setSelectedUser}
-                        selectedUser={selectedUser as User}
+                        selectedUser={selectedUser as IUser}
                         action={handleSelect}
                         setDrawerOpen={setDrawerOpen}
                         isSmall={isSmall}
@@ -465,7 +465,7 @@ function Users({ setDrawerOpen }: PropsType) {
                     <UserDetails
                         setUsers={setUsers as any}
                         setSelectedUser={setSelectedUser}
-                        selectedUser={selectedUser as User}
+                        selectedUser={selectedUser as IUser}
                         className="rounded-2xl border border-border
                         shadow-sm dark:shadow-customBorder dark:shadow-inner"
                         role="user"

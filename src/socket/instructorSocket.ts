@@ -1,4 +1,4 @@
-import { Review } from "@/components/instructor/reviews/reviews";
+import { IReview } from "@/types/review";
 import { io } from "socket.io-client";
 
 export const socket = io(import.meta.env.VITE_INSTRUCTOR_SOCKET);
@@ -39,7 +39,7 @@ export const loadReviews = (
  * @param callBack - The callback function to call with the received reviews.
  */
 export const loadedReviews = (
-    callBack: (data: Review[]) => void
+    callBack: (data: IReview[]) => void
 ) => {
     socket.on("loadedReviews", (data) => {
         callBack(data)

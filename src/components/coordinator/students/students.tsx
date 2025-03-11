@@ -41,13 +41,13 @@ import { fetchData, patchData } from "@/service/api-service";
 import { handleCustomError } from "@/utils/error";
 import ApiEndpoints from "@/constants/api-endpoints";
 import AddStudentSheet from "./sheet-add-student";
-import { Student } from "@/types/coordinator";
-import { User } from "@/types/admin";
 import { IUserContext, UserContext } from "@/context/user-context";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import { toast } from "@/hooks/use-toast";
 import { Checkbox } from "@/components/ui/checkbox";
+import { IStudent } from "@/types/student";
+import { IUser } from "@/types/user";
 
 // Interface for Props
 interface PropsType {
@@ -58,9 +58,9 @@ interface PropsType {
 // Students Component
 function Students({ setDrawerOpen }: PropsType) {
     // Students related states
-    const [newStudent, setNewStudent] = useState<Student | null>(null);
-    const [students, setStudents] = useState<Student[] | []>([]);
-    const [selectedStudent, setSelectedStudent] = useState<Student | User | null>(
+    const [newStudent, setNewStudent] = useState<IStudent | null>(null);
+    const [students, setStudents] = useState<IStudent[] | []>([]);
+    const [selectedStudent, setSelectedStudent] = useState<IStudent | IUser | null>(
         null
     );
 
@@ -104,7 +104,7 @@ function Students({ setDrawerOpen }: PropsType) {
     };
 
     // Handle blocking-unblocking user
-    const handleBlock = async (user: User) => {
+    const handleBlock = async (user: IUser) => {
         try {
             // Set blocking state
             setChangingStatus(true);
@@ -119,7 +119,7 @@ function Students({ setDrawerOpen }: PropsType) {
             // Success response
             if (resp && resp.status === 200) {
                 // Update students in students list
-                setStudents((prevUsers: Student[]) => {
+                setStudents((prevUsers: IStudent[]) => {
                     return prevUsers.map((u) => {
                         if (u._id === user._id) {
                             return { ...u, isblock: !u.isblock };
@@ -129,7 +129,7 @@ function Students({ setDrawerOpen }: PropsType) {
                 });
 
                 // Update student in selected student, if selected
-                setSelectedStudent((prevUser: User | Student | null) => {
+                setSelectedStudent((prevUser: IUser | IStudent | null) => {
                     if (prevUser?._id === user._id) {
                         return { ...prevUser, isblock: !prevUser.isblock };
                     }
@@ -137,7 +137,7 @@ function Students({ setDrawerOpen }: PropsType) {
                 });
 
                 // Remove user from users list - becuase we changed status
-                setStudents((prevUsers: Student[]) => {
+                setStudents((prevUsers: IStudent[]) => {
                     return prevUsers.filter((u) => u._id !== user._id);
                 });
 
@@ -158,7 +158,7 @@ function Students({ setDrawerOpen }: PropsType) {
     // Add new student
     useEffect(() => {
         if (newStudent) {
-            setStudents((prevStudents: Student[]) => {
+            setStudents((prevStudents: IStudent[]) => {
                 return [...prevStudents, newStudent];
             });
             setNewStudent(null);
@@ -341,7 +341,7 @@ function Students({ setDrawerOpen }: PropsType) {
                         setUsers={setStudents as any}
                         users={students}
                         setSelectedUser={setSelectedStudent}
-                        selectedUser={selectedStudent as Student}
+                        selectedUser={selectedStudent as IStudent}
                         action={handleSelect}
                         setDrawerOpen={setDrawerOpen}
                         isSmall={isSmall}
@@ -446,7 +446,7 @@ function Students({ setDrawerOpen }: PropsType) {
                     <UserDetails
                         setUsers={setStudents as any}
                         setSelectedUser={setSelectedStudent}
-                        selectedUser={selectedStudent as Student}
+                        selectedUser={selectedStudent as IStudent}
                         className="rounded-2xl border border-border
                         shadow-sm dark:shadow-customBorder dark:shadow-inner"
                         role="student"

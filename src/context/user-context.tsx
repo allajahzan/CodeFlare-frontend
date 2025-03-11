@@ -14,8 +14,8 @@ export interface IUser {
     _id: string;
     name: string;
     email: string;
-    phoneNumber?: string;
-    profilePic?: string;
+    phoneNumber: string;
+    profilePic: string;
     role: string;
     batch?: IBatch;
     batches?: IBatch[];

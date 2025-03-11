@@ -29,7 +29,9 @@ enum ApiEndpoints {
     MESSAGE = "/communication/message",
 
     // Review APIs - instructor service
-    REVIEW = '/instructor/review'
+    REVIEW = '/instructor/review',
+    REVIEW_STATUS = '/instructor/review/status',
+    REVIEW_SCORE = '/instructor/review/score'
 }
 
 export default ApiEndpoints;
