@@ -110,7 +110,6 @@ function Chat() {
                                     minute: "2-digit",
                                     hour12: true,
                                 }),
-                                // count: chat.sender._id === user?._id ? chat.count : 0
                             };
                         });
 
@@ -136,31 +135,11 @@ function Chat() {
                         return {
                             ...u,
                             chatId: chat.chatId,
-                            count:
-                                u._id === chat.senderId &&
-                                    (selectedUser as IUserChat)?._id !== chat.senderId
-                                    ? chat.count
-                                    : 0
                         };
                     }
                     return u;
                 });
             });
-
-            // // Mark messages as read
-            // if (
-            //     selectedUser &&
-            //     selectedUser._id === chat.senderId &&
-            //     selectedUser.chatId !== chat.chatId 
-            // ) {
-            //     console.log("Eda mone its selected", selectedUser);
-    
-            //     readMessages(
-            //         selectedUser.chatId as string,
-            //         selectedUser._id as string,
-            //         user?._id as string
-            //     );
-            // }
         });
 
         // Clean up
