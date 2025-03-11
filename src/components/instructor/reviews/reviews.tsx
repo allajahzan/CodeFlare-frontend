@@ -257,6 +257,33 @@ function Reviews() {
                                         </p>
                                     </div>
                                 }
+                                children2={
+                                    <div className="flex items-center p-2 rounded-full">
+                                        {(() => {
+                                            switch (review.status) {
+                                                case "Pending":
+                                                    return (
+                                                        <div className="p-1 rounded-full bg-yellow-400/40 group-hover:bg-yellow-400/50"></div>
+                                                    );
+                                                case "Cancelled":
+                                                    return (
+                                                        <div className="p-1 rounded-full bg-purple-400/40 group-hover:bg-purple-400/50"></div>
+                                                    );
+                                                case "Absent":
+                                                    return (
+                                                        <div className="p-1 rounded-full bg-red-400/40 group-hover:bg-red-400/50"></div>
+                                                    );
+                                                case "Completed":
+                                                    return (
+                                                        <div className="p-1 rounded-full bg-green-400/40 group-hover:bg-green-400/50"></div>
+                                                    );
+
+                                                default:
+                                                    return null;
+                                            }
+                                        })()}
+                                    </div>
+                                }
                             />
                         ))}
                     </div>

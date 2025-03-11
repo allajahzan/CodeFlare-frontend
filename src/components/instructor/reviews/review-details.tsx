@@ -80,9 +80,9 @@ function ReviewDetails({
         (cardsListsRef.current as HTMLDivElement).scrollLeft += event.deltaY;
     };
 
-    useEffect(() => {
-        cardsListsRef.current?.addEventListener("wheel", onwheel);
-    }, []);
+    // useEffect(() => {
+    //     cardsListsRef.current?.addEventListener("wheel", onwheel);
+    // }, []);
 
     // Reset feedback
     useEffect(() => {
@@ -325,6 +325,7 @@ function ReviewDetails({
                         {/* Info cards */}
                         <div
                             ref={cardsListsRef}
+                            onWheel={onwheel}
                             className="flex gap-[13px] relative -top-1 w-full overflow-scroll overflow-y-hidden no-scrollbar whitespace-nowrap scrollbar-hide"
                         >
                             {/* Status */}

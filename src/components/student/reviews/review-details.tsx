@@ -10,6 +10,7 @@ import {
     Clock,
     Copy,
     Hourglass,
+    Loader2,
     LucideProps,
     Trophy,
 } from "lucide-react";
@@ -28,6 +29,7 @@ import { Input } from "@/components/ui/input";
 interface PropsType {
     reviews: IReview[];
     selectedReview: IReview | null;
+    fetching: boolean;
 }
 
 // Review details
@@ -45,11 +47,12 @@ function ReviewDetails({ selectedReview }: PropsType) {
 
     const onwheel = (event: any): void => {
         (cardsListsRef.current as HTMLDivElement).scrollLeft += event.deltaY;
+        // (cardsListsRef.current as HTMLDivElement).style.scrollBehavior = "smooth";
     };
 
-    useEffect(() => {
-        cardsListsRef.current?.addEventListener("wheel", onwheel);
-    }, []);
+    // useEffect(() => {
+    //     cardsListsRef.current?.addEventListener("wheel", onwheel);
+    // }, []);
 
     // Update status color
     useEffect(() => {
@@ -136,6 +139,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
                         {/* Info cards */}
                         <div
                             ref={cardsListsRef}
+                            onWheel={onwheel}
                             className="flex gap-[13px] relative -top-1 w-full overflow-x-auto no-scrollbar whitespace-nowrap scrollbar-hide"
                         >
                             {/* Status */}
@@ -284,7 +288,7 @@ interface IWeekData {
 }
 
 // Pending and chart Component
-function PendingsAndChart({ selectedReview, reviews }: PropsType) {
+function PendingsAndChart({ selectedReview, reviews, fetching }: PropsType) {
     const [monthlyData, setMonthlyData] = useState<IWeekData[] | []>([]);
 
     // copy to clipboard
@@ -354,7 +358,7 @@ function PendingsAndChart({ selectedReview, reviews }: PropsType) {
                             <AnimatePresence mode="wait">
                                 <div className="h-[170px] sm:h-[206px] flex flex-col gap-1 overflow-x-hidden overflow-auto no-scrolbar">
                                     <ul className="space-y-2.5">
-                                        {['Event looop', 'Js engine'].map((pending, index) => (
+                                        {["Event looop", "Js engine"].map((pending, index) => (
                                             <motion.p
                                                 key={index}
                                                 initial={{ opacity: 0, x: -20 }}
@@ -381,7 +385,7 @@ function PendingsAndChart({ selectedReview, reviews }: PropsType) {
                 {/* No review selected */}
                 {!selectedReview && (
                     <NotSelected
-                        className="h-[170px] sm:h-[206px] border-none shadow-none"
+                        className="h-[214px] sm:h-[250px] border-none shadow-none"
                         MainIcon={CalendarIcon}
                         text="No review selected"
                         message="Select a review to view pendings"
@@ -394,11 +398,31 @@ function PendingsAndChart({ selectedReview, reviews }: PropsType) {
                 className="h-fit p-5 bg-zinc-0 rounded-2xl border border-border dark:border-customBorder 
             shadow-sm dark:shadow-customBorder dark:shadow-inner"
             >
-                <LineCharts
-                    data={monthlyData}
-                    text="Overall Performance"
-                    className="h-[170px] sm:h-[206px]"
-                />
+                {reviews.length > 0 && (
+                    <LineCharts
+                        data={monthlyData}
+                        text="Overall Performance"
+                        className="h-[170px] sm:h-[206px]"
+                    />
+                )}
+
+                {/* If no reviews */}
+                {reviews.length === 0 && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                        className="flex items-center justify-center h-[170px] sm:h-[250px]"
+                    >
+                        {fetching ? (
+                            <Loader2 className="w-5 h-5 animate-spin text-foreground" />
+                        ) : (
+                            <p className="text-center text-foreground text-sm font-semibold">
+                                No reviews found
+                            </p>
+                        )}
+                    </motion.div>
+                )}
             </div>
         </div>
     );

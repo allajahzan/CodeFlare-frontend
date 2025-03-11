@@ -169,10 +169,18 @@ function Reviews() {
             {/* Selected review details */}
             <div className="w-full h-full relative z-20 bg-background rounded-2xl grid grid-rows-[auto_1fr] md:col-span-1 lg:col-span-2 gap-5 overflow-auto">
                 {/* Review details */}
-                <ReviewDetails selectedReview={selectedReview as IReview} reviews={reviews} />
+                <ReviewDetails
+                    selectedReview={selectedReview as IReview}
+                    reviews={reviews}
+                    fetching={fetching}
+                />
 
                 {/* Pendings and performance graph */}
-                <PendingsAndChart selectedReview={selectedReview as IReview} reviews={reviews} />
+                <PendingsAndChart
+                    selectedReview={selectedReview as IReview}
+                    reviews={reviews}
+                    fetching={fetching}
+                />
             </div>
         </div>
     );
