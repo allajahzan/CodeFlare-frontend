@@ -140,6 +140,22 @@ function Chat() {
                     return u;
                 });
             });
+
+            // Update selected user chat with user details
+            // setSelectedUser((prevUserChat) => {
+            //     if (!prevUserChat) return null;
+
+            //     if (prevUserChat._id === chat.senderId) {
+            //         return {
+            //             ...prevUserChat,
+            //             name: chat.sender.name,
+            //             email: chat.sender.email,
+            //             profilePic: chat.sender.profilePic,
+            //         };
+            //     }
+
+            //     return prevUserChat;
+            // });
         });
 
         // Clean up
@@ -174,24 +190,6 @@ function Chat() {
                 } else {
                     return prevChat;
                 }
-            });
-
-            // ======================================================================
-
-            // Update selected user chat with user details
-            setSelectedUser((prevUserChat) => {
-                if (!prevUserChat) return null;
-
-                if (prevUserChat._id === message.senderId) {
-                    return {
-                        ...prevUserChat,
-                        name: message.sender.name,
-                        email: message.sender.email,
-                        profilePic: message.sender.profilePic,
-                    };
-                }
-
-                return prevUserChat;
             });
 
             // ======================================================================
