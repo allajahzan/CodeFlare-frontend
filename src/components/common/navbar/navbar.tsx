@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { sideBarVisibilityAction, stateType } from "@/redux/store";
 import NavbarItem from "./navbar-item";
 import Heading from "@/components/ui/heading";
-import { Bell, Globe, Search, Moon, Sun, ChevronRight } from "lucide-react";
+import { Bell, Globe, Search, Moon, Sun, ChevronDown } from "lucide-react";
 import avatar_boy from "@/assets/images/avatar_boy.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -137,7 +137,7 @@ const Navbar = () => {
                                 : first.slice(0, 2).toUpperCase();
                         })()}
                     </p>
-                    <ChevronRight className="text-foreground" />
+                    <ChevronDown className="text-foreground" />
                 </div>
             </div>
         </div>

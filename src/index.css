@@ -80,6 +80,48 @@ label {
     user-select: none;
 }
 
+/* Calender */
+/* Main */
+.fc .fc-scrollgrid{
+    border-radius:10px;
+    overflow: hidden;
+}
+
+/*  */
+.fc-scrollgrid  .fc-scrollgrid-liquid{
+    border-radius: 10px;
+}
+
+.fc-event{
+    border-radius: 0px;
+}
+
+.fc-daygrid-day-events{
+  margin-top: 0px;
+}
+
+.fc-theme-standard .fc-scrollgrid, .fc-theme-standard td, .fc-theme-standard th {
+   border-style: solid;
+   border-width: 1px;
+   border-color: hsl(var(--border));
+}
+
+.fc-col-header-cell-cushion{
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.dark .fc-col-header-cell-cushion{
+    color: #eeeeee;
+}
+
+.fc-daygrid-day-number{
+    font-size: 16px;
+}
+.dark .fc-daygrid-day-number{
+    color: #eeeeee;
+}
+
 @layer components {
     [data-vaul-drawer] {
         will-change: auto !important;

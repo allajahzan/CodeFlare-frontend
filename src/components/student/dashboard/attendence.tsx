@@ -3,13 +3,20 @@ import { Disc, Eye, List, Pause, Play } from "lucide-react";
 import { motion } from "framer-motion";
 import IconButton from "@/components/ui/icon-button";
 import ToolTip from "@/components/common/tooltip/tooltip";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { stateType } from "@/redux/store";
 
 // Attendence Component
 function Attendence() {
+    const navigate = useNavigate();
     const [time, setTime] = useState(new Date());
     const [meridian, setMeridian] = useState(
         new Date().getHours() >= 12 ? "PM" : "AM"
     );
+
+    // Redux
+    const role = useSelector((state: stateType)=> state.role);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -37,7 +44,7 @@ function Attendence() {
                 <p className="flex-1 text-base text-foreground font-semibold">
                     Attendence
                 </p>
-                <div className="p-2 bg-muted rounded-full cursor-pointer">
+                <div onClick={()=>navigate(`/${role}/attendence`)} className="p-2 bg-muted rounded-full cursor-pointer">
                     <List className="w-4 h-4 text-foreground" />
                 </div>
             </div>
@@ -83,8 +90,8 @@ function Attendence() {
                             key={index}
                             className="mx-2 flex flex-col items-center gap-3 justify-center"
                         >
-                            <div className="h-1 w-1 bg-sidebar rounded-full"></div>
-                            <div className="h-1 w-1 bg-sidebar rounded-full"></div>
+                            <div className="h-1 w-1 bg-foreground rounded-full"></div>
+                            <div className="h-1 w-1 bg-foreground rounded-full"></div>
                         </span>
                     );
                 })}

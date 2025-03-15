@@ -10,6 +10,7 @@ enum AppRoutes {
     CHATS = 'chats',
     PROFILE = 'profile',
     COMMUNITY = 'community',
+    ATTENDENCE = 'attendence',
 
     // Admin Routes
     ADMIN = "admin",
