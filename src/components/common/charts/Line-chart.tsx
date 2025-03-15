@@ -23,7 +23,7 @@ const LineCharts = ({ data, text, className }: PropsType) => {
     const { theme } = useContext(ThemeContext) as IThemeContext;
 
     return (
-        <div className="h-full w-full flex flex-col gap-2">
+        <div className="h-full w-full flex flex-col gap-3">
             <div className="flex items-center gap-3 w-full">
                 <p className="flex-1 text-base text-foreground font-semibold truncate">
                     {text}

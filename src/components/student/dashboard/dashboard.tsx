@@ -6,7 +6,7 @@ function Dashboard() {
   return (
     <div className="grid grid-cols-3 gap-5 p-5 pt-0">
       {/* First */}
-      <div className="rounded-2xl w-full h-[400px] bg-background dark:bg-sidebar-background border p-4 shadow-sm">
+      <div className="w-full h-[400px] p-5 bg-background dark:bg-sidebar-background border rounded-2xl shadow-sm">
         <div className="w-full flex items-center gap-3">
           <p className="flex-1 text-base text-foreground font-semibold">
             Overall Information
@@ -21,7 +21,7 @@ function Dashboard() {
       </div>
 
       {/* Second */}
-      <div className="rounded-2xl w-full h-[400px] bg-background dark:bg-sidebar-background border border-border p-4 shadow-sm">
+      <div className="w-full h-[400px] p-5 bg-background dark:bg-sidebar-background border border-border rounded-2xl shadow-sm">
         <LineCharts
           data={[
             { week: "1", score: 2 },

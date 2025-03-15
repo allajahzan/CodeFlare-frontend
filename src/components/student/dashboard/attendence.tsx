@@ -16,7 +16,7 @@ function Attendence() {
     );
 
     // Redux
-    const role = useSelector((state: stateType)=> state.role);
+    const role = useSelector((state: stateType) => state.role);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -38,16 +38,28 @@ function Attendence() {
     const minutes = formatNumber(time.getMinutes());
 
     return (
-        <div className="rounded-2xl w-full h-[400px] bg-background dark:bg-sidebar-background border p-4 shadow-sm flex flex-col">
+        <div className="relative p-5 flex flex-col rounded-2xl w-full h-[400px] bg-background dark:bg-sidebar-background border shadow-sm">
             {/* Header */}
             <div className="w-full flex items-center gap-3">
                 <p className="flex-1 text-base text-foreground font-semibold">
                     Attendence
                 </p>
-                <div onClick={()=>navigate(`/${role}/attendence`)} className="p-2 bg-muted rounded-full cursor-pointer">
+                <div
+                    onClick={() => navigate(`/${role}/attendence`)}
+                    className="p-2 bg-muted rounded-full cursor-pointer"
+                >
                     <List className="w-4 h-4 text-foreground" />
                 </div>
             </div>
+
+            {/* Date */}
+            <p className="absolute -translate-x-1/2 left-[22%] top-[27%] text-base text-foreground font-semibold">
+                {new Date().toLocaleDateString("en-GB", {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                })}
+            </p>
 
             {/* Time Flipper */}
             <div
