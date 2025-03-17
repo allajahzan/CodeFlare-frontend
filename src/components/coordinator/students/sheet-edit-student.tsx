@@ -101,12 +101,12 @@ function EditStudentSheet({
                 setSubmiting(false);
                 reset();
 
-                // Set updated student in selected student
+                // Set updated user in selected user
                 setSelectedStudent(student);
 
-                // Set updated student in students list
-                setStudents((prevStudents) =>
-                    prevStudents.map((u) =>
+                // Set updated user in users list
+                setStudents((prevUsers) =>
+                    prevUsers.map((u) =>
                         u._id === student._id ? { ...u, ...student } : u
                     )
                 );

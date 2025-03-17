@@ -7,6 +7,7 @@ import {
     stateType,
 } from "@/redux/store";
 import {
+    CalendarClockIcon,
     Globe,
     //   CalendarDays,
     //   CreditCard,
@@ -56,6 +57,7 @@ function CoordinatorLayout({ isDrawerOpen }: PropsType) {
             { path: AppRoutes.DASHBOARD, icon: LayoutDashboard, label: AppRoutes.DASHBOARD },
             { path: AppRoutes.COORDINATOR_STUDENTS, icon: UsersRound, label: "Students" },
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
+            { path: AppRoutes.ATTENDENCE, icon: CalendarClockIcon, label: "Attendence" },
             ...(isSmall
                 ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
                 : []),

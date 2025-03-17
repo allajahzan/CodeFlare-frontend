@@ -134,7 +134,9 @@ function UserDetails({
                                     value:
                                         selectedUser.role !== "student"
                                             ? selectedUser.lastActive || "Not recently"
-                                            : (selectedUser as IStudent).week || "Fumigation",
+                                            : (selectedUser as IStudent).week?.[0].toUpperCase() +
+                                            (selectedUser as IStudent).week?.slice(1) ||
+                                            "Fumigation",
                                     iconDivClassName:
                                         "bg-green-400/20 group-hover:bg-green-400/30",
                                     iconClassName: "text-green-600",
@@ -144,7 +146,11 @@ function UserDetails({
                                 {
                                     icon: CalendarDaysIcon,
                                     label: "Date Joined",
-                                    value: selectedUser.createdAt || "20th Jan 2025",
+                                    value:
+                                        new Date(selectedUser.createdAt).toLocaleDateString(
+                                            "en-GB",
+                                            { day: "numeric", month: "short", year: "numeric" }
+                                        ) || "20th Jan 2025",
                                     iconDivClassName:
                                         "bg-orange-400/20 group-hover:bg-orange-400/30",
                                     iconClassName: "text-orange-600",
@@ -155,7 +161,9 @@ function UserDetails({
                                     ? {
                                         icon: Home,
                                         label: "Batch",
-                                        value: (selectedUser as IStudent).batch.name,
+                                        value:
+                                            (selectedUser as IStudent).batch?.name ||
+                                            "Not assigned",
                                         iconDivClassName:
                                             "bg-purple-400/20 group-hover:bg-purple-400/30",
                                         iconClassName: "text-purple-600",
@@ -223,8 +231,8 @@ function UserDetails({
                                     >
                                         {(selectedUser as IUser).batches.map((batch, index) => {
                                             return (
-                                                <DropdownMenuItem key={index} textValue={batch.name}>
-                                                    {batch.name}
+                                                <DropdownMenuItem key={index} textValue={batch?.name}>
+                                                    {batch?.name}
                                                 </DropdownMenuItem>
                                             );
                                         })}

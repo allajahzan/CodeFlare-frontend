@@ -122,13 +122,13 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                                             transition={{ delay: 0.2 + index * 0.1 }}
                                             className={`
                                             relative flex flex-col  
-                                            border rounded-lg p-2 hover:bg-muted dark:hover:bg-sidebar
+                                            border rounded-lg p-2
                                             ${isCurrentMonth
-                                                    ? "bg-background"
-                                                    : "bg-muted dark:bg-sidebar"
+                                                    ? "bg-background hover:bg-muted dark:hover:bg-sidebar"
+                                                    : "bg-muted"
                                                 } 
                                             ${isToday(day)
-                                                    ? "bg-blue-600/10 hover:bg-blue-600/20"
+                                                    ? "border-foreground"
                                                     : ""
                                                 } 
                                             ${isSameDay(day, hoveredDate)
@@ -138,7 +138,7 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                                             ${!isCurrentMonth
                                                     ? "text-muted-foreground"
                                                     : "text-foreground"
-                                                }
+                                                }     
                                         `}
                                             onClick={() => i !== 0 && onDateClick(day)}
                                             onMouseEnter={() => setHoveredDate(day)}
@@ -146,7 +146,7 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                                         >
                                             <time
                                                 dateTime={format(day, "yyyy-MM-dd")}
-                                                className={`mb-1 text-center text-base 
+                                                className={`mb-1 text-center text-base font-semibold
                                                 ${attendance?.status ===
                                                         "absent"
                                                         ? "text-red-600"
@@ -171,16 +171,18 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                                                 // <Badge className="text-xs capitalize">
                                                 //     {attendance.status}
                                                 // </Badge>
-                                                <div className={`absolute z-10 inset-0 rounded-lg ${attendance?.status === "present"
+                                                <div
+                                                    className={`absolute z-10 inset-0 rounded-lg ${attendance?.status === "present"
                                                             ? isToday(day)
                                                                 ? ""
-                                                                : "bg-green-600/10 "
+                                                                : "bg-green-600/20"
                                                             : attendance?.status === "absent"
-                                                                ? "bg-red-600/10 "
+                                                                ? "bg-red-600/20"
                                                                 : ""
-                                                        }`}>
+                                                        }`}
+                                                >
                                                     <p
-                                                        className={`absolute -translate-x-1/2 top-1/2 left-1/2 font-medium`}
+                                                        className={`absolute -translate-x-1/2 top-[55%] left-1/2 font-medium`}
                                                     >
                                                         {attendance.status === "present" ? (
                                                             <CheckCircle2 className="w-5 h-5 text-green-600" />
@@ -192,7 +194,7 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                                                     </p>
                                                 </div>
                                             )}
-                                            <p className="text-center text-sm opacity-50 text-foreground font-medium tracking-wide">
+                                            <p className="text-center text-sm opacity-50 text-foreground font-medium tracking-wide truncate">
                                                 {i == 0 ? "Holiday" : ""}
                                             </p>
                                         </motion.div>
