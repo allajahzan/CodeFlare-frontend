@@ -125,7 +125,7 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                                             border rounded-lg p-2
                                             ${isCurrentMonth
                                                     ? "bg-background hover:bg-muted dark:hover:bg-sidebar"
-                                                    : "bg-muted "
+                                                    : "bg-sidebar-backgroundDark"
                                                 } 
                                             ${isToday(day)
                                                     ? "border-foreground"

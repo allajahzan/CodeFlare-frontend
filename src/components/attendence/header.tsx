@@ -68,12 +68,12 @@ export function CalendarHeader({
                         <IconButton
                             Icon={ChevronLeft}
                             action={onPreviousMonth}
-                            className="bg-background dark:border-customBorder-dark dark:hover:bg-muted shadow-none dark:shadow-none"
+                            className="bg-background dark:hover:border-customBorder-dark dark:hover:bg-muted shadow-none dark:shadow-none"
                         />
                         <IconButton
                             Icon={ChevronRight}
                             action={onNextMonth}
-                            className="bg-background dark:border-customBorder-dark dark:hover:bg-muted shadow-none dark:shadow-none"
+                            className="bg-background dark:hover:border-customBorder-dark dark:hover:bg-muted shadow-none dark:shadow-none"
                         />
                     </Fragment>
                 )}
@@ -94,7 +94,7 @@ export function CalendarHeader({
                         >
                             <SelectTrigger
                                 title="Date"
-                                className="w-full sm:w-[252px] text-foreground font-medium p-5 pl-9 cursor-pointer dark:border-customBorder-dark bg-background"
+                                className="w-full sm:w-[252px] text-foreground font-medium p-5 pl-9 cursor-pointer dark:hover:border-customBorder-dark bg-background"
                             >
                                 <SelectValue placeholder="Select date" className="truncate">
                                     {selectedDate
@@ -115,7 +115,7 @@ export function CalendarHeader({
                                     isDatePickerOpen={true}
                                     selectedDate={selectedDate}
                                     setSelectedDate={setSelectedDate}
-                                    className="bg-background rounded-lg shadow-lg border dark:border-customBorder-dark"
+                                    className="bg-background rounded-lg shadow-lg border"
                                 />
                             </SelectContent>
                         </Select>
@@ -127,7 +127,7 @@ export function CalendarHeader({
                     <Select>
                         <SelectTrigger
                             title="Filter"
-                            className="w-[41.6px] h-[41.6px] bg-background dark:border-customBorder-dark hover:bg-muted shadow-none"
+                            className="w-[41.6px] h-[41.6px] bg-background dark:hover:border-customBorder-dark hover:bg-muted shadow-none"
                         >
                             <Filter className="w-4 h-4 text-foreground" />
                         </SelectTrigger>
@@ -146,7 +146,7 @@ export function CalendarHeader({
                     >
                         <SelectTrigger
                             title="View"
-                            className="w-[41.6px] h-[41.6px] bg-background dark:border-customBorder-dark hover:bg-muted shadow-none"
+                            className="w-[41.6px] h-[41.6px] bg-background dark:hover:border-customBorder-dark hover:bg-muted shadow-none"
                         >
                             <ScanEye className="w-4 h-4 text-foreground" />
                         </SelectTrigger>
