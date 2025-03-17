@@ -95,7 +95,7 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
     //   }
     // };
     return (
-        <div className="h-full flex flex-col flex-1 p-5 overflow-hidden">
+        <div className="h-full flex flex-col flex-1 p-5 overflow-auto no-scrollbar">
             {/* Week day headers */}
             <div className="grid grid-cols-7 gap-px mb-2 text-center text-[14.5px] font-semibold text-foreground">
                 {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
@@ -125,14 +125,14 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                                             border rounded-lg p-2
                                             ${isCurrentMonth
                                                     ? "bg-background hover:bg-muted dark:hover:bg-sidebar"
-                                                    : "bg-muted"
+                                                    : "bg-muted "
                                                 } 
                                             ${isToday(day)
                                                     ? "border-foreground"
                                                     : ""
                                                 } 
                                             ${isSameDay(day, hoveredDate)
-                                                    ? "bg-muted"
+                                                    ? ""
                                                     : ""
                                                 }
                                             ${!isCurrentMonth

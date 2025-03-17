@@ -5,7 +5,6 @@ import Calendar, { IEvent } from "./calender";
 import InfoModal from "./info-modal";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
-import FilterAttendence from "./filter";
 import Table from "./table";
 
 // Sample attendance data
@@ -47,7 +46,7 @@ function AttendenceList() {
 
     // View state
     const [view, setView] = useState<"table-view" | "calender-view">(
-        role === 'student' ? "calender-view" : "table-view"
+        role === "student" ? "calender-view" : "table-view"
     );
 
     const handlePreviousMonth = () => {
@@ -72,31 +71,26 @@ function AttendenceList() {
 
     return (
         <div className="p-5 pt-0 overflow-hidden">
-            <main className="h-[calc(100vh-108px)] bg-background dark:bg-sidebar flex flex-col p-0 rounded-2xl border overflow-hidden">
+            <main className="relative h-[calc(100vh-108px)] bg-background dark:bg-sidebar flex flex-col p-0 rounded-2xl border overflow-hidden">
                 {/* Calender */}
                 <CalendarHeader
                     currentDate={currentDate}
                     onPreviousMonth={handlePreviousMonth}
                     onNextMonth={handleNextMonth}
+                    view={view}
+                    setView={setView}
                 />
-
-                {/* Filter and sort students */}
-                {role === "coordinator" && (
-                    <div className="w-full ">
-                        <FilterAttendence view={view} setView={setView} />
-                    </div>
-                )}
 
                 {/* Make Calendar Take Remaining Space */}
                 {view === "calender-view" && (
-                        <div className="flex-1 overflow-hidden">
-                            <Calendar
-                                currentDate={currentDate}
-                                onDateClick={handleDateClick}
-                                attendanceData={attendanceData}
-                            />
-                        </div>
-                    )}
+                    <div className="flex-1 overflow-hidden">
+                        <Calendar
+                            currentDate={currentDate}
+                            onDateClick={handleDateClick}
+                            attendanceData={attendanceData}
+                        />
+                    </div>
+                )}
 
                 {/* Table */}
                 {view === "table-view" && <Table />}

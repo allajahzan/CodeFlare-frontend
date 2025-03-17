@@ -177,12 +177,14 @@ label {
 
         /* Sidebar */
         --sidebar: 240, 5%, 6%;
+        --sidebar-background-dark: 0, 0%, 9%;
         --sidebar-background: 0 0% 4%;
         --sidebar-foreground: 0 0% 98%;
         --sidebar-border: 240, 6%, 10%;
 
         /* Custom border */
         --custom-border: 240, 6%, 10%;
+        --custom-border-dark: 240, 6%, 26%;
 
         /* Card */
         --card: 240, 5%, 6%;

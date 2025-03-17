@@ -52,6 +52,7 @@ export default {
 					DEFAULT: "hsl(var(--sidebar))",
 					foreground: "hsl(var(--sidebar-foreground))",
 					background: "hsl(var(--sidebar-background))",
+					backgroundDark: "hsl(var(--sidebar-background-dark))",
 					border: "hsl(var(--sidebar-border))",
 				},
 
@@ -64,6 +65,7 @@ export default {
 				// Custom border
 				customBorder: {
 					DEFAULT: "hsl(var(--custom-border))",
+					dark: "hsl(var(--custom-border-dark))",
 				},
 
 				popover: {
