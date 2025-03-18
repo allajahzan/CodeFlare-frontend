@@ -71,7 +71,7 @@ function AttendenceList() {
 
     return (
         <div className="p-5 pt-0 overflow-hidden">
-            <main className="relative h-[calc(100vh-108px)] bg-background dark:bg-sidebar flex flex-col p-0 rounded-2xl border overflow-hidden">
+            <main className="relative h-[calc(100vh-108px)] bg-background dark:bg-sidebar-background flex flex-col p-0 rounded-2xl border overflow-hidden">
                 {/* Calender */}
                 <CalendarHeader
                     currentDate={currentDate}

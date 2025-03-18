@@ -106,7 +106,7 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
             </div>
 
             {/* Calendar grid (Takes full height) */}
-            <div className="flex-1 grid grid-rows-6 grid-cols-7 gap-1">
+            <div className="flex-1 grid grid-rows-6 grid-cols-7 gap-2">
                 {weeks.map((week, index) =>
                     week.map((day: any, i: number) => {
                         const attendance = getAttendanceStatus(day);
@@ -124,11 +124,11 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                                             relative flex flex-col  
                                             border rounded-lg p-2
                                             ${isCurrentMonth
-                                                    ? "bg-background hover:bg-muted dark:hover:bg-sidebar"
+                                                    ? "bg-background hover:shadow-sm dark:hover:shadow-inner dark:hover:shadow-customBorder hover:bg-muted dark:hover:bg-sidebar"
                                                     : "bg-sidebar-backgroundDark"
                                                 } 
                                             ${isToday(day)
-                                                    ? "border-foreground"
+                                                    ? "shadow-lg border-foreground"
                                                     : ""
                                                 } 
                                             ${isSameDay(day, hoveredDate)
@@ -146,7 +146,7 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                                         >
                                             <time
                                                 dateTime={format(day, "yyyy-MM-dd")}
-                                                className={`mb-1 text-center text-base font-semibold
+                                                className={`mb-1 text-center text-sm sm:text-base font-semibold
                                                 ${attendance?.status ===
                                                         "absent"
                                                         ? "text-red-600"
