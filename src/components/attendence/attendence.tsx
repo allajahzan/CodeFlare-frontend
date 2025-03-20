@@ -70,20 +70,22 @@ function AttendenceList() {
     }, [selectedDate]);
 
     return (
-        <div className="p-5 pt-0 overflow-hidden">
-            <main className="relative h-[calc(100vh-108px)] bg-background dark:bg-sidebar-background flex flex-col p-0 rounded-2xl border overflow-hidden">
+        <div className="p-5 pt-0 overflow-">
+            <main className="relative h-[calc(100vh-108px)] bg-background dark:bg-background flex flex-col p-0 gap-5">
                 {/* Calender */}
-                <CalendarHeader
-                    currentDate={currentDate}
-                    onPreviousMonth={handlePreviousMonth}
-                    onNextMonth={handleNextMonth}
-                    view={view}
-                    setView={setView}
-                />
+                {view === "calender-view" && (
+                    <CalendarHeader
+                        currentDate={currentDate}
+                        onPreviousMonth={handlePreviousMonth}
+                        onNextMonth={handleNextMonth}
+                        view={view}
+                        setView={setView}
+                    />
+                )}
 
                 {/* Make Calendar Take Remaining Space */}
                 {view === "calender-view" && (
-                    <div className="flex-1 overflow-hidden">
+                    <div className="flex-1 overflow-">
                         <Calendar
                             currentDate={currentDate}
                             onDateClick={handleDateClick}
@@ -93,7 +95,15 @@ function AttendenceList() {
                 )}
 
                 {/* Table */}
-                {view === "table-view" && <Table />}
+                {view === "table-view" && (
+                    <Table
+                        currentDate={currentDate}
+                        onPreviousMonth={handlePreviousMonth}
+                        onNextMonth={handleNextMonth}
+                        view={view}
+                        setView={setView}
+                    />
+                )}
             </main>
 
             {/* Info modal */}

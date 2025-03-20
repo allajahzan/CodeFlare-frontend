@@ -95,7 +95,7 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
     //   }
     // };
     return (
-        <div className="h-full flex flex-col flex-1 p-5 overflow-auto no-scrollbar">
+        <div className="h-full flex flex-col flex-1 p-5 rounded-2xl border shadow-sm overflow-auto no-scrollbar">
             {/* Week day headers */}
             <div className="grid grid-cols-7 gap-px mb-2 text-center text-[14.5px] font-semibold text-foreground">
                 {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
@@ -128,7 +128,7 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                                                     : "bg-sidebar-backgroundDark"
                                                 } 
                                             ${isToday(day)
-                                                    ? "shadow-lg border-foreground"
+                                                    ? "shadow-lg border-zinc-300"
                                                     : ""
                                                 } 
                                             ${isSameDay(day, hoveredDate)
@@ -144,6 +144,7 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                                             onMouseEnter={() => setHoveredDate(day)}
                                             onMouseLeave={() => setHoveredDate(null)}
                                         >
+                                            {/* Date */}
                                             <time
                                                 dateTime={format(day, "yyyy-MM-dd")}
                                                 className={`mb-1 text-center text-sm sm:text-base font-semibold
@@ -167,6 +168,7 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                                                 {format(day, "d")}
                                             </time>
 
+                                            {/* Attendence status */}
                                             {attendance && (
                                                 // <Badge className="text-xs capitalize">
                                                 //     {attendance.status}
@@ -194,11 +196,14 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                                                     </p>
                                                 </div>
                                             )}
+
+                                            {/* For sundays */}
                                             <p className="text-center text-sm opacity-50 text-foreground font-medium tracking-wide truncate">
                                                 {i == 0 ? "Holiday" : ""}
                                             </p>
                                         </motion.div>
                                     </TooltipTrigger>
+                                    {/* Tooltip content */}
                                     {attendance && (
                                         <TooltipContent className="bg-background text-foreground dark:bg-sidebar border borer-2">
                                             <p className="capitalize">{attendance.status}</p>
