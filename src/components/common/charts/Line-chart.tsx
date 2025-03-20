@@ -15,10 +15,11 @@ interface PropsType {
     data: any[];
     text: string;
     className: string;
+    pieChart?: boolean;
 }
 
 // Interface for LineCharts
-const LineCharts = ({ data, text, className }: PropsType) => {
+const LineCharts = ({ data, text, className, pieChart }: PropsType) => {
     // Theme context
     const { theme } = useContext(ThemeContext) as IThemeContext;
 
@@ -31,9 +32,9 @@ const LineCharts = ({ data, text, className }: PropsType) => {
                 <div className="p-2 bg-muted rounded-full cursor-pointer">
                     <Download className="w-4 h-4 text-foreground" />
                 </div>
-                <div className="p-2 bg-muted rounded-full cursor-pointer">
+                {pieChart && <div className="p-2 bg-muted rounded-full cursor-pointer">
                     <ChartPie className="w-4 h-4 text-foreground" />
-                </div>
+                </div>}
             </div>
             <div className={cn(className)}>
                 <ResponsiveContainer width="100%" height="100%">

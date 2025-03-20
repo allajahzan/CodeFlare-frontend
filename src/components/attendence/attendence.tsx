@@ -70,8 +70,8 @@ function AttendenceList() {
     }, [selectedDate]);
 
     return (
-        <div className="p-5 pt-0 overflow-">
-            <main className="relative h-[calc(100vh-108px)] bg-background dark:bg-background flex flex-col p-0 gap-5">
+        <div className={`p-5 pt-0 h-full`}>
+            <main className="h-full relative flex flex-col p-0 gap-5">
                 {/* Calender */}
                 {view === "calender-view" && (
                     <CalendarHeader
@@ -85,7 +85,7 @@ function AttendenceList() {
 
                 {/* Make Calendar Take Remaining Space */}
                 {view === "calender-view" && (
-                    <div className="flex-1 overflow-">
+                    <div className="flex-1">
                         <Calendar
                             currentDate={currentDate}
                             onDateClick={handleDateClick}
