@@ -1,4 +1,9 @@
-import { Calendar1, CalendarClockIcon, ShieldQuestion } from "lucide-react";
+import {
+    Calendar1,
+    CalendarClockIcon,
+    Clock,
+    ShieldQuestion,
+} from "lucide-react";
 import {
     Dialog,
     DialogContent,
@@ -8,9 +13,11 @@ import {
 import { IEvent } from "./calender";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { ReactNode } from "react";
 
 // Interface for Props
 interface PropsType {
+    children: ReactNode;
     isModalOpen: boolean;
     setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
     selectedEvent: IEvent;
@@ -25,28 +32,27 @@ function InfoModal({ isModalOpen, setIsModalOpen, selectedEvent }: PropsType) {
                     <div className="p-2 bg-muted rounded-full">
                         <CalendarClockIcon className="w-4 h-4" />
                     </div>
-                    <span>Attendence Info</span>
+                    <span>Attendance Info</span>
                 </DialogTitle>
                 <DialogDescription className="text-muted-foreground font-medium">
-                    Details of the attendence for this day.
+                    Details of the attendance for this day.
                 </DialogDescription>
 
                 {/* Details */}
                 <div className="space-y-2 flex flex-col">
                     {/* Date */}
                     <div className="space-y-2">
-                        <Label
-                            className="text-sm text-foreground font-medium"
-                        >
-                            Date
-                        </Label>
-
+                        <Label className="text-sm text-foreground font-medium">Date</Label>
                         <div className="relative">
                             <Input
                                 placeholder="Date"
                                 readOnly
                                 disabled
-                                value={new Date(selectedEvent?.date).toDateString()}
+                                value={
+                                    selectedEvent?.date
+                                        ? new Date(selectedEvent.date).toDateString()
+                                        : ""
+                                }
                                 className="text-foreground font-medium p-5 pl-9"
                             />
                             <Calendar1 className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
@@ -55,65 +61,63 @@ function InfoModal({ isModalOpen, setIsModalOpen, selectedEvent }: PropsType) {
 
                     {/* Status */}
                     <div className="space-y-2">
-                        <Label
-                            className="text-sm text-foreground font-medium"
-                        >
+                        <Label className="text-sm text-foreground font-medium">
                             Status
                         </Label>
-
                         <div className="relative">
                             <Input
-                                placeholder="Date"
+                                placeholder="Status"
                                 disabled
                                 readOnly
-                                value={selectedEvent?.status[0].toUpperCase() + selectedEvent?.status.slice(1)}
+                                value={
+                                    selectedEvent?.status
+                                        ? selectedEvent.status[0].toUpperCase() +
+                                        selectedEvent.status.slice(1)
+                                        : ""
+                                }
                                 className="text-foreground font-medium p-5 pl-9"
                             />
                             <ShieldQuestion className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
                     </div>
 
-                     {/* Start */}
-                     <div className="space-y-2">
-                        <Label
-                            className="text-sm text-foreground font-medium"
-                        >
-                            Start
-                        </Label>
-
+                    {/* Start Time */}
+                    <div className="space-y-2">
+                        <Label className="text-sm text-foreground font-medium">Start</Label>
                         <div className="relative">
                             <Input
-                                placeholder="Date"
+                                placeholder="Start Time"
                                 disabled
                                 readOnly
-                                value={new Date(selectedEvent?.start).toLocaleTimeString()}
+                                value={
+                                    selectedEvent?.start
+                                        ? new Date(selectedEvent.start).toLocaleTimeString()
+                                        : ""
+                                }
                                 className="text-foreground font-medium p-5 pl-9"
                             />
-                            <ShieldQuestion className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                            <Clock className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
                     </div>
 
-                      {/* End */}
-                      <div className="space-y-2">
-                        <Label
-                            className="text-sm text-foreground font-medium"
-                        >
-                            End
-                        </Label>
-
+                    {/* End Time - Fixed Here */}
+                    <div className="space-y-2">
+                        <Label className="text-sm text-foreground font-medium">End</Label>
                         <div className="relative">
                             <Input
-                                placeholder="Date"
+                                placeholder="End Time"
                                 disabled
                                 readOnly
-                                value={new Date(selectedEvent?.start).toLocaleTimeString()}
+                                value={
+                                    selectedEvent?.end
+                                        ? new Date(selectedEvent.end).toLocaleTimeString()
+                                        : ""
+                                }
                                 className="text-foreground font-medium p-5 pl-9"
                             />
-                            <ShieldQuestion className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                            <Clock className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
                     </div>
-
-                    {/*  */}
                 </div>
             </DialogContent>
         </Dialog>

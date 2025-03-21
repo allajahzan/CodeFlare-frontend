@@ -44,21 +44,21 @@ interface Propstype {
 function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
     const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
 
-    // Get the first day of the month
+    // First day of the month
     const monthStart = startOfMonth(currentDate);
 
-    // Get the last day of the month
+    // Last day of the month
     const monthEnd = endOfMonth(currentDate);
 
-    // Get the first day of the first week of the month
-    // This ensures we include days from the previous month to fill the first week
+    // First day of the first week of the month
+    // Days from the previous month to fill the first week
     const calendarStart = startOfWeek(monthStart);
 
-    // Get the last day of the last week of the month
-    // This ensures we include days from the next month to fill the last week
+    // Last day of the last week of the month
+    // Days from the next month to fill the last week
     const calendarEnd = endOfWeek(monthEnd);
 
-    // Get all days in the calendar view (including days from prev/next months)
+    // All days in the calendar view (including days from prev/next months)
     const calendarDays = eachDayOfInterval({
         start: calendarStart,
         end: calendarEnd,
@@ -82,141 +82,132 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
         return attendanceData[dateStr];
     };
 
-    // const getStatusColor = (status: string) => {
-    //   switch (status) {
-    //     case "present":
-    //       return "success";
-    //     case "absent":
-    //       return "destructive";
-    //     case "late":
-    //       return "warning";
-    //     default:
-    //       return "default";
-    //   }
-    // };
     return (
-        <div className="h-full flex flex-col flex-1 p-5 rounded-2xl border shadow-sm overflow-auto no-scrollbar">
-            {/* Week day headers */}
-            <div className="grid grid-cols-7 gap-px mb-2 text-center text-[14.5px] font-semibold text-foreground">
-                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-                    <div key={day} className="pb-2">
-                        {day}
-                    </div>
-                ))}
-            </div>
+        <div className="h-[calc(100vh-195px)] bg-background dark:bg-sidebar-background">
+            <div className="h-full flex flex-col flex-1 p-5 rounded-2xl border shadow-sm overflow-auto no-scrollbar">
+                {/* Week day headers */}
+                <div className="grid grid-cols-7 gap-px mb-2 text-center text-[14.5px] font-semibold text-foreground">
+                    {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+                        <div key={day} className="pb-2">
+                            {day}
+                        </div>
+                    ))}
+                </div>
 
-            {/* Calendar grid (Takes full height) */}
-            <div className="flex-1 grid grid-rows-6 grid-cols-7 gap-2">
-                {weeks.map((week, index) =>
-                    week.map((day: any, i: number) => {
-                        const attendance = getAttendanceStatus(day);
-                        const isCurrentMonth = isSameMonth(day, currentDate);
+                {/* Calendar grid (Takes full height) */}
+                <div className="flex-1 grid grid-rows-6 grid-cols-7 gap-2">
+                    {weeks.map((week, index) =>
+                        week.map((day: any, i: number) => {
+                            const attendance = getAttendanceStatus(day);
+                            const isCurrentMonth = isSameMonth(day, currentDate);
 
-                        return (
-                            <TooltipProvider key={day.toString()}>
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <motion.div
-                                            initial={{ opacity: 0, y: 20 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            transition={{ delay: 0.2 + index * 0.1 }}
-                                            className={`
-                                            relative flex flex-col  
-                                            border rounded-lg p-2
-                                            ${isCurrentMonth
-                                                    ? "bg-background hover:shadow-sm dark:hover:shadow-inner dark:hover:shadow-customBorder hover:bg-muted dark:hover:bg-sidebar"
-                                                    : "bg-sidebar-backgroundDark"
-                                                } 
-                                            ${isToday(day)
-                                                    ? "shadow-lg border-zinc-300"
-                                                    : ""
-                                                } 
-                                            ${isSameDay(day, hoveredDate)
-                                                    ? ""
-                                                    : ""
-                                                }
-                                            ${!isCurrentMonth
-                                                    ? "text-muted-foreground"
-                                                    : "text-foreground"
-                                                }     
-                                        `}
-                                            onClick={() => i !== 0 && onDateClick(day)}
-                                            onMouseEnter={() => setHoveredDate(day)}
-                                            onMouseLeave={() => setHoveredDate(null)}
-                                        >
-                                            {/* Date */}
-                                            <time
-                                                dateTime={format(day, "yyyy-MM-dd")}
-                                                className={`mb-1 text-center text-sm sm:text-base font-semibold
-                                                ${attendance?.status ===
-                                                        "absent"
-                                                        ? "text-red-600"
-                                                        : attendance?.status ===
-                                                            "present"
-                                                            ? "text-green-600"
-                                                            : isToday(day)
-                                                                ? "text-yellow-600"
-                                                                : ""
+                            return (
+                                <TooltipProvider key={day.toString()}>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 20 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ delay: 0.2 + index * 0.1 }}
+                                                className={`
+                                        relative flex flex-col  
+                                        border border-border dark:border-customBorder rounded-lg p-2
+                                        ${isCurrentMonth
+                                                        ? `bg-background dark:bg-sidebar hover:bg-muted dark:hover:bg-sidebar-background`
+                                                        : "bg-muted dark:bg-sidebar-backgroundDark"
                                                     } 
-                                                    }
-                                                ${isToday(day)
-                                                        ? "font-bold"
+                                        ${isToday(day)
+                                                        ? "bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border border-yellow-200 dark:border-yellow-800 shadow-sm"
                                                         : ""
-                                                    }
-                                            `}
+                                                    } 
+                                        ${isSameDay(day, hoveredDate) ? "" : ""}
+                                        ${!isCurrentMonth
+                                                        ? "text-zinc-300 dark:text-zinc-800"
+                                                        : "text-foreground"
+                                                    }   
+                                                 ${attendance?.status ===
+                                                        "present"
+                                                        ? isToday(day)
+                                                            ? ""
+                                                            : "bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border border-green-200 dark:border-green-800"
+                                                        : attendance?.status ===
+                                                            "absent"
+                                                            ? "bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border border-red-200 dark:border-red-800"
+                                                            : ""
+                                                    }  
+                                    `}
+                                                onClick={() =>
+                                                    i !== 0 && onDateClick(day)
+                                                }
+                                                onMouseEnter={() => setHoveredDate(day)}
+                                                onMouseLeave={() => setHoveredDate(null)}
                                             >
-                                                {format(day, "d")}
-                                            </time>
-
-                                            {/* Attendence status */}
-                                            {attendance && (
-                                                // <Badge className="text-xs capitalize">
-                                                //     {attendance.status}
-                                                // </Badge>
-                                                <div
-                                                    className={`absolute z-10 inset-0 rounded-lg ${attendance?.status === "present"
-                                                            ? isToday(day)
-                                                                ? ""
-                                                                : "bg-green-600/20"
-                                                            : attendance?.status === "absent"
-                                                                ? "bg-red-600/20"
-                                                                : ""
-                                                        }`}
+                                                {/* Date */}
+                                                <time
+                                                    dateTime={format(day, "yyyy-MM-dd")}
+                                                    className={`mb-1 text-center text-sm sm:text-base font-bold
+                                            ${attendance?.status === "absent"
+                                                            ? "text-red-600"
+                                                            : attendance?.status ===
+                                                                "present"
+                                                                ? "text-green-600"
+                                                                : isToday(day)
+                                                                    ? "text-yellow-600"
+                                                                    : ""
+                                                        } 
+                                                }
+                                            ${isToday(day) ? "font-bold" : ""}
+                                        `}
                                                 >
-                                                    <p
-                                                        className={`absolute -translate-x-1/2 top-[55%] left-1/2 font-medium`}
-                                                    >
-                                                        {attendance.status === "present" ? (
-                                                            <CheckCircle2 className="w-5 h-5 text-green-600" />
-                                                        ) : attendance.status === "absent" ? (
-                                                            <XCircle className="w-5 h-5 text-red-600" />
-                                                        ) : (
-                                                            <CircleDashed className="w-5 h-5 text-yellow-600" />
-                                                        )}
-                                                    </p>
-                                                </div>
-                                            )}
+                                                    {format(day, "d")}
+                                                </time>
 
-                                            {/* For sundays */}
-                                            <p className="text-center text-sm opacity-50 text-foreground font-medium tracking-wide truncate">
-                                                {i == 0 ? "Holiday" : ""}
-                                            </p>
-                                        </motion.div>
-                                    </TooltipTrigger>
-                                    {/* Tooltip content */}
-                                    {attendance && (
-                                        <TooltipContent className="bg-background text-foreground dark:bg-sidebar border borer-2">
-                                            <p className="capitalize">{attendance.status}</p>
-                                            <p className="text-xs text-muted-foreground">
-                                                {attendance.notes}
-                                            </p>
-                                        </TooltipContent>
-                                    )}
-                                </Tooltip>
-                            </TooltipProvider>
-                        );
-                    })
-                )}
+                                                {/* Attendence status */}
+                                                {attendance && (
+                                                    // <Badge className="text-xs capitalize">
+                                                    //     {attendance.status}
+                                                    // </Badge>
+                                                    <div
+                                                        className={`absolute z-10 inset-0 rounded-lg `}
+                                                    >
+                                                        <p
+                                                            className={`absolute -translate-x-1/2 top-[55%] left-1/2 font-medium`}
+                                                        >
+                                                            {attendance.status === "present" ? (
+                                                                <CheckCircle2 className="w-5 h-5 text-green-600" />
+                                                            ) : attendance.status ===
+                                                                "absent" ? (
+                                                                <XCircle className="w-5 h-5 text-red-600" />
+                                                            ) : (
+                                                                <CircleDashed className="w-5 h-5 text-yellow-600" />
+                                                            )}
+                                                        </p>
+                                                    </div>
+                                                )}
+
+                                                {/* For sundays */}
+                                                <p className="text-center text-muted-foreground font-medium tracking-wide truncate">
+                                                    {i == 0 ? "Holiday" : ""}
+                                                </p>
+                                            </motion.div>
+                                        </TooltipTrigger>
+                                        {/* Tooltip content */}
+                                        {attendance && (
+                                            <TooltipContent className="bg-background text-foreground dark:bg-sidebar border borer-2">
+                                                <p className="capitalize">
+                                                    {attendance.status}
+                                                </p>
+                                                <p className="text-xs text-muted-foreground">
+                                                    {attendance.notes}
+                                                </p>
+                                            </TooltipContent>
+                                        )}
+                                    </Tooltip>
+                                </TooltipProvider>
+                            );
+                        })
+                    )}
+                </div>
             </div>
         </div>
     );

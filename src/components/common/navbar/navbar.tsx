@@ -71,7 +71,7 @@ const Navbar = () => {
     return (
         <div
             className={cn(
-                "sticky top-0 left-0 w-full z-40 flex justify-between items-center p-5 bg-background",
+                "sticky top-0 left-0 w-full z-40 flex justify-between items-center p-5",
                 isSmall && ""
             )}
         >

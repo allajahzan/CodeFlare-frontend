@@ -18,8 +18,8 @@ import { SelectValue } from "@radix-ui/react-select";
 // Interface for Props
 interface Propstype {
     currentDate: Date;
-    onPreviousMonth: () => void;
-    onNextMonth: () => void;
+    onPreviousMonth?: () => void;
+    onNextMonth?: () => void;
     view: "table-view" | "calender-view";
     setView: React.Dispatch<React.SetStateAction<"table-view" | "calender-view">>;
 }
@@ -41,8 +41,7 @@ export function CalendarHeader({
 
     return (
         <div
-            className={`bg-transparent sticky top-0 z-30 ${view === "calender-view" && "rounded-b-xl"
-                }`}
+            className={`${view === 'calender-view' && 'bg-background dark:bg-sidebar-background'} sticky top-0 z-30 rounded-b-xl`}
         >
             <div
                 className={`flex items-center justify-between ${view === "calender-view"
@@ -158,6 +157,7 @@ export function CalendarHeader({
                             onValueChange={(value: "table-view" | "calender-view") =>
                                 setView(value)
                             }
+                            value={view}
                         >
                             <SelectTrigger
                                 title="View"

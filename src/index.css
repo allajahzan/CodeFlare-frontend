@@ -116,3 +116,82 @@
     @apply bg-background text-foreground;
     }
 }
+
+
+html {
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+    will-change: auto;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+body {
+    font-family: "Urbanist", sans-serif;
+    font-optical-sizing: auto;
+    outline: none;
+    color: #18181b;
+    will-change: auto !important;
+    backface-visibility: hidden !important;
+}
+
+p,
+label,
+input,
+textarea,
+select,
+option {
+    font-size: 14.5px;
+}
+
+h1 {
+    font-size: 16.5px;
+}
+
+::-webkit-scrollbar {
+    width: 16px;
+    height: 16px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+    margin: 2px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #eeeeee;
+    border-radius: 100px;
+    border: 6px solid transparent;
+    background-clip: padding-box;
+    cursor: pointer;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: #18181b;
+    border-radius: 100px;
+    border: 6px solid transparent;
+    background-clip: padding-box;
+    cursor: pointer;
+}
+
+div,
+img,
+h1,
+p,
+input,
+button,
+h2,
+label {
+    outline: none;
+    -webkit-user-drag: none;
+    user-select: none;
+}

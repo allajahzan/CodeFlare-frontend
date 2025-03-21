@@ -9,21 +9,21 @@ import Table from "./table";
 
 // Sample attendance data
 const attendanceData: Record<string, any> = {
-    "2025-03-13": {
+    "2025-03-19": {
         date: "2025-03-13",
         status: "absent",
         notes: "Sick leave",
         start: "2025-03-14T09:00",
         end: "05:30 pm",
     },
-    "2025-03-14": {
+    "2025-03-20": {
         date: "2025-03-14",
         status: "present",
         notes: "On time",
         start: "09:000 am",
         end: "05:30 pm",
     },
-    "2025-03-15": {
+    "2025-03-21": {
         date: "2025-03-15",
         status: "pending",
         notes: "Joined 30 minutes late",
@@ -49,25 +49,36 @@ function AttendenceList() {
         role === "student" ? "calender-view" : "table-view"
     );
 
+    //  Previous month
     const handlePreviousMonth = () => {
         setCurrentDate((prev) => subMonths(prev, 1));
     };
 
+    // Next month
     const handleNextMonth = () => {
         setCurrentDate((prev) => addMonths(prev, 1));
     };
 
+    // Select a date
     const handleDateClick = (date: Date) => {
         setSelectedDate(date);
         setIsModalOpen(true);
     };
 
+    // Click on date
     useEffect(() => {
         if (selectedDate) {
             const dateStr = format(selectedDate as Date, "yyyy-MM-dd");
             setSelectedEvent(attendanceData[dateStr]);
         }
     }, [selectedDate]);
+
+    // Clear event when modal closes
+    useEffect(() => {
+        if (!isModalOpen) {
+            setSelectedEvent(null);
+        }
+    }, [isModalOpen]);
 
     return (
         <div className={`p-5 pt-0 h-full`}>
@@ -112,6 +123,7 @@ function AttendenceList() {
                     isModalOpen={isModalOpen}
                     setIsModalOpen={setIsModalOpen}
                     selectedEvent={selectedEvent}
+                    children={undefined}
                 />
             )}
         </div>

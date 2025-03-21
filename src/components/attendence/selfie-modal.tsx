@@ -65,7 +65,7 @@ function SelfieModal({ children }: Propstype) {
                         <AccordionContent>
                             <div className="relative">
                                 <div className="w-full h-[250px] rounded-xl p-2 border shadow-sm overflow-hidden">
-                                    <Badge className="p-1 px-2 absolute top-5 left-5 text-xs text-foreground font-semibold bg-background hover:bg-muted shadow-md rounded-full overflow-hidden cursor-pointer">
+                                    <Badge className="p-1 px-2 absolute bottom-5 left-5 text-xs text-foreground font-semibold bg-background hover:bg-muted shadow-md rounded-full overflow-hidden cursor-pointer">
                                         <MapPin className="w-3 h-3 text-foreground" />
                                         &nbsp;Calicut, Kerala
                                     </Badge>
@@ -74,7 +74,7 @@ function SelfieModal({ children }: Propstype) {
                                         className="h-full w-full object-cover rounded-lg"
                                         alt=""
                                     />
-                                    <div className="absolute bottom-0 right-0 p-5">
+                                    <div className="absolute top-0 right-0 p-5">
                                         <Button className="bg-background hover:bg-muted dark:hover:bg-muted shadow-md text-foreground">
                                             Verify
                                         </Button>
@@ -102,7 +102,7 @@ function SelfieModal({ children }: Propstype) {
                         <AccordionContent>
                             <div className="relative">
                                 <div className="w-full h-[250px] rounded-xl p-2 border shadow-sm overflow-hidden">
-                                    <Badge className="p-1 px-2 absolute top-5 left-5 text-xs text-foreground font-semibold bg-background hover:bg-muted shadow-md rounded-full overflow-hidden cursor-pointer">
+                                    <Badge className="p-1 px-2 absolute bottom-5 left-5 text-xs text-foreground font-semibold bg-background hover:bg-muted shadow-md rounded-full overflow-hidden cursor-pointer">
                                         <MapPin className="w-3 h-3 text-foreground" />
                                         &nbsp;Calicut, Kerala
                                     </Badge>
@@ -111,7 +111,7 @@ function SelfieModal({ children }: Propstype) {
                                         className="h-full w-full object-cover rounded-lg"
                                         alt=""
                                     />
-                                    <div className="absolute bottom-0 right-0 p-5">
+                                    <div className="absolute top-0 right-0 p-5">
                                         <Button className="bg-background hover:bg-muted dark:hover:bg-muted shadow-md text-foreground">
                                             Verify
                                         </Button>
@@ -139,7 +139,7 @@ function SelfieModal({ children }: Propstype) {
                         <AccordionContent>
                             <div className="relative">
                                 <div className="w-full h-[250px] rounded-xl p-2 border shadow-sm overflow-hidden">
-                                    <Badge className="p-1 px-2 absolute top-5 left-5 text-xs text-foreground font-semibold bg-background hover:bg-muted shadow-md rounded-full overflow-hidden cursor-pointer">
+                                    <Badge className="p-1 px-2 absolute bottom-5 left-5 text-xs text-foreground font-semibold bg-background hover:bg-muted shadow-md rounded-full overflow-hidden cursor-pointer">
                                         <MapPin className="w-3 h-3 text-foreground" />
                                         &nbsp;Calicut, Kerala
                                     </Badge>
@@ -148,7 +148,7 @@ function SelfieModal({ children }: Propstype) {
                                         className="h-full w-full object-cover rounded-lg"
                                         alt=""
                                     />
-                                    <div className="absolute bottom-0 right-0 p-5">
+                                    <div className="absolute top-0 right-0 p-5">
                                         <Button className="bg-background hover:bg-muted dark:hover:bg-muted shadow-md text-foreground">
                                             Verify
                                         </Button>

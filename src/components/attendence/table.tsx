@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import {
+    Camera,
     Clock,
     Dot,
     FileSpreadsheetIcon,
@@ -111,7 +112,7 @@ function Table({
                                 </div>
 
                                 {/* Status color */}
-                                <div className="flex items-center p-2 rounded-full">
+                                <div className="hidden xflex items-center p-2 rounded-full">
                                     {(() => {
                                         switch (item) {
                                             case "Pending":
@@ -147,7 +148,7 @@ function Table({
                 {/* Scroll container*/}
                 <div className="relative p-5 flex flex-col gap-3 border bg-background dark:bg-sidebar-background rounded-2xl shadow-sm row-span-1">
                     {/* Student info */}
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mb-2">
                         <UserNameCard
                             data={{
                                 name: "Ahsan allaj pk",
@@ -256,14 +257,16 @@ function Table({
                             //         </div>
                             //     </div>
                             // </div>
-                            <InfoCard
-                                Icon={FileSpreadsheetIcon}
-                                label="Description"
-                                text="Reason"
-                                iconClassName="text-orange-600"
-                                iconDivClassName="bg-orange-400/20 group-hover:bg-orange-400/30"
-                                className="w-full shadow-sm dark:border-transparent dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark"
-                            />
+                            <div>
+                                <InfoCard
+                                    Icon={Camera}
+                                    label="Attendence"
+                                    text="Verification Snapshots"
+                                    iconClassName="text-blue-600"
+                                    iconDivClassName="bg-blue-400/20 group-hover:bg-blue-400/30"
+                                    className="w-full shadow-sm dark:border-transparent dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark"
+                                />
+                            </div>
                         }
                     />
 
@@ -281,7 +284,7 @@ function Table({
                             <AccordionTrigger>
                                 <InfoCard
                                     Icon={FileSpreadsheetIcon}
-                                    label="Description"
+                                    label="Absent / Late"
                                     text="Reason"
                                     iconClassName="text-orange-600"
                                     iconDivClassName="bg-orange-400/20 group-hover:bg-orange-400/30"
