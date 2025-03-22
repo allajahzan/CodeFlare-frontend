@@ -2,6 +2,7 @@ import LineCharts from "@/components/common/charts/Line-chart";
 import Attendence from "@/components/student/dashboard/attendence";
 import { EllipsisVertical, Share2 } from "lucide-react";
 
+// Student Dashboard Component
 function Dashboard() {
   return (
     <div className="grid grid-cols-3 gap-5 p-5 pt-0">

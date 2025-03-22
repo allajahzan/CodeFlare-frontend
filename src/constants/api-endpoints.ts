@@ -31,7 +31,10 @@ enum ApiEndpoints {
     // Review APIs - instructor service
     REVIEW = '/instructor/review',
     REVIEW_STATUS = '/instructor/review/status',
-    REVIEW_SCORE = '/instructor/review/score'
+    REVIEW_SCORE = '/instructor/review/score',
+
+    // Attendence APIs - student service
+    CHECK_IN_OUT = "/student/attendence/check-in-out"
 }
 
 export default ApiEndpoints;

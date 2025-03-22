@@ -17,7 +17,7 @@ import { postData } from "@/service/api-service";
 import { handleCustomError } from "@/utils/error";
 import { formSchema, FormType } from "@/validations/admin/batch";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, UsersRound, Loader2 } from "lucide-react";
+import { Plus, UsersRound, Loader2, ScanFace } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
@@ -98,12 +98,12 @@ function AddBatchModal({ setNewBatch }: Propstype) {
                 <DialogHeader>
                     <DialogTitle className="text-foreground flex items-center gap-3">
                         <div className="p-2 bg-muted rounded-full">
-                            <UsersRound className="w-4 h-4" />
+                            <ScanFace className="w-4 h-4" />
                         </div>
                         <span>Add new batch</span>
                     </DialogTitle>
                     <DialogDescription className="text-muted-foreground font-medium">
-                        Fill the information below to add new batch.
+                        Ensure secure check-ins and check-outs with facial recognition.
                     </DialogDescription>
                 </DialogHeader>
 
