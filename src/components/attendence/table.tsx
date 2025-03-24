@@ -401,10 +401,11 @@ function Table({
                         </p>
 
                         {/* Reason */}
+
                         <Accordion type="single" collapsible>
                             <AccordionItem
                                 value="item-1"
-                                className="border-b-0 relative flex flex-col gap-3"
+                                className="border-b-0 relative flex flex-col"
                             >
                                 <AccordionTrigger>
                                     <InfoCard
@@ -416,48 +417,70 @@ function Table({
                                         className="w-full shadow-sm dark:border-transparent dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark"
                                     />
                                 </AccordionTrigger>
-                                <AccordionContent>
-                                    <div className="relative flex flex-col gap-3 p-5 border dark:border-transparent bg-background dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark rounded-lg">
-                                        {/* Time */}
-                                        <div className="space-y-2 relative text-start">
-                                            {/* Label */}
-                                            <Label className="text-sm text-foreground font-medium">
-                                                Time
-                                            </Label>
-
+                                <AccordionContent className="mt-3">
+                                    {selectedAttendence.reason.time && (
+                                        <div className="relative flex flex-col gap-3 p-5 border dark:border-transparent bg-background dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark rounded-lg">
                                             {/* Time */}
-                                            <div className="relative">
-                                                <Input
-                                                    id="time"
-                                                    type="text"
-                                                    placeholder="Time"
-                                                    readOnly
-                                                    required
-                                                    defaultValue={"8:55 AM"}
-                                                    className="text-foreground font-medium p-5 pl-9 border"
-                                                />
-                                                <Clock className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                                            <div className="space-y-2 relative text-start">
+                                                {/* Label */}
+                                                <Label className="text-sm text-foreground font-medium">
+                                                    Time
+                                                </Label>
+
+                                                {/* Time */}
+                                                <div className="relative">
+                                                    <Input
+                                                        id="time"
+                                                        type="text"
+                                                        placeholder="Time"
+                                                        readOnly
+                                                        required
+                                                        defaultValue={convertTo12HourFormat(
+                                                            selectedAttendence.reason.time
+                                                        )}
+                                                        className="text-foreground font-medium p-5 pl-9 border"
+                                                    />
+                                                    <Clock className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                                                </div>
+                                            </div>
+
+                                            {/* Reason */}
+                                            <div className="space-y-2 relative text-start">
+                                                {/* Label */}
+                                                <Label className="text-sm text-foreground font-medium">
+                                                    Reason
+                                                </Label>
+
+                                                {/* Time */}
+                                                <div className="relative">
+                                                    <Textarea
+                                                        placeholder="Reason"
+                                                        readOnly
+                                                        rows={3}
+                                                        defaultValue={selectedAttendence.reason.description}
+                                                        className="text-foreground font-medium border bg-background resize-none"
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
+                                    )}
 
-                                        {/* Reason */}
-                                        <div className="space-y-2 relative text-start">
-                                            {/* Label */}
-                                            <Label className="text-sm text-foreground font-medium">
-                                                Reason
-                                            </Label>
-
-                                            {/* Time */}
-                                            <div className="relative">
-                                                <Textarea
-                                                    placeholder="Reason"
-                                                    readOnly
-                                                    rows={3}
-                                                    className="text-foreground font-medium border bg-background resize-none"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
+                                    {!selectedAttendence.reason.time && (
+                                        <p className="text-start text-sm">
+                                            No reasons for attendence with status{" "}
+                                            <span
+                                                className={cn(
+                                                    selectedAttendence.status === "Pass"
+                                                        ? "text-green-600"
+                                                        : selectedAttendence.status === "Fail"
+                                                            ? "text-red-600"
+                                                            : "text-yellow-600"
+                                                )}
+                                            >
+                                                {selectedAttendence.status.toLowerCase()}
+                                            </span>
+                                        </p>
+                                    )}
                                 </AccordionContent>
                             </AccordionItem>
                         </Accordion>
