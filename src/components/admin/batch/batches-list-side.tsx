@@ -21,7 +21,6 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { NotFoundOrbit } from "@/components/animation/fallbacks";
 import EditBatchModal from "./modal-edit-batch";
-import { IBatch } from "./batches";
 import CardHeader from "@/components/common/data-card/header";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -33,6 +32,7 @@ import { fetchData } from "@/service/api-service";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useMediaQuery } from "usehooks-ts";
 import DrawerBatchLists from "./drawer-batch-lists";
+import { IBatch } from "@/types/batch";
 
 // Interface for Props
 interface PropsType {

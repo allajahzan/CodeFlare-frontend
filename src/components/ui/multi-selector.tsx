@@ -3,7 +3,7 @@ import { Check, LucideProps } from "lucide-react";
 import { Input } from "./input";
 import { UseFormRegister } from "react-hook-form";
 import { ReactNode } from "react";
-import { IBatch } from "../admin/batch/batches";
+import { IBatch } from "@/types/batch";
 
 // Interface for MultiSelectorContent
 interface PropsMultiSelectorContent {

@@ -10,10 +10,12 @@ import IconButton from "../ui/icon-button";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import DatePicker from "../instructor/reviews/date-picker";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
 import FilterAttendence from "./filter";
 import { SelectValue } from "@radix-ui/react-select";
+import { IStudent } from "@/types/student";
+import { IBatch } from "@/types/batch";
 
 // Interface for Props
 interface Propstype {
@@ -22,6 +24,16 @@ interface Propstype {
     onNextMonth?: () => void;
     view: "table-view" | "calender-view";
     setView: React.Dispatch<React.SetStateAction<"table-view" | "calender-view">>;
+
+    selectedDate: Date | undefined;
+    setSelectedDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+    selectedBatch: IBatch | null;
+    setSelectedBatch: React.Dispatch<React.SetStateAction<IBatch | null>>;
+    selectedStudent: string | "";
+    setSelectedStudent: React.Dispatch<React.SetStateAction<string | "">>;
+
+    students: [] | IStudent[];
+    fetchingStudents: boolean;
 }
 
 // Calendeer header Component
@@ -31,17 +43,24 @@ export function CalendarHeader({
     onNextMonth,
     view,
     setView,
+
+    selectedDate,
+    setSelectedDate,
+    selectedBatch,
+    setSelectedBatch,
+    selectedStudent,
+    setSelectedStudent,
+
+    students,
+    fetchingStudents,
 }: Propstype) {
-    // Date
-    const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-        new Date()
-    );
     // Redux
     const role = useSelector((state: stateType) => state.role);
 
     return (
         <div
-            className={`${view === 'calender-view' && 'bg-background dark:bg-sidebar-background'} sticky top-0 z-30 rounded-b-xl`}
+            className={`${view === "calender-view" && "bg-background dark:bg-sidebar-background"
+                } sticky top-0 z-30 rounded-b-xl`}
         >
             <div
                 className={`flex items-center justify-between ${view === "calender-view"
@@ -62,16 +81,6 @@ export function CalendarHeader({
                                 year: "2-digit",
                             })}
                         </h1>
-                        {/* )} */}
-
-                        {/* {view === "table-view" && (
-                        <h1 className="text-lg text-foreground font-semibold">
-                            {new Date(selectedDate as Date).toLocaleDateString("en-GB", {
-                                month: "short",
-                                year: "2-digit",
-                            })}
-                        </h1>
-                    )} */}
                     </div>
                 )}
 
@@ -146,7 +155,14 @@ export function CalendarHeader({
                                 <Filter className="w-4 h-4 text-foreground" />
                             </SelectTrigger>
                             <SelectContent className="w-[220px]" align="end">
-                                <FilterAttendence />
+                                <FilterAttendence
+                                    selectedBatch={selectedBatch}
+                                    setSelectedBatch={setSelectedBatch}
+                                    selectedStudent={selectedStudent}
+                                    setSelectedStudent={setSelectedStudent}
+                                    students={students}
+                                    fetchingStudents={fetchingStudents}
+                                />
                             </SelectContent>
                         </Select>
                     )}

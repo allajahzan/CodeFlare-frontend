@@ -34,6 +34,7 @@ enum ApiEndpoints {
     REVIEW_SCORE = '/instructor/review/score',
 
     // Attendence APIs - student service
+    ATTENDENCE = '/student/attendence',
     CHECK_IN_OUT = "/student/attendence/check-in-out"
 }
 

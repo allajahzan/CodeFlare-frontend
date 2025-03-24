@@ -1,16 +1,16 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import { Eye, List, Webcam } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Eye, List, LogOut } from "lucide-react";
 import { motion } from "framer-motion";
 import IconButton from "@/components/ui/icon-button";
 import ToolTip from "@/components/common/tooltip/tooltip";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
-import { handleCustomError } from "@/utils/error";
-import { patchData } from "@/service/api-service";
-import ApiEndpoints from "@/constants/api-endpoints";
-import { IUserContext, UserContext } from "@/context/user-context";
-import WebCamModal from "./web-cam-modal";
+import CheckedInOutModal from "./check-in-out-modal";
+// import * as faceapi from "face-api.js";
+// import * as tf from "@tensorflow/tfjs";
+// import { drawFaceLandmarks } from "@/utils/face-landmark";
+// import { generateStableFaceId } from "@/utils/generate-uniqueId";
 
 // Attendence Component
 function Attendence() {
@@ -21,75 +21,13 @@ function Attendence() {
     );
 
     // Webcam states
-    const [webCamOpen, setWebCamOpen] = useState<boolean>(false);
+    // const [webCamOpen, setWebCamOpen] = useState<boolean>(false);
 
     // Video Ref
-    const videoRef = useRef<HTMLVideoElement | null>(null);
-
-    // Canvas Ref
-    const canvasRef = useRef(null);
+    // const videoRef = useRef<HTMLVideoElement | null>(null);
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
-
-    // User Context
-    const { user } = useContext(UserContext) as IUserContext;
-
-    // CheckInOut
-    // const handleCheckIn = async (activity: string) => {
-    //     try {
-    //         // Send request
-    //         const resp = await patchData(
-    //             ApiEndpoints.CHECK_IN_OUT + `?userId=${user?._id}&activity=${activity}`,
-    //             {},
-    //             role
-    //         );
-
-    //         // Success Response
-    //         if (resp && resp.status === 200) {
-    //             const data = resp.data?.data;
-
-    //             console.log(data);
-    //         }
-    //     } catch (err: unknown) {
-    //         handleCustomError(err);
-    //     }
-    // };
-
-    // Open webcam
-    useEffect(() => {
-        let stream: MediaStream | null = null;
-
-        // Start Webcam
-        const startWebcam = async () => {
-            try {
-                stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                if (videoRef.current) {
-                    videoRef.current.srcObject = stream;
-                }
-            } catch (err: unknown) {
-                console.log(err);
-            }
-        };
-
-        // Stop Webcam
-        const stopWebcam = () => {
-            if (stream) {
-                stream.getTracks().forEach((track) => track.stop());
-            }
-            if (videoRef.current) {
-                videoRef.current.srcObject = null;
-            }
-        };
-
-        if (webCamOpen) {
-            startWebcam();
-        } else {
-            stopWebcam();
-        }
-
-        return () => stopWebcam(); // Clean up
-    }, [webCamOpen]);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -185,41 +123,27 @@ function Attendence() {
 
             {/* Sign your attendence */}
             <div className="w-full flex gap-3 items-center justify-center">
-                <ToolTip
+                {/* CheckIn */}
+                <CheckedInOutModal
                     children={
-                        <div
-                            onClick={() => setWebCamOpen(!webCamOpen)}
-                            className="bg-background rounded-lg"
-                        >
-                            <IconButton Icon={Webcam} />
+                        <div title="Check-In" className="bg-background rounded-lg">
+                            <IconButton Icon={LogOut} />
                         </div>
                     }
-                    text="Face detector"
-                    side="left"
+                    activity="checkIn"
                 />
 
-                {/* <ToolTip
+                {/* CheckOut */}
+                <CheckedInOutModal
                     children={
-                        <div className="bg-background rounded-lg">
-                            <IconButton Icon={Pause} />
+                        <div title="Check-Out" className="bg-background rounded-lg">
+                            <IconButton Icon={LogOut} iconClassName="rotate-180" />
                         </div>
                     }
-                    text="Break"
-                    side="left"
-                /> */}
+                    activity="checkOut"
+                />
 
-                {/* <ToolTip
-                    children={
-                        <div
-                            className="bg-background rounded-lg"
-                        >
-                            <IconButton Icon={Disc} />
-                        </div>
-                    }
-                    text="Stop"
-                    side="left"
-                /> */}
-
+                {/* View */}
                 <ToolTip
                     children={
                         <div className="bg-background rounded-lg">
@@ -229,16 +153,14 @@ function Attendence() {
                     text="View"
                     side="left"
                 />
-
-                <canvas ref={canvasRef} width="320" height="240" hidden></canvas>
             </div>
 
             {/* Web cam */}
-            <WebCamModal
+            {/* <WebCamModal
                 videoRef={videoRef}
                 webCamOpen={webCamOpen}
                 setWebCamOpen={setWebCamOpen}
-            />
+            /> */}
         </div>
     );
 }

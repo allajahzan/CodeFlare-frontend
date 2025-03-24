@@ -35,13 +35,13 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import ValidationError from "@/components/ui/validation-error";
-import { IBatch } from "@/components/admin/batch/batches";
 import DatePicker from "./date-picker";
 import { formSchema, FormType } from "@/validations/instructor/schedule-review";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { convertTo12HourFormat } from "@/utils/time-converter";
 import { IStudent } from "@/types/student";
 import { IReview } from "@/types/review";
+import { IBatch } from "@/types/batch";
 
 // Interface for Props
 interface PropsType {

@@ -36,8 +36,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import ValidationError from "@/components/ui/validation-error";
-import { IBatch } from "@/components/admin/batch/batches";
 import { IStudent } from "@/types/student";
+import { IBatch } from "@/types/batch";
 
 // Interface for Props
 interface PropsType {

@@ -1,6 +1,5 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { IUserContext, UserContext } from "@/context/user-context";
-import { IBatch } from "../admin/batch/batches";
 import { Loader2, School, UsersRound } from "lucide-react";
 import {
     Select,
@@ -9,57 +8,32 @@ import {
     SelectTrigger,
     SelectValue,
 } from "../ui/select";
-import { fetchData } from "@/service/api-service";
-import ApiEndpoints from "@/constants/api-endpoints";
-import { useSelector } from "react-redux";
-import { stateType } from "@/redux/store";
-import { handleCustomError } from "@/utils/error";
 import { IStudent } from "@/types/student";
+import { IBatch } from "@/types/batch";
+
+// Interface for Props
+interface propsType {
+    selectedBatch: IBatch | null;
+    setSelectedBatch: React.Dispatch<React.SetStateAction<IBatch | null>>;
+    selectedStudent: string | "";
+    setSelectedStudent: React.Dispatch<React.SetStateAction<string | "">>;
+    students: [] | IStudent[];
+    fetchingStudents: boolean;
+}
 
 // Filter students
-function FilterAttendence() {
-    // State to store the selected batch
-    const [selectedBatch, setSelectedBatch] = useState<IBatch | null>(null);
-
-    // Studebt related states
-    const [students, setStudents] = useState<IStudent[] | []>([]);
-    const [fetchingStudents, setFetchingStudents] = useState<boolean>(false);
-    const [selectedStudent, setSelectedStudent] = useState<string>("");
+function FilterAttendence({
+    selectedBatch,
+    setSelectedBatch,
+    selectedStudent,
+    setSelectedStudent,
+    students,
+    fetchingStudents,
+}: propsType) {
+    // Student related states
 
     // User context
     const { user } = useContext(UserContext) as IUserContext;
-
-    // Redux
-    const role = useSelector((state: stateType) => state.role);
-
-    // Fetch students based on batch
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                // Clear states
-                setFetchingStudents(true);
-                setStudents([]);
-                setSelectedStudent("");
-
-                // Fetch data
-                const resp = await fetchData(
-                    ApiEndpoints.SEARCH_USER +
-                    `?category=student&batchId=${selectedBatch?._id}`,
-                    role
-                );
-
-                if (resp?.status === 200) {
-                    setStudents(resp.data.data); // Update students list
-                }
-            } catch (err) {
-                handleCustomError(err);
-            } finally {
-                setFetchingStudents(false); // Always set fetching to false after request
-            }
-        };
-
-        if (selectedBatch) fetchUsers();
-    }, [selectedBatch]);
 
     return (
         <div className="w-full grid grid-cols-1 p-0">
@@ -71,7 +45,9 @@ function FilterAttendence() {
                     value={selectedBatch?._id || ""}
                     onValueChange={(value) => {
                         const batch = user?.batches?.find((b) => b._id === value);
-                        setSelectedBatch(batch || null);
+                        setSelectedBatch((prevBatch: IBatch | null) =>
+                            prevBatch !== batch ? (batch as IBatch) : null
+                        );
                     }}
                 >
                     <SelectTrigger

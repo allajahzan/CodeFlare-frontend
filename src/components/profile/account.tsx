@@ -27,7 +27,7 @@ import { IUserContext, UserContext } from "@/context/user-context";
 import ValidationError from "../ui/validation-error";
 import { IProfile } from "@/types/profile";
 import { toast } from "@/hooks/use-toast";
-import { IBatch } from "../admin/batch/batches";
+import { IBatch } from "@/types/batch";
 
 // Interface for Props
 interface PropsType {
