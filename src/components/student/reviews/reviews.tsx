@@ -57,6 +57,7 @@ function Reviews() {
                     // Update reviews
                     setTimeout(() => {
                         setReviews(data);
+                        setFetching(false);
                     }, 1000);
                 }
             } catch (err: unknown) {
