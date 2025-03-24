@@ -89,7 +89,7 @@ function SelfieModal({ children, selectedAttedence }: Propstype) {
                                     {/* No selfie */}
                                     {!selectedAttedence.selfies?.[0] && (
                                         <p className="text-foreground font-medium text-sm">
-                                            No selfies yet
+                                            No snapshot
                                         </p>
                                     )}
                                 </div>
@@ -138,7 +138,7 @@ function SelfieModal({ children, selectedAttedence }: Propstype) {
                                     {/* No selfie */}
                                     {!selectedAttedence.selfies?.[1] && (
                                         <p className="text-foreground font-medium text-sm">
-                                            No selfies yet
+                                            No snapshot
                                         </p>
                                     )}
                                 </div>
@@ -187,7 +187,7 @@ function SelfieModal({ children, selectedAttedence }: Propstype) {
                                     {/* No selfie */}
                                     {!selectedAttedence.selfies?.[2] && (
                                         <p className="text-foreground font-medium text-sm">
-                                            No selfies yet
+                                            No snapshot
                                         </p>
                                     )}
                                 </div>

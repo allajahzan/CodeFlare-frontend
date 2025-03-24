@@ -296,9 +296,9 @@ function Table({
                             <Badge
                                 className={cn(
                                     "self-start text-sm font-semibold rounded-full duration-0",
-                                    selectedAttendence.status === "Pass"
+                                    selectedAttendence.status === "Present"
                                         ? "text-green-600 bg-green-400/20 hover:bg-green-400/30"
-                                        : selectedAttendence.status === "Fail"
+                                        : selectedAttendence.status === "Absent"
                                             ? "text-red-600 bg-red-400/20 hover:bg-red-400/30"
                                             : "text-yellow-600 bg-yellow-400/20 hover:bg-yellow-400/30"
                                 )}
@@ -342,7 +342,7 @@ function Table({
                                     text={
                                         selectedAttendence.checkOut
                                             ? convertTo12HourFormat(
-                                                selectedAttendence.checkIn as string
+                                                selectedAttendence.checkOut as string
                                             )
                                             : "-"
                                     }
@@ -465,20 +465,27 @@ function Table({
                                         </div>
                                     )}
 
-                                    {!selectedAttendence.reason.time && (
-                                        <p className="text-start text-sm">
-                                            No reasons for attendence with status{" "}
-                                            <span
-                                                className={cn(
-                                                    selectedAttendence.status === "Pass"
-                                                        ? "text-green-600"
-                                                        : selectedAttendence.status === "Fail"
-                                                            ? "text-red-600"
-                                                            : "text-yellow-600"
-                                                )}
-                                            >
-                                                {selectedAttendence.status.toLowerCase()}
-                                            </span>
+                                    {/* If no reason */}
+                                    {!selectedAttendence.reason?.time && (
+                                        <p className="text-start text-sm font-medium">
+                                            {selectedAttendence.status === "Absent" ? (
+                                                "No reason submitted"
+                                            ) : (
+                                                <>
+                                                    No need of reason for attendance with status{" "}
+                                                    <span
+                                                        className={cn(
+                                                            selectedAttendence.status === "Present"
+                                                                ? "text-green-600"
+                                                                : selectedAttendence.status === "Absent"
+                                                                    ? "text-red-600"
+                                                                    : "text-yellow-600"
+                                                        )}
+                                                    >
+                                                        {selectedAttendence.status.toLowerCase()}
+                                                    </span>
+                                                </>
+                                            )}
                                         </p>
                                     )}
                                 </AccordionContent>
@@ -505,8 +512,7 @@ function Table({
                             data={[
                                 { name: "Present", value: 50 },
                                 { name: "Absent", value: 20 },
-                                { name: "Late", value: 15 },
-                                { name: "Excused", value: 15 },
+                                { name: "Pending", value: 15 },
                             ]}
                             text="Today's overview"
                             className="h-[220px]"

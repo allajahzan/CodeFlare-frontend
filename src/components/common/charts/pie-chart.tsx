@@ -19,8 +19,8 @@ const PieCharts = ({ data, text, className }: PropsType) => {
     const COLORS = [
         "rgba(34, 197, 94, 1)",
         "rgba(239, 68, 68, 1)",
-        "rgba(30, 64, 175, 1)",
         "rgba(249, 115, 22, 1)",
+        "rgba(30, 64, 175, 1)",
         "rgba(6, 182, 212, 1)",
         "rgba(168, 85, 247, 1)",
     ];
