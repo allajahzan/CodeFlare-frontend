@@ -15,17 +15,18 @@ import {
 } from "../ui/accordion";
 import InfoCard from "../common/other-cards/info-card";
 import { CameraIcon, Eye, MapPin, Minus, Plus } from "lucide-react";
-import image from "@/assets/images/allaj.jpeg";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
+import { IAttendence } from "@/types/attendence";
 
 // Interface Props
 interface Propstype {
     children: ReactNode;
+    selectedAttedence: IAttendence;
 }
 
 // Selfie Component
-function SelfieModal({ children }: Propstype) {
+function SelfieModal({ children, selectedAttedence }: Propstype) {
     return (
         <Dialog>
             <DialogTrigger>{children}</DialogTrigger>
@@ -64,21 +65,33 @@ function SelfieModal({ children }: Propstype) {
                         </AccordionTrigger>
                         <AccordionContent>
                             <div className="relative">
-                                <div className="w-full h-[250px] rounded-xl p-2 border shadow-sm overflow-hidden">
-                                    <Badge className="p-1 px-2 absolute bottom-5 left-5 text-xs text-foreground font-semibold bg-background hover:bg-muted shadow-md rounded-full overflow-hidden cursor-pointer">
-                                        <MapPin className="w-3 h-3 text-foreground" />
-                                        &nbsp;Calicut, Kerala
-                                    </Badge>
-                                    <img
-                                        src={image}
-                                        className="h-full w-full object-cover rounded-lg"
-                                        alt=""
-                                    />
-                                    <div className="absolute top-0 right-0 p-5">
-                                        <Button className="bg-background hover:bg-muted dark:hover:bg-muted shadow-md text-foreground">
-                                            Verify
-                                        </Button>
-                                    </div>
+                                <div className="w-full h-[220px] flex items-center justify-center dark:bg-sidebar rounded-xl p-2 border dark:border-transparent shadow-sm overflow-hidden">
+                                    {/* Tea break */}
+                                    {selectedAttedence.selfies?.[0] && (
+                                        <>
+                                            <Badge className="p-1 px-2 absolute bottom-5 left-5 text-xs text-foreground font-semibold bg-background hover:bg-muted shadow-md rounded-full overflow-hidden cursor-pointer">
+                                                <MapPin className="w-3 h-3 text-foreground" />
+                                                &nbsp;{selectedAttedence.selfies[0].location}
+                                            </Badge>
+                                            <img
+                                                src={selectedAttedence.selfies[0].photo}
+                                                className="h-full w-full object-cover rounded-lg"
+                                                alt=""
+                                            />
+                                            <div className="absolute top-0 right-0 p-5">
+                                                <Button className="bg-background hover:bg-muted dark:hover:bg-muted shadow-md text-foreground">
+                                                    Verify
+                                                </Button>
+                                            </div>
+                                        </>
+                                    )}
+
+                                    {/* No selfie */}
+                                    {!selectedAttedence.selfies?.[0] && (
+                                        <p className="text-foreground font-medium text-sm">
+                                            No selfies yet
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         </AccordionContent>
@@ -101,21 +114,33 @@ function SelfieModal({ children }: Propstype) {
                         </AccordionTrigger>
                         <AccordionContent>
                             <div className="relative">
-                                <div className="w-full h-[250px] rounded-xl p-2 border shadow-sm overflow-hidden">
-                                    <Badge className="p-1 px-2 absolute bottom-5 left-5 text-xs text-foreground font-semibold bg-background hover:bg-muted shadow-md rounded-full overflow-hidden cursor-pointer">
-                                        <MapPin className="w-3 h-3 text-foreground" />
-                                        &nbsp;Calicut, Kerala
-                                    </Badge>
-                                    <img
-                                        src={image}
-                                        className="h-full w-full object-cover rounded-lg"
-                                        alt=""
-                                    />
-                                    <div className="absolute top-0 right-0 p-5">
-                                        <Button className="bg-background hover:bg-muted dark:hover:bg-muted shadow-md text-foreground">
-                                            Verify
-                                        </Button>
-                                    </div>
+                                <div className="w-full h-[220px] flex items-center justify-center dark:bg-sidebar rounded-xl p-2 border dark:border-transparent shadow-sm overflow-hidden">
+                                    {/* Lunch break */}
+                                    {selectedAttedence.selfies?.[1] && (
+                                        <>
+                                            <Badge className="p-1 px-2 absolute bottom-5 left-5 text-xs text-foreground font-semibold bg-background hover:bg-muted shadow-md rounded-full overflow-hidden cursor-pointer">
+                                                <MapPin className="w-3 h-3 text-foreground" />
+                                                &nbsp;{selectedAttedence.selfies[1].location}
+                                            </Badge>
+                                            <img
+                                                src={selectedAttedence.selfies[1].photo}
+                                                className="h-full w-full object-cover rounded-lg"
+                                                alt=""
+                                            />
+                                            <div className="absolute top-0 right-0 p-5">
+                                                <Button className="bg-background hover:bg-muted dark:hover:bg-muted shadow-md text-foreground">
+                                                    Verify
+                                                </Button>
+                                            </div>
+                                        </>
+                                    )}
+
+                                    {/* No selfie */}
+                                    {!selectedAttedence.selfies?.[1] && (
+                                        <p className="text-foreground font-medium text-sm">
+                                            No selfies yet
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         </AccordionContent>
@@ -138,21 +163,33 @@ function SelfieModal({ children }: Propstype) {
                         </AccordionTrigger>
                         <AccordionContent>
                             <div className="relative">
-                                <div className="w-full h-[250px] rounded-xl p-2 border shadow-sm overflow-hidden">
-                                    <Badge className="p-1 px-2 absolute bottom-5 left-5 text-xs text-foreground font-semibold bg-background hover:bg-muted shadow-md rounded-full overflow-hidden cursor-pointer">
-                                        <MapPin className="w-3 h-3 text-foreground" />
-                                        &nbsp;Calicut, Kerala
-                                    </Badge>
-                                    <img
-                                        src={image}
-                                        className="h-full w-full object-cover rounded-lg"
-                                        alt=""
-                                    />
-                                    <div className="absolute top-0 right-0 p-5">
-                                        <Button className="bg-background hover:bg-muted dark:hover:bg-muted shadow-md text-foreground">
-                                            Verify
-                                        </Button>
-                                    </div>
+                                <div className="w-full h-[220px] flex items-center justify-center dark:bg-sidebar rounded-xl p-2 border dark:border-transparent shadow-sm overflow-hidden">
+                                    {/* Evening break */}
+                                    {selectedAttedence.selfies?.[2] && (
+                                        <>
+                                            <Badge className="p-1 px-2 absolute bottom-5 left-5 text-xs text-foreground font-semibold bg-background hover:bg-muted shadow-md rounded-full overflow-hidden cursor-pointer">
+                                                <MapPin className="w-3 h-3 text-foreground" />
+                                                &nbsp;{selectedAttedence.selfies[2].location}
+                                            </Badge>
+                                            <img
+                                                src={selectedAttedence.selfies[2].photo}
+                                                className="h-full w-full object-cover rounded-lg"
+                                                alt=""
+                                            />
+                                            <div className="absolute top-0 right-0 p-5">
+                                                <Button className="bg-background hover:bg-muted dark:hover:bg-muted shadow-md text-foreground">
+                                                    Verify
+                                                </Button>
+                                            </div>
+                                        </>
+                                    )}
+
+                                    {/* No selfie */}
+                                    {!selectedAttedence.selfies?.[2] && (
+                                        <p className="text-foreground font-medium text-sm">
+                                            No selfies yet
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         </AccordionContent>

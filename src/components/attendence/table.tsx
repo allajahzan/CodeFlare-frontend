@@ -17,7 +17,6 @@ import UserNameCard from "../common/user/user-name-card";
 import InfoCard from "../common/other-cards/info-card";
 import { Badge } from "../ui/badge";
 import CardHeader from "../common/data-card/header";
-import image1 from "@/assets/images/allaj.jpeg";
 import { CalendarHeader } from "./header";
 import SelfieModal from "./selfie-modal";
 import {
@@ -41,6 +40,7 @@ import { IStudent } from "@/types/student";
 import { IBatch } from "@/types/batch";
 import { IAttendence } from "@/types/attendence";
 import { NotFoundOrbit, NotSelected } from "../animation/fallbacks";
+import { convertTo12HourFormat } from "@/utils/time-converter";
 
 interface Propstype {
     currentDate: Date;
@@ -151,7 +151,7 @@ function Table({
     }, [selectedBatch]);
 
     return (
-        <div className="w-full overflow-hidden grid grid-cols-3 gap-5 text-center text-foreground font-semibold">
+        <div className="grid grid-cols-3 gap-5 text-center text-foreground font-semibold">
             {/* Left side*/}
             <div className="h-[calc(100vh-108px)] sticky top-0 bg-background dark:bg-sidebar-background p-5 border flex flex-col gap-5 rounded-2xl shadow-sm overflow-hidden">
                 {/* Header */}
@@ -278,10 +278,10 @@ function Table({
             </div>
 
             {/* Right side */}
-            <div className="h-full grid grid-rows-[auto,1fr,auto] space-y-5 col-span-2 overflow-auto no-scrollbar">
+            <div className="h-full grid grid-rows-[auto,1fr,auto] space-y-5 col-span-2 overflow-hidden">
                 {/* Scroll container*/}
                 {selectedAttendence && (
-                    <div className="relative p-5 flex flex-col gap-3 border bg-background dark:bg-sidebar-background rounded-2xl shadow-sm">
+                    <div className="w-full relative p-5 flex flex-col gap-3 border bg-background dark:bg-sidebar-background rounded-2xl shadow-sm overflow-hidden">
                         {/* Student info */}
                         <div className="flex items-center justify-between mb-2">
                             <UserNameCard
@@ -313,14 +313,20 @@ function Table({
                         </p>
 
                         {/* Time and duration info cards */}
-                        <div className="min-h-min flex gap-3 overflow-scroll overflow-y-hidden no-scrollbar">
+                        <div className="min-h-min w-full flex gap-3 overflow-scroll overflow-y-hidden no-scrollbar">
                             {/* CheckIn */}
                             <div className="min-w-[250px] w-full min-h-min bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border border-green-200 dark:border-green-800 rounded-lg relative overflow-hidden">
                                 <div className="absolute top-0 right-0 w-16 h-16 bg-green-200 dark:bg-green-700/20 rounded-bl-full opacity-50"></div>
                                 <InfoCard
                                     Icon={LogOut}
                                     label="Check-In Time"
-                                    text="9:00 AM"
+                                    text={
+                                        selectedAttendence.checkIn
+                                            ? convertTo12HourFormat(
+                                                selectedAttendence.checkIn as string
+                                            )
+                                            : "-"
+                                    }
                                     iconClassName="text-green-600"
                                     iconDivClassName="bg-green-400/20 group-hover:bg-green-400/30"
                                     className="w-full border-none bg-transparent"
@@ -333,7 +339,13 @@ function Table({
                                 <InfoCard
                                     Icon={LogOut}
                                     label="Check-Out Time"
-                                    text="5:30 PM"
+                                    text={
+                                        selectedAttendence.checkOut
+                                            ? convertTo12HourFormat(
+                                                selectedAttendence.checkIn as string
+                                            )
+                                            : "-"
+                                    }
                                     iconClassName="text-pink-600"
                                     iconDivClassName="bg-pink-400/20 group-hover:bg-pink-400/30 rotate-180"
                                     className="w-full border-none bg-transparent"
@@ -346,7 +358,14 @@ function Table({
                                 <InfoCard
                                     Icon={Hourglass}
                                     label="Duration"
-                                    text="8 Hours"
+                                    text={
+                                        selectedAttendence.checkIn && selectedAttendence.checkOut
+                                            ? (
+                                                Number(selectedAttendence.checkOut.split(":")[0]) -
+                                                Number(selectedAttendence.checkIn.split(":")[0])
+                                            ).toString()
+                                            : "-"
+                                    }
                                     iconClassName="text-purple-600"
                                     iconDivClassName="bg-purple-400/20 group-hover:bg-purple-400/30"
                                     className="w-full border-none bg-transparent"
@@ -366,13 +385,14 @@ function Table({
                                     <InfoCard
                                         Icon={Camera}
                                         label="Attendence"
-                                        text="Verification Snapshots"
+                                        text="Break snapshots"
                                         iconClassName="text-blue-600"
                                         iconDivClassName="bg-blue-400/20 group-hover:bg-blue-400/30"
                                         className="w-full shadow-sm dark:border-transparent dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark"
                                     />
                                 </div>
                             }
+                            selectedAttedence={selectedAttendence}
                         />
 
                         {/* Reason */}
@@ -445,12 +465,14 @@ function Table({
                 )}
 
                 {/* No attendence selected */}
-                <NotSelected
-                    MainIcon={CalendarClock}
-                    message="Select an attendence to view it's details"
-                    text="No attendence selected"
-                    className="h-[457.5px]"
-                />
+                {!selectedAttendence && (
+                    <NotSelected
+                        MainIcon={CalendarClock}
+                        message="Select an attendence to view it's details"
+                        text="No attendence selected"
+                        className="h-[457.5px]"
+                    />
+                )}
 
                 {/* Graphs */}
                 <div className="grid grid-cols-2 gap-5">

@@ -41,10 +41,14 @@ function CheckedInOutModal({ children, activity }: Propstype) {
         try {
             setSubmiting(true);
 
+            const time = new Date();
+            const hours = time.getHours();
+            const minutes = time.getMinutes();
+
             // Send request
             const resp = await patchData(
                 ApiEndpoints.CHECK_IN_OUT + `?userId=${user?._id}&activity=${activity}`,
-                {},
+                { time: `${hours}:${minutes}` },
                 role
             );
 

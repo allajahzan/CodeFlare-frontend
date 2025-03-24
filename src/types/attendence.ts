@@ -13,7 +13,7 @@ interface IUser{
 // Interface for selfie
 export interface ISelfie {
     name: string,
-    time: Date,
+    time: string,
     photo: string,
     location: string,
     isVerified: boolean
@@ -25,13 +25,13 @@ export interface IAttendence{
     userId: string,
     batchId: string,
     date: Date,
-    checkIn: Date | null,
-    checkOut: Date | null,
+    checkIn: string | null,
+    checkOut: string | null,
     status: string,
     isApproved: boolean, 
     isPartial: boolean,
     reason: {
-        time: Date,
+        time: string,
         description: string,
     }
     selfies : ISelfie[]

@@ -81,8 +81,9 @@ function AttendenceList() {
     }, [isModalOpen]);
 
     return (
-        <div className={`p-5 pt-0 h-full`}>
-            <main className="h-full relative flex flex-col p-0 gap-5">
+        <div
+            className={`w-full h-full flex flex-col overflow-y-auto no-scrollbar p-5 pt-0`}
+        >
                 {/* Calender */}
                 {view === "calender-view" && (
                     <CalendarHeader
@@ -115,7 +116,7 @@ function AttendenceList() {
                         setView={setView}
                     />
                 )}
-            </main>
+        
 
             {/* Info modal */}
             {selectedEvent && (
