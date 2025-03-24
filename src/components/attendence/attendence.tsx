@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { addMonths, format, subMonths } from "date-fns";
-import { CalendarHeader } from "./header";
 import Calendar, { IEvent } from "./calender";
 import InfoModal from "./info-modal";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import Table from "./table";
+import CalendarHeaderForStudent from "./header-student";
 
 // Sample attendance data
 const attendanceData: Record<string, any> = {
@@ -82,41 +82,40 @@ function AttendenceList() {
 
     return (
         <div
-            className={`w-full h-full flex flex-col overflow-y-auto no-scrollbar p-5 pt-0`}
+            className={`w-full h-full flex flex-col gap-5 overflow-y-auto no-scrollbar p-5 pt-0`}
         >
-                {/* Calender */}
-                {view === "calender-view" && (
-                    <CalendarHeader
-                        currentDate={currentDate}
-                        onPreviousMonth={handlePreviousMonth}
-                        onNextMonth={handleNextMonth}
-                        view={view}
-                        setView={setView}
-                    />
-                )}
+            {/* Calender */}
+            {view === "calender-view" && (
+                <CalendarHeaderForStudent
 
-                {/* Make Calendar Take Remaining Space */}
-                {view === "calender-view" && (
-                    <div className="flex-1">
-                        <Calendar
-                            currentDate={currentDate}
-                            onDateClick={handleDateClick}
-                            attendanceData={attendanceData}
-                        />
-                    </div>
-                )}
+                    currentDate={currentDate}
+                    onPreviousMonth={handlePreviousMonth}
+                    onNextMonth={handleNextMonth}
+                    view={view}
+                />
+            )}
 
-                {/* Table */}
-                {view === "table-view" && (
-                    <Table
+            {/* Make Calendar Take Remaining Space */}
+            {view === "calender-view" && (
+                <div className="flex-1">
+                    <Calendar
                         currentDate={currentDate}
-                        onPreviousMonth={handlePreviousMonth}
-                        onNextMonth={handleNextMonth}
-                        view={view}
-                        setView={setView}
+                        onDateClick={handleDateClick}
+                        attendanceData={attendanceData}
                     />
-                )}
-        
+                </div>
+            )}
+
+            {/* Table */}
+            {view === "table-view" && (
+                <Table
+                    currentDate={currentDate}
+                    onPreviousMonth={handlePreviousMonth}
+                    onNextMonth={handleNextMonth}
+                    view={view}
+                    setView={setView}
+                />
+            )}
 
             {/* Info modal */}
             {selectedEvent && (

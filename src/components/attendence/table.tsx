@@ -17,7 +17,7 @@ import UserNameCard from "../common/user/user-name-card";
 import InfoCard from "../common/other-cards/info-card";
 import { Badge } from "../ui/badge";
 import CardHeader from "../common/data-card/header";
-import { CalendarHeader } from "./header";
+import CalendarHeaderForInstrucor from "./header-instructor";
 import SelfieModal from "./selfie-modal";
 import {
     Accordion,
@@ -158,7 +158,7 @@ function Table({
                 <CardHeader count={4} heading="Attedence list" />
 
                 {/* Filter and view */}
-                <CalendarHeader
+                <CalendarHeaderForInstrucor
                     currentDate={currentDate}
                     onPreviousMonth={onPreviousMonth}
                     onNextMonth={onNextMonth}
@@ -363,7 +363,7 @@ function Table({
                                             ? (
                                                 Number(selectedAttendence.checkOut.split(":")[0]) -
                                                 Number(selectedAttendence.checkIn.split(":")[0])
-                                            ).toString()
+                                            ).toString() + ' Hours'
                                             : "-"
                                     }
                                     iconClassName="text-purple-600"
@@ -469,21 +469,11 @@ function Table({
                                     {!selectedAttendence.reason?.time && (
                                         <p className="text-start text-sm font-medium">
                                             {selectedAttendence.status === "Absent" ? (
-                                                "No reason submitted"
+                                                "Reason not submitted"
                                             ) : (
                                                 <>
-                                                    No need of reason for attendance with status{" "}
-                                                    <span
-                                                        className={cn(
-                                                            selectedAttendence.status === "Present"
-                                                                ? "text-green-600"
-                                                                : selectedAttendence.status === "Absent"
-                                                                    ? "text-red-600"
-                                                                    : "text-yellow-600"
-                                                        )}
-                                                    >
-                                                        {selectedAttendence.status.toLowerCase()}
-                                                    </span>
+                                                    Not needed
+                                                   
                                                 </>
                                             )}
                                         </p>
