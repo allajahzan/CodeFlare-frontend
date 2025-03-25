@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { Eye, List, LogOut } from "lucide-react";
+import { Info, List } from "lucide-react";
 import { motion } from "framer-motion";
-import IconButton from "@/components/ui/icon-button";
-import ToolTip from "@/components/common/tooltip/tooltip";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { stateType } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { checkedInAction, stateType } from "@/redux/store";
 import CheckedInOutModal from "./check-in-out-modal";
+import { Button } from "@/components/ui/button";
+import AttendenceInfoModal from "./attendence-info-modal";
 // import * as faceapi from "face-api.js";
 // import * as tf from "@tensorflow/tfjs";
 // import { drawFaceLandmarks } from "@/utils/face-landmark";
@@ -14,11 +14,26 @@ import CheckedInOutModal from "./check-in-out-modal";
 
 // Attendence Component
 function Attendence() {
-    const navigate = useNavigate();
+    // Time related states
     const [time, setTime] = useState(new Date());
     const [meridian, setMeridian] = useState(
         new Date().getHours() >= 12 ? "PM" : "AM"
     );
+
+    // Navigate
+    const navigate = useNavigate();
+
+    // Redux
+    const isCheckedIn = useSelector((state: stateType) => state.isCheckedIn);
+
+    const dispatch = useDispatch();
+
+    // Check last checked-in-date and clear isCheckedIn if needed
+    const lastCheckedInDate = localStorage.getItem("lastCheckedInDate");
+    if (lastCheckedInDate !== new Date().toDateString()) {
+        dispatch(checkedInAction(false));
+        localStorage.setItem("isCheckedIn", "0");
+    }
 
     // Webcam states
     // const [webCamOpen, setWebCamOpen] = useState<boolean>(false);
@@ -53,9 +68,20 @@ function Attendence() {
         <div className="relative p-5 flex flex-col rounded-2xl w-full h-[400px] bg-background dark:bg-sidebar-background border shadow-sm">
             {/* Header */}
             <div className="w-full flex items-center gap-3">
-                <p className="flex-1 text-base text-foreground font-semibold">
+                <p className="flex-1 text-lg text-foreground font-semibold">
                     Attendence
                 </p>
+
+                {/* Info about attedence */}
+                <AttendenceInfoModal
+                    children={
+                        <div className="p-2 bg-muted rounded-full cursor-pointer">
+                            <Info className="w-4 h-4 text-foreground" />
+                        </div>
+                    }
+                />
+
+                {/* Attendence calender */}
                 <div
                     onClick={() => navigate(`/${role}/attendence`)}
                     className="p-2 bg-muted rounded-full cursor-pointer"
@@ -65,7 +91,7 @@ function Attendence() {
             </div>
 
             {/* Date */}
-            <p className="absolute -translate-x-1/2 left-[22%] top-[27%] text-base text-foreground font-semibold">
+            <p className="absolute -translate-x-1/2 left-[22%] top-[30%] text-base text-foreground font-medium">
                 {new Date().toLocaleDateString("en-GB", {
                     day: "2-digit",
                     month: "long",
@@ -85,7 +111,7 @@ function Attendence() {
                             {/* Old Number  */}
                             <motion.div
                                 key={`old-${item}`}
-                                className="absolute p-5 m-0.5 w-20 h-20 flex items-center justify-center bg-zinc-800 dark:bg-background border text-white shadow-sm rounded-lg"
+                                className="absolute p-5 m-0.5 w-20 h-20 flex items-center justify-center bg-gradient-to-tr from-zinc-950 via-zinc-800 to-zinc-600 dark:bg-background border text-white shadow-sm rounded-lg"
                             >
                                 {item}
                             </motion.div>
@@ -94,7 +120,7 @@ function Attendence() {
                             <div className="relative">
                                 <motion.div
                                     key={`new-${item}`}
-                                    className="p-5 m-0.5 w-20 h-20 flex items-center justify-center bg-zinc-800 dark:bg-background border text-white shadow-sm rounded-lg"
+                                    className="p-5 m-0.5 w-20 h-20 flex items-center justify-center bg-gradient-to-tr from-zinc-950 via-zinc-800 to-zinc-600 dark:bg-background border text-white shadow-sm rounded-lg"
                                 >
                                     {item}
                                 </motion.div>
@@ -122,29 +148,18 @@ function Attendence() {
             </div>
 
             {/* Sign your attendence */}
-            <div className="w-full flex gap-3 items-center justify-center">
-                {/* CheckIn */}
-                <CheckedInOutModal
-                    children={
-                        <div title="Check-In" className="bg-background rounded-lg">
-                            <IconButton Icon={LogOut} />
-                        </div>
-                    }
-                    activity="checkIn"
-                />
-
+            <div className="w-full flex gap-3 items-center justify-end">
                 {/* CheckOut */}
                 <CheckedInOutModal
                     children={
-                        <div title="Check-Out" className="bg-background rounded-lg">
-                            <IconButton Icon={LogOut} iconClassName="rotate-180" />
+                        <div className="bg-background rounded-lg">
+                            <Button>{isCheckedIn ? "Check-out" : "Check-in"}</Button>
                         </div>
                     }
-                    activity="checkOut"
                 />
 
                 {/* View */}
-                <ToolTip
+                {/* <ToolTip
                     children={
                         <div className="bg-background rounded-lg">
                             <IconButton Icon={Eye} />
@@ -152,7 +167,7 @@ function Attendence() {
                     }
                     text="View"
                     side="left"
-                />
+                /> */}
             </div>
 
             {/* Web cam */}

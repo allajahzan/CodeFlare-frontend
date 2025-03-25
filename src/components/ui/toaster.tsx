@@ -18,7 +18,7 @@ export function Toaster() {
           <Toast
             key={id}
             {...props}
-            className="bg-sidebar text-sidebar-foreground border border-transparent dark:border-border 
+            className="
             shadow-md cursor-pointer"
           >
             <div className="grid gap-1">

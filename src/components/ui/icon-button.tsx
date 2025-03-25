@@ -12,7 +12,7 @@ interface PropsType {
 }
 function IconButton({ className, action, Icon, iconClassName, text }: PropsType) {
     return (
-        <button
+        <div
             onClick={
                 action
                     ? () => action()
@@ -25,7 +25,7 @@ function IconButton({ className, action, Icon, iconClassName, text }: PropsType)
         >
             {Icon && <Icon className={cn("w-4 h-4 text-foreground", iconClassName)} />}
             {text && <p>{text}</p>}
-        </button>
+        </div>
     );
 }
 

@@ -1,5 +1,5 @@
 import LineCharts from "@/components/common/charts/Line-chart";
-import Attendence from "@/components/student/dashboard/attendence";
+import Attendence from "@/components/student/dashboard/attendence/attendence";
 import { EllipsisVertical, Share2 } from "lucide-react";
 
 // Student Dashboard Component
