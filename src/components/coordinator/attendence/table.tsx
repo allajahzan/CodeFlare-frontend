@@ -10,13 +10,13 @@ import {
     LogOut,
     Search,
 } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import profile from "@/assets/images/no-profile.svg";
 import { motion } from "framer-motion";
-import UserNameCard from "../common/user/user-name-card";
-import InfoCard from "../common/other-cards/info-card";
-import { Badge } from "../ui/badge";
-import CardHeader from "../common/data-card/header";
+import UserNameCard from "@/components/common/user/user-name-card";
+import InfoCard from "@/components/common/other-cards/info-card";
+import { Badge } from "@/components/ui/badge";
+import CardHeader from "@/components/common/data-card/header";
 import CalendarHeaderForInstrucor from "./header-instructor";
 import SelfieModal from "./selfie-modal";
 import {
@@ -24,11 +24,11 @@ import {
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
-} from "../ui/accordion";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { Textarea } from "../ui/textarea";
-import PieCharts from "../common/charts/pie-chart";
+} from "@/components/ui/accordion";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import PieCharts from "@/components/common/charts/pie-chart";
 import { useContext, useEffect, useState } from "react";
 import { handleCustomError } from "@/utils/error";
 import { fetchData } from "@/service/api-service";
@@ -39,7 +39,7 @@ import { IUserContext, UserContext } from "@/context/user-context";
 import { IStudent } from "@/types/student";
 import { IBatch } from "@/types/batch";
 import { IAttendence } from "@/types/attendence";
-import { NotFoundOrbit, NotSelected } from "../animation/fallbacks";
+import { NotFoundOrbit, NotSelected } from "@/components/animation/fallbacks";
 import { convertTo12HourFormat } from "@/utils/time-converter";
 
 interface Propstype {
@@ -363,7 +363,7 @@ function Table({
                                             ? (
                                                 Number(selectedAttendence.checkOut.split(":")[0]) -
                                                 Number(selectedAttendence.checkIn.split(":")[0])
-                                            ).toString() + ' Hours'
+                                            ).toString() + " Hours"
                                             : "-"
                                     }
                                     iconClassName="text-purple-600"
@@ -471,10 +471,7 @@ function Table({
                                             {selectedAttendence.status === "Absent" ? (
                                                 "Reason not submitted"
                                             ) : (
-                                                <>
-                                                    Not needed
-                                                   
-                                                </>
+                                                <>Not needed</>
                                             )}
                                         </p>
                                     )}

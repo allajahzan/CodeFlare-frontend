@@ -6,17 +6,17 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "../ui/dialog";
+} from "@/components/ui/dialog";
 import {
     Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
-} from "../ui/accordion";
-import InfoCard from "../common/other-cards/info-card";
+} from "@/components/ui/accordion";
+import InfoCard from "@/components/common/other-cards/info-card";
 import { CameraIcon, Eye, MapPin, Minus, Plus } from "lucide-react";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { IAttendence } from "@/types/attendence";
 
 // Interface Props

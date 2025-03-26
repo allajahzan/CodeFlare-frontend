@@ -3,9 +3,7 @@ import {
     ChevronLeft,
     ChevronRight,
 } from "lucide-react";
-import IconButton from "../ui/icon-button";
-import { useSelector } from "react-redux";
-import { stateType } from "@/redux/store";
+import IconButton from "@/components/ui/icon-button";
 import { Fragment } from "react";
 
 // Interface for Props
@@ -23,9 +21,6 @@ function CalendarHeaderForStudent({
     onNextMonth,
     view,
 }: Propstype) {
-    // Redux
-    const role = useSelector((state: stateType) => state.role);
-
     return (
         <div
             className={`${view === "calender-view" && "bg-background dark:bg-sidebar-background"

@@ -7,7 +7,7 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "../ui/select";
+} from "@/components/ui/select";
 import { IStudent } from "@/types/student";
 import { IBatch } from "@/types/batch";
 

@@ -6,12 +6,12 @@ import {
     Filter,
     ScanEye,
 } from "lucide-react";
-import IconButton from "../ui/icon-button";
+import IconButton from "@/components/ui/icon-button";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
-import DatePicker from "../instructor/reviews/date-picker";
+import DatePicker from "@/components/instructor/reviews/date-picker";
 import { Fragment } from "react";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
 import FilterAttendence from "./filter";
 import { SelectValue } from "@radix-ui/react-select";
 import { IStudent } from "@/types/student";
