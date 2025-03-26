@@ -16,6 +16,13 @@ interface Propstype {
 
 // WebCam Modal Component
 function WebCamModal({ videoRef, webCamOpen, setWebCamOpen }: Propstype) {
+        // Webcam states
+        // const [webCamOpen, setWebCamOpen] = useState<boolean>(false);
+    
+        // Video Ref
+        // const videoRef = useRef<HTMLVideoElement | null>(null);
+
+        
      // Open webcam to scan face
         // useEffect(() => {
         //     let stream: MediaStream | null = null;

@@ -23,7 +23,7 @@ function ToolTip({ children, text, action, side }: PropsType) {
                         {children}
                     </div>
                 </TooltipTrigger>
-                <TooltipContent
+                <TooltipContent 
                     className="text-foreground dark:bg-sidebar border borer-2"
                     side={side}
                 >

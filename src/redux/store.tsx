@@ -46,17 +46,7 @@ const role = (prevState: string = initialRole, action: actionType) => {
 };
 
 // reducer function for checked In
-let status = localStorage.getItem("isCheckedIn");
-const lastCheckedInDate = localStorage.getItem("lastCheckedInDate");
-
-if (lastCheckedInDate !== new Date().toDateString()) {
-    status = "0";
-}
-
-const isCheckedIn = (
-    prevState: boolean = status === "1",
-    action: actionType
-) => {
+const isCheckedIn = (prevState: boolean = false, action: actionType) => {
     if (action.type === "isCheckedIn") {
         return action.payload;
     }

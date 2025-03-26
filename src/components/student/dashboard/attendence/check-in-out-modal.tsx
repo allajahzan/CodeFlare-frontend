@@ -71,14 +71,9 @@ function CheckedInOutModal({ children }: Propstype) {
 
                 // Update isCheckedIn
                 if (isCheckedIn) {
-                    // Make isCheckedIn to false
                     dispatch(checkedInAction(false));
-                    localStorage.setItem("isCheckedIn", "0");
                 } else {
-                    // Make isCheckedIn to true
                     dispatch(checkedInAction(true));
-                    localStorage.setItem("isCheckedIn", "1");
-                    localStorage.setItem("lastCheckedInDate", new Date().toDateString());
                 }
 
                 toast({
@@ -109,7 +104,7 @@ function CheckedInOutModal({ children }: Propstype) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>{children}</DialogTrigger>
-            <DialogContent className="flex flex-col gap-10">
+            <DialogContent className="flex flex-col gap-10 bg-background dark:bg-sidebar-background">
                 <DialogHeader>
                     <DialogTitle className="text-foreground flex items-center gap-3">
                         <div className="p-2 bg-muted rounded-full">

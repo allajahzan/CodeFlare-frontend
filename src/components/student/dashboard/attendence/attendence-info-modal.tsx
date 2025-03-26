@@ -19,7 +19,7 @@ function AttendenceInfoModal({ children }: PropsType) {
     return (
         <Dialog>
             <DialogTrigger asChild>{children}</DialogTrigger>
-            <DialogContent className="flex flex-col gap-10">
+            <DialogContent className="flex flex-col gap-10 dark:bg-sidebar-background">
                 <DialogHeader>
                     <DialogTitle className="text-foreground flex items-center gap-3">
                         <div className="p-2 bg-muted rounded-full">

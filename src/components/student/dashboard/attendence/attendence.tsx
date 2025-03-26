@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Info, List } from "lucide-react";
+import { useContext, useEffect, useState } from "react";
+import { Info, List, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,6 +7,11 @@ import { checkedInAction, stateType } from "@/redux/store";
 import CheckedInOutModal from "./check-in-out-modal";
 import { Button } from "@/components/ui/button";
 import AttendenceInfoModal from "./attendence-info-modal";
+import { handleCustomError } from "@/utils/error";
+import ApiEndpoints from "@/constants/api-endpoints";
+import { fetchData } from "@/service/api-service";
+import { IUserContext, UserContext } from "@/context/user-context";
+import ToolTip from "@/components/common/tooltip/tooltip";
 // import * as faceapi from "face-api.js";
 // import * as tf from "@tensorflow/tfjs";
 // import { drawFaceLandmarks } from "@/utils/face-landmark";
@@ -23,27 +28,60 @@ function Attendence() {
     // Navigate
     const navigate = useNavigate();
 
+    // Fetching
+    const [fetching, setFetching] = useState<boolean>(true);
+    const [loading, setLoading] = useState<boolean>(true);
+
     // Redux
+    const role = useSelector((state: stateType) => state.role);
     const isCheckedIn = useSelector((state: stateType) => state.isCheckedIn);
 
     const dispatch = useDispatch();
 
-    // Check last checked-in-date and clear isCheckedIn if needed
-    const lastCheckedInDate = localStorage.getItem("lastCheckedInDate");
-    if (lastCheckedInDate !== new Date().toDateString()) {
-        dispatch(checkedInAction(false));
-        localStorage.setItem("isCheckedIn", "0");
-    }
+    // User context
+    const { user } = useContext(UserContext) as IUserContext;
 
-    // Webcam states
-    // const [webCamOpen, setWebCamOpen] = useState<boolean>(false);
+    // Check weather student checkedIn or not
+    useEffect(() => {
+        const checkCheckIn = async () => {
+            try {
+                setFetching(true);
+                setLoading(true);
 
-    // Video Ref
-    // const videoRef = useRef<HTMLVideoElement | null>(null);
+                // Send request
+                const resp = await fetchData(
+                    ApiEndpoints.ATTENDENCE + `?userId=${user?._id}`,
+                    role
+                );
 
-    // Redux
-    const role = useSelector((state: stateType) => state.role);
+                // Success response
+                if (resp && resp.status === 200) {
+                    const data = resp.data?.data;
 
+                    // Update isCheckedIn
+                    if (data.checkIn) {
+                        dispatch(checkedInAction(true));
+                    } else {
+                        dispatch(checkedInAction(false));
+                    }
+
+                    setFetching(false);
+                    setLoading(false);
+                }
+            } catch (err: unknown) {
+                // Not on 404
+                if ((err as { status: number; msg: string }).status !== 404) {
+                    handleCustomError(err);
+                    setLoading(false);
+                }
+                setFetching(false);
+            }
+        };
+
+        checkCheckIn();
+    }, []);
+
+    // Update time in every second
     useEffect(() => {
         const interval = setInterval(() => {
             const newTime = new Date();
@@ -73,25 +111,37 @@ function Attendence() {
                 </p>
 
                 {/* Info about attedence */}
-                <AttendenceInfoModal
+                <ToolTip
+                    text="Guidlines"
+                    side="left"
                     children={
-                        <div className="p-2 bg-muted rounded-full cursor-pointer">
-                            <Info className="w-4 h-4 text-foreground" />
-                        </div>
+                        <AttendenceInfoModal
+                            children={
+                                <div className="p-2 bg-muted rounded-full cursor-pointer">
+                                    <Info className="w-4 h-4 text-foreground" />
+                                </div>
+                            }
+                        />
                     }
                 />
 
                 {/* Attendence calender */}
-                <div
-                    onClick={() => navigate(`/${role}/attendence`)}
-                    className="p-2 bg-muted rounded-full cursor-pointer"
-                >
-                    <List className="w-4 h-4 text-foreground" />
-                </div>
+                <ToolTip
+                    text="Attendence List"
+                    side="left"
+                    children={
+                        <div
+                            onClick={() => navigate(`/${role}/attendence`)}
+                            className="p-2 bg-muted rounded-full cursor-pointer"
+                        >
+                            <List className="w-4 h-4 text-foreground" />
+                        </div>
+                    }
+                />
             </div>
 
             {/* Date */}
-            <p className="absolute -translate-x-1/2 left-[22%] top-[30%] text-base text-foreground font-medium">
+            <p className="absolute -translate-x-1/2 left-[22%] top-[30%] text-base text-foreground font-semibold">
                 {new Date().toLocaleDateString("en-GB", {
                     day: "2-digit",
                     month: "long",
@@ -111,7 +161,7 @@ function Attendence() {
                             {/* Old Number  */}
                             <motion.div
                                 key={`old-${item}`}
-                                className="absolute p-5 m-0.5 w-20 h-20 flex items-center justify-center bg-gradient-to-tr from-zinc-950 via-zinc-800 to-zinc-600 dark:bg-background border text-white shadow-sm rounded-lg"
+                                className="absolute p-5 m-0.5 w-20 h-20 flex items-center justify-center bg-gradient-to-tr from-zinc-950 via-zinc-900 to-zinc-800 dark:bg-background border text-white shadow-md rounded-lg"
                             >
                                 {item}
                             </motion.div>
@@ -120,7 +170,7 @@ function Attendence() {
                             <div className="relative">
                                 <motion.div
                                     key={`new-${item}`}
-                                    className="p-5 m-0.5 w-20 h-20 flex items-center justify-center bg-gradient-to-tr from-zinc-950 via-zinc-800 to-zinc-600 dark:bg-background border text-white shadow-sm rounded-lg"
+                                    className="p-5 m-0.5 w-20 h-20 flex items-center justify-center bg-gradient-to-tr from-zinc-950 via-zinc-900 to-zinc-800 dark:bg-background border text-white shadow-md rounded-lg"
                                 >
                                     {item}
                                 </motion.div>
@@ -148,26 +198,58 @@ function Attendence() {
             </div>
 
             {/* Sign your attendence */}
-            <div className="w-full flex gap-3 items-center justify-end">
-                {/* CheckOut */}
-                <CheckedInOutModal
-                    children={
-                        <div className="bg-background rounded-lg">
-                            <Button>{isCheckedIn ? "Check-out" : "Check-in"}</Button>
-                        </div>
-                    }
-                />
+            <div className="w-full flex gap-3 px-5 items-center justify-end">
+                <div className="relative w-full">
+                    {/* Allowed button */}
+                    {!loading && (
+                        <CheckedInOutModal
+                            children={
+                                <div className="w-full bg-background rounded-lg">
+                                    <Button
+                                        variant="default"
+                                        type="submit"
+                                        disabled={loading}
+                                        className="w-full shadow-md disabled:cursor-not-allowed"
+                                    >
+                                        {fetching ? (
+                                            <div className="flex items-center gap-2">
+                                                <Loader2 className="h-4 w-4 animate-spin" />
+                                                Loading...
+                                            </div>
+                                        ) : isCheckedIn ? (
+                                            "Check-out"
+                                        ) : (
+                                            "Check-in"
+                                        )}
+                                    </Button>
+                                </div>
+                            }
+                        />
+                    )}
 
-                {/* View */}
-                {/* <ToolTip
-                    children={
-                        <div className="bg-background rounded-lg">
-                            <IconButton Icon={Eye} />
+                    {/* Not allowed button */}
+                    {loading && (
+                        <div className="relative cursor-not-allowed">
+                            <Button
+                                variant="default"
+                                type="submit"
+                                disabled={loading}
+                                className="w-full shadow-md disabled:cursor-not-allowed"
+                            >
+                                {fetching ? (
+                                    <div className="flex items-center gap-2">
+                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                        Loading...
+                                    </div>
+                                ) : isCheckedIn ? (
+                                    "Check-out"
+                                ) : (
+                                    "Check-in"
+                                )}
+                            </Button>
                         </div>
-                    }
-                    text="View"
-                    side="left"
-                /> */}
+                    )}
+                </div>
             </div>
 
             {/* Web cam */}
