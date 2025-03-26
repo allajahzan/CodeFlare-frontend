@@ -1,10 +1,10 @@
 .dotted-bg {
     background-color: white; /* Light mode background */
-    background-image: radial-gradient(circle, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+    background-image: radial-gradient(circle, rgba(0, 0, 0, 0.15) 1px, transparent 1px);
     background-size: 15px 15px;
 }
 
 .dark .dotted-bg {
     background-color: black; /* Dark mode background */
-    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.15) 1px, transparent 1px);
 }
