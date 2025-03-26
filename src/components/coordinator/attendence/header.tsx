@@ -37,7 +37,7 @@ interface Propstype {
 }
 
 // Calendeer header Component
-function CalendarHeaderForInstrucor({
+function CalenderHeader({
     currentDate,
     onPreviousMonth,
     onNextMonth,
@@ -193,4 +193,4 @@ function CalendarHeaderForInstrucor({
     );
 }
 
-export default CalendarHeaderForInstrucor;
+export default CalenderHeader;

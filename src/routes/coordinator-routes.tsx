@@ -12,7 +12,7 @@ import Students from "@/pages/coordinator/students";
 import AppRoutes from "@/constants/app-routes";
 import Chat from "@/pages/chat/chat";
 import Profile from "@/pages/profile/profile";
-import Attendence from "@/pages/attendence/attendence";
+import Attendence from "@/components/coordinator/attendence/attendence";
 
 // Coordinator Routes
 function CoordinatorRoutes() {

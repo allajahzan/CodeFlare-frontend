@@ -75,8 +75,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
         <>
             {selectedReview && (
                 <div
-                    className="h-full p-5 rounded-2xl overflow-hidden border border-border dark:border-customBorder
-        shadow-sm dark:shadow-customBorder dark:shadow-inner"
+                    className="h-full p-5 rounded-2xl overflow-hidden border shadow-sm bg-background dark:bg-sidebar-background"
                 >
                     <div key={selectedReview._id} className="space-y-5">
                         {/* Heading */}

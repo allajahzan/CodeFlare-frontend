@@ -17,7 +17,7 @@ import UserNameCard from "@/components/common/user/user-name-card";
 import InfoCard from "@/components/common/other-cards/info-card";
 import { Badge } from "@/components/ui/badge";
 import CardHeader from "@/components/common/data-card/header";
-import CalendarHeaderForInstrucor from "./header-instructor";
+import CalenderHeader from "./header";
 import SelfieModal from "./selfie-modal";
 import {
     Accordion,
@@ -158,7 +158,7 @@ function Table({
                 <CardHeader count={4} heading="Attedence list" />
 
                 {/* Filter and view */}
-                <CalendarHeaderForInstrucor
+                <CalenderHeader
                     currentDate={currentDate}
                     onPreviousMonth={onPreviousMonth}
                     onNextMonth={onNextMonth}

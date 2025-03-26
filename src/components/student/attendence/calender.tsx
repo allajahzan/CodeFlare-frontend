@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
     format,
     startOfMonth,
@@ -7,7 +6,7 @@ import {
     endOfWeek,
     eachDayOfInterval,
     isSameMonth,
-    isSameDay,
+    // isSameDay,
     isToday,
 } from "date-fns";
 import { motion } from "framer-motion";
@@ -42,8 +41,6 @@ interface Propstype {
 }
 
 function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
-    const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
-
     // First day of the month
     const monthStart = startOfMonth(currentDate);
 
@@ -101,6 +98,26 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                             const attendance = getAttendanceStatus(day);
                             const isCurrentMonth = isSameMonth(day, currentDate);
 
+                            // Tailwind class according to the conditions
+                            const backgroundClass = attendance?.status
+                                ? attendance.status === "present"
+                                    ? isToday(day)
+                                        ? "" 
+                                        : "bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border border-green-200 dark:border-green-800"
+                                    : attendance.status === "absent"
+                                        ? "bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border border-red-200 dark:border-red-800"
+                                        : "bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border border-yellow-200 dark:border-yellow-800"
+                                : isCurrentMonth
+                                    ? `bg-background dark:bg-sidebar hover:bg-muted dark:bg-gradient-to-tr from-zinc-950 via-zinc-900 to-zinc-800 hover:dark:bg-gradient-to-tr hover:from-zinc-900 hover:via-zinc-850 hover:to-zinc-800`
+                                    : "bg-muted dark:bg-sidebar";
+
+                            const textColor = !isCurrentMonth
+                                ? "text-zinc-300 dark:text-zinc-800"
+                                : "text-foreground";
+
+                                // Final class
+                                const finalClass = `${backgroundClass}  ${textColor}`;
+
                             return (
                                 <TooltipProvider key={day.toString()}>
                                     <Tooltip>
@@ -111,36 +128,9 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                                                 transition={{ delay: 0.2 + index * 0.1 }}
                                                 className={`
                                         relative flex flex-col  
-                                        border border-border dark:border-customBorder rounded-lg p-2
-                                        ${isCurrentMonth
-                                                        ? `bg-background dark:bg-sidebar hover:bg-muted dark:hover:bg-sidebar-background`
-                                                        : "bg-muted dark:bg-sidebar-backgroundDark"
-                                                    } 
-                                        ${isToday(day)
-                                                        ? "bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border border-yellow-200 dark:border-yellow-800 shadow-sm"
-                                                        : ""
-                                                    } 
-                                        ${isSameDay(day, hoveredDate) ? "" : ""}
-                                        ${!isCurrentMonth
-                                                        ? "text-zinc-300 dark:text-zinc-800"
-                                                        : "text-foreground"
-                                                    }   
-                                                 ${attendance?.status ===
-                                                        "present"
-                                                        ? isToday(day)
-                                                            ? ""
-                                                            : "bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border border-green-200 dark:border-green-800"
-                                                        : attendance?.status ===
-                                                            "absent"
-                                                            ? "bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border border-red-200 dark:border-red-800"
-                                                            : ""
-                                                    }  
-                                    `}
-                                                onClick={() =>
-                                                    i !== 0 && onDateClick(day)
-                                                }
-                                                onMouseEnter={() => setHoveredDate(day)}
-                                                onMouseLeave={() => setHoveredDate(null)}
+                                        border border-border dark:border-customBorder rounded-lg p-2 ${finalClass}`
+                                        }
+                                                onClick={() => i !== 0 && onDateClick(day)}
                                             >
                                                 {/* Date */}
                                                 <time
@@ -167,16 +157,13 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                                                     // <Badge className="text-xs capitalize">
                                                     //     {attendance.status}
                                                     // </Badge>
-                                                    <div
-                                                        className={`absolute z-10 inset-0 rounded-lg `}
-                                                    >
+                                                    <div className={`absolute z-10 inset-0 rounded-lg `}>
                                                         <p
                                                             className={`absolute -translate-x-1/2 top-[55%] left-1/2 font-medium`}
                                                         >
                                                             {attendance.status === "present" ? (
                                                                 <CheckCircle2 className="w-5 h-5 text-green-600" />
-                                                            ) : attendance.status ===
-                                                                "absent" ? (
+                                                            ) : attendance.status === "absent" ? (
                                                                 <XCircle className="w-5 h-5 text-red-600" />
                                                             ) : (
                                                                 <CircleDashed className="w-5 h-5 text-yellow-600" />
@@ -194,9 +181,7 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                                         {/* Tooltip content */}
                                         {attendance && (
                                             <TooltipContent className="bg-background text-foreground dark:bg-sidebar border borer-2">
-                                                <p className="capitalize">
-                                                    {attendance.status}
-                                                </p>
+                                                <p className="capitalize">{attendance.status}</p>
                                                 <p className="text-xs text-muted-foreground">
                                                     {attendance.notes}
                                                 </p>
