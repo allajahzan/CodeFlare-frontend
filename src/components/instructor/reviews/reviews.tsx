@@ -163,7 +163,7 @@ function Reviews() {
             <div
                 // onClick={() => setDatePickerOpen(false)}
                 className="p-5 sticky z-0 top-0 md:top-5 w-full h-[calc(100vh-108px)] flex flex-col gap-5 items-center rounded-2xl
-            bg-background border border-border shadow-sm dark:shadow-customBorder dark:shadow-inner"
+            bg-background dark:bg-sidebar-background border border-border shadow-sm"
             >
                 {/* Card header */}
                 <CardHeader
@@ -241,6 +241,7 @@ function Reviews() {
                                 }}
                                 action={() => setSelectedReview(review)}
                                 selectedUser={selectedReview}
+                                className="dark:border-transparent bg-background dark:bg-sidebar hover:bg-muted dark:hover:bg-sidebar-backgroundDark"
                                 children1={
                                     <div className="flex items-center relative overflow-auto no-scrollbar">
                                         <p className="relative text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
@@ -298,7 +299,7 @@ function Reviews() {
                             fetching ? "Please wait a moment" : "Schedule review for students"
                         }
                         text={fetching ? "Fetching..." : "No reviews found"}
-                        className="w-full"
+                        className="w-full "
                     />
                 )}
             </div>

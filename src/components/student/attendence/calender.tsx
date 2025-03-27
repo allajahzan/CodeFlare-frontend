@@ -108,7 +108,7 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                                         ? "bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border border-red-200 dark:border-red-800"
                                         : "bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border border-yellow-200 dark:border-yellow-800"
                                 : isCurrentMonth
-                                    ? `bg-background dark:bg-sidebar hover:bg-muted hover:dark:bg-sidebar-backgroundDark`
+                                    ? `bg-background dark:bg-sidebar-backgroundDark hover:bg-muted hover:dark:bg-muted`
                                     : "bg-muted dark:bg-sidebar-background";
 
                             const textColor = !isCurrentMonth

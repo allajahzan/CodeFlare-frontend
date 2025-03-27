@@ -105,7 +105,7 @@ function StudentLayout({ isDrawerOpen }: PropsType) {
                 )}
             >
                 <Navbar />
-                <div className="h-full overflow-auto">
+                <div className="h-full overflow-auto no-scrollbar">
                     <Outlet />
                 </div>
             </div>

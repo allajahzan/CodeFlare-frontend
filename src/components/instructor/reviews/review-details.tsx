@@ -237,7 +237,7 @@ function ReviewDetails({
             {selectedReview && (
                 <div
                     className={
-                        "realtive h-full p-5 rounded-2xl overflow-hidden border border-border dark:bg-background shadow-sm"
+                        "realtive h-full p-5 rounded-2xl overflow-hidden border border-border bg-background dark:bg-sidebar-background shadow-sm"
                     }
                 >
                     {/* Overlay to restrict action */}
@@ -331,11 +331,8 @@ function ReviewDetails({
                             {/* Status */}
                             <DropdownMenu>
                                 <DropdownMenuTrigger>
-                                    <motion.div
-                                        initial={{ opacity: 1, x: 0 }}
-                                        animate={{ x: 0, opacity: 1 }}
-                                        transition={{ delay: 0 }}
-                                    >
+                                    <div className={`relative rounded-lg bg-gradient-to-br from-${statusColor}-50 to-${statusColor}-100 dark:from-${statusColor}-900/20 dark:to-${statusColor}-800/20 border border-${statusColor}-200 dark:border-${statusColor}-800`}>
+                                    <div className={`absolute top-0 right-0 w-16 h-16 bg-${statusColor}-200 dark:bg-${statusColor}-700/20 rounded-bl-full opacity-50`}></div>
                                         <InfoCard
                                             Icon={statusIcon}
                                             label="Status"
@@ -343,7 +340,7 @@ function ReviewDetails({
                                             iconDivClassName={`bg-${statusColor}-400/20 group-hover:bg-${statusColor}-400/30`}
                                             iconClassName={`text-${statusColor}-600`}
                                         />
-                                    </motion.div>
+                                    </div>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent
                                     align="end"
@@ -377,12 +374,9 @@ function ReviewDetails({
                             </DropdownMenu>
 
                             {/* Score */}
-                            <motion.div
-                                initial={{ opacity: 1, x: 0 }}
-                                animate={{ x: 0, opacity: 1 }}
-                                transition={{ delay: 0 }}
-                            >
-                                <div className="group min-w-[250px] p-3 rounded-lg border border-border bg-background shadow-sm">
+                            <div>
+                                <div className="relative group min-w-[250px] p-3 rounded-lg shadow-sm bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900/20 dark:to-pink-800/20 border border-pink-200 dark:border-pink-800 ">
+                                <div className="absolute top-0 right-0 w-16 h-16 bg-pink-200 dark:bg-pink-700/20 rounded-bl-full opacity-50"></div>
                                     <div className="relative flex items-center gap-3">
                                         <div className="p-2 rounded-lg bg-pink-400/20 group-hover:bg-pink-400/30">
                                             <Trophy className="w-5 h-5 text-pink-600" />
@@ -415,14 +409,11 @@ function ReviewDetails({
                                         />
                                     </div>
                                 </div>
-                            </motion.div>
+                            </div>
 
                             {/* Sheduled date */}
-                            <motion.div
-                                initial={{ opacity: 1, x: 0 }}
-                                animate={{ x: 0, opacity: 1 }}
-                                transition={{ delay: 0 }}
-                            >
+                            <div className="relative rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border border-blue-200 dark:border-blue-800">
+                            <div className="absolute top-0 right-0 w-16 h-16 bg-blue-200 dark:bg-blue-700/20 rounded-bl-full opacity-50"></div>
                                 <InfoCard
                                     Icon={CalendarDays}
                                     label="Sheduled Date"
@@ -437,14 +428,11 @@ function ReviewDetails({
                                     iconDivClassName="bg-blue-400/20 group-hover:bg-blue-400/30"
                                     iconClassName="text-blue-600"
                                 />
-                            </motion.div>
+                            </div>
 
                             {/* Review date */}
-                            <motion.div
-                                initial={{ opacity: 1, x: 0 }}
-                                animate={{ x: 0, opacity: 1 }}
-                                transition={{ delay: 0 }}
-                            >
+                            <div className="relative rounded-lg bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 border border-orange-200 dark:border-orange-800">
+                            <div className="absolute top-0 right-0 w-16 h-16 bg-orange-200 dark:bg-orange-700/20 rounded-bl-full opacity-50"></div>
                                 <InfoCard
                                     Icon={CalendarDays}
                                     label="Reveiw Date"
@@ -459,14 +447,11 @@ function ReviewDetails({
                                     iconDivClassName="bg-orange-400/20 group-hover:bg-orange-400/30"
                                     iconClassName="text-orange-600"
                                 />
-                            </motion.div>
+                            </div>
 
                             {/* Time */}
-                            <motion.div
-                                initial={{ opacity: 1, x: 0 }}
-                                animate={{ x: 0, opacity: 1 }}
-                                transition={{ delay: 0 }}
-                            >
+                            <div className="relative rounded-lg bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border border-green-200 dark:border-green-800">
+                            <div className="absolute top-0 right-0 w-16 h-16 bg-green-200 dark:bg-green-700/20 rounded-bl-full opacity-50"></div>
                                 <InfoCard
                                     Icon={Clock}
                                     label="Time"
@@ -474,14 +459,11 @@ function ReviewDetails({
                                     iconDivClassName="bg-green-400/20 group-hover:bg-green-400/30"
                                     iconClassName="text-green-600"
                                 />
-                            </motion.div>
+                            </div>
 
                             {/* Duration */}
-                            <motion.div
-                                initial={{ opacity: 1, x: 0 }}
-                                animate={{ x: 0, opacity: 1 }}
-                                transition={{ delay: 0 }}
-                            >
+                            <div className="relative rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border border-blue-200 dark:border-blue-800">
+                            <div className="absolute top-0 right-0 w-16 h-16 bg-blue-200 dark:bg-blue-700/20 rounded-bl-full opacity-50"></div>
                                 <InfoCard
                                     Icon={Hourglass}
                                     label="Duration"
@@ -489,7 +471,7 @@ function ReviewDetails({
                                     iconDivClassName="bg-purple-400/20 group-hover:bg-purple-400/30"
                                     iconClassName="text-purple-600"
                                 />
-                            </motion.div>
+                            </div>
                         </div>
                     </div>
                 </div>
