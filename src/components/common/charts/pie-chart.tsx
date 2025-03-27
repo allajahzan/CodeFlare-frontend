@@ -9,9 +9,10 @@ interface PropsType {
     data: any[];
     text: string;
     className: string;
+    radius?: number;
 }
 
-const PieCharts = ({ data, text, className }: PropsType) => {
+const PieCharts = ({ data, text, className, radius }: PropsType) => {
     // Theme context
     const { theme } = useContext(ThemeContext) as IThemeContext;
 
@@ -61,7 +62,7 @@ const PieCharts = ({ data, text, className }: PropsType) => {
                             nameKey="name"
                             cx="50%"
                             cy="50%"
-                            outerRadius={78}
+                            outerRadius={radius? radius : 78}
                             fill={theme === "dark" ? "#f5f5f5" : "#18181b"}
                             label
                         >

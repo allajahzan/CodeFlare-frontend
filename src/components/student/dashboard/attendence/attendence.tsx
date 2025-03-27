@@ -59,14 +59,15 @@ function Attendence() {
                     const data = resp.data?.data;
 
                     // Update isCheckedIn
-                    if (data.checkIn) {
+                    if (data.checkIn && !data.checkOut) {
                         dispatch(checkedInAction(true));
-                    } else {
+                        setLoading(false);
+                    } else if (!data.checkIn) {
                         dispatch(checkedInAction(false));
+                        setLoading(false);
                     }
 
                     setFetching(false);
-                    setLoading(false);
                 }
             } catch (err: unknown) {
                 // Not on 404

@@ -24,6 +24,7 @@ import { IReview } from "@/types/review";
 import { convertTo12HourFormat } from "@/utils/time-converter";
 import { NotSelected } from "@/components/animation/fallbacks";
 import { Input } from "@/components/ui/input";
+// import PieCharts from "@/components/common/charts/pie-chart";
 
 // Interface for Props
 interface PropsType {
@@ -386,6 +387,16 @@ function PendingsAndChart({ selectedReview, reviews, fetching }: PropsType) {
                         text="Overall Performance"
                         className="h-[170px] sm:h-[206px]"
                     />
+                    //  <PieCharts
+                    //                             data={[
+                    //                                 { name: "Present", value: 50 },
+                    //                                 { name: "Absent", value: 20 },
+                    //                                 { name: "Pending", value: 15 },
+                    //                             ]}
+                    //                             text="Today's overview"
+                    //                             className="h-[170px] sm:h-[206px]"
+                    //                             radius={70}
+                    //                         />
                 )}
 
                 {/* If no reviews */}

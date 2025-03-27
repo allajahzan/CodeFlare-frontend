@@ -89,7 +89,7 @@ function Reviews() {
                 </div>
 
                 {reviews.length > 0 && (
-                    <div className="flex flex-col gap-8 overflow-auto no-scrollbar ">
+                    <div className="flex flex-col gap-3 overflow-auto no-scrollbar ">
                         {reviews.map((review, index) => (
                             <div key={review._id} className="relative rounded-lg">
                                 {/* One list */}
@@ -137,9 +137,9 @@ function Reviews() {
                                 {index < reviews.length - 1 && (
                                     <motion.div
                                         initial={{ height: 0 }}
-                                        animate={{ height: 49 }}
+                                        animate={{ height: 28 }}
                                         transition={{ delay: 0.2 + index * 0.1 }}
-                                        style={{ top: "57px" }}
+                                        style={{ top: "56px" }}
                                         className={cn(
                                             "absolute z-50 left-[37px] w-0.5 -translate-x-1/2 rounded-full",
                                             reviews[index + 1].status === "Pass"
@@ -168,7 +168,7 @@ function Reviews() {
             </div>
 
             {/* Selected review details */}
-            <div className="w-full h-full bg-background dark:bg-sidebar-background md:dark:bg-transparent md:bg-transparent relative z-20 rounded-2xl grid grid-rows-[auto_1fr] md:col-span-1 lg:col-span-2 gap-5 overflow-auto no-scrollbar">
+            <div className="w-full h-full bg-background border-0 shadow-none md:bg-transparent relative z-20 rounded-2xl grid grid-rows-[auto_1fr] md:col-span-1 lg:col-span-2 gap-5 overflow-auto no-scrollbar">
                 {/* Review details */}
                 <ReviewDetails
                     selectedReview={selectedReview as IReview}
