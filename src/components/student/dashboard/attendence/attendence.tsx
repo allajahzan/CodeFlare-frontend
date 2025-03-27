@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import { Info, List, Loader2 } from "lucide-react";
+import { CalendarClock, Info, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { checkedInAction, stateType } from "@/redux/store";
 import CheckedInOutModal from "./check-in-out-modal";
 import { Button } from "@/components/ui/button";
-import AttendenceInfoModal from "./attendence-info-modal";
+import AttendenceInfoModal from "./guidlines-modal";
 import { handleCustomError } from "@/utils/error";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { fetchData } from "@/service/api-service";
@@ -127,14 +127,14 @@ function Attendence() {
 
                 {/* Attendence calender */}
                 <ToolTip
-                    text="Attendence List"
+                    text="Calender"
                     side="left"
                     children={
                         <div
                             onClick={() => navigate(`/${role}/attendence`)}
                             className="p-2 bg-muted rounded-full cursor-pointer"
                         >
-                            <List className="w-4 h-4 text-foreground" />
+                            <CalendarClock className="w-4 h-4 text-foreground" />
                         </div>
                     }
                 />

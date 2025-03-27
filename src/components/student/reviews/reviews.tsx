@@ -70,12 +70,12 @@ function Reviews() {
     }, []);
 
     return (
-        <div className="p-5 pt-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 md:gap-5 bg-transparent">
+        <div className="p-5 pt-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 md:gap-5">
             {/* Reviews lists */}
             <div
-                className="sticky top-[0px] w-full p-5 flex flex-col gap-5
+                className="sticky top-0 bg-background dark:bg-sidebar-background w-full p-5 flex flex-col gap-5
             h-[calc(100vh-322px)] md:h-[calc(100vh-108px)] mb-5 md:mb-0 rounded-2xl
-            border border-border shadow-sm dark:shadow-customBorder dark:shadow-inner"
+            border border-border shadow-sm"
             >
                 {/* Card header */}
                 <CardHeader count={reviews.length} heading="All Reviews" />
@@ -98,7 +98,7 @@ function Reviews() {
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.2 + index * 0.1 }}
                                     className={cn(
-                                        "p-2 px-3 flex items-center gap-4 cursor-pointer rounded-full bg-background hover:bg-muted dark:hover:bg-sidebar border border-transparent dark:border-border",
+                                        "p-2 px-3 flex items-center gap-4 cursor-pointer rounded-full  bg-background dark:bg-sidebar hover:bg-muted dark:hover:bg-sidebar-backgroundDark",
                                         selectedReview?._id === review._id
                                             ? "bg-muted dark:bg-sidebar"
                                             : ""
@@ -168,7 +168,7 @@ function Reviews() {
             </div>
 
             {/* Selected review details */}
-            <div className="w-full h-full relative z-20 bg-background rounded-2xl grid grid-rows-[auto_1fr] md:col-span-1 lg:col-span-2 gap-5 overflow-auto">
+            <div className="w-full h-full relative z-20 rounded-2xl grid grid-rows-[auto_1fr] md:col-span-1 lg:col-span-2 gap-5 overflow-auto">
                 {/* Review details */}
                 <ReviewDetails
                     selectedReview={selectedReview as IReview}

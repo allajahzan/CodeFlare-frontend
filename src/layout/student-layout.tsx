@@ -57,7 +57,7 @@ function StudentLayout({ isDrawerOpen }: PropsType) {
             {
                 path: AppRoutes.STUDENT_REVIEWS,
                 icon: CalendarDays,
-                label: AppRoutes.STUDENT_REVIEWS,
+                label: "Reviews",
             },
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
             ...(isSmall
@@ -94,7 +94,7 @@ function StudentLayout({ isDrawerOpen }: PropsType) {
                         transform: "scale(1) translate3d(0, 0, 0)",
                     }),
             }}
-            className="h-screen dotted-bg"
+            className="h-screen dotted-bg relative"
         >
             <Shadow />
             <Sidebar sideBarItems={sideBarItems} />

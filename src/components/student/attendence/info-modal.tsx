@@ -27,7 +27,7 @@ interface PropsType {
 function InfoModal({ isModalOpen, setIsModalOpen, selectedEvent }: PropsType) {
     return (
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-            <DialogContent autoFocus={false}>
+            <DialogContent autoFocus={false} className="bg-background dark:bg-sidebar-background">
                 <DialogTitle className="text-foreground flex items-center gap-3">
                     <div className="p-2 bg-muted rounded-full">
                         <CalendarClockIcon className="w-4 h-4" />

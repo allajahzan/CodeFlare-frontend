@@ -21,7 +21,7 @@ function Search({ search, handleSearch }: PropsType) {
                 required
                 value={search}
                 onChange={handleSearch}
-                className="p-5 pl-9 pr-3 text-foreground font-medium rounded-lg dark:shadow-customBorder dark:shadow-inner"
+                className="p-5 pl-9 pr-3 text-foreground font-medium rounded-lg shadow-sm bg-background dark:hover:bg-sidebar dark:hover:border-customBorder-dark"
             />
         </div>
     );

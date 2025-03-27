@@ -6,21 +6,21 @@ import CalendarHeaderForStudent from "./header";
 
 // Sample attendance data
 const attendanceData: Record<string, any> = {
-    "2025-03-24": {
+    "2025-03-25": {
         date: "2025-03-13",
         status: "absent",
         notes: "Sick leave",
         start: "2025-03-14T09:00",
         end: "05:30 pm",
     },
-    "2025-03-25": {
+    "2025-03-26": {
         date: "2025-03-14",
         status: "present",
         notes: "On time",
         start: "09:000 am",
         end: "05:30 pm",
     },
-    "2025-03-26": {
+    "2025-03-27": {
         date: "2025-03-15",
         status: "pending",
         notes: "Joined 30 minutes late",

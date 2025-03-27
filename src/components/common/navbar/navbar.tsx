@@ -109,7 +109,7 @@ const Navbar = () => {
                             placeholder="Search"
                             autoComplete="off"
                             required
-                            className="p-5 pl-9 text-foreground font-medium rounded-lg shadow-sm dark:shadow-customBorder dark:shadow-inner"
+                            className="p-5 pl-9 text-foreground font-medium rounded-lg shadow-sm"
                         />
                         <Search className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                     </div>

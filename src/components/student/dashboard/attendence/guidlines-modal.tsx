@@ -76,7 +76,7 @@ function AttendenceInfoModal({ children }: PropsType) {
                                 <p className="py-2 flex items-center">
                                     <Dot className="flex-shrink-0 self-start" />
                                     If you check in between 9:00 AM and 10:00 AM, you are
-                                    considered late and must provide a vapd reason.
+                                    considered late and must provide a valid reason.
                                 </p>
                                 <p className="py-2 flex items-center">
                                     <Dot className="flex-shrink-0 self-start" />

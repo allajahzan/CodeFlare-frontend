@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { addMonths, subMonths } from "date-fns";
+// import { addMonths, subMonths } from "date-fns";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import Table from "./table";
@@ -31,7 +31,7 @@ import Table from "./table";
 
 // Attendence list Component
 function AttendenceList() {
-    const [currentDate, setCurrentDate] = useState(new Date());
+    // const [currentDate, setCurrentDate] = useState(new Date());
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
@@ -42,14 +42,14 @@ function AttendenceList() {
     );
 
     //  Previous month
-    const handlePreviousMonth = () => {
-        setCurrentDate((prev) => subMonths(prev, 1));
-    };
+    // const handlePreviousMonth = () => {
+    //     setCurrentDate((prev) => subMonths(prev, 1));
+    // };
 
     // Next month
-    const handleNextMonth = () => {
-        setCurrentDate((prev) => addMonths(prev, 1));
-    };
+    // const handleNextMonth = () => {
+    //     setCurrentDate((prev) => addMonths(prev, 1));
+    // };
 
     return (
         <div
@@ -58,9 +58,6 @@ function AttendenceList() {
             {/* Table */}
             {view === "table-view" && (
                 <Table
-                    currentDate={currentDate}
-                    onPreviousMonth={handlePreviousMonth}
-                    onNextMonth={handleNextMonth}
                     view={view}
                     setView={setView}
                 />

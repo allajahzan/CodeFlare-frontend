@@ -1,16 +1,11 @@
 import {
-    CalendarClockIcon,
     CalendarDaysIcon,
-    ChevronLeft,
-    ChevronRight,
     Filter,
     ScanEye,
 } from "lucide-react";
-import IconButton from "@/components/ui/icon-button";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import DatePicker from "@/components/instructor/reviews/date-picker";
-import { Fragment } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
 import FilterAttendence from "./filter";
 import { SelectValue } from "@radix-ui/react-select";
@@ -19,9 +14,6 @@ import { IBatch } from "@/types/batch";
 
 // Interface for Props
 interface Propstype {
-    currentDate: Date;
-    onPreviousMonth?: () => void;
-    onNextMonth?: () => void;
     view: "table-view" | "calender-view";
     setView: React.Dispatch<React.SetStateAction<"table-view" | "calender-view">>;
 
@@ -38,9 +30,6 @@ interface Propstype {
 
 // Calendeer header Component
 function CalenderHeader({
-    currentDate,
-    onPreviousMonth,
-    onNextMonth,
     view,
     setView,
 
@@ -68,39 +57,9 @@ function CalenderHeader({
                         : "p-0"
                     }`}
             >
-                {view === "calender-view" && (
-                    <div className={`flex items-center gap-2 truncate`}>
-                        <div className="p-2 rounded-full bg-muted">
-                            <CalendarClockIcon className="w-5 h-5 text-foreground" />
-                        </div>
-
-                        {/* {view === "calender-view" && ( */}
-                        <h1 className="text-lg text-foreground font-semibold">
-                            {new Date(currentDate).toLocaleDateString("en-GB", {
-                                month: "short",
-                                year: "2-digit",
-                            })}
-                        </h1>
-                    </div>
-                )}
-
+                
                 {/* Buttons */}
                 <div className={`flex gap-1 ${view === "table-view" && "w-full"}`}>
-                    {view === "calender-view" && (
-                        <Fragment>
-                            <IconButton
-                                Icon={ChevronLeft}
-                                action={onPreviousMonth}
-                                className="bg-background dark:hover:border-customBorder-dark hover:bg-muted dark:hover:bg-sidebar shadow-none dark:shadow-none"
-                            />
-                            <IconButton
-                                Icon={ChevronRight}
-                                action={onNextMonth}
-                                className="bg-background dark:hover:border-customBorder-dark hover:bg-muted dark:hover:bg-sidebar shadow-none dark:shadow-none"
-                            />
-                        </Fragment>
-                    )}
-
                     {/* Select Date */}
                     {view === "table-view" && (
                         <div className="relative w-full sm:col-span-2 lg:col-span-1">
