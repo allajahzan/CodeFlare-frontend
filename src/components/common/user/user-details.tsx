@@ -174,7 +174,7 @@ function UserDetails({
                                 .map((item, index) => (
                                     <Fragment key={index}>
                                         {item?.icon && (
-                                            <div className={cn("group p-3 rounded-lg border border-border shadow-sm", item.className)}>
+                                            <div className={cn("group bg-background dark:bg-sidebar p-3 rounded-lg border dark:border-transparent shadow-sm")}>
                                                 <div className="flex items-center gap-3">
                                                     <div
                                                         className={cn(

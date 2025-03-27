@@ -255,7 +255,7 @@ function Table({ view, setView }: Propstype) {
                         MainIcon={CalendarClock}
                         message="Select an attendence to view it's details"
                         text="No attendence selected"
-                        className="h-[457.5px]"
+                        className="h-[454px]"
                     />
                 )}
 
