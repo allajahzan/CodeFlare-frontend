@@ -23,7 +23,7 @@ import EditStudentSheet from "@/components/coordinator/students/sheet-edit-stude
 import { useContext } from "react";
 import { IUserContext, UserContext } from "@/context/user-context";
 import UserNameCard from "./user-name-card";
-import { IBatch } from "@/components/admin/batch/batches";
+import {IBatch} from "@/types/batch"
 import { IStudent } from "@/types/student";
 import { IUser } from "@/types/user";
 
@@ -64,7 +64,7 @@ function UserDetails({
                 >
                     <div
                         className={cn(
-                            "h-full p-5 space-y-5 bg-background overflow-hidden",
+                            "h-full p-5 space-y-5 bg-background dark:bg-sidebar-background overflow-hidden",
                             className
                         )}
                     >
@@ -174,7 +174,7 @@ function UserDetails({
                                 .map((item, index) => (
                                     <Fragment key={index}>
                                         {item?.icon && (
-                                            <div className="group p-3 rounded-lg border border-border shadow-sm">
+                                            <div className={cn("group p-3 rounded-lg border border-border shadow-sm", item.className)}>
                                                 <div className="flex items-center gap-3">
                                                     <div
                                                         className={cn(

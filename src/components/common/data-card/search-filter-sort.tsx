@@ -36,7 +36,7 @@ function SearchFilterSort({
                         required
                         value={search}
                         onChange={handleSearch}
-                        className="p-5 pl-9 text-foreground font-medium rounded-lg dark:shadow-customBorder dark:shadow-inner"
+                        className="p-5 pl-9 text-foreground font-medium rounded-lg"
                     />
                 </div>
                 <ToolTip
@@ -45,8 +45,8 @@ function SearchFilterSort({
                     children={
                         <div
                             onClick={hanldeStatus}
-                            className="p-3 rounded-lg border hover:bg-muted dark:hover:bg-sidebar 
-                     shadow-sm dark:shadow-customBorder dark:shadow-inner"
+                            className="p-3 rounded-lg border dark:hover:border-customBorder-dark bg-background hover:bg-muted dark:hover:bg-sidebar
+                     shadow-sm"
                         >
                             {isBlocked ? (
                                 <UserRoundMinus className="h-4 w-4 text-foreground" />
