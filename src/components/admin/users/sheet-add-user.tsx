@@ -297,7 +297,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                             >
                                 <SelectTrigger
                                     id="role"
-                                    className="text-foreground font-medium p-5 pl-9"
+                                    className="text-foreground bg-background dark:hover:bg-sidebar dark:hover:border-customBorder-dark font-medium p-5 pl-9"
                                 >
                                     <SelectValue placeholder="Select a role" />
                                 </SelectTrigger>

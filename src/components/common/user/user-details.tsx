@@ -23,7 +23,7 @@ import EditStudentSheet from "@/components/coordinator/students/sheet-edit-stude
 import { useContext } from "react";
 import { IUserContext, UserContext } from "@/context/user-context";
 import UserNameCard from "./user-name-card";
-import {IBatch} from "@/types/batch"
+import { IBatch } from "@/types/batch";
 import { IStudent } from "@/types/student";
 import { IUser } from "@/types/user";
 
@@ -174,7 +174,11 @@ function UserDetails({
                                 .map((item, index) => (
                                     <Fragment key={index}>
                                         {item?.icon && (
-                                            <div className={cn("group bg-background dark:bg-sidebar p-3 rounded-lg border dark:border-transparent shadow-sm")}>
+                                            <div
+                                                className={cn(
+                                                    "group bg-background dark:bg-sidebar p-3 rounded-lg border dark:border-transparent shadow-sm"
+                                                )}
+                                            >
                                                 <div className="flex items-center gap-3">
                                                     <div
                                                         className={cn(
@@ -211,10 +215,7 @@ function UserDetails({
                             {/* Assigned batches lists for instructors and coordinators*/}
                             {selectedUser.role !== "student" && (
                                 <DropdownMenu>
-                                    <DropdownMenuTrigger
-                                        className="group flex items-center gap-3 text-start rounded-lg cursor-pointer p-3 border 
-                                    border-border shadow-sm"
-                                    >
+                                    <DropdownMenuTrigger className="group flex items-center gap-3 text-start rounded-lg cursor-pointer bg-background dark:bg-sidebar p-3 border dark:border-transparent shadow-sm">
                                         <div className="p-2 rounded-lg bg-purple-400/20 group-hover:bg-purple-400/30">
                                             <PersonStanding className="w-5 h-5 text-purple-600" />
                                         </div>

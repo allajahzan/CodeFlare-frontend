@@ -132,7 +132,7 @@ function BatchesListSide({
     return (
         <div
             className="p-5 sticky z-0 top-0 w-full h-[calc(100vh-108px)] flex flex-col gap-5 items-center rounded-2xl
-    bg-background border border-border shadow-sm dark:shadow-customBorder dark:shadow-inner"
+    bg-background dark:bg-sidebar-background border shadow-sm"
         >
             {/* Heading */}
             <CardHeader
@@ -153,15 +153,15 @@ function BatchesListSide({
                         required
                         value={search}
                         onChange={handleSearch}
-                        className="w-full p-5 pl-9 text-foreground font-medium rounded-lg dark:shadow-customBorder dark:shadow-inner"
+                        className="w-full p-5 pl-9 text-foreground font-medium rounded-lg shadow-sm"
                     />
                 </div>
 
                 <DropdownMenu>
                     <DropdownMenuTrigger
                         className="flex items-center justify-center w-[41.6px] rounded-lg
-                        border hover:bg-muted dark:hover:bg-sidebar 
-                        shadow-sm dark:shadow-customBorder dark:shadow-inner"
+                        border bg-background hover:bg-muted dark:hover:bg-sidebar 
+                        shadow-sm dark:hover:border-customBorder-dark"
                     >
                         <SortAsc className="h-4 w-4 text-foreground" />
                     </DropdownMenuTrigger>
@@ -230,6 +230,7 @@ function BatchesListSide({
                                     text={batch.name}
                                     action={() => setSelectedBatch(batch)}
                                     selectedItem={selectedBatch}
+                                    className="bg-background dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark dark:border-transparent"
                                     children={
                                         <DropdownMenu>
                                             <DropdownMenuTrigger className="p-2 hover:bg-muted rounded-lg">

@@ -9,10 +9,11 @@ interface PropsType {
     children: ReactNode;
     action: any;
     selectedItem: any;
+    className?: string;
 }
 
 // List card Component
-function ListCard({ index, text, children, action, selectedItem }: PropsType) {    
+function ListCard({ index, text, children, action, selectedItem, className }: PropsType) {    
     return (
         <motion.div
             key={1}
@@ -22,7 +23,8 @@ function ListCard({ index, text, children, action, selectedItem }: PropsType) {
             onClick={action}
             className={cn(
                "group p-2 px-3 w-full flex flex-col rounded-xl cursor-pointer border border-border hover:bg-muted dark:hover:bg-sidebar",
-                selectedItem?.name === text ? "bg-muted dark:bg-sidebar" : ""
+                selectedItem?.name === text ? "bg-muted dark:bg-sidebar" : "",
+                className
             )}
         >
             <div className="flex items-center">
