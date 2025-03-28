@@ -22,7 +22,7 @@ function Filter({ title, fitlerData, filter, setFilter }: PropsType) {
         <DropdownMenu>
             <DropdownMenuTrigger
                 className="flex items-center justify-center w-[41.6px] rounded-lg
-                border hover:bg-muted dark:hover:bg-sidebar shadow-sm"
+                border bg-background dark:hover:bg-sidebar dark:hover:border-customBorder-dark shadow-sm"
             >
                 <FilterIcon className="h-4 w-4 text-foreground" />
             </DropdownMenuTrigger>

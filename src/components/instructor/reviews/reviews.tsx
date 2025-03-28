@@ -194,6 +194,7 @@ function Reviews() {
                             // e.stopPropagation();
                             setDatePickerOpen(!isDatePickerOpen);
                         }}
+                        className="bg-background dark:hover:bg-sidebar dark:hover:border-customBorder-dark cursor-pointer"
                     />
                     <DatePicker
                         isDatePickerOpen={isDatePickerOpen}
@@ -204,7 +205,7 @@ function Reviews() {
                                 setDatePickerOpen(false);
                             }, 0);
                         }}
-                        className="absolute z-20 bg-background top-[45.5px]"
+                        className="absolute z-20 bg-background top-[45.5px] border rounded-lg"
                     />
 
                     {/* Sort */}

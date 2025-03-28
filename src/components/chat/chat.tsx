@@ -321,9 +321,10 @@ function Chat() {
 
             {/* If no chat is selected  */}
             {!selectedUser && (
-                <div className="hidden md:block relative w-full min-h-screen col-span-2 bg-muted dark:bg-sidebar">
+                <div className="hidden md:flex flex-col items-center justify-center relative w-full min-h-screen col-span-2 dark:bg-sidebar">
+                    {/* <img className="w-80" src={chatImage} alt="" /> */}
                     <NotSelected
-                        className="h-full rounded-none bg-transparent border-none"
+                        className="h-fixed rounded-none bg-transparent dark:bg-transparent border-none shadow-none"
                         MainIcon={MessageCircle}
                         IconClassName="w-5 h-5 text-foreground"
                         text="No chat selected"
