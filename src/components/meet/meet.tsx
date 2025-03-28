@@ -29,7 +29,7 @@ function Meet() {
                 <Navbar />
 
                 {/* Content */}
-                <div className="flex flex-col flex-1 overflow-hidden">
+                <div className="flex flex-col items-center flex-1 overflow-hidden">
                     {/* Grid */}
                     <div className="flex-1 grid grid-cols-2">
                         {/* Left side */}
@@ -57,9 +57,9 @@ function Meet() {
                             {/* Buttons */}
                             <div className="flex items-center gap-3 mt-5 pr-12">
                                 <motion.div
-                                    initial={{ opacity: 0, y: 25 }}
+                                    initial={{ opacity: 0, y: 30 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 1.3, duration: 0.3, ease: "easeOut" }}
+                                    transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
                                 >
                                     <Button className="h-11 shadow-md disabled:cursor-not-allowed">
                                         <Video /> New meeting
@@ -67,10 +67,10 @@ function Meet() {
                                 </motion.div>
 
                                 <motion.div
-                                    initial={{ opacity: 0, y: 25 }}
+                                    initial={{ opacity: 0, y: 30 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 1.4, duration: 0.3, ease: "easeOut" }}
-                                    className="relative flex-1 shadow-sm"
+                                    transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
+                                    className="relative flex-1"
                                 >
                                     <Input
                                         id="work"
@@ -84,9 +84,9 @@ function Meet() {
                                 </motion.div>
 
                                 <motion.div
-                                    initial={{ opacity: 0, y: 25 }}
+                                    initial={{ opacity: 0, y: 30 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 1.5, duration: 0.3, ease: "easeOut" }}
+                                    transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
                                     className="h-full px-8 flex items-center bg-muted rounded-lg shadow-sm"
                                 >
                                     <p className="text-foreground font-medium text-base">Join</p>
@@ -141,7 +141,10 @@ function Meet() {
                     </div>
 
                     {/* Footer */}
-                    <div className="w-full"> het allaj </div>
+                    {/* <div className="w-[50%] p-5 flex flex-col gap-1 items-center justify-center border-t"> 
+                      <p className="text-foreground font-medium text-base">Handcrafted with ❤️ by myself.</p>    
+                      <p className="text-foreground font-medium text-base">Copyright © Ahsan allaj pk | 2025</p>
+                    </div> */}
                 </div>
             </div>
         </div>
