@@ -270,7 +270,7 @@ function MessageSideOfChat({
                 shadow-sm dark:shadow-customBorder dark:shadow-inner"
         >
             {/* User name card */}
-            <div className="px-5 py-3 border-b sticky top-0 z-10 bg-background dark:bg-sidebar-background">
+            <div className="px-5 py-3 border-b sticky top-0 z-10 bg-background dark:bg-sidebar-background shadow-sm">
                 <div className="flex items-center gap-3">
                     {/* Back button */}
                     <div

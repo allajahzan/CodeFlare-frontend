@@ -34,7 +34,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
-    "embla-carousel-react": "^8.5.1",
+    "embla-carousel-react": "^8.5.2",
     "face-api.js": "^0.22.2",
     "flowbite-react": "^0.10.2",
     "framer-motion": "^11.15.0",

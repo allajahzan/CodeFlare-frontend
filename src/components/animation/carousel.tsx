@@ -33,7 +33,7 @@ function Carousel({ slides, image, className }: PropsType) {
     return (
         <div
             className={cn(
-                "h-[260px] md:h-full w-full relative rounded-2xl shadow-md",
+                "h-[260px] md:h-full w-full relative rounded-2xl shadow-md text-white",
                 className
             )}
         >
@@ -55,10 +55,10 @@ function Carousel({ slides, image, className }: PropsType) {
                         }}
                         className="text-center px-12"
                     >
-                        <h2 className="text-2xl md:text-3xl text-white font-bold mb-4">
+                        <h2 className="text-2xl md:text-3xl font-bold mb-4">
                             {slides[currentSlide].title}
                         </h2>
-                        <p className="text-white text-base md:text-lg">
+                        <p className="text-base md:text-lg">
                             {slides[currentSlide].description}
                         </p>
                     </motion.div>
