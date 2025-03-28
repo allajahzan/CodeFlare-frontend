@@ -1,5 +1,6 @@
 import { IThemeContext, ThemeContext } from "@/context/theme-context";
 import { cn } from "@/lib/utils";
+import { ChartPie, Download } from "lucide-react";
 import { useContext } from "react";
 import {
     LineChart,
@@ -14,16 +15,27 @@ interface PropsType {
     data: any[];
     text: string;
     className: string;
+    pieChart?: boolean;
 }
 
 // Interface for LineCharts
-const LineCharts = ({ data, text, className }: PropsType) => {
+const LineCharts = ({ data, text, className, pieChart }: PropsType) => {
     // Theme context
     const { theme } = useContext(ThemeContext) as IThemeContext;
 
     return (
-        <div className="h-full w-full flex flex-col gap-5">
-            <p className="text-base text-foreground font-medium truncate">{text}</p>
+        <div className="h-full w-full flex flex-col gap-3">
+            <div className="flex items-center gap-3 w-full">
+                <p className="flex-1 text-base text-foreground font-semibold truncate">
+                    {text}
+                </p>
+                <div className="p-2 bg-muted rounded-full cursor-pointer">
+                    <Download className="w-4 h-4 text-foreground" />
+                </div>
+                {pieChart && <div className="p-2 bg-muted rounded-full cursor-pointer">
+                    <ChartPie className="w-4 h-4 text-foreground" />
+                </div>}
+            </div>
             <div className={cn(className)}>
                 <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={data}>

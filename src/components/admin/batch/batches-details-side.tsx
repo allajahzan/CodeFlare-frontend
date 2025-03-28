@@ -25,7 +25,6 @@ import {
 import { ChangeEvent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Label } from "@/components/ui/label";
-import { IBatch } from "./batches";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
 import { handleCustomError } from "@/utils/error";
@@ -33,6 +32,7 @@ import ApiEndpoints from "@/constants/api-endpoints";
 import { fetchData } from "@/service/api-service";
 import { IStudent } from "@/types/student";
 import { IUser } from "@/types/user";
+import { IBatch } from "@/types/batch";
 
 // Interface for Props
 interface Propstype {

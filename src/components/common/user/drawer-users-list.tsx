@@ -123,7 +123,7 @@ function DrawerUsersList({
                 setDrawerOpen(false);
             }}
         >
-            <div className="h-full w-full flex flex-col gap-[9px] overflow-auto bg-transparent no-scrollbar">
+            <div className="h-full w-full flex flex-col gap-[9px] overflow-auto no-scrollbar">
                 {/* Hidden Title and Description for Accessibility */}
                 <div id="drawerTitle" style={{ display: "none" }}>
                     Users List Drawer
@@ -261,7 +261,7 @@ function DrawerUsersList({
             </div>
 
             {/* Selected user details */}
-            <DrawerContent className="will-change-auto">
+            <DrawerContent className="will-change-auto bg-background dark:bg-sidebar-background ">
                 <UserDetails
                     setUsers={setUsers}
                     setSelectedUser={setSelectedUser}

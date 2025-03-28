@@ -25,7 +25,7 @@ export interface IUserChat {
     lastMessage: string;
     updatedAt: string;
     isOnline?: boolean;
-    count? : number;
+    count?: number;
 }
 
 // Interface for Props
@@ -95,7 +95,7 @@ function UserContactSheet({
     return (
         <div
             className={cn(
-                "h-full w-full bg-background absolute top-0 left-0 transition-all duration-300 ease-in-out",
+                "h-full w-full bg-background dark:bg-sidebar-background absolute top-0 left-0 transition-all duration-300 ease-in-out",
                 isOpen ? "translate-x-0 opacity-1" : "-translate-x-full opacity-1"
             )}
         >
@@ -129,12 +129,15 @@ function UserContactSheet({
                             required
                             value={""}
                             onChange={() => { }}
-                            className="p-5 pl-9 text-foreground font-medium rounded-lg dark:shadow-customBorder dark:shadow-inner"
+                            className="p-5 pl-9 text-foreground font-medium rounded-lg shadow-sm"
                         />
                     </div>
 
                     {/* Filter user */}
-                    <IconButton Icon={Filter} />
+                    <IconButton
+                        Icon={Filter}
+                        className="bg-background dark:hover:bg-sidebar dark:hover:border-customBorder-dark"
+                    />
                 </div>
             </div>
 

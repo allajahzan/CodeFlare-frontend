@@ -82,10 +82,7 @@ function Profile() {
             {/* First section */}
             <div className="relative h-[calc(100vh-108px)] gap-3 col-span-3 md:col-span-2">
                 {/* Background div */}
-                <div
-                    className="w-full relative h-20 rounded-2xl bg-muted dark:bg-sidebar shadow-sm 
-                dark:shadow-customBorder dark:shadow-inner overflow-hidden"
-                >
+                <div className="w-full relative h-20 rounded-2xl bg-muted dark:bg-sidebar shadow-sm overflow-hidden">
                     {bgImage && (
                         <img
                             src={image}
@@ -116,7 +113,7 @@ function Profile() {
 
                 <div className="relative top-10 pt-10 px-0 sm:px-0 flex flex-col gap-2 transition-all duration-300">
                     <Tabs defaultValue="Account" className="w-full flex flex-col gap-4">
-                        <TabsList className="grid w-full grid-cols-3">
+                        <TabsList className="grid w-full grid-cols-3 dark:bg-sidebar-backgroundDark">
                             <TabsTrigger className="text-foreground" value="Account">
                                 Account
                             </TabsTrigger>
@@ -130,14 +127,14 @@ function Profile() {
 
                         {/* Tab content */}
                         <div
-                            className="relative p-5 h-[calc(100vh-320px)] border rounded-2xl overflow-auto no-scrollbar
-                    shadow-sm dark:shadow-customBorder dark:shadow-inner"
+                            className="relative p-5 h-[calc(100vh-320px)] bg-background dark:bg-sidebar-background border rounded-2xl overflow-auto no-scrollbar
+                    shadow-sm "
                         >
                             {!fetching && (
                                 <Fragment>
                                     {/* Account */}
                                     <TabsContent value="Account">
-                                        <Account profile={profile} />
+                                        <Account profile={profile} setProfile={setProfile} />
                                     </TabsContent>
 
                                     {/* Password */}
@@ -147,7 +144,7 @@ function Profile() {
 
                                     {/* Social links */}
                                     <TabsContent value="Urls">
-                                        <SocialLinks profile={profile} />
+                                        <SocialLinks profile={profile} setProfile={setProfile} />
                                     </TabsContent>
                                 </Fragment>
                             )}
@@ -157,8 +154,8 @@ function Profile() {
             </div>
 
             <div
-                className="hidden md:block h-full p-5 bg-zinc-0 rounded-2xl border border-transparent
-            bg-muted dark:bg-sidebar shadow-sm dark:shadow-customBorder dark:shadow-inner"
+                className="hidden md:block h-full p-5 bg-zinc-0 rounded-2xl border
+            bg-background dark:bg-sidebar-background shadow-sm"
             ></div>
         </div>
     );

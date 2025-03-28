@@ -14,6 +14,7 @@ import { useState } from "react";
 import UserCard from "./user-card";
 import { Chat } from "./chat";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 
 // Interface for Props
 interface PropsType {
@@ -44,55 +45,67 @@ function UsersListOfChat({
     return (
         <div
             className={cn(
-                "sticky top-0 z-50 h-[calc(100vh)] flex flex-col gap-5 p-0 bg-background",
-                "border-r border-border shadow-sm dark:shadow-customBorder dark:shadow-inner transition-all duration-0",
+                "sticky top-0 z-50 h-[calc(100vh)] flex flex-col gap-5 p-0 bg-background dark:bg-sidebar-background",
+                "border-r border-border shadow-s transition-all duration-0",
                 isUsersListSideOpen ? "translate-x-0" : "-translate-x-full"
             )}
         >
             {/* Header */}
-            <div className="flex items-center gap-2 px-5 py-5">
-                {/* Go back */}
-                <button onClick={() => navigate("dashboard")} className="p-2">
-                    <ChevronLeft className="w-5 h-5 text-foreground" />
-                </button>
+            <div className="flex flex-col">
+                <div className="flex items-center gap-2 px-5 py-5">
+                    {/* Go back */}
+                    <button onClick={() => navigate("dashboard")} className="p-2">
+                        <ChevronLeft className="w-5 h-5 text-foreground" />
+                    </button>
 
-                <p className="flex-1 text-2xl text-foreground font-bold">Chats</p>
+                    <motion.p
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="flex-1 text-2xl text-foreground font-bold"
+                    >
+                        Chats
+                    </motion.p>
 
-                {/* Contact */}
-                <IconButton
-                    Icon={MessageCirclePlusIcon}
-                    action={() => setIsOpen(true)}
-                    iconClassName="w-5 h-5"
-                    className="border-none shadow-none rounded-full dark:shadow-none hover:bg-muted hover:dark:bg-sidebar"
-                />
+                    {/* Contact */}
+                    <IconButton
+                        Icon={MessageCirclePlusIcon}
+                        action={() => setIsOpen(true)}
+                        iconClassName="w-5 h-5"
+                        className="cursor-pointer border-none shadow-none rounded-full dark:shadow-none bg-background dark:bg-transparent dark:hover:bg-muted"
+                    />
 
-                {/* More */}
-                <IconButton
-                    Icon={EllipsisVertical}
-                    iconClassName="w-5 h-5"
-                    className="border-none shadow-none rounded-full dark:shadow-none hover:bg-muted hover:dark:bg-sidebar"
-                />
-            </div>
-
-            {/* Search and add user */}
-            <div className="flex items-center gap-2 px-5">
-                {/* Search */}
-                <div className="relative flex-1">
-                    <Search className="absolute left-3.5 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input
-                        id="search-chat"
-                        type="search"
-                        placeholder="Search"
-                        autoComplete="off"
-                        required
-                        value={""}
-                        onChange={() => { }}
-                        className="p-5 pl-9 text-foreground font-medium rounded-lg dark:shadow-customBorder dark:shadow-inner"
+                    {/* More */}
+                    <IconButton
+                        Icon={EllipsisVertical}
+                        iconClassName="w-5 h-5"
+                        className="cursor-pointer border-none shadow-none rounded-full dark:shadow-none bg-background dark:bg-transparent dark:hover:bg-muted"
                     />
                 </div>
 
-                {/* Filter user */}
-                <IconButton Icon={Filter} />
+                {/* Search and add user */}
+                <div className="flex items-center gap-2 px-5">
+                    {/* Search */}
+                    <div className="relative flex-1">
+                        <Search className="absolute left-3.5 top-3 h-4 w-4 text-muted-foreground" />
+                        <Input
+                            id="search-chat"
+                            type="search"
+                            placeholder="Search"
+                            autoComplete="off"
+                            required
+                            value={""}
+                            onChange={() => { }}
+                            className="p-5 pl-9 text-foreground font-medium rounded-lg shadow-sm"
+                        />
+                    </div>
+
+                    {/* Filter user */}
+                    <IconButton
+                        Icon={Filter}
+                        className="bg-background dark:hover:bg-sidebar dark:hover:border-customBorder-dark"
+                    />
+                </div>
             </div>
 
             {/* lists */}
@@ -136,8 +149,8 @@ function UsersListOfChat({
                                     <p className="w-full text-end text-xs text-foreground font-medium">
                                         {user.updatedAt.toString()}
                                     </p>
-                                     
-                                    <div className="w-5 h-5"/>
+
+                                    <div className="w-5 h-5" />
                                 </div>
                             }
                         />

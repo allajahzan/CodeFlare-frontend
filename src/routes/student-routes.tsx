@@ -3,7 +3,7 @@ import Login from "@/pages/authentication/login";
 import Dashboard from "@/pages/student/dashboard";
 import Chat from '@/components/chat/chat';
 import Invoice from "@/pages/student/invoice";
-import Leave from "@/pages/student/leave";
+import Leave from "@/pages/student/attendence";
 import Reviews from "@/pages/student/reviews";
 import { Navigate, Route, Routes } from "react-router-dom";
 import PublicRoutes from "@/routes/public-routes";
@@ -14,6 +14,7 @@ import ResetPassword from "@/pages/authentication/reset-password";
 import AppRoutes from "@/constants/app-routes";
 import { useState } from "react";
 import Profile from "@/pages/profile/profile";
+import Attendence from "@/pages/student/attendence";
 
 // Student Routes
 function StudentRoutes() {
@@ -37,6 +38,7 @@ function StudentRoutes() {
                     <Route path={AppRoutes.DASHBOARD} element={<Dashboard />} />
                     <Route path={AppRoutes.STUDENT_REVIEWS} element={<Reviews />} />
                     <Route path={AppRoutes.STUDENT_INVOICES} element={<Invoice />} />
+                    <Route path={AppRoutes.ATTENDENCE} element={<Attendence />} />
                     <Route path={AppRoutes.STUDENT_LEAVES} element={<Leave />} />
                     <Route path={AppRoutes.PROFILE} element={<Profile />} />
                 </Route>

@@ -197,7 +197,7 @@ function Users({ setDrawerOpen }: PropsType) {
             {/*Left side  */}
             <div
                 className="p-5 sticky z-0 top-5 w-full h-[calc(100vh-108px)] flex flex-col gap-5 items-center rounded-2xl
-            bg-background border border-border shadow-sm dark:shadow-customBorder dark:shadow-inner"
+            bg-background dark:bg-sidebar-background border border-border shadow-sm"
             >
                 {/* Heading */}
                 <CardHeader
@@ -227,8 +227,8 @@ function Users({ setDrawerOpen }: PropsType) {
                     children1={
                         <DropdownMenu>
                             <DropdownMenuTrigger
-                                className="p-3 rounded-lg border hover:bg-muted dark:hover:bg-sidebar
-                             shadow-sm dark:shadow-customBorder dark:shadow-inner"
+                                className="p-3 rounded-lg border dark:hover:border-customBorder-dark bg-background hover:bg-muted dark:hover:bg-sidebar
+                             shadow-sm"
                             >
                                 <Filter className="h-4 w-4 text-foreground" />
                             </DropdownMenuTrigger>
@@ -274,8 +274,8 @@ function Users({ setDrawerOpen }: PropsType) {
                         <DropdownMenu>
                             <DropdownMenuTrigger
                                 className="flex items-center justify-center w-[41.6px] rounded-lg
-                                    border hover:bg-muted dark:hover:bg-sidebar 
-                                    shadow-sm dark:shadow-customBorder dark:shadow-inner"
+                                    border dark:hover:border-customBorder-dark bg-background hover:bg-muted dark:hover:bg-sidebar 
+                                    shadow-sm "
                             >
                                 <SortAsc className="h-4 w-4 text-foreground" />
                             </DropdownMenuTrigger>
@@ -379,6 +379,7 @@ function Users({ setDrawerOpen }: PropsType) {
                                         action={handleSelect}
                                         user={user}
                                         selectedUser={selectedUser}
+                                        className="dark:border-transparent bg-background dark:bg-sidebar hover:bg-muted dark:hover:bg-sidebar-backgroundDark"
                                         children1={
                                             <p className="text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
                                                 {user.role[0].toUpperCase() + user.role.slice(1)}
@@ -467,12 +468,12 @@ function Users({ setDrawerOpen }: PropsType) {
                         setSelectedUser={setSelectedUser}
                         selectedUser={selectedUser as IUser}
                         className="rounded-2xl border border-border
-                        shadow-sm dark:shadow-customBorder dark:shadow-inner"
+                        shadow-sm"
                         role="user"
                     />
                     <div
-                        className="h-full p-5 rounded-2xl bg-background border border-border
-                    shadow-sm dark:shadow-customBorder dark:shadow-inner"
+                        className="h-full p-5 rounded-2xl bg-background dark:bg-sidebar-background border border-border
+                    shadow-sm "
                     ></div>
                 </div>
             )}

@@ -12,20 +12,20 @@ interface PropsType {
 }
 function IconButton({ className, action, Icon, iconClassName, text }: PropsType) {
     return (
-        <button
+        <div
             onClick={
                 action
                     ? () => action()
                     : () => { }
             }
             className={cn(
-                "p-3 rounded-lg border border-border hover:bg-muted dark:hover:bg-sidebar shadow-sm dark:shadow-customBorder dark:shadow-inner",
+                "p-3 rounded-lg border border-border hover:bg-muted dark:hover:bg-sidebar shadow-sm",
                 className
             )}
         >
             {Icon && <Icon className={cn("w-4 h-4 text-foreground", iconClassName)} />}
             {text && <p>{text}</p>}
-        </button>
+        </div>
     );
 }
 

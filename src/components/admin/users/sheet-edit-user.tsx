@@ -41,8 +41,8 @@ import {
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import ValidationError from "@/components/ui/validation-error";
-import { IBatch } from "../batch/batches";
 import { IUser } from "@/types/user";
+import { IBatch } from "@/types/batch";
 
 // Interface for Props
 interface PropsType {
@@ -325,7 +325,7 @@ function EditUserSheet({
                             >
                                 <SelectTrigger
                                     id="role"
-                                    className="text-foreground font-medium p-5 pl-9"
+                                    className="text-foreground bg-background dark:hover:bg-sidebar dark:hover:border-customBorder-dark font-medium p-5 pl-9"
                                 >
                                     <SelectValue placeholder="Select a role" />
                                 </SelectTrigger>

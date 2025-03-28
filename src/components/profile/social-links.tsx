@@ -19,10 +19,11 @@ import { IProfile } from "@/types/profile";
 // Interface for Props
 interface PropsType {
     profile: IProfile;
+    setProfile: React.Dispatch<React.SetStateAction<IProfile>>;
 }
 
 // Social links Components
-function SocialLinks({ profile }: PropsType) {
+function SocialLinks({ profile, setProfile }: PropsType) {
     // Form related states
     const [submiting, setSubmiting] = useState(false);
 
@@ -49,10 +50,23 @@ function SocialLinks({ profile }: PropsType) {
         };
 
         try {
+            // Send request
             const resp = await postData(ApiEndpoints.PROFILE, data, role);
 
+            // Success response
             if (resp && resp.status === 200) {
                 setSubmiting(false);
+
+                // Update profile
+                setProfile((prev: IProfile) => {
+                    return {
+                        ...prev,
+                        github: formData.github || "",
+                        linkedin: formData.linkedin || "",
+                        portfolio: formData.portfolio || "",
+                        instagram: formData.instagram || "",
+                    };
+                });
 
                 toast({ title: "Successfully added social links." });
             }

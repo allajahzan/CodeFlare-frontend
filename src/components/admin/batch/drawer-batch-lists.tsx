@@ -1,5 +1,4 @@
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import { IBatch } from "./batches";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -11,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { NotFoundOrbit } from "@/components/animation/fallbacks";
 import BatchesDetailsSide from "./batches-details-side";
 import { motion } from "framer-motion";
+import { IBatch } from "@/types/batch";
 
 // Interface for Props
 interface PropsType {

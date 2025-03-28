@@ -85,7 +85,7 @@ function AdminLayout({ isDrawerOpen }: PropsType) {
                         transform: "scale(1) translate3d(0, 0, 0)",
                     }),
             }}
-            className="h-screen bg-background dark:bg-background"
+            className="h-screen dotted-bg"
         >
             <Shadow />
             <Sidebar sideBarItems={sideBarItems} />

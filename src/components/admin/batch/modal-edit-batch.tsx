@@ -19,8 +19,8 @@ import { UsersRound, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { IBatch } from "./batches";
 import { toast } from "@/hooks/use-toast";
+import { IBatch } from "@/types/batch";
 
 // Interface for Props
 interface PropsType {

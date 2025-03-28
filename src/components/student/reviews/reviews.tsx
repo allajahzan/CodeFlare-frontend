@@ -57,6 +57,7 @@ function Reviews() {
                     // Update reviews
                     setTimeout(() => {
                         setReviews(data);
+                        setFetching(false);
                     }, 1000);
                 }
             } catch (err: unknown) {
@@ -69,12 +70,12 @@ function Reviews() {
     }, []);
 
     return (
-        <div className="p-5 pt-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 md:gap-5 bg-transparent">
+        <div className="p-5 pt-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 md:gap-5">
             {/* Reviews lists */}
             <div
-                className="sticky top-[0px] w-full p-5 flex flex-col gap-5
+                className="sticky top-0 bg-background dark:bg-sidebar-background w-full p-5 flex flex-col gap-5
             h-[calc(100vh-322px)] md:h-[calc(100vh-108px)] mb-5 md:mb-0 rounded-2xl
-            border border-border shadow-sm dark:shadow-customBorder dark:shadow-inner"
+            border border-border shadow-sm"
             >
                 {/* Card header */}
                 <CardHeader count={reviews.length} heading="All Reviews" />
@@ -88,7 +89,7 @@ function Reviews() {
                 </div>
 
                 {reviews.length > 0 && (
-                    <div className="flex flex-col gap-8 overflow-auto no-scrollbar">
+                    <div className="flex flex-col gap-3 overflow-auto no-scrollbar ">
                         {reviews.map((review, index) => (
                             <div key={review._id} className="relative rounded-lg">
                                 {/* One list */}
@@ -97,7 +98,7 @@ function Reviews() {
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.2 + index * 0.1 }}
                                     className={cn(
-                                        "p-2 px-3 flex items-center gap-4 cursor-pointer rounded-full bg-background hover:bg-muted dark:hover:bg-sidebar border border-transparent dark:border-border",
+                                        "p-2 px-3 flex items-center gap-4 cursor-pointer rounded-full  bg-background dark:bg-sidebar hover:bg-muted dark:hover:bg-sidebar-backgroundDark",
                                         selectedReview?._id === review._id
                                             ? "bg-muted dark:bg-sidebar"
                                             : ""
@@ -136,9 +137,9 @@ function Reviews() {
                                 {index < reviews.length - 1 && (
                                     <motion.div
                                         initial={{ height: 0 }}
-                                        animate={{ height: 49 }}
+                                        animate={{ height: 28 }}
                                         transition={{ delay: 0.2 + index * 0.1 }}
-                                        style={{ top: "57px" }}
+                                        style={{ top: "56px" }}
                                         className={cn(
                                             "absolute z-50 left-[37px] w-0.5 -translate-x-1/2 rounded-full",
                                             reviews[index + 1].status === "Pass"
@@ -167,7 +168,7 @@ function Reviews() {
             </div>
 
             {/* Selected review details */}
-            <div className="w-full h-full relative z-20 bg-background rounded-2xl grid grid-rows-[auto_1fr] md:col-span-1 lg:col-span-2 gap-5 overflow-auto">
+            <div className="w-full h-full bg-background border-0 shadow-none md:bg-transparent relative z-20 rounded-2xl grid grid-rows-[auto_1fr] md:col-span-1 lg:col-span-2 gap-5 overflow-auto no-scrollbar">
                 {/* Review details */}
                 <ReviewDetails
                     selectedReview={selectedReview as IReview}

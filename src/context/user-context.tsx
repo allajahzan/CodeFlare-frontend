@@ -1,10 +1,10 @@
-import { IBatch } from "@/components/admin/batch/batches";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { toast } from "@/hooks/use-toast";
 import { sideBarVisibilityAction, stateType } from "@/redux/store";
 import { fetchData } from "@/service/api-service";
 import axiosInstance from "@/service/axios-instance";
 import { registerUser } from "@/socket/chatSocket";
+import { IBatch } from "@/types/batch";
 import { handleCustomError } from "@/utils/error";
 import { createContext, ReactNode, useState, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +21,7 @@ export interface IUser {
     batches?: IBatch[];
     createdAt?: string;
     updatedAt?: string;
+    qrCode?: string;
 }
 
 // Interface for User Context

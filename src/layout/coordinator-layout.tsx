@@ -7,6 +7,7 @@ import {
     stateType,
 } from "@/redux/store";
 import {
+    CalendarClockIcon,
     Globe,
     //   CalendarDays,
     //   CreditCard,
@@ -53,9 +54,22 @@ function CoordinatorLayout({ isDrawerOpen }: PropsType) {
     // sidebar items
     const sideBarItems = useMemo(
         () => [
-            { path: AppRoutes.DASHBOARD, icon: LayoutDashboard, label: AppRoutes.DASHBOARD },
-            { path: AppRoutes.COORDINATOR_STUDENTS, icon: UsersRound, label: "Students" },
+            {
+                path: AppRoutes.DASHBOARD,
+                icon: LayoutDashboard,
+                label: AppRoutes.DASHBOARD,
+            },
+            {
+                path: AppRoutes.COORDINATOR_STUDENTS,
+                icon: UsersRound,
+                label: "Students",
+            },
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
+            {
+                path: AppRoutes.ATTENDENCE,
+                icon: CalendarClockIcon,
+                label: "Attendence",
+            },
             ...(isSmall
                 ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
                 : []),
@@ -87,7 +101,7 @@ function CoordinatorLayout({ isDrawerOpen }: PropsType) {
                         transform: "scale(1) translate3d(0, 0, 0)",
                     }),
             }}
-            className="h-screen bg-background"
+            className="h-screen dotted-bg"
         >
             <Shadow />
             <Sidebar sideBarItems={sideBarItems} />

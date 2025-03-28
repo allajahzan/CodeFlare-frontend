@@ -23,19 +23,20 @@ import { useSelector } from "react-redux";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formSchema, Formtype } from "@/validations/profile/account";
-import { IUserContext, UserContext } from "@/context/user-context";
+import { IUser, IUserContext, UserContext } from "@/context/user-context";
 import ValidationError from "../ui/validation-error";
 import { IProfile } from "@/types/profile";
 import { toast } from "@/hooks/use-toast";
-import { IBatch } from "../admin/batch/batches";
+import { IBatch } from "@/types/batch";
 
 // Interface for Props
 interface PropsType {
     profile: IProfile;
+    setProfile: React.Dispatch<React.SetStateAction<IProfile>>;
 }
 
 // Account Component
-function Account({ profile }: PropsType) {
+function Account({ profile, setProfile }: PropsType) {
     // Form related states
     const [submiting, setSubmiting] = useState(false);
 
@@ -43,7 +44,7 @@ function Account({ profile }: PropsType) {
     const role = useSelector((state: stateType) => state.role);
 
     // User context
-    const { user } = useContext(UserContext) as IUserContext;
+    const { user, setUser } = useContext(UserContext) as IUserContext;
 
     // Form validator
     const {
@@ -71,6 +72,33 @@ function Account({ profile }: PropsType) {
                     name: formData.name,
                 })
             );
+
+            // Update the profile
+            setProfile((prev: IProfile) => {
+                return {
+                    ...prev,
+                    name: formData.name || "",
+                    phoneNumber: formData.phoneNumber || "",
+                    bio: formData.bio || "",
+                    about: formData.about || "",
+                    softSkills: formData.softSkills || "",
+                    techSkills: formData.techSkills || "",
+                    work: formData.work || "",
+                    education: formData.education || "",
+                };
+            });
+
+            // Update context
+            setUser((prev: IUser | null) => {
+                if (prev) {
+                    return {
+                        ...prev,
+                        name: formData.name,
+                    };
+                } else {
+                    return null;
+                }
+            });
 
             toast({ title: "Successfully updated profile." });
         }
@@ -228,7 +256,8 @@ function Account({ profile }: PropsType) {
                             placeholder={user?.batch ? "Batch" : "Batches"}
                             autoComplete="off"
                             defaultValue={
-                                user?.batch?.name || (user?.batches as IBatch[])?.map((b)=>b.name).join(", ")
+                                user?.batch?.name ||
+                                (user?.batches as IBatch[])?.map((b) => b.name).join(", ")
                             }
                             disabled
                             className="p-5 pl-9 text-foreground font-medium"
@@ -282,7 +311,7 @@ function Account({ profile }: PropsType) {
                         autoComplete="off"
                         placeholder="About"
                         {...register("about")}
-                        className="text-foreground font-medium h-[145px] resize-none placeholder:text-[14.5px]"
+                        className="bg-background text-foreground font-medium h-[145px] resize-none placeholder:text-[14.5px]"
                     />
                 </div>
             </motion.div>

@@ -29,7 +29,7 @@ function DatePicker({
                 mode="single"
                 selected={selectedDate}
                 onSelect={setSelectedDate}
-                className="rounded-md border shadow text-foreground"
+                className="rounded-md border-none shadow text-foreground"
             />
         </div>
     );

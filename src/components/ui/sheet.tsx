@@ -59,7 +59,7 @@ const SheetContent = React.forwardRef<
     <SheetOverlay />
     <SheetPrimitive.Content
       ref={ref}
-      className={cn(sheetVariants({ side }), className)}
+      className={cn(sheetVariants({ side }), className, 'bg-background dark:bg-sidebar-background')}
       {...props}
     >
       <SheetPrimitive.Close className="absolute right-5 top-[17.5px] rounded-full text-foreground hover:bg-muted border-none shadow-none p-2">

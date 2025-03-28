@@ -270,7 +270,7 @@ function MessageSideOfChat({
                 shadow-sm dark:shadow-customBorder dark:shadow-inner"
         >
             {/* User name card */}
-            <div className="px-5 py-3 border-b sticky top-0 z-10 bg-background">
+            <div className="px-5 py-3 border-b sticky top-0 z-10 bg-background dark:bg-sidebar-background">
                 <div className="flex items-center gap-3">
                     {/* Back button */}
                     <div
@@ -365,10 +365,10 @@ function MessageSideOfChat({
                     style={{
                         backgroundImage: `url('https://static.whatsapp.net/rsrc.php/v4/yl/r/gi_DckOUM5a.png')`,
                     }}
-                    className="h-full w-full flex flex-col justify-end bg-[#eae6df] dark:bg-sidebar"
+                    className="h-full w-full flex flex-col justify-end bg-[#eae6d6] dark:bg-sidebar"
                 >
                     {/* Give shadow */}
-                    <div className="w-full h-full absolute z-0 top-0 left-0 bg-white/10 dark:bg-black/90"></div>
+                    <div className="w-full h-full absolute z-0 top-0 left-0 bg-white/10 dark:bg-black/85"></div>
 
                     {/* List of messages */}
                     {selectedChat && selectedChat.messages.length > 0 && (
@@ -438,7 +438,7 @@ function MessageSideOfChat({
                         sendMessage();
                     }
                 }}
-                className="p-5 px-5 flex gap-2 items-center border-t bg-background relative z-10"
+                className="p-5 px-5 flex gap-2 items-center border-t bg-background dark:bg-sidebar-background relative z-10"
             >
                 {/* Paper clip */}
                 <PaperClip
@@ -460,12 +460,12 @@ function MessageSideOfChat({
                         placeholder="Type a message"
                         value={message}
                         onChange={(event) => setMessage(event.target.value)}
-                        className="p-5 pl-9 text-foreground font-medium rounded-lg dark:shadow-customBorder dark:shadow-inner"
+                        className="p-5 pl-9 text-foreground font-medium rounded-lg shadow-sm"
                     />
                 </div>
 
                 {/* Button */}
-                <IconButton Icon={message ? Send : Mic} />
+                <IconButton Icon={message ? Send : Mic} className="bg-background dark:hover:bg-sidebar dark:hover:border-customBorder-dark" />
             </form>
 
             {/* Emoji picker */}

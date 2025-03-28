@@ -23,7 +23,7 @@ import EditStudentSheet from "@/components/coordinator/students/sheet-edit-stude
 import { useContext } from "react";
 import { IUserContext, UserContext } from "@/context/user-context";
 import UserNameCard from "./user-name-card";
-import { IBatch } from "@/components/admin/batch/batches";
+import { IBatch } from "@/types/batch";
 import { IStudent } from "@/types/student";
 import { IUser } from "@/types/user";
 
@@ -64,7 +64,7 @@ function UserDetails({
                 >
                     <div
                         className={cn(
-                            "h-full p-5 space-y-5 bg-background overflow-hidden",
+                            "h-full p-5 space-y-5 bg-background dark:bg-sidebar-background overflow-hidden",
                             className
                         )}
                     >
@@ -134,7 +134,9 @@ function UserDetails({
                                     value:
                                         selectedUser.role !== "student"
                                             ? selectedUser.lastActive || "Not recently"
-                                            : (selectedUser as IStudent).week || "Fumigation",
+                                            : (selectedUser as IStudent).week?.[0].toUpperCase() +
+                                            (selectedUser as IStudent).week?.slice(1) ||
+                                            "Fumigation",
                                     iconDivClassName:
                                         "bg-green-400/20 group-hover:bg-green-400/30",
                                     iconClassName: "text-green-600",
@@ -144,7 +146,11 @@ function UserDetails({
                                 {
                                     icon: CalendarDaysIcon,
                                     label: "Date Joined",
-                                    value: selectedUser.createdAt || "20th Jan 2025",
+                                    value:
+                                        new Date(selectedUser.createdAt).toLocaleDateString(
+                                            "en-GB",
+                                            { day: "numeric", month: "short", year: "numeric" }
+                                        ) || "20th Jan 2025",
                                     iconDivClassName:
                                         "bg-orange-400/20 group-hover:bg-orange-400/30",
                                     iconClassName: "text-orange-600",
@@ -155,7 +161,9 @@ function UserDetails({
                                     ? {
                                         icon: Home,
                                         label: "Batch",
-                                        value: (selectedUser as IStudent).batch.name,
+                                        value:
+                                            (selectedUser as IStudent).batch?.name ||
+                                            "Not assigned",
                                         iconDivClassName:
                                             "bg-purple-400/20 group-hover:bg-purple-400/30",
                                         iconClassName: "text-purple-600",
@@ -166,7 +174,11 @@ function UserDetails({
                                 .map((item, index) => (
                                     <Fragment key={index}>
                                         {item?.icon && (
-                                            <div className="group p-3 rounded-lg border border-border shadow-sm">
+                                            <div
+                                                className={cn(
+                                                    "group bg-background dark:bg-sidebar p-3 rounded-lg border dark:border-transparent shadow-sm"
+                                                )}
+                                            >
                                                 <div className="flex items-center gap-3">
                                                     <div
                                                         className={cn(
@@ -203,10 +215,7 @@ function UserDetails({
                             {/* Assigned batches lists for instructors and coordinators*/}
                             {selectedUser.role !== "student" && (
                                 <DropdownMenu>
-                                    <DropdownMenuTrigger
-                                        className="group flex items-center gap-3 text-start rounded-lg cursor-pointer p-3 border 
-                                    border-border shadow-sm"
-                                    >
+                                    <DropdownMenuTrigger className="group flex items-center gap-3 text-start rounded-lg cursor-pointer bg-background dark:bg-sidebar p-3 border dark:border-transparent shadow-sm">
                                         <div className="p-2 rounded-lg bg-purple-400/20 group-hover:bg-purple-400/30">
                                             <PersonStanding className="w-5 h-5 text-purple-600" />
                                         </div>
@@ -223,8 +232,8 @@ function UserDetails({
                                     >
                                         {(selectedUser as IUser).batches.map((batch, index) => {
                                             return (
-                                                <DropdownMenuItem key={index} textValue={batch.name}>
-                                                    {batch.name}
+                                                <DropdownMenuItem key={index} textValue={batch?.name}>
+                                                    {batch?.name}
                                                 </DropdownMenuItem>
                                             );
                                         })}

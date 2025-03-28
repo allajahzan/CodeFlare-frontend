@@ -9,13 +9,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { sideBarVisibilityAction, stateType } from "@/redux/store";
 import NavbarItem from "./navbar-item";
 import Heading from "@/components/ui/heading";
-import { Bell, ChevronDown, Globe, Search, Moon, Sun } from "lucide-react";
+import { Bell, Globe, Search, Moon, Sun, ChevronDown } from "lucide-react";
 import avatar_boy from "@/assets/images/avatar_boy.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { IThemeContext, ThemeContext } from "@/context/theme-context";
+import { IUserContext, UserContext } from "@/context/user-context";
 
 // Navbar Component
 const Navbar = () => {
@@ -28,6 +29,9 @@ const Navbar = () => {
 
     // Theme context
     const { theme, setTheme } = useContext(ThemeContext) as IThemeContext;
+
+    // User context
+    const { user } = useContext(UserContext) as IUserContext;
 
     // Naviagate
     const navigate = useNavigate();
@@ -47,9 +51,10 @@ const Navbar = () => {
         dispatch(sideBarVisibilityAction(!isSideBarVisible));
     }, [dispatch, isSideBarVisible]);
 
+    // Set page heading
     useLayoutEffect(() => {
         pathname.split("/")[2] === "dashboard"
-            ? setPath("Hi Ahsan!")
+            ? setPath(`Hi, ${user?.name as string}!`)
             : setPath(
                 pathname.split("/")[2][0].toUpperCase() +
                 pathname.split("/")[2].slice(1)
@@ -66,7 +71,7 @@ const Navbar = () => {
     return (
         <div
             className={cn(
-                "sticky top-0 left-0 w-full z-40 flex justify-between items-center p-5 bg-background",
+                "sticky top-0 left-0 w-full z-40 flex justify-between items-center p-5",
                 isSmall && ""
             )}
         >
@@ -104,7 +109,7 @@ const Navbar = () => {
                             placeholder="Search"
                             autoComplete="off"
                             required
-                            className="p-5 pl-9 text-foreground font-medium rounded-lg shadow-sm dark:shadow-customBorder dark:shadow-inner"
+                            className="p-5 pl-9 text-foreground font-medium rounded-lg shadow-sm"
                         />
                         <Search className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                     </div>
@@ -125,7 +130,12 @@ const Navbar = () => {
                         <img className="h-full w-full" src={avatar_boy} alt="User Avatar" />
                     </div>
                     <p className="flex-1 text-center text-foreground font-bold truncate">
-                        AA
+                        {(() => {
+                            const [first, second] = (user?.name as string).split(" ");
+                            return second
+                                ? first[0].toUpperCase() + second[0].toUpperCase()
+                                : first.slice(0, 2).toUpperCase();
+                        })()}
                     </p>
                     <ChevronDown className="text-foreground" />
                 </div>

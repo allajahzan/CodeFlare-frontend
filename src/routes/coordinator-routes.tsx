@@ -12,6 +12,7 @@ import Students from "@/pages/coordinator/students";
 import AppRoutes from "@/constants/app-routes";
 import Chat from "@/pages/chat/chat";
 import Profile from "@/pages/profile/profile";
+import Attendence from "@/components/coordinator/attendence/attendence";
 
 // Coordinator Routes
 function CoordinatorRoutes() {
@@ -34,6 +35,7 @@ function CoordinatorRoutes() {
                 <Route element={<CoordinatorLayout isDrawerOpen={isDrawerOpen} />}>
                     <Route path={AppRoutes.DASHBOARD} element={<Dashboard />} />
                     <Route path={AppRoutes.COORDINATOR_STUDENTS} element={<Students isDrawerOpen={isDrawerOpen} setDrawerOpen={_setDrawerOpen} />}/>
+                    <Route path={AppRoutes.ATTENDENCE} element={<Attendence />} />
                     <Route path={AppRoutes.PROFILE} element={<Profile />} />
                 </Route>
             </Route>

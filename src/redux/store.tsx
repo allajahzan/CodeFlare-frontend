@@ -9,6 +9,7 @@ export interface stateType {
     isSideBarVisible: boolean;
     isSmall: boolean;
     role: string;
+    isCheckedIn: boolean;
 }
 
 // reducer function for sideBar visibility
@@ -44,10 +45,19 @@ const role = (prevState: string = initialRole, action: actionType) => {
     return prevState;
 };
 
+// reducer function for checked In
+const isCheckedIn = (prevState: boolean = false, action: actionType) => {
+    if (action.type === "isCheckedIn") {
+        return action.payload;
+    }
+    return prevState;
+};
+
 const appReducer = combineReducers({
     isSideBarVisible,
     isSmall,
     role,
+    isCheckedIn,
 });
 
 const store = createStore(appReducer);
@@ -70,10 +80,18 @@ function resizeAction(payload: boolean) {
     };
 }
 
-// Action for theme changing
+// Action for role changing
 function roleAction(payload: string) {
     return {
         type: "role",
+        payload: payload,
+    };
+}
+
+// Action for checkedIn
+function checkedInAction(payload: boolean) {
+    return {
+        type: "isCheckedIn",
         payload: payload,
     };
 }
@@ -83,4 +101,5 @@ export {
     sideBarVisibilityAction,
     resizeAction,
     roleAction,
+    checkedInAction,
 };

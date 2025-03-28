@@ -7,10 +7,10 @@ import {
     stateType,
 } from "@/redux/store";
 import {
+    CalendarClock,
     CalendarDays,
     CreditCard,
     Globe,
-    IdCard,
     LayoutDashboard,
     ListTodo,
     MessageCircleMore,
@@ -57,14 +57,14 @@ function StudentLayout({ isDrawerOpen }: PropsType) {
             {
                 path: AppRoutes.STUDENT_REVIEWS,
                 icon: CalendarDays,
-                label: AppRoutes.STUDENT_REVIEWS,
+                label: "Reviews",
             },
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
             ...(isSmall
                 ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
                 : []),
 
-            { path: AppRoutes.STUDENT_LEAVES, icon: IdCard, label: "Leaves" },
+            { path: AppRoutes.ATTENDENCE, icon: CalendarClock, label: "Attendence" },
             { path: AppRoutes.STUDENT_INVOICES, icon: CreditCard, label: "Invoices" },
         ],
         [isSmall]
@@ -94,7 +94,7 @@ function StudentLayout({ isDrawerOpen }: PropsType) {
                         transform: "scale(1) translate3d(0, 0, 0)",
                     }),
             }}
-            className="h-screen bg-background"
+            className="h-screen dotted-bg relative"
         >
             <Shadow />
             <Sidebar sideBarItems={sideBarItems} />
@@ -105,7 +105,7 @@ function StudentLayout({ isDrawerOpen }: PropsType) {
                 )}
             >
                 <Navbar />
-                <div className="h-full overflow-auto">
+                <div className="h-full overflow-auto no-scrollbar">
                     <Outlet />
                 </div>
             </div>
