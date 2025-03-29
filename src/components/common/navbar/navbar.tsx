@@ -90,7 +90,7 @@ const Navbar = () => {
             <div className="flex items-center gap-2">
                 {/* Go back */}
                 {pathname.split("/")[2] === "meet" && (
-                    <button onClick={() => navigate("dashboard")} className="p-2">
+                    <button onClick={() => navigate(-1)} className="p-2">
                         <ChevronLeft className="w-5 h-5 text-foreground" />
                     </button>
                 )}
@@ -143,7 +143,7 @@ const Navbar = () => {
 
                 {/* Date on meet page */}
                 {pathname.split("/")[2] === "meet" && (
-                    <div className="px-5">
+                    <div className="px-5 hidden md:block">
                         <p className="flex items-center text-muted-foreground font-medium text-lg">
                             {new Date().toLocaleTimeString("en-US", {
                                 hour: "2-digit",

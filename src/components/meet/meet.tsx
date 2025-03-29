@@ -39,7 +39,7 @@ function Meet() {
                                 initial={{ opacity: 0, x: -30 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
-                                className="text-foreground text-5xl font-medium leading-tight"
+                                className="text-foreground text-[42px] font-medium leading-tight"
                             >
                                 Video calls and meetings for everyone
                             </motion.p>
@@ -55,13 +55,17 @@ function Meet() {
                             </motion.p>
 
                             {/* Buttons */}
-                            <div className="flex items-center gap-3 mt-5 pr-12">
+                            <form className="flex items-center gap-3 mt-5 pr-[50px]">
                                 <motion.div
                                     initial={{ opacity: 0, y: 30 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
+                                    className="shadow-md rounded-lg"
                                 >
-                                    <Button className="h-11 shadow-md disabled:cursor-not-allowed">
+                                    <Button
+                                        type="button"
+                                        className="h-11 shadow-md disabled:cursor-not-allowed "
+                                    >
                                         <Video /> New meeting
                                     </Button>
                                 </motion.div>
@@ -70,14 +74,15 @@ function Meet() {
                                     initial={{ opacity: 0, y: 30 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
-                                    className="relative flex-1"
+                                    className="relative flex-1 shadow-md rounded-lg"
                                 >
                                     <Input
                                         id="work"
                                         type="text"
                                         placeholder="Enter a code or link"
                                         autoComplete="off"
-                                        className="p-5 pl-9  h-11 text-foreground font-medium
+                                        required
+                                        className="p-5 pl-9  h-11 text-foreground font-medium dark:border-customBorder-dark
                                        focus:outline-none focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-600 focus:ring-offset-2 focus:ring-offset-background"
                                     />
                                     <Keyboard className="w-4 h-4 absolute left-3 top-[14px] text-muted-foreground" />
@@ -87,11 +92,16 @@ function Meet() {
                                     initial={{ opacity: 0, y: 30 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
-                                    className="h-full px-8 flex items-center bg-muted rounded-lg shadow-sm"
+                                    className="h-full flex items-center bg-muted rounded-lg shadow-sm"
                                 >
-                                    <p className="text-foreground font-medium text-base">Join</p>
+                                    <Button
+                                        type="submit"
+                                        className="h-11 w-28 shadow-md disabled:cursor-not-allowed bg-muted hover:bg-muted dark:bg-muted dark:hover:bg-muted text-foreground"
+                                    >
+                                        Join
+                                    </Button>
                                 </motion.div>
-                            </div>
+                            </form>
                         </div>
 
                         {/* Right side */}
@@ -112,7 +122,7 @@ function Meet() {
                                             <p className="text-foreground font-medium text-2xl">
                                                 Get a link you can share
                                             </p>
-                                            <p className="text-muted-foreground text-center font-medium text-base px-10">
+                                            <p className="text-muted-foreground text-center font-medium text-base px-12">
                                                 Click new meeting to get a link you can send to people
                                                 you want to meet with
                                             </p>
@@ -127,7 +137,7 @@ function Meet() {
                                             <p className="text-foreground font-medium text-2xl">
                                                 Your meeting is safe
                                             </p>
-                                            <p className="text-muted-foreground text-center font-medium text-base px-10">
+                                            <p className="text-muted-foreground text-center font-medium text-base px-12">
                                                 No one can join the meeting unless invited or admitted
                                                 by the host
                                             </p>

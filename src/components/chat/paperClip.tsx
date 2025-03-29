@@ -129,7 +129,7 @@ function PaperClip({
     return (
         <DropdownMenu>
             <DropdownMenuTrigger>
-                <div className="p-3 rounded-lg border border-border hover:bg-muted dark:hover:bg-sidebar dark:hover:border-customBorder-dark shadow-sm">
+                <div className="p-3 rounded-lg border border-border bg-background hover:bg-muted dark:hover:bg-sidebar dark:hover:border-customBorder-dark shadow-sm">
                     <Paperclip className="h-4 w-4 text-foreground" />
                 </div>
             </DropdownMenuTrigger>

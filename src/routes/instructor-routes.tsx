@@ -13,6 +13,7 @@ import Chat from "@/pages/chat/chat";
 import Profile from "@/pages/profile/profile";
 import Reviews from "@/pages/instructor/reviews";
 import Meet from "@/pages/meet/meet";
+import JoinMeet from "@/pages/meet/join";
 
 // Instructor Routes
 function InstructorRoutes() {
@@ -33,6 +34,7 @@ function InstructorRoutes() {
             <Route element={<ProtectedRoutes allowedRole={AppRoutes.INSTRUCTOR} />}>
             <Route path={AppRoutes.CHATS} element={<Chat />} />
             <Route path={AppRoutes.MEET} element={<Meet />} />
+            <Route path={AppRoutes.MEET+ '/:id'} element={<JoinMeet />} />
                 <Route element={<InstructorLayout isDrawerOpen={isDrawerOpen} />}>
                     <Route path={AppRoutes.DASHBOARD} element={<Dashboard />} />
                     <Route path={AppRoutes.STUDENT_REVIEWS} element={<Reviews />} />
