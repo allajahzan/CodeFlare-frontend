@@ -33,7 +33,7 @@ function Meet() {
                     {/* Grid */}
                     <div className="flex-1 grid grid-cols-2">
                         {/* Left side */}
-                        <div className="flex flex-col justify-center gap-3 p-24">
+                        <div className="flex flex-col justify-center gap-3 p-20">
                             {/* Headings */}
                             <motion.p
                                 initial={{ opacity: 0, x: -30 }}
@@ -48,7 +48,7 @@ function Meet() {
                                 initial={{ opacity: 0, x: -30 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
-                                className="text-muted-foreground font-medium text-2xl pr-10"
+                                className="text-muted-foreground font-medium text-2xl pr-16"
                             >
                                 Connect, collaborate, and celebrate from anywhere with CodeFlare
                                 meet

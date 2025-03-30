@@ -1,6 +1,6 @@
 import JoinMeet from "@/components/meet/join"
 
-// Video call Component
+// Join-Meet Page Component
 function JoinMeetPage() {
   return <JoinMeet/>
 }
