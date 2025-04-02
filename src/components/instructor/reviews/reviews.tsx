@@ -16,7 +16,7 @@ import Search from "@/components/common/data-card/search";
 import UserList from "@/components/common/user/user-list-card";
 import IconButton from "@/components/ui/icon-button";
 import DatePicker from "./date-picker";
-import { loadedReviews, loadReviews, socket } from "@/socket/instructorSocket";
+import { loadedReviews, loadReviews, socket } from "@/socket/instructor/instructorSocket";
 import { IReview } from "@/types/review";
 
 // Reviews Component

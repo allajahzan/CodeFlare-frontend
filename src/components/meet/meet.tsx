@@ -1,161 +1,480 @@
-import { Keyboard, Video } from "lucide-react";
 import Navbar from "../common/navbar/navbar";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { motion } from "framer-motion";
 import {
-    Carousel,
-    CarouselContent,
-    CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
-} from "../ui/carousel";
-import meet from "@/assets/images/meet.svg";
-import meetWhite from "@/assets/images/meet-white.svg";
-import secure from "@/assets/images/secure.svg";
-import secireWhite from "@/assets/images/secure-white.svg";
-import { useContext } from "react";
-import { IThemeContext, ThemeContext } from "@/context/theme-context";
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from "react";
+import * as mediasoupClient from "mediasoup-client";
+import { socket } from "@/socket/communication/connect";
+import JoinVideoCall from "./join-meeting";
+import OnVideoCall from "./meeting-room";
+
+// mediasoup params
+let params = {
+    encodings: [
+        {
+            rid: "r0",
+            maxBitrate: 100000,
+            scalabilityMode: "S1T3",
+        },
+        {
+            rid: "r1",
+            maxBitrate: 300000,
+            scalabilityMode: "S1T3",
+        },
+        {
+            rid: "r2",
+            maxBitrate: 900000,
+            scalabilityMode: "S1T3",
+        },
+    ],
+    codecOptions: {
+        videoGoogleStartBitrate: 1000,
+    },
+    audioEncodings: [
+        {
+            maxBitrate: 64000, // Adjust this based on network conditions
+        },
+    ],
+    codecOptionsAudio: {
+        opusStereo: true,
+        opusDtx: true,
+    },
+};
 
 // Meet Component
 function Meet() {
-    // Theme context
-    const { theme } = useContext(ThemeContext) as IThemeContext;
+    const [isJoined, setJoined] = useState<boolean>(false);
+
+    // Stream
+    const [stream, setStream] = useState<MediaStream | null>(null);
+    const [isVideoLoading, setVideoLoading] = useState<boolean>(true);
+
+    // Video ref
+    const videoRef = useRef<HTMLVideoElement | null>(null);
+
+    // Mute-unmute states
+    const [isAudioMute, setAudioMute] = useState<boolean>(false);
+    const [isVideoMute, setVideoMute] = useState<boolean>(false);
+
+    // Start webcam
+    const startWebcam = async () => {
+        try {
+            let newStream = await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: true,
+            });
+
+            // Update stream
+            setStream(newStream);
+
+            setTimeout(() => {
+                if (videoRef.current) {
+                    videoRef.current.srcObject = newStream;
+                }
+            }, 500);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    // Stop webcam
+    const stopWebcam = async () => {
+        if (stream && videoRef.current) {
+            videoRef.current.srcObject = null;
+            stream.getTracks().forEach((track) => track.stop()); // Stop camera
+
+            // Update stream
+            setStream(null);
+        }
+    };
+
+    // Handle video
+    const handleVideo = () => {
+        if (stream) {
+            const videoTrack = stream.getVideoTracks()[0]; // Get video track
+
+            if (videoTrack) {
+                videoTrack.enabled = !videoTrack.enabled; // Enable-Disable
+
+                // Update state and localStorage
+                setVideoMute((prev) => !prev);
+                localStorage.setItem("isVideoMute", isVideoMute ? "0" : "1");
+            }
+        }
+    };
+
+    // Handle state - isVideoMute
+    useEffect(() => {
+        if (!isVideoMute && videoRef.current) {
+            videoRef.current.srcObject = stream;
+            videoRef.current.play().catch((err) => console.log(err));
+        }
+    }, [isVideoMute, stream]);
+
+    // Handle audio
+    const handleAudio = () => {
+        if (stream) {
+            const audioTrack = stream.getAudioTracks()[0];
+            if (audioTrack) {
+                audioTrack.enabled = !audioTrack.enabled; // Enable-Disable
+
+                // Update state and localstorage
+                setAudioMute((prev) => !prev);
+                localStorage.setItem("isAudioMute", isAudioMute ? "0" : "1");
+            }
+        }
+    };
+
+    // Start webcam when page load
+    useLayoutEffect(() => {
+        localStorage.setItem("isVideoMute", "0");
+        localStorage.setItem("isAudioMute", "0");
+
+        startWebcam();
+
+        // Clean up
+        return () => {
+            stopWebcam();
+        };
+    }, []);
+
+    // ========================= WebRtc with socket IO and mediasoup ===========================================
+
+    const roomId = "room-123";
+
+    // Peers
+    const [peers, setPeers] = useState<{ [key: string]: MediaStream }>({});
+
+    // Device
+    const [device, setDevice] = useState<mediasoupClient.Device | null>(null);
+
+    // Producer Transport
+    const [senderTransport, setSenderTransport] =
+        useState<mediasoupClient.types.Transport | null>(null);
+
+    // ReciverTransport
+    const [recvTransport, setRecvTransport] =
+        useState<mediasoupClient.types.Transport | null>(null);
+
+    const [consumerParams, setConsumerParams] = useState<any | null>(null);
+
+    // Join room and create device =============================================================================
+    useEffect(() => {
+        async function joinRoom() {
+            try {
+                socket.emit(
+                    "joinRoom",
+                    { roomId },
+                    async (rtpCapabilities: mediasoupClient.types.RtpCapabilities) => {
+                        console.log("joined room");
+                        const newDevice = new mediasoupClient.Device();
+                        await newDevice.load({ routerRtpCapabilities: rtpCapabilities });
+                        setDevice(newDevice);
+                    }
+                );
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+        if (isJoined) joinRoom();
+    }, [isJoined]);
+
+    // Create webrtc transports (both producer and consumer), also listen for new producer =====================
+    useEffect(() => {
+        const startCall = async () => {
+            try {
+                // Create transport
+                socket.emit(
+                    "createWebRtcTransport",
+                    { sender: true, roomId },
+                    ({ params }: any) => {
+                        if (params.err) {
+                            console.log("create webrtc transport failed", params.err);
+                            return;
+                        }
+
+                        if (!device) return;
+
+                        // create producer transport
+                        const producerTransport = device.createSendTransport(params);
+
+                        if (!producerTransport) return;
+
+                        setSenderTransport(producerTransport); // Update state
+
+                        // Connect transport - will trigger, when produce() method in producerTransport calls
+                        producerTransport.on(
+                            "connect",
+                            ({ dtlsParameters }, callback, errback) => {
+                                try {
+                                    console.log("produceTransport connect event");
+
+                                    socket.emit("connectTransport", {
+                                        roomId,
+                                        transportId: producerTransport.id,
+                                        dtlsParameters,
+                                    });
+
+                                    callback(); // Notify parameters are transmitted
+                                } catch (err: any) {
+                                    console.log(err);
+                                    errback(err);
+                                }
+                            }
+                        );
+
+                        // Produce transport - will trigger, when produce() method in producerTransport calls
+                        producerTransport.on(
+                            "produce",
+                            async (parameters, callback, errback) => {
+                                try {
+                                    console.log("produceTransport produce event");
+
+                                    socket.emit(
+                                        "produceTransport",
+                                        {
+                                            roomId,
+                                            transportId: producerTransport.id,
+                                            kind: parameters.kind,
+                                            rtpParameters: parameters.rtpParameters,
+                                        },
+                                        ({ producerId }: { producerId: string }) => {
+                                            callback({ id: producerId }); // Notify parameters are transmitted
+                                            // and got the producer id
+                                        }
+                                    );
+                                } catch (err: any) {
+                                    errback(err);
+                                }
+                            }
+                        );
+                    }
+                );
+
+                // New producer
+                socket.on("newProducer", async ({ producerId, kind, socketId }) => {
+                    console.log("new producer");
+                    console.log(producerId, kind, socketId);
+
+                    if (!device) return;
+
+                    // Create transport
+                    socket.emit(
+                        "createWebRtcTransport",
+                        { sender: false, roomId },
+                        ({ params }: any) => {
+                            if (params.err) {
+                                console.log("create webrtc transport failed", params.err);
+                                return;
+                            }
+
+                            if (!device) return;
+
+                            // create consumer transport
+                            const consumerTransport = device.createRecvTransport(params);
+
+                            if (!consumerTransport) return;
+
+                            setRecvTransport(consumerTransport); // Update state
+                            setConsumerParams({ producerId, kind, socketId }); // Update params
+
+                            // Connect transport -
+                            consumerTransport.on(
+                                "connect",
+                                ({ dtlsParameters }, callback, errback) => {
+                                    try {
+                                        console.log("consumerTransport connect event");
+
+                                        socket.emit("connectTransport", {
+                                            roomId,
+                                            transportId: consumerTransport.id,
+                                            dtlsParameters,
+                                        });
+
+                                        callback(); // Notify parameters are transmitted
+                                    } catch (err: any) {
+                                        console.log(err);
+                                        errback(err);
+                                    }
+                                }
+                            );
+                        }
+                    );
+                });
+            } catch (err: unknown) {
+                console.log(err);
+            }
+        };
+
+        device && startCall();
+    }, [device]);
+
+    // Connect webrtc produce tranport ==========================================================================
+    useEffect(() => {
+        const connectProducerTransport = async () => {
+            try {
+                if (!stream) return;
+
+                // Get video & audio tracks
+                const videoTrack = stream.getVideoTracks()[0];
+                const audioTrack = stream.getAudioTracks()[0];
+
+                // Produce video
+                if (videoTrack) {
+                    const videoProducer = await senderTransport?.produce({
+                        encodings: params.encodings,
+                        codecOptions: params.codecOptions,
+                        track: videoTrack,
+                    });
+
+                    videoProducer?.on("trackended", () => {
+                        console.log("Video track ended");
+                    });
+
+                    videoProducer?.on("transportclose", () => {
+                        console.log("Video transport ended");
+                    });
+                }
+
+                // Produce audio
+                if (audioTrack) {
+                    const audioProducer = await senderTransport?.produce({
+                        encodings: params.audioEncodings,
+                        codecOptions: params.codecOptionsAudio,
+                        track: audioTrack,
+                    });
+
+                    audioProducer?.on("trackended", () => {
+                        console.log("Audio track ended");
+                    });
+
+                    audioProducer?.on("transportclose", () => {
+                        console.log("Audio transport ended");
+                    });
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        };
+
+        senderTransport && connectProducerTransport();
+    }, [senderTransport]);
+
+    // Connect webrtc consumer transport ========================================================================
+    useEffect(() => {
+        const connectConsumerTransport = async () => {
+            try {
+                if (!device || !recvTransport || !senderTransport) return;
+
+                socket.emit(
+                    "consume",
+                    {
+                        roomId,
+                        transportId: recvTransport.id,
+                        producerId: consumerParams.producerId,
+                        rtpCapabilities: device.rtpCapabilities,
+                    },
+                    async ({ params }: any) => {
+                        if (params.err) {
+                            console.log("Cannot consume", params.err);
+                        }
+
+                        const consumer = await recvTransport.consume({
+                            id: params.id,
+                            producerId: params.producerId,
+                            kind: params.kind,
+                            rtpParameters: params.rtpParameters,
+                        });
+
+                        if (!consumer) return;
+
+                        const { track } = consumer; // track
+
+                        // const remoteStream = new MediaStream([track]);
+                        // With the above code we can't add track to existing stream
+                        // It's set new track for streaming, even after mute and unmute
+                        // So streaming might get stuck
+
+                        // Resume the cosumer by emiting the event
+                        socket.emit(
+                            "resumeConsumer",
+                            { roomId, consumerId: consumer.id },
+                            ({ params }: any) => {
+                                if (params.success) {
+                                    console.log("successfully resumed");
+                                } else {
+                                    console.log("Failed to resume");
+                                }
+                            }
+                        );
+
+                        // Update peers with remote stream. if stream already exists, add new track to it.
+                        setPeers((prevPeers) => {
+                            const existingStream = prevPeers[consumerParams.socketId];
+
+                            if (existingStream) {
+                                // Replace track if stream already exists
+                                const newStream = new MediaStream(existingStream.getTracks());
+                                newStream.addTrack(track);
+                                return {
+                                    ...prevPeers,
+                                    [consumerParams.socketId]: newStream, // Update stream with new track
+                                };
+                            } else {
+                                // First time creating stream
+                                return {
+                                    ...prevPeers,
+                                    [consumerParams.socketId]: new MediaStream([track]),
+                                };
+                            }
+                        });
+                    }
+                );
+            } catch (err: unknown) {
+                console.log(err);
+            }
+        };
+
+        recvTransport && consumerParams && connectConsumerTransport();
+    }, [recvTransport, consumerParams]);
+
+    // ==========================================================================================================
 
     return (
         <div className="h-screen dotted-bg">
-            <div className="flex flex-col h-full relative transition-all">
+            <div className="flex flex-col h-full w-full relative transition-all">
                 {/* Navbar */}
-                <Navbar />
+                {!isJoined && <Navbar />}
 
-                {/* Content */}
-                <div className="flex flex-col items-center flex-1 overflow-hidden">
-                    {/* Grid */}
-                    <div className="flex-1 grid grid-cols-2">
-                        {/* Left side */}
-                        <div className="flex flex-col justify-center gap-3 p-20">
-                            {/* Headings */}
-                            <motion.p
-                                initial={{ opacity: 0, x: -30 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
-                                className="text-foreground text-[42px] font-medium leading-tight"
-                            >
-                                Video calls and meetings for everyone
-                            </motion.p>
+                {/* Join video call */}
+                {!isJoined && (
+                    <JoinVideoCall
+                        videoRef={videoRef}
+                        setJoined={setJoined}
+                        isVideoMute={isVideoMute}
+                        isAudioMute={isAudioMute}
+                        handleVideo={handleVideo}
+                        handleAudio={handleAudio}
+                    />
+                )}
 
-                            <motion.p
-                                initial={{ opacity: 0, x: -30 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
-                                className="text-muted-foreground font-medium text-2xl pr-16"
-                            >
-                                Connect, collaborate, and celebrate from anywhere with CodeFlare
-                                meet
-                            </motion.p>
-
-                            {/* Buttons */}
-                            <form className="flex items-center gap-3 mt-5 pr-[50px]">
-                                <motion.div
-                                    initial={{ opacity: 0, y: 30 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
-                                    className="shadow-md rounded-lg"
-                                >
-                                    <Button
-                                        type="button"
-                                        className="h-11 shadow-md disabled:cursor-not-allowed "
-                                    >
-                                        <Video /> New meeting
-                                    </Button>
-                                </motion.div>
-
-                                <motion.div
-                                    initial={{ opacity: 0, y: 30 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
-                                    className="relative flex-1 shadow-md rounded-lg"
-                                >
-                                    <Input
-                                        id="work"
-                                        type="text"
-                                        placeholder="Enter a code or link"
-                                        autoComplete="off"
-                                        required
-                                        className="p-5 pl-9  h-11 text-foreground font-medium dark:border-customBorder-dark
-                                       focus:outline-none focus:ring-2 focus:ring-zinc-300 dark:focus:ring-zinc-600 focus:ring-offset-2 focus:ring-offset-background"
-                                    />
-                                    <Keyboard className="w-4 h-4 absolute left-3 top-[14px] text-muted-foreground" />
-                                </motion.div>
-
-                                <motion.div
-                                    initial={{ opacity: 0, y: 30 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" }}
-                                    className="h-full flex items-center bg-muted rounded-lg shadow-sm"
-                                >
-                                    <Button
-                                        type="submit"
-                                        className="h-11 w-28 shadow-md disabled:cursor-not-allowed bg-muted hover:bg-muted dark:bg-muted dark:hover:bg-muted text-foreground"
-                                    >
-                                        Join
-                                    </Button>
-                                </motion.div>
-                            </form>
-                        </div>
-
-                        {/* Right side */}
-                        <motion.div
-                            initial={{ opacity: 0, y: -30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
-                            className="h-full flex items-center justify-center"
-                        >
-                            <Carousel className="w-full max-w-lg h-full flex items-center justify-center">
-                                <CarouselContent className="h-full w-full flex items-center gap-0">
-                                    <CarouselItem className="w-full flex items-center justify-center">
-                                        <div className="flex flex-col items-center gap-2">
-                                            <img
-                                                src={theme === "light" ? meet : meetWhite}
-                                                className="w-28"
-                                            />
-                                            <p className="text-foreground font-medium text-2xl">
-                                                Get a link you can share
-                                            </p>
-                                            <p className="text-muted-foreground text-center font-medium text-base px-12">
-                                                Click new meeting to get a link you can send to people
-                                                you want to meet with
-                                            </p>
-                                        </div>
-                                    </CarouselItem>
-                                    <CarouselItem className="flex items-center justify-center">
-                                        <div className="flex flex-col items-center gap-2">
-                                            <img
-                                                src={theme === "light" ? secure : secireWhite}
-                                                className="w-24"
-                                            />
-                                            <p className="text-foreground font-medium text-2xl">
-                                                Your meeting is safe
-                                            </p>
-                                            <p className="text-muted-foreground text-center font-medium text-base px-12">
-                                                No one can join the meeting unless invited or admitted
-                                                by the host
-                                            </p>
-                                        </div>
-                                    </CarouselItem>
-                                </CarouselContent>
-                                <CarouselPrevious className="duration-0" />
-                                <CarouselNext className="duration-0" />
-                            </Carousel>
-                        </motion.div>
-                    </div>
-
-                    {/* Footer */}
-                    {/* <div className="w-[50%] p-5 flex flex-col gap-1 items-center justify-center border-t"> 
-                      <p className="text-foreground font-medium text-base">Handcrafted with ❤️ by myself.</p>    
-                      <p className="text-foreground font-medium text-base">Copyright © Ahsan allaj pk | 2025</p>
-                    </div> */}
-                </div>
+                {/* Video Component */}
+                {isJoined && (
+                    <OnVideoCall
+                        isVideoMute={isVideoMute}
+                        isAudioMute={isAudioMute}
+                        isVideoLoading={isVideoLoading}
+                        setVideoLoading={setVideoLoading}
+                        videoRef={videoRef}
+                        stream={stream}
+                        handleVideo={handleVideo}
+                        handleAudio={handleAudio}
+                        peers={peers}
+                    />
+                )}
             </div>
         </div>
     );

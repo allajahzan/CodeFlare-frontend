@@ -31,7 +31,7 @@ import socket, {
     loadedMessages,
     loadMoreMessages,
     userTyping,
-} from "@/socket/chatSocket";
+} from "@/socket/communication/chatSocket";
 import PaperClip from "./paperClip";
 
 // Iterface for Props
