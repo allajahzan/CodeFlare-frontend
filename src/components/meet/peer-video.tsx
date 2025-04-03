@@ -28,7 +28,7 @@ function PeerVideo({
                             bg-zinc-200 dark:bg-sidebar-backgroundDark rounded-2xl overflow-hidden"
         >
             {/* Video Element Always Present */}
-            {media && <VideoElement media={media} isVideoMute={isVideoMute} />}
+            <VideoElement media={media} isVideoMute={isVideoMute} />
 
             {/* Show Fallback Over Video if Muted */}
             {isVideoMute && (
