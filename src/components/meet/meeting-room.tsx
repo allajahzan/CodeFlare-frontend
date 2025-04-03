@@ -5,35 +5,36 @@ import {
     Video,
     VideoOff,
     Phone,
-    Loader2,
     Hand,
+    ScreenShare,
+    MessageCircle,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { IUserContext, UserContext } from "@/context/user-context";
-import VideoCard from "./peer-video";
+import PeerVideo from "./peer-video";
 
 // Interface for props
 interface PropsType {
     isVideoMute: boolean;
     isAudioMute: boolean;
-    isVideoLoading: boolean;
-    setVideoLoading: React.Dispatch<React.SetStateAction<boolean>>;
     videoRef: React.MutableRefObject<HTMLVideoElement | null>;
     stream: MediaStream | null;
     handleVideo: () => void;
     handleAudio: () => void;
     peers: {
-        [key: string]: MediaStream;
+        [socketId: string]: {
+            media: MediaStream;
+            isVideoMute: boolean;
+            isAudioMute: boolean;
+        };
     };
 }
 
 // Video Call Component
-function OnVideoCall({
+function MeetingRoom({
     isVideoMute,
     isAudioMute,
-    isVideoLoading,
-    setVideoLoading,
     videoRef,
     stream,
     handleVideo,
@@ -42,28 +43,6 @@ function OnVideoCall({
 }: PropsType) {
     // User context
     const { user } = useContext(UserContext) as IUserContext;
-
-
-    
-
-    // const [participants, setParticipants] = useState([
-    //     {
-    //         id: user?._id,
-    //         name: "You (Host)",
-    //         isHost: true,
-    //         video: true,
-    //         audio: true,
-    //         isPinned: false,
-    //     },
-    //     {
-    //         id: 2,
-    //         name: "Ajmal",
-    //         isHost: false,
-    //         video: true,
-    //         audio: true,
-    //         isPinned: false,
-    //     },
-    // ]);
 
     // Set localstream when component mounts
     useEffect(() => {
@@ -98,7 +77,7 @@ function OnVideoCall({
             {/* Main Content */}
             <div
                 className="flex-1 flex flex-col items-center justify-center overflow-hidden
-           bg-background border rounded-2xl shadow-custom relative p-2 "
+           bg-background border rounded-2xl shadow-lg relative p-2 "
             >
                 {/* Video Grid */}
                 <div className={`grid ${getGridClass()} gap-2 w-full h-full`}>
@@ -106,40 +85,39 @@ function OnVideoCall({
                     <div
                         key={user?._id}
                         className="relative aspect-video flex items-center justify-center w-full h-full
-                            bg-sidebar dark:bg-sidebar-backgroundDark rounded-2xl overflow-hidden"
+                           bg-zinc-200 dark:bg-sidebar-backgroundDark rounded-xl overflow-hidden"
                     >
-                        {/* User Video or Avatar */}
-                        {isVideoMute ? (
-                            // Muted
-                            <div className="w-full h-full flex items-center justify-center bg-zinc-200 dark:bg-sidebar-backgroundDark">
-                                <Avatar className="h-24 w-24">
-                                    <AvatarFallback className="bg-zinc-300 dark:bg-muted font-semibold text-black dark:text-white text-2xl">
-                                        {user?.name[0].toUpperCase()}
-                                    </AvatarFallback>
-                                </Avatar>
-                            </div>
-                        ) : (
-                            // Unmuted
+                        {/* Unmuted */}
+                        {!isVideoMute && (
                             <div className="relative w-full h-full">
-                                {/* Loader */}
-                                {isVideoLoading && (
-                                    <div className="absolute inset-0 flex items-center justify-center bg-sidebar dark:bg-sidebar-backgroundDark">
-                                        <Loader2 className="animate-spin w-12 h-12 text-white" />
-                                    </div>
-                                )}
-
                                 {/* Video */}
                                 <video
                                     ref={videoRef}
                                     autoPlay
                                     playsInline
                                     muted
-                                    onLoadedMetadata={() => setVideoLoading(true)}
-                                    className="w-full h-full object-cover transform scale-x-[-1]"
+                                    className={`w-full h-full object-cover transform scale-x-[-1]`}
                                 />
                             </div>
                         )}
 
+                        {/* Muted */}
+                        {isVideoMute && (
+                            // Fallback
+                            <div className="flex items-center justify-center bg-zinc-200 dark:bg-sidebar-backgroundDark">
+                                <Avatar className="h-24 w-24">
+                                    <AvatarFallback className="bg-zinc-800 dark:bg-muted text-white text-2xl font-semibold">
+                                        {user?.profilePic ? (
+                                            <img src={user.profilePic} />
+                                        ) : (
+                                            user?.name?.[0]?.toUpperCase()
+                                        )}
+                                    </AvatarFallback>
+                                </Avatar>
+                            </div>
+                        )}
+
+                        {/* Name and mic icon */}
                         <div className="w-full absolute bottom-0 left-0 right-0 p-2 flex justify-between items-center">
                             <div className="p-1 px-3 flex items-center gap-2 bg-black/30 backdrop-blur-sm text-white rounded-lg text-sm font-medium">
                                 <span>{user?.name}</span>
@@ -147,24 +125,34 @@ function OnVideoCall({
                                         <Shield className="h-4 w-4 text-white" />
                                     )} */}
                             </div>
-                            {true && (
-                                <div className="p-2 bg-black/30 backdrop-blur-sm text-white rounded-full text-sm font-medium">
-                                    <MicOff className="h-4 w-4 text-white" />
-                                </div>
-                            )}
+
+                            {/* Audio Icon */}
+                            <div className="p-2 bg-black/30 backdrop-blur-sm text-white rounded-full text-sm font-medium">
+                                {isAudioMute ? (
+                                    <MicOff className="h-4 w-4 text-red-600" />
+                                ) : (
+                                    <Mic className="h-4 w-4 text-white" />
+                                )}
+                            </div>
                         </div>
                     </div>
 
-                    {/* Remote videos */}
-                    {Object.entries(peers).map(([socketId]) => (
-                        <VideoCard socketId={socketId} media={peers[socketId]} />
+                    {/* Remote videos - peers */}
+                    {Object.entries(peers).map(([socketId, peer]) => (
+                        <PeerVideo
+                            key={socketId}
+                            socketId={socketId}
+                            media={peer.media}
+                            isVideoMute={peer.isVideoMute}
+                            isAudioMute={peer.isAudioMute}
+                        />
                     ))}
                 </div>
             </div>
 
             {/* Control Bar */}
             <div className="flex items-center justify-center gap-3">
-                <div className="flex items-center justify-center gap-3 p-2 bg-zinc-200 dark:bg-sidebar-backgroundDark backdrop-blur-sm rounded-full">
+                <div className="flex items-center justify-center gap-3 p-2 bg-white border dark:bg-sidebar-backgroundDark shadow-md backdrop-blur-sm rounded-full">
                     <motion.div
                         className="flex items-center justify-center cursor-pointer"
                         whileTap={{ scale: 0.95 }}
@@ -175,8 +163,8 @@ function OnVideoCall({
                                 <MicOff className="w-5 h-5 text-white" />
                             </div>
                         ) : (
-                            <div className="p-3 rounded-full bg-black/30 dark:bg-muted">
-                                <Mic className="w-5 h-5 text-white" />
+                            <div className="p-3 rounded-full bg-muted">
+                                <Mic className="w-5 h-5 text-foreground" />
                             </div>
                         )}
                     </motion.div>
@@ -192,10 +180,20 @@ function OnVideoCall({
                                 <VideoOff className="w-5 h-5 text-white" />
                             </div>
                         ) : (
-                            <div className="p-3 rounded-full bg-black/30 dark:bg-muted">
-                                <Video className="w-5 h-5 text-white" />
+                            <div className="p-3 rounded-full bg-muted">
+                                <Video className="w-5 h-5 text-foreground" />
                             </div>
                         )}
+                    </motion.div>
+
+                    {/* Hand rise */}
+                    <motion.div
+                        className="flex items-center justify-center cursor-pointer"
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        <div className="p-3 rounded-full bg-muted">
+                            <Hand className="w-5 h-5 text-foreground" />
+                        </div>
                     </motion.div>
 
                     {/* Screen share */}
@@ -203,8 +201,17 @@ function OnVideoCall({
                         className="flex items-center justify-center cursor-pointer"
                         whileTap={{ scale: 0.95 }}
                     >
-                        <div className="p-3 rounded-full bg-black/30 dark:bg-muted">
-                            <Hand className="w-5 h-5 text-white" />
+                        <div className="p-3 rounded-full bg-muted">
+                            <ScreenShare className="w-5 h-5 text-foreground" />
+                        </div>
+                    </motion.div>
+
+                    <motion.div
+                        className="flex items-center justify-center cursor-pointer"
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        <div className="p-3 rounded-full bg-muted">
+                            <MessageCircle className="w-5 h-5 text-foreground" />
                         </div>
                     </motion.div>
 
@@ -223,4 +230,4 @@ function OnVideoCall({
     );
 }
 
-export default OnVideoCall;
+export default MeetingRoom;
