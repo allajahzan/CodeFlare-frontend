@@ -1,4 +1,4 @@
-import { IBatch } from "@/components/admin/batch/batches";
+import { IBatch } from "@/types/batch";
 
 // Interface for Student
 export interface IStudent {

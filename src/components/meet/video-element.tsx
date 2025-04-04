@@ -42,7 +42,7 @@ function VideoElement({ media, isVideoMute }: PropsType) {
                 ref={videoRef}
                 autoPlay
                 playsInline
-                className={`w-full h-full object-cover transform scale-x-[-1] transition-opacity duration-300
+                className={`w-full h-full object-cover transform scale-x-[1] transition-opacity duration-300
                      ${!isLoaded || isVideoMute ? "opacity-0" : "opacity-100"}`}
             />
         </div>

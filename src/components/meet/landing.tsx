@@ -50,7 +50,7 @@ function MeetLanding() {
     }, []);
 
     return (
-        <div className="h-screen bg-background dark:bg-sidebar-background">
+        <div className="h-screen dotted-bg">
             <div className="flex flex-col h-full relative transition-all ">
                 {/* Meet info modal */}
                 <ModalMeetInfo open={open} setOpen={setOpen} />
@@ -192,7 +192,7 @@ function MeetLanding() {
                             className="h-full flex items-center justify-center px-4 sm:px-6 relative -top-5 md:top-0"
                         >
                             <Carousel className="w-full max-w-md md:max-w-lg lg:max-w-md xl:max-w-lg h-full flex flex-col gap-5 items-center justify-center">
-                                <img src={image2} className="w-36 md:w-44" />
+                                <img src={image2} className="w-40 md:w-44" />
                                 <CarouselContent className="h-full w-full flex items-center gap-0">
                                     <CarouselItem className="w-full flex items-center justify-center">
                                         <div className="flex flex-col items-center gap-2">

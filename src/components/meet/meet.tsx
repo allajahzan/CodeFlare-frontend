@@ -2,7 +2,7 @@ import Navbar from "../common/navbar/navbar";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import * as mediasoupClient from "mediasoup-client";
 import { socket } from "@/socket/communication/connect";
-import JoinMeeting from "./join-meeting";
+import JoinMeeting, { IMeet } from "./join-meeting";
 import MeetingRoom from "./meeting-room";
 import { useLocation } from "react-router-dom";
 import { IUserContext, UserContext } from "@/context/user-context";
@@ -60,6 +60,7 @@ function Meet() {
     // ===================== states used for webrtc =====================================================
 
     const [isJoined, setJoined] = useState<boolean>(false);
+    const [meet, setMeet] = useState<IMeet | null>(null);
 
     const roomId = useLocation().pathname.split("/")[3];
 
@@ -519,6 +520,8 @@ function Meet() {
                         handleAudio={handleAudio}
                         stream={stream}
                         setStream={setStream}
+                        meet={meet as IMeet}
+                        setMeet={setMeet}
                     />
                 )}
 

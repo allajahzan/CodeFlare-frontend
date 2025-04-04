@@ -7,7 +7,7 @@ import VideoElement from "./video-element";
 // Interface for Props
 interface PropsType {
     socketId: string;
-    user?: IUser;
+    peer?: IUser;
     media: MediaStream | null;
     isVideoMute: boolean;
     isAudioMute: boolean;
@@ -16,7 +16,7 @@ interface PropsType {
 // PeerVideo Component
 function PeerVideo({
     socketId,
-    user,
+    peer,
     media,
     isVideoMute,
     isAudioMute,
@@ -34,8 +34,12 @@ function PeerVideo({
             {isVideoMute && (
                 <div className="absolute inset-0 flex items-center justify-center bg-zinc-200 dark:bg-sidebar-backgroundDark">
                     <Avatar className="h-24 w-24">
-                        <AvatarFallback className="bg-zinc-300 dark:bg-muted font-semibold text-black dark:text-white text-2xl">
-                            {user?.name?.[0]?.toUpperCase() || "?"}
+                        <AvatarFallback className="bg-zinc-300 dark:bg-muted text-foreground text-2xl font-semibold">
+                            {peer?.profilePic ? (
+                                <img src={peer.profilePic} />
+                            ) : (
+                                '?'
+                            )}
                         </AvatarFallback>
                     </Avatar>
                 </div>
@@ -44,7 +48,7 @@ function PeerVideo({
             {/* Mic Status & User Name */}
             <div className="absolute bottom-0 left-0 right-0 p-2 flex justify-between items-center">
                 <div className="p-1 px-3 flex items-center gap-2 bg-black/30 backdrop-blur-sm text-white rounded-lg text-sm font-medium">
-                    <span>{user?.name || "Peer"}</span>
+                    <span>{peer?.name || "Peer"}</span>
                 </div>
 
                 <div className="p-2 bg-black/30 backdrop-blur-sm text-white rounded-full text-sm font-medium">

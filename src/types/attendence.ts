@@ -1,7 +1,7 @@
 import { IBatch } from "./batch"
 
 // Interface for user
-interface IUser{
+export interface IUser{
     _id: string, 
     name: string,
     email: string, 

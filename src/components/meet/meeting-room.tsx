@@ -106,7 +106,7 @@ function MeetingRoom({
                             // Fallback
                             <div className="flex items-center justify-center bg-zinc-200 dark:bg-sidebar-backgroundDark">
                                 <Avatar className="h-24 w-24">
-                                    <AvatarFallback className="bg-zinc-800 dark:bg-muted text-white text-2xl font-semibold">
+                                    <AvatarFallback className="bg-zinc-300 dark:bg-muted text-foreground text-2xl font-semibold">
                                         {user?.profilePic ? (
                                             <img src={user.profilePic} />
                                         ) : (
