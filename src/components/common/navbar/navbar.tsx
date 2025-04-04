@@ -90,7 +90,7 @@ const Navbar = () => {
             <div className="flex items-center gap-2">
                 {/* Go back */}
                 {pathname.split("/")[2] === "meet" && (
-                    <button onClick={() => navigate(-1)} className="p-2">
+                    <button onClick={() => navigate(`/${role}/dashboard`)} className="p-2">
                         <ChevronLeft className="w-5 h-5 text-foreground" />
                     </button>
                 )}
