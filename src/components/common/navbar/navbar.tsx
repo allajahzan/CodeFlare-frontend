@@ -66,7 +66,7 @@ const Navbar = () => {
         pathname.split("/")[2] === "dashboard"
             ? setPath(`Hi, ${user?.name as string}!`)
             : pathname.split("/")[2] === "meet"
-                ? setPath("CodeFlare Meet")
+                ? setPath("Meet")
                 : setPath(
                     pathname.split("/")[2][0].toUpperCase() +
                     pathname.split("/")[2].slice(1)
@@ -167,6 +167,7 @@ const Navbar = () => {
                         <NavbarItem text="Notifications" Image={Bell} />
                     </>
                 )}
+
                 <NavbarItem text={themeText} action={handleTheme} Image={themeIcon} />
 
                 {/* Profile Section */}

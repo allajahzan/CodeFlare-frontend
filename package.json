@@ -49,6 +49,7 @@
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.54.2",
     "react-redux": "^9.1.2",
+    "react-responsive": "^10.0.1",
     "react-router-dom": "^6.27.0",
     "recharts": "^2.15.0",
     "redux": "^5.0.1",
