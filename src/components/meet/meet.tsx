@@ -1,12 +1,11 @@
 import Navbar from "../common/navbar/navbar";
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import * as mediasoupClient from "mediasoup-client";
 import { socket } from "@/socket/communication/connect";
 import JoinMeeting, { IMeet } from "./join-meeting";
 import MeetingRoom from "./meeting-room";
 import { useLocation } from "react-router-dom";
-import { IUserContext, UserContext } from "@/context/user-context";
-import MeetingExitPage from "./left-meeting";
+import MeetingExit from "./meeting-exit";
 
 // mediasoup params
 let params = {
@@ -44,9 +43,6 @@ let params = {
 // Meet Component
 function Meet() {
     // ===================== state used for local stream ================================================
-
-    // User context
-    const { user } = useContext(UserContext) as IUserContext;
 
     // Stream
     const [stream, setStream] = useState<MediaStream | null>(null);
@@ -187,7 +183,7 @@ function Meet() {
             try {
                 socket.emit(
                     "joinRoom",
-                    { roomId, userId: user?._id },
+                    { roomId },
                     async (
                         rtpCapabilities: mediasoupClient.types.RtpCapabilities,
                         existingPeer: any
@@ -444,7 +440,7 @@ function Meet() {
 
                             newStream.addTrack(track);
 
-                            console.log(consumerParams.appData);
+                            // console.log(consumerParams.appData);
 
                             return {
                                 ...prevPeers,
@@ -548,7 +544,13 @@ function Meet() {
                 )}
 
                 {/* Meet exit page */}
-                {isMeetLeft && <MeetingExitPage />}
+                {isMeetLeft && (
+                    <MeetingExit
+                        setDevice={setDevice}
+                        setJoined={setJoined}
+                        setMeetLeft={setMeetLeft}
+                    />
+                )}
             </div>
         </div>
     );

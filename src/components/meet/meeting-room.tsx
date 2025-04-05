@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
     Mic,
     MicOff,
@@ -52,6 +52,9 @@ function MeetingRoom({
     // User context
     const { user } = useContext(UserContext) as IUserContext;
 
+    // Leaving
+    const [isLeaving, setLeaving] = useState<boolean>(false);
+
     // Set localstream when component mounts
     useEffect(() => {
         if (videoRef.current && stream) {
@@ -61,7 +64,17 @@ function MeetingRoom({
 
     const roomId = path.pathname.split("/")[3];
 
-    // Handle leave call
+    // Handle leave
+    const handleLeave = () => {
+        setLeaving(true);
+        setTimeout(() => {
+            leaveCall();
+            setMeetLeft(true);
+            setJoined(null);
+        }, 1000);
+    };
+
+    // leave call
     const leaveCall = () => {
         socket.emit("leaveCall", { roomId });
     };
@@ -243,11 +256,7 @@ function MeetingRoom({
 
                     {/* End meet */}
                     <motion.div
-                        onClick={() => {
-                            leaveCall();
-                            setMeetLeft(true);
-                            setJoined(null);
-                        }}
+                        onClick={handleLeave}
                         className="flex items-center justify-center cursor-pointer "
                         whileTap={{ scale: 0.95 }}
                     >
@@ -257,6 +266,13 @@ function MeetingRoom({
                     </motion.div>
                 </div>
             </div>
+
+            {/* When leaving meet */}
+            {isLeaving && (
+                <div className="fixed z-50 inset-0 flex gap-2 items-center justify-center bg-black/80">
+                    <p className="text-3xl text-white">Leaving...</p>
+                </div>
+            )}
         </div>
     );
 }

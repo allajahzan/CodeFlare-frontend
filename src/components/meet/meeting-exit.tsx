@@ -2,20 +2,64 @@ import { useState, useEffect } from "react";
 import { Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
+import { socket } from "@/socket/communication/connect";
+import * as mediasoupClient from "mediasoup-client";
+
+// Interface for Props
+interface PropsType {
+    setDevice: React.Dispatch<
+        React.SetStateAction<mediasoupClient.types.Device | null>
+    >;
+    setJoined: React.Dispatch<React.SetStateAction<boolean | null>>;
+    setMeetLeft: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 // Meeting exist page Component
-function MeetingExitPage() {
+function MeetingExit({ setDevice, setJoined, setMeetLeft }: PropsType) {
     // Count state
-    const [countdown, setCountdown] = useState(100000);
+    const [countdown, setCountdown] = useState(30);
+
+    const navigate = useNavigate();
+    const path = useLocation();
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
 
-    const navigate = useNavigate();
+    // User context
 
+    const roomId = path.pathname.split("/")[3];
+
+    // Handle Rejoin
+    async function reJoinRoom() {
+        // Update states for changing UI
+        setJoined(true);
+        setMeetLeft(false);
+
+        // Emit event
+        try {
+            socket.emit(
+                "joinRoom",
+                { roomId },
+                async (
+                    rtpCapabilities: mediasoupClient.types.RtpCapabilities,
+                    existingPeer: any
+                ) => {
+                    const newDevice = new mediasoupClient.Device();
+                    await newDevice.load({ routerRtpCapabilities: rtpCapabilities });
+                    setDevice(newDevice);
+
+                    console.log(existingPeer);
+                }
+            );
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+    // Count down
     useEffect(() => {
         const timer = setInterval(() => {
             setCountdown((prev) => {
@@ -56,7 +100,7 @@ function MeetingExitPage() {
                                 className="text-foreground"
                                 strokeWidth="8"
                                 strokeDasharray={290}
-                                strokeDashoffset={290 - (290 * countdown) / 60}
+                                strokeDashoffset={290 - (290 * countdown) / 30}
                                 strokeLinecap="round"
                                 stroke="currentColor"
                                 fill="transparent"
@@ -67,13 +111,13 @@ function MeetingExitPage() {
                         </svg>
 
                         {/* Countdown number */}
-                        <span className="text-lg font-semibold text-foreground z-10">
+                        <span className="text-base font-semibold text-foreground z-10">
                             {countdown}
                         </span>
                     </div>
 
                     {/* Text below */}
-                    <p className="mt-5 text-sm text-muted-foreground font-medium text-center">
+                    <p className="mt-5 text-sm text-foreground font-medium text-center">
                         Returning to home screen
                     </p>
                 </div>
@@ -83,10 +127,17 @@ function MeetingExitPage() {
                 </h1>
 
                 <div className="flex flex-col sm:flex-row gap-3 mb-6">
-                    <Button variant="outline" className="h-11 text-foreground duration-0">
+                    <Button
+                        onClick={reJoinRoom}
+                        variant="outline"
+                        className="h-11 text-foreground duration-0"
+                    >
                         Rejoin
                     </Button>
-                    <Button className="h-11 disabled:cursor-not-allowed mb-12">
+                    <Button
+                        onClick={() => navigate(`/${role}/meet`)}
+                        className="h-11 disabled:cursor-not-allowed mb-12"
+                    >
                         Return to home screen
                     </Button>
                 </div>
@@ -111,4 +162,4 @@ function MeetingExitPage() {
     );
 }
 
-export default MeetingExitPage;
+export default MeetingExit;

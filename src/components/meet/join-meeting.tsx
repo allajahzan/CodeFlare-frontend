@@ -130,7 +130,7 @@ function JoinMeeting({
                     setTimeout(() => {
                         setMeet(data);
                         setVerified(true);
-                    }, 500);
+                    }, 1000);
                 }
             } catch (err: unknown) {
                 setVerified(false);
