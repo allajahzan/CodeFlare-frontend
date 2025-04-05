@@ -6,6 +6,7 @@ import JoinMeeting, { IMeet } from "./join-meeting";
 import MeetingRoom from "./meeting-room";
 import { useLocation } from "react-router-dom";
 import { IUserContext, UserContext } from "@/context/user-context";
+import MeetingExitPage from "./left-meeting";
 
 // mediasoup params
 let params = {
@@ -59,7 +60,8 @@ function Meet() {
 
     // ===================== states used for webrtc =====================================================
 
-    const [isJoined, setJoined] = useState<boolean>(false);
+    const [isJoined, setJoined] = useState<boolean | null>(false);
+    const [isMeetLeft, setMeetLeft] = useState<boolean>(false);
     const [meet, setMeet] = useState<IMeet | null>(null);
 
     const roomId = useLocation().pathname.split("/")[3];
@@ -186,10 +188,15 @@ function Meet() {
                 socket.emit(
                     "joinRoom",
                     { roomId, userId: user?._id },
-                    async (rtpCapabilities: mediasoupClient.types.RtpCapabilities) => {
+                    async (
+                        rtpCapabilities: mediasoupClient.types.RtpCapabilities,
+                        existingPeer: any
+                    ) => {
                         const newDevice = new mediasoupClient.Device();
                         await newDevice.load({ routerRtpCapabilities: rtpCapabilities });
                         setDevice(newDevice);
+
+                        console.log(existingPeer);
                     }
                 );
             } catch (err) {
@@ -510,7 +517,7 @@ function Meet() {
                 {true && <Navbar />}
 
                 {/* Join video call */}
-                {!isJoined && (
+                {isJoined === false && (
                     <JoinMeeting
                         videoRef={videoRef}
                         setJoined={setJoined}
@@ -525,8 +532,8 @@ function Meet() {
                     />
                 )}
 
-                {/* Video Component */}
-                {isJoined && (
+                {/* Meeting room */}
+                {isJoined === true && (
                     <MeetingRoom
                         isVideoMute={isVideoMute}
                         isAudioMute={isAudioMute}
@@ -535,8 +542,13 @@ function Meet() {
                         handleVideo={handleVideo}
                         handleAudio={handleAudio}
                         peers={peers}
+                        setMeetLeft={setMeetLeft}
+                        setJoined={setJoined}
                     />
                 )}
+
+                {/* Meet exit page */}
+                {isMeetLeft && <MeetingExitPage />}
             </div>
         </div>
     );

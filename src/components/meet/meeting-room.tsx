@@ -13,6 +13,8 @@ import { motion } from "framer-motion";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { IUserContext, UserContext } from "@/context/user-context";
 import PeerVideo from "./peer-video";
+import { socket } from "@/socket/communication/connect";
+import { useLocation } from "react-router-dom";
 
 // Interface for props
 interface PropsType {
@@ -29,6 +31,8 @@ interface PropsType {
             isAudioMute: boolean;
         };
     };
+    setMeetLeft: React.Dispatch<React.SetStateAction<boolean>>;
+    setJoined: React.Dispatch<React.SetStateAction<boolean | null>>;
 }
 
 // Video Call Component
@@ -40,7 +44,11 @@ function MeetingRoom({
     handleVideo,
     handleAudio,
     peers,
+    setMeetLeft,
+    setJoined,
 }: PropsType) {
+    const path = useLocation();
+
     // User context
     const { user } = useContext(UserContext) as IUserContext;
 
@@ -49,6 +57,24 @@ function MeetingRoom({
         if (videoRef.current && stream) {
             videoRef.current.srcObject = stream;
         }
+    }, []);
+
+    const roomId = path.pathname.split("/")[3];
+
+    // Handle leave call
+    const leaveCall = () => {
+        socket.emit("leaveCall", { roomId });
+    };
+
+    // Leave from call when page refresh after joinin
+    useEffect(() => {
+        // Listen for page close/refresh
+        window.addEventListener("beforeunload", leaveCall);
+
+        // Cleand up
+        return () => {
+            window.removeEventListener("beforeunload", leaveCall);
+        };
     }, []);
 
     const getGridClass = () => {
@@ -217,7 +243,12 @@ function MeetingRoom({
 
                     {/* End meet */}
                     <motion.div
-                        className="flex items-center justify-center cursor-pointer"
+                        onClick={() => {
+                            leaveCall();
+                            setMeetLeft(true);
+                            setJoined(null);
+                        }}
+                        className="flex items-center justify-center cursor-pointer "
                         whileTap={{ scale: 0.95 }}
                     >
                         <div className="p-3 rounded-full bg-red-600/80">

@@ -41,7 +41,7 @@ interface PropsType {
     isVideoMute: boolean;
     isAudioMute: boolean;
     videoRef: React.MutableRefObject<HTMLVideoElement | null>;
-    setJoined: React.Dispatch<React.SetStateAction<boolean>>;
+    setJoined: React.Dispatch<React.SetStateAction<boolean | null>>;
     handleVideo: () => void;
     handleAudio: () => void;
     stream: MediaStream | null;
@@ -309,7 +309,7 @@ function JoinMeeting({
             {/* If not verified */}
             {isVerified === false && (
                 <div className="relative h-screen w-full z-0 flex flex-col items-center justify-center p-5 space-y-5">
-                    <h1 className="text-foreground font-bold text-2xl">
+                    <h1 className="text-center text-foreground font-bold text-2xl">
                         Sorry, this page isn't available.
                     </h1>
                     <p className="text-center text-foreground font-medium text-lg">
@@ -325,7 +325,7 @@ function JoinMeeting({
             {/* If isVerified is null */}
             {isVerified === null && (
                 <div className="fixed z-50 inset-0 flex gap-2 items-center justify-center bg-black/80">
-                    <p className="text-2xl text-foreground">Joining...</p>
+                    <p className="text-3xl text-white">Joining...</p>
                 </div>
             )}
         </Fragment>
