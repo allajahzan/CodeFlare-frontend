@@ -25,7 +25,7 @@ interface PropsType {
 // Meet info Modal
 function ModalMeetInfo({ open, setOpen }: PropsType) {
     const [roomId, setRoomId] = useState<string>("");
-    const [fetching, setFetching] = useState<boolean>(true);
+    const [fetching, setFetching] = useState<boolean| null>(true);
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
@@ -50,6 +50,8 @@ function ModalMeetInfo({ open, setOpen }: PropsType) {
     useEffect(() => {
         const createMeet = async () => {
             try {
+                setFetching(true)
+                
                 // Send request
                 const resp = await postData(
                     ApiEndpoints.MEET,
@@ -80,7 +82,7 @@ function ModalMeetInfo({ open, setOpen }: PropsType) {
         return () => {
             document.body.style.pointerEvents = "auto";
             setRoomId("");
-            setFetching(true);
+            setFetching(null);
         };
     }, [open]);
 

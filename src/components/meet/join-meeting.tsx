@@ -127,8 +127,10 @@ function JoinMeeting({
                 if (resp && resp.status === 200) {
                     const data = resp.data?.data;
 
-                    setMeet(data);
-                    setVerified(true);
+                    setTimeout(() => {
+                        setMeet(data);
+                        setVerified(true);
+                    }, 500);
                 }
             } catch (err: unknown) {
                 setVerified(false);
@@ -317,6 +319,13 @@ function JoinMeeting({
                             Go back
                         </Link>
                     </p>
+                </div>
+            )}
+
+            {/* If isVerified is null */}
+            {isVerified === null && (
+                <div className="fixed z-50 inset-0 flex gap-2 items-center justify-center bg-black/80">
+                    <p className="text-2xl text-foreground">Joining...</p>
                 </div>
             )}
         </Fragment>
