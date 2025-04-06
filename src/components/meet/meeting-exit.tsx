@@ -2,60 +2,69 @@ import { useState, useEffect } from "react";
 import { Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
-import { socket } from "@/socket/communication/connect";
-import * as mediasoupClient from "mediasoup-client";
 
 // Interface for Props
 interface PropsType {
-    deviceRef: React.MutableRefObject<mediasoupClient.types.Device | null>
     setJoined: React.Dispatch<React.SetStateAction<boolean | null>>;
     setMeetLeft: React.Dispatch<React.SetStateAction<boolean>>;
+    setStream: React.Dispatch<React.SetStateAction<MediaStream | null>>;
+    setVideoMute: React.Dispatch<React.SetStateAction<boolean>>;
+    setAudioMute: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // Meeting exist page Component
-function MeetingExit({ deviceRef, setJoined, setMeetLeft }: PropsType) {
+function MeetingExit({
+    setJoined,
+    setMeetLeft,
+    setStream,
+    setAudioMute,
+    setVideoMute,
+}: PropsType) {
     // Count state
     const [countdown, setCountdown] = useState(30);
 
+    // Leaving
+    const [isReJoining, setReJoining] = useState<boolean>(false);
+
     const navigate = useNavigate();
-    const path = useLocation();
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
 
-    // User context
-
-    const roomId = path.pathname.split("/")[3];
-
-    // Handle Rejoin
-    async function reJoinRoom() {
-        // Update states for changing UI
-        setJoined(true);
-        setMeetLeft(false);
-
-        // Emit event
+    // Start webcam
+    const startWebcam = async () => {
         try {
-            socket.emit(
-                "joinRoom",
-                { roomId },
-                async (
-                    rtpCapabilities: mediasoupClient.types.RtpCapabilities,
-                    existingPeer: any
-                ) => {
-                    const newDevice = new mediasoupClient.Device();
-                    await newDevice.load({ routerRtpCapabilities: rtpCapabilities });
-                    
-                    // Update device
-                    deviceRef.current = newDevice;
-                    console.log(existingPeer);
-                }
-            );
+            let newStream = await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: true,
+            });
+
+            // Update stream
+            setStream(newStream);
         } catch (err) {
             console.log(err);
         }
+    };
+
+    // Handle Rejoin
+    async function reJoinRoom() {
+        // Unmute all
+        setAudioMute(false);
+        setVideoMute(false);
+
+        // Start web cam
+        startWebcam();
+        setReJoining(true);
+
+        // Rejoining - give 1 secone delay to start streaming
+        setTimeout(() => {
+            setJoined(true);
+            setMeetLeft(false);
+            setReJoining(false);
+        }, 1000);
     }
 
     // Count down
@@ -157,6 +166,13 @@ function MeetingExit({ deviceRef, setJoined, setMeetLeft }: PropsType) {
                     </div>
                 </Card>
             </main>
+
+            {/* When rejoining meet */}
+            {isReJoining && (
+                <div className="fixed z-50 inset-0 flex gap-2 items-center justify-center bg-black/90">
+                    <p className="text-3xl text-white">Re joining...</p>
+                </div>
+            )}
         </div>
     );
 }

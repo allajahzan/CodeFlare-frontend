@@ -15,6 +15,7 @@ import { IUserContext, UserContext } from "@/context/user-context";
 import PeerVideo from "./peer-video";
 import { socket } from "@/socket/communication/connect";
 import { useLocation } from "react-router-dom";
+import { leaveMeet } from "@/socket/communication/videoCallSocket";
 
 // Interface for props
 interface PropsType {
@@ -33,6 +34,7 @@ interface PropsType {
     };
     setMeetLeft: React.Dispatch<React.SetStateAction<boolean>>;
     setJoined: React.Dispatch<React.SetStateAction<boolean | null>>;
+    setStream: React.Dispatch<React.SetStateAction<MediaStream | null>>
 }
 
 // Video Call Component
@@ -46,6 +48,7 @@ function MeetingRoom({
     peers,
     setMeetLeft,
     setJoined,
+    setStream
 }: PropsType) {
     const path = useLocation();
 
@@ -64,11 +67,23 @@ function MeetingRoom({
 
     const roomId = path.pathname.split("/")[3];
 
+    // Stop webcam
+    const stopWebcam = async () => {
+        if (stream && videoRef.current) {
+            videoRef.current.srcObject = null;
+            stream.getTracks().forEach((track) => track.stop()); // Stop camera
+
+            // Update stream
+            setStream(null);
+        }
+    };
+
     // Handle leave
     const handleLeave = () => {
         setLeaving(true);
         setTimeout(() => {
-            leaveCall();
+            leaveCall(); // 
+            stopWebcam();
             setMeetLeft(true);
             setJoined(null);
         }, 1000);
@@ -76,7 +91,7 @@ function MeetingRoom({
 
     // leave call
     const leaveCall = () => {
-        socket.emit("leaveCall", { roomId });
+        leaveMeet(roomId)
     };
 
     // When page refresh- - leave the call
@@ -84,9 +99,9 @@ function MeetingRoom({
         const handleBeforeUnload = () => {
             socket.emit("leaveCall", { roomId });
         };
-    
+
         window.addEventListener("beforeunload", handleBeforeUnload);
-    
+
         return () => {
             window.removeEventListener("beforeunload", handleBeforeUnload);
         };
@@ -271,7 +286,7 @@ function MeetingRoom({
 
             {/* When leaving meet */}
             {isLeaving && (
-                <div className="fixed z-50 inset-0 flex gap-2 items-center justify-center bg-black/80">
+                <div className="fixed z-50 inset-0 flex gap-2 items-center justify-center bg-black/90">
                     <p className="text-3xl text-white">Leaving...</p>
                 </div>
             )}

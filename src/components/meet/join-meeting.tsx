@@ -6,7 +6,6 @@ import {
     Fragment,
     useContext,
     useEffect,
-    useLayoutEffect,
     useState,
 } from "react";
 import { IUserContext, UserContext } from "@/context/user-context";
@@ -91,7 +90,9 @@ function JoinMeeting({
 
     // Stop webcam
     const stopWebcam = async () => {
+        console.log(videoRef.current, stream)
         if (stream && videoRef.current) {
+
             videoRef.current.srcObject = null;
             stream.getTracks().forEach((track) => track.stop()); // Stop camera
 
@@ -101,7 +102,7 @@ function JoinMeeting({
     };
 
     // Start webcam when page load
-    useLayoutEffect(() => {
+    useEffect(() => {
         localStorage.setItem("isVideoMute", "0");
         localStorage.setItem("isAudioMute", "0");
 
@@ -324,7 +325,7 @@ function JoinMeeting({
 
             {/* If isVerified is null */}
             {isVerified === null && (
-                <div className="fixed z-50 inset-0 flex gap-2 items-center justify-center bg-black/80">
+                <div className="fixed z-50 inset-0 flex gap-2 items-center justify-center bg-black/90">
                     <p className="text-3xl text-white">Joining...</p>
                 </div>
             )}

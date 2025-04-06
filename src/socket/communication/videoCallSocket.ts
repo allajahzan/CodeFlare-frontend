@@ -69,20 +69,72 @@ export const createTransport = (
 export const onNewProducer = (
     callback: ({
         producerId,
-        kind,
         appData,
         socketId,
     }: {
         producerId: string;
-        kind: mediasoupClient.types.MediaKind;
         appData: any;
         socketId: string;
     }) => void
 ) => {
-    socket.on("newProducer", (data) => {
-        console.log("listening");
-        
-        callback(data);
-    });
+    try{
+        socket.on("newProducer", (data) => {
+            callback(data);
+        });
+    }catch(err: unknown){
+        console.log(err)
+    }
 };
 
+/**
+ * Listens for the "peerMuteChange" event from the server and triggers the provided
+ * callback with the type, isMuted, and socketId of the peer that changed mute state.
+ * The callback is also removed when the returned function is called.
+ * @param callback - A function to be called with the type, isMuted, and socketId of
+ * the peer that changed mute state.
+ * @returns A function to be called when the event listener should be removed.
+ */
+export const onPeerMuteChange = (
+    callback: ({
+        type,
+        isMuted,
+        socketId,
+    }: {
+        type: "audio" | "video";
+        isMuted: boolean;
+        socketId: string;
+    }) => void
+) => {
+    try{
+        socket.on("peerMuteChange", callback);
+    }catch(err: unknown){
+        console.log(err)
+    }
+};
+
+/**
+ * Emits a "leaveCall" event to the server with the provided roomId.
+ * This removes the user from the video call room and cleans up the peer's resources.
+ * @param roomId - The ID of the room to leave.
+ */
+export const leaveMeet = (roomId:string) => {
+    try{
+        socket.emit("leaveCall", { roomId });
+    }catch(err: unknown){
+        console.log(err)
+    }
+};
+
+/**
+ * Listens for the "peerLeft" event from the server and triggers the provided
+ * callback with the socketId of the peer that left the room.
+ * The callback is also removed when the returned function is called.
+ * @param callback - A function to be called with the socketId of the peer that left
+ * the room.
+ * @returns A function to be called when the event listener should be removed.
+ */
+export const onPeerLeft = (callback: (socketId: string) => void) => {
+    socket.on("peerLeft", ({ socketId }) => {
+        callback(socketId);
+    });
+};

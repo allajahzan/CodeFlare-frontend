@@ -10,6 +10,8 @@ import {
     createTransport,
     joinRoom,
     onNewProducer,
+    onPeerLeft,
+    onPeerMuteChange,
 } from "@/socket/communication/videoCallSocket";
 
 // mediasoup track params
@@ -79,16 +81,18 @@ function Meet() {
     // Device
     const deviceRef = useRef<mediasoupClient.Device | null>(null);
 
-    // Sender Transport
-    // const sendTransportRef = useRef<mediasoupClient.types.Transport | null>(null);
-
-    // Receiver Transport
-    // const recvTransportRef = useRef<mediasoupClient.types.Transport | null>(null);
-
     // Existing producers
     const pendingProducersRef = useRef<any[]>([]);
 
     // ===================================================================================================
+
+    // Handle local video streaming on mute and unmute
+    useEffect(() => {
+        if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+            videoRef.current.play().catch((err) => console.log(err));
+        }
+    }, [isVideoMute, stream]);
 
     // Handle video
     const handleVideo = useCallback(() => {
@@ -130,14 +134,6 @@ function Meet() {
             }
         }
     }, [stream, socket, roomId, isJoined]);
-
-    // Handle local video streaming on mute and unmute
-    useEffect(() => {
-        if (!isVideoMute && videoRef.current) {
-            videoRef.current.srcObject = stream;
-            videoRef.current.play().catch((err) => console.log(err));
-        }
-    }, [isVideoMute, stream]);
 
     // Handle audio
     const handleAudio = useCallback(() => {
@@ -203,9 +199,7 @@ function Meet() {
 
     // Listen for new producers
     useEffect(() => {
-        onNewProducer(async ({ producerId, kind, appData, socketId }) => {
-            console.log(producerId, kind, appData, socketId);
-
+        onNewProducer(async ({ producerId, appData, socketId }) => {
             // Create receiver transport
             const recvTransport = await goCreateTransport(false);
             if (!recvTransport) return;
@@ -216,6 +210,23 @@ function Meet() {
 
         return () => {
             socket.off("newProducer");
+        };
+    }, []);
+
+    // Listen for peer left
+    useEffect(() => {
+        const handlePeerLeft = (socketId: string) => {
+            setPeers((prevPeers) => {
+                const updatedPeers = { ...prevPeers };
+                delete updatedPeers[socketId]; // Remove the peer
+                return updatedPeers;
+            });
+        };
+
+        onPeerLeft(handlePeerLeft);
+
+        return () => {
+            socket.off("peerLeft", handlePeerLeft);
         };
     }, []);
 
@@ -256,7 +267,7 @@ function Meet() {
                     }
                 });
             } catch (err) {
-                console.error("Error in goCreateTransport:", err);
+                console.log(err);
                 reject(err);
             }
         });
@@ -381,8 +392,6 @@ function Meet() {
                     });
 
                     callback(); // Notify parameters are transmitted
-
-                    console.log("haayyyyyyyyyy");
                 } catch (err: any) {
                     console.log(err);
                     errback(err);
@@ -404,8 +413,6 @@ function Meet() {
             const device = deviceRef.current;
 
             if (!device || !recvTransport) return;
-
-            console.log("consuming brooooo");
 
             // Consume media
             socket.emit(
@@ -436,8 +443,6 @@ function Meet() {
 
                     const { track } = consumer; // track from remote peer
 
-                    console.log("going to resume brooooo");
-
                     // Emit event to resume consumer
                     socket.emit(
                         "resumeConsumer",
@@ -458,8 +463,6 @@ function Meet() {
 
                         newStream.addTrack(track);
 
-                        // console.log(consumerParams.appData);
-
                         return {
                             ...prevPeers,
                             [socketId]: {
@@ -478,10 +481,6 @@ function Meet() {
         }
     };
 
-    useEffect(() => {
-        console.log("updated peers", peers);
-    }, [peers]);
-
     // Listen mute unmute changes ==============================================================================
     useEffect(() => {
         const handlePeerMuteChange = ({
@@ -493,9 +492,8 @@ function Meet() {
             isMuted: boolean;
             socketId: string;
         }) => {
-            // Update peers
             setPeers((prevPeers) => {
-                if (!prevPeers[socketId]) return prevPeers; // Ensure peer exists
+                if (!prevPeers[socketId]) return prevPeers;
 
                 return {
                     ...prevPeers,
@@ -507,8 +505,7 @@ function Meet() {
             });
         };
 
-        // Listen to event
-        socket.on("peerMuteChange", handlePeerMuteChange);
+        onPeerMuteChange(handlePeerMuteChange);
 
         return () => {
             socket.off("peerMuteChange", handlePeerMuteChange);
@@ -551,15 +548,18 @@ function Meet() {
                         peers={peers}
                         setMeetLeft={setMeetLeft}
                         setJoined={setJoined}
+                        setStream={setStream}
                     />
                 )}
 
                 {/* Meet exit page */}
                 {isMeetLeft && (
                     <MeetingExit
-                        deviceRef={deviceRef}
                         setJoined={setJoined}
                         setMeetLeft={setMeetLeft}
+                        setStream={setStream}
+                        setAudioMute={setAudioMute}
+                        setVideoMute={setVideoMute}
                     />
                 )}
             </div>
