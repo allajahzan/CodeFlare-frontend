@@ -10,15 +10,13 @@ import * as mediasoupClient from "mediasoup-client";
 
 // Interface for Props
 interface PropsType {
-    setDevice: React.Dispatch<
-        React.SetStateAction<mediasoupClient.types.Device | null>
-    >;
+    deviceRef: React.MutableRefObject<mediasoupClient.types.Device | null>
     setJoined: React.Dispatch<React.SetStateAction<boolean | null>>;
     setMeetLeft: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // Meeting exist page Component
-function MeetingExit({ setDevice, setJoined, setMeetLeft }: PropsType) {
+function MeetingExit({ deviceRef, setJoined, setMeetLeft }: PropsType) {
     // Count state
     const [countdown, setCountdown] = useState(30);
 
@@ -49,8 +47,9 @@ function MeetingExit({ setDevice, setJoined, setMeetLeft }: PropsType) {
                 ) => {
                     const newDevice = new mediasoupClient.Device();
                     await newDevice.load({ routerRtpCapabilities: rtpCapabilities });
-                    setDevice(newDevice);
-
+                    
+                    // Update device
+                    deviceRef.current = newDevice;
                     console.log(existingPeer);
                 }
             );

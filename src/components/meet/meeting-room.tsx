@@ -79,16 +79,18 @@ function MeetingRoom({
         socket.emit("leaveCall", { roomId });
     };
 
-    // Leave from call when page refresh after joinin
+    // When page refresh- - leave the call
     useEffect(() => {
-        // Listen for page close/refresh
-        window.addEventListener("beforeunload", leaveCall);
-
-        // Cleand up
-        return () => {
-            window.removeEventListener("beforeunload", leaveCall);
+        const handleBeforeUnload = () => {
+            socket.emit("leaveCall", { roomId });
         };
-    }, []);
+    
+        window.addEventListener("beforeunload", handleBeforeUnload);
+    
+        return () => {
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+        };
+    }, [roomId]);
 
     const getGridClass = () => {
         const count = Object.keys(peers).length;

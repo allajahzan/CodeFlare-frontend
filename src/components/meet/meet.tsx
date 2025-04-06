@@ -6,9 +6,14 @@ import JoinMeeting, { IMeet } from "./join-meeting";
 import MeetingRoom from "./meeting-room";
 import { useLocation } from "react-router-dom";
 import MeetingExit from "./meeting-exit";
+import {
+    createTransport,
+    joinRoom,
+    onNewProducer,
+} from "@/socket/communication/videoCallSocket";
 
-// mediasoup params
-let params = {
+// mediasoup track params
+let trackParams = {
     encodings: [
         {
             rid: "r0",
@@ -72,17 +77,16 @@ function Meet() {
     }>({});
 
     // Device
-    const [device, setDevice] = useState<mediasoupClient.Device | null>(null);
+    const deviceRef = useRef<mediasoupClient.Device | null>(null);
 
-    // Producer Transport
-    const [senderTransport, setSenderTransport] =
-        useState<mediasoupClient.types.Transport | null>(null);
+    // Sender Transport
+    // const sendTransportRef = useRef<mediasoupClient.types.Transport | null>(null);
 
-    // ReciverTransport
-    const [recvTransport, setRecvTransport] =
-        useState<mediasoupClient.types.Transport | null>(null);
+    // Receiver Transport
+    // const recvTransportRef = useRef<mediasoupClient.types.Transport | null>(null);
 
-    const [consumerParams, setConsumerParams] = useState<any | null>(null);
+    // Existing producers
+    const pendingProducersRef = useRef<any[]>([]);
 
     // ===================================================================================================
 
@@ -179,293 +183,300 @@ function Meet() {
 
     // Join room and create device =============================================================================
     useEffect(() => {
-        async function joinRoom() {
-            try {
-                socket.emit(
-                    "joinRoom",
-                    { roomId },
-                    async (
-                        rtpCapabilities: mediasoupClient.types.RtpCapabilities,
-                        existingPeer: any
-                    ) => {
-                        const newDevice = new mediasoupClient.Device();
-                        await newDevice.load({ routerRtpCapabilities: rtpCapabilities });
-                        setDevice(newDevice);
+        if (isJoined) {
+            joinRoom(roomId, async (rtpCapabilities, existingProducers) => {
+                // Create and load the device
+                const newDevice = new mediasoupClient.Device();
+                await newDevice.load({ routerRtpCapabilities: rtpCapabilities });
 
-                        console.log(existingPeer);
-                    }
-                );
-            } catch (err) {
-                console.log(err);
-            }
+                // Update the device
+                deviceRef.current = newDevice;
+
+                // Update existing producers
+                pendingProducersRef.current = existingProducers;
+
+                // Create producer transport
+                goCreateTransport(true);
+            });
         }
-
-        if (isJoined) joinRoom();
     }, [isJoined]);
 
+    // Listen for new producers
+    useEffect(() => {
+        onNewProducer(async ({ producerId, kind, appData, socketId }) => {
+            console.log(producerId, kind, appData, socketId);
+
+            // Create receiver transport
+            const recvTransport = await goCreateTransport(false);
+            if (!recvTransport) return;
+
+            // Connect and consume media
+            connectAndConsumeMedia(producerId, appData, socketId, recvTransport);
+        });
+
+        return () => {
+            socket.off("newProducer");
+        };
+    }, []);
+
     // Create webrtc transports (both producer and consumer), also listen for new producer =====================
-    useEffect(() => {
-        const startCall = async () => {
+    const goCreateTransport = async (
+        sender: boolean
+    ): Promise<mediasoupClient.types.Transport | undefined> => {
+        return new Promise((resolve, reject) => {
             try {
-                // Create transport
-                socket.emit(
-                    "createWebRtcTransport",
-                    { sender: true, roomId },
-                    ({ params }: any) => {
-                        if (params.err) {
-                            console.log(params.err);
-                            return;
-                        }
+                createTransport(sender, roomId, (params) => {
+                    // console.log("Transport created with params:", params);
 
-                        if (!device) return;
+                    if (sender) {
+                        // SendTransport
+                        const sendTransport =
+                            deviceRef.current?.createSendTransport(params);
+                        if (!sendTransport) return reject("SendTransport not created");
 
-                        // create producer transport
-                        const producerTransport = device.createSendTransport(params);
+                        // Set sendtransport event listeners
+                        setSendTransportEventListners(sendTransport);
 
-                        if (!producerTransport) return;
+                        // Connect and produce media
+                        connectAndProduceMedia(sendTransport);
 
-                        setSenderTransport(producerTransport); // Update state
+                        // Resolve sendTranport
+                        resolve(sendTransport);
+                    } else {
+                        // ReceiveTransports
+                        const recvTransport =
+                            deviceRef.current?.createRecvTransport(params);
+                        if (!recvTransport) return reject("RecvTransport not created");
 
-                        // Connect transport - will trigger, when produce() method in producerTransport calls
-                        producerTransport.on(
-                            "connect",
-                            ({ dtlsParameters }, callback, errback) => {
-                                try {
-                                    socket.emit("connectTransport", {
-                                        roomId,
-                                        transportId: producerTransport.id,
-                                        dtlsParameters,
-                                    });
+                        // Set receivetransport event listeners
+                        setRecvTransportEventListners(recvTransport);
 
-                                    callback(); // Notify parameters are transmitted
-                                } catch (err: any) {
-                                    console.log(err);
-                                    errback(err);
-                                }
-                            }
-                        );
-
-                        // Produce transport - will trigger, when produce() method at server side called
-                        producerTransport.on(
-                            "produce",
-                            async (parameters, callback, errback) => {
-                                try {
-                                    const muteState =
-                                        parameters.kind === "audio"
-                                            ? { isAudioMute: isAudioMute ?? false }
-                                            : { isVideoMute: isVideoMute ?? false };
-
-                                    socket.emit(
-                                        "produceTransport",
-                                        {
-                                            roomId,
-                                            transportId: producerTransport.id,
-                                            kind: parameters.kind,
-                                            rtpParameters: parameters.rtpParameters,
-                                            ...muteState,
-                                        },
-                                        ({ producerId }: { producerId: string }) => {
-                                            callback({ id: producerId }); // Notify parameters are transmitted
-                                            // and got the producer id
-                                        }
-                                    );
-                                } catch (err: any) {
-                                    errback(err);
-                                }
-                            }
-                        );
+                        // Resolve resvTransport
+                        resolve(recvTransport);
                     }
-                );
-
-                // New producer
-                socket.on(
-                    "newProducer",
-                    async ({ producerId, kind, appData, socketId }) => {
-                        if (!device) return;
-
-                        // Create transport
-                        socket.emit(
-                            "createWebRtcTransport",
-                            { sender: false, roomId },
-                            ({ params }: any) => {
-                                if (params.err) {
-                                    console.log(params.err);
-                                    return;
-                                }
-
-                                if (!device) return;
-
-                                // create consumer transport
-                                const consumerTransport = device.createRecvTransport(params);
-                                if (!consumerTransport) return;
-
-                                setRecvTransport(consumerTransport); // Update state
-                                setConsumerParams({ producerId, kind, appData, socketId }); // Update params
-
-                                // Connect transport - will trigger when consume() at server side called
-                                consumerTransport.on(
-                                    "connect",
-                                    ({ dtlsParameters }, callback, errback) => {
-                                        try {
-                                            socket.emit("connectTransport", {
-                                                roomId,
-                                                transportId: consumerTransport.id,
-                                                dtlsParameters,
-                                            });
-
-                                            callback(); // Notify parameters are transmitted
-                                        } catch (err: any) {
-                                            console.log(err);
-                                            errback(err);
-                                        }
-                                    }
-                                );
-                            }
-                        );
-                    }
-                );
-            } catch (err: unknown) {
-                console.log(err);
-            }
-        };
-
-        device && startCall();
-    }, [device]);
-
-    // Connect webrtc produce tranport ==========================================================================
-    useEffect(() => {
-        const connectProducerTransport = async () => {
-            try {
-                if (!stream) return;
-
-                // Get video & audio tracks
-                const videoTrack = stream.getVideoTracks()[0];
-                const audioTrack = stream.getAudioTracks()[0];
-
-                // Produce video
-                if (videoTrack) {
-                    const videoProducer = await senderTransport?.produce({
-                        encodings: params.encodings,
-                        codecOptions: params.codecOptions,
-                        track: videoTrack,
-                        appData: { isVideoMute },
-                    });
-
-                    videoProducer?.on("trackended", () => {
-                        console.log("Video track ended");
-                    });
-
-                    videoProducer?.on("transportclose", () => {
-                        console.log("Video transport ended");
-                    });
-                }
-
-                // Produce audio
-                if (audioTrack) {
-                    const audioProducer = await senderTransport?.produce({
-                        encodings: params.audioEncodings,
-                        codecOptions: params.codecOptionsAudio,
-                        track: audioTrack,
-                        appData: { isAudioMute },
-                    });
-
-                    audioProducer?.on("trackended", () => {
-                        console.log("Audio track ended");
-                    });
-
-                    audioProducer?.on("transportclose", () => {
-                        console.log("Audio transport ended");
-                    });
-                }
+                });
             } catch (err) {
-                console.log(err);
+                console.error("Error in goCreateTransport:", err);
+                reject(err);
             }
-        };
+        });
+    };
 
-        senderTransport && connectProducerTransport();
-    }, [senderTransport]);
-
-    // Connect webrtc consumer transport ========================================================================
-    useEffect(() => {
-        const connectConsumerTransport = async () => {
-            try {
-                if (!device || !recvTransport || !senderTransport) return;
-
-                // Consume media
-                socket.emit(
-                    "consume",
-                    {
+    // Send tranpsort event listners
+    const setSendTransportEventListners = (
+        sendTransport: mediasoupClient.types.Transport
+    ) => {
+        try {
+            // Connect transport - will trigger, when produce() method in sendTransport calls
+            sendTransport.on("connect", ({ dtlsParameters }, callback, errback) => {
+                try {
+                    socket.emit("connectTransport", {
                         roomId,
-                        transportId: recvTransport.id,
-                        producerId: consumerParams.producerId,
-                        rtpCapabilities: device.rtpCapabilities,
-                        appData: consumerParams.appData,
-                    },
-                    async ({ params }: any) => {
-                        if (params.err) {
-                            console.log(params.err);
-                            return;
+                        transportId: sendTransport.id,
+                        dtlsParameters,
+                    });
+
+                    callback(); // Notify parameters are transmitted
+                } catch (err: any) {
+                    console.log(err);
+                    errback(err);
+                }
+            });
+
+            // Produce transport - will trigger, when produce() method in sendTransport calls
+            sendTransport.on("produce", async (parameters, callback, errback) => {
+                try {
+                    const muteState =
+                        parameters.kind === "audio"
+                            ? { isAudioMute: isAudioMute ?? false }
+                            : { isVideoMute: isVideoMute ?? false };
+
+                    socket.emit(
+                        "produceTransport",
+                        {
+                            roomId,
+                            transportId: sendTransport.id,
+                            kind: parameters.kind,
+                            rtpParameters: parameters.rtpParameters,
+                            ...muteState,
+                        },
+                        ({ producerId }: { producerId: string }) => {
+                            callback({ id: producerId });
+                            // Notify parameters are transmitted
+                            // and got the producer id
                         }
+                    );
+                } catch (err: any) {
+                    errback(err);
+                }
+            });
+        } catch (err: unknown) {
+            console.log(err);
+        }
+    };
 
-                        // Consumer
-                        const consumer = await recvTransport.consume({
-                            id: params.id,
-                            producerId: params.producerId,
-                            kind: params.kind,
-                            rtpParameters: params.rtpParameters,
-                            appData: params.appData,
-                        });
+    // Connect to sendTransport and produce media
+    const connectAndProduceMedia = async (
+        sendTransport: mediasoupClient.types.Transport
+    ) => {
+        try {
+            if (!stream) return;
 
-                        if (!consumer) return;
+            // Get video & audio tracks
+            const videoTrack = stream.getVideoTracks()[0];
+            const audioTrack = stream.getAudioTracks()[0];
 
-                        const { track } = consumer; // track from remote peer
+            // Produce video
+            if (videoTrack) {
+                const videoProducer = await sendTransport?.produce({
+                    encodings: trackParams.encodings,
+                    codecOptions: trackParams.codecOptions,
+                    track: videoTrack,
+                    appData: { isVideoMute },
+                });
 
-                        // Emit event to resume consumer
-                        socket.emit(
-                            "resumeConsumer",
-                            { roomId, consumerId: consumer.id },
-                            ({ params }: any) => {
-                                console.log(params.success);
-                            }
-                        );
+                videoProducer?.on("trackended", () => {
+                    console.log("Video track ended");
+                });
 
-                        // Update peers with remote stream, adding track dynamically
-                        setPeers((prevPeers) => {
-                            const existingPeer = prevPeers[consumerParams.socketId];
-
-                            // Create a new stream if not exists, otherwise  add track to it
-                            const newStream = existingPeer
-                                ? new MediaStream(existingPeer.media.getTracks())
-                                : new MediaStream();
-
-                            newStream.addTrack(track);
-
-                            // console.log(consumerParams.appData);
-
-                            return {
-                                ...prevPeers,
-                                [consumerParams.socketId]: {
-                                    media: newStream,
-                                    isVideoMute:
-                                        consumerParams.appData.isVideoMute ??
-                                        existingPeer?.isVideoMute ??
-                                        false,
-                                    isAudioMute:
-                                        consumerParams.appData.isAudioMute ??
-                                        existingPeer?.isAudioMute ??
-                                        false,
-                                },
-                            };
-                        });
-                    }
-                );
-            } catch (err: unknown) {
-                console.log(err);
+                videoProducer?.on("transportclose", () => {
+                    console.log("Video transport ended");
+                });
             }
-        };
 
-        recvTransport && consumerParams && connectConsumerTransport();
-    }, [recvTransport, consumerParams]);
+            // Produce audio
+            if (audioTrack) {
+                const audioProducer = await sendTransport?.produce({
+                    encodings: trackParams.audioEncodings,
+                    codecOptions: trackParams.codecOptionsAudio,
+                    track: audioTrack,
+                    appData: { isAudioMute },
+                });
+
+                audioProducer?.on("trackended", () => {
+                    console.log("Audio track ended");
+                });
+
+                audioProducer?.on("transportclose", () => {
+                    console.log("Audio transport ended");
+                });
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    // Receiver Transport event listeners
+    const setRecvTransportEventListners = async (
+        recvTranpsort: mediasoupClient.types.Transport
+    ) => {
+        try {
+            // Connect transport - will trigger when consume() at server side called
+            recvTranpsort.on("connect", ({ dtlsParameters }, callback, errback) => {
+                try {
+                    socket.emit("connectTransport", {
+                        roomId,
+                        transportId: recvTranpsort.id,
+                        dtlsParameters,
+                    });
+
+                    callback(); // Notify parameters are transmitted
+
+                    console.log("haayyyyyyyyyy");
+                } catch (err: any) {
+                    console.log(err);
+                    errback(err);
+                }
+            });
+        } catch (err: unknown) {
+            console.log(err);
+        }
+    };
+
+    // Connect to recvtransport and consume media
+    const connectAndConsumeMedia = async (
+        producerId: string,
+        appData: any,
+        socketId: string,
+        recvTransport: mediasoupClient.types.Transport
+    ) => {
+        try {
+            const device = deviceRef.current;
+
+            if (!device || !recvTransport) return;
+
+            console.log("consuming brooooo");
+
+            // Consume media
+            socket.emit(
+                "consume",
+                {
+                    roomId,
+                    transportId: recvTransport.id,
+                    producerId: producerId,
+                    rtpCapabilities: device.rtpCapabilities,
+                    appData: appData,
+                },
+                async ({ params }: any) => {
+                    if (params.err) {
+                        console.log(params.err);
+                        return;
+                    }
+
+                    // Consumer
+                    const consumer = await recvTransport.consume({
+                        id: params.id,
+                        producerId: params.producerId,
+                        kind: params.kind,
+                        rtpParameters: params.rtpParameters,
+                        appData: params.appData,
+                    });
+
+                    if (!consumer) return;
+
+                    const { track } = consumer; // track from remote peer
+
+                    console.log("going to resume brooooo");
+
+                    // Emit event to resume consumer
+                    socket.emit(
+                        "resumeConsumer",
+                        { roomId, consumerId: consumer.id },
+                        ({ params }: any) => {
+                            console.log(params.success);
+                        }
+                    );
+
+                    // Update peers with remote stream, adding track dynamically
+                    setPeers((prevPeers) => {
+                        const existingPeer = prevPeers[socketId];
+
+                        // Create a new stream if not exists, otherwise  add track to it
+                        const newStream = existingPeer
+                            ? new MediaStream(existingPeer.media.getTracks())
+                            : new MediaStream();
+
+                        newStream.addTrack(track);
+
+                        // console.log(consumerParams.appData);
+
+                        return {
+                            ...prevPeers,
+                            [socketId]: {
+                                media: newStream,
+                                isVideoMute:
+                                    appData.isVideoMute ?? existingPeer?.isVideoMute ?? false,
+                                isAudioMute:
+                                    appData.isAudioMute ?? existingPeer?.isAudioMute ?? false,
+                            },
+                        };
+                    });
+                }
+            );
+        } catch (err: unknown) {
+            console.log(err);
+        }
+    };
 
     useEffect(() => {
         console.log("updated peers", peers);
@@ -546,7 +557,7 @@ function Meet() {
                 {/* Meet exit page */}
                 {isMeetLeft && (
                     <MeetingExit
-                        setDevice={setDevice}
+                        deviceRef={deviceRef}
                         setJoined={setJoined}
                         setMeetLeft={setMeetLeft}
                     />
