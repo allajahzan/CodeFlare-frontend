@@ -81,9 +81,6 @@ function Meet() {
     // Device
     const deviceRef = useRef<mediasoupClient.Device | null>(null);
 
-    // Existing producers
-    const pendingProducersRef = useRef<any[]>([]);
-
     // ===================================================================================================
 
     // Handle local video streaming on mute and unmute
@@ -188,8 +185,10 @@ function Meet() {
                 // Update the device
                 deviceRef.current = newDevice;
 
-                // Update existing producers
-                pendingProducersRef.current = existingProducers;
+                // Consume all existing producers
+                if (existingProducers && existingProducers.length > 0) {
+                    await consumeExistingProducers(existingProducers);
+                }
 
                 // Create producer transport
                 goCreateTransport(true);
@@ -229,6 +228,32 @@ function Meet() {
             socket.off("peerLeft", handlePeerLeft);
         };
     }, []);
+
+    // Consume existing producers
+    const consumeExistingProducers = async (
+        existingProducers: {
+            producerId: string;
+            kind: mediasoupClient.types.MediaKind;
+            appData: any;
+            socketId: string;
+        }[]
+    ) => {
+        console.log("Consuming existing producers: ", existingProducers);
+
+        for (const producer of existingProducers) {
+            // Create receiver transport
+            const recvTransport = await goCreateTransport(false);
+            if (!recvTransport) return;
+
+            // Connect and consume media
+            connectAndConsumeMedia(
+                producer.producerId,
+                producer.appData,
+                producer.socketId,
+                recvTransport
+            );
+        }
+    };
 
     // Create webrtc transports (both producer and consumer), also listen for new producer =====================
     const goCreateTransport = async (
