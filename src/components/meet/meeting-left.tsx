@@ -10,18 +10,18 @@ import { stateType } from "@/redux/store";
 interface PropsType {
     setJoined: React.Dispatch<React.SetStateAction<boolean | null>>;
     setMeetLeft: React.Dispatch<React.SetStateAction<boolean>>;
-    setStream: React.Dispatch<React.SetStateAction<MediaStream | null>>;
     setVideoMute: React.Dispatch<React.SetStateAction<boolean>>;
     setAudioMute: React.Dispatch<React.SetStateAction<boolean>>;
+    startWebcam: ()=>void;
 }
 
 // Meeting exist page Component
-function MeetingExit({
+function MeetingLeft({
     setJoined,
     setMeetLeft,
-    setStream,
     setAudioMute,
     setVideoMute,
+    startWebcam
 }: PropsType) {
     // Count state
     const [countdown, setCountdown] = useState(30);
@@ -33,21 +33,6 @@ function MeetingExit({
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
-
-    // Start webcam
-    const startWebcam = async () => {
-        try {
-            let newStream = await navigator.mediaDevices.getUserMedia({
-                video: true,
-                audio: true,
-            });
-
-            // Update stream
-            setStream(newStream);
-        } catch (err) {
-            console.log(err);
-        }
-    };
 
     // Handle Rejoin
     async function reJoinRoom() {
@@ -177,4 +162,4 @@ function MeetingExit({
     );
 }
 
-export default MeetingExit;
+export default MeetingLeft;

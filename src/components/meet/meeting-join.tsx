@@ -2,12 +2,7 @@ import { motion } from "framer-motion";
 import { Ellipsis, Mic, MicOff, Video, VideoOff } from "lucide-react";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import {
-    Fragment,
-    useContext,
-    useEffect,
-    useState,
-} from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { IUserContext, UserContext } from "@/context/user-context";
 import React from "react";
 import { fetchData } from "@/service/api-service";
@@ -43,22 +38,22 @@ interface PropsType {
     setJoined: React.Dispatch<React.SetStateAction<boolean | null>>;
     handleVideo: () => void;
     handleAudio: () => void;
-    stream: MediaStream | null;
-    setStream: React.Dispatch<React.SetStateAction<MediaStream | null>>;
+    startWebcam : ()=>void;
+    streamRef: React.MutableRefObject<MediaStream | null>;
     meet: IMeet;
     setMeet: React.Dispatch<React.SetStateAction<IMeet | null>>;
 }
 
 // Join video call Component
-function JoinMeeting({
+function MeetingJoin({
     isAudioMute,
     isVideoMute,
     videoRef,
     setJoined,
     handleAudio,
     handleVideo,
-    stream,
-    setStream,
+    startWebcam,
+    streamRef,
     meet,
     setMeet,
 }: PropsType) {
@@ -71,35 +66,10 @@ function JoinMeeting({
     // User context
     const { user } = useContext(UserContext) as IUserContext;
 
+    // Path
     const path = useLocation();
 
-    // Start web cam
-    const startWebcam = async () => {
-        try {
-            let newStream = await navigator.mediaDevices.getUserMedia({
-                video: true,
-                audio: true,
-            });
-
-            // Update stream
-            setStream(newStream);
-        } catch (err) {
-            console.log(err);
-        }
-    };
-
-    // Stop webcam
-    const stopWebcam = async () => {
-        console.log(videoRef.current, stream)
-        if (stream && videoRef.current) {
-
-            videoRef.current.srcObject = null;
-            stream.getTracks().forEach((track) => track.stop()); // Stop camera
-
-            // Update stream
-            setStream(null);
-        }
-    };
+    const roomId = path.pathname.split("/")[3];
 
     // Start webcam when page load
     useEffect(() => {
@@ -107,12 +77,15 @@ function JoinMeeting({
         localStorage.setItem("isAudioMute", "0");
 
         isVerified && startWebcam();
-
-        // Clean up
-        return () => {
-            stopWebcam();
-        };
     }, [isVerified]);
+
+    // Handle local video streaming on video mute and unmute
+    useEffect(() => {
+        if (videoRef.current) {
+            videoRef.current.srcObject = streamRef.current;
+            videoRef.current.play().catch((err) => console.log(err));
+        }
+    }, [isVideoMute]);
 
     // Check room exists or not
     useEffect(() => {
@@ -120,7 +93,7 @@ function JoinMeeting({
             try {
                 // Send request
                 const resp = await fetchData(
-                    ApiEndpoints.MEET + `?roomId=${path.pathname.split("/")[3]}`,
+                    ApiEndpoints.MEET + `?roomId=${roomId}`,
                     role
                 );
 
@@ -333,4 +306,4 @@ function JoinMeeting({
     );
 }
 
-export default React.memo(JoinMeeting);
+export default React.memo(MeetingJoin);

@@ -2,13 +2,14 @@ import Navbar from "../common/navbar/navbar";
 import { useCallback, useEffect, useRef, useState } from "react";
 import * as mediasoupClient from "mediasoup-client";
 import { socket } from "@/socket/communication/connect";
-import JoinMeeting, { IMeet } from "./join-meeting";
+import MeetingJoin, { IMeet } from "./meeting-join";
 import MeetingRoom from "./meeting-room";
 import { useLocation } from "react-router-dom";
-import MeetingExit from "./meeting-exit";
+import MeetingLeft from "./meeting-left";
 import {
     createTransport,
     joinRoom,
+    leaveMeet,
     onNewProducer,
     onPeerLeft,
     onPeerMuteChange,
@@ -51,8 +52,8 @@ let trackParams = {
 function Meet() {
     // ===================== state used for local stream ================================================
 
-    // Stream
-    const [stream, setStream] = useState<MediaStream | null>(null);
+    // Stream ref
+    const streamRef = useRef<MediaStream | null>(null);
 
     // Video ref
     const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -83,18 +84,57 @@ function Meet() {
 
     // ===================================================================================================
 
-    // Handle local video streaming on mute and unmute
-    useEffect(() => {
-        if (videoRef.current) {
-            videoRef.current.srcObject = stream;
-            videoRef.current.play().catch((err) => console.log(err));
+    // Start web cam
+    const startWebcam = async () => {
+        try {
+            let newStream = await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: true,
+            });
+
+            // Update stream
+            streamRef.current = newStream;
+
+            if (videoRef.current) {
+                videoRef.current.srcObject = streamRef.current;
+                videoRef.current.play().catch((err) => console.log(err));
+            }
+        } catch (err) {
+            console.log(err);
         }
-    }, [isVideoMute, stream]);
+    };
+
+    // Stop webcam
+    const stopWebcam = useCallback(() => {
+        const currentStream = streamRef.current;
+
+        if (currentStream) {
+            currentStream.getTracks().forEach((track) => track.stop());
+            streamRef.current = null;
+
+            // Leave call
+            leaveCall();
+        }
+    }, []);
+
+    // leave call
+    const leaveCall = () => {
+        leaveMeet(roomId);
+    };
+
+    // when page unmount stop webcam
+    useEffect(() => {
+        return () => {
+            stopWebcam();
+        };
+    }, []);
+
+    // =======================================================================================================
 
     // Handle video
     const handleVideo = useCallback(() => {
-        if (stream) {
-            const videoTrack = stream.getVideoTracks()[0]; // Get video track
+        if (streamRef.current) {
+            const videoTrack = streamRef.current.getVideoTracks()[0]; // Get video track
 
             if (videoTrack) {
                 videoTrack.enabled = !videoTrack.enabled; // Enable-Disable
@@ -130,12 +170,12 @@ function Meet() {
                 }
             }
         }
-    }, [stream, socket, roomId, isJoined]);
+    }, [socket, roomId, isJoined]);
 
     // Handle audio
     const handleAudio = useCallback(() => {
-        if (stream) {
-            const audioTrack = stream.getAudioTracks()[0]; // Get audio track
+        if (streamRef.current) {
+            const audioTrack = streamRef.current.getAudioTracks()[0]; // Get audio track
             if (audioTrack) {
                 audioTrack.enabled = !audioTrack.enabled; // Enable-Disable
 
@@ -170,7 +210,7 @@ function Meet() {
                 }
             }
         }
-    }, [stream, socket, roomId, isJoined]);
+    }, [socket, roomId, isJoined]);
 
     // ========================= WebRtc with socket IO and mediasoup ===========================================
 
@@ -356,11 +396,11 @@ function Meet() {
         sendTransport: mediasoupClient.types.Transport
     ) => {
         try {
-            if (!stream) return;
+            if (!streamRef.current) return;
 
             // Get video & audio tracks
-            const videoTrack = stream.getVideoTracks()[0];
-            const audioTrack = stream.getAudioTracks()[0];
+            const videoTrack = streamRef.current.getVideoTracks()[0];
+            const audioTrack = streamRef.current.getAudioTracks()[0];
 
             // Produce video
             if (videoTrack) {
@@ -545,17 +585,17 @@ function Meet() {
                 {/* Navbar */}
                 {true && <Navbar />}
 
-                {/* Join video call */}
+                {/* Meeting join */}
                 {isJoined === false && (
-                    <JoinMeeting
+                    <MeetingJoin
                         videoRef={videoRef}
                         setJoined={setJoined}
                         isVideoMute={isVideoMute}
                         isAudioMute={isAudioMute}
                         handleVideo={handleVideo}
                         handleAudio={handleAudio}
-                        stream={stream}
-                        setStream={setStream}
+                        startWebcam={startWebcam}
+                        streamRef={streamRef}
                         meet={meet as IMeet}
                         setMeet={setMeet}
                     />
@@ -567,24 +607,23 @@ function Meet() {
                         isVideoMute={isVideoMute}
                         isAudioMute={isAudioMute}
                         videoRef={videoRef}
-                        stream={stream}
+                        streamRef={streamRef}
                         handleVideo={handleVideo}
                         handleAudio={handleAudio}
                         peers={peers}
                         setMeetLeft={setMeetLeft}
                         setJoined={setJoined}
-                        setStream={setStream}
                     />
                 )}
 
-                {/* Meet exit page */}
+                {/* Meeting left */}
                 {isMeetLeft && (
-                    <MeetingExit
+                    <MeetingLeft
                         setJoined={setJoined}
                         setMeetLeft={setMeetLeft}
-                        setStream={setStream}
                         setAudioMute={setAudioMute}
                         setVideoMute={setVideoMute}
+                        startWebcam={startWebcam}
                     />
                 )}
             </div>

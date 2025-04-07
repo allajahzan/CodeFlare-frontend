@@ -22,7 +22,7 @@ interface PropsType {
     isVideoMute: boolean;
     isAudioMute: boolean;
     videoRef: React.MutableRefObject<HTMLVideoElement | null>;
-    stream: MediaStream | null;
+    streamRef: React.MutableRefObject<MediaStream | null>;
     handleVideo: () => void;
     handleAudio: () => void;
     peers: {
@@ -34,7 +34,6 @@ interface PropsType {
     };
     setMeetLeft: React.Dispatch<React.SetStateAction<boolean>>;
     setJoined: React.Dispatch<React.SetStateAction<boolean | null>>;
-    setStream: React.Dispatch<React.SetStateAction<MediaStream | null>>
 }
 
 // Video Call Component
@@ -42,14 +41,14 @@ function MeetingRoom({
     isVideoMute,
     isAudioMute,
     videoRef,
-    stream,
+    streamRef,
     handleVideo,
     handleAudio,
     peers,
     setMeetLeft,
     setJoined,
-    setStream
 }: PropsType) {
+    // Path
     const path = useLocation();
 
     // User context
@@ -58,23 +57,23 @@ function MeetingRoom({
     // Leaving
     const [isLeaving, setLeaving] = useState<boolean>(false);
 
-    // Set localstream when component mounts
+    // Set localstream when video mute unmute
     useEffect(() => {
-        if (videoRef.current && stream) {
-            videoRef.current.srcObject = stream;
+        if (videoRef.current && streamRef.current) {
+            videoRef.current.srcObject = streamRef.current;
         }
-    }, []);
+    }, [isVideoMute]);
 
     const roomId = path.pathname.split("/")[3];
 
     // Stop webcam
     const stopWebcam = async () => {
-        if (stream && videoRef.current) {
+        if (streamRef.current && videoRef.current) {
             videoRef.current.srcObject = null;
-            stream.getTracks().forEach((track) => track.stop()); // Stop camera
+            streamRef.current.getTracks().forEach((track) => track.stop()); // Stop camera
 
             // Update stream
-            setStream(null);
+            streamRef.current = null;
         }
     };
 
@@ -82,7 +81,7 @@ function MeetingRoom({
     const handleLeave = () => {
         setLeaving(true);
         setTimeout(() => {
-            leaveCall(); // 
+            leaveCall(); //
             stopWebcam();
             setMeetLeft(true);
             setJoined(null);
@@ -91,7 +90,7 @@ function MeetingRoom({
 
     // leave call
     const leaveCall = () => {
-        leaveMeet(roomId)
+        leaveMeet(roomId);
     };
 
     // When page refresh- - leave the call

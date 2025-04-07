@@ -40,9 +40,6 @@ function MeetLanding() {
 
     const isMobile = useMediaQuery({ maxWidth: 640 });
 
-    // // Theme context
-    // const { theme } = useContext(ThemeContext) as IThemeContext;
-
     const navigate = useNavigate();
 
     useEffect(() => {

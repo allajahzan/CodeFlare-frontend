@@ -25,7 +25,7 @@ interface PropsType {
 // Meet info Modal
 function ModalMeetInfo({ open, setOpen }: PropsType) {
     const [roomId, setRoomId] = useState<string>("");
-    const [fetching, setFetching] = useState<boolean| null>(true);
+    const [fetching, setFetching] = useState<boolean | null>(true);
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
@@ -50,8 +50,8 @@ function ModalMeetInfo({ open, setOpen }: PropsType) {
     useEffect(() => {
         const createMeet = async () => {
             try {
-                setFetching(true)
-                
+                setFetching(true);
+
                 // Send request
                 const resp = await postData(
                     ApiEndpoints.MEET,
@@ -125,10 +125,12 @@ function ModalMeetInfo({ open, setOpen }: PropsType) {
                                     defaultValue={roomId}
                                     className="text-foreground font-medium p-5 pr-9 border-none bg-muted dark:bg-sidebar dark:hover:bg-sidebar cursor-auto"
                                 />
-                                <Copy
+                                <div
                                     onClick={() => handleCopy(roomId)}
-                                    className="w-4 h-4 absolute right-3 top-[13px] text-muted-foreground cursor-pointer"
-                                />
+                                    className="absolute right-1 top-1 p-2 cursor-pointer"
+                                >
+                                    <Copy className="w-4 h-4 text-muted-foreground" />
+                                </div>
                             </div>
                         </div>
                     </div>
