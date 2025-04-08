@@ -4,6 +4,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
 
 // Interface for Props
@@ -12,9 +13,10 @@ interface PropsType {
     action?: () => void;
     text: string;
     side?: "top" | "bottom" | "left" | "right";
+    className?: string;
 }
 
-function ToolTip({ children, text, action, side }: PropsType) {
+function ToolTip({ children, text, action, side , className}: PropsType) {
     return (
         <TooltipProvider disableHoverableContent={true}>
             <Tooltip>
@@ -24,7 +26,7 @@ function ToolTip({ children, text, action, side }: PropsType) {
                     </div>
                 </TooltipTrigger>
                 <TooltipContent 
-                    className="text-foreground dark:bg-sidebar border borer-2"
+                    className={cn("text-foreground dark:bg-sidebar border borer-2", className)}
                     side={side}
                 >
                     <p style={{ fontSize: "13px" }}>{text}</p>

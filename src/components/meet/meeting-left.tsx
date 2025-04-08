@@ -12,7 +12,7 @@ interface PropsType {
     setMeetLeft: React.Dispatch<React.SetStateAction<boolean>>;
     setVideoMute: React.Dispatch<React.SetStateAction<boolean>>;
     setAudioMute: React.Dispatch<React.SetStateAction<boolean>>;
-    startWebcam: ()=>void;
+    startWebcam: () => void;
 }
 
 // Meeting exist page Component
@@ -21,7 +21,7 @@ function MeetingLeft({
     setMeetLeft,
     setAudioMute,
     setVideoMute,
-    startWebcam
+    startWebcam,
 }: PropsType) {
     // Count state
     const [countdown, setCountdown] = useState(30);
@@ -115,7 +115,7 @@ function MeetingLeft({
                     </p>
                 </div>
 
-                <h1 className="text-3xl font-semibold text-foreground mb-8">
+                <h1 className="text-3xl text-center font-semibold text-foreground mb-8">
                     You left the meeting
                 </h1>
 

@@ -50,7 +50,9 @@ let trackParams = {
 
 // Meet Component
 function Meet() {
-    // ===================== state used for local stream ================================================
+    // ===================================== Initial streaming setup ===================================
+
+    const roomId = useLocation().pathname.split("/")[3];
 
     // Stream ref
     const streamRef = useRef<MediaStream | null>(null);
@@ -58,31 +60,9 @@ function Meet() {
     // Video ref
     const videoRef = useRef<HTMLVideoElement | null>(null);
 
-    // Mute-unmute states
-    const [isAudioMute, setAudioMute] = useState<boolean>(false);
-    const [isVideoMute, setVideoMute] = useState<boolean>(false);
-
-    // ===================== states used for webrtc =====================================================
-
     const [isJoined, setJoined] = useState<boolean | null>(false);
     const [isMeetLeft, setMeetLeft] = useState<boolean>(false);
     const [meet, setMeet] = useState<IMeet | null>(null);
-
-    const roomId = useLocation().pathname.split("/")[3];
-
-    // Peers
-    const [peers, setPeers] = useState<{
-        [socketId: string]: {
-            media: MediaStream;
-            isVideoMute: boolean;
-            isAudioMute: boolean;
-        };
-    }>({});
-
-    // Device
-    const deviceRef = useRef<mediasoupClient.Device | null>(null);
-
-    // ===================================================================================================
 
     // Start web cam
     const startWebcam = async () => {
@@ -129,7 +109,11 @@ function Meet() {
         };
     }, []);
 
-    // =======================================================================================================
+    // =========================================== Mute/unmute ==========================================
+
+    // Mute-unmute states
+    const [isAudioMute, setAudioMute] = useState<boolean>(false);
+    const [isVideoMute, setVideoMute] = useState<boolean>(false);
 
     // Handle video
     const handleVideo = useCallback(() => {
@@ -212,9 +196,53 @@ function Meet() {
         }
     }, [socket, roomId, isJoined]);
 
+    // Listen mute unmute changes
+    useEffect(() => {
+        const handlePeerMuteChange = ({
+            type,
+            isMuted,
+            socketId,
+        }: {
+            type: "audio" | "video";
+            isMuted: boolean;
+            socketId: string;
+        }) => {
+            setPeers((prevPeers) => {
+                if (!prevPeers[socketId]) return prevPeers;
+
+                return {
+                    ...prevPeers,
+                    [socketId]: {
+                        ...prevPeers[socketId],
+                        [`is${type === "video" ? "Video" : "Audio"}Mute`]: isMuted,
+                    },
+                };
+            });
+        };
+
+        onPeerMuteChange(handlePeerMuteChange);
+
+        return () => {
+            socket.off("peerMuteChange", handlePeerMuteChange);
+        };
+    }, []);
+
     // ========================= WebRtc with socket IO and mediasoup ===========================================
 
-    // Join room and create device =============================================================================
+    // Peers
+    const [peers, setPeers] = useState<{
+        [socketId: string]: {
+            media: MediaStream;
+            screen?: MediaStream;
+            isVideoMute: boolean;
+            isAudioMute: boolean;
+        };
+    }>({});
+
+    // Device
+    const deviceRef = useRef<mediasoupClient.Device | null>(null);
+
+    // Join room and create device
     useEffect(() => {
         if (isJoined) {
             joinRoom(roomId, async (rtpCapabilities, existingProducers) => {
@@ -231,7 +259,17 @@ function Meet() {
                 }
 
                 // Create producer transport
-                goCreateTransport(true);
+                const sendTransport = await goCreateTransport(true);
+                if (!sendTransport) return;
+
+                if (!streamRef.current) return;
+
+                // Get video & audio tracks
+                const videoTrack = streamRef.current.getVideoTracks()[0];
+                const audioTrack = streamRef.current.getAudioTracks()[0];
+
+                // Connect and produce media
+                connectAndProduceMedia(sendTransport, videoTrack, audioTrack, null);
             });
         }
     }, [isJoined]);
@@ -278,7 +316,7 @@ function Meet() {
             socketId: string;
         }[]
     ) => {
-        console.log("Consuming existing producers: ", existingProducers);
+        // console.log("Consuming existing producers: ", existingProducers);
 
         for (const producer of existingProducers) {
             // Create receiver transport
@@ -295,7 +333,7 @@ function Meet() {
         }
     };
 
-    // Create webrtc transports (both producer and consumer), also listen for new producer =====================
+    // Create webrtc transports (both producer and consumer), also listen for new producer
     const goCreateTransport = async (
         sender: boolean
     ): Promise<mediasoupClient.types.Transport | undefined> => {
@@ -312,9 +350,6 @@ function Meet() {
 
                         // Set sendtransport event listeners
                         setSendTransportEventListners(sendTransport);
-
-                        // Connect and produce media
-                        connectAndProduceMedia(sendTransport);
 
                         // Resolve sendTranport
                         resolve(sendTransport);
@@ -362,19 +397,14 @@ function Meet() {
             // Produce transport - will trigger, when produce() method in sendTransport calls
             sendTransport.on("produce", async (parameters, callback, errback) => {
                 try {
-                    const muteState =
-                        parameters.kind === "audio"
-                            ? { isAudioMute: isAudioMute ?? false }
-                            : { isVideoMute: isVideoMute ?? false };
-
                     socket.emit(
                         "produceTransport",
                         {
                             roomId,
                             transportId: sendTransport.id,
                             kind: parameters.kind,
+                            appData: parameters.appData,
                             rtpParameters: parameters.rtpParameters,
-                            ...muteState,
                         },
                         ({ producerId }: { producerId: string }) => {
                             callback({ id: producerId });
@@ -393,22 +423,19 @@ function Meet() {
 
     // Connect to sendTransport and produce media
     const connectAndProduceMedia = async (
-        sendTransport: mediasoupClient.types.Transport
+        sendTransport: mediasoupClient.types.Transport,
+        videoTrack: MediaStreamTrack | null,
+        audioTrack: MediaStreamTrack | null,
+        screenTrack: MediaStreamTrack | null
     ) => {
         try {
-            if (!streamRef.current) return;
-
-            // Get video & audio tracks
-            const videoTrack = streamRef.current.getVideoTracks()[0];
-            const audioTrack = streamRef.current.getAudioTracks()[0];
-
             // Produce video
             if (videoTrack) {
                 const videoProducer = await sendTransport?.produce({
                     encodings: trackParams.encodings,
                     codecOptions: trackParams.codecOptions,
                     track: videoTrack,
-                    appData: { isVideoMute },
+                    appData: { isVideoMute, kind: "video" },
                 });
 
                 videoProducer?.on("trackended", () => {
@@ -426,7 +453,7 @@ function Meet() {
                     encodings: trackParams.audioEncodings,
                     codecOptions: trackParams.codecOptionsAudio,
                     track: audioTrack,
-                    appData: { isAudioMute },
+                    appData: { isAudioMute, kind: "audio" },
                 });
 
                 audioProducer?.on("trackended", () => {
@@ -435,6 +462,24 @@ function Meet() {
 
                 audioProducer?.on("transportclose", () => {
                     console.log("Audio transport ended");
+                });
+            }
+
+            // Produce screen
+            if (screenTrack) {
+                const screenProducer = await sendTransport?.produce({
+                    encodings: trackParams.encodings,
+                    codecOptions: trackParams.codecOptions,
+                    track: screenTrack,
+                    appData: { kind: "screen" },
+                });
+
+                screenProducer?.on("trackended", () => {
+                    console.log("screen track ended");
+                });
+
+                screenProducer?.on("transportclose", () => {
+                    console.log("screen transport ended");
                 });
             }
         } catch (err) {
@@ -466,6 +511,10 @@ function Meet() {
             console.log(err);
         }
     };
+
+    useEffect(() => {
+        console.log(peers);
+    }, [peers]);
 
     // Connect to recvtransport and consume media
     const connectAndConsumeMedia = async (
@@ -504,11 +553,16 @@ function Meet() {
                         appData: params.appData,
                     });
 
+                    // console.log(params.appData);
+
                     if (!consumer) return;
 
-                    const { track } = consumer; // track from remote peer
+                    const { track } = consumer;
+                    const kind = params.appData.kind; // Type of track
 
-                    // Emit event to resume consumer
+                    console.log(kind);
+
+                    // Resume consumer
                     socket.emit(
                         "resumeConsumer",
                         { roomId, consumerId: consumer.id },
@@ -517,25 +571,40 @@ function Meet() {
                         }
                     );
 
-                    // Update peers with remote stream, adding track dynamically
+                    // Update peers
                     setPeers((prevPeers) => {
-                        const existingPeer = prevPeers[socketId];
+                        const existingPeer = prevPeers[socketId] || {};
 
-                        // Create a new stream if not exists, otherwise  add track to it
-                        const newStream = existingPeer
+                        // Audio or video stream
+                        let updatedMediaStream = existingPeer.media
                             ? new MediaStream(existingPeer.media.getTracks())
                             : new MediaStream();
 
-                        newStream.addTrack(track);
+                        // Screen stream
+                        let updatedScreenStream = existingPeer.screen
+                            ? new MediaStream()
+                            : undefined;
+
+                        if (kind === "audio" || kind === "video") {
+                            updatedMediaStream.addTrack(track);
+                        } else if (kind === "screen") {
+                            updatedScreenStream = updatedScreenStream || new MediaStream();
+                            updatedScreenStream.addTrack(track);
+                        } else {
+                            console.warn("Unknown kind:", kind);
+                            return prevPeers;
+                        }
 
                         return {
                             ...prevPeers,
                             [socketId]: {
-                                media: newStream,
+                                ...existingPeer,
+                                media: updatedMediaStream,
+                                screen: updatedScreenStream,
                                 isVideoMute:
-                                    appData.isVideoMute ?? existingPeer?.isVideoMute ?? false,
+                                    appData.isVideoMute ?? existingPeer.isVideoMute ?? false,
                                 isAudioMute:
-                                    appData.isAudioMute ?? existingPeer?.isAudioMute ?? false,
+                                    appData.isAudioMute ?? existingPeer.isAudioMute ?? false,
                             },
                         };
                     });
@@ -546,41 +615,8 @@ function Meet() {
         }
     };
 
-    // Listen mute unmute changes ==============================================================================
-    useEffect(() => {
-        const handlePeerMuteChange = ({
-            type,
-            isMuted,
-            socketId,
-        }: {
-            type: "audio" | "video";
-            isMuted: boolean;
-            socketId: string;
-        }) => {
-            setPeers((prevPeers) => {
-                if (!prevPeers[socketId]) return prevPeers;
-
-                return {
-                    ...prevPeers,
-                    [socketId]: {
-                        ...prevPeers[socketId],
-                        [`is${type === "video" ? "Video" : "Audio"}Mute`]: isMuted,
-                    },
-                };
-            });
-        };
-
-        onPeerMuteChange(handlePeerMuteChange);
-
-        return () => {
-            socket.off("peerMuteChange", handlePeerMuteChange);
-        };
-    }, []);
-
-    // ==========================================================================================================
-
     return (
-        <div className="h-screen dotted-bg">
+        <div className="h-screen dotted-b">
             <div className="flex flex-col h-full w-full relative transition-all">
                 {/* Navbar */}
                 {true && <Navbar />}
@@ -603,17 +639,21 @@ function Meet() {
 
                 {/* Meeting room */}
                 {isJoined === true && (
-                    <MeetingRoom
-                        isVideoMute={isVideoMute}
-                        isAudioMute={isAudioMute}
-                        videoRef={videoRef}
-                        streamRef={streamRef}
-                        handleVideo={handleVideo}
-                        handleAudio={handleAudio}
-                        peers={peers}
-                        setMeetLeft={setMeetLeft}
-                        setJoined={setJoined}
-                    />
+                    <div className="flex-1 overflow-hidden">
+                        <MeetingRoom
+                            isVideoMute={isVideoMute}
+                            isAudioMute={isAudioMute}
+                            videoRef={videoRef}
+                            streamRef={streamRef}
+                            handleVideo={handleVideo}
+                            handleAudio={handleAudio}
+                            peers={peers}
+                            setMeetLeft={setMeetLeft}
+                            setJoined={setJoined}
+                            goCreateTransport={goCreateTransport}
+                            connectAndProduceMedia={connectAndProduceMedia}
+                        />
+                    </div>
                 )}
 
                 {/* Meeting left */}

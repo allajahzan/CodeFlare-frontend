@@ -47,7 +47,7 @@ function MeetLanding() {
     }, []);
 
     return (
-        <div className="h-screen dotted-bg">
+        <div className="h-screen dotted-b">
             <div className="flex flex-col h-full relative transition-all ">
                 {/* Meet info modal */}
                 <ModalMeetInfo open={open} setOpen={setOpen} />
