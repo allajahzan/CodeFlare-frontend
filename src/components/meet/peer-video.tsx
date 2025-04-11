@@ -2,7 +2,7 @@ import React, { Fragment, useRef } from "react";
 import { IUser } from "@/types/attendence";
 import VideoElement from "./video-element";
 import { cn } from "@/lib/utils";
-import { Mic, MicOff, Pin, UserRoundMinus } from "lucide-react";
+import { Mic, MicOff, Pin } from "lucide-react";
 import ScreenShareElement from "./screenshare-element";
 import { motion } from "framer-motion";
 import ToolTip from "../common/tooltip/tooltip";
@@ -15,7 +15,8 @@ interface PropsType {
     screen?: MediaStream | undefined;
     isVideoMute: boolean;
     isAudioMute: boolean;
-    setPinnedUser: React.Dispatch<React.SetStateAction<string | null>>;
+    setPinnedUser: React.Dispatch<React.SetStateAction<string | undefined>>;
+    isOptionsShow: boolean;
     className?: string;
     videoElementClassName?: string;
 }
@@ -29,6 +30,7 @@ function PeerVideo({
     isVideoMute,
     isAudioMute,
     setPinnedUser,
+    isOptionsShow,
     className,
     videoElementClassName,
 }: PropsType) {
@@ -38,49 +40,32 @@ function PeerVideo({
         <div
             key={socketId}
             className={cn(
-                "group relative aspect-video flex items-center justify-center w-full min-h-[230px] h-full",
-                "bg-zinc-200 dark:bg-sidebar-backgroundDark border rounded-2xl shadow overflow-hidden",
+                "group relative aspect-video flex items-center justify-center w-[180px] min-h-[180px]",
+                "bg-muted dark:bg-sidebar-backgroundDark rounded-2xl overflow-hidden shadow-md",
+                "border-2 border-white dark:border-muted-foreground",
                 className
             )}
         >
             {/* Options */}
-            <div className="group-hover:opacity-100 opacity-0 absolute z-50 inset-0 flex items-center justify-center">
-                <div className="flex items-center justify-center gap-1 bg-black/40 backdrop-blur-sm text-white rounded-full ">
-                    <ToolTip
-                        action={() => {
-                            setPinnedUser(socketId);
-                        }}
-                        text="Pin"
-                        side="bottom"
-                        className="bg-white dark:bg-white dark:text-black border border-border dark:border-zinc-100"
-                        children={
-                            <div className="p-3 hover:bg-black/30 rounded-full">
-                                <Pin className="w-5 h-5" />
-                            </div>
-                        }
-                    />
-                    <ToolTip
-                        text="Mute"
-                        side="bottom"
-                        className="bg-white dark:bg-white dark:text-black border border-border dark:border-zinc-100"
-                        children={
-                            <div className="p-3 hover:bg-black/30 rounded-full">
-                                <MicOff className="w-5 h-5" />
-                            </div>
-                        }
-                    />
-                    <ToolTip
-                        text="Remove"
-                        side="bottom"
-                        className="bg-white dark:bg-white dark:text-black border border-border dark:border-zinc-100"
-                        children={
-                            <div className="p-3 hover:bg-black/30 rounded-full">
-                                <UserRoundMinus className="w-5 h-5" />
-                            </div>
-                        }
-                    />
+            {isOptionsShow && (
+                <div className="group-hover:opacity-100 opacity-0 absolute z-50 inset-0 flex items-center justify-center">
+                    <div className="flex items-center justify-center gap-1 bg-black/40 backdrop-blur-sm text-white rounded-full ">
+                        <ToolTip
+                            action={() => {
+                                setPinnedUser(socketId);
+                            }}
+                            text="Pin"
+                            side="bottom"
+                            className="bg-background dark:bg-muted text-foreground border-none dark:border-none"
+                            children={
+                                <div className="p-3 hover:bg-black/30 rounded-full">
+                                    <Pin className="w-4 h-4" />
+                                </div>
+                            }
+                        />
+                    </div>
                 </div>
-            </div>
+            )}
 
             {/* If screen is not shared */}
             {!screen && (
@@ -93,15 +78,18 @@ function PeerVideo({
                         className={videoElementClassName}
                     />
 
-                    {/* Mic Status & User Name */}
+                    {/* User Name */}
                     <div className="absolute bottom-0 left-0 right-0 p-2 flex justify-between items-center">
                         <div className="p-1 px-3 flex items-center gap-2 bg-black/30 backdrop-blur-sm text-white rounded-lg text-sm font-medium">
                             <span>{(peer?.name && "You") || "Peer"}</span>
                         </div>
+                    </div>
 
+                    {/* Mic status */}
+                    <div className="absolute z-50 top-0 right-0 p-2 flex justify-between items-center">
                         <div className="p-2 bg-black/30 backdrop-blur-sm text-white rounded-full text-sm font-medium">
                             {isAudioMute ? (
-                                <MicOff className="h-4 w-4 text-red-600" />
+                                <MicOff className="h-4 w-4 text-white" />
                             ) : (
                                 <Mic className="h-4 w-4 text-white" />
                             )}
@@ -114,7 +102,7 @@ function PeerVideo({
             {screen && (
                 <div
                     ref={containerRef}
-                    className="relative flex items-center h-full w-full"
+                    className="relative flex items-center h-full w-full shadow-md"
                 >
                     {/* Small video element */}
                     <motion.div
@@ -135,15 +123,18 @@ function PeerVideo({
                         <ScreenShareElement screen={screen} />
                     </div>
 
-                    {/* Mic Status & User Name */}
+                    {/* User Name */}
                     <div className="absolute z-50 bottom-0 left-0 right-0 p-2 flex justify-between items-center">
                         <div className="p-1 px-3 flex items-center gap-2 bg-black/30 backdrop-blur-sm text-white rounded-lg text-sm font-medium">
                             <span>{(peer?.name && "You") || "Peer"}</span>
                         </div>
+                    </div>
 
+                    {/* Mic status */}
+                    <div className="absolute z-50 top-0 right-0 p-2 flex justify-between items-center">
                         <div className="p-2 bg-black/30 backdrop-blur-sm text-white rounded-full text-sm font-medium">
                             {isAudioMute ? (
-                                <MicOff className="h-4 w-4 text-red-600" />
+                                <MicOff className="h-4 w-4 text-white" />
                             ) : (
                                 <Mic className="h-4 w-4 text-white" />
                             )}

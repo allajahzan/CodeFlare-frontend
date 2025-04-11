@@ -23,10 +23,10 @@ function ScreenShareElement({ screen }: PropsType) {
     return (
         <Fragment>
             {/* Video Element Always Present */}
-            <div className="w-full h-full relative bg-zinc-200 dark:bg-sidebar-backgroundDark">
+            <div className="w-full h-full relative bg-muted dark:bg-sidebar-backgroundDark ">
                 {!isLoaded && (
                     <div className="absolute inset-0 flex items-center justify-center">
-                        <Loader2 className="w-8 h-8 text-foreground animate-spin" />
+                        <Loader2 className="w-6 h-6 text-white animate-spin" />
                     </div>
                 )}
 

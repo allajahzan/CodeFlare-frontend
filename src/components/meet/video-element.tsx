@@ -1,8 +1,15 @@
 import { Avatar, AvatarFallback } from "../ui/avatar";
-import React, { Fragment, useEffect, useRef, useState } from "react";
+import React, {
+    Fragment,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import { IUser } from "@/types/attendence";
 import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { IUserContext, UserContext } from "@/context/user-context";
 
 // Interface for Props
 interface PropsType {
@@ -17,14 +24,14 @@ function VideoElement({ peer, media, isVideoMute, className }: PropsType) {
     const videoRef = useRef<HTMLVideoElement | null>(null);
     const [isLoaded, setIsLoaded] = useState(false);
 
+    const { user } = useContext(UserContext) as IUserContext;
+
     useEffect(() => {
         if (videoRef.current && media) {
             videoRef.current.srcObject = media;
-
-            // When video loads, set isLoaded to true
-            videoRef.current.onloadeddata = () => setIsLoaded(true);
+            videoRef.current.muted = peer?._id === user?._id;
         }
-    }, [media]);
+    }, [media, peer, user]);
 
     // When mute/unmute changes, reset loading state
     useEffect(() => {
@@ -38,14 +45,15 @@ function VideoElement({ peer, media, isVideoMute, className }: PropsType) {
     return (
         <Fragment>
             {/* Video Element Always Present */}
-            <div className="w-full h-full relative bg-zinc-200 dark:bg-sidebar-backgroundDark">
+            <div className="w-full h-full relative bg-transparent">
                 {(!isLoaded || isVideoMute) && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <Loader2 className="w-8 h-8 text-foreground animate-spin" />
+                    <div className="absolute bg-muted dark:bg-sidebar-backgroundDark inset-0 flex items-center justify-center">
+                        <Loader2 className="w-6 h-6 text-foreground animate-spin" />
                     </div>
                 )}
 
                 <video
+                    key={peer?._id}
                     ref={videoRef}
                     autoPlay
                     playsInline
@@ -59,10 +67,10 @@ function VideoElement({ peer, media, isVideoMute, className }: PropsType) {
 
             {/* Show Fallback Over Video if Muted */}
             {isVideoMute && (
-                <div className="absolute inset-0 flex items-center justify-center bg-zinc-200 dark:bg-sidebar-backgroundDark">
+                <div className="absolute inset-0 flex items-center justify-center bg-muted dark:bg-sidebar-backgroundDark">
                     <Avatar className="h-24 w-24">
-                        <AvatarFallback className="bg-zinc-300 dark:bg-muted text-foreground text-2xl font-semibold">
-                            {peer?.profilePic ? <img src={peer.profilePic} /> : "?"}
+                        <AvatarFallback className="bg-zinc-200 dark:bg-muted text-foreground text-2xl font-semibold">
+                            {peer?.profilePic ? <img src={peer.profilePic} /> : "A"}
                         </AvatarFallback>
                     </Avatar>
                 </div>

@@ -1,25 +1,35 @@
-import React, { useContext, useEffect, useState } from "react";
+import { socket } from "@/socket/communication/connect";
+import { leaveMeet } from "@/socket/communication/videoCallSocket";
+import { motion } from "framer-motion";
 import {
+    Crown,
+    Dot,
+    Hand,
+    MessageCircle,
     Mic,
     MicOff,
+    // MonitorCheck,
+    Phone,
+    Pin,
+    PinOff,
+    UsersRound,
+    // ScreenShare,
     Video,
     VideoOff,
-    Phone,
-    Hand,
-    ScreenShare,
-    MessageCircle,
-    Grid2X2,
 } from "lucide-react";
-import { motion } from "framer-motion";
-import { IUserContext, UserContext } from "@/context/user-context";
-import PeerVideo from "./peer-video";
-import { socket } from "@/socket/communication/connect";
-import { useLocation } from "react-router-dom";
-import { leaveMeet } from "@/socket/communication/videoCallSocket";
 import * as mediasoupClient from "mediasoup-client";
+import { useContext, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import PeerVideo from "./peer-video";
+import { IUserContext, UserContext } from "@/context/user-context";
 import { IUser } from "@/types/attendence";
+import { cn } from "@/lib/utils";
+import { IMeet } from "./meeting-join";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import profile from "@/assets/images/no-profile.svg";
+import { Separator } from "../ui/separator";
 
-// Interface for props
+// Interface for Props
 interface PropsType {
     isVideoMute: boolean;
     isAudioMute: boolean;
@@ -37,6 +47,7 @@ interface PropsType {
     };
     setMeetLeft: React.Dispatch<React.SetStateAction<boolean>>;
     setJoined: React.Dispatch<React.SetStateAction<boolean | null>>;
+    meet: IMeet | null;
     goCreateTransport: (
         sender: boolean
     ) => Promise<mediasoupClient.types.Transport | undefined>;
@@ -48,30 +59,50 @@ interface PropsType {
     ) => Promise<void>;
 }
 
-// Video Call Component
+// Meeting room Component
 function MeetingRoom({
-    isVideoMute,
-    isAudioMute,
-    videoRef,
-    streamRef,
-    handleVideo,
     handleAudio,
-    peers,
-    setMeetLeft,
+    handleVideo,
+    isAudioMute,
+    isVideoMute,
     setJoined,
-    goCreateTransport,
-    connectAndProduceMedia,
+    setMeetLeft,
+    meet,
+    streamRef,
+    videoRef,
+    // connectAndProduceMedia,
+    // goCreateTransport,
+    peers,
 }: PropsType) {
     // Path
     const path = useLocation();
 
     const roomId = path.pathname.split("/")[3];
 
+    // Leaving
+    const [isLeaving, setLeaving] = useState<boolean>(false);
+
     // User context
     const { user } = useContext(UserContext) as IUserContext;
 
-    // Leaving
-    const [isLeaving, setLeaving] = useState<boolean>(false);
+    // Selected peer
+    const [selectedPeer, setSelectedPeer] = useState<string | undefined>(
+        Object.entries(peers)?.[0]?.[0] || socket.id
+    );
+
+    // Self pinned
+    const isPinnedSelf = selectedPeer === socket.id;
+
+    // Peers list
+    const [isPeersListOpen, setPeersList] = useState<boolean>(true);
+
+    // Screen sharing
+    // let screenTrack: MediaStreamTrack | null;
+    // let screenStream: MediaStream | null;
+    // let sendTransport: mediasoupClient.types.Transport | undefined;
+    // let screenProducer: mediasoupClient.types.Producer | null;
+
+    // const [isScreenShared, setScreenShared] = useState<boolean>(false);
 
     // Stop webcam
     const stopWebcam = async () => {
@@ -120,125 +151,267 @@ function MeetingRoom({
         }
     }, [isVideoMute]);
 
+    // Peers list open close
+    useEffect(() => {
+        if (Object.entries(peers).length === 1 && selectedPeer === socket.id) {
+            setPeersList(true);
+        }
+    }, [peers, selectedPeer, socket.id]);
+
     // =========================================== Screen recording ==========================================
 
     // Start sharing
-    async function startScreenSharing() {
-        console.log("started screen sharing");
+    // async function startScreenSharing(): Promise<void> {
+    //     try {
+    //         screenStream = await navigator.mediaDevices.getDisplayMedia({
+    //             video: true,
+    //             audio: true,
+    //         });
 
-        const stream = await navigator.mediaDevices.getDisplayMedia({
-            video: true,
-            audio: true,
-        });
+    //         screenTrack = screenStream.getVideoTracks()[0];
 
-        const screenTrack = stream.getVideoTracks()[0];
+    //         // Detect when user stops screen sharing via browser UI
+    //         screenTrack.onended = () => {
+    //             console.log("Screen sharing stopped by browser");
+    //         };
 
-        // Now i have to create tranpsort
-        const sendTransport = await goCreateTransport(true);
-        if (!sendTransport) return;
+    //         sendTransport = await goCreateTransport(true);
+    //         if (!sendTransport) return;
 
-        // Connect and produce media
-        connectAndProduceMedia(sendTransport, null, null, screenTrack);
-    }
+    //         screenProducer = await connectAndProduceMedia(
+    //             sendTransport,
+    //             null,
+    //             null,
+    //             screenTrack
+    //         );
 
-    const [pinnedUser, setPinnedUser] = useState<string | null>(
-        socket.id as string
-    );
-    const [peerLayout, setPeerLayout] = useState<number>(1); // 1 or 2 per row
+    //         if (!screenProducer) {
+    //             console.warn("Failed to produce screen media");
+    //             return;
+    //         }
 
-    const peersArray = Object.entries(peers);
+    //         screenProducer.on("trackended", () => {
+    //             setScreenShared(false);
+    //             console.log("Screen track ended");
+    //         });
+
+    //         screenProducer.on("transportclose", () => {
+    //             console.log("Screen transport closed");
+    //         });
+
+    //         setScreenShared(true);
+    //     } catch (error) {
+    //         console.error("Error starting screen sharing:", error);
+    //     }
+    // }
 
     return (
-        <div className="flex flex-col h-full">
-            {/* Main Area */}
-            <div
-                className={`flex-1 ${peersArray.length === 0 && "flex items-center justify-center"
-                    } overflow-hidden p-5 pt-0`}
-            >
+        <div className="flex flex-col h-full dark:bg-sidebar-background">
+            {/* Content */}
+            <div className="flex-1 flex items-center">
+                {/* Left side peers list */}
                 <div
-                    className={`grid grid-cols-${peersArray.length > 0 ? 3 : 1
-                        } gap-2 h-full p-2 border rounded-2xl shadow-lg`}
-                >
-                    {/* Pinned video - initailly local stream*/}
-                    {pinnedUser && pinnedUser === socket.id && (
-                        <PeerVideo
-                            key={socket.id}
-                            socketId={socket.id as string}
-                            media={streamRef.current}
-                            screen={undefined}
-                            isVideoMute={isVideoMute}
-                            isAudioMute={isAudioMute}
-                            setPinnedUser={setPinnedUser}
-                            className="col-span-2"
-                            videoElementClassName="transform scale-x-[-1]"
-                            peer={user as unknown as IUser}
-                        />
+                    className={cn(
+                        "absolute top-0 left-0 z-40 h-full w-[280px] pb-[105px] flex-col gap-5",
+                        "bg-background dark:bg-sidebar border-r overflow-y-auto overflow-x-hidden no-scrollbar",
+                        "transform transition-transform duration-300 ease-in-out",
+                        isPeersListOpen ? "translate-x-0" : "-translate-x-full"
                     )}
+                >
+                    {/* Headin */}
+                    <div className="w-full p-5 bg-background dark:bg-sidebar flex items-center justify-between gap-3 sticky top-0 z-[1000]">
+                        <p className="text-lg text-foreground font-semibold">
+                            Participants
+                        </p>
+                        <p className="text-foreground text-lg font-medium">
+                            ({Object.entries(peers).length + 1})
+                        </p>
+                    </div>
 
-                    {/* Pinned peer video */}
-                    {pinnedUser &&
-                        peersArray.map(([socketId, peer]) => {
-                            if (socketId === pinnedUser) {
-                                return (
-                                    <PeerVideo
-                                        key={socketId}
-                                        socketId={socketId as string}
-                                        media={peer.media}
-                                        screen={peer.screen}
-                                        isVideoMute={peer.isVideoMute}
-                                        isAudioMute={peer.isAudioMute}
-                                        setPinnedUser={setPinnedUser}
-                                        className="col-span-2"
-                                    />
-                                );
-                            }
-                        })}
+                    {/* Separator */}
+                    <Separator />
 
-                    {/* Unpinned */}
-                    {peers && peersArray.length > 0 && (
-                        <div
-                            className={`overflow-y-auto h-full w-full grid grid-cols-1 md:grid-cols-${peerLayout} gap-2`}
-                        >
-                            {/* Local stream unpinned */}
-                            {pinnedUser && pinnedUser !== socket.id && (
-                                <PeerVideo
-                                    key={socket.id}
-                                    socketId={socket.id as string}
-                                    media={streamRef.current}
-                                    screen={undefined}
-                                    isVideoMute={isVideoMute}
-                                    isAudioMute={isAudioMute}
-                                    setPinnedUser={setPinnedUser}
-                                    videoElementClassName="transform scale-x-[-1]"
-                                    peer={user as unknown as IUser}
+                    {/* Peers videos */}
+                    <div className="w-full flex flex-col gap-0 items-start">
+                        {/* Self */}
+                        <div className="w-full flex items-center gap-3 p-5 py-3 pr-3 hover:bg-muted dark:hover:bg-sidebar">
+                            {/* Avatar profile pic */}
+                            <Avatar className="bg-background w-12 h-12 border-2 border-background dark:border-border shadow-md">
+                                <AvatarImage
+                                    src={meet?.host?.profilePic}
+                                    className="object-cover"
                                 />
-                            )}
+                                <AvatarFallback className="bg-transparent">
+                                    <img className="w-full" src={profile} alt="" />
+                                </AvatarFallback>
+                            </Avatar>
 
-                            {/* Peers videos unpinned*/}
-                            {peersArray.length > 0 &&
-                                peersArray.map(([socketId, peer]) => {
-                                    if (pinnedUser !== socketId) {
+                            {/* Name and other details */}
+                            <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2">
+                                    <p className="font-semibold text-foreground truncate flex items-center gap-2">
+                                        {user?._id === meet?.host._id ? "You" : meet?.host.name}
+                                        <Crown className="w-4 h-4 text-yellow-500" />
+                                    </p>
+                                </div>
+                                <p className="text-sm text-muted-foreground">Host</p>
+                            </div>
+                            {/* Options */}
+                            <div className="flex items-center gap-1">
+                                {/* <div className="p-2 rounded-lg hover:bg-muted cursor-pointer">
+                                    <Mic className="w-4 h-4 text-foreground" />
+                                </div> */}
+                                <div
+                                    className={cn(
+                                        "p-2 rounded-lg hover:bg-muted cursor-pointer",
+                                        meet?._id === user?._id && "opacity-20"
+                                    )}
+                                >
+                                    <PinOff className="w-4 h-4 text-foreground" />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Other peers */}
+                        {Object.entries(peers).length > 0 &&
+                            Object.entries(peers).map(([socketId, peer]) => {
+                                // if(socketId !== meet)
+                                return (
+                                    <div
+                                        key={socketId}
+                                        className="w-full flex items-center gap-3 p-5 py-3 pr-3 hover:bg-muted dark:hover:bg-sidebar"
+                                    >
+                                        {/* Avatar profile pic */}
+                                        <Avatar className="bg-background w-12 h-12 border-2 border-background dark:border-border shadow-md">
+                                            <AvatarImage
+                                                // src={user?.profilePic}
+                                                className="object-cover"
+                                            />
+                                            <AvatarFallback className="bg-transparent">
+                                                <img className="w-full" src={profile} alt="" />
+                                            </AvatarFallback>
+                                        </Avatar>
+
+                                        {/* Name and other details */}
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-2">
+                                                <p className="font-semibold text-foreground truncate">
+                                                    {"Peer"}
+                                                </p>
+                                            </div>
+                                            {/* {children1} */}
+                                        </div>
+                                        {/* Options */}
+                                        <div className="flex items-center gap-1">
+                                            {/* <div className="p-2 rounded-lg hover:bg-muted cursor-pointer">
+                                                <Mic className="w-4 h-4 text-foreground" />
+                                            </div> */}
+                                            <div
+                                                onClick={() =>
+                                                    setSelectedPeer((prev) => {
+                                                        if (prev === socketId) {
+                                                            return socket.id as string;
+                                                        } else {
+                                                            return socketId;
+                                                        }
+                                                    })
+                                                }
+                                                className="p-2 rounded-lg hover:bg-muted cursor-pointer"
+                                            >
+                                                {selectedPeer === socketId ? (
+                                                    <PinOff className="w-4 h-4 text-foreground" />
+                                                ) : (
+                                                    <Pin className="w-4 h-4 text-foreground" />
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                    </div>
+                </div>
+
+                {/* Main videos */}
+                <div
+                    className={cn(
+                        "h-full w-full relative p-5 bg-background",
+                        "transition-all duration-300 ease-in-out"
+                        // (isChatOpen || isParticipantsOpen) && isMobile ? "hidden" : "block",
+                        // isPeersListOpen? "ml-[135px]" : "ml-0"
+                    )}
+                >
+                    <div className="h-full w-full flex items-center justify-center overflow-hidden">
+                        <div className="h-full md:h-fit w-full max-w-4xl rounded-2xl">
+                            {/* Selected Peer view */}
+                            {selectedPeer &&
+                                Object.entries(peers).length > 0 &&
+                                Object.entries(peers).map(([socketId, peer]) => {
+                                    if (socketId === selectedPeer) {
                                         return (
                                             <PeerVideo
                                                 key={socketId}
-                                                socketId={socketId}
+                                                socketId={socketId as string}
                                                 media={peer.media}
                                                 screen={peer.screen}
                                                 isVideoMute={peer.isVideoMute}
                                                 isAudioMute={peer.isAudioMute}
-                                                setPinnedUser={setPinnedUser}
+                                                setPinnedUser={setSelectedPeer}
+                                                isOptionsShow={false}
+                                                className="h-full w-full"
                                             />
                                         );
                                     }
                                 })}
+
+                            {/* Local stream - self view */}
+                            {selectedPeer && (
+                                <div
+                                    className={cn(
+                                        "transition-all duration-500 ease-in-out rounded-2xl",
+                                        isPinnedSelf || Object.entries(peers).length === 0
+                                            ? "h-full w-full"
+                                            : "absolute bottom-8 md:bottom-5 right-8 md:right-5 w-60 sm:w-72 md:w-96 aspect-video rounded-2xl overflow-hidden shadow-md"
+                                    )}
+                                >
+                                    <PeerVideo
+                                        key={socket.id}
+                                        socketId={socket.id as string}
+                                        media={streamRef.current}
+                                        screen={undefined}
+                                        isVideoMute={isVideoMute}
+                                        isAudioMute={isAudioMute}
+                                        setPinnedUser={setSelectedPeer}
+                                        isOptionsShow={false}
+                                        className="h-full w-full"
+                                        videoElementClassName="transform scale-x-[-1]"
+                                        peer={user as unknown as IUser}
+                                    />
+                                </div>
+                            )}
                         </div>
-                    )}
+                    </div>
                 </div>
             </div>
 
-            {/* Control Bar */}
-            <div className="flex items-center justify-center gap-3 pb-5">
-                <div className="flex items-center justify-center gap-3 p-2 bg-white border dark:bg-sidebar-backgroundDark shadow-md backdrop-blur-sm rounded-full">
+            {/* Controle buttons */}
+            <div className="relative z-40 bg-background dark:bg-sidebar flex items-center justify-center gap-3 p-3 border-t">
+                {/* <div className="absolute left-5 top-1/2 -translate-y-1/2 px-5 hidden md:block">
+                    <p className="flex items-center text-muted-foreground font-medium text-lg">
+                        {new Date().toLocaleTimeString("en-US", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: true,
+                        })}{" "}
+                        <Dot className="text-muted-foreground" />
+                        {new Date().toLocaleDateString("en-US", {
+                            weekday: "short",
+                            month: "short",
+                            day: "numeric",
+                        })}
+                    </p>
+                </div> */}
+
+                <div className="flex items-center justify-center gap-3 p-2 backdrop-blur-sm rounded-full">
                     <motion.div
                         className="flex items-center justify-center cursor-pointer"
                         whileTap={{ scale: 0.95 }}
@@ -273,48 +446,47 @@ function MeetingRoom({
                     </motion.div>
 
                     {/* Hand rise */}
-                    <motion.div
+                    {/* <motion.div
                         className="flex items-center justify-center cursor-pointer"
                         whileTap={{ scale: 0.95 }}
                     >
                         <div className="p-3 rounded-full bg-muted">
                             <Hand className="w-5 h-5 text-foreground" />
                         </div>
-                    </motion.div>
+                    </motion.div> */}
 
                     {/* Screen share */}
-                    <motion.div
-                        onClick={startScreenSharing}
+                    {/* <motion.div
+                        onClick={isScreenShared ? () => { } : startScreenSharing}
                         className="flex items-center justify-center cursor-pointer"
                         whileTap={{ scale: 0.95 }}
                     >
-                        <div className="p-3 rounded-full bg-muted">
-                            <ScreenShare className="w-5 h-5 text-foreground" />
+                        <div
+                            className={`p-3 rounded-full ${isScreenShared ? "bg-green-800 animate-pulse" : "bg-muted"
+                                }`}
+                        >
+                            <ScreenShare className={`w-5 h-5 ${isScreenShared? "text-white" : "text-foreground"}`} />
                         </div>
-                    </motion.div>
-
-                    {/* Grid change */}
-                    <motion.div
-                        onClick={() =>
-                            setPeerLayout(
-                                peerLayout === 1 ? (peersArray.length > 2 ? 2 : 1) : 1
-                            )
-                        }
-                        className="flex items-center justify-center cursor-pointer"
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        <div className="p-3 rounded-full bg-muted">
-                            <Grid2X2 className="w-5 h-5 text-foreground" />
-                        </div>
-                    </motion.div>
+                    </motion.div> */}
 
                     {/* Message */}
-                    <motion.div
+                    {/* <motion.div
                         className="flex items-center justify-center cursor-pointer"
                         whileTap={{ scale: 0.95 }}
                     >
                         <div className="p-3 rounded-full bg-muted">
                             <MessageCircle className="w-5 h-5 text-foreground" />
+                        </div>
+                    </motion.div> */}
+
+                    {/* Peers */}
+                    <motion.div
+                        onClick={() => setPeersList(!isPeersListOpen)}
+                        className="flex items-center justify-center cursor-pointer"
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        <div className="p-3 rounded-full bg-muted">
+                            <UsersRound className="w-5 h-5 text-foreground" />
                         </div>
                     </motion.div>
 
@@ -325,7 +497,7 @@ function MeetingRoom({
                         whileTap={{ scale: 0.95 }}
                     >
                         <div className="p-3 rounded-full bg-red-600/80">
-                            <Phone className="w-5 h-5 text-white" />
+                            <Phone className="w-5 h-5 text-white rotate-[135deg]" />
                         </div>
                     </motion.div>
                 </div>

@@ -3,7 +3,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import * as mediasoupClient from "mediasoup-client";
 import { socket } from "@/socket/communication/connect";
 import MeetingJoin, { IMeet } from "./meeting-join";
-import MeetingRoom from "./meeting-room";
 import { useLocation } from "react-router-dom";
 import MeetingLeft from "./meeting-left";
 import {
@@ -14,6 +13,7 @@ import {
     onPeerLeft,
     onPeerMuteChange,
 } from "@/socket/communication/videoCallSocket";
+import MeetingRoom from "./meeting-room";
 
 // mediasoup track params
 let trackParams = {
@@ -512,10 +512,6 @@ function Meet() {
         }
     };
 
-    useEffect(() => {
-        console.log(peers);
-    }, [peers]);
-
     // Connect to recvtransport and consume media
     const connectAndConsumeMedia = async (
         producerId: string,
@@ -560,7 +556,7 @@ function Meet() {
                     const { track } = consumer;
                     const kind = params.appData.kind; // Type of track
 
-                    console.log(kind);
+                    // console.log(kind);
 
                     // Resume consumer
                     socket.emit(
@@ -619,7 +615,7 @@ function Meet() {
         <div className="h-screen dotted-b">
             <div className="flex flex-col h-full w-full relative transition-all">
                 {/* Navbar */}
-                {true && <Navbar />}
+                {!isJoined && <Navbar />}
 
                 {/* Meeting join */}
                 {isJoined === false && (
@@ -639,7 +635,7 @@ function Meet() {
 
                 {/* Meeting room */}
                 {isJoined === true && (
-                    <div className="flex-1 overflow-hidden">
+                    <div className="flex-1">
                         <MeetingRoom
                             isVideoMute={isVideoMute}
                             isAudioMute={isAudioMute}
@@ -650,6 +646,7 @@ function Meet() {
                             peers={peers}
                             setMeetLeft={setMeetLeft}
                             setJoined={setJoined}
+                            meet={meet as IMeet}
                             goCreateTransport={goCreateTransport}
                             connectAndProduceMedia={connectAndProduceMedia}
                         />
