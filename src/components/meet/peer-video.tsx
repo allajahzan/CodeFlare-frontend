@@ -2,7 +2,7 @@ import React, { Fragment, useContext, useRef } from "react";
 import { IUser } from "@/types/attendence";
 import VideoElement from "./video-element";
 import { cn } from "@/lib/utils";
-import { Crown, Mic, MicOff, Pin, PinOff } from "lucide-react";
+import { Crown, Hand, Mic, MicOff, Pin, PinOff } from "lucide-react";
 import ScreenShareElement from "./screenshare-element";
 import { motion } from "framer-motion";
 import ToolTip from "../common/tooltip/tooltip";
@@ -18,6 +18,7 @@ interface PropsType {
     screen?: MediaStream | undefined;
     isVideoMute: boolean;
     isAudioMute: boolean;
+    isHandRaised: boolean;
     pinnedUser?: string;
     setPinnedUser: React.Dispatch<React.SetStateAction<string | undefined>>;
     isOptionsShow: boolean;
@@ -34,6 +35,7 @@ function PeerVideo({
     screen,
     isVideoMute,
     isAudioMute,
+    isHandRaised,
     pinnedUser,
     setPinnedUser,
     isOptionsShow,
@@ -51,7 +53,7 @@ function PeerVideo({
             key={socketId}
             className={cn(
                 "group relative aspect-video flex items-center justify-center min-h-[100px] md:min-h-[160px]",
-                "bg-muted dark:bg-sidebar-backgroundDark rounded-2xl overflow-hidden shadow-custom",
+                "bg-muted dark:bg-sidebar-backgroundDark rounded-2xl overflow-hidden shadow-md",
                 "border-2 border-white dark:border-zinc-700",
                 className
             )}
@@ -100,19 +102,22 @@ function PeerVideo({
 
                     {/* User Name */}
                     <div className="absolute bottom-0 left-0 right-0 p-2 flex justify-between items-center">
-                        <div className="p-1 px-3 flex items-center gap-2 bg-black/30 backdrop-blur-sm text-white rounded-lg text-sm font-medium">
+                        <div className="shadow p-1 px-3 flex items-center gap-2 bg-black/30 backdrop-blur-sm text-white rounded-lg text-sm font-medium">
                             <span>{peer?._id === user?._id ? "You" : peer?.name}</span>
                             {meet.host._id === peer?._id && (
                                 <Crown className="w-4 h-4 text-yellow-400" />
                             )}
                         </div>
-
-                        <div></div>
                     </div>
 
                     {/* Mic status */}
-                    <div className="absolute z-50 top-0 right-0 p-2 flex justify-between items-center">
-                        <div className="p-2 bg-black/30 backdrop-blur-sm text-white rounded-full text-sm font-medium">
+                    <div className="absolute z-50 top-0 right-0 p-2 flex justify-between items-center gap-2">
+                        {isHandRaised && (
+                            <div className="shadow p-2 animate-pulse bg-white backdrop-blur-sm text-black rounded-full text-sm font-medium">
+                                <Hand className="h-4 w-4 text-black" />
+                            </div>
+                        )}
+                        <div className="shadow p-2 bg-black/30 backdrop-blur-sm text-white rounded-full text-sm font-medium">
                             {isAudioMute ? (
                                 <MicOff className="h-4 w-4 text-white" />
                             ) : (

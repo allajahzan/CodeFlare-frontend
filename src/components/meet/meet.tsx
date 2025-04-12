@@ -9,6 +9,7 @@ import {
     createTransport,
     joinRoom,
     leaveMeet,
+    onHandRaiseChange,
     onNewProducer,
     onPeerLeft,
     onPeerMuteChange,
@@ -68,6 +69,9 @@ function Meet() {
     const [isJoined, setJoined] = useState<boolean | null>(false);
     const [isMeetLeft, setMeetLeft] = useState<boolean>(false);
     const [meet, setMeet] = useState<IMeet | null>(null);
+
+    // Hand raise
+    const [isHandRaised, setHandRaised] = useState<boolean>(false);
 
     // Start web cam
     const startWebcam = async () => {
@@ -234,6 +238,37 @@ function Meet() {
         };
     }, []);
 
+    //  Listen hand raise
+    useEffect(() => {
+        const handleHandRaise = ({
+            isHandRaised,
+            socketId,
+        }: {
+            isHandRaised: boolean;
+            socketId: string;
+        }) => {
+            console.log(isHandRaised);
+
+            setPeers((prevPeers) => {
+                if (!prevPeers[socketId]) return prevPeers;
+
+                return {
+                    ...prevPeers,
+                    [socketId]: {
+                        ...prevPeers[socketId],
+                        isHandRaised,
+                    },
+                };
+            });
+        };
+
+        onHandRaiseChange(handleHandRaise);
+
+        return () => {
+            socket.off("handRaiseChange", handleHandRaise);
+        };
+    }, []);
+
     // ========================= WebRtc with socket IO and mediasoup ===========================================
 
     // Peers
@@ -244,6 +279,7 @@ function Meet() {
             screen?: MediaStream;
             isVideoMute: boolean;
             isAudioMute: boolean;
+            isHandRaised: boolean;
         };
     }>({});
 
@@ -417,6 +453,8 @@ function Meet() {
             // Produce transport - will trigger, when produce() method in sendTransport calls
             sendTransport.on("produce", async (parameters, callback, errback) => {
                 try {
+                    console.log(parameters.appData);
+
                     socket.emit(
                         "produceTransport",
                         {
@@ -455,7 +493,7 @@ function Meet() {
                     encodings: trackParams.encodings,
                     codecOptions: trackParams.codecOptions,
                     track: videoTrack,
-                    appData: { isVideoMute, kind: "video" },
+                    appData: { isVideoMute, isHandRaised, kind: "video" },
                 });
 
                 videoProducer?.on("trackended", () => {
@@ -473,7 +511,7 @@ function Meet() {
                     encodings: trackParams.audioEncodings,
                     codecOptions: trackParams.codecOptionsAudio,
                     track: audioTrack,
-                    appData: { isAudioMute, kind: "audio" },
+                    appData: { isAudioMute, isHandRaised, kind: "audio" },
                 });
 
                 audioProducer?.on("trackended", () => {
@@ -491,7 +529,7 @@ function Meet() {
                     encodings: trackParams.encodings,
                     codecOptions: trackParams.codecOptions,
                     track: screenTrack,
-                    appData: { kind: "screen" },
+                    appData: { isHandRaised, kind: "screen" },
                 });
 
                 screenProducer?.on("trackended", () => {
@@ -575,7 +613,8 @@ function Meet() {
                     if (!consumer) return;
 
                     const { track } = consumer;
-                    const kind = params.appData.kind; // Type of track
+
+                    const { kind, isHandRaised } = params.appData; // Type of track
 
                     // console.log(kind);
 
@@ -623,6 +662,7 @@ function Meet() {
                                     appData.isVideoMute ?? existingPeer.isVideoMute ?? false,
                                 isAudioMute:
                                     appData.isAudioMute ?? existingPeer.isAudioMute ?? false,
+                                isHandRaised: isHandRaised || false,
                             },
                         };
                     });
@@ -665,6 +705,8 @@ function Meet() {
                             streamRef={streamRef}
                             handleVideo={handleVideo}
                             handleAudio={handleAudio}
+                            isHandRaised={isHandRaised}
+                            setHandRaised={setHandRaised}
                             peers={peers}
                             setMeetLeft={setMeetLeft}
                             setJoined={setJoined}

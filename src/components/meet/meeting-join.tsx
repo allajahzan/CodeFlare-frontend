@@ -124,7 +124,7 @@ function MeetingJoin({
                 <div className="flex-1 flex flex-col md:flex-row p-8 sm:p-10 md:p-20 md:px-10 lg:p-20 lg:px-10 gap-6 max-w-7xl mx-auto w-full">
                     {/* Video Preview */}
                     <motion.div
-                        className="flex-1 aspect-video p-2 relative rounded-2xl overflow-hidden bg-background border shadow-custom"
+                        className="flex-1 aspect-video p-2 relative rounded-2xl overflow-hidden bg-background border shadow-md"
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.2, duration: 0.5 }}

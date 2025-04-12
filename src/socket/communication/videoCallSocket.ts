@@ -123,6 +123,51 @@ export const onPeerMuteChange = (
 };
 
 /**
+ * Emits a "handRaise" event to the server with the given roomId, isHandRaise, and
+ * socketId. This will notify the server of a change in hand raise state for the
+ * given peer.
+ * @param roomId - The ID of the room in which the peer is located.
+ * @param isHandRaised - Whether the peer is currently raising their hand.
+ * @param socketId - The ID of the socket of the peer that changed hand raise state.
+ */
+export const handRaise = (
+    roomId: string,
+    isHandRaised: boolean,
+    socketId: string
+) => {
+    try {
+        socket.emit("handRaise", { roomId, isHandRaised, socketId });
+    } catch (err: unknown) {
+        console.log(err);
+    }
+};
+
+/**
+ * Listens for the "handRaiseChange" event from the server and triggers the
+ * provided callback with the isRaise and socketId of the peer that changed
+ * hand raise state. The callback is also removed when the returned function
+ * is called.
+ * @param callback - A function to be called with the isRaise and socketId of
+ * the peer that changed hand raise state.
+ * @returns A function to be called when the event listener should be removed.
+ */
+export const onHandRaiseChange = (
+    callback: ({
+        isHandRaised,
+        socketId,
+    }: {
+        isHandRaised: boolean;
+        socketId: string;
+    }) => void
+) => {
+    try {
+        socket.on("handRaiseChange", callback);
+    } catch (err: unknown) {
+        console.log(err);
+    }
+};
+
+/**
  * Emits a "leaveCall" event to the server with the provided roomId.
  * This removes the user from the video call room and cleans up the peer's resources.
  * @param roomId - The ID of the room to leave.

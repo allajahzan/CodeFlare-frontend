@@ -58,8 +58,8 @@ function VideoElement({ peer, media, isVideoMute, className }: PropsType) {
                     autoPlay
                     playsInline
                     className={cn(
-                        "w-full h-full object-cover transform scale-x-[1] transition-opacity duration-300",
-                        !isLoaded || isVideoMute ? "opacity-0" : "opacity-100",
+                        "w-full h-full object-cover transform scale-x-[1] transition-all duration-500",
+                        !isLoaded || isVideoMute ? "hidden" : "visible",
                         className
                     )}
                 />

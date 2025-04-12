@@ -1,15 +1,11 @@
 import { socket } from "@/socket/communication/connect";
-import { leaveMeet } from "@/socket/communication/videoCallSocket";
+import { handRaise, leaveMeet } from "@/socket/communication/videoCallSocket";
 import { motion } from "framer-motion";
 import {
-    Crown,
     Hand,
-    MessageCircle,
     Mic,
     MicOff,
     Phone,
-    Pin,
-    PinOff,
     Send,
     UsersRound,
     Video,
@@ -26,7 +22,6 @@ import { IMeet } from "./meeting-join";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import profile from "@/assets/images/no-profile.svg";
 import { Separator } from "../ui/separator";
-import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import IconButton from "../ui/icon-button";
 
@@ -45,6 +40,7 @@ interface PropsType {
             screen?: MediaStream;
             isVideoMute: boolean;
             isAudioMute: boolean;
+            isHandRaised: boolean;
         };
     };
     setMeetLeft: React.Dispatch<React.SetStateAction<boolean>>;
@@ -60,6 +56,8 @@ interface PropsType {
         screenTrack: MediaStreamTrack | null
     ) => Promise<void>;
     stopWebcam: () => void;
+    isHandRaised: boolean;
+    setHandRaised: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 // Meeting room Component
@@ -74,6 +72,8 @@ function MeetingRoom({
     streamRef,
     videoRef,
     stopWebcam,
+    isHandRaised,
+    setHandRaised,
     // connectAndProduceMedia,
     // goCreateTransport,
     peers,
@@ -143,8 +143,12 @@ function MeetingRoom({
         }
     }, [peers, selectedPeer, socket.id]);
 
-    // Chat related states
+    // Emit hand raise event
+    useEffect(() => {
+        handRaise(roomId, isHandRaised, socket.id as string);
+    }, [isHandRaised]);
 
+    // Chat related states
     const [isChatOpen, setIsChatOpen] = useState(false);
 
     const chatMessages = [
@@ -176,7 +180,7 @@ function MeetingRoom({
                 <div
                     className={cn(
                         "absolute top-0 left-0 z-50 h-full w-[300px] flex-col gap-5",
-                        "bg-background dark:bg-sidebar border-r overflow-y-auto overflow-x-hidden no-scrollbar",
+                        "bg-background dark:bg-sidebar border-r shadow overflow-y-auto overflow-x-hidden no-scrollbar",
                         "transform transition-transform duration-300 ease-in-out",
                         isPeersListOpen ? "translate-x-0" : "-translate-x-full"
                     )}
@@ -186,8 +190,8 @@ function MeetingRoom({
                         <p className="text-lg text-foreground font-semibold">
                             Participants
                         </p>
-                        <p className="text-background text-sm flex items-center justify-center h-5 w-5 font-medium rounded-full bg-foreground">
-                            {Object.entries(peers).length}
+                        <p className="text-lg text-foreground font-semibold">
+                            ({Object.entries(peers).length})
                         </p>
                     </div>
 
@@ -209,6 +213,7 @@ function MeetingRoom({
                                             screen={peer.screen}
                                             isVideoMute={peer.isVideoMute}
                                             isAudioMute={peer.isAudioMute}
+                                            isHandRaised={peer.isHandRaised}
                                             setPinnedUser={setSelectedPeer}
                                             pinnedUser={selectedPeer}
                                             meet={meet as IMeet}
@@ -224,9 +229,9 @@ function MeetingRoom({
                 {/* Main videos */}
                 <div
                     className={cn(
-                        "h-full w-full relative p-5 bg-gray-100 dark:bg-sidebar-background",
+                        "h-full w-full relative p-5 dotted-bg bg-backgrounddark:bg-sidebar-background",
                         "transition-all duration-300 ease-in-out",
-                        isPeersListOpen ? "ml-[300px]" : "ml-0"
+                        // isPeersListOpen ? "ml-[300px]" : "ml-0"
                     )}
                 >
                     <div className="h-full w-full flex items-center justify-center">
@@ -245,6 +250,7 @@ function MeetingRoom({
                                                 screen={peer.screen}
                                                 isVideoMute={peer.isVideoMute}
                                                 isAudioMute={peer.isAudioMute}
+                                                isHandRaised={peer.isHandRaised}
                                                 setPinnedUser={setSelectedPeer}
                                                 pinnedUser={selectedPeer}
                                                 meet={meet as IMeet}
@@ -273,6 +279,7 @@ function MeetingRoom({
                                         screen={undefined}
                                         isVideoMute={isVideoMute}
                                         isAudioMute={isAudioMute}
+                                        isHandRaised={isHandRaised}
                                         setPinnedUser={setSelectedPeer}
                                         meet={meet as IMeet}
                                         isOptionsShow={false}
@@ -388,8 +395,14 @@ function MeetingRoom({
                         className="flex items-center justify-center cursor-pointer"
                         whileTap={{ scale: 0.95 }}
                     >
-                        <div className="p-3 rounded-full bg-muted">
-                            <Hand className="w-5 h-5 text-foreground" />
+                        <div
+                            onClick={() => setHandRaised(!isHandRaised)}
+                            className={`p-3 rounded-full ${isHandRaised
+                                    ? "bg-zinc-200 text-black dark:bg-zinc-700 dark:text-white"
+                                    : "bg-muted text-foreground"
+                                }`}
+                        >
+                            <Hand className="w-5 h-5" />
                         </div>
                     </motion.div>
 
