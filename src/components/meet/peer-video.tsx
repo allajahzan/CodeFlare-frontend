@@ -43,15 +43,15 @@ function PeerVideo({
         <div
             key={socketId}
             className={cn(
-                "group relative aspect-video flex items-center justify-center min-h-[180px]",
-                "bg-muted dark:bg-sidebar-backgroundDark rounded-2xl overflow-hidden shadow-md",
-                "border-2 border-white dark:border-muted-foreground",
+                "group relative aspect-video flex items-center justify-center min-h-[100px] md:min-h-[160px]",
+                "bg-muted dark:bg-sidebar-backgroundDark rounded-2xl overflow-hidden shadow-custom",
+                "border-2 border-white dark:border-zinc-700",
                 className
             )}
         >
             {/* Options */}
             {isOptionsShow && (
-                <div className="group-hover:opacity-100 opacity-0 absolute z-50 inset-0 flex items-center justify-center">
+                <div className="group-hover:opacity-100 opacity-0 absolute z-40 inset-0 flex items-center justify-center">
                     <div className="flex items-center justify-center gap-1 bg-black/40 backdrop-blur-sm text-white rounded-full ">
                         <ToolTip
                             action={() =>
@@ -95,7 +95,7 @@ function PeerVideo({
                     <div className="absolute bottom-0 left-0 right-0 p-2 flex justify-between items-center">
                         <div className="p-1 px-3 flex items-center gap-2 bg-black/30 backdrop-blur-sm text-white rounded-lg text-sm font-medium">
                             <span>{(peer?.name && "You") || "Peer"}</span>
-                            <Crown className="w-4 h-4 text-white"/>
+                            <Crown className="w-4 h-4 text-white" />
                         </div>
                     </div>
 

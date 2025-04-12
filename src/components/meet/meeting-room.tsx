@@ -183,7 +183,7 @@ function MeetingRoom({
                 {/* Left side peers list */}
                 <div
                     className={cn(
-                        "absolute top-0 left-0 z-40 h-full w-[300px] pb-[105px] flex-col gap-5",
+                        "absolute top-0 left-0 z-50 h-full w-[300px] flex-col gap-5",
                         "bg-background dark:bg-sidebar border-r overflow-y-auto overflow-x-hidden no-scrollbar",
                         "transform transition-transform duration-300 ease-in-out",
                         isPeersListOpen ? "translate-x-0" : "-translate-x-full"
@@ -194,8 +194,8 @@ function MeetingRoom({
                         <p className="text-lg text-foreground font-semibold">
                             Participants
                         </p>
-                        <p className="text-foreground text-lg font-medium">
-                            ({Object.entries(peers).length})
+                        <p className="text-background text-sm flex items-center justify-center h-5 w-5 font-medium rounded-full bg-foreground">
+                            {Object.entries(peers).length}
                         </p>
                     </div>
 
@@ -204,9 +204,6 @@ function MeetingRoom({
 
                     {/* Peers lists */}
                     <div className="w-full flex flex-col gap-5 p-5 items-center">
-                        {/* Self */}
-                        
-
                         {/* Other peers */}
                         {Object.entries(peers).length > 0 &&
                             Object.entries(peers).map(([socketId, peer]) => {
@@ -231,7 +228,7 @@ function MeetingRoom({
                 </div>
 
                 {/* Main videos */}
-                <div className={cn("h-full w-full relative p-5 bg-background")}>
+                <div className="h-full w-full relative p-5 bg-gray-100 dark:bg-sidebar-background">
                     <div className="h-full w-full flex items-center justify-center">
                         <div className="h-full md:h-fit w-full max-w-4xl rounded-2xl">
                             {/* Selected Peer view */}
@@ -348,24 +345,8 @@ function MeetingRoom({
             </div>
 
             {/* Controle buttons */}
-            <div className="relative z-40 bg-background dark:bg-sidebar flex items-center justify-center gap-3 p-3 border-t">
-                {/* <div className="absolute left-5 top-1/2 -translate-y-1/2 px-5 hidden md:block">
-                    <p className="flex items-center text-muted-foreground font-medium text-lg">
-                        {new Date().toLocaleTimeString("en-US", {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: true,
-                        })}{" "}
-                        <Dot className="text-muted-foreground" />
-                        {new Date().toLocaleDateString("en-US", {
-                            weekday: "short",
-                            month: "short",
-                            day: "numeric",
-                        })}
-                    </p>
-                </div> */}
-
-                <div className="flex items-center justify-center gap-3 p-2 backdrop-blur-sm rounded-full">
+            <div className="relative border-t z-40 bg-background dark:bg-sidebar flex items-center justify-center gap-3 p-3">
+                <div className="flex items-center justify-center gap-3 p-2  rounded-full">
                     <motion.div
                         className="flex items-center justify-center cursor-pointer"
                         whileTap={{ scale: 0.95 }}
@@ -424,26 +405,25 @@ function MeetingRoom({
                     </motion.div> */}
 
                     {/* Message */}
-                    <motion.div
+                    {/* <motion.div
                         className="flex items-center justify-center cursor-pointer"
                         whileTap={{ scale: 0.95 }}
                     >
                         <div
                             onClick={() => {
                                 setIsChatOpen(!isChatOpen);
-                                setPeersList(false);
                             }}
                             className="p-3 rounded-full bg-muted"
                         >
                             <MessageCircle className="w-5 h-5 text-foreground" />
                         </div>
-                    </motion.div>
+                    </motion.div> */}
 
                     {/* Peers */}
                     <motion.div
                         onClick={() => {
                             setPeersList(!isPeersListOpen);
-                            setIsChatOpen(false);
+                            // setIsChatOpen(false);
                         }}
                         className="flex items-center justify-center cursor-pointer"
                         whileTap={{ scale: 0.95 }}
