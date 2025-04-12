@@ -229,7 +229,7 @@ function MeetingRoom({
                 {/* Main videos */}
                 <div
                     className={cn(
-                        "h-full w-full relative p-5 dotted-bg bg-backgrounddark:bg-sidebar-background",
+                        "h-full w-full relative p-5 dotted-bg bg-background dark:bg-sidebar-background",
                         "transition-all duration-300 ease-in-out",
                         // isPeersListOpen ? "ml-[300px]" : "ml-0"
                     )}

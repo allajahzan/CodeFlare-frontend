@@ -53,7 +53,7 @@ function PeerVideo({
             key={socketId}
             className={cn(
                 "group relative aspect-video flex items-center justify-center min-h-[100px] md:min-h-[160px]",
-                "bg-muted dark:bg-sidebar-backgroundDark rounded-2xl overflow-hidden shadow-md",
+                "bg-muted dark:bg-sidebar-backgroundDark rounded-2xl overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.2)]",
                 "border-2 border-white dark:border-zinc-700",
                 className
             )}
