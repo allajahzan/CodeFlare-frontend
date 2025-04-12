@@ -2,10 +2,11 @@ import React, { Fragment, useRef } from "react";
 import { IUser } from "@/types/attendence";
 import VideoElement from "./video-element";
 import { cn } from "@/lib/utils";
-import { Mic, MicOff, Pin } from "lucide-react";
+import { Crown, Mic, MicOff, Pin, PinOff } from "lucide-react";
 import ScreenShareElement from "./screenshare-element";
 import { motion } from "framer-motion";
 import ToolTip from "../common/tooltip/tooltip";
+import { socket } from "@/socket/communication/connect";
 
 // Interface for Props
 interface PropsType {
@@ -15,6 +16,7 @@ interface PropsType {
     screen?: MediaStream | undefined;
     isVideoMute: boolean;
     isAudioMute: boolean;
+    pinnedUser?: string;
     setPinnedUser: React.Dispatch<React.SetStateAction<string | undefined>>;
     isOptionsShow: boolean;
     className?: string;
@@ -29,6 +31,7 @@ function PeerVideo({
     screen,
     isVideoMute,
     isAudioMute,
+    pinnedUser,
     setPinnedUser,
     isOptionsShow,
     className,
@@ -40,7 +43,7 @@ function PeerVideo({
         <div
             key={socketId}
             className={cn(
-                "group relative aspect-video flex items-center justify-center w-[180px] min-h-[180px]",
+                "group relative aspect-video flex items-center justify-center min-h-[180px]",
                 "bg-muted dark:bg-sidebar-backgroundDark rounded-2xl overflow-hidden shadow-md",
                 "border-2 border-white dark:border-muted-foreground",
                 className
@@ -51,15 +54,25 @@ function PeerVideo({
                 <div className="group-hover:opacity-100 opacity-0 absolute z-50 inset-0 flex items-center justify-center">
                     <div className="flex items-center justify-center gap-1 bg-black/40 backdrop-blur-sm text-white rounded-full ">
                         <ToolTip
-                            action={() => {
-                                setPinnedUser(socketId);
-                            }}
+                            action={() =>
+                                setPinnedUser((prev) => {
+                                    if (prev === socketId) {
+                                        return socket.id as string;
+                                    } else {
+                                        return socketId;
+                                    }
+                                })
+                            }
                             text="Pin"
                             side="bottom"
                             className="bg-background dark:bg-muted text-foreground border-none dark:border-none"
                             children={
                                 <div className="p-3 hover:bg-black/30 rounded-full">
-                                    <Pin className="w-4 h-4" />
+                                    {pinnedUser === socketId ? (
+                                        <PinOff className="w-4 h-4" />
+                                    ) : (
+                                        <Pin className="w-4 h-4" />
+                                    )}
                                 </div>
                             }
                         />
@@ -82,6 +95,7 @@ function PeerVideo({
                     <div className="absolute bottom-0 left-0 right-0 p-2 flex justify-between items-center">
                         <div className="p-1 px-3 flex items-center gap-2 bg-black/30 backdrop-blur-sm text-white rounded-lg text-sm font-medium">
                             <span>{(peer?.name && "You") || "Peer"}</span>
+                            <Crown className="w-4 h-4 text-white"/>
                         </div>
                     </div>
 

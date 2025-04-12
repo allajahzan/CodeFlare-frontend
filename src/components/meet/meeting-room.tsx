@@ -3,17 +3,15 @@ import { leaveMeet } from "@/socket/communication/videoCallSocket";
 import { motion } from "framer-motion";
 import {
     Crown,
-    Dot,
     Hand,
     MessageCircle,
     Mic,
     MicOff,
-    // MonitorCheck,
     Phone,
     Pin,
     PinOff,
+    Send,
     UsersRound,
-    // ScreenShare,
     Video,
     VideoOff,
 } from "lucide-react";
@@ -28,6 +26,9 @@ import { IMeet } from "./meeting-join";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import profile from "@/assets/images/no-profile.svg";
 import { Separator } from "../ui/separator";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import IconButton from "../ui/icon-button";
 
 // Interface for Props
 interface PropsType {
@@ -96,14 +97,6 @@ function MeetingRoom({
     // Peers list
     const [isPeersListOpen, setPeersList] = useState<boolean>(true);
 
-    // Screen sharing
-    // let screenTrack: MediaStreamTrack | null;
-    // let screenStream: MediaStream | null;
-    // let sendTransport: mediasoupClient.types.Transport | undefined;
-    // let screenProducer: mediasoupClient.types.Producer | null;
-
-    // const [isScreenShared, setScreenShared] = useState<boolean>(false);
-
     // Stop webcam
     const stopWebcam = async () => {
         if (streamRef.current && videoRef.current) {
@@ -158,189 +151,88 @@ function MeetingRoom({
         }
     }, [peers, selectedPeer, socket.id]);
 
-    // =========================================== Screen recording ==========================================
+    // Chat related states
 
-    // Start sharing
-    // async function startScreenSharing(): Promise<void> {
-    //     try {
-    //         screenStream = await navigator.mediaDevices.getDisplayMedia({
-    //             video: true,
-    //             audio: true,
-    //         });
+    const [isChatOpen, setIsChatOpen] = useState(false);
 
-    //         screenTrack = screenStream.getVideoTracks()[0];
-
-    //         // Detect when user stops screen sharing via browser UI
-    //         screenTrack.onended = () => {
-    //             console.log("Screen sharing stopped by browser");
-    //         };
-
-    //         sendTransport = await goCreateTransport(true);
-    //         if (!sendTransport) return;
-
-    //         screenProducer = await connectAndProduceMedia(
-    //             sendTransport,
-    //             null,
-    //             null,
-    //             screenTrack
-    //         );
-
-    //         if (!screenProducer) {
-    //             console.warn("Failed to produce screen media");
-    //             return;
-    //         }
-
-    //         screenProducer.on("trackended", () => {
-    //             setScreenShared(false);
-    //             console.log("Screen track ended");
-    //         });
-
-    //         screenProducer.on("transportclose", () => {
-    //             console.log("Screen transport closed");
-    //         });
-
-    //         setScreenShared(true);
-    //     } catch (error) {
-    //         console.error("Error starting screen sharing:", error);
-    //     }
-    // }
+    const chatMessages = [
+        {
+            id: 1,
+            sender: "Jane Cooper",
+            message: "Hi Team",
+            avatar: "/placeholder.svg?height=40&width=40",
+        },
+        {
+            id: 2,
+            sender: "Jack",
+            message: "I share the main document",
+            avatar: "/placeholder.svg?height=40&width=40",
+        },
+        {
+            id: 3,
+            sender: "Steven",
+            message: "Hi Everyone! don't forget to make a note.",
+            avatar: "/placeholder.svg?height=40&width=40",
+        },
+    ];
 
     return (
         <div className="flex flex-col h-full dark:bg-sidebar-background">
             {/* Content */}
-            <div className="flex-1 flex items-center">
+            <div className="flex flex-1 overflow-hidden relative">
                 {/* Left side peers list */}
                 <div
                     className={cn(
-                        "absolute top-0 left-0 z-40 h-full w-[280px] pb-[105px] flex-col gap-5",
+                        "absolute top-0 left-0 z-40 h-full w-[300px] pb-[105px] flex-col gap-5",
                         "bg-background dark:bg-sidebar border-r overflow-y-auto overflow-x-hidden no-scrollbar",
                         "transform transition-transform duration-300 ease-in-out",
                         isPeersListOpen ? "translate-x-0" : "-translate-x-full"
                     )}
                 >
-                    {/* Headin */}
+                    {/* Heading */}
                     <div className="w-full p-5 bg-background dark:bg-sidebar flex items-center justify-between gap-3 sticky top-0 z-[1000]">
                         <p className="text-lg text-foreground font-semibold">
                             Participants
                         </p>
                         <p className="text-foreground text-lg font-medium">
-                            ({Object.entries(peers).length + 1})
+                            ({Object.entries(peers).length})
                         </p>
                     </div>
 
                     {/* Separator */}
                     <Separator />
 
-                    {/* Peers videos */}
-                    <div className="w-full flex flex-col gap-0 items-start">
+                    {/* Peers lists */}
+                    <div className="w-full flex flex-col gap-5 p-5 items-center">
                         {/* Self */}
-                        <div className="w-full flex items-center gap-3 p-5 py-3 pr-3 hover:bg-muted dark:hover:bg-sidebar">
-                            {/* Avatar profile pic */}
-                            <Avatar className="bg-background w-12 h-12 border-2 border-background dark:border-border shadow-md">
-                                <AvatarImage
-                                    src={meet?.host?.profilePic}
-                                    className="object-cover"
-                                />
-                                <AvatarFallback className="bg-transparent">
-                                    <img className="w-full" src={profile} alt="" />
-                                </AvatarFallback>
-                            </Avatar>
-
-                            {/* Name and other details */}
-                            <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2">
-                                    <p className="font-semibold text-foreground truncate flex items-center gap-2">
-                                        {user?._id === meet?.host._id ? "You" : meet?.host.name}
-                                        <Crown className="w-4 h-4 text-yellow-500" />
-                                    </p>
-                                </div>
-                                <p className="text-sm text-muted-foreground">Host</p>
-                            </div>
-                            {/* Options */}
-                            <div className="flex items-center gap-1">
-                                {/* <div className="p-2 rounded-lg hover:bg-muted cursor-pointer">
-                                    <Mic className="w-4 h-4 text-foreground" />
-                                </div> */}
-                                <div
-                                    className={cn(
-                                        "p-2 rounded-lg hover:bg-muted cursor-pointer",
-                                        meet?._id === user?._id && "opacity-20"
-                                    )}
-                                >
-                                    <PinOff className="w-4 h-4 text-foreground" />
-                                </div>
-                            </div>
-                        </div>
+                        
 
                         {/* Other peers */}
                         {Object.entries(peers).length > 0 &&
                             Object.entries(peers).map(([socketId, peer]) => {
-                                // if(socketId !== meet)
-                                return (
-                                    <div
-                                        key={socketId}
-                                        className="w-full flex items-center gap-3 p-5 py-3 pr-3 hover:bg-muted dark:hover:bg-sidebar"
-                                    >
-                                        {/* Avatar profile pic */}
-                                        <Avatar className="bg-background w-12 h-12 border-2 border-background dark:border-border shadow-md">
-                                            <AvatarImage
-                                                // src={user?.profilePic}
-                                                className="object-cover"
-                                            />
-                                            <AvatarFallback className="bg-transparent">
-                                                <img className="w-full" src={profile} alt="" />
-                                            </AvatarFallback>
-                                        </Avatar>
-
-                                        {/* Name and other details */}
-                                        <div className="flex-1 min-w-0">
-                                            <div className="flex items-center gap-2">
-                                                <p className="font-semibold text-foreground truncate">
-                                                    {"Peer"}
-                                                </p>
-                                            </div>
-                                            {/* {children1} */}
-                                        </div>
-                                        {/* Options */}
-                                        <div className="flex items-center gap-1">
-                                            {/* <div className="p-2 rounded-lg hover:bg-muted cursor-pointer">
-                                                <Mic className="w-4 h-4 text-foreground" />
-                                            </div> */}
-                                            <div
-                                                onClick={() =>
-                                                    setSelectedPeer((prev) => {
-                                                        if (prev === socketId) {
-                                                            return socket.id as string;
-                                                        } else {
-                                                            return socketId;
-                                                        }
-                                                    })
-                                                }
-                                                className="p-2 rounded-lg hover:bg-muted cursor-pointer"
-                                            >
-                                                {selectedPeer === socketId ? (
-                                                    <PinOff className="w-4 h-4 text-foreground" />
-                                                ) : (
-                                                    <Pin className="w-4 h-4 text-foreground" />
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                );
+                                if (socketId !== selectedPeer) {
+                                    return (
+                                        <PeerVideo
+                                            key={socketId}
+                                            socketId={socketId as string}
+                                            media={peer.media}
+                                            screen={peer.screen}
+                                            isVideoMute={peer.isVideoMute}
+                                            isAudioMute={peer.isAudioMute}
+                                            setPinnedUser={setSelectedPeer}
+                                            pinnedUser={selectedPeer}
+                                            isOptionsShow={true}
+                                            className="w-full"
+                                        />
+                                    );
+                                }
                             })}
                     </div>
                 </div>
 
                 {/* Main videos */}
-                <div
-                    className={cn(
-                        "h-full w-full relative p-5 bg-background",
-                        "transition-all duration-300 ease-in-out"
-                        // (isChatOpen || isParticipantsOpen) && isMobile ? "hidden" : "block",
-                        // isPeersListOpen? "ml-[135px]" : "ml-0"
-                    )}
-                >
-                    <div className="h-full w-full flex items-center justify-center overflow-hidden">
+                <div className={cn("h-full w-full relative p-5 bg-background")}>
+                    <div className="h-full w-full flex items-center justify-center">
                         <div className="h-full md:h-fit w-full max-w-4xl rounded-2xl">
                             {/* Selected Peer view */}
                             {selectedPeer &&
@@ -356,7 +248,8 @@ function MeetingRoom({
                                                 isVideoMute={peer.isVideoMute}
                                                 isAudioMute={peer.isAudioMute}
                                                 setPinnedUser={setSelectedPeer}
-                                                isOptionsShow={false}
+                                                pinnedUser={selectedPeer}
+                                                isOptionsShow={true}
                                                 className="h-full w-full"
                                             />
                                         );
@@ -388,6 +281,67 @@ function MeetingRoom({
                                     />
                                 </div>
                             )}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Chat panel */}
+                <div
+                    className={cn(
+                        "h-full absolute w-[300px] z-[1000] top-0 right-0 border-l bg-background dark:bg-sidebar flex flex-col",
+                        "transform transition-transform duration-300 ease-in-out",
+                        isChatOpen ? "translate-x-0" : "translate-x-full"
+                    )}
+                >
+                    {/* Heading */}
+                    <div className="flex items-center justify-between p-5 border-b ">
+                        <h2 className="text-lg font-semibold text-foreground">Chat</h2>
+                    </div>
+
+                    {/* Message */}
+                    <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                        {chatMessages.map((message) => (
+                            <div key={message.id} className="flex gap-3">
+                                <Avatar className="bg-background w-12 h-12 border-2 border-background dark:border-border shadow-md">
+                                    <AvatarImage
+                                        // src={user?.profilePic}
+                                        className="object-cover"
+                                    />
+                                    <AvatarFallback className="bg-transparent">
+                                        <img className="w-full" src={profile} alt="" />
+                                    </AvatarFallback>
+                                </Avatar>
+
+                                <div>
+                                    <div className="text-sm font-medium text-foreground">
+                                        {message.sender}
+                                    </div>
+                                    <div className="text-sm text-foreground">
+                                        {message.message}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Button */}
+                    <div className="p-4 border-t">
+                        <div className="flex items-center gap-2">
+                            <div className="relative flex-1 flex items-center">
+                                <Input
+                                    type="text"
+                                    placeholder="Type a message"
+                                    // value={message}
+                                    // onChange={(event) => setMessage(event.target.value)}
+                                    className="p-5 text-foreground font-medium rounded-lg shadow-sm"
+                                />
+                            </div>
+
+                            {/* Button */}
+                            <IconButton
+                                Icon={Send}
+                                className="bg-background dark:hover:bg-sidebar dark:hover:border-customBorder-dark"
+                            />
                         </div>
                     </div>
                 </div>
@@ -446,14 +400,14 @@ function MeetingRoom({
                     </motion.div>
 
                     {/* Hand rise */}
-                    {/* <motion.div
+                    <motion.div
                         className="flex items-center justify-center cursor-pointer"
                         whileTap={{ scale: 0.95 }}
                     >
                         <div className="p-3 rounded-full bg-muted">
                             <Hand className="w-5 h-5 text-foreground" />
                         </div>
-                    </motion.div> */}
+                    </motion.div>
 
                     {/* Screen share */}
                     {/* <motion.div
@@ -470,18 +424,27 @@ function MeetingRoom({
                     </motion.div> */}
 
                     {/* Message */}
-                    {/* <motion.div
+                    <motion.div
                         className="flex items-center justify-center cursor-pointer"
                         whileTap={{ scale: 0.95 }}
                     >
-                        <div className="p-3 rounded-full bg-muted">
+                        <div
+                            onClick={() => {
+                                setIsChatOpen(!isChatOpen);
+                                setPeersList(false);
+                            }}
+                            className="p-3 rounded-full bg-muted"
+                        >
                             <MessageCircle className="w-5 h-5 text-foreground" />
                         </div>
-                    </motion.div> */}
+                    </motion.div>
 
                     {/* Peers */}
                     <motion.div
-                        onClick={() => setPeersList(!isPeersListOpen)}
+                        onClick={() => {
+                            setPeersList(!isPeersListOpen);
+                            setIsChatOpen(false);
+                        }}
                         className="flex items-center justify-center cursor-pointer"
                         whileTap={{ scale: 0.95 }}
                     >

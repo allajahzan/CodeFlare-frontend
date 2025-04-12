@@ -635,7 +635,7 @@ function Meet() {
 
                 {/* Meeting room */}
                 {isJoined === true && (
-                    <div className="flex-1">
+                    <div className="flex-1 overflow-y-auto overflow-x-hidden">
                         <MeetingRoom
                             isVideoMute={isVideoMute}
                             isAudioMute={isAudioMute}
