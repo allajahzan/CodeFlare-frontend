@@ -13,6 +13,7 @@ import {
     LayoutDashboard,
     MessageCircleMore,
     UsersRound,
+    Video,
 } from "lucide-react";
 import Shadow from "@/components/ui/shadow";
 import { useLayoutEffect, useMemo } from "react";
@@ -55,6 +56,7 @@ function InstructorLayout({ isDrawerOpen }: PropsType) {
             { path: AppRoutes.COORDINATOR_STUDENTS, icon: UsersRound, label: "Students" },
             { path: AppRoutes.STUDENT_REVIEWS, icon: CalendarDays, label: "Reviews" },
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
+            { path: AppRoutes.MEET, icon: Video, label: "Meet" },
             ...(isSmall
                 ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
                 : []),
@@ -86,7 +88,7 @@ function InstructorLayout({ isDrawerOpen }: PropsType) {
                         transform: "scale(1) translate3d(0, 0, 0)",
                     }),
             }}
-            className="h-screen dotted-bg"
+            className="h-screen "
         >
             <Shadow />
             <Sidebar sideBarItems={sideBarItems} />

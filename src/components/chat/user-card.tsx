@@ -6,7 +6,7 @@ import { IUserChat } from "./user-contact-sheet";
 import { Chat } from "./chat";
 import { IUserContext, UserContext } from "@/context/user-context";
 import { useMediaQuery } from "usehooks-ts";
-import { userOnline } from "@/socket/chatSocket";
+import { userOnline } from "@/socket/communication/chatSocket";
 
 // Interface for Props
 interface PropsType {

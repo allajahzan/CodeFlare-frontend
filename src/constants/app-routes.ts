@@ -11,6 +11,7 @@ enum AppRoutes {
     PROFILE = 'profile',
     COMMUNITY = 'community',
     ATTENDENCE = 'attendence',
+    MEET = "meet",
 
     // Admin Routes
     ADMIN = "admin",

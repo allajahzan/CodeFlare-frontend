@@ -134,7 +134,7 @@ function AddMarkModal({
                     <Pencil className="h-4 w-4 text-foreground" />
                 </div>
             </DialogTrigger>
-            <DialogContent className="flex flex-col gap-10">
+            <DialogContent className="flex flex-col gap-10 bg-background dark:bg-sidebar-background">
                 {/* Header */}
                 <DialogHeader>
                     <DialogTitle className="text-foreground flex items-center gap-3">
