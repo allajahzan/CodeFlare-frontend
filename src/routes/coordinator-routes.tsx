@@ -13,6 +13,8 @@ import AppRoutes from "@/constants/app-routes";
 import Chat from "@/pages/chat/chat";
 import Profile from "@/pages/profile/profile";
 import Attendence from "@/components/coordinator/attendence/attendence";
+import MeetLanding from "@/components/meet/landing";
+import Meet from "@/components/meet/meet";
 
 // Coordinator Routes
 function CoordinatorRoutes() {
@@ -31,10 +33,12 @@ function CoordinatorRoutes() {
 
             {/* Protected Routes */}
             <Route element={<ProtectedRoutes allowedRole={AppRoutes.COORDINATOR} />}>
-            <Route path={AppRoutes.CHATS} element={<Chat />} />
+                <Route path={AppRoutes.CHATS} element={<Chat />} />
+                <Route path={AppRoutes.MEET} element={<MeetLanding />} />
+                <Route path={AppRoutes.MEET + '/:id'} element={<Meet />} />
                 <Route element={<CoordinatorLayout isDrawerOpen={isDrawerOpen} />}>
                     <Route path={AppRoutes.DASHBOARD} element={<Dashboard />} />
-                    <Route path={AppRoutes.COORDINATOR_STUDENTS} element={<Students isDrawerOpen={isDrawerOpen} setDrawerOpen={_setDrawerOpen} />}/>
+                    <Route path={AppRoutes.COORDINATOR_STUDENTS} element={<Students isDrawerOpen={isDrawerOpen} setDrawerOpen={_setDrawerOpen} />} />
                     <Route path={AppRoutes.ATTENDENCE} element={<Attendence />} />
                     <Route path={AppRoutes.PROFILE} element={<Profile />} />
                 </Route>

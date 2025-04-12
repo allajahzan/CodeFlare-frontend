@@ -14,6 +14,7 @@ import {
     LayoutDashboard,
     ListTodo,
     MessageCircleMore,
+    Video,
 } from "lucide-react";
 import Shadow from "@/components/ui/shadow";
 import { useLayoutEffect, useMemo } from "react";
@@ -60,6 +61,7 @@ function StudentLayout({ isDrawerOpen }: PropsType) {
                 label: "Reviews",
             },
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
+            { path: AppRoutes.MEET, icon: Video, label: "Meet" },
             ...(isSmall
                 ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
                 : []),
@@ -94,7 +96,7 @@ function StudentLayout({ isDrawerOpen }: PropsType) {
                         transform: "scale(1) translate3d(0, 0, 0)",
                     }),
             }}
-            className="h-screen dotted-bg relative"
+            className="h-screen"
         >
             <Shadow />
             <Sidebar sideBarItems={sideBarItems} />

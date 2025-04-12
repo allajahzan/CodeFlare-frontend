@@ -10,6 +10,7 @@ import {
     MessageCircleMore,
     School,
     UsersRound,
+    Video,
 } from "lucide-react";
 import Shadow from "@/components/ui/shadow";
 import { useLayoutEffect, useMemo } from "react";
@@ -51,6 +52,7 @@ function AdminLayout({ isDrawerOpen }: PropsType) {
             { path: AppRoutes.DASHBOARD, icon: LayoutDashboard, label: "Dashboard" },
             { path: AppRoutes.ADMIN_USERS, icon: UsersRound, label: "Users" },
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
+            { path: AppRoutes.MEET, icon: Video, label: "Meet" },
             ...(isSmall
                 ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
                 : []),
@@ -85,7 +87,7 @@ function AdminLayout({ isDrawerOpen }: PropsType) {
                         transform: "scale(1) translate3d(0, 0, 0)",
                     }),
             }}
-            className="h-screen dotted-bg"
+            className="h-screen"
         >
             <Shadow />
             <Sidebar sideBarItems={sideBarItems} />

@@ -13,6 +13,8 @@ import AppRoutes from "@/constants/app-routes";
 import Chat from "@/pages/chat/chat";
 import Profile from "@/pages/profile/profile";
 import Batches from "@/pages/admin/batches";
+import MeetLanding from "@/components/meet/landing";
+import Meet from "@/components/meet/meet";
 
 // Admin Routes
 function AdminRoutes() {
@@ -31,11 +33,13 @@ function AdminRoutes() {
 
             {/* Protected Routes */}
             <Route element={<ProtectedRoutes allowedRole={AppRoutes.ADMIN} />}>
-            <Route path={AppRoutes.CHATS} element={<Chat />} />
+                <Route path={AppRoutes.CHATS} element={<Chat />} />
+                <Route path={AppRoutes.MEET} element={<MeetLanding />} />
+                <Route path={AppRoutes.MEET + '/:id'} element={<Meet />} />
                 <Route element={<AdminLayout isDrawerOpen={isDrawerOpen} />}>
                     <Route path={AppRoutes.DASHBOARD} element={<Dashboard />} />
                     <Route path={AppRoutes.ADMIN_USERS} element={<Users isDrawerOpen={isDrawerOpen} setDrawerOpen={setDrawerOpen} />} />
-                    <Route path={AppRoutes.ADMIN_BATCHES} element={<Batches setDrawerOpen={setDrawerOpen} />}/>
+                    <Route path={AppRoutes.ADMIN_BATCHES} element={<Batches setDrawerOpen={setDrawerOpen} />} />
                     <Route path={AppRoutes.PROFILE} element={<Profile />} />
                 </Route>
             </Route>

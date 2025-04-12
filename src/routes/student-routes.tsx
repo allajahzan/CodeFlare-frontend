@@ -15,6 +15,8 @@ import AppRoutes from "@/constants/app-routes";
 import { useState } from "react";
 import Profile from "@/pages/profile/profile";
 import Attendence from "@/pages/student/attendence";
+import MeetLanding from "@/components/meet/landing";
+import Meet from "@/components/meet/meet";
 
 // Student Routes
 function StudentRoutes() {
@@ -34,6 +36,8 @@ function StudentRoutes() {
             {/* Protected Routes */}
             <Route element={<ProtectedRoutes allowedRole={AppRoutes.STUDENT} />}>
                 <Route path={`${AppRoutes.STUDENT}/${AppRoutes.CHATS}`} element={<Chat />} />
+                <Route path={AppRoutes.MEET} element={<MeetLanding />} />
+                <Route path={AppRoutes.MEET + '/:id'} element={<Meet />} />
                 <Route path={AppRoutes.STUDENT} element={<StudentLayout isDrawerOpen={isDrawerOpen} />}>
                     <Route path={AppRoutes.DASHBOARD} element={<Dashboard />} />
                     <Route path={AppRoutes.STUDENT_REVIEWS} element={<Reviews />} />
