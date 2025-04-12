@@ -70,7 +70,7 @@ function VideoElement({ peer, media, isVideoMute, className }: PropsType) {
                 <div className="absolute inset-0 flex items-center justify-center bg-muted dark:bg-sidebar-backgroundDark">
                     <Avatar className="h-24 w-24">
                         <AvatarFallback className="bg-zinc-200 dark:bg-muted text-foreground text-2xl font-semibold">
-                            {peer?.profilePic ? <img src={peer.profilePic} /> : "A"}
+                            {peer?.profilePic ? <img src={peer.profilePic} /> : peer?.name[0]}
                         </AvatarFallback>
                     </Avatar>
                 </div>

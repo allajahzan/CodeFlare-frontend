@@ -1,4 +1,4 @@
-import React, { Fragment, useRef } from "react";
+import React, { Fragment, useContext, useRef } from "react";
 import { IUser } from "@/types/attendence";
 import VideoElement from "./video-element";
 import { cn } from "@/lib/utils";
@@ -7,6 +7,8 @@ import ScreenShareElement from "./screenshare-element";
 import { motion } from "framer-motion";
 import ToolTip from "../common/tooltip/tooltip";
 import { socket } from "@/socket/communication/connect";
+import { IUserContext, UserContext } from "@/context/user-context";
+import { IMeet } from "./meeting-join";
 
 // Interface for Props
 interface PropsType {
@@ -21,6 +23,7 @@ interface PropsType {
     isOptionsShow: boolean;
     className?: string;
     videoElementClassName?: string;
+    meet: IMeet;
 }
 
 // PeerVideo Component
@@ -36,8 +39,12 @@ function PeerVideo({
     isOptionsShow,
     className,
     videoElementClassName,
+    meet,
 }: PropsType) {
     const containerRef = useRef<HTMLDivElement>(null);
+
+    // User context
+    const { user } = useContext(UserContext) as IUserContext;
 
     return (
         <div
@@ -94,9 +101,13 @@ function PeerVideo({
                     {/* User Name */}
                     <div className="absolute bottom-0 left-0 right-0 p-2 flex justify-between items-center">
                         <div className="p-1 px-3 flex items-center gap-2 bg-black/30 backdrop-blur-sm text-white rounded-lg text-sm font-medium">
-                            <span>{(peer?.name && "You") || "Peer"}</span>
-                            <Crown className="w-4 h-4 text-white" />
+                            <span>{peer?._id === user?._id ? "You" : peer?.name}</span>
+                            {meet.host._id === peer?._id && (
+                                <Crown className="w-4 h-4 text-yellow-400" />
+                            )}
                         </div>
+
+                        <div></div>
                     </div>
 
                     {/* Mic status */}

@@ -1,5 +1,5 @@
 import Navbar from "../common/navbar/navbar";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import * as mediasoupClient from "mediasoup-client";
 import { socket } from "@/socket/communication/connect";
 import MeetingJoin, { IMeet } from "./meeting-join";
@@ -14,6 +14,8 @@ import {
     onPeerMuteChange,
 } from "@/socket/communication/videoCallSocket";
 import MeetingRoom from "./meeting-room";
+import { IUser } from "@/types/attendence";
+import { IUserContext, UserContext } from "@/context/user-context";
 
 // mediasoup track params
 let trackParams = {
@@ -51,6 +53,9 @@ let trackParams = {
 // Meet Component
 function Meet() {
     // ===================================== Initial streaming setup ===================================
+
+    // User context
+    const { user } = useContext(UserContext) as IUserContext;
 
     const roomId = useLocation().pathname.split("/")[3];
 
@@ -90,7 +95,7 @@ function Meet() {
 
         if (currentStream) {
             currentStream.getTracks().forEach((track) => track.stop());
-            videoRef.current = null
+            videoRef.current = null;
             streamRef.current = null;
 
             // Leave call
@@ -234,6 +239,7 @@ function Meet() {
     // Peers
     const [peers, setPeers] = useState<{
         [socketId: string]: {
+            user: IUser;
             media: MediaStream;
             screen?: MediaStream;
             isVideoMute: boolean;
@@ -247,44 +253,54 @@ function Meet() {
     // Join room and create device
     useEffect(() => {
         if (isJoined) {
-            joinRoom(roomId, async (rtpCapabilities, existingProducers) => {
-                // Create and load the device
-                const newDevice = new mediasoupClient.Device();
-                await newDevice.load({ routerRtpCapabilities: rtpCapabilities });
+            joinRoom(
+                roomId,
+                user?._id as string,
+                async (rtpCapabilities, existingProducers) => {
+                    // Create and load the device
+                    const newDevice = new mediasoupClient.Device();
+                    await newDevice.load({ routerRtpCapabilities: rtpCapabilities });
 
-                // Update the device
-                deviceRef.current = newDevice;
+                    // Update the device
+                    deviceRef.current = newDevice;
 
-                // Consume all existing producers
-                if (existingProducers && existingProducers.length > 0) {
-                    await consumeExistingProducers(existingProducers);
+                    // Consume all existing producers
+                    if (existingProducers && existingProducers.length > 0) {
+                        await consumeExistingProducers(existingProducers);
+                    }
+
+                    // Create producer transport
+                    const sendTransport = await goCreateTransport(true);
+                    if (!sendTransport) return;
+
+                    if (!streamRef.current) return;
+
+                    // Get video & audio tracks
+                    const videoTrack = streamRef.current.getVideoTracks()[0];
+                    const audioTrack = streamRef.current.getAudioTracks()[0];
+
+                    // Connect and produce media
+                    connectAndProduceMedia(sendTransport, videoTrack, audioTrack, null);
                 }
-
-                // Create producer transport
-                const sendTransport = await goCreateTransport(true);
-                if (!sendTransport) return;
-
-                if (!streamRef.current) return;
-
-                // Get video & audio tracks
-                const videoTrack = streamRef.current.getVideoTracks()[0];
-                const audioTrack = streamRef.current.getAudioTracks()[0];
-
-                // Connect and produce media
-                connectAndProduceMedia(sendTransport, videoTrack, audioTrack, null);
-            });
+            );
         }
     }, [isJoined]);
 
     // Listen for new producers
     useEffect(() => {
-        onNewProducer(async ({ producerId, appData, socketId }) => {
+        onNewProducer(async ({ producerId, appData, socketId, user }) => {
             // Create receiver transport
             const recvTransport = await goCreateTransport(false);
             if (!recvTransport) return;
 
             // Connect and consume media
-            connectAndConsumeMedia(producerId, appData, socketId, recvTransport);
+            connectAndConsumeMedia(
+                producerId,
+                appData,
+                socketId,
+                recvTransport,
+                user
+            );
         });
 
         return () => {
@@ -316,6 +332,7 @@ function Meet() {
             kind: mediasoupClient.types.MediaKind;
             appData: any;
             socketId: string;
+            user: IUser;
         }[]
     ) => {
         // console.log("Consuming existing producers: ", existingProducers);
@@ -330,7 +347,8 @@ function Meet() {
                 producer.producerId,
                 producer.appData,
                 producer.socketId,
-                recvTransport
+                recvTransport,
+                producer.user
             );
         }
     };
@@ -519,7 +537,8 @@ function Meet() {
         producerId: string,
         appData: any,
         socketId: string,
-        recvTransport: mediasoupClient.types.Transport
+        recvTransport: mediasoupClient.types.Transport,
+        user: IUser
     ) => {
         try {
             const device = deviceRef.current;
@@ -597,6 +616,7 @@ function Meet() {
                             ...prevPeers,
                             [socketId]: {
                                 ...existingPeer,
+                                user,
                                 media: updatedMediaStream,
                                 screen: updatedScreenStream,
                                 isVideoMute:

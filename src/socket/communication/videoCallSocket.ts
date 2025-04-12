@@ -1,5 +1,7 @@
+import { IUser } from "@/types/attendence";
 import { socket } from "./connect";
 import * as mediasoupClient from "mediasoup-client";
+import { handleCustomError } from "@/utils/error";
 
 /**
  * Emits a "joinRoom" event to the server and triggers the provided callback
@@ -10,6 +12,7 @@ import * as mediasoupClient from "mediasoup-client";
  */
 export const joinRoom = (
     roomId: string,
+    userId: string,
     callback: (
         rtpCapabilities: mediasoupClient.types.RtpCapabilities,
         existingProducers: any
@@ -18,11 +21,16 @@ export const joinRoom = (
     try {
         socket.emit(
             "joinRoom",
-            { roomId },
+            { roomId, userId },
             (
+                error: { message: string; status: number },
                 rtpCapabilities: mediasoupClient.types.RtpCapabilities,
                 existingProducers: any
             ) => {
+                if (error) {
+                    handleCustomError(error);
+                    return;
+                }
                 callback(rtpCapabilities, existingProducers);
             }
         );
@@ -71,18 +79,20 @@ export const onNewProducer = (
         producerId,
         appData,
         socketId,
+        user,
     }: {
         producerId: string;
         appData: any;
         socketId: string;
+        user: IUser;
     }) => void
 ) => {
-    try{
+    try {
         socket.on("newProducer", (data) => {
             callback(data);
         });
-    }catch(err: unknown){
-        console.log(err)
+    } catch (err: unknown) {
+        console.log(err);
     }
 };
 
@@ -105,10 +115,10 @@ export const onPeerMuteChange = (
         socketId: string;
     }) => void
 ) => {
-    try{
+    try {
         socket.on("peerMuteChange", callback);
-    }catch(err: unknown){
-        console.log(err)
+    } catch (err: unknown) {
+        console.log(err);
     }
 };
 
@@ -117,11 +127,11 @@ export const onPeerMuteChange = (
  * This removes the user from the video call room and cleans up the peer's resources.
  * @param roomId - The ID of the room to leave.
  */
-export const leaveMeet = (roomId:string) => {
-    try{
+export const leaveMeet = (roomId: string) => {
+    try {
         socket.emit("leaveCall", { roomId });
-    }catch(err: unknown){
-        console.log(err)
+    } catch (err: unknown) {
+        console.log(err);
     }
 };
 

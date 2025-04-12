@@ -40,6 +40,7 @@ interface PropsType {
     handleAudio: () => void;
     peers: {
         [socketId: string]: {
+            user: IUser;
             media: MediaStream;
             screen?: MediaStream;
             isVideoMute: boolean;
@@ -58,7 +59,7 @@ interface PropsType {
         audioTrack: MediaStreamTrack | null,
         screenTrack: MediaStreamTrack | null
     ) => Promise<void>;
-    stopWebcam : ()=>void
+    stopWebcam: () => void;
 }
 
 // Meeting room Component
@@ -203,12 +204,14 @@ function MeetingRoom({
                                         <PeerVideo
                                             key={socketId}
                                             socketId={socketId as string}
+                                            peer={peer.user}
                                             media={peer.media}
                                             screen={peer.screen}
                                             isVideoMute={peer.isVideoMute}
                                             isAudioMute={peer.isAudioMute}
                                             setPinnedUser={setSelectedPeer}
                                             pinnedUser={selectedPeer}
+                                            meet={meet as IMeet}
                                             isOptionsShow={true}
                                             className="w-full"
                                         />
@@ -219,7 +222,13 @@ function MeetingRoom({
                 </div>
 
                 {/* Main videos */}
-                <div className="h-full w-full relative p-5 bg-gray-100 dark:bg-sidebar-background">
+                <div
+                    className={cn(
+                        "h-full w-full relative p-5 bg-gray-100 dark:bg-sidebar-background",
+                        "transition-all duration-300 ease-in-out",
+                        isPeersListOpen ? "ml-[300px]" : "ml-0"
+                    )}
+                >
                     <div className="h-full w-full flex items-center justify-center">
                         <div className="h-full md:h-fit w-full max-w-4xl rounded-2xl">
                             {/* Selected Peer view */}
@@ -231,12 +240,14 @@ function MeetingRoom({
                                             <PeerVideo
                                                 key={socketId}
                                                 socketId={socketId as string}
+                                                peer={peer.user}
                                                 media={peer.media}
                                                 screen={peer.screen}
                                                 isVideoMute={peer.isVideoMute}
                                                 isAudioMute={peer.isAudioMute}
                                                 setPinnedUser={setSelectedPeer}
                                                 pinnedUser={selectedPeer}
+                                                meet={meet as IMeet}
                                                 isOptionsShow={true}
                                                 className="h-full w-full"
                                             />
@@ -257,15 +268,16 @@ function MeetingRoom({
                                     <PeerVideo
                                         key={socket.id}
                                         socketId={socket.id as string}
+                                        peer={user as unknown as IUser}
                                         media={streamRef.current}
                                         screen={undefined}
                                         isVideoMute={isVideoMute}
                                         isAudioMute={isAudioMute}
                                         setPinnedUser={setSelectedPeer}
+                                        meet={meet as IMeet}
                                         isOptionsShow={false}
                                         className="h-full w-full"
                                         videoElementClassName="transform scale-x-[-1]"
-                                        peer={user as unknown as IUser}
                                     />
                                 </div>
                             )}
