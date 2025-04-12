@@ -76,7 +76,10 @@ function MeetingJoin({
         localStorage.setItem("isVideoMute", "0");
         localStorage.setItem("isAudioMute", "0");
 
-        isVerified && startWebcam();
+        if(isVerified){
+            console.log("starting camera")
+            startWebcam();
+        }
     }, [isVerified]);
 
     // Handle local video streaming on video mute and unmute

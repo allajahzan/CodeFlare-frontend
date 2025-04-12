@@ -90,6 +90,7 @@ function Meet() {
 
         if (currentStream) {
             currentStream.getTracks().forEach((track) => track.stop());
+            videoRef.current = null
             streamRef.current = null;
 
             // Leave call
@@ -105,6 +106,7 @@ function Meet() {
     // when page unmount stop webcam
     useEffect(() => {
         return () => {
+            console.log("Unmounting component...");
             stopWebcam();
         };
     }, []);
@@ -647,6 +649,7 @@ function Meet() {
                             setMeetLeft={setMeetLeft}
                             setJoined={setJoined}
                             meet={meet as IMeet}
+                            stopWebcam={stopWebcam}
                             goCreateTransport={goCreateTransport}
                             connectAndProduceMedia={connectAndProduceMedia}
                         />
@@ -661,6 +664,7 @@ function Meet() {
                         setAudioMute={setAudioMute}
                         setVideoMute={setVideoMute}
                         startWebcam={startWebcam}
+                        stopWebcam={stopWebcam}
                     />
                 )}
             </div>

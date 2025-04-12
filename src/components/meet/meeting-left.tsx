@@ -13,6 +13,7 @@ interface PropsType {
     setVideoMute: React.Dispatch<React.SetStateAction<boolean>>;
     setAudioMute: React.Dispatch<React.SetStateAction<boolean>>;
     startWebcam: () => void;
+    stopWebcam: ()=> void;
 }
 
 // Meeting exist page Component
@@ -22,6 +23,7 @@ function MeetingLeft({
     setAudioMute,
     setVideoMute,
     startWebcam,
+    stopWebcam
 }: PropsType) {
     // Count state
     const [countdown, setCountdown] = useState(30);
@@ -58,6 +60,7 @@ function MeetingLeft({
             setCountdown((prev) => {
                 if (prev <= 1) {
                     clearInterval(timer);
+                    stopWebcam()
                     navigate(`/${role}/meet`);
                     return 0;
                 }
@@ -128,7 +131,10 @@ function MeetingLeft({
                         Rejoin
                     </Button>
                     <Button
-                        onClick={() => navigate(`/${role}/meet`)}
+                        onClick={() => {
+                            stopWebcam();
+                            navigate(`/${role}/meet`)
+                        }}
                         className="h-11 disabled:cursor-not-allowed mb-12"
                     >
                         Return to home screen

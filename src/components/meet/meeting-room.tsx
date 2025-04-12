@@ -58,6 +58,7 @@ interface PropsType {
         audioTrack: MediaStreamTrack | null,
         screenTrack: MediaStreamTrack | null
     ) => Promise<void>;
+    stopWebcam : ()=>void
 }
 
 // Meeting room Component
@@ -71,6 +72,7 @@ function MeetingRoom({
     meet,
     streamRef,
     videoRef,
+    stopWebcam,
     // connectAndProduceMedia,
     // goCreateTransport,
     peers,
@@ -95,18 +97,7 @@ function MeetingRoom({
     const isPinnedSelf = selectedPeer === socket.id;
 
     // Peers list
-    const [isPeersListOpen, setPeersList] = useState<boolean>(true);
-
-    // Stop webcam
-    const stopWebcam = async () => {
-        if (streamRef.current && videoRef.current) {
-            videoRef.current.srcObject = null;
-            streamRef.current.getTracks().forEach((track) => track.stop()); // Stop camera
-
-            // Update stream
-            streamRef.current = null;
-        }
-    };
+    const [isPeersListOpen, setPeersList] = useState<boolean>(false);
 
     // Handle leave
     const handleLeave = () => {
