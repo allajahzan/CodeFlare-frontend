@@ -26,7 +26,7 @@ interface Propstype {
 }
 
 // Selfie Component
-function SelfieModal({ children, selectedAttedence }: Propstype) {
+function SnapshotsModal({ children, selectedAttedence }: Propstype) {
     return (
         <Dialog>
             <DialogTrigger>{children}</DialogTrigger>
@@ -60,7 +60,7 @@ function SelfieModal({ children, selectedAttedence }: Propstype) {
                                 text="Tea break"
                                 iconClassName="text-blue-600"
                                 iconDivClassName="bg-blue-400/20 group-hover:bg-blue-400/30"
-                                className="w-full shadow-sm dark:border-transparent dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark"
+                                className="w-full shadow-sm border dark:border-transparent dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark"
                             />
                         </AccordionTrigger>
                         <AccordionContent>
@@ -109,7 +109,7 @@ function SelfieModal({ children, selectedAttedence }: Propstype) {
                                 text="Lunch break"
                                 iconClassName="text-orange-600"
                                 iconDivClassName="bg-orange-400/20 group-hover:bg-orange-400/30"
-                                className="w-full shadow-sm dark:border-transparent dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark"
+                                className="w-full shadow-sm border dark:border-transparent dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark"
                             />
                         </AccordionTrigger>
                         <AccordionContent>
@@ -158,7 +158,7 @@ function SelfieModal({ children, selectedAttedence }: Propstype) {
                                 text="Evening break"
                                 iconClassName="text-yellow-600"
                                 iconDivClassName="bg-yellow-400/20 group-hover:bg-yellow-400/30"
-                                className="w-full shadow-sm dark:border-transparent dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark"
+                                className="w-full shadow-sm border dark:border-transparent dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark"
                             />
                         </AccordionTrigger>
                         <AccordionContent>
@@ -200,4 +200,4 @@ function SelfieModal({ children, selectedAttedence }: Propstype) {
     );
 }
 
-export default SelfieModal;
+export default SnapshotsModal;

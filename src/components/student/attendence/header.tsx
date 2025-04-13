@@ -10,7 +10,7 @@ interface Propstype {
 }
 
 // Calendeer header Component
-function CalendarHeaderForStudent({
+function CalenderHeader({
     currentDate,
     onPreviousMonth,
     onNextMonth,
@@ -51,4 +51,4 @@ function CalendarHeaderForStudent({
     );
 }
 
-export default CalendarHeaderForStudent;
+export default CalenderHeader;

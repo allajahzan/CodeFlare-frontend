@@ -1,12 +1,11 @@
-import {
-    CalendarDaysIcon,
-    Filter,
-    ScanEye,
-} from "lucide-react";
-import { useSelector } from "react-redux";
-import { stateType } from "@/redux/store";
+import { CalendarDaysIcon, Filter, ScanEye } from "lucide-react";
 import DatePicker from "@/components/instructor/reviews/date-picker";
-import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+} from "@/components/ui/select";
 import FilterAttendence from "./filter";
 import { SelectValue } from "@radix-ui/react-select";
 import { IStudent } from "@/types/student";
@@ -43,9 +42,6 @@ function CalenderHeader({
     students,
     fetchingStudents,
 }: Propstype) {
-    // Redux
-    const role = useSelector((state: stateType) => state.role);
-
     return (
         <div
             className={`${view === "calender-view" && "bg-background dark:bg-sidebar-background"
@@ -57,7 +53,6 @@ function CalenderHeader({
                         : "p-0"
                     }`}
             >
-                
                 {/* Buttons */}
                 <div className={`flex gap-1 ${view === "table-view" && "w-full"}`}>
                     {/* Select Date */}
@@ -105,47 +100,44 @@ function CalenderHeader({
                     )}
 
                     {/* Filter modal */}
-                    {role === "coordinator" && (
-                        <Select>
-                            <SelectTrigger
-                                title="Filter"
-                                className="w-[41.6px] h-[41.6px] bg-background dark:hover:border-customBorder-dark hover:bg-muted dark:hover:bg-sidebar shadow-none"
-                            >
-                                <Filter className="w-4 h-4 text-foreground" />
-                            </SelectTrigger>
-                            <SelectContent className="w-[220px]" align="end">
-                                <FilterAttendence
-                                    selectedBatch={selectedBatch}
-                                    setSelectedBatch={setSelectedBatch}
-                                    selectedStudent={selectedStudent}
-                                    setSelectedStudent={setSelectedStudent}
-                                    students={students}
-                                    fetchingStudents={fetchingStudents}
-                                />
-                            </SelectContent>
-                        </Select>
-                    )}
+                    <Select>
+                        <SelectTrigger
+                            title="Filter"
+                            className="w-[41.6px] h-[41.6px] bg-background dark:hover:border-customBorder-dark hover:bg-muted dark:hover:bg-sidebar shadow-none"
+                        >
+                            <Filter className="w-4 h-4 text-foreground" />
+                        </SelectTrigger>
+                        <SelectContent className="w-[220px]" align="end">
+                            <FilterAttendence
+                                selectedBatch={selectedBatch}
+                                setSelectedBatch={setSelectedBatch}
+                                selectedStudent={selectedStudent}
+                                setSelectedStudent={setSelectedStudent}
+                                students={students}
+                                fetchingStudents={fetchingStudents}
+                            />
+                        </SelectContent>
+                    </Select>
 
                     {/* View selecter */}
-                    {role === "coordinator" && (
-                        <Select
-                            onValueChange={(value: "table-view" | "calender-view") =>
-                                setView(value)
-                            }
-                            value={view}
+
+                    <Select
+                        onValueChange={(value: "table-view" | "calender-view") =>
+                            setView(value)
+                        }
+                        value={view}
+                    >
+                        <SelectTrigger
+                            title="View"
+                            className="w-[41.6px] h-[41.6px] bg-background dark:hover:border-customBorder-dark hover:bg-muted dark:hover:bg-sidebar shadow-none"
                         >
-                            <SelectTrigger
-                                title="View"
-                                className="w-[41.6px] h-[41.6px] bg-background dark:hover:border-customBorder-dark hover:bg-muted dark:hover:bg-sidebar shadow-none"
-                            >
-                                <ScanEye className="w-4 h-4 text-foreground" />
-                            </SelectTrigger>
-                            <SelectContent align="end">
-                                <SelectItem value="table-view">Table</SelectItem>
-                                <SelectItem value="calender-view">Calender</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    )}
+                            <ScanEye className="w-4 h-4 text-foreground" />
+                        </SelectTrigger>
+                        <SelectContent align="end">
+                            <SelectItem value="table-view">Table</SelectItem>
+                            <SelectItem value="calender-view">Calender</SelectItem>
+                        </SelectContent>
+                    </Select>
                 </div>
             </div>
         </div>

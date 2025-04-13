@@ -65,13 +65,13 @@ function CoordinatorLayout({ isDrawerOpen }: PropsType) {
                 icon: UsersRound,
                 label: "Students",
             },
-            { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
-            { path: AppRoutes.MEET, icon: Video, label: "Meet" },
             {
                 path: AppRoutes.ATTENDENCE,
                 icon: CalendarClockIcon,
                 label: "Attendence",
             },
+            { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
+            { path: AppRoutes.MEET, icon: Video, label: "Meet" },
             ...(isSmall
                 ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
                 : []),

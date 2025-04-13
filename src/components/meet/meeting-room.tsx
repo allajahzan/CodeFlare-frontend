@@ -1,5 +1,5 @@
-import { socket } from "@/socket/communication/connect";
-import { handRaise, leaveMeet } from "@/socket/communication/videoCallSocket";
+import { socket } from "@/socket/communication/connection";
+import { handRaise, leaveMeet } from "@/socket/communication/videocall-Socket";
 import { motion } from "framer-motion";
 import {
     Hand,

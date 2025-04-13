@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { addMonths, format, subMonths } from "date-fns";
 import Calendar, { IEvent } from "./calender";
 import InfoModal from "./info-modal";
-import CalendarHeaderForStudent from "./header";
+import CalenderHeader from "./header";
 
 // Sample attendance data
 const attendanceData: Record<string, any> = {
@@ -74,7 +74,7 @@ function AttendenceList() {
             className={`w-full h-full flex flex-col gap-5 overflow-y-auto no-scrollbar p-5 pt-0`}
         >
             {/* Calender Header */}
-            <CalendarHeaderForStudent
+            <CalenderHeader
                 currentDate={currentDate}
                 onPreviousMonth={handlePreviousMonth}
                 onNextMonth={handleNextMonth}

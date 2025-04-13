@@ -11,7 +11,7 @@ import {
     Hourglass,
     LogOut,
 } from "lucide-react";
-import SelfieModal from "./selfie-modal";
+import SnapshotsModal from "./snapshots-modal";
 import {
     Accordion,
     AccordionContent,
@@ -123,7 +123,7 @@ function AttendenceDetails({ selectedAttendence }: PropsType) {
             </p>
 
             {/* Selfie updated with modal */}
-            <SelfieModal
+            <SnapshotsModal
                 children={
                     <div>
                         <InfoCard
@@ -132,7 +132,7 @@ function AttendenceDetails({ selectedAttendence }: PropsType) {
                             text="Break snapshots"
                             iconClassName="text-blue-600"
                             iconDivClassName="bg-blue-400/20 group-hover:bg-blue-400/30"
-                            className="w-full shadow-sm dark:border-transparent dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark"
+                            className="w-full shadow-sm border dark:border-transparent dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark"
                         />
                     </div>
                 }
@@ -158,7 +158,7 @@ function AttendenceDetails({ selectedAttendence }: PropsType) {
                             text="Reason"
                             iconClassName="text-orange-600"
                             iconDivClassName="bg-orange-400/20 group-hover:bg-orange-400/30"
-                            className="w-full shadow-sm dark:border-transparent dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark"
+                            className="w-full shadow-sm border dark:border-transparent dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark"
                         />
                     </AccordionTrigger>
                     <AccordionContent className="mt-3">

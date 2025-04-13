@@ -1,5 +1,5 @@
 import { IUser } from "@/types/attendence";
-import { socket } from "./connect";
+import { socket } from "./connection";
 import * as mediasoupClient from "mediasoup-client";
 import { handleCustomError } from "@/utils/error";
 

@@ -3,7 +3,7 @@ import { toast } from "@/hooks/use-toast";
 import { sideBarVisibilityAction, stateType } from "@/redux/store";
 import { fetchData } from "@/service/api-service";
 import axiosInstance from "@/service/axios-instance";
-import { registerUser } from "@/socket/communication/chatSocket";
+import { registerUser } from "@/socket/communication/chat-socket";
 import { IBatch } from "@/types/batch";
 import { handleCustomError } from "@/utils/error";
 import { createContext, ReactNode, useState, useLayoutEffect } from "react";

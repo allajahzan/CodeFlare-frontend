@@ -51,14 +51,14 @@ function AdminLayout({ isDrawerOpen }: PropsType) {
         () => [
             { path: AppRoutes.DASHBOARD, icon: LayoutDashboard, label: "Dashboard" },
             { path: AppRoutes.ADMIN_USERS, icon: UsersRound, label: "Users" },
+            { path: AppRoutes.ADMIN_BATCHES, icon: School, label: "Batches" },
+            { path: AppRoutes.ADMIN_WEEKS, icon: CalendarDaysIcon, label: "Weeks" },
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
             { path: AppRoutes.MEET, icon: Video, label: "Meet" },
+            // { path: AppRoutes.ADMIN_INVOICES, icon: CreditCard, label: "Invoices" },
             ...(isSmall
                 ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
                 : []),
-            { path: AppRoutes.ADMIN_BATCHES, icon: School, label: "Batches" },
-            { path: AppRoutes.ADMIN_WEEKS, icon: CalendarDaysIcon, label: "Weeks" },
-            // { path: AppRoutes.ADMIN_INVOICES, icon: CreditCard, label: "Invoices" },
         ],
         [isSmall]
     );

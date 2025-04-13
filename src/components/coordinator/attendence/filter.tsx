@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { IUserContext, UserContext } from "@/context/user-context";
-import { Loader2, School, UsersRound } from "lucide-react";
+import { Loader2, School, UsersRound, X } from "lucide-react";
 import {
     Select,
     SelectContent,
@@ -117,6 +117,21 @@ function FilterAttendence({
                 {!fetchingStudents && (
                     <UsersRound className="w-4 h-4 absolute left-3 top-[9px] text-muted-foreground" />
                 )}
+            </div>
+
+            {/* Clear */}
+            <div className="relative w-full">
+                <div
+                    onClick={() => {
+                        setSelectedBatch(null);
+                        setSelectedStudent("");
+                    }}
+                    className="text-foreground font-medium p-2 pl-9 relative w-full bg-transparent shadow-none hover:bg-muted border-none rounded-lg"
+                >
+                    <p>Clear</p>
+                </div>
+
+                <X className="w-4 h-4 absolute left-3 top-[10px] text-muted-foreground" />
             </div>
         </div>
     );
