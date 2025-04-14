@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, ReactNode } from "react";
-import warningAlarm from "@/assets/music/warning-alarm.mp3";
+// import warningAlarm from "@/assets/music/warning-alarm.mp3";
 import { toast } from "@/hooks/use-toast";
 import {
     reciveSnapshotMessage,
@@ -24,8 +24,9 @@ const SnapshotContextProvider = ({ children }: { children: ReactNode }) => {
     // Alaram
     useEffect(() => {
         if (snapshotMessage) {
-            const audio = new Audio(warningAlarm);
-            audio.play();
+            // const audio = new Audio(warningAlarm);
+            // audio.load();
+            // audio.play();
 
             toast({ title: snapshotMessage });
         }
@@ -41,7 +42,7 @@ const SnapshotContextProvider = ({ children }: { children: ReactNode }) => {
 
             const item = {
                 value: data.message,
-                expiry: now.getTime() + 10 * 60 * 1000,
+                expiry: now.getTime() + 5 * 60 * 1000,
             };
 
             // Update localstorage with expiry time of 5 minutes
