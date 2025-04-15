@@ -177,12 +177,17 @@ function WebCamModal({
                 const { latitude, longitude } = await getLatitudeAndLongitude(); // Get latitude and longitude
 
                 // Get readable location
-                const location = await getReadableLocation(latitude, longitude);
+                const locationPromise = getReadableLocation(latitude, longitude);
 
                 // Upload to cloudinary
                 let imageUrl;
 
-                const data = await uploadImageToCloudinary(file);
+                const dataPromise = uploadImageToCloudinary(file);
+
+                const [location, data] = await Promise.all([
+                    locationPromise,
+                    dataPromise,
+                ]);
 
                 if (data) {
                     imageUrl = data.imageUrl;
