@@ -6,9 +6,12 @@ import { IAttendence } from "@/types/attendence";
 import { convertTo12HourFormat } from "@/utils/time-converter";
 import {
     Camera,
+    Check,
+    ChevronDown,
     Clock,
     FileSpreadsheetIcon,
     Hourglass,
+    Loader2,
     LogOut,
 } from "lucide-react";
 import SnapshotsModal from "./snapshots-modal";
@@ -21,13 +24,96 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { handleCustomError } from "@/utils/error";
+import { patchData } from "@/service/api-service";
+import ApiEndpoints from "@/constants/api-endpoints";
+import { stateType } from "@/redux/store";
+import { useSelector } from "react-redux";
+import { toast } from "@/hooks/use-toast";
+import { useEffect, useState } from "react";
 
 // Interface for Props
 interface PropsType {
+    setAttendences: React.Dispatch<React.SetStateAction<[] | IAttendence[]>>;
     selectedAttendence: IAttendence;
+    setSelectedAttendence: React.Dispatch<
+        React.SetStateAction<IAttendence | null>
+    >;
 }
 // Attendence Details Component
-function AttendenceDetails({ selectedAttendence }: PropsType) {
+function AttendenceDetails({
+    setAttendences,
+    selectedAttendence,
+    setSelectedAttendence,
+}: PropsType) {
+    // Redux
+    const role = useSelector((state: stateType) => state.role);
+
+    // Status state
+    const [status, setStatus] = useState<"Pending" | "Present" | "Absent" | "">(
+        ""
+    );
+
+    const [updating, setUpdating] = useState<boolean>(false);
+
+    // Update status
+    useEffect(() => {
+        const updateStatus = async () => {
+            setUpdating(true);
+
+            try {
+                // Send request
+                const resp = await patchData(
+                    ApiEndpoints.ATTENDENCE_STATUS + `/${selectedAttendence._id}`,
+                    { status },
+                    role
+                );
+
+                // Success response
+                if (resp && resp.status === 200) {
+                    // Upadate selected attendence
+                    setSelectedAttendence((prev: IAttendence | null) => {
+                        if (!prev) return null;
+                        return { ...prev, status: status as any };
+                    });
+
+                    // Update selected attendence in attendence list
+                    setAttendences((prev: IAttendence[]) => {
+                        return prev.map((attendence: IAttendence) => {
+                            if (attendence._id !== selectedAttendence._id) {
+                                return attendence;
+                            }
+                            return { ...attendence, status: status as any };
+                        });
+                    });
+
+                    toast({
+                        title: `${selectedAttendence.user.name
+                            }'s attendence marked as ${status.toLowerCase()}.`,
+                    });
+
+                    setUpdating(false);
+                    setStatus("");
+                }
+            } catch (err: unknown) {
+                setUpdating(false);
+                setStatus("");
+
+                handleCustomError(err);
+            }
+        };
+
+        status && updateStatus();
+    }, [status]);
+
     return (
         <div className="w-full relative p-5 flex flex-col gap-3 border bg-background dark:bg-sidebar-background rounded-2xl shadow-sm overflow-hidden">
             {/* Student info */}
@@ -41,18 +127,47 @@ function AttendenceDetails({ selectedAttendence }: PropsType) {
                     }}
                 />
 
-                <Badge
-                    className={cn(
-                        "self-start text-sm font-semibold rounded-full duration-0",
-                        selectedAttendence.status === "Present"
-                            ? "text-green-600 bg-green-400/20 hover:bg-green-400/30"
-                            : selectedAttendence.status === "Absent"
-                                ? "text-red-600 bg-red-400/20 hover:bg-red-400/30"
-                                : "text-yellow-600 bg-yellow-400/20 hover:bg-yellow-400/30"
-                    )}
-                >
-                    {selectedAttendence.status || "Pending"}
-                </Badge>
+                <DropdownMenu>
+                    <DropdownMenuTrigger className="self-start flex items-center gap-2">
+                        <Badge
+                            className={cn(
+                                "text-sm font-semibold rounded-full duration-0",
+                                selectedAttendence.status === "Present"
+                                    ? "text-green-600 bg-green-400/20 hover:bg-green-400/30"
+                                    : selectedAttendence.status === "Absent"
+                                        ? "text-red-600 bg-red-400/20 hover:bg-red-400/30"
+                                        : "text-yellow-600 bg-yellow-400/20 hover:bg-yellow-400/30"
+                            )}
+                        >
+                            {selectedAttendence.status || "Pending"}
+                        </Badge>
+                        <ChevronDown className="w-4 h-5 text-black" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
+                        <DropdownMenuLabel>Status</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        {["Pending", "Absent", "Present"].map((item, index) => (
+                            <DropdownMenuItem
+                                key={index}
+                                onClick={(event) => {
+                                    event.preventDefault();
+                                    if (item === selectedAttendence.status) return;
+                                    setStatus(item as typeof status);
+                                }}
+                                className="relative"
+                            >
+                                {status === item && updating && (
+                                    <Loader2 className="w-4 h-5 text-foreground animate-spin" />
+                                )}
+                                {status === item && updating ? "Processing" : item}
+
+                                {selectedAttendence.status === item && (
+                                    <Check className="absolute right-2 w-4 h-4 text-foreground" />
+                                )}
+                            </DropdownMenuItem>
+                        ))}
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </div>
 
             {/* Time line*/}

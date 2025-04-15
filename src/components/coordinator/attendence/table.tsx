@@ -203,10 +203,6 @@ function Table({ view, setView }: Propstype) {
                                                     return (
                                                         <div className="p-1 rounded-full bg-yellow-400/40 group-hover:bg-yellow-400/50"></div>
                                                     );
-                                                case "Late":
-                                                    return (
-                                                        <div className="p-1 rounded-full bg-purple-400/40 group-hover:bg-purple-400/50"></div>
-                                                    );
                                                 case "Absent":
                                                     return (
                                                         <div className="p-1 rounded-full bg-red-400/40 group-hover:bg-red-400/50"></div>
@@ -246,7 +242,11 @@ function Table({ view, setView }: Propstype) {
             <div className="h-full grid grid-rows-[auto,1fr,auto] space-y-5 col-span-2 overflow-hidden">
                 {/* Scroll container*/}
                 {selectedAttendence && (
-                    <AttendenceDetails selectedAttendence={selectedAttendence} />
+                    <AttendenceDetails
+                        setAttendences={setAttendences}
+                        selectedAttendence={selectedAttendence}
+                        setSelectedAttendence={setSelectedAttendence}
+                    />
                 )}
 
                 {/* No attendence selected */}

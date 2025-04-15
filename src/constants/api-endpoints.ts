@@ -38,6 +38,7 @@ enum ApiEndpoints {
 
     // Attendence APIs - student service
     ATTENDENCE = '/student/attendence',
+    ATTENDENCE_STATUS = '/student/attendence/update-status',
     CHECK_IN_OUT = "/student/attendence/check-in-out",
     SNAP_SHOT = "/student/attendence/upload-snapshot"
 }

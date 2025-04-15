@@ -65,12 +65,14 @@ function SnapshotsModal({ children, selectedAttedence }: Propstype) {
                         </AccordionTrigger>
                         <AccordionContent>
                             <div className="relative">
-                                <div className="w-full h-[300px] flex items-center justify-center dark:bg-sidebar rounded-xl p-2 border dark:border-transparent shadow-sm overflow-hidden">
+                                <div className="w-full h-[280px] flex items-center justify-center dark:bg-sidebar rounded-xl p-2 border dark:border-transparent shadow-sm overflow-hidden">
                                     {/* Tea break */}
                                     {selectedAttedence.selfies?.[0]?.name === "Tea" ? (
                                         <>
                                             <Badge className="p-1 px-2 absolute max-w-max bottom-5 left-5 right-5 text-xs text-black font-semibold bg-white hover:bg-muted dark:hover:bg-zinc-200 shadow-md rounded-full overflow-hidden cursor-pointer">
-                                                <MapPin className="w-3 h-3 text-black flex-shrink-0" />
+                                                <p className="self-start p-[3px]">
+                                                    <MapPin className="w-4 h-4 text-black flex-shrink-0" />
+                                                </p>
                                                 &nbsp;
                                                 <p className="text-sm font-medium">
                                                     {selectedAttedence.selfies[0].location
@@ -117,12 +119,14 @@ function SnapshotsModal({ children, selectedAttedence }: Propstype) {
                         </AccordionTrigger>
                         <AccordionContent>
                             <div className="relative">
-                                <div className="w-full h-[300px] flex items-center justify-center dark:bg-sidebar rounded-xl p-2 border dark:border-transparent shadow-sm overflow-hidden">
+                                <div className="w-full h-[280px] flex items-center justify-center dark:bg-sidebar rounded-xl p-2 border dark:border-transparent shadow-sm overflow-hidden">
                                     {/* Lunch break */}
                                     {selectedAttedence.selfies?.[1]?.name === "Lunch" ? (
                                         <>
                                             <Badge className="p-1 px-2 max-w-max absolute bottom-5 left-5 right-5 text-xs text-black font-semibold bg-white hover:bg-muted dark:hover:bg-zinc-200 shadow-md rounded-full overflow-hidden cursor-pointer">
-                                                <MapPin className="w-3 h-3 text-black flex-shrink-0" />
+                                                <p className="self-start p-[3px]">
+                                                    <MapPin className="w-4 h-4 text-black flex-shrink-0" />
+                                                </p>
                                                 &nbsp;
                                                 <p className="text-sm font-medium">
                                                     {selectedAttedence.selfies[1].location
@@ -169,12 +173,14 @@ function SnapshotsModal({ children, selectedAttedence }: Propstype) {
                         </AccordionTrigger>
                         <AccordionContent>
                             <div className="relative">
-                                <div className="w-full h-[300px] flex items-center justify-center dark:bg-sidebar rounded-xl p-2 border dark:border-transparent shadow-sm overflow-hidden">
+                                <div className="w-full h-[280px] flex items-center justify-center dark:bg-sidebar rounded-xl p-2 border dark:border-transparent shadow-sm overflow-hidden">
                                     {/* Evening break */}
                                     {selectedAttedence.selfies?.[2]?.name === "Evening" ? (
                                         <>
                                             <Badge className="p-1 px-2 max-w-max absolute bottom-5 left-5 right-5 text-xs text-black font-semibold bg-white hover:bg-muted dark:hover:bg-zinc-200 shadow-md rounded-full overflow-hidden cursor-pointer">
-                                                <MapPin className="w-3 h-3 text-black flex-shrink-0" />
+                                                <p className="self-start p-[3px]">
+                                                    <MapPin className="w-4 h-4 text-black flex-shrink-0" />
+                                                </p>
                                                 &nbsp;
                                                 <p className="text-sm font-medium">
                                                     {selectedAttedence.selfies[2].location
