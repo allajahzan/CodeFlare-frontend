@@ -86,11 +86,11 @@ function SnapshotsModal({ children, selectedAttedence }: Propstype) {
                                                 className="h-full w-full object-cover rounded-lg"
                                                 alt=""
                                             />
-                                            <div className="absolute top-0 right-0 p-5">
+                                            {/* <div className="absolute top-0 right-0 p-5">
                                                 <Button className="bg-white hover:bg-muted shadow-md text-black">
                                                     Verify
                                                 </Button>
-                                            </div>
+                                            </div> */}
                                         </>
                                     ) : (
                                         <p className="text-foreground font-medium text-sm">
@@ -140,11 +140,11 @@ function SnapshotsModal({ children, selectedAttedence }: Propstype) {
                                                 className="h-full w-full object-cover rounded-lg"
                                                 alt=""
                                             />
-                                            <div className="absolute top-0 right-0 p-5">
+                                            {/* <div className="absolute top-0 right-0 p-5">
                                                 <Button className="bg-white hover:bg-muted shadow-md text-black">
                                                     Verify
                                                 </Button>
-                                            </div>
+                                            </div> */}
                                         </>
                                     ) : (
                                         <p className="text-foreground font-medium text-sm">
@@ -194,11 +194,11 @@ function SnapshotsModal({ children, selectedAttedence }: Propstype) {
                                                 className="h-full w-full object-cover rounded-lg"
                                                 alt=""
                                             />
-                                            <div className="absolute top-0 right-0 p-5">
+                                            {/* <div className="absolute top-0 right-0 p-5">
                                                 <Button className="bg-white hover:bg-muted shadow-md text-black">
                                                     Verify
                                                 </Button>
-                                            </div>
+                                            </div> */}
                                         </>
                                     ) : (
                                         <p className="text-foreground font-medium text-sm">

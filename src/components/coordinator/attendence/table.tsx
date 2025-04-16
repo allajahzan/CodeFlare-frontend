@@ -123,7 +123,7 @@ function Table({ view, setView }: Propstype) {
             {/* Left side*/}
             <div className="h-[calc(100vh-108px)] sticky top-0 bg-background dark:bg-sidebar-background p-5 border flex flex-col gap-5 rounded-2xl shadow-sm overflow-hidden">
                 {/* Header */}
-                <CardHeader count={4} heading="Attedence list" />
+                <CardHeader count={attendances.length} heading="Attedence list" />
 
                 {/* Filter and view */}
                 <CalenderHeader
