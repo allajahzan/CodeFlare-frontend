@@ -208,7 +208,7 @@ function Attendence() {
                     </div>
 
                     {/* Snapshot Message */}
-                    {snapshotMessage && (
+                    {snapshotMessage && isCheckedIn &&(
                         <ToolTip
                             text={snapshotMessage}
                             action={() => setOpen(true)}

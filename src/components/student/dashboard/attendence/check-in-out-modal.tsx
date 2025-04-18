@@ -151,6 +151,7 @@ function CheckedInOutModal({ children }: Propstype) {
                     <div className="w-full flex items-center justify-end gap-2">
                         <Button
                             onClick={() => setOpen(false)}
+                            type="button"
                             className="h-11 w-full transition-all duration-200 disabled:cursor-not-allowed"
                         >
                             Cancel

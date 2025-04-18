@@ -5,7 +5,6 @@ import AdminRoutes from "./routes/admin-routes";
 import StudentRoutes from "./routes/student-routes";
 import CoordinatorRoutes from "./routes/coordinator-routes";
 import InstructorRoutes from "./routes/instructor-routes";
-import { SnapshotContextProvider } from "./context/snapshot-context";
 
 // App Component
 function App() {
@@ -16,7 +15,7 @@ function App() {
 
             {/* Routes */}
             <Routes>
-                <Route path="/*" element={<SnapshotContextProvider><StudentRoutes /></SnapshotContextProvider>} />
+                <Route path="/*" element={<StudentRoutes />} />
                 <Route path="/admin/*" element={<AdminRoutes />} />
                 <Route path="/coordinator/*" element={<CoordinatorRoutes />} />
                 <Route path="/instructor/*" element={<InstructorRoutes />} />

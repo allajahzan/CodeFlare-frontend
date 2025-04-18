@@ -16,7 +16,6 @@ import {
 import InfoCard from "@/components/common/other-cards/info-card";
 import { CameraIcon, Eye, MapPin, Minus, Plus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { IAttendence } from "@/types/attendence";
 
 // Interface Props

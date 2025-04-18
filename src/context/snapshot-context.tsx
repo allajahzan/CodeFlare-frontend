@@ -42,10 +42,10 @@ const SnapshotContextProvider = ({ children }: { children: ReactNode }) => {
 
             const item = {
                 value: data.message,
-                expiry: now.getTime() + 5 * 60 * 1000,
+                expiry: now.getTime() + 10 * 60 * 1000,
             };
 
-            // Update localstorage with expiry time of 5 minutes
+            // Update localstorage with expiry time of 10 minutes
             localStorage.setItem("snapshotMessage", JSON.stringify(item));
         });
 
