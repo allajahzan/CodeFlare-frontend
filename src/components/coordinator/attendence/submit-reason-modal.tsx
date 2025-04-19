@@ -21,9 +21,8 @@ interface PropsType {
         customStatus: "Pending" | "Present" | "Absent" | "Late" | "",
         customReason: string | null
     ) => Promise<void>;
-    submiting: boolean;
-    setSubmiting: (val: boolean) => void;
     status: "Pending" | "Present" | "Absent" | "Late" | "";
+    submiting: boolean;
 }
 
 // Reason Modal Component
@@ -31,9 +30,8 @@ function SubmitReasonModal({
     onClose,
     open,
     onSubmit,
-    submiting,
-    setSubmiting,
     status,
+    submiting,
 }: PropsType) {
     // Form state
     const [reason, setReason] = useState("");
@@ -43,11 +41,8 @@ function SubmitReasonModal({
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        setSubmiting(true);
-
         if (!reason.trim()) {
             setError(true);
-            setSubmiting(false);
             return;
         }
 
@@ -115,6 +110,7 @@ function SubmitReasonModal({
                             Cancel
                         </Button>
                         <Button
+                            type="submit"
                             disabled={submiting}
                             className="w-full h-11 transition-all duration-200 disabled:cursor-not-allowed"
                         >

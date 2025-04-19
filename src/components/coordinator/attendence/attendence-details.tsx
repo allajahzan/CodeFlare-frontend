@@ -11,7 +11,9 @@ import {
     FileSpreadsheetIcon,
     Hourglass,
     Loader2,
+    LogIn,
     LogOut,
+    LucideCheckCircle2,
 } from "lucide-react";
 import SnapshotsModal from "./snapshots-modal";
 import { Label } from "@/components/ui/label";
@@ -32,7 +34,8 @@ import { useSelector } from "react-redux";
 import { toast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
 import ViewReasonModal from "./view-reason-modal";
-import ReasonModal from "./submit-reason-modal";
+import SubmitReasonModal from "./submit-reason-modal";
+import { Button } from "@/components/ui/button";
 
 // Interface for Props
 interface PropsType {
@@ -58,10 +61,11 @@ function AttendenceDetails({
 
     // Reason submit modal states
     const [open, setOpen] = useState<boolean>(false);
-    const [submiting, setSubmiting] = useState<boolean>(false);
 
-    // Updating state
-    const [updating, setUpdating] = useState(false);
+    // Requesting states
+    const [updating, setUpdating] = useState<boolean>(false);
+    const [submiting, setSubmiting] = useState<boolean>(false);
+    const [marking, setMarking] = useState<boolean>(false);
 
     // Handle status change
     const handleStatusChange = (
@@ -81,6 +85,7 @@ function AttendenceDetails({
         customReason: string | null
     ) => {
         setUpdating(true);
+        setSubmiting(true);
         try {
             // Send request
             const resp = await patchData(
@@ -142,6 +147,66 @@ function AttendenceDetails({
         }
     };
 
+    // Handle attendence (check-in or check-out)
+    const handleAttendence = async () => {
+        try {
+            // If already checked-in or checked-out
+            if(selectedAttendence.checkIn && selectedAttendence.checkOut) return;
+            
+            setMarking(true);
+
+            const activity = selectedAttendence.checkIn ? "checkOut" : "checkIn";
+
+            // Send request
+            const resp = await patchData(
+                ApiEndpoints.CHECK_IN_OUT +
+                `?attendanceId=${selectedAttendence?._id}&activity=${activity}`,
+                {},
+                role
+            );
+
+            // Success response
+            if (resp && resp.status === 200) {
+                const data = resp.data?.data;
+
+                // Update selected attendence
+                setSelectedAttendence((prev: IAttendence | null) => {
+                    if (!prev) return null;
+                    return {
+                        ...prev,
+                        ...(activity === "checkIn"
+                            ? { checkIn: data.checkIn }
+                            : { checkOut: data.checkOut }),
+                    };
+                });
+
+                // Update selected attendence in attendence list
+                setAttendences((prev: IAttendence[]) => {
+                    return prev.map((attendence: IAttendence) => {
+                        if (attendence._id !== selectedAttendence._id) {
+                            return attendence;
+                        }
+                        return {
+                            ...attendence,
+                            ...(activity === "checkIn"
+                                ? { checkIn: data.checkIn }
+                                : { checkOut: data.checkOut }),
+                        };
+                    });
+                });
+
+                toast({
+                    title: `${selectedAttendence.user.name}'s ${activity === "checkIn" ? "check-in" : "check-out"
+                        } was recorded.`,
+                });
+            }
+        } catch (err: unknown) {
+            handleCustomError(err);
+        } finally {
+            setMarking(false);
+        }
+    };
+
     // Auto-update when status is not Absent
     useEffect(() => {
         if (status && !["Absent", "Late"].includes(status)) {
@@ -168,7 +233,9 @@ function AttendenceDetails({
                             ? "text-green-600 bg-green-400/20 hover:bg-green-400/30"
                             : selectedAttendence.status === "Absent"
                                 ? "text-red-600 bg-red-400/20 hover:bg-red-400/30"
-                                : "text-yellow-600 bg-yellow-400/20 hover:bg-yellow-400/30"
+                                : selectedAttendence.status === "Late"
+                                    ? "text-blue-600 bg-blue-400/20 hover:bg-blue-400/30"
+                                    : "text-yellow-600 bg-yellow-400/20 hover:bg-yellow-400/30"
                     )}
                 >
                     {selectedAttendence.status}
@@ -314,14 +381,38 @@ function AttendenceDetails({
                         Attendence
                     </Label>
 
-                    {/* Attendence */}
-                    <Input
-                        className="text-foreground text-center font-medium p-5 pl-3 cursor-pointer border-transparent bg-muted dark:bg-sidebar shadow-sm"
-                        placeholder="Attendence"
-                        value={selectedAttendence.checkIn ? "check-out" : "check-in"}
-                        readOnly
-                        disabled={selectedAttendence.checkOut ? true : false}
-                    />
+                    <Button
+                        className={cn(
+                            "h-11 bg-muted dark:bg-sidebar hover:bg-muted dark:hover:bg-muted text-foreground",
+                            selectedAttendence.checkOut && "cursor-not-allowed opacity-60 dark:hover:bg-sidebar"
+                        )}
+                        onClick={handleAttendence}
+                        // disabled={selectedAttendence.checkOut ? true : false}
+                    >
+                        {marking ? (
+                            <div className="flex items-center gap-2">
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                                Processing...
+                            </div>
+                        ) : selectedAttendence.checkIn ? (
+                            selectedAttendence.checkOut ? (
+                                <span className="flex items-center gap-2">
+                                    Checked In & Out
+                                    <LucideCheckCircle2 className="text-green-600" />
+                                </span>
+                            ) : (
+                                <span className="flex items-center gap-2">
+                                    Check-Out
+                                    <LogIn className="rotate-180 text-red-600" />
+                                </span>
+                            )
+                        ) : (
+                            <span className="flex items-center gap-2 text-blue-600">
+                                Check-In
+                                <LogIn />
+                            </span>
+                        )}
+                    </Button>
                 </div>
 
                 <div className="space-y-2 relative text-start w-full flex flex-col">
@@ -387,15 +478,14 @@ function AttendenceDetails({
 
             {/* Submit reason modal */}
             {open && (
-                <ReasonModal
+                <SubmitReasonModal
                     open={open}
                     onClose={() => {
                         setOpen(false);
                     }}
                     onSubmit={submitStatusUpdate}
-                    submiting={submiting}
-                    setSubmiting={setSubmiting}
                     status={status}
+                    submiting={submiting}
                 />
             )}
         </div>

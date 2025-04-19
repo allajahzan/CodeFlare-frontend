@@ -69,10 +69,10 @@ function ViewReasonModal({
                         <div className="p-2 bg-muted rounded-full">
                             <FileSpreadsheetIcon className="w-4 h-4" />
                         </div>
-                        <span>Reason for late/Absent</span>
+                        <span>Reason for absent/late</span>
                     </DialogTitle>
                     <DialogDescription className="text-muted-foreground font-medium">
-                        This is the reason why student is late/absent.
+                        This is the reason why student is absent/late.
                     </DialogDescription>
                 </DialogHeader>
 

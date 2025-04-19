@@ -208,7 +208,7 @@ function Attendence() {
                     </div>
 
                     {/* Snapshot Message */}
-                    {snapshotMessage && isCheckedIn &&(
+                    {snapshotMessage && isCheckedIn && (
                         <ToolTip
                             text={snapshotMessage}
                             action={() => setOpen(true)}
@@ -274,10 +274,8 @@ function Attendence() {
                                             <Loader2 className="h-4 w-4 animate-spin" />
                                             Loading...
                                         </div>
-                                    ) : isCheckedIn ? (
-                                        "Check-out"
                                     ) : (
-                                        "Check-in"
+                                        "Checked In & Out"
                                     )}
                                 </Button>
                             </div>
