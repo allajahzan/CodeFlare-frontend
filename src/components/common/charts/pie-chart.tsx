@@ -18,12 +18,10 @@ const PieCharts = ({ data, text, className, radius }: PropsType) => {
 
     // Colors for the Pie Chart
     const COLORS = [
-        "rgba(34, 197, 94, 1)",
-        "rgba(239, 68, 68, 1)",
-        "rgba(249, 115, 22, 1)",
-        "rgba(30, 64, 175, 1)",
-        "rgba(6, 182, 212, 1)",
-        "rgba(168, 85, 247, 1)",
+        "rgba(22, 163, 74, 1)", // green-600
+        "rgba(220, 38, 38, 1)", // red-600
+        "rgba(202, 168, 4, 1)", // yellow-600
+        "rgba(30, 64, 175, 1)", // blue-600
     ];
 
     return (
@@ -62,9 +60,12 @@ const PieCharts = ({ data, text, className, radius }: PropsType) => {
                             nameKey="name"
                             cx="50%"
                             cy="50%"
-                            outerRadius={radius? radius : 78}
+                            outerRadius={radius ? radius : 78}
                             fill={theme === "dark" ? "#f5f5f5" : "#18181b"}
                             label
+                            isAnimationActive={true}
+                            animationDuration={1000}
+                            animationEasing="ease-in-out"
                         >
                             {data.map((_, index) => (
                                 <Cell

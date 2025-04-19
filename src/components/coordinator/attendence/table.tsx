@@ -211,6 +211,10 @@ function Table({ view, setView }: Propstype) {
                                                     return (
                                                         <div className="p-1 rounded-full bg-green-400/40 group-hover:bg-green-400/50"></div>
                                                     );
+                                                case "Late":
+                                                    return (
+                                                        <div className="p-1 rounded-full bg-blue-400/40 group-hover:bg-blue-400/50"></div>
+                                                    );
 
                                                 default:
                                                     return null;
@@ -268,6 +272,7 @@ function Table({ view, setView }: Propstype) {
                                 { name: "Present", value: 50 },
                                 { name: "Absent", value: 20 },
                                 { name: "Pending", value: 15 },
+                                { name: "Late", value: 15 },
                             ]}
                             text="Today's overview"
                             className="h-[220px]"

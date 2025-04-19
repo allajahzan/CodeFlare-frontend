@@ -8,22 +8,14 @@ import {
     Camera,
     Check,
     ChevronDown,
-    Clock,
     FileSpreadsheetIcon,
     Hourglass,
     Loader2,
     LogOut,
 } from "lucide-react";
 import SnapshotsModal from "./snapshots-modal";
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -39,6 +31,8 @@ import { stateType } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { toast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
+import ViewReasonModal from "./view-reason-modal";
+import ReasonModal from "./submit-reason-modal";
 
 // Interface for Props
 interface PropsType {
@@ -58,60 +52,101 @@ function AttendenceDetails({
     const role = useSelector((state: stateType) => state.role);
 
     // Status state
-    const [status, setStatus] = useState<"Pending" | "Present" | "Absent" | "">(
-        ""
-    );
+    const [status, setStatus] = useState<
+        "Pending" | "Present" | "Absent" | "Late" | ""
+    >("");
 
-    const [updating, setUpdating] = useState<boolean>(false);
+    // Reason submit modal states
+    const [open, setOpen] = useState<boolean>(false);
+    const [submiting, setSubmiting] = useState<boolean>(false);
 
-    // Update status
-    useEffect(() => {
-        const updateStatus = async () => {
-            setUpdating(true);
+    // Updating state
+    const [updating, setUpdating] = useState(false);
 
-            try {
-                // Send request
-                const resp = await patchData(
-                    ApiEndpoints.ATTENDENCE_STATUS + `/${selectedAttendence._id}`,
-                    { status },
-                    role
-                );
+    // Handle status change
+    const handleStatusChange = (
+        newStatus: "Pending" | "Present" | "Absent" | "Late"
+    ) => {
+        if (newStatus === "Absent" || newStatus === "Late") {
+            setOpen(true);
+            setStatus(newStatus);
+        } else {
+            setStatus(newStatus);
+        }
+    };
 
-                // Success response
-                if (resp && resp.status === 200) {
-                    // Upadate selected attendence
-                    setSelectedAttendence((prev: IAttendence | null) => {
-                        if (!prev) return null;
-                        return { ...prev, status: status as any };
+    // Submit status update
+    const submitStatusUpdate = async (
+        customStatus: "Pending" | "Present" | "Absent" | "Late" | "",
+        customReason: string | null
+    ) => {
+        setUpdating(true);
+        try {
+            // Send request
+            const resp = await patchData(
+                ApiEndpoints.ATTENDENCE_STATUS + `/${selectedAttendence._id}`,
+                { status: customStatus, reason: customReason },
+                role
+            );
+
+            // Success response
+            if (resp && resp.status === 200) {
+                // Updated reason
+                const updatedReason = customReason
+                    ? {
+                        time: `${new Date().getHours()}:${new Date().getMinutes()}`,
+                        description: customReason,
+                    }
+                    : { time: "", description: "" };
+
+                // Update selected attendence
+                setSelectedAttendence((prev: IAttendence | null) => {
+                    if (!prev) return null;
+                    return {
+                        ...prev,
+                        status: customStatus || prev.status,
+                        reason: updatedReason,
+                    };
+                });
+
+                // Update selected attendence in attendence list
+                setAttendences((prev: IAttendence[]) => {
+                    return prev.map((attendence: IAttendence) => {
+                        if (attendence._id !== selectedAttendence._id) {
+                            return attendence;
+                        }
+                        return {
+                            ...attendence,
+                            status: customStatus || attendence.status,
+                            reason: updatedReason,
+                        };
                     });
+                });
 
-                    // Update selected attendence in attendence list
-                    setAttendences((prev: IAttendence[]) => {
-                        return prev.map((attendence: IAttendence) => {
-                            if (attendence._id !== selectedAttendence._id) {
-                                return attendence;
-                            }
-                            return { ...attendence, status: status as any };
-                        });
-                    });
-
+                // Show toast only when status is there
+                if (customStatus) {
                     toast({
                         title: `${selectedAttendence.user.name
-                            }'s attendence marked as ${status.toLowerCase()}.`,
+                            }'s attendance marked as ${customStatus.toLowerCase()}.`,
                     });
-
-                    setUpdating(false);
-                    setStatus("");
                 }
-            } catch (err: unknown) {
-                setUpdating(false);
-                setStatus("");
 
-                handleCustomError(err);
+                setOpen(false);
             }
-        };
+        } catch (err) {
+            handleCustomError(err);
+        } finally {
+            setStatus("");
+            setUpdating(false);
+            setSubmiting(false);
+        }
+    };
 
-        status && updateStatus();
+    // Auto-update when status is not Absent
+    useEffect(() => {
+        if (status && !["Absent", "Late"].includes(status)) {
+            submitStatusUpdate(status, null);
+        }
     }, [status]);
 
     return (
@@ -126,48 +161,18 @@ function AttendenceDetails({
                         profilePic: selectedAttendence.user.profilePic,
                     }}
                 />
-
-                <DropdownMenu>
-                    <DropdownMenuTrigger className="self-start flex items-center gap-2">
-                        <Badge
-                            className={cn(
-                                "text-sm font-semibold rounded-full duration-0",
-                                selectedAttendence.status === "Present"
-                                    ? "text-green-600 bg-green-400/20 hover:bg-green-400/30"
-                                    : selectedAttendence.status === "Absent"
-                                        ? "text-red-600 bg-red-400/20 hover:bg-red-400/30"
-                                        : "text-yellow-600 bg-yellow-400/20 hover:bg-yellow-400/30"
-                            )}
-                        >
-                            {selectedAttendence.status || "Pending"}
-                        </Badge>
-                        <ChevronDown className="w-4 h-5 text-black" />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
-                        <DropdownMenuLabel>Status</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        {["Pending", "Absent", "Present"].map((item, index) => (
-                            <DropdownMenuItem
-                                key={index}
-                                onClick={(event) => {
-                                    event.preventDefault();
-                                    if (item === selectedAttendence.status) return;
-                                    setStatus(item as typeof status);
-                                }}
-                                className="relative"
-                            >
-                                {status === item && updating && (
-                                    <Loader2 className="w-4 h-5 text-foreground animate-spin" />
-                                )}
-                                {status === item && updating ? "Processing" : item}
-
-                                {selectedAttendence.status === item && (
-                                    <Check className="absolute right-2 w-4 h-4 text-foreground" />
-                                )}
-                            </DropdownMenuItem>
-                        ))}
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <Badge
+                    className={cn(
+                        "self-start text-sm font-semibold rounded-full duration-0",
+                        selectedAttendence.status === "Present"
+                            ? "text-green-600 bg-green-400/20 hover:bg-green-400/30"
+                            : selectedAttendence.status === "Absent"
+                                ? "text-red-600 bg-red-400/20 hover:bg-red-400/30"
+                                : "text-yellow-600 bg-yellow-400/20 hover:bg-yellow-400/30"
+                    )}
+                >
+                    {selectedAttendence.status}
+                </Badge>
             </div>
 
             {/* Time line*/}
@@ -255,88 +260,144 @@ function AttendenceDetails({
             />
 
             {/* Reason */}
-            <p className="text-start text-base w-full flex items-center gap-1">
-                Reason
-            </p>
+            {selectedAttendence?.reason?.description ? (
+                <>
+                    <p className="text-start text-base w-full flex items-center gap-1">
+                        Reason
+                    </p>
 
-            {/* Reason */}
-
-            <Accordion type="single" collapsible>
-                <AccordionItem
-                    value="item-1"
-                    className="border-b-0 relative flex flex-col"
-                >
-                    <AccordionTrigger>
-                        <InfoCard
-                            Icon={FileSpreadsheetIcon}
-                            label="Absent / Late"
-                            text="Reason"
-                            iconClassName="text-orange-600"
-                            iconDivClassName="bg-orange-400/20 group-hover:bg-orange-400/30"
-                            className="w-full shadow-sm border dark:border-transparent dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark"
-                        />
-                    </AccordionTrigger>
-                    <AccordionContent className="mt-3">
-                        {selectedAttendence.reason.time && (
-                            <div className="relative flex flex-col gap-3 p-5 border dark:border-transparent bg-background dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark rounded-lg">
-                                {/* Time */}
-                                <div className="space-y-2 relative text-start">
-                                    {/* Label */}
-                                    <Label className="text-sm text-foreground font-medium">
-                                        Time
-                                    </Label>
-
-                                    {/* Time */}
-                                    <div className="relative">
-                                        <Input
-                                            id="time"
-                                            type="text"
-                                            placeholder="Time"
-                                            readOnly
-                                            required
-                                            defaultValue={convertTo12HourFormat(
-                                                selectedAttendence.reason.time
-                                            )}
-                                            className="text-foreground font-medium p-5 pl-9 border"
-                                        />
-                                        <Clock className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
-                                    </div>
-                                </div>
-
-                                {/* Reason */}
-                                <div className="space-y-2 relative text-start">
-                                    {/* Label */}
-                                    <Label className="text-sm text-foreground font-medium">
-                                        Reason
-                                    </Label>
-
-                                    {/* Time */}
-                                    <div className="relative">
-                                        <Textarea
-                                            placeholder="Reason"
-                                            readOnly
-                                            rows={3}
-                                            defaultValue={selectedAttendence.reason.description}
-                                            className="text-foreground font-medium border bg-background resize-none"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
+                    <ViewReasonModal
+                        children={
+                            <InfoCard
+                                Icon={FileSpreadsheetIcon}
+                                label="Absent / Late"
+                                text="Reason"
+                                iconClassName="text-orange-600"
+                                iconDivClassName="bg-orange-400/20 group-hover:bg-orange-400/30"
+                                className="w-full shadow-sm border dark:border-transparent dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark"
+                            />
+                        }
+                        selectedAttendence={selectedAttendence}
+                        onSubmit={submitStatusUpdate}
+                    />
+                </>
+            ) : (
+                <>
+                    <p className="text-start text-base w-full flex items-center gap-1">
+                        Reason
+                    </p>
+                    <InfoCard
+                        Icon={FileSpreadsheetIcon}
+                        label={
+                            selectedAttendence?.status &&
+                                !["Present", "Pending"].includes(selectedAttendence.status)
+                                ? "Didn't submit yet !"
+                                : "Not needed"
+                        }
+                        text="Reason"
+                        iconClassName="text-orange-600"
+                        iconDivClassName="bg-orange-400/20 group-hover:bg-orange-400/30"
+                        className={cn(
+                            "w-full shadow-sm border dark:border-transparent dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark",
+                            !selectedAttendence?.reason?.description &&
+                            "opacity-80 cursor-not-allowed"
                         )}
+                    />
+                </>
+            )}
 
-                        {/* If no reason */}
-                        {!selectedAttendence.reason?.time && (
-                            <p className="text-start text-sm font-medium">
-                                {selectedAttendence.status === "Absent" ? (
-                                    "Reason not submitted"
-                                ) : (
-                                    <>Not needed</>
-                                )}
-                            </p>
-                        )}
-                    </AccordionContent>
-                </AccordionItem>
-            </Accordion>
+            {/* Actions */}
+            <div className="w-full flex items-center gap-2">
+                <div className="space-y-2 relative text-start w-full flex flex-col">
+                    {/* Label */}
+                    <Label className="text-base text-foreground font-semibold">
+                        Attendence
+                    </Label>
+
+                    {/* Attendence */}
+                    <Input
+                        className="text-foreground text-center font-medium p-5 pl-3 cursor-pointer border-transparent bg-muted dark:bg-sidebar shadow-sm"
+                        placeholder="Attendence"
+                        value={selectedAttendence.checkIn ? "check-out" : "check-in"}
+                        readOnly
+                        disabled={selectedAttendence.checkOut ? true : false}
+                    />
+                </div>
+
+                <div className="space-y-2 relative text-start w-full flex flex-col">
+                    {/* Label */}
+                    <Label className="text-base text-foreground font-semibold">
+                        Status
+                    </Label>
+
+                    {/* Status */}
+                    <DropdownMenu>
+                        <DropdownMenuTrigger className="relative w-full">
+                            <Input
+                                id="status"
+                                type="text"
+                                required
+                                autoComplete="off"
+                                value={selectedAttendence.status}
+                                readOnly
+                                onChange={() => { }}
+                                className="text-foreground font-medium p-5 pl-3 cursor-pointer"
+                            />
+                            <ChevronDown className="absolute top-3 right-3 w-4 h-5 text-foreground" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                            align="start"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <DropdownMenuLabel>Status</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            {["Pending", "Present", "Absent", "Late"].map((item, index) => (
+                                <DropdownMenuItem
+                                    key={index}
+                                    onClick={(event) => {
+                                        // Prevent default only for pending and present
+                                        if (!["Absent", "Late"].includes(item)) {
+                                            event.preventDefault();
+                                        }
+
+                                        // If already selected
+                                        if (item === selectedAttendence.status) return;
+
+                                        // Set status
+                                        handleStatusChange(
+                                            item as "Pending" | "Present" | "Absent" | "Late"
+                                        );
+                                    }}
+                                    className="relative"
+                                >
+                                    {status === item && updating && (
+                                        <Loader2 className="w-4 h-5 text-foreground animate-spin" />
+                                    )}
+                                    {status === item && updating ? "Processing" : item}
+
+                                    {selectedAttendence.status === item && (
+                                        <Check className="absolute right-2 w-4 h-4 text-foreground" />
+                                    )}
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
+            </div>
+
+            {/* Submit reason modal */}
+            {open && (
+                <ReasonModal
+                    open={open}
+                    onClose={() => {
+                        setOpen(false);
+                    }}
+                    onSubmit={submitStatusUpdate}
+                    submiting={submiting}
+                    setSubmiting={setSubmiting}
+                    status={status}
+                />
+            )}
         </div>
     );
 }

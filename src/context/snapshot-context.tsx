@@ -17,9 +17,12 @@ const SnapshotContext = createContext<ISnapshotContext | null>(null);
 // Snapshot context provider
 const SnapshotContextProvider = ({ children }: { children: ReactNode }) => {
     // Snapshot message
-    const [snapshotMessage, setSnapshotMessage] = useState<string>(
-        getItemWithExpiry("snapshotMessage")
-    );
+    const [snapshotMessage, setSnapshotMessage] = useState<string>("");
+
+    // Check if snapshot message is expired
+    useEffect(() => {
+        setSnapshotMessage(getItemWithExpiry("snapshotMessage"));
+    }, []);
 
     // Alaram
     useEffect(() => {
@@ -64,13 +67,17 @@ const SnapshotContextProvider = ({ children }: { children: ReactNode }) => {
             const item = JSON.parse(itemStr);
             const now = new Date();
 
-            if (now.getTime() > item.expiry) {
+            const expiry =
+                typeof item.expiry === "string" ? Number(item.expiry) : item.expiry;
+
+            if (now.getTime() > expiry) {
                 localStorage.removeItem(key);
                 return "";
             }
 
             return item.value;
-        } catch {
+        } catch (err) {
+            console.error("Failed to parse snapshotMessage:", err);
             return "";
         }
     }

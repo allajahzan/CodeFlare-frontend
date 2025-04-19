@@ -74,14 +74,14 @@ function SnapshotsModal({ children, selectedAttedence }: Propstype) {
                                                 </p>
                                                 &nbsp;
                                                 <p className="text-sm font-medium">
-                                                    {selectedAttedence.selfies[0].location
+                                                    {selectedAttedence.selfies[0]?.location
                                                         .split(",")
                                                         .filter((_, index) => index > 0 && index < 5)
                                                         .join(",")}
                                                 </p>
                                             </Badge>
                                             <img
-                                                src={selectedAttedence.selfies[0].photo}
+                                                src={selectedAttedence.selfies[0]?.photo}
                                                 className="h-full w-full object-cover rounded-lg"
                                                 alt=""
                                             />
@@ -128,14 +128,14 @@ function SnapshotsModal({ children, selectedAttedence }: Propstype) {
                                                 </p>
                                                 &nbsp;
                                                 <p className="text-sm font-medium">
-                                                    {selectedAttedence.selfies[1].location
+                                                    {selectedAttedence.selfies[1]?.location
                                                         .split(",")
                                                         .filter((_, index) => index > 0 && index < 6)
                                                         .join(",")}
                                                 </p>
                                             </Badge>
                                             <img
-                                                src={selectedAttedence.selfies[1].photo}
+                                                src={selectedAttedence.selfies[1]?.photo}
                                                 className="h-full w-full object-cover rounded-lg"
                                                 alt=""
                                             />
@@ -182,14 +182,14 @@ function SnapshotsModal({ children, selectedAttedence }: Propstype) {
                                                 </p>
                                                 &nbsp;
                                                 <p className="text-sm font-medium">
-                                                    {selectedAttedence.selfies[2].location
+                                                    {selectedAttedence.selfies[2]?.location
                                                         .split(",")
                                                         .filter((_, index) => index > 0 && index < 6)
                                                         .join(",")}
                                                 </p>
                                             </Badge>
                                             <img
-                                                src={selectedAttedence.selfies[1].photo}
+                                                src={selectedAttedence.selfies[2]?.photo}
                                                 className="h-full w-full object-cover rounded-lg"
                                                 alt=""
                                             />

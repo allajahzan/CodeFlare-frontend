@@ -6,8 +6,8 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { UserContext, IUserContext } from "@/context/user-context";
 import { toast } from "@/hooks/use-toast";
@@ -133,15 +133,13 @@ function CheckedInOutModal({ children }: Propstype) {
                                 Reason
                             </Label>
                             <div className="relative">
-                                <Input
-                                    id="reason"
-                                    type="text"
-                                    placeholder="Reason"
-                                    autoComplete="off"
-                                    required
+                                <Textarea
+                                    placeholder="Enter the reason"
+                                    rows={3}
                                     value={reason}
+                                    required
                                     onChange={(event) => setReason(event.target.value)}
-                                    className="p-5 pl-9 text-foreground font-medium"
+                                    className="p-2.5 pl-9 text-foreground font-medium border bg-background resize-none"
                                 />
                                 <FileSpreadsheetIcon className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                             </div>
