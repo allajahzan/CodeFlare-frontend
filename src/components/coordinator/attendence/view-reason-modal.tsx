@@ -84,25 +84,30 @@ function ViewReasonModal({
                             <Input
                                 type="text"
                                 readOnly
+                                disabled
                                 value={convertTo12HourFormat(selectedAttendence.reason.time)}
-                                className="text-foreground font-medium p-5 pl-9 border"
+                                className="text-foreground font-medium p-5 pl-9 border disabled:cursor-default"
                             />
                             <Clock className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
                     </div>
 
                     {/* Reason Input */}
-                    <div className="space-y-2 text-start">
+                    <div className="space-y-2 relative text-start">
                         <Label className="text-sm text-foreground font-medium">
                             Reason
                         </Label>
-                        <Textarea
-                            placeholder="Reason"
-                            rows={3}
-                            value={reason}
-                            onChange={(e) => setReason(e.target.value)}
-                            className="text-foreground font-medium border bg-background resize-none"
-                        />
+                        <div className="relative">
+                            <Textarea
+                                placeholder="Enter the reason"
+                                rows={3}
+                                value={reason}
+                                required
+                                onChange={(event) => setReason(event.target.value)}
+                                className="p-2.5 pl-9 text-foreground font-medium border bg-background resize-none"
+                            />
+                            <FileSpreadsheetIcon className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                        </div>
                     </div>
 
                     {/* Update Button */}

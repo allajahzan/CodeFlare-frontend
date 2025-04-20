@@ -1,42 +1,48 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { addMonths, format, subMonths } from "date-fns";
-import Calendar, { IEvent } from "./calender";
+import Calendar from "./calender";
 import InfoModal from "./info-modal";
 import CalenderHeader from "./header";
+import { handleCustomError } from "@/utils/error";
+import { fetchData } from "@/service/api-service";
+import ApiEndpoints from "@/constants/api-endpoints";
+import { useSelector } from "react-redux";
+import { stateType } from "@/redux/store";
+import { IUserContext, UserContext } from "@/context/user-context";
+import { IAttendence } from "@/types/attendence";
 
-// Sample attendance data
-const attendanceData: Record<string, any> = {
-    "2025-03-25": {
-        date: "2025-03-13",
-        status: "absent",
-        notes: "Sick leave",
-        start: "2025-03-14T09:00",
-        end: "05:30 pm",
-    },
-    "2025-03-26": {
-        date: "2025-03-14",
-        status: "present",
-        notes: "On time",
-        start: "09:000 am",
-        end: "05:30 pm",
-    },
-    "2025-03-27": {
-        date: "2025-03-15",
-        status: "pending",
-        notes: "Joined 30 minutes late",
-        start: "09:000 am",
-        end: "pending",
-    },
-};
+// Interface for Event
+export interface IEvent {
+    date: string;
+    status: string;
+    notes: string;
+    checkIn: string | null;
+    checkOut: string | null;
+    reason: string | null;
+}
 
 // Attendence list Component
 function AttendenceList() {
+    // Date related states
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-    const [selectedEvent, setSelectedEvent] = useState<IEvent | null>(null);
+    const [selectedAttendence, setSelectedAttendence] = useState<IEvent | null>(
+        null
+    );
+
+    // Attendence data
+    const [attendanceData, setAttendenceData] = useState<Record<string, IEvent>>(
+        {}
+    );
 
     // Modal
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    // Redux
+    const role = useSelector((state: stateType) => state.role);
+
+    // User context
+    const { user } = useContext(UserContext) as IUserContext;
 
     //  Previous month
     const handlePreviousMonth = () => {
@@ -54,20 +60,73 @@ function AttendenceList() {
         setIsModalOpen(true);
     };
 
+    // Transform attendence data to map
+    const transformAttendanceData = (attendances: IAttendence[]) => {
+        const attendanceData: Record<string, IEvent> = {};
+
+        attendances.forEach((entry) => {
+            const dateObj = new Date(entry.date);
+            const formattedDate = dateObj.toISOString().split("T")[0]; // "YYYY-MM-DD"
+
+            attendanceData[formattedDate] = {
+                date: formattedDate,
+                status: entry.status.toLowerCase(),
+                notes:
+                    entry.reason && entry.reason.description
+                        ? "Reported with reason"
+                        : entry.status === "Present" || entry.status === "Pending"
+                            ? "No need of report"
+                            : "No report",
+                checkIn: entry.checkIn ? `${entry.checkIn}` : null,
+                checkOut: entry.checkOut ? `${entry.checkOut}` : null,
+                reason: entry.reason && entry.reason.description,
+            };
+        });
+
+        return attendanceData;
+    };
+
     // Click on date
     useEffect(() => {
         if (selectedDate) {
             const dateStr = format(selectedDate as Date, "yyyy-MM-dd");
-            setSelectedEvent(attendanceData[dateStr]);
+            setSelectedAttendence(attendanceData[dateStr]);
         }
     }, [selectedDate]);
 
     // Clear event when modal closes
     useEffect(() => {
         if (!isModalOpen) {
-            setSelectedEvent(null);
+            setSelectedAttendence(null);
         }
     }, [isModalOpen]);
+
+    // Fetch attendence
+    useEffect(() => {
+        const fetchAttendence = async () => {
+            try {
+                // Send request
+                const resp = await fetchData(
+                    ApiEndpoints.ATTENDENCE +
+                    `?userId=${user?._id}&month=${currentDate.getMonth() + 1
+                    }&year=${currentDate.getFullYear()}`,
+                    role
+                );
+
+                // Success response
+                if (resp && resp.status === 200) {
+                    const data = resp.data?.data;
+
+                    // Set attendence data
+                    setAttendenceData(transformAttendanceData(data));
+                }
+            } catch (err: unknown) {
+                handleCustomError(err);
+            }
+        };
+
+        fetchAttendence();
+    }, [currentDate]);
 
     return (
         <div
@@ -90,11 +149,11 @@ function AttendenceList() {
             </div>
 
             {/* Info modal */}
-            {selectedEvent && (
+            {selectedAttendence && (
                 <InfoModal
                     isModalOpen={isModalOpen}
                     setIsModalOpen={setIsModalOpen}
-                    selectedEvent={selectedEvent}
+                    selectedAttendence={selectedAttendence}
                     children={undefined}
                 />
             )}

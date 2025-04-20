@@ -151,8 +151,8 @@ function AttendenceDetails({
     const handleAttendence = async () => {
         try {
             // If already checked-in or checked-out
-            if(selectedAttendence.checkIn && selectedAttendence.checkOut) return;
-            
+            if (selectedAttendence.checkIn && selectedAttendence.checkOut) return;
+
             setMarking(true);
 
             const activity = selectedAttendence.checkIn ? "checkOut" : "checkIn";
@@ -384,10 +384,11 @@ function AttendenceDetails({
                     <Button
                         className={cn(
                             "h-11 bg-muted dark:bg-sidebar hover:bg-muted dark:hover:bg-muted text-foreground",
-                            selectedAttendence.checkOut && "cursor-not-allowed opacity-60 dark:hover:bg-sidebar"
+                            selectedAttendence.checkOut &&
+                            "cursor-not-allowed opacity-60 dark:hover:bg-sidebar"
                         )}
                         onClick={handleAttendence}
-                        // disabled={selectedAttendence.checkOut ? true : false}
+                    // disabled={selectedAttendence.checkOut ? true : false}
                     >
                         {marking ? (
                             <div className="flex items-center gap-2">
@@ -402,14 +403,14 @@ function AttendenceDetails({
                                 </span>
                             ) : (
                                 <span className="flex items-center gap-2">
-                                    Check-Out
+                                    Check-out
                                     <LogIn className="rotate-180 text-red-600" />
                                 </span>
                             )
                         ) : (
-                            <span className="flex items-center gap-2 text-blue-600">
-                                Check-In
-                                <LogIn />
+                            <span className="flex items-center gap-2">
+                                Check-in
+                                <LogIn className="text-blue-600" />
                             </span>
                         )}
                     </Button>
