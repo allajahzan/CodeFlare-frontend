@@ -68,7 +68,7 @@ function CoordinatorLayout({ isDrawerOpen }: PropsType) {
             {
                 path: AppRoutes.ATTENDENCE,
                 icon: CalendarClockIcon,
-                label: "Attendence",
+                label: "Attendance",
             },
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
             { path: AppRoutes.MEET, icon: Video, label: "Meet" },

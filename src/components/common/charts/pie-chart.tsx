@@ -18,9 +18,9 @@ const PieCharts = ({ data, text, className, radius }: PropsType) => {
 
     // Colors for the Pie Chart
     const COLORS = [
+        "rgba(202, 168, 4, 1)", // yellow-600
         "rgba(22, 163, 74, 1)", // green-600
         "rgba(220, 38, 38, 1)", // red-600
-        "rgba(202, 168, 4, 1)", // yellow-600
         "rgba(30, 64, 175, 1)", // blue-600
     ];
 
@@ -57,7 +57,7 @@ const PieCharts = ({ data, text, className, radius }: PropsType) => {
                         <Pie
                             data={data}
                             dataKey="value"
-                            nameKey="name"
+                            nameKey="label"
                             cx="50%"
                             cy="50%"
                             outerRadius={radius ? radius : 78}

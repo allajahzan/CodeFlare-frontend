@@ -60,7 +60,7 @@ function StudentLayout({ isDrawerOpen }: PropsType) {
                 icon: CalendarDays,
                 label: "Reviews",
             },
-            { path: AppRoutes.ATTENDENCE, icon: CalendarClock, label: "Attendence" },
+            { path: AppRoutes.ATTENDENCE, icon: CalendarClock, label: "Attendance" },
             { path: AppRoutes.STUDENT_INVOICES, icon: CreditCard, label: "Invoices" },
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
             { path: AppRoutes.MEET, icon: Video, label: "Meet" },

@@ -1,5 +1,11 @@
 import { cn } from "@/lib/utils";
-import { CalendarClock, CalendarCogIcon, Dot, Search } from "lucide-react";
+import {
+    CalendarClock,
+    CalendarCogIcon,
+    Dot,
+    PieChart,
+    Search,
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import profile from "@/assets/images/no-profile.svg";
 import CardHeader from "@/components/common/data-card/header";
@@ -19,18 +25,18 @@ import { NotFoundOrbit, NotSelected } from "@/components/animation/fallbacks";
 import AttendenceDetails from "./attendence-details";
 import { motion } from "framer-motion";
 
+// Interface for Props
 interface Propstype {
     view: "table-view" | "calender-view";
     setView: React.Dispatch<React.SetStateAction<"table-view" | "calender-view">>;
 }
 
-// Component
+// Table Component
 function Table({ view, setView }: Propstype) {
     // Attendence states
     const [attendances, setAttendences] = useState<IAttendence[] | []>([]);
     const [selectedAttendence, setSelectedAttendence] =
         useState<IAttendence | null>(null);
-
     const [fetching, setFetching] = useState<boolean>(false);
 
     // Date
@@ -46,11 +52,74 @@ function Table({ view, setView }: Propstype) {
     const [students, setStudents] = useState<IStudent[] | []>([]);
     const [fetchingStudents, setFetchingStudents] = useState<boolean>(false);
 
+    // Pie chart data
+    const [pieChartData, setPieChartData] = useState<
+        { label: string; value: number }[]
+    >([]);
+
     // Role
     const role = useSelector((state: stateType) => state.role);
 
     // User Context
     const { user } = useContext(UserContext) as IUserContext;
+
+    // Get attendence for pie char
+    useEffect(() => {
+        const fetchAttendence = async () => {
+            try {
+                // Send request
+                const resp = await fetchData(
+                    ApiEndpoints.ATTENDENCE +
+                    `/search?batchIds=${user?.batches
+                        ?.map((batch) => batch._id)
+                        .join(",")}&date=${selectedDate}`,
+                    role
+                );
+
+                // Success response
+                if (resp && resp.status === 200) {
+                    const data = resp.data?.data;
+
+                    // Staus count
+                    const statusCount: Record<string, number> = {
+                        pending: 0,
+                        present: 0,
+                        absent: 0,
+                        late: 0,
+                    };
+
+                    for (let i = 0; i < data.length; i++) {
+                        const status = data[i].status?.toLowerCase();
+
+                        if (status === "pending") statusCount.pending += 1;
+                        if (status === "present") statusCount.present += 1;
+                        if (status === "absent") statusCount.absent += 1;
+                        if (status === "late") statusCount.late += 1;
+                    }
+
+                    // Update pie chart data
+                    if (data.length > 0) {
+                        setPieChartData([
+                            { label: "Pending", value: statusCount.pending },
+                            { label: "Present", value: statusCount.present },
+                            { label: "Absent", value: statusCount.absent },
+                            { label: "Late", value: statusCount.late },
+                        ]);
+                    } else {
+                        setPieChartData([]);
+                    }
+                }
+            } catch (err: unknown) {
+                handleCustomError(err);
+            }
+        };
+
+        fetchAttendence();
+    }, [selectedDate]);
+
+    useEffect(() => {
+        console.log(pieChartData);
+    }, [pieChartData]);
 
     // Get Attendence
     useEffect(() => {
@@ -106,12 +175,13 @@ function Table({ view, setView }: Propstype) {
                 );
 
                 if (resp?.status === 200) {
-                    setStudents(resp.data.data); // Update students list
+                    // Update students list
+                    setStudents(resp.data.data);
                 }
             } catch (err) {
                 handleCustomError(err);
             } finally {
-                setFetchingStudents(false); // Always set fetching to false after request
+                setFetchingStudents(false);
             }
         };
 
@@ -123,7 +193,7 @@ function Table({ view, setView }: Propstype) {
             {/* Left side*/}
             <div className="h-[calc(100vh-108px)] sticky top-0 bg-background dark:bg-sidebar-background p-5 border flex flex-col gap-5 rounded-2xl shadow-sm overflow-hidden">
                 {/* Header */}
-                <CardHeader count={attendances.length} heading="Attedence list" />
+                <CardHeader count={attendances.length} heading="Attendance list" />
 
                 {/* Filter and view */}
                 <CalenderHeader
@@ -233,9 +303,9 @@ function Table({ view, setView }: Propstype) {
                             message={
                                 fetching
                                     ? "Please wait a moment"
-                                    : "No attendece are marked yet"
+                                    : "No attendance records available yet"
                             }
-                            text={fetching ? "Fetching..." : "No attendence found"}
+                            text={fetching ? "Fetching..." : "No attendance found"}
                             className="w-full"
                         />
                     )}
@@ -257,27 +327,36 @@ function Table({ view, setView }: Propstype) {
                 {!selectedAttendence && (
                     <NotSelected
                         MainIcon={CalendarClock}
-                        message="Select an attendence to view it's details"
-                        text="No attendence selected"
-                        className="h-[458px]"
+                        message="Select an attendance to view it's details"
+                        text="No attendance selected"
+                        className="h-[547.65px]"
                     />
                 )}
 
                 {/* Graphs */}
                 <div className="grid grid-cols-2 gap-5">
                     {/* Pie graph */}
-                    <div className="w-full h-fit bg-background dark:bg-sidebar-background text-start p-5 border rounded-2xl">
-                        <PieCharts
-                            data={[
-                                { name: "Present", value: 50 },
-                                { name: "Absent", value: 20 },
-                                { name: "Pending", value: 15 },
-                                { name: "Late", value: 15 },
-                            ]}
-                            text="Today's overview"
-                            className="h-[220px]"
-                        />
-                    </div>
+                    {pieChartData.length > 0 && (
+                        <div className="w-full h-fit bg-background dark:bg-sidebar-background text-start p-5 border rounded-2xl">
+                            <PieCharts
+                                data={pieChartData}
+                                text="Today's overview"
+                                className="h-[220px]"
+                            />
+                        </div>
+                    )}
+
+                    {/* Not attendence data */}
+                    {pieChartData.length === 0 && (
+                        <div className="w-full h-[305.6px] bg-background dark:bg-sidebar-background text-start p-5 border rounded-2xl">
+                            <NotSelected
+                                MainIcon={PieChart}
+                                message="No attendance records for pie chart"
+                                text="No attendance founds"
+                                className="h-full p-0 border-none"
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
