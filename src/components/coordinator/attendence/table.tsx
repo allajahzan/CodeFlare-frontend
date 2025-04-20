@@ -115,11 +115,7 @@ function Table({ view, setView }: Propstype) {
         };
 
         fetchAttendence();
-    }, [selectedDate]);
-
-    useEffect(() => {
-        console.log(pieChartData);
-    }, [pieChartData]);
+    }, [selectedDate, selectedAttendence]);
 
     // Get Attendence
     useEffect(() => {
