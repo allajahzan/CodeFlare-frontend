@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { checkedInAction, stateType } from "@/redux/store";
 import CheckedInOutModal from "./check-in-out-modal";
 import { Button } from "@/components/ui/button";
-import AttendenceInfoModal from "./guidlines-modal";
+import AttendenceGuidlinesModal from "./guidlines-modal";
 import { handleCustomError } from "@/utils/error";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { fetchData } from "@/service/api-service";
@@ -15,10 +15,6 @@ import ToolTip from "@/components/common/tooltip/tooltip";
 import { ISnapshotContext, SnapshotContext } from "@/context/snapshot-context";
 import WebCamModal from "./web-cam-modal";
 import { Badge } from "@/components/ui/badge";
-// import * as faceapi from "face-api.js";
-// import * as tf from "@tensorflow/tfjs";
-// import { drawFaceLandmarks } from "@/utils/face-landmark";
-// import { generateStableFaceId } from "@/utils/generate-uniqueId";
 
 // Attendence Component
 function Attendence() {
@@ -36,7 +32,8 @@ function Attendence() {
     const [loading, setLoading] = useState<boolean>(true);
 
     // Modal
-    const [open, setOpen] = useState<boolean>(false);
+    const [openWebCamModal, setOpenWebCamModal] = useState<boolean>(false);
+    const [openGuidlinesModal, setOpenGuidlinesModal] = useState<boolean>(false);
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
@@ -127,14 +124,11 @@ function Attendence() {
                     text="Guidlines"
                     side="left"
                     children={
-                        <AttendenceInfoModal
-                            children={
-                                <div className="p-2 bg-muted rounded-full cursor-pointer">
-                                    <Info className="w-4 h-4 text-foreground" />
-                                </div>
-                            }
-                        />
+                        <div className="p-2 bg-muted rounded-full cursor-pointer">
+                            <Info className="w-4 h-4 text-foreground" />
+                        </div>
                     }
+                    action={() => setOpenGuidlinesModal(true)}
                 />
 
                 {/* Attendence calender */}
@@ -211,7 +205,7 @@ function Attendence() {
                     {snapshotMessage && isCheckedIn && (
                         <ToolTip
                             text={snapshotMessage}
-                            action={() => setOpen(true)}
+                            action={() => setOpenWebCamModal(true)}
                             MainClassName="w-full"
                             children={
                                 <div className="w-full">
@@ -287,12 +281,18 @@ function Attendence() {
             {/* Web cam */}
             {snapshotMessage && (
                 <WebCamModal
-                    open={open}
-                    setOpen={setOpen}
+                    open={openWebCamModal}
+                    setOpen={setOpenWebCamModal}
                     message={snapshotMessage}
                     setSnapshotMessage={setSnapshotMessage}
                 />
             )}
+
+            {/* Guidlines modal */}
+            <AttendenceGuidlinesModal
+                open={openGuidlinesModal}
+                setOpen={setOpenGuidlinesModal}
+            />
         </div>
     );
 }
