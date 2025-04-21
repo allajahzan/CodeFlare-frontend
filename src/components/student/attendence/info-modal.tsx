@@ -135,7 +135,7 @@ function InfoModal({
 
                     {/* Reason */}
                     {(selectedAttendence?.status === "absent" ||
-                        selectedAttendence?.status === "Late") && (
+                        selectedAttendence?.status === "late") && (
                             <div className="space-y-2">
                                 <Label className="text-sm text-foreground font-medium">
                                     Reason

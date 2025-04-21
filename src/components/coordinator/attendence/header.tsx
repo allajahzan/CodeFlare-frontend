@@ -44,66 +44,60 @@ function CalenderHeader({
 }: Propstype) {
     return (
         <div
-            className={`${view === "calender-view" && "bg-background dark:bg-sidebar-background"
-                } sticky top-0 z-30 rounded-b-xl`}
+            style={{ willChange: "transform" }}
+            className="sticky top-0 z-30 rounded-b-xl"
         >
-            <div
-                className={`flex items-center justify-between ${view === "calender-view"
-                        ? "w-full p-5 py-3 border shadow-sm rounded-xl "
-                        : "p-0"
-                    }`}
-            >
+            <div className="flex items-center justify-between p-0">
                 {/* Buttons */}
-                <div className={`flex gap-1 ${view === "table-view" && "w-full"}`}>
+                <div className="flex gap-1 w-full">
                     {/* Select Date */}
-                    {view === "table-view" && (
-                        <div className="relative w-full sm:col-span-2 lg:col-span-1">
-                            <Select
-                                value={
-                                    selectedDate
+
+                    <div className="relative w-full sm:col-span-2 lg:col-span-1">
+                        <Select
+                            value={
+                                selectedDate
+                                    ? new Date(selectedDate).toLocaleDateString("en-GB", {
+                                        day: "numeric",
+                                        month: "short",
+                                        year: "numeric",
+                                    })
+                                    : ""
+                            }
+                        >
+                            <SelectTrigger
+                                title="Date"
+                                className="w-full text-foreground font-medium p-5 pl-9 rounded-lg cursor-pointer bg-background dark:hover:bg-sidebar dark:hover:border-customBorder-dark"
+                            >
+                                <SelectValue placeholder="Select date" className="truncate">
+                                    {selectedDate
                                         ? new Date(selectedDate).toLocaleDateString("en-GB", {
                                             day: "numeric",
                                             month: "short",
                                             year: "numeric",
                                         })
-                                        : ""
-                                }
+                                        : "Select date"}
+                                </SelectValue>
+                                <CalendarDaysIcon className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                            </SelectTrigger>
+                            <SelectContent
+                                className="bg-transparent border-none shadow-none p-0 relative left-1 rounded-lg"
+                                align="end"
                             >
-                                <SelectTrigger
-                                    title="Date"
-                                    className="w-full text-foreground font-medium p-5 pl-9 cursor-pointer bg-background dark:hover:bg-sidebar dark:hover:border-customBorder-dark"
-                                >
-                                    <SelectValue placeholder="Select date" className="truncate">
-                                        {selectedDate
-                                            ? new Date(selectedDate).toLocaleDateString("en-GB", {
-                                                day: "numeric",
-                                                month: "short",
-                                                year: "numeric",
-                                            })
-                                            : "Select date"}
-                                    </SelectValue>
-                                    <CalendarDaysIcon className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
-                                </SelectTrigger>
-                                <SelectContent
-                                    className="bg-transparent border-none shadow-none p-0 relative left-1"
-                                    align="end"
-                                >
-                                    <DatePicker
-                                        isDatePickerOpen={true}
-                                        selectedDate={selectedDate}
-                                        setSelectedDate={setSelectedDate}
-                                        className="w-[252px] bg-background rounded-lg shadow-lg border"
-                                    />
-                                </SelectContent>
-                            </Select>
-                        </div>
-                    )}
+                                <DatePicker
+                                    isDatePickerOpen={true}
+                                    selectedDate={selectedDate}
+                                    setSelectedDate={setSelectedDate}
+                                    className="w-[252px] bg-background rounded-lg shadow-lg border"
+                                />
+                            </SelectContent>
+                        </Select>
+                    </div>
 
                     {/* Filter modal */}
                     <Select>
                         <SelectTrigger
                             title="Filter"
-                            className="w-[41.6px] h-[41.6px] bg-background dark:hover:border-customBorder-dark hover:bg-muted dark:hover:bg-sidebar shadow-none"
+                            className="w-[41.6px] h-[41.6px] bg-background dark:hover:border-customBorder-dark hover:bg-muted dark:hover:bg-sidebar rounded-lg shadow-none"
                         >
                             <Filter className="w-4 h-4 text-foreground" />
                         </SelectTrigger>
@@ -129,7 +123,7 @@ function CalenderHeader({
                     >
                         <SelectTrigger
                             title="View"
-                            className="w-[41.6px] h-[41.6px] bg-background dark:hover:border-customBorder-dark hover:bg-muted dark:hover:bg-sidebar shadow-none"
+                            className="w-[41.6px] h-[41.6px] bg-background dark:hover:border-customBorder-dark hover:bg-muted dark:hover:bg-sidebar rounded-lg shadow-none"
                         >
                             <ScanEye className="w-4 h-4 text-foreground" />
                         </SelectTrigger>

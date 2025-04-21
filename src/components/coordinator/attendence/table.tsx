@@ -185,9 +185,14 @@ function Table({ view, setView }: Propstype) {
     }, [selectedBatch]);
 
     return (
-        <div className="grid grid-cols-3 gap-5 text-center text-foreground font-semibold">
+        <div className="p-5 pt-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {/* Left side*/}
-            <div className="h-[calc(100vh-108px)] sticky top-0 bg-background dark:bg-sidebar-background p-5 border flex flex-col gap-5 rounded-2xl shadow-sm overflow-hidden">
+            <div
+                style={{ willChange: "transform" }}
+                className="sticky top-0 bg-background dark:bg-sidebar-background w-full p-5 flex flex-col gap-5
+            h-[calc(100vh-108px)] mb-5 md:mb-0 rounded-2xl
+            border border-border shadow-sm"
+            >
                 {/* Header */}
                 <CardHeader count={attendances.length} heading="Attendance list" />
 
@@ -206,131 +211,127 @@ function Table({ view, setView }: Propstype) {
                 />
 
                 {/* Lists */}
-                <div className="h-full flex flex-col items-center gap-[10px] overflow-auto no-scrollbar">
-                    {/* List */}
-                    {attendances.length > 0 &&
-                        attendances.map((item: IAttendence, index: number) => (
-                            <motion.div
+                {attendances.length > 0 && (
+                    <div className="flex flex-col gap-3 overflow-auto no-scrollbar">
+                        {attendances.map((item: IAttendence, index: number) => (
+                            <div
+                                style={{ willChange: "transform" }}
                                 key={index}
-                                initial={{ opacity: 0, y: -20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.2 + index * 0.1 }}
-                                onClick={() => setSelectedAttendence(item)}
-                                className={cn(
-                                    "group p-2 px-3 w-full flex flex-col rounded-xl cursor-pointer border dark:border-transparent bg-background dark:bg-sidebar hover:bg-muted dark:hover:bg-sidebar-backgroundDark",
-                                    selectedAttendence?._id === item._id
-                                        ? "bg-muted dark:bg-sidebar-backgroundDark"
-                                        : ""
-                                )}
+                                className="relateive w-full"
                             >
-                                <div className="flex items-center gap-3">
-                                    {/* Avatar profile pic */}
-                                    <Avatar className="bg-background w-12 h-12 border-2 border-background dark:border-border shadow-md">
-                                        <AvatarImage
-                                            src={item.user.profilePic}
-                                            className="object-cover"
-                                        />
-                                        <AvatarFallback className="bg-transparent">
-                                            <img className="w-full" src={profile} alt="" />
-                                        </AvatarFallback>
-                                    </Avatar>
+                                <motion.div
+                                    key={index}
+                                    initial={{ opacity: 0, y: -20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.2 + index * 0.1 }}
+                                    onClick={() => setSelectedAttendence(item)}
+                                    className={cn(
+                                        "group p-2 px-3 w-full flex flex-col rounded-xl cursor-pointer border dark:border-transparent bg-background dark:bg-sidebar hover:bg-muted dark:hover:bg-sidebar-backgroundDark",
+                                        selectedAttendence?._id === item._id
+                                            ? "bg-muted dark:bg-sidebar-backgroundDark"
+                                            : ""
+                                    )}
+                                >
+                                    <div className="flex items-center gap-3">
+                                        {/* Avatar profile pic */}
+                                        <Avatar className="bg-background w-12 h-12 border-2 border-background dark:border-border shadow-md">
+                                            <AvatarImage
+                                                src={item.user.profilePic}
+                                                className="object-cover"
+                                            />
+                                            <AvatarFallback className="bg-transparent">
+                                                <img className="w-full" src={profile} alt="" />
+                                            </AvatarFallback>
+                                        </Avatar>
 
-                                    {/* Name and other details */}
-                                    <div className="flex-1 min-w-0 truncate">
-                                        <div className="flex items-center gap-2">
-                                            <p className="font-semibold text-foreground truncate">
-                                                {item.user.name}
-                                            </p>
+                                        {/* Name and other details */}
+                                        <div className="flex-1 min-w-0 truncate">
+                                            <div className="flex items-center gap-2">
+                                                <p className="font-semibold text-foreground truncate">
+                                                    {item.user.name}
+                                                </p>
+                                            </div>
+
+                                            {/* Batch and date */}
+                                            <div className="flex items-center gap-0">
+                                                <p className="flex gap-1 items-center text-sm text-muted-foreground font-medium">
+                                                    {/* <UsersRound className="w-3 h-3" /> */}
+                                                    {item.batch.name}
+                                                </p>
+                                                <Dot className="p-0 text-muted-foreground flex-shrink-0" />
+                                                <p className="flex gap-1 items-center text-sm text-muted-foreground font-medium">
+                                                    {/* <Calendar1 className="w-3 h-3" /> */}
+                                                    {new Date(item.date).toLocaleDateString("en-GB", {
+                                                        day: "2-digit",
+                                                        month: "short",
+                                                        year: "numeric",
+                                                    })}
+                                                </p>
+                                            </div>
                                         </div>
 
-                                        {/* Batch and date */}
-                                        <div className="flex items-center gap-0">
-                                            <p className="flex gap-1 items-center text-sm text-muted-foreground font-medium">
-                                                {/* <UsersRound className="w-3 h-3" /> */}
-                                                {item.batch.name}
-                                            </p>
-                                            <Dot className="p-0 text-muted-foreground flex-shrink-0" />
-                                            <p className="flex gap-1 items-center text-sm text-muted-foreground font-medium">
-                                                {/* <Calendar1 className="w-3 h-3" /> */}
-                                                {new Date(item.date).toLocaleDateString("en-GB", {
-                                                    day: "2-digit",
-                                                    month: "short",
-                                                    year: "numeric",
-                                                })}
-                                            </p>
+                                        {/* Status color */}
+                                        <div className="flex items-center p-2 rounded-full">
+                                            {(() => {
+                                                switch (item.status) {
+                                                    case "Pending":
+                                                        return (
+                                                            <div className="p-1 rounded-full bg-yellow-400/40 group-hover:bg-yellow-400/50"></div>
+                                                        );
+                                                    case "Absent":
+                                                        return (
+                                                            <div className="p-1 rounded-full bg-red-400/40 group-hover:bg-red-400/50"></div>
+                                                        );
+                                                    case "Present":
+                                                        return (
+                                                            <div className="p-1 rounded-full bg-green-400/40 group-hover:bg-green-400/50"></div>
+                                                        );
+                                                    case "Late":
+                                                        return (
+                                                            <div className="p-1 rounded-full bg-blue-400/40 group-hover:bg-blue-400/50"></div>
+                                                        );
+
+                                                    default:
+                                                        return null;
+                                                }
+                                            })()}
                                         </div>
                                     </div>
-
-                                    {/* Status color */}
-                                    <div className="flex items-center p-2 rounded-full">
-                                        {(() => {
-                                            switch (item.status) {
-                                                case "Pending":
-                                                    return (
-                                                        <div className="p-1 rounded-full bg-yellow-400/40 group-hover:bg-yellow-400/50"></div>
-                                                    );
-                                                case "Absent":
-                                                    return (
-                                                        <div className="p-1 rounded-full bg-red-400/40 group-hover:bg-red-400/50"></div>
-                                                    );
-                                                case "Present":
-                                                    return (
-                                                        <div className="p-1 rounded-full bg-green-400/40 group-hover:bg-green-400/50"></div>
-                                                    );
-                                                case "Late":
-                                                    return (
-                                                        <div className="p-1 rounded-full bg-blue-400/40 group-hover:bg-blue-400/50"></div>
-                                                    );
-
-                                                default:
-                                                    return null;
-                                            }
-                                        })()}
-                                    </div>
-                                </div>
-                            </motion.div>
+                                </motion.div>
+                            </div>
                         ))}
+                    </div>
+                )}
 
-                    {/* No attendence */}
-                    {attendances && attendances.length === 0 && (
-                        <NotFoundOrbit
-                            MainIcon={CalendarClock}
-                            SubIcon={fetching ? Search : CalendarCogIcon}
-                            message={
-                                fetching
-                                    ? "Please wait a moment"
-                                    : "No attendance records available yet"
-                            }
-                            text={fetching ? "Fetching..." : "No attendance found"}
-                            className="w-full"
-                        />
-                    )}
-                </div>
+                {/* No attendence */}
+                {attendances && attendances.length === 0 && (
+                    <NotFoundOrbit
+                        MainIcon={CalendarClock}
+                        SubIcon={fetching ? Search : CalendarCogIcon}
+                        message={
+                            fetching
+                                ? "Please wait a moment"
+                                : "No attendance records available yet"
+                        }
+                        text={fetching ? "Fetching..." : "No attendance found"}
+                        className="w-full"
+                    />
+                )}
             </div>
 
             {/* Right side */}
-            <div className="h-full grid grid-rows-[auto,1fr,auto] space-y-5 col-span-2 overflow-hidden">
-                {/* Scroll container*/}
-                {selectedAttendence && (
-                    <AttendenceDetails
-                        setAttendences={setAttendences}
-                        selectedAttendence={selectedAttendence}
-                        setSelectedAttendence={setSelectedAttendence}
-                    />
-                )}
 
-                {/* No attendence selected */}
-                {!selectedAttendence && (
-                    <NotSelected
-                        MainIcon={CalendarClock}
-                        message="Select an attendance to view it's details"
-                        text="No attendance selected"
-                        className="h-[547.65px]"
-                    />
-                )}
+            <div className="w-full h-full bg-background border-0 shadow-none md:bg-transparent relative z-20 rounded-2xl grid grid-rows-[auto_1fr] md:col-span-1 lg:col-span-2 gap-5 overflow-auto no-scrollbar">
+                {/* Scroll container*/}
+
+                <AttendenceDetails
+                    setAttendences={setAttendences}
+                    selectedAttendence={selectedAttendence}
+                    setSelectedAttendence={setSelectedAttendence}
+                />
 
                 {/* Graphs */}
-                <div className="grid grid-cols-2 gap-5">
+                <div className="w-full grid grid-cols-2 gap-5">
                     {/* Pie graph */}
                     {pieChartData.length > 0 && (
                         <div className="w-full h-fit bg-background dark:bg-sidebar-background text-start p-5 border rounded-2xl">

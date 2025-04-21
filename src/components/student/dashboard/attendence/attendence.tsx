@@ -137,7 +137,7 @@ function Attendence() {
                     side="left"
                     children={
                         <div
-                            onClick={() => navigate(`/${role}/attendence`)}
+                            onClick={() => navigate(`/${role}/attendance`)}
                             className="p-2 bg-muted rounded-full cursor-pointer"
                         >
                             <CalendarClock className="w-4 h-4 text-foreground" />
