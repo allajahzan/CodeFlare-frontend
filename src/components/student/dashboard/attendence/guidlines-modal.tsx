@@ -55,6 +55,10 @@ function AttendenceGuidlinesModal({ open, setOpen }: PropsType) {
                                 </p>
                                 <p className="py-2 flex items-center">
                                     <Dot className="flex-shrink-0 self-start" />
+                                    If you didn't check-out, you are considered as absent.
+                                </p>
+                                <p className="py-2 flex items-center">
+                                    <Dot className="flex-shrink-0 self-start" />
                                     Attendance is monitored throughout the day, with the final
                                     attendance being marked at 10:00 PM.
                                 </p>

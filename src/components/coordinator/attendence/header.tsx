@@ -1,4 +1,4 @@
-import { CalendarDaysIcon, Filter, ScanEye } from "lucide-react";
+import { CalendarDaysIcon, ScanEye, Search } from "lucide-react";
 import DatePicker from "@/components/instructor/reviews/date-picker";
 import {
     Select,
@@ -6,15 +6,18 @@ import {
     SelectItem,
     SelectTrigger,
 } from "@/components/ui/select";
-import FilterAttendence from "./filter";
+import SearchAttendence from "./search-attendence";
 import { SelectValue } from "@radix-ui/react-select";
 import { IStudent } from "@/types/student";
 import { IBatch } from "@/types/batch";
+import Filter from "@/components/common/data-card/filter";
 
 // Interface for Props
 interface Propstype {
-    view: "table-view" | "calender-view";
-    setView: React.Dispatch<React.SetStateAction<"table-view" | "calender-view">>;
+    view: "records-view" | "analysis-view";
+    setView: React.Dispatch<
+        React.SetStateAction<"records-view" | "analysis-view">
+    >;
 
     selectedDate: Date | undefined;
     setSelectedDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
@@ -25,10 +28,13 @@ interface Propstype {
 
     students: [] | IStudent[];
     fetchingStudents: boolean;
+
+    selectedStatus: string;
+    setSelectedStatus: React.Dispatch<React.SetStateAction<string | "">>;
 }
 
 // Calendeer header Component
-function CalenderHeader({
+function Header({
     view,
     setView,
 
@@ -38,9 +44,11 @@ function CalenderHeader({
     setSelectedBatch,
     selectedStudent,
     setSelectedStudent,
-
     students,
     fetchingStudents,
+
+    selectedStatus,
+    setSelectedStatus,
 }: Propstype) {
     return (
         <div
@@ -52,7 +60,7 @@ function CalenderHeader({
                 <div className="flex gap-1 w-full">
                     {/* Select Date */}
 
-                    <div className="relative w-full sm:col-span-2 lg:col-span-1">
+                    <div className="relative min-w-0 w-full sm:col-span-2 lg:col-span-1">
                         <Select
                             value={
                                 selectedDate
@@ -68,7 +76,7 @@ function CalenderHeader({
                                 title="Date"
                                 className="w-full text-foreground font-medium p-5 pl-9 rounded-lg cursor-pointer bg-background dark:hover:bg-sidebar dark:hover:border-customBorder-dark"
                             >
-                                <SelectValue placeholder="Select date" className="truncate">
+                                <SelectValue placeholder="Select date">
                                     {selectedDate
                                         ? new Date(selectedDate).toLocaleDateString("en-GB", {
                                             day: "numeric",
@@ -93,16 +101,16 @@ function CalenderHeader({
                         </Select>
                     </div>
 
-                    {/* Filter modal */}
+                    {/* Search modal */}
                     <Select>
                         <SelectTrigger
-                            title="Filter"
+                            title="Search"
                             className="w-[41.6px] h-[41.6px] bg-background dark:hover:border-customBorder-dark hover:bg-muted dark:hover:bg-sidebar rounded-lg shadow-none"
                         >
-                            <Filter className="w-4 h-4 text-foreground" />
+                            <Search className="w-4 h-4 text-foreground" />
                         </SelectTrigger>
                         <SelectContent className="w-[220px]" align="end">
-                            <FilterAttendence
+                            <SearchAttendence
                                 selectedBatch={selectedBatch}
                                 setSelectedBatch={setSelectedBatch}
                                 selectedStudent={selectedStudent}
@@ -113,10 +121,17 @@ function CalenderHeader({
                         </SelectContent>
                     </Select>
 
-                    {/* View selecter */}
+                    {/* Filter */}
+                    <Filter
+                        title="Status"
+                        filter={selectedStatus}
+                        setFilter={setSelectedStatus}
+                        fitlerData={["All", "Pending", "Present", "Absent", "Late"]}
+                    />
 
+                    {/* View selecter */}
                     <Select
-                        onValueChange={(value: "table-view" | "calender-view") =>
+                        onValueChange={(value: "records-view" | "analysis-view") =>
                             setView(value)
                         }
                         value={view}
@@ -128,8 +143,8 @@ function CalenderHeader({
                             <ScanEye className="w-4 h-4 text-foreground" />
                         </SelectTrigger>
                         <SelectContent align="end">
-                            <SelectItem value="table-view">Table</SelectItem>
-                            <SelectItem value="calender-view">Calender</SelectItem>
+                            <SelectItem value="records-view">Attendence Records</SelectItem>
+                            <SelectItem value="analysis-view">Monthly Analysis</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
@@ -138,4 +153,4 @@ function CalenderHeader({
     );
 }
 
-export default CalenderHeader;
+export default Header;

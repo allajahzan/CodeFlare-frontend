@@ -67,7 +67,6 @@ function StudentLayout({ isDrawerOpen }: PropsType) {
             ...(isSmall
                 ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
                 : []),
-
         ],
         [isSmall]
     );
@@ -107,7 +106,10 @@ function StudentLayout({ isDrawerOpen }: PropsType) {
                 )}
             >
                 <Navbar />
-                <div className="h-full overflow-auto no-scrollbar">
+                <div
+                    style={{ willChange: "transform" }}
+                    className="h-full overflow-auto no-scrollbar"
+                >
                     <Outlet />
                 </div>
             </div>

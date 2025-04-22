@@ -1,4 +1,4 @@
-import Attendence from "@/components/student/attendence/attendence";
+import Attendence from "@/components/coordinator/attendence/attendence";
 
 // Attendence Page Component
 function AttedencePage() {

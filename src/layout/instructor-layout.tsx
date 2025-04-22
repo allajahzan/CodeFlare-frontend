@@ -1,7 +1,11 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "@/components/common/navbar/navbar";
 import { useDispatch, useSelector } from "react-redux";
-import { resizeAction, sideBarVisibilityAction, stateType } from "@/redux/store";
+import {
+    resizeAction,
+    sideBarVisibilityAction,
+    stateType,
+} from "@/redux/store";
 import {
     CalendarDays,
     Globe,
@@ -52,8 +56,12 @@ function InstructorLayout({ isDrawerOpen }: PropsType) {
     // sidebar items
     const sideBarItems = useMemo(
         () => [
-            { path: AppRoutes.DASHBOARD, icon: LayoutDashboard, label: "Dashboard"},
-            { path: AppRoutes.COORDINATOR_STUDENTS, icon: UsersRound, label: "Students" },
+            { path: AppRoutes.DASHBOARD, icon: LayoutDashboard, label: "Dashboard" },
+            {
+                path: AppRoutes.COORDINATOR_STUDENTS,
+                icon: UsersRound,
+                label: "Students",
+            },
             { path: AppRoutes.STUDENT_REVIEWS, icon: CalendarDays, label: "Reviews" },
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
             { path: AppRoutes.MEET, icon: Video, label: "Meet" },
@@ -99,7 +107,10 @@ function InstructorLayout({ isDrawerOpen }: PropsType) {
                 )}
             >
                 <Navbar />
-                <div className="h-full overflow-auto no-scrollbar">
+                <div
+                    style={{ willChange: "transform" }}
+                    className="h-full overflow-auto no-scrollbar"
+                >
                     <Outlet />
                 </div>
             </div>

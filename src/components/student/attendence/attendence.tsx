@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { addMonths, format, subMonths } from "date-fns";
 import Calendar from "./calender";
-import InfoModal from "./info-modal";
+import DetailsModal from "./details-modal";
 import CalenderHeader from "./header";
 import { handleCustomError } from "@/utils/error";
 import { fetchData } from "@/service/api-service";
@@ -22,7 +22,7 @@ export interface IEvent {
 }
 
 // Attendence list Component
-function AttendenceList() {
+function Attendence() {
     // Date related states
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -150,7 +150,7 @@ function AttendenceList() {
 
             {/* Info modal */}
             {selectedAttendence && (
-                <InfoModal
+                <DetailsModal
                     isModalOpen={isModalOpen}
                     setIsModalOpen={setIsModalOpen}
                     selectedAttendence={selectedAttendence}
@@ -161,4 +161,4 @@ function AttendenceList() {
     );
 }
 
-export default AttendenceList;
+export default Attendence;

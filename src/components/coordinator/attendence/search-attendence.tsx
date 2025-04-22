@@ -21,8 +21,8 @@ interface propsType {
     fetchingStudents: boolean;
 }
 
-// Filter students
-function FilterAttendence({
+// Search attendence Component
+function SearchAttendence({
     selectedBatch,
     setSelectedBatch,
     selectedStudent,
@@ -137,4 +137,4 @@ function FilterAttendence({
     );
 }
 
-export default FilterAttendence;
+export default SearchAttendence;

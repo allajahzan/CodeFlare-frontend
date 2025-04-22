@@ -7,6 +7,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import IconButton from "@/components/ui/icon-button";
 import { Check, SortAsc } from "lucide-react";
 
 // Interface for Props
@@ -27,11 +28,8 @@ interface PropsType {
 function Sort({ sort, setSort, sortData }: PropsType) {
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger
-                className="flex items-center justify-center w-[41.6px] rounded-lg
-                border bg-background dark:hover:bg-sidebar dark:hover:border-customBorder-dark shadow-sm"
-            >
-                <SortAsc className="h-4 w-4 text-foreground" />
+            <DropdownMenuTrigger title="Sort">
+                <IconButton Icon={SortAsc} />
             </DropdownMenuTrigger>
 
             <DropdownMenuContent

@@ -6,6 +6,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import IconButton from "@/components/ui/icon-button";
 import { Check, FilterIcon } from "lucide-react";
 
 // Inteface for Props
@@ -20,11 +21,8 @@ interface PropsType {
 function Filter({ title, fitlerData, filter, setFilter }: PropsType) {
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger
-                className="flex items-center justify-center w-[41.6px] rounded-lg
-                border bg-background dark:hover:bg-sidebar dark:hover:border-customBorder-dark shadow-sm"
-            >
-                <FilterIcon className="h-4 w-4 text-foreground" />
+            <DropdownMenuTrigger title="Filter">
+                <IconButton Icon={FilterIcon} />
             </DropdownMenuTrigger>
 
             <DropdownMenuContent

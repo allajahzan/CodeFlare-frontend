@@ -114,8 +114,7 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                                                 transition={{ delay: 0.2 + index * 0.1 }}
                                                 className={`
                                         relative flex flex-col  
-                                        ${!isToday(day) &&
-                                                    "border border-border dark:border-customBorder"
+                                       border border-border dark:border-customBorder"
                                                     } rounded-lg p-2 ${finalClass}`}
                                                 onClick={() => i !== 0 && onDateClick(day)}
                                             >

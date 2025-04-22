@@ -1,24 +1,26 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
-import Table from "./table";
+import Records from "./records";
+import Analysis from "./analysis";
 
 // Attendence list Component
-function AttendenceList() {
+function Attendence() {
     // Redux
     const role = useSelector((state: stateType) => state.role);
 
     // View state
-    const [view, setView] = useState<"table-view" | "calender-view">(
-        role === "student" ? "calender-view" : "table-view"
+    const [view, setView] = useState<"records-view" | "analysis-view">(
+        role === "student" ? "analysis-view" : "records-view"
     );
 
     return (
         <>
-            {/* Table */}
-            {view === "table-view" && <Table view={view} setView={setView} />}
+            {/* Records */}
+            {view === "records-view" && <Records view={view} setView={setView} />}
+            {view === "analysis-view" && <Analysis view={view} setView={setView} />}
         </>
     );
 }
 
-export default AttendenceList;
+export default Attendence;

@@ -3,13 +3,14 @@ import {
     CalendarClock,
     CalendarCogIcon,
     Dot,
+    Info,
     PieChart,
     Search,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import profile from "@/assets/images/no-profile.svg";
 import CardHeader from "@/components/common/data-card/header";
-import CalenderHeader from "./header";
+import Header from "./header";
 import PieCharts from "@/components/common/charts/pie-chart";
 import { useContext, useEffect, useState } from "react";
 import { handleCustomError } from "@/utils/error";
@@ -24,15 +25,25 @@ import { IAttendence } from "@/types/attendence";
 import { NotFoundOrbit, NotSelected } from "@/components/animation/fallbacks";
 import AttendenceDetails from "./attendence-details";
 import { motion } from "framer-motion";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import ToolTip from "@/components/common/tooltip/tooltip";
 
 // Interface for Props
 interface Propstype {
-    view: "table-view" | "calender-view";
-    setView: React.Dispatch<React.SetStateAction<"table-view" | "calender-view">>;
+    view: "records-view" | "analysis-view";
+    setView: React.Dispatch<
+        React.SetStateAction<"records-view" | "analysis-view">
+    >;
 }
 
-// Table Component
-function Table({ view, setView }: Propstype) {
+// Records Component
+function Records({ view, setView }: Propstype) {
     // Attendence states
     const [attendances, setAttendences] = useState<IAttendence[] | []>([]);
     const [selectedAttendence, setSelectedAttendence] =
@@ -44,13 +55,22 @@ function Table({ view, setView }: Propstype) {
         new Date()
     );
 
-    // Filter batch
+    // Search batch
     const [selectedBatch, setSelectedBatch] = useState<IBatch | null>(null);
 
-    // Filter student
+    // search student
     const [selectedStudent, setSelectedStudent] = useState<string | "">("");
     const [students, setStudents] = useState<IStudent[] | []>([]);
     const [fetchingStudents, setFetchingStudents] = useState<boolean>(false);
+
+    // Filter status
+    const [selectedStatus, setSelectedStatus] = useState<string>("");
+
+    // // Sort
+    // const [sort, setSort] = useState<{ key: string; order: number }>({
+    //     key: "createdAt",
+    //     order: 1,
+    // });
 
     // Pie chart data
     const [pieChartData, setPieChartData] = useState<
@@ -63,7 +83,7 @@ function Table({ view, setView }: Propstype) {
     // User Context
     const { user } = useContext(UserContext) as IUserContext;
 
-    // Get attendence for pie char
+    // Get attendence for pie chart
     useEffect(() => {
         const fetchAttendence = async () => {
             try {
@@ -80,7 +100,7 @@ function Table({ view, setView }: Propstype) {
                 if (resp && resp.status === 200) {
                     const data = resp.data?.data;
 
-                    // Staus count
+                    // Status count
                     const statusCount: Record<string, number> = {
                         pending: 0,
                         present: 0,
@@ -130,7 +150,8 @@ function Table({ view, setView }: Propstype) {
                     `/search?batchIds=${selectedBatch
                         ? selectedBatch._id
                         : user?.batches?.map((batch) => batch._id).join(",")
-                    }&userId=${selectedStudent}&date=${selectedDate}`,
+                    }&userId=${selectedStudent}&date=${selectedDate}&filter=${selectedStatus === "All" ? "" : selectedStatus
+                    }`,
                     role
                 );
 
@@ -151,7 +172,7 @@ function Table({ view, setView }: Propstype) {
         };
 
         fetchAttendence();
-    }, [selectedDate, selectedBatch, selectedStudent]);
+    }, [selectedDate, selectedBatch, selectedStudent, selectedStatus]);
 
     // Fetch students based on batch
     useEffect(() => {
@@ -188,16 +209,52 @@ function Table({ view, setView }: Propstype) {
         <div className="p-5 pt-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {/* Left side*/}
             <div
-                style={{ willChange: "transform" }}
                 className="sticky top-0 bg-background dark:bg-sidebar-background w-full p-5 flex flex-col gap-5
             h-[calc(100vh-108px)] mb-5 md:mb-0 rounded-2xl
             border border-border shadow-sm"
             >
                 {/* Header */}
-                <CardHeader count={attendances.length} heading="Attendance list" />
+                <CardHeader
+                    count={attendances.length}
+                    heading="Attendance list"
+                    children={
+                        <ToolTip
+                            text="Info"
+                            side="left"
+                            children={
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger>
+                                        <div className="bg-muted text-foreground rounded-full p-2">
+                                            <Info className="h-4 w-4" />
+                                        </div>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        <DropdownMenuLabel>Colors</DropdownMenuLabel>
+                                        <DropdownMenuItem>
+                                            <div className="p-1 rounded-full bg-yellow-400/40 group-hover:bg-yellow-400/50"></div>
+                                            Pending
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem>
+                                            <div className="p-1 rounded-full bg-green-400/40 group-hover:bg-green-400/50"></div>
+                                            Present
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem>
+                                            <div className="p-1 rounded-full bg-red-400/40 group-hover:bg-red-400/50"></div>
+                                            Absent
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem>
+                                            <div className="p-1 rounded-full bg-blue-400/40 group-hover:bg-blue-400/50"></div>
+                                            Late
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            }
+                        />
+                    }
+                />
 
                 {/* Filter and view */}
-                <CalenderHeader
+                <Header
                     view={view}
                     setView={setView}
                     selectedDate={selectedDate}
@@ -208,17 +265,15 @@ function Table({ view, setView }: Propstype) {
                     setSelectedStudent={setSelectedStudent}
                     students={students}
                     fetchingStudents={fetchingStudents}
+                    selectedStatus={selectedStatus}
+                    setSelectedStatus={setSelectedStatus}
                 />
 
                 {/* Lists */}
                 {attendances.length > 0 && (
                     <div className="flex flex-col gap-3 overflow-auto no-scrollbar">
                         {attendances.map((item: IAttendence, index: number) => (
-                            <div
-                                style={{ willChange: "transform" }}
-                                key={index}
-                                className="relateive w-full"
-                            >
+                            <div key={index} className="relateive w-full">
                                 <motion.div
                                     key={index}
                                     initial={{ opacity: 0, y: -20 }}
@@ -360,4 +415,4 @@ function Table({ view, setView }: Propstype) {
     );
 }
 
-export default Table;
+export default Records;

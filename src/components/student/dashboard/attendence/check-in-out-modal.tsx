@@ -73,7 +73,7 @@ function CheckedInOutModal({ children }: Propstype) {
                 }
 
                 toast({
-                    title: `You have successfully ${activity === "checkIn" ? "checked In." : "checked Out."
+                    title: `You have successfully ${activity === "checkIn" ? "checked-in." : "checked-out."
                         }`,
                 });
 
