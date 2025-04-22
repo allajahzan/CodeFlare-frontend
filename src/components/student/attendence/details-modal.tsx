@@ -82,7 +82,7 @@ function DetailsModal({
                                 value={
                                     selectedAttendence?.checkIn
                                         ? convertTo12HourFormat(selectedAttendence.checkIn)
-                                        : "-"
+                                        : "--:--"
                                 }
                                 className="text-foreground font-medium p-5 pl-9 disabled:cursor-default"
                             />
@@ -103,7 +103,7 @@ function DetailsModal({
                                 value={
                                     selectedAttendence?.checkOut
                                         ? convertTo12HourFormat(selectedAttendence.checkOut)
-                                        : "-"
+                                        : "--:--"
                                 }
                                 className="text-foreground font-medium p-5 pl-9 disabled:cursor-default"
                             />
@@ -142,12 +142,12 @@ function DetailsModal({
                                 </Label>
                                 <div className="relative">
                                     <Textarea
-                                        placeholder="Enter the reason"
+                                        placeholder="Reason"
                                         readOnly
                                         disabled
                                         rows={3}
                                         value={
-                                            selectedAttendence.reason ? selectedAttendence.reason : "-"
+                                            selectedAttendence.reason ? selectedAttendence.reason : "..."
                                         }
                                         className="p-2.5 pl-9 text-foreground font-medium border bg-background resize-none disabled:cursor-default"
                                     />

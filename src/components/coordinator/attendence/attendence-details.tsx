@@ -264,7 +264,7 @@ function AttendenceDetails({
                                         ? convertTo12HourFormat(
                                             selectedAttendence.checkIn as string
                                         )
-                                        : "-"
+                                        : "--:--"
                                 }
                                 iconClassName="text-green-600"
                                 iconDivClassName="bg-green-400/20 group-hover:bg-green-400/30"
@@ -283,7 +283,7 @@ function AttendenceDetails({
                                         ? convertTo12HourFormat(
                                             selectedAttendence.checkOut as string
                                         )
-                                        : "-"
+                                        : "--:--"
                                 }
                                 iconClassName="text-pink-600"
                                 iconDivClassName="bg-pink-400/20 group-hover:bg-pink-400/30 rotate-180"
@@ -303,7 +303,7 @@ function AttendenceDetails({
                                             Number(selectedAttendence.checkOut.split(":")[0]) -
                                             Number(selectedAttendence.checkIn.split(":")[0])
                                         ).toString() + " Hours"
-                                        : "-"
+                                        : "--"
                                 }
                                 iconClassName="text-purple-600"
                                 iconDivClassName="bg-purple-400/20 group-hover:bg-purple-400/30"

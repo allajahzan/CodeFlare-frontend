@@ -14,10 +14,8 @@ import Filter from "@/components/common/data-card/filter";
 
 // Interface for Props
 interface Propstype {
-    view: "records-view" | "analysis-view";
-    setView: React.Dispatch<
-        React.SetStateAction<"records-view" | "analysis-view">
-    >;
+    view: "lists-view" | "analysis-view";
+    setView: React.Dispatch<React.SetStateAction<"lists-view" | "analysis-view">>;
 
     selectedDate: Date | undefined;
     setSelectedDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
@@ -131,7 +129,7 @@ function Header({
 
                     {/* View selecter */}
                     <Select
-                        onValueChange={(value: "records-view" | "analysis-view") =>
+                        onValueChange={(value: "lists-view" | "analysis-view") =>
                             setView(value)
                         }
                         value={view}
@@ -143,8 +141,8 @@ function Header({
                             <ScanEye className="w-4 h-4 text-foreground" />
                         </SelectTrigger>
                         <SelectContent align="end">
-                            <SelectItem value="records-view">Attendence Records</SelectItem>
-                            <SelectItem value="analysis-view">Monthly Analysis</SelectItem>
+                            <SelectItem value="lists-view">Attendence list</SelectItem>
+                            <SelectItem value="analysis-view">Monthly analysis</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>

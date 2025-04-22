@@ -32,18 +32,17 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import ToolTip from "@/components/common/tooltip/tooltip";
 
 // Interface for Props
 interface Propstype {
-    view: "records-view" | "analysis-view";
+    view: "lists-view" | "analysis-view";
     setView: React.Dispatch<
-        React.SetStateAction<"records-view" | "analysis-view">
+        React.SetStateAction<"lists-view" | "analysis-view">
     >;
 }
 
-// Records Component
-function Records({ view, setView }: Propstype) {
+// lists Component
+function Lists({ view, setView }: Propstype) {
     // Attendence states
     const [attendances, setAttendences] = useState<IAttendence[] | []>([]);
     const [selectedAttendence, setSelectedAttendence] =
@@ -218,38 +217,32 @@ function Records({ view, setView }: Propstype) {
                     count={attendances.length}
                     heading="Attendance list"
                     children={
-                        <ToolTip
-                            text="Info"
-                            side="left"
-                            children={
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger>
-                                        <div className="bg-muted text-foreground rounded-full p-2">
-                                            <Info className="h-4 w-4" />
-                                        </div>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent>
-                                        <DropdownMenuLabel>Colors</DropdownMenuLabel>
-                                        <DropdownMenuItem>
-                                            <div className="p-1 rounded-full bg-yellow-400/40 group-hover:bg-yellow-400/50"></div>
-                                            Pending
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                            <div className="p-1 rounded-full bg-green-400/40 group-hover:bg-green-400/50"></div>
-                                            Present
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                            <div className="p-1 rounded-full bg-red-400/40 group-hover:bg-red-400/50"></div>
-                                            Absent
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                            <div className="p-1 rounded-full bg-blue-400/40 group-hover:bg-blue-400/50"></div>
-                                            Late
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            }
-                        />
+                        <DropdownMenu>
+                            <DropdownMenuTrigger title="Info">
+                                <div className="bg-muted text-foreground rounded-full p-2">
+                                    <Info className="h-4 w-4" />
+                                </div>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>Colors</DropdownMenuLabel>
+                                <DropdownMenuItem>
+                                    <div className="p-1 rounded-full bg-yellow-400/40 group-hover:bg-yellow-400/50"></div>
+                                    Pending
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <div className="p-1 rounded-full bg-green-400/40 group-hover:bg-green-400/50"></div>
+                                    Present
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <div className="p-1 rounded-full bg-red-400/40 group-hover:bg-red-400/50"></div>
+                                    Absent
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <div className="p-1 rounded-full bg-blue-400/40 group-hover:bg-blue-400/50"></div>
+                                    Late
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     }
                 />
 
@@ -366,7 +359,7 @@ function Records({ view, setView }: Propstype) {
                         message={
                             fetching
                                 ? "Please wait a moment"
-                                : "No attendance records available yet"
+                                : "No attendance lists available yet"
                         }
                         text={fetching ? "Fetching..." : "No attendance found"}
                         className="w-full"
@@ -403,7 +396,7 @@ function Records({ view, setView }: Propstype) {
                         <div className="w-full h-[305.6px] bg-background dark:bg-sidebar-background text-start p-5 border rounded-2xl">
                             <NotSelected
                                 MainIcon={PieChart}
-                                message="No attendance records for pie chart"
+                                message="No attendance lists for pie chart"
                                 text="No attendance founds"
                                 className="h-full p-0 border-none"
                             />
@@ -415,4 +408,4 @@ function Records({ view, setView }: Propstype) {
     );
 }
 
-export default Records;
+export default Lists;
