@@ -102,7 +102,6 @@ function ViewReasonModal({
                                 placeholder="Enter the reason"
                                 rows={3}
                                 value={reason}
-                                required
                                 onChange={(event) => setReason(event.target.value)}
                                 className="p-2.5 pl-9 text-foreground font-medium border bg-background resize-none"
                             />

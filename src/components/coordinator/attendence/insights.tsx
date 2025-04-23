@@ -1,5 +1,5 @@
 import type React from "react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ChevronDown, Download } from "lucide-react";
 import { IBatch } from "@/types/batch";
 import { IStudent } from "@/types/student";
@@ -18,17 +18,8 @@ import ApiEndpoints from "@/constants/api-endpoints";
 import { handleCustomError } from "@/utils/error";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
-
-// Student data interface
-interface StudentRecord {
-    id: string;
-    date: string;
-    batch: string;
-    student: string;
-    checkIn: string;
-    checkOut: string;
-    status: "Pending" | "Present" | "Absent" | "Late";
-}
+import { IAttendence } from "@/types/attendence";
+import { IUserContext, UserContext } from "@/context/user-context";
 
 // Interface for Props
 interface Propstype {
@@ -43,54 +34,9 @@ function Insights({ view, setView }: Propstype) {
         "monthly-overview" | "flagged-students"
     >("monthly-overview");
 
-    // Sample data
-    const studentRecords: StudentRecord[] = [
-        {
-            id: "1",
-            date: "2025-04-22",
-            batch: "Batch 1",
-            student: "John Doe",
-            checkIn: "08:30 AM",
-            checkOut: "04:30 PM",
-            status: "Present",
-        },
-        {
-            id: "2",
-            date: "2025-04-22",
-            batch: "Batch 1",
-            student: "Jane Smith",
-            checkIn: "01:15 PM",
-            checkOut: "07:30 PM",
-            status: "Late",
-        },
-        {
-            id: "3",
-            date: "2025-04-22",
-            batch: "Batch 2",
-            student: "Mike Johnson",
-            checkIn: "05:00 PM",
-            checkOut: "09:00 PM",
-            status: "Present",
-        },
-        {
-            id: "4",
-            date: "2025-04-21",
-            batch: "Batch 2",
-            student: "Sarah Williams",
-            checkIn: "--:--",
-            checkOut: "--:--",
-            status: "Absent",
-        },
-        {
-            id: "5",
-            date: "2025-04-21",
-            batch: "Batch 3",
-            student: "Alex Brown",
-            checkIn: "01:30 PM",
-            checkOut: "07:45 PM",
-            status: "Present",
-        },
-    ];
+    // Attendence states
+    const [attendences, setAttendences] = useState<IAttendence[] | []>([]);
+    const [fetching, setFetching] = useState<boolean>(false);
 
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
@@ -116,6 +62,53 @@ function Insights({ view, setView }: Propstype) {
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
+
+    // User context
+    const { user } = useContext(UserContext) as IUserContext;
+
+    // Fetch attendences
+    useEffect(() => {
+        const fetchAttendence = async () => {
+            try {
+                setFetching(true);
+                setAttendences([]);
+
+                // Send request
+                const resp = await fetchData(
+                    ApiEndpoints.MONTHLY_OVERVIEW +
+                    `?batchIds=${selectedBatch
+                        ? selectedBatch._id
+                        : user?.batches?.map((batch) => batch._id).join(",")
+                    }&userId=${selectedStudent}&month=${selectedMonth}&year=${selectedYear}&filter=${selectedStatus === "All" ? "" : selectedStatus
+                    }`,
+                    role
+                );
+
+                // Success response
+                if (resp && resp.status === 200) {
+                    const data = resp.data?.data;
+
+                    // Update attendence
+                    setTimeout(() => {
+                        setAttendences(data);
+                        setFetching(false);
+                    }, 1000);
+                }
+            } catch (err: unknown) {
+                setFetching(false);
+                handleCustomError(err);
+            }
+        };
+
+        insightView === "monthly-overview" && fetchAttendence();
+    }, [
+        selectedMonth,
+        selectedYear,
+        selectedBatch,
+        selectedStudent,
+        selectedStatus,
+        insightView,
+    ]);
 
     // Fetch students based on batch
     useEffect(() => {
@@ -158,7 +151,12 @@ function Insights({ view, setView }: Propstype) {
                 <div className="w-full flex items-center justify-between">
                     <DropdownMenu>
                         <DropdownMenuTrigger className="w-fit border-none text-lg text-foreground font-semibold p-0 focus:outline-none flex items-center gap-2">
-                            <span>Monthly overview (5)</span>
+                            <span>
+                                {insightView === "monthly-overview"
+                                    ? "Monthly overview"
+                                    : "Flagged students"}{" "}
+                                ({attendences.length})
+                            </span>
                             <ChevronDown className="h-4 w-4" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
@@ -168,7 +166,10 @@ function Insights({ view, setView }: Propstype) {
                                 Monthly overview
                             </DropdownMenuItem>
                             <DropdownMenuItem
-                                onClick={() => setInsightView("flagged-students")}
+                                onClick={() => {
+                                    setAttendences([]);
+                                    setInsightView("flagged-students");
+                                }}
                             >
                                 Flagged students
                             </DropdownMenuItem>
@@ -209,9 +210,9 @@ function Insights({ view, setView }: Propstype) {
                     />
                 </div>
 
-                {/* Toggle pages */}
+                {/* Toggle views */}
                 {insightView === "monthly-overview" ? (
-                    <MontlyOverview studentRecords={studentRecords} />
+                    <MontlyOverview attendences={attendences} fetching={fetching} />
                 ) : (
                     <FlaggedStudents />
                 )}

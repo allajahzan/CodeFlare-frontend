@@ -318,13 +318,16 @@ function Lists({ view, setView }: Propstype) {
                                     transition={{ delay: 0.2 + index * 0.1 }}
                                     onClick={() => setSelectedAttendence(item)}
                                     className={cn(
-                                        "group p-2 px-3 w-full flex flex-col rounded-xl cursor-pointer border dark:border-transparent bg-background dark:bg-sidebar hover:bg-muted dark:hover:bg-sidebar-backgroundDark",
+                                        "group p-2 px-3 w-full flex flex-col rounded-xl cursor-pointer border dark:border-transparent bg-background dark:bg-sidebar hover:bg-muted dark:hover:bg-sidebar-backgroundDark shadow-sm",
                                         selectedAttendence?._id === item._id
                                             ? "bg-muted dark:bg-sidebar-backgroundDark"
                                             : ""
                                     )}
                                 >
-                                    <div className="flex items-center gap-3">
+                                    <div
+                                        style={{ willChange: "transform" }}
+                                        className="flex items-center gap-3"
+                                    >
                                         {/* Avatar profile pic */}
                                         <Avatar className="bg-background w-12 h-12 border-2 border-background dark:border-border shadow-md">
                                             <AvatarImage
