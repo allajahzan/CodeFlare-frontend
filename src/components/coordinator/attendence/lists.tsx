@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import {
     CalendarClock,
     CalendarCogIcon,
+    CalendarDaysIcon,
     Dot,
     Info,
     PieChart,
@@ -10,7 +11,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import profile from "@/assets/images/no-profile.svg";
 import CardHeader from "@/components/common/data-card/header";
-import Header from "./header";
+import FilterOptions from "./filter-options";
 import PieCharts from "@/components/common/charts/pie-chart";
 import { useContext, useEffect, useState } from "react";
 import { handleCustomError } from "@/utils/error";
@@ -32,13 +33,18 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+    Select,
+    SelectContent,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import DatePicker from "@/components/instructor/reviews/date-picker";
 
 // Interface for Props
 interface Propstype {
-    view: "lists-view" | "analysis-view";
-    setView: React.Dispatch<
-        React.SetStateAction<"lists-view" | "analysis-view">
-    >;
+    view: "lists-view" | "insights-view";
+    setView: React.Dispatch<React.SetStateAction<"lists-view" | "insights-view">>;
 }
 
 // lists Component
@@ -63,13 +69,7 @@ function Lists({ view, setView }: Propstype) {
     const [fetchingStudents, setFetchingStudents] = useState<boolean>(false);
 
     // Filter status
-    const [selectedStatus, setSelectedStatus] = useState<string>("");
-
-    // // Sort
-    // const [sort, setSort] = useState<{ key: string; order: number }>({
-    //     key: "createdAt",
-    //     order: 1,
-    // });
+    const [selectedStatus, setSelectedStatus] = useState<string>("All");
 
     // Pie chart data
     const [pieChartData, setPieChartData] = useState<
@@ -246,21 +246,65 @@ function Lists({ view, setView }: Propstype) {
                     }
                 />
 
-                {/* Filter and view */}
-                <Header
-                    view={view}
-                    setView={setView}
-                    selectedDate={selectedDate}
-                    setSelectedDate={setSelectedDate}
-                    selectedBatch={selectedBatch}
-                    setSelectedBatch={setSelectedBatch}
-                    selectedStudent={selectedStudent}
-                    setSelectedStudent={setSelectedStudent}
-                    students={students}
-                    fetchingStudents={fetchingStudents}
-                    selectedStatus={selectedStatus}
-                    setSelectedStatus={setSelectedStatus}
-                />
+                {/* Search filter */}
+                <div className="flex items-center gap-2">
+                    {/* Select Date */}
+                    <div className="relative min-w-0 w-full sm:col-span-2 lg:col-span-1">
+                        <Select
+                            value={
+                                selectedDate
+                                    ? new Date(selectedDate).toLocaleDateString("en-GB", {
+                                        day: "numeric",
+                                        month: "short",
+                                        year: "numeric",
+                                    })
+                                    : ""
+                            }
+                        >
+                            <SelectTrigger
+                                title="Date"
+                                className="w-full text-foreground font-medium p-5 pl-9 rounded-lg cursor-pointer bg-background dark:hover:bg-sidebar dark:hover:border-customBorder-dark"
+                            >
+                                <SelectValue placeholder="Select date">
+                                    {selectedDate
+                                        ? new Date(selectedDate).toLocaleDateString("en-GB", {
+                                            day: "numeric",
+                                            month: "short",
+                                            year: "numeric",
+                                        })
+                                        : "Select date"}
+                                </SelectValue>
+                                <CalendarDaysIcon className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                            </SelectTrigger>
+                            <SelectContent
+                                className="bg-transparent border-none shadow-none p-0 relative left-1 rounded-lg"
+                                align="end"
+                            >
+                                <DatePicker
+                                    isDatePickerOpen={true}
+                                    selectedDate={selectedDate}
+                                    setSelectedDate={setSelectedDate}
+                                    className="w-[252px] bg-background rounded-lg shadow-lg border"
+                                />
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    {/* Filter options */}
+                    <FilterOptions
+                        view={view}
+                        setView={setView}
+                        selectedBatch={selectedBatch}
+                        setSelectedBatch={setSelectedBatch}
+                        selectedStudent={selectedStudent}
+                        setSelectedStudent={setSelectedStudent}
+                        students={students}
+                        setStudents={setStudents}
+                        fetchingStudents={fetchingStudents}
+                        selectedStatus={selectedStatus}
+                        setSelectedStatus={setSelectedStatus}
+                    />
+                </div>
 
                 {/* Lists */}
                 {attendances.length > 0 && (

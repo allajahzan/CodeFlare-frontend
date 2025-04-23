@@ -19,7 +19,7 @@ function IconButton({ className, action, Icon, iconClassName, text }: PropsType)
                     : () => { }
             }
             className={cn(
-                "p-3 rounded-lg border border-border hover:bg-muted dark:hover:bg-sidebar shadow-sm",
+                "p-3 rounded-lg border border-border dark:hover:border-customBorder-dark bg-background hover:bg-muted dark:hover:bg-sidebar shadow-sm",
                 className
             )}
         >

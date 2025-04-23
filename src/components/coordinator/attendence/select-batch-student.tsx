@@ -18,15 +18,17 @@ interface propsType {
     selectedStudent: string | "";
     setSelectedStudent: React.Dispatch<React.SetStateAction<string | "">>;
     students: [] | IStudent[];
+    setStudents: React.Dispatch<React.SetStateAction<[] | IStudent[]>>;
     fetchingStudents: boolean;
 }
 
-// Search attendence Component
-function SearchAttendence({
+// Selects batch student Component
+function SelectBatchStudent({
     selectedBatch,
     setSelectedBatch,
     selectedStudent,
     setSelectedStudent,
+    setStudents,
     students,
     fetchingStudents,
 }: propsType) {
@@ -125,6 +127,7 @@ function SearchAttendence({
                     onClick={() => {
                         setSelectedBatch(null);
                         setSelectedStudent("");
+                        setStudents([]);
                     }}
                     className="text-foreground font-medium p-2 pl-9 relative w-full bg-transparent shadow-none hover:bg-muted border-none rounded-lg"
                 >
@@ -137,4 +140,4 @@ function SearchAttendence({
     );
 }
 
-export default SearchAttendence;
+export default SelectBatchStudent;

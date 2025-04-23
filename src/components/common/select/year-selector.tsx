@@ -23,7 +23,7 @@ function SelectYear({
                 defaultValue={selectedYear}
                 className="w-full h-[41.6px] bg-background border dark:hover:border-customBorder-dark hover:bg-muted dark:hover:bg-sidebar rounded-lg shadow-none"
             >
-                <span className="pl-3 text-sm text-start text-foreground font-medium flex items-center gap-2">
+                <span className="pl-3 text-[14.5px] text-start text-foreground font-medium flex items-center gap-2">
                     <CalendarDays className="w-4 h-4 text-foreground" />{" "}
                     {selectedYear || "Year"}
                 </span>

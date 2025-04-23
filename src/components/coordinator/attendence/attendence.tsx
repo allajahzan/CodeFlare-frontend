@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
-import Analysis from "./analysis";
+import Insights from "./insights";
 import Lists from "./lists";
 
 // Attendence list Component
@@ -10,15 +10,15 @@ function Attendence() {
     const role = useSelector((state: stateType) => state.role);
 
     // View state
-    const [view, setView] = useState<"lists-view" | "analysis-view">(
-        role === "student" ? "analysis-view" : "lists-view"
+    const [view, setView] = useState<"lists-view" | "insights-view">(
+        role === "student" ? "insights-view" : "lists-view"
     );
 
     return (
         <>
             {/* lists */}
             {view === "lists-view" && <Lists view={view} setView={setView} />}
-            {view === "analysis-view" && <Analysis view={view} setView={setView} />}
+            {view === "insights-view" && <Insights view={view} setView={setView} />}
         </>
     );
 }
