@@ -46,8 +46,8 @@ function Insights({ view, setView }: Propstype) {
     const currentMonth = currentDate.toLocaleString("default", { month: "long" });
 
     // Year and month
-    const [selectedYear, setSelectedYear] = useState(currentYear);
-    const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+    const [selectedYear, setSelectedYear] = useState<number>(currentYear);
+    const [selectedMonth, setSelectedMonth] = useState<string>(currentMonth);
 
     // Select batch
     const [selectedBatch, setSelectedBatch] = useState<IBatch | null>(null);
@@ -260,7 +260,10 @@ function Insights({ view, setView }: Propstype) {
                 {insightView === "monthly-overview" ? (
                     <MontlyOverview attendences={attendences} fetching={fetching} />
                 ) : (
-                    <FlaggedStudents flaggedStudents={flaggedStudents} />
+                    <FlaggedStudents
+                        flaggedStudents={flaggedStudents}
+                        fetching={fetching}
+                    />
                 )}
             </div>
         </div>

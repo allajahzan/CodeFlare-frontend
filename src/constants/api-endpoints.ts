@@ -42,6 +42,9 @@ enum ApiEndpoints {
     CHECK_IN_OUT = "/student/attendence/check-in-out",
     SNAP_SHOT = "/student/attendence/snapshot",
     MONTHLY_ATTENDENCE = "/student/attendence/monthly-attendence",
+
+    // Warning APIs - student service
+    WARNING = "/student/warning",
 }
 
 export default ApiEndpoints;

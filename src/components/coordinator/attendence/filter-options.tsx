@@ -53,7 +53,7 @@ function FilterOptions({
     setSelectedStatus,
 
     selectedCategory, // Optional
-    setSelectedCategory // Optional
+    setSelectedCategory, // Optional
 }: Propstype) {
     return (
         <div
@@ -99,7 +99,11 @@ function FilterOptions({
                         <Filter
                             title="Status"
                             filter={selectedCategory as string}
-                            setFilter={setSelectedCategory as React.Dispatch<React.SetStateAction<string>>}
+                            setFilter={
+                                setSelectedCategory as React.Dispatch<
+                                    React.SetStateAction<string>
+                                >
+                            }
                             fitlerData={["All", "Absent", "Late"]}
                         />
                     )}

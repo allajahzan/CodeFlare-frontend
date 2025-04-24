@@ -58,6 +58,15 @@ const SnapshotContextProvider = ({ children }: { children: ReactNode }) => {
         };
     }, []);
 
+    // Get warning from coordinator
+    useEffect(() => {
+        socket.on("receiveWarning", (data) => {
+            console.log(data);
+
+            toast({ title: data.message });
+        });
+    }, []);
+
     // Get snapshot message from localstorage
     function getItemWithExpiry(key: string): string {
         const itemStr = localStorage.getItem(key);
