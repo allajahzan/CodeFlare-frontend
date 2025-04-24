@@ -147,7 +147,7 @@ function DetailsModal({
                                         disabled
                                         rows={3}
                                         value={
-                                            selectedAttendence.reason ? selectedAttendence.reason : "..."
+                                            selectedAttendence.reason ? selectedAttendence.reason : "NILL"
                                         }
                                         className="p-2.5 pl-9 text-foreground font-medium border bg-background resize-none disabled:cursor-default"
                                     />

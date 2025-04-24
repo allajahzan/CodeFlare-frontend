@@ -41,7 +41,7 @@ enum ApiEndpoints {
     ATTENDENCE_STATUS = "/student/attendence/status",
     CHECK_IN_OUT = "/student/attendence/check-in-out",
     SNAP_SHOT = "/student/attendence/snapshot",
-    MONTHLY_OVERVIEW = "/student/attendence/monthly-overview",
+    MONTHLY_ATTENDENCE = "/student/attendence/monthly-attendence",
 }
 
 export default ApiEndpoints;

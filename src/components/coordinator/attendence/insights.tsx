@@ -11,7 +11,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import MontlyOverview from "./monthly-overview";
-import FlaggedStudents from "./flagged-students";
+import FlaggedStudents, { IFlaggedStudent } from "./flagged-student";
 import FilterOptions from "./filter-options";
 import { fetchData } from "@/service/api-service";
 import ApiEndpoints from "@/constants/api-endpoints";
@@ -36,6 +36,9 @@ function Insights({ view, setView }: Propstype) {
 
     // Attendence states
     const [attendences, setAttendences] = useState<IAttendence[] | []>([]);
+    const [flaggedStudents, setFlaggedStudents] = useState<
+        IFlaggedStudent[] | []
+    >([]);
     const [fetching, setFetching] = useState<boolean>(false);
 
     const currentDate = new Date();
@@ -66,7 +69,50 @@ function Insights({ view, setView }: Propstype) {
     // User context
     const { user } = useContext(UserContext) as IUserContext;
 
-    // Fetch attendences
+    // Fetch flagged users
+    useEffect(() => {
+        const fetchFlaggedUsers = async () => {
+            try {
+                setFetching(true);
+                setFlaggedStudents([]);
+
+                // Send request
+                const resp = await fetchData(
+                    ApiEndpoints.MONTHLY_ATTENDENCE +
+                    `?type=${insightView}&batchIds=${selectedBatch
+                        ? selectedBatch._id
+                        : user?.batches?.map((batch) => batch._id).join(",")
+                    }&userId=${selectedStudent}&month=${selectedMonth}&year=${selectedYear}&filter=${selectedCategory === "All" ? "" : selectedCategory
+                    }`,
+                    role
+                );
+
+                // Success response
+                if (resp && resp.status === 200) {
+                    const data = resp.data?.data;
+
+                    // Update attendence
+                    setTimeout(() => {
+                        setFlaggedStudents(data);
+                        setFetching(false);
+                    }, 1000);
+                }
+            } catch (err: unknown) {
+                handleCustomError(err);
+            }
+        };
+
+        insightView === "flagged-students" && fetchFlaggedUsers();
+    }, [
+        selectedMonth,
+        selectedYear,
+        selectedBatch,
+        selectedStudent,
+        selectedCategory,
+        insightView,
+    ]);
+
+    // Fetch attendences - monthly overview
     useEffect(() => {
         const fetchAttendence = async () => {
             try {
@@ -75,8 +121,8 @@ function Insights({ view, setView }: Propstype) {
 
                 // Send request
                 const resp = await fetchData(
-                    ApiEndpoints.MONTHLY_OVERVIEW +
-                    `?batchIds=${selectedBatch
+                    ApiEndpoints.MONTHLY_ATTENDENCE +
+                    `?type=${insightView}&batchIds=${selectedBatch
                         ? selectedBatch._id
                         : user?.batches?.map((batch) => batch._id).join(",")
                     }&userId=${selectedStudent}&month=${selectedMonth}&year=${selectedYear}&filter=${selectedStatus === "All" ? "" : selectedStatus
@@ -144,7 +190,7 @@ function Insights({ view, setView }: Propstype) {
         <div className="p-5 pt-0 grid grid-cols-1">
             <div
                 className="sticky top-0 bg-background dark:bg-sidebar-background w-full p-5 flex flex-col gap-5
-        h-[calc(100vh-108px)] mb-5 md:mb-0 rounded-2xl
+        h-[calc(100vh-108px)] rounded-2xl
         border border-border shadow-sm overflow-hidden "
             >
                 {/* Header - select insight view */}
@@ -159,7 +205,7 @@ function Insights({ view, setView }: Propstype) {
                             </span>
                             <ChevronDown className="h-4 w-4" />
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
+                        <DropdownMenuContent align="start">
                             <DropdownMenuItem
                                 onClick={() => setInsightView("monthly-overview")}
                             >
@@ -214,7 +260,7 @@ function Insights({ view, setView }: Propstype) {
                 {insightView === "monthly-overview" ? (
                     <MontlyOverview attendences={attendences} fetching={fetching} />
                 ) : (
-                    <FlaggedStudents />
+                    <FlaggedStudents flaggedStudents={flaggedStudents} />
                 )}
             </div>
         </div>

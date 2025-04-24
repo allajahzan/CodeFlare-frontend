@@ -1,9 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
-    AlertTriangle,
     CalendarClock,
     CalendarCogIcon,
     ChevronDown,
@@ -57,7 +55,7 @@ function MontlyOverview({ attendences, fetching }: Propstype) {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 + index * 0.1 }}
                                 className="rounded-lg border border-border dark:border-transparent dark:bg-sidebar 
-                                hover:bg-muted dark:hover:bg-sidebar-backgroundDark shadow-sm"
+                                hover:bg-muted/50 dark:hover:bg-sidebar-backgroundDark shadow-sm"
                             >
                                 {/* Mobile/Desktop Row */}
                                 <div
@@ -197,7 +195,7 @@ function MontlyOverview({ attendences, fetching }: Propstype) {
                                                 </p>
                                             </div>
 
-                                            <div className="hidden">
+                                            {/* <div className="hidden">
                                                 <Button
                                                     variant="outline"
                                                     size="sm"
@@ -208,7 +206,7 @@ function MontlyOverview({ attendences, fetching }: Propstype) {
                                                     <AlertTriangle size={16} />
                                                     Send Warning
                                                 </Button>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 )}
