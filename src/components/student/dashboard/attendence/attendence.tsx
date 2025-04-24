@@ -1,21 +1,20 @@
 import { useContext, useEffect, useState } from "react";
-import { CalendarClock, Info, Loader2 } from "lucide-react";
+import { CalendarClock, Info, Loader2, TriangleAlert } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { checkedInAction, stateType } from "@/redux/store";
 import CheckedInOutModal from "./check-in-out-modal";
 import { Button } from "@/components/ui/button";
-import AttendenceInfoModal from "./guidlines-modal";
+import AttendenceGuidlinesModal from "./guidlines-modal";
 import { handleCustomError } from "@/utils/error";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { fetchData } from "@/service/api-service";
 import { IUserContext, UserContext } from "@/context/user-context";
 import ToolTip from "@/components/common/tooltip/tooltip";
-// import * as faceapi from "face-api.js";
-// import * as tf from "@tensorflow/tfjs";
-// import { drawFaceLandmarks } from "@/utils/face-landmark";
-// import { generateStableFaceId } from "@/utils/generate-uniqueId";
+import { ISnapshotContext, SnapshotContext } from "@/context/snapshot-context";
+import WebCamModal from "./web-cam-modal";
+import { Badge } from "@/components/ui/badge";
 
 // Attendence Component
 function Attendence() {
@@ -32,6 +31,10 @@ function Attendence() {
     const [fetching, setFetching] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(true);
 
+    // Modal
+    const [openWebCamModal, setOpenWebCamModal] = useState<boolean>(false);
+    const [openGuidlinesModal, setOpenGuidlinesModal] = useState<boolean>(false);
+
     // Redux
     const role = useSelector((state: stateType) => state.role);
     const isCheckedIn = useSelector((state: stateType) => state.isCheckedIn);
@@ -40,6 +43,11 @@ function Attendence() {
 
     // User context
     const { user } = useContext(UserContext) as IUserContext;
+
+    // Snapshot context
+    const { setSnapshotMessage, snapshotMessage } = useContext(
+        SnapshotContext
+    ) as ISnapshotContext;
 
     // Check weather student checkedIn or not
     useEffect(() => {
@@ -116,14 +124,11 @@ function Attendence() {
                     text="Guidlines"
                     side="left"
                     children={
-                        <AttendenceInfoModal
-                            children={
-                                <div className="p-2 bg-muted rounded-full cursor-pointer">
-                                    <Info className="w-4 h-4 text-foreground" />
-                                </div>
-                            }
-                        />
+                        <div className="p-2 bg-muted rounded-full cursor-pointer">
+                            <Info className="w-4 h-4 text-foreground" />
+                        </div>
                     }
+                    action={() => setOpenGuidlinesModal(true)}
                 />
 
                 {/* Attendence calender */}
@@ -132,7 +137,7 @@ function Attendence() {
                     side="left"
                     children={
                         <div
-                            onClick={() => navigate(`/${role}/attendence`)}
+                            onClick={() => navigate(`/${role}/attendance`)}
                             className="p-2 bg-muted rounded-full cursor-pointer"
                         >
                             <CalendarClock className="w-4 h-4 text-foreground" />
@@ -141,124 +146,153 @@ function Attendence() {
                 />
             </div>
 
-            {/* Date */}
-            <p className="absolute -translate-x-1/2 left-[22%] top-[30%] text-base text-foreground font-semibold">
-                {new Date().toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "long",
-                    year: "numeric",
-                })}
-            </p>
+            <div className="relative flex-1 h-full flex flex-col pt-14 gap-3">
+                {/* Date top-left */}
+                <p className="text-base text-foreground font-semibold">
+                    {new Date().toLocaleDateString("en-GB", {
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric",
+                    })}
+                </p>
 
-            {/* Time Flipper */}
-            <div
-                // style={{ fontFamily: "Arial, sans-serif" }}
-                className="flex-1 flex justify-center items-center text-foreground text-6xl font-bold"
-            >
-                {[hours[0], hours[1], "", minutes[0], minutes[1]].map((item, index) => {
-                    return item ? (
-                        // Time Card
-                        <div key={index} className="relative">
-                            {/* Old Number  */}
-                            <motion.div
-                                key={`old-${item}`}
-                                className="absolute p-5 m-0.5 w-20 h-20 flex items-center justify-center bg-gradient-to-tr from-zinc-950 via-zinc-900 to-zinc-800 dark:bg-background border text-white shadow-md rounded-lg"
-                            >
-                                {item}
-                            </motion.div>
+                {/* Time Flipper */}
+                <div className="h-full flex flex-col justify-between items-center">
+                    <div className="flex justify-center items-center text-foreground text-6xl font-bold">
+                        {[hours[0], hours[1], "", minutes[0], minutes[1]].map(
+                            (item, index) =>
+                                item ? (
+                                    <div key={index} className="relative">
+                                        {/* Old Number */}
+                                        <motion.div
+                                            key={`old-${item}`}
+                                            className="absolute p-5 m-0.5 w-[92px] h-[92px] flex items-center justify-center bg-gradient-to-tr from-zinc-950 via-zinc-900 to-zinc-800 dark:bg-background border text-white shadow-md rounded-lg"
+                                        >
+                                            {item}
+                                        </motion.div>
 
-                            {/* New Number (Flipping In) */}
-                            <div className="relative">
-                                <motion.div
-                                    key={`new-${item}`}
-                                    className="p-5 m-0.5 w-20 h-20 flex items-center justify-center bg-gradient-to-tr from-zinc-950 via-zinc-900 to-zinc-800 dark:bg-background border text-white shadow-md rounded-lg"
-                                >
-                                    {item}
-                                </motion.div>
-                                {index === 0 && (
-                                    <motion.p
-                                        className={`absolute z-30 ${meridian === "AM" ? "top-2" : "bottom-2"
-                                            } left-2 text-white text-[10px] font-semibold`}
+                                        {/* New Number */}
+                                        <div className="relative">
+                                            <motion.div
+                                                key={`new-${item}`}
+                                                className="p-5 m-0.5 w-[92px] h-[92px] flex items-center justify-center bg-gradient-to-tr from-zinc-950 via-zinc-900 to-zinc-800 dark:bg-background border text-white shadow-md rounded-lg"
+                                            >
+                                                {item}
+                                            </motion.div>
+                                            {index === 0 && (
+                                                <motion.p
+                                                    className={`absolute z-30 ${meridian === "AM" ? "top-2" : "bottom-2"
+                                                        } left-2 text-white text-[10px] font-semibold`}
+                                                >
+                                                    {meridian}
+                                                </motion.p>
+                                            )}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <span
+                                        key={index}
+                                        className="mx-2 flex flex-col items-center gap-3 justify-center"
                                     >
-                                        {meridian}
-                                    </motion.p>
-                                )}
-                            </div>
-                        </div>
-                    ) : (
-                        // Dots
-                        <span
-                            key={index}
-                            className="mx-2 flex flex-col items-center gap-3 justify-center"
-                        >
-                            <div className="h-1 w-1 bg-foreground rounded-full"></div>
-                            <div className="h-1 w-1 bg-foreground rounded-full"></div>
-                        </span>
-                    );
-                })}
-            </div>
+                                        <div className="h-1 w-1 bg-foreground rounded-full"></div>
+                                        <div className="h-1 w-1 bg-foreground rounded-full"></div>
+                                    </span>
+                                )
+                        )}
+                    </div>
 
-            {/* Sign your attendence */}
-            <div className="w-full flex gap-3 px-5 items-center justify-end">
-                <div className="relative w-full">
-                    {/* Allowed button */}
-                    {!loading && (
-                        <CheckedInOutModal
+                    {/* Snapshot Message */}
+                    {snapshotMessage && isCheckedIn && (
+                        <ToolTip
+                            text={snapshotMessage}
+                            action={() => setOpenWebCamModal(true)}
+                            MainClassName="w-full"
                             children={
-                                <div className="w-full bg-background rounded-lg">
-                                    <Button
-                                        variant="default"
-                                        type="submit"
-                                        disabled={loading}
-                                        className="w-full shadow-md disabled:cursor-not-allowed"
-                                    >
-                                        {fetching ? (
-                                            <div className="flex items-center gap-2">
-                                                <Loader2 className="h-4 w-4 animate-spin" />
-                                                Loading...
-                                            </div>
-                                        ) : isCheckedIn ? (
-                                            "Check-out"
-                                        ) : (
-                                            "Check-in"
-                                        )}
-                                    </Button>
+                                <div className="w-full">
+                                    <div className="h-11 px-3 flex items-center justify-between rounded-lg bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border border-red-200 dark:border-red-800">
+                                        <div className="flex items-center space-x-2">
+                                            <TriangleAlert className="h-5 w-5 text-red-800 dark:text-red-600" />
+                                            <span className="text-sm font-medium text-red-800 dark:text-red-600">
+                                                Send snapshot
+                                            </span>
+                                        </div>
+                                        <Badge className="bg-red-600/20 text-red-800 dark:text-red-600 hover:bg-red-200 rounded-full shadow-none duration-0">
+                                            Required
+                                        </Badge>
+                                    </div>
                                 </div>
                             }
                         />
                     )}
+                </div>
 
-                    {/* Not allowed button */}
-                    {loading && (
-                        <div className="relative cursor-not-allowed">
-                            <Button
-                                variant="default"
-                                type="submit"
-                                disabled={loading}
-                                className="w-full shadow-md disabled:cursor-not-allowed"
-                            >
-                                {fetching ? (
-                                    <div className="flex items-center gap-2">
-                                        <Loader2 className="h-4 w-4 animate-spin" />
-                                        Loading...
+                {/* Sign your attendance - bottom right */}
+                <div className="mt-auto w-full flex gap-3 items-center justify-end">
+                    <div className="relative w-full">
+                        {!loading && (
+                            <CheckedInOutModal
+                                children={
+                                    <div className="w-full bg-background rounded-lg">
+                                        <Button
+                                            variant="default"
+                                            type="submit"
+                                            disabled={loading}
+                                            className="h-11 w-full shadow-md disabled:cursor-not-allowed"
+                                        >
+                                            {fetching ? (
+                                                <div className="flex items-center gap-2">
+                                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                                    Loading...
+                                                </div>
+                                            ) : isCheckedIn ? (
+                                                "Check-out"
+                                            ) : (
+                                                "Check-in"
+                                            )}
+                                        </Button>
                                     </div>
-                                ) : isCheckedIn ? (
-                                    "Check-out"
-                                ) : (
-                                    "Check-in"
-                                )}
-                            </Button>
-                        </div>
-                    )}
+                                }
+                            />
+                        )}
+
+                        {loading && (
+                            <div className="relative cursor-not-allowed">
+                                <Button
+                                    variant="default"
+                                    type="submit"
+                                    disabled={loading}
+                                    className="h-11 w-full shadow-md disabled:cursor-not-allowed"
+                                >
+                                    {fetching ? (
+                                        <div className="flex items-center gap-2">
+                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                            Loading...
+                                        </div>
+                                    ) : (
+                                        "Checked In & Out"
+                                    )}
+                                </Button>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 
             {/* Web cam */}
-            {/* <WebCamModal
-                videoRef={videoRef}
-                webCamOpen={webCamOpen}
-                setWebCamOpen={setWebCamOpen}
-            /> */}
+            {snapshotMessage && (
+                <WebCamModal
+                    open={openWebCamModal}
+                    setOpen={setOpenWebCamModal}
+                    message={snapshotMessage}
+                    setSnapshotMessage={setSnapshotMessage}
+                />
+            )}
+
+            {/* Guidlines modal */}
+            <AttendenceGuidlinesModal
+                open={openGuidlinesModal}
+                setOpen={setOpenGuidlinesModal}
+            />
         </div>
     );
 }

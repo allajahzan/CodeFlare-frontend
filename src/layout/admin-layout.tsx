@@ -1,7 +1,11 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "@/components/common/navbar/navbar";
 import { useDispatch, useSelector } from "react-redux";
-import { resizeAction, sideBarVisibilityAction, stateType } from "@/redux/store";
+import {
+    resizeAction,
+    sideBarVisibilityAction,
+    stateType,
+} from "@/redux/store";
 import {
     CalendarDaysIcon,
     // CreditCard,
@@ -98,7 +102,10 @@ function AdminLayout({ isDrawerOpen }: PropsType) {
                 )}
             >
                 <Navbar />
-                <div className="h-full overflow-auto">
+                <div
+                    style={{ willChange: "transform" }}
+                    className="h-full overflow-auto no-scrollbar"
+                >
                     <Outlet />
                 </div>
             </div>

@@ -23,11 +23,7 @@ interface PropsType {
 }
 
 // Paper clip Component
-function PaperClip({
-    setUser,
-    selectedUser,
-    setSelectedChat,
-}: PropsType) {
+function PaperClip({ setUser, selectedUser, setSelectedChat }: PropsType) {
     // User context
     const { user } = useContext(UserContext) as IUserContext;
 
@@ -86,9 +82,9 @@ function PaperClip({
                     };
 
                     // Get image url
-                    const status = await uploadImageToCloudinary(files[0]);
+                    const data = await uploadImageToCloudinary(files[0]);
 
-                    if (status) {
+                    if (data) {
                         // Update users with formatted user chat
                         setUser((prevUsers: IUserChat[]) => {
                             const filteredUserChats = prevUsers.filter(
@@ -102,7 +98,7 @@ function PaperClip({
                             user?._id as string,
                             selectedUser?._id as string,
                             "image",
-                            status
+                            data.imageUrl
                         );
                     } else {
                         // Remove sent message from chat

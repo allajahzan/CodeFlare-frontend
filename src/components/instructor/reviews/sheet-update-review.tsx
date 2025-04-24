@@ -105,12 +105,15 @@ function UpdateReviewsheet({
 
             // Success response
             if (resp && resp.status === 200) {
+                const data = resp.data?.data;
+
                 // Update selected review
                 setSelectedReview((prevReview: IReview | null) =>
                     prevReview
                         ? {
                             ...prevReview,
                             ...formData,
+                            updatedAt: data.updatedAt,
                         }
                         : null
                 );
@@ -147,7 +150,7 @@ function UpdateReviewsheet({
         setSelectedDate(new Date(selectedReview.date));
         setselectedTime(selectedReview.time);
         setSubmiting(false);
-        setDatePickerOpen(false)
+        setDatePickerOpen(false);
     }, [open, reset, selectedReview]);
 
     return (

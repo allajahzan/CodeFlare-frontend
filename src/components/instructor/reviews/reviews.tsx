@@ -16,8 +16,13 @@ import Search from "@/components/common/data-card/search";
 import UserList from "@/components/common/user/user-list-card";
 import IconButton from "@/components/ui/icon-button";
 import DatePicker from "./date-picker";
-import { loadedReviews, loadReviews, socket } from "@/socket/instructor/instructor-socket";
+import {
+    loadedReviews,
+    loadReviews,
+    socket,
+} from "@/socket/instructor/instructor-socket";
 import { IReview } from "@/types/review";
+import { Textarea } from "@/components/ui/textarea";
 
 // Reviews Component
 function Reviews() {
@@ -313,7 +318,19 @@ function Reviews() {
                     selectedReview={selectedReview}
                     setSelectedReview={setSelectedReview}
                 />
-                <div className=""></div>
+
+                {/* Add pendings */}
+                {selectedReview && (
+                    <div className="h-full p-5 rounded-2xl overflow-hidden border border-border bg-background dark:bg-sidebar-background shadow-sm flex flex-col">
+                        <p>Add Pendings</p>
+                        <form className="flex-1 flex flex-col">
+                            <Textarea
+                                placeholder="Closure, event loops,..."
+                                className="resize-none flex-1 w-full"
+                            />
+                        </form>
+                    </div>
+                )}
             </div>
         </div>
     );

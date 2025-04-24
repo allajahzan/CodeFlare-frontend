@@ -14,19 +14,23 @@ interface PropsType {
     text: string;
     side?: "top" | "bottom" | "left" | "right";
     className?: string;
+    MainClassName?: string;
 }
 
-function ToolTip({ children, text, action, side , className}: PropsType) {
+function ToolTip({ children, text, action, side, className, MainClassName }: PropsType) {
     return (
         <TooltipProvider disableHoverableContent={true}>
             <Tooltip>
-                <TooltipTrigger className="">
+                <TooltipTrigger className={cn(MainClassName)}>
                     <div onClick={action} className="">
                         {children}
                     </div>
                 </TooltipTrigger>
-                <TooltipContent 
-                    className={cn("text-foreground dark:bg-sidebar border borer-2", className)}
+                <TooltipContent
+                    className={cn(
+                        "text-foreground dark:bg-sidebar border borer-2",
+                        className
+                    )}
                     side={side}
                 >
                     <p style={{ fontSize: "13px" }}>{text}</p>

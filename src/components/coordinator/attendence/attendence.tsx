@@ -1,32 +1,26 @@
 import { useState } from "react";
-// import { addMonths, subMonths } from "date-fns";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
-import Table from "./table";
+import Insights from "./insights";
+import Lists from "./lists";
 
 // Attendence list Component
-function AttendenceList() {
+function Attendence() {
     // Redux
     const role = useSelector((state: stateType) => state.role);
 
     // View state
-    const [view, setView] = useState<"table-view" | "calender-view">(
-        role === "student" ? "calender-view" : "table-view"
+    const [view, setView] = useState<"lists-view" | "insights-view">(
+        role === "student" ? "insights-view" : "lists-view"
     );
 
     return (
-        <div
-            className={`w-full h-full flex flex-col gap-5 overflow-y-auto no-scrollbar p-5 pt-0`}
-        >
-            {/* Table */}
-            {view === "table-view" && (
-                <Table
-                    view={view}
-                    setView={setView}
-                />
-            )}
-        </div>
+        <>
+            {/* lists */}
+            {view === "lists-view" && <Lists view={view} setView={setView} />}
+            {view === "insights-view" && <Insights view={view} setView={setView} />}
+        </>
     );
 }
 
-export default AttendenceList;
+export default Attendence;

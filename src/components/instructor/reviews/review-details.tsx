@@ -331,8 +331,12 @@ function ReviewDetails({
                             {/* Status */}
                             <DropdownMenu>
                                 <DropdownMenuTrigger>
-                                    <div className={`relative rounded-lg bg-gradient-to-br from-${statusColor}-50 to-${statusColor}-100 dark:from-${statusColor}-900/20 dark:to-${statusColor}-800/20 border border-${statusColor}-200 dark:border-${statusColor}-800`}>
-                                    <div className={`absolute top-0 right-0 w-16 h-16 bg-${statusColor}-200 dark:bg-${statusColor}-700/20 rounded-bl-full opacity-50`}></div>
+                                    <div
+                                        className={`relative rounded-lg bg-gradient-to-br from-${statusColor}-50 to-${statusColor}-100 dark:from-${statusColor}-900/20 dark:to-${statusColor}-800/20 border border-${statusColor}-200 dark:border-${statusColor}-800`}
+                                    >
+                                        <div
+                                            className={`absolute top-0 right-0 w-16 h-16 bg-${statusColor}-200 dark:bg-${statusColor}-700/20 rounded-bl-full opacity-50`}
+                                        ></div>
                                         <InfoCard
                                             Icon={statusIcon}
                                             label="Status"
@@ -376,7 +380,7 @@ function ReviewDetails({
                             {/* Score */}
                             <div>
                                 <div className="relative group min-w-[250px] p-3 rounded-lg shadow-sm bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900/20 dark:to-pink-800/20 border border-pink-200 dark:border-pink-800 ">
-                                <div className="absolute top-0 right-0 w-16 h-16 bg-pink-200 dark:bg-pink-700/20 rounded-bl-full opacity-50"></div>
+                                    <div className="absolute top-0 right-0 w-16 h-16 bg-pink-200 dark:bg-pink-700/20 rounded-bl-full opacity-50"></div>
                                     <div className="relative flex items-center gap-3">
                                         <div className="p-2 rounded-lg bg-pink-400/20 group-hover:bg-pink-400/30">
                                             <Trophy className="w-5 h-5 text-pink-600" />
@@ -413,11 +417,11 @@ function ReviewDetails({
 
                             {/* Sheduled date */}
                             <div className="relative rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border border-blue-200 dark:border-blue-800">
-                            <div className="absolute top-0 right-0 w-16 h-16 bg-blue-200 dark:bg-blue-700/20 rounded-bl-full opacity-50"></div>
+                                <div className="absolute top-0 right-0 w-16 h-16 bg-blue-200 dark:bg-blue-700/20 rounded-bl-full opacity-50"></div>
                                 <InfoCard
                                     Icon={CalendarDays}
                                     label="Sheduled Date"
-                                    text={new Date(selectedReview.createdAt).toLocaleDateString(
+                                    text={new Date(selectedReview.updatedAt).toLocaleDateString(
                                         "en-GB",
                                         {
                                             day: "2-digit",
@@ -432,7 +436,7 @@ function ReviewDetails({
 
                             {/* Review date */}
                             <div className="relative rounded-lg bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 border border-orange-200 dark:border-orange-800">
-                            <div className="absolute top-0 right-0 w-16 h-16 bg-orange-200 dark:bg-orange-700/20 rounded-bl-full opacity-50"></div>
+                                <div className="absolute top-0 right-0 w-16 h-16 bg-orange-200 dark:bg-orange-700/20 rounded-bl-full opacity-50"></div>
                                 <InfoCard
                                     Icon={CalendarDays}
                                     label="Reveiw Date"
@@ -451,7 +455,7 @@ function ReviewDetails({
 
                             {/* Time */}
                             <div className="relative rounded-lg bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border border-green-200 dark:border-green-800">
-                            <div className="absolute top-0 right-0 w-16 h-16 bg-green-200 dark:bg-green-700/20 rounded-bl-full opacity-50"></div>
+                                <div className="absolute top-0 right-0 w-16 h-16 bg-green-200 dark:bg-green-700/20 rounded-bl-full opacity-50"></div>
                                 <InfoCard
                                     Icon={Clock}
                                     label="Time"
@@ -463,7 +467,7 @@ function ReviewDetails({
 
                             {/* Duration */}
                             <div className="relative rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border border-blue-200 dark:border-blue-800">
-                            <div className="absolute top-0 right-0 w-16 h-16 bg-blue-200 dark:bg-blue-700/20 rounded-bl-full opacity-50"></div>
+                                <div className="absolute top-0 right-0 w-16 h-16 bg-blue-200 dark:bg-blue-700/20 rounded-bl-full opacity-50"></div>
                                 <InfoCard
                                     Icon={Hourglass}
                                     label="Duration"

@@ -10,21 +10,19 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog";
 import { Dot, Info } from "lucide-react";
-import { ReactNode } from "react";
 
 // Interface for Props
 interface PropsType {
-    children: ReactNode;
+    open: boolean;
+    setOpen: (open: boolean) => void;
 }
 
-// Attendence Info Modal
-function AttendenceInfoModal({ children }: PropsType) {
+// Attendence guidlines Modal
+function AttendenceGuidlinesModal({ open, setOpen }: PropsType) {
     return (
-        <Dialog>
-            <DialogTrigger asChild>{children}</DialogTrigger>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="flex flex-col gap-5 dark:bg-sidebar-background max-h-screen">
                 <DialogHeader>
                     <DialogTitle className="text-foreground flex items-center gap-3">
@@ -54,6 +52,10 @@ function AttendenceInfoModal({ children }: PropsType) {
                                 <p className="py-2 flex items-center">
                                     <Dot className="flex-shrink-0 self-start" />
                                     You are required to be present for a minimum of 8 hours daily.
+                                </p>
+                                <p className="py-2 flex items-center">
+                                    <Dot className="flex-shrink-0 self-start" />
+                                    If you didn't check-out, you are considered as absent.
                                 </p>
                                 <p className="py-2 flex items-center">
                                     <Dot className="flex-shrink-0 self-start" />
@@ -133,4 +135,4 @@ function AttendenceInfoModal({ children }: PropsType) {
     );
 }
 
-export default AttendenceInfoModal;
+export default AttendenceGuidlinesModal;

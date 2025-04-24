@@ -12,7 +12,9 @@ enum ApiEndpoints {
     USER = "/user",
     GET_USERS = "/user/users",
     CHANGE_USER_STATUS = "/user/status",
-    SEARCH_USER = '/user/search',
+    SEARCH_USER = "/user/search",
+
+    DELETE_IMAGE = "user/delete-image",
 
     // Profile APIs - user service
     PROFILE = "/user/profile",
@@ -30,13 +32,19 @@ enum ApiEndpoints {
     MEET = "/communication/meet",
 
     // Review APIs - instructor service
-    REVIEW = '/instructor/review',
-    REVIEW_STATUS = '/instructor/review/status',
-    REVIEW_SCORE = '/instructor/review/score',
+    REVIEW = "/instructor/review",
+    REVIEW_STATUS = "/instructor/review/status",
+    REVIEW_SCORE = "/instructor/review/score",
 
     // Attendence APIs - student service
-    ATTENDENCE = '/student/attendence',
-    CHECK_IN_OUT = "/student/attendence/check-in-out"
+    ATTENDENCE = "/student/attendence",
+    ATTENDENCE_STATUS = "/student/attendence/status",
+    CHECK_IN_OUT = "/student/attendence/check-in-out",
+    SNAP_SHOT = "/student/attendence/snapshot",
+    MONTHLY_ATTENDENCE = "/student/attendence/monthly-attendence",
+
+    // Warning APIs - student service
+    WARNING = "/student/warning",
 }
 
 export default ApiEndpoints;

@@ -6,8 +6,8 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { UserContext, IUserContext } from "@/context/user-context";
 import { toast } from "@/hooks/use-toast";
@@ -54,14 +54,10 @@ function CheckedInOutModal({ children }: Propstype) {
 
             setSubmiting(true);
 
-            const time = new Date();
-            const hours = time.getHours();
-            const minutes = time.getMinutes();
-
             // Send request
             const resp = await patchData(
                 ApiEndpoints.CHECK_IN_OUT + `?userId=${user?._id}&activity=${activity}`,
-                { time: `${hours}:${minutes}`, reason },
+                { reason },
                 role
             );
 
@@ -77,7 +73,7 @@ function CheckedInOutModal({ children }: Propstype) {
                 }
 
                 toast({
-                    title: `You have successfully ${activity === "checkIn" ? "checked In." : "checked Out."
+                    title: `You have successfully ${activity === "checkIn" ? "checked-in." : "checked-out."
                         }`,
                 });
 
@@ -133,15 +129,13 @@ function CheckedInOutModal({ children }: Propstype) {
                                 Reason
                             </Label>
                             <div className="relative">
-                                <Input
-                                    id="reason"
-                                    type="text"
-                                    placeholder="Reason"
-                                    autoComplete="off"
-                                    required
+                                <Textarea
+                                    placeholder="Enter the reason"
+                                    rows={3}
                                     value={reason}
+                                    required
                                     onChange={(event) => setReason(event.target.value)}
-                                    className="p-5 pl-9 text-foreground font-medium"
+                                    className="p-2.5 pl-9 text-foreground font-medium border bg-background resize-none"
                                 />
                                 <FileSpreadsheetIcon className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                             </div>
@@ -151,6 +145,7 @@ function CheckedInOutModal({ children }: Propstype) {
                     <div className="w-full flex items-center justify-end gap-2">
                         <Button
                             onClick={() => setOpen(false)}
+                            type="button"
                             className="h-11 w-full transition-all duration-200 disabled:cursor-not-allowed"
                         >
                             Cancel

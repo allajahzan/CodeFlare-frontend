@@ -418,12 +418,12 @@ function Users({ setDrawerOpen }: PropsType) {
                                                     >
                                                         {user.isblock ? (
                                                             changingStatus ? (
-                                                                <Loader2 className="w-4 h-5 text-foreground animate-spin" />
+                                                                <Loader2 className="w-4 h-4 text-foreground animate-spin" />
                                                             ) : (
                                                                 <UserRoundCheck />
                                                             )
                                                         ) : changingStatus ? (
-                                                            <Loader2 className="w-4 h-5 text-foreground animate-spin" />
+                                                            <Loader2 className="w-4 h-4 text-foreground animate-spin" />
                                                         ) : (
                                                             <UserRoundMinus />
                                                         )}

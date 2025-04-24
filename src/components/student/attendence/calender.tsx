@@ -16,23 +16,9 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { CheckCircle2, CircleDashed, XCircle } from "lucide-react";
-
-// Inteface for event
-export interface IEvent {
-    date: Date;
-    title: string;
-    description: string;
-    start: Date;
-    end: Date;
-    breaks: {
-        start: string;
-        end: string;
-        reason: string;
-    }[];
-    status: string;
-    location: string;
-}
+import { CheckCircle2, CircleDashed, CircleDot, XCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
+import React from "react";
 
 interface Propstype {
     attendanceData: Record<string, any>;
@@ -101,12 +87,12 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                             // Tailwind class according to the conditions
                             const backgroundClass = attendance?.status
                                 ? attendance.status === "present"
-                                    ? isToday(day)
-                                        ? "" 
-                                        : "bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border border-green-200 dark:border-green-800"
+                                    ? "cursor-pointer bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border border-green-200 dark:border-green-800"
                                     : attendance.status === "absent"
-                                        ? "bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border border-red-200 dark:border-red-800"
-                                        : "bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border border-yellow-200 dark:border-yellow-800"
+                                        ? "cursor-pointer bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border border-red-200 dark:border-red-800"
+                                        : attendance.status === "late"
+                                            ? "cursor-pointer bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border border-blue-200 dark:border-blue-800"
+                                            : "cursor-pointer bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 border border-yellow-200 dark:border-yellow-800"
                                 : isCurrentMonth
                                     ? `bg-background dark:bg-sidebar-backgroundDark hover:bg-muted hover:dark:bg-muted`
                                     : "bg-muted dark:bg-sidebar-background";
@@ -115,8 +101,8 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                                 ? "text-zinc-300 dark:text-zinc-800"
                                 : "text-foreground";
 
-                                // Final class
-                                const finalClass = `${backgroundClass}  ${textColor}`;
+                            // Final class
+                            const finalClass = `${backgroundClass}  ${textColor}`;
 
                             return (
                                 <TooltipProvider key={day.toString()}>
@@ -128,26 +114,25 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                                                 transition={{ delay: 0.2 + index * 0.1 }}
                                                 className={`
                                         relative flex flex-col  
-                                        border border-border dark:border-customBorder rounded-lg p-2 ${finalClass}`
-                                        }
+                                       border border-border dark:border-customBorder"
+                                                    } rounded-lg p-2 ${finalClass}`}
                                                 onClick={() => i !== 0 && onDateClick(day)}
                                             >
                                                 {/* Date */}
                                                 <time
                                                     dateTime={format(day, "yyyy-MM-dd")}
-                                                    className={`mb-1 text-center text-sm sm:text-base font-bold
-                                            ${attendance?.status === "absent"
-                                                            ? "text-red-600"
-                                                            : attendance?.status ===
-                                                                "present"
-                                                                ? "text-green-600"
-                                                                : isToday(day)
-                                                                    ? "text-yellow-600"
-                                                                    : ""
-                                                        } 
-                                                }
-                                            ${isToday(day) ? "font-bold" : ""}
-                                        `}
+                                                    className={cn(
+                                                        "mb-1 text-center text-sm sm:text-base font-bold",
+                                                        isToday(day) && attendance?.status === "pending"
+                                                            ? "text-yellow-600"
+                                                            : attendance?.status === "absent"
+                                                                ? "text-red-600"
+                                                                : attendance?.status === "present"
+                                                                    ? "text-green-600"
+                                                                    : attendance?.status === "late"
+                                                                        ? "text-blue-600"
+                                                                        : ""
+                                                    )}
                                                 >
                                                     {format(day, "d")}
                                                 </time>
@@ -165,6 +150,8 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                                                                 <CheckCircle2 className="w-5 h-5 text-green-600" />
                                                             ) : attendance.status === "absent" ? (
                                                                 <XCircle className="w-5 h-5 text-red-600" />
+                                                            ) : attendance.status === "late" ? (
+                                                                <CircleDot className="w-5 h-5 text-blue-600" />
                                                             ) : (
                                                                 <CircleDashed className="w-5 h-5 text-yellow-600" />
                                                             )}
@@ -198,4 +185,4 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
     );
 }
 
-export default Calendar;
+export default React.memo(Calendar);

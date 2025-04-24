@@ -39,13 +39,13 @@ function UserInfo() {
                 reader.onload = async () => {
                     // Upload image to cloudinary
                     try {
-                        const imageUrl = await uploadImageToCloudinary(files[0]);
+                        const data = await uploadImageToCloudinary(files[0]);
 
-                        if (imageUrl) {
+                        if (data) {
                             // Change profile pic
                             const resp = await patchData(
                                 ApiEndpoints.CHANGE_PROFILE_PIC,
-                                { imageUrl },
+                                { imageUrl: data.imageUrl },
                                 user?.role
                             );
 
@@ -62,7 +62,7 @@ function UserInfo() {
                                     "user",
                                     JSON.stringify({
                                         ...JSON.parse(user as string),
-                                        profilePic: imageUrl,
+                                        profilePic: data.imageUrl,
                                     })
                                 );
 
@@ -71,7 +71,7 @@ function UserInfo() {
                                     if (prevUser) {
                                         return {
                                             ...prevUser,
-                                            profilePic: imageUrl,
+                                            profilePic: data.imageUrl,
                                         };
                                     } else {
                                         return prevUser;

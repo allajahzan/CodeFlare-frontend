@@ -68,7 +68,7 @@ function CoordinatorLayout({ isDrawerOpen }: PropsType) {
             {
                 path: AppRoutes.ATTENDENCE,
                 icon: CalendarClockIcon,
-                label: "Attendence",
+                label: "Attendance",
             },
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
             { path: AppRoutes.MEET, icon: Video, label: "Meet" },
@@ -114,7 +114,10 @@ function CoordinatorLayout({ isDrawerOpen }: PropsType) {
                 )}
             >
                 <Navbar />
-                <div className="h-full overflow-auto">
+                <div
+                    style={{ willChange: "transform" }}
+                    className="h-full overflow-auto no-scrollbar"
+                >
                     <Outlet />
                 </div>
             </div>

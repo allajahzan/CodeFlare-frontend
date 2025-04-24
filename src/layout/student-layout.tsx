@@ -60,14 +60,13 @@ function StudentLayout({ isDrawerOpen }: PropsType) {
                 icon: CalendarDays,
                 label: "Reviews",
             },
-            { path: AppRoutes.ATTENDENCE, icon: CalendarClock, label: "Attendence" },
+            { path: AppRoutes.ATTENDENCE, icon: CalendarClock, label: "Attendance" },
             { path: AppRoutes.STUDENT_INVOICES, icon: CreditCard, label: "Invoices" },
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
             { path: AppRoutes.MEET, icon: Video, label: "Meet" },
             ...(isSmall
                 ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
                 : []),
-
         ],
         [isSmall]
     );
@@ -107,7 +106,10 @@ function StudentLayout({ isDrawerOpen }: PropsType) {
                 )}
             >
                 <Navbar />
-                <div className="h-full overflow-auto no-scrollbar">
+                <div
+                    style={{ willChange: "transform" }}
+                    className="h-full overflow-auto no-scrollbar"
+                >
                     <Outlet />
                 </div>
             </div>
