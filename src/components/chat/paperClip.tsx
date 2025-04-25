@@ -10,7 +10,7 @@ import { Chat, Message } from "./chat";
 import { useContext } from "react";
 import { IUserContext, UserContext } from "@/context/user-context";
 import { uploadImageToCloudinary } from "@/service/cloudinary";
-import { sendPrivateMessage } from "@/socket/communication/chat-socket";
+import { sendPrivateMessage } from "@/socket/communication/chat";
 import { toast } from "@/hooks/use-toast";
 
 // Interface for Props

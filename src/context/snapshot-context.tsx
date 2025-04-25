@@ -1,10 +1,8 @@
 import React, { createContext, useState, useEffect, ReactNode } from "react";
 // import warningAlarm from "@/assets/music/warning-alarm.mp3";
 import { toast } from "@/hooks/use-toast";
-import {
-    reciveSnapshotMessage,
-    socket,
-} from "@/socket/notification/notification-socket";
+import { reciveSnapshotMessage } from "@/socket/communication/notification";
+import { socket } from "@/socket/communication/socket";
 
 export interface ISnapshotContext {
     snapshotMessage: string;
@@ -65,6 +63,11 @@ const SnapshotContextProvider = ({ children }: { children: ReactNode }) => {
 
             toast({ title: data.message });
         });
+
+           // Clean up
+           return () => {
+            socket.off("receiveWarning");
+        };
     }, []);
 
     // Get snapshot message from localstorage

@@ -4,12 +4,13 @@ import { NotSelected } from "@/components/animation/fallbacks";
 import UsersListOfChat from "./chat-users-list";
 import MessageSideOfChat from "./chat-message-side";
 import { IUserChat } from "./user-contact-sheet";
-import socket, {
+import { socket } from "@/socket/communication/socket";
+import {
     chatInfo,
     listenUserOnline,
     receivePrivateMessage,
     sendPrivateMessage,
-} from "@/socket/communication/chat-socket";
+} from "@/socket/communication/chat";
 import { IUserContext, UserContext } from "@/context/user-context";
 import { handleCustomError } from "@/utils/error";
 import ApiEndpoints from "@/constants/api-endpoints";

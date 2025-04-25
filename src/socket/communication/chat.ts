@@ -1,4 +1,4 @@
-import { socket } from "./connection";
+import { socket } from "./socket";
 
 /**
  * Emits a "registerUser" event to the socket server with the provided userId.
@@ -151,5 +151,3 @@ export const loadedMessages = (
         }
     });
 };
-
-export default socket;

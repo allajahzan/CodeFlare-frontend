@@ -1,7 +1,7 @@
 import { IReview } from "@/types/review";
 import { io } from "socket.io-client";
 
-export const socket = io(import.meta.env.VITE_INSTRUCTOR_SOCKET);
+export const socket = io(import.meta.env.VITE_INSTRUCTOR_SERVICE_URL);
 
 /**
  * Emits a "loadReviews" event to the server to load reviews that match the given search criteria.

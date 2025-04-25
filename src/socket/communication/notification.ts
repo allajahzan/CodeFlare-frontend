@@ -1,6 +1,4 @@
-import { io } from "socket.io-client";
-
-export const socket = io(import.meta.env.VITE_NOTIFICATION_SOCKET);
+import { socket } from "./socket";
 
 /**
  * Listens for "reciveSnapshotMessage" events from the notification socket server and triggers the provided callback when a message is received.

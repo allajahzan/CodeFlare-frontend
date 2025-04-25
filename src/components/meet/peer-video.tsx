@@ -6,7 +6,7 @@ import { Crown, Hand, Mic, MicOff, Pin, PinOff } from "lucide-react";
 import ScreenShareElement from "./screenshare-element";
 import { motion } from "framer-motion";
 import ToolTip from "../common/tooltip/tooltip";
-import { socket } from "@/socket/communication/connection";
+import { socket } from "@/socket/communication/socket";
 import { IUserContext, UserContext } from "@/context/user-context";
 import { IMeet } from "./meeting-join";
 

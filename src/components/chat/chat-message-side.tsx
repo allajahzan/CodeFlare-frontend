@@ -26,12 +26,13 @@ import ApiEndpoints from "@/constants/api-endpoints";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import { handleCustomError } from "@/utils/error";
-import socket, {
+import { socket } from "@/socket/communication/socket";
+import {
     listenUserTyping,
     loadedMessages,
     loadMoreMessages,
     userTyping,
-} from "@/socket/communication/chat-socket";
+} from "@/socket/communication/chat";
 import PaperClip from "./paperClip";
 
 // Iterface for Props

@@ -1,7 +1,7 @@
 import Navbar from "../common/navbar/navbar";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import * as mediasoupClient from "mediasoup-client";
-import { socket } from "@/socket/communication/connection";
+import { socket } from "@/socket/communication/socket";
 import MeetingJoin, { IMeet } from "./meeting-join";
 import { useLocation } from "react-router-dom";
 import MeetingLeft from "./meeting-left";
@@ -13,7 +13,7 @@ import {
     onNewProducer,
     onPeerLeft,
     onPeerMuteChange,
-} from "@/socket/communication/videocall-Socket";
+} from "@/socket/communication/videocall";
 import MeetingRoom from "./meeting-room";
 import { IUser } from "@/types/attendence";
 import { IUserContext, UserContext } from "@/context/user-context";
