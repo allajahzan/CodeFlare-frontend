@@ -17,11 +17,18 @@ interface PropsType {
     MainClassName?: string;
 }
 
-function ToolTip({ children, text, action, side, className, MainClassName }: PropsType) {
+function ToolTip({
+    children,
+    text,
+    action,
+    side,
+    className,
+    MainClassName,
+}: PropsType) {
     return (
-        <TooltipProvider disableHoverableContent={true}>
+        <TooltipProvider>
             <Tooltip>
-                <TooltipTrigger className={cn(MainClassName)}>
+                <TooltipTrigger asChild className={cn(MainClassName)}>
                     <div onClick={action} className="">
                         {children}
                     </div>

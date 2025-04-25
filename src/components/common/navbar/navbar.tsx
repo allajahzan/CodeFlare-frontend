@@ -26,9 +26,68 @@ import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { IThemeContext, ThemeContext } from "@/context/theme-context";
 import { IUserContext, UserContext } from "@/context/user-context";
+import ToolTip from "../tooltip/tooltip";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import NotificationItem, {
+    INotificationProps,
+} from "@/components/notification/notification-item";
+
+// Sample notifications data
+const sampleNotifications: INotificationProps[] = [
+    {
+        id: "1",
+        type: "review",
+        message: "Your review has been scheduled with Dr. Smith",
+        time: "10 minutes ago",
+        user: {
+            name: "Dr. Smith",
+            image: "/placeholder.svg?height=40&width=40",
+        },
+        path: "/student/reviews",
+    },
+    {
+        id: "2",
+        type: "warning",
+        message: "You have missed the deadline for assignment submission",
+        time: "1 hour ago",
+        user: {
+            name: "Prof. Johnson",
+            image: "/placeholder.svg?height=40&width=40",
+        },
+        path: "/student/attendence",
+    },
+    {
+        id: "3",
+        type: "info",
+        message: "Campus will be closed on Monday for maintenance",
+        time: "2 hours ago",
+        path: "/student/reviews",
+    },
+    {
+        id: "4",
+        type: "success",
+        message: "Your assignment has been graded. You scored 95%",
+        time: "Yesterday",
+        path: "/student/reviews",
+    },
+    {
+        id: "5",
+        type: "fail",
+        message: "Your assignment has been graded. You scored 25%",
+        time: "Yesterday",
+        path: "/student/reviews",
+    },
+];
 
 // Navbar Component
 const Navbar = () => {
+    const [notifications, setNotifications] =
+        useState<INotificationProps[]>(sampleNotifications);
+
     //Redux
     const isSideBarVisible = useSelector(
         (state: stateType) => state.isSideBarVisible
@@ -163,11 +222,53 @@ const Navbar = () => {
                 {/* Navbar Items */}
                 {pathname.split("/")[2] !== "meet" && (
                     <>
+                        {/* Community */}
                         <NavbarItem text="Community" Image={Globe} />
-                        <NavbarItem text="Notifications" Image={Bell} />
+
+                        {/* Notifications */}
+                        <ToolTip
+                            side="left"
+                            text="Notifications"
+                            MainClassName="cursor-pointer"
+                        >
+                            <DropdownMenu>
+                                <DropdownMenuTrigger
+                                    asChild
+                                    className="h-[44px] w-[44px] flex items-center justify-center rounded-full bg-muted"
+                                >
+                                    <div>
+                                        <Bell className="w-5 h-5 text-foreground" />
+                                    </div>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent
+                                    align="end"
+                                    className={`px-5 bg-transparent border-none shadow-none ${notifications.length >= 5 ? "h-[450px]" : "h-fit"
+                                        } w-screen sm:w-[500px] overflow-hidden`}
+                                >
+                                    {/* You can map notifications here */}
+                                    <div className="h-full w-full bg-background dark:bg-sidebar-background border rounded-lg shadow-md overflow-auto no-scrollbar">
+                                        <h3 className="text-lg font-semibold sticky z-30 top-0 bg-background dark:bg-sidebar-background p-5">
+                                            Notifications
+                                        </h3>
+                                        <div className="px-5 flex flex-col gap-3">
+                                            {notifications.map((notification) => (
+                                                <NotificationItem
+                                                    key={notification.id}
+                                                    notification={notification}
+                                                />
+                                            ))}
+                                        </div>
+                                        <h3 className="text-sm text-center font-semibold bg-sidebar-background p-4">
+                                            See more
+                                        </h3>
+                                    </div>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </ToolTip>
                     </>
                 )}
 
+                {/* Theme */}
                 <NavbarItem text={themeText} action={handleTheme} Image={themeIcon} />
 
                 {/* Profile Section */}
