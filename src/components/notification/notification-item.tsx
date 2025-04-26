@@ -10,24 +10,24 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { animate, motion, useMotionValue } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import IconButton from "../ui/icon-button";
+import { IUser } from "@codeflare/common";
+import profile from "@/assets/images/no-profile.svg";
+// import { getRelativeTime } from "@/utils/relative-time";
+import { handleCustomError } from "@/utils/error";
+import { formatDistanceToNow } from "date-fns";
 
-interface User {
-    name: string;
-    image?: string;
-}
 // Define notification types
 type NotificationType = "warning" | "review" | "info" | "success" | "fail";
 
 export interface INotificationProps {
-    id: string;
+    _id: string;
+    sender: IUser;
     type: NotificationType;
-    message: string;
-    time: string;
-    image?: string;
-    user?: User;
     path: string;
+    message: string;
+    date: string;
 }
 
 function NotificationItem({
@@ -35,7 +35,7 @@ function NotificationItem({
 }: {
     notification: INotificationProps;
 }) {
-    const { type, message, time, image, user, path } = notification;
+    const { type, message, path, sender, date } = notification;
 
     // Define styles based on notification type
     const getTypeStyles = () => {
@@ -74,19 +74,22 @@ function NotificationItem({
 
     const navigate = useNavigate();
 
+    // Time
+    const [_timeNow, setTimeNow] = useState(new Date());
+
     // Delete icon
-    const [showDelete, setShowDelete] = useState(false);
+    const [showDelete, setShowDelete] = useState<boolean>(false);
 
     // Swipe
     const x = useMotionValue(0);
 
-    const threshold = -60;
+    const thresholdForDelete = -60;
 
     // Handle drag end
     const handleDragEnd = () => {
-        if (x.get() < threshold) {
+        if (x.get() < thresholdForDelete) {
             setShowDelete(true);
-            animate(x, threshold, { type: "spring", stiffness: 300 });
+            animate(x, thresholdForDelete, { type: "spring", stiffness: 300 });
         } else {
             setShowDelete(false);
             animate(x, 0, { type: "spring", stiffness: 300 });
@@ -95,14 +98,26 @@ function NotificationItem({
 
     // Handle delete
     const handleDelete = () => {
-        console.log("Delete notification with id:");
+        try {
+        } catch (err: unknown) {
+            handleCustomError(err);
+        }
     };
+
+    // Update timeNow every minute
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTimeNow(new Date());
+        }, 60 * 1000); // every minute
+
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <div className="relative w-full">
             {/* Delete background layer */}
             {showDelete && (
-                <div className="absolute inset-0 flex justify-end items-center rounded-md">
+                <div className="absolute inset-0 flex justify-end items-center rounded-md cursor-pointer">
                     <IconButton
                         Icon={Trash2}
                         action={handleDelete}
@@ -111,7 +126,6 @@ function NotificationItem({
                     />
                 </div>
             )}
-
             {/* Swipeable card */}
             <motion.div
                 className={cn(
@@ -123,11 +137,9 @@ function NotificationItem({
                 style={{ x }}
                 onDragStart={() => setShowDelete(false)}
                 onDragEnd={handleDragEnd}
-                onDoubleClick={() => {
-                    if (!showDelete) navigate(path);
-                }}
+                onDoubleClick={() => navigate(path)}
             >
-                {image && (
+                {/* {image && (
                     <div className="mb-3">
                         <img
                             src={image}
@@ -135,21 +147,22 @@ function NotificationItem({
                             className="w-full h-auto rounded-md object-cover"
                         />
                     </div>
-                )}
+                )} */}
 
                 <div className="flex items-start gap-3">
                     <div className="mt-0.5">{icon}</div>
                     <div className="flex-1">
-                        <p className="text-sm font-medium">{message}</p>
-                        <span className="text-xs text-muted-foreground mt-1">{time}</span>
+                        <p className="text-sm font-medium truncate">{message}</p>
+                        <span className="text-xs text-muted-foreground font-medium mt-1">
+                            {formatDistanceToNow(new Date(date), { addSuffix: true })}
+                        </span>
                     </div>
-                    {user && (
-                        <Avatar className="h-8 w-8">
-                            <AvatarImage
-                                src={user.image || "/placeholder.svg"}
-                                alt={user.name}
-                            />
-                            <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+                    {sender && (
+                        <Avatar className="bg-background w-10 h-10 border-2 border-background dark:border-border shadow-md">
+                            <AvatarImage src={sender.profilePic} className="object-cover" />
+                            <AvatarFallback className="bg-transparent">
+                                <img src={profile} alt="" />
+                            </AvatarFallback>
                         </Avatar>
                     )}
                 </div>

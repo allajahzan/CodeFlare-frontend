@@ -1,6 +1,7 @@
 import {
     useCallback,
     useContext,
+    useEffect,
     useLayoutEffect,
     useMemo,
     useState,
@@ -35,58 +36,15 @@ import {
 import NotificationItem, {
     INotificationProps,
 } from "@/components/notification/notification-item";
-
-// Sample notifications data
-const sampleNotifications: INotificationProps[] = [
-    {
-        id: "1",
-        type: "review",
-        message: "Your review has been scheduled with Dr. Smith",
-        time: "10 minutes ago",
-        user: {
-            name: "Dr. Smith",
-            image: "/placeholder.svg?height=40&width=40",
-        },
-        path: "/student/reviews",
-    },
-    {
-        id: "2",
-        type: "warning",
-        message: "You have missed the deadline for assignment submission",
-        time: "1 hour ago",
-        user: {
-            name: "Prof. Johnson",
-            image: "/placeholder.svg?height=40&width=40",
-        },
-        path: "/student/attendence",
-    },
-    {
-        id: "3",
-        type: "info",
-        message: "Campus will be closed on Monday for maintenance",
-        time: "2 hours ago",
-        path: "/student/reviews",
-    },
-    {
-        id: "4",
-        type: "success",
-        message: "Your assignment has been graded. You scored 95%",
-        time: "Yesterday",
-        path: "/student/reviews",
-    },
-    {
-        id: "5",
-        type: "fail",
-        message: "Your assignment has been graded. You scored 25%",
-        time: "Yesterday",
-        path: "/student/reviews",
-    },
-];
+import { handleCustomError } from "@/utils/error";
+import { fetchData } from "@/service/api-service";
+import ApiEndpoints from "@/constants/api-endpoints";
 
 // Navbar Component
 const Navbar = () => {
-    const [notifications, setNotifications] =
-        useState<INotificationProps[]>(sampleNotifications);
+    const [notifications, setNotifications] = useState<INotificationProps[] | []>(
+        []
+    );
 
     //Redux
     const isSideBarVisible = useSelector(
@@ -138,6 +96,28 @@ const Navbar = () => {
         () => (theme === "light" ? "Light" : "Dark"),
         [theme]
     );
+
+    // Fetch notifications
+    useEffect(() => {
+        const fetchNotifications = async () => {
+            try {
+                // Send request
+                const resp = await fetchData(ApiEndpoints.NOTIFICATION, role);
+
+                // Success response
+                if (resp && resp.status === 200) {
+                    const data = resp.data?.data;
+
+                    // Update notifications state
+                    setNotifications(data);
+                }
+            } catch (err: unknown) {
+                handleCustomError(err);
+            }
+        };
+
+        fetchNotifications();
+    }, []);
 
     return (
         <div
@@ -253,7 +233,7 @@ const Navbar = () => {
                                         <div className="px-5 flex flex-col gap-3">
                                             {notifications.map((notification) => (
                                                 <NotificationItem
-                                                    key={notification.id}
+                                                    key={notification._id}
                                                     notification={notification}
                                                 />
                                             ))}

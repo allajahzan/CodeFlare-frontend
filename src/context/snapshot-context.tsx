@@ -64,8 +64,8 @@ const SnapshotContextProvider = ({ children }: { children: ReactNode }) => {
             toast({ title: data.message });
         });
 
-           // Clean up
-           return () => {
+        // Clean up
+        return () => {
             socket.off("receiveWarning");
         };
     }, []);

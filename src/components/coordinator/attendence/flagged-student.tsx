@@ -71,9 +71,7 @@ function FlaggedStudents({ flaggedStudents, fetching }: Propstype) {
                     warning: {
                         studentId,
                         coordinatorId: user?._id,
-                        message: `Warning from coordinator - 
-                        you have reached count of ${count} ${status} already. 
-                        Please reply to this warning asap or else you will be blocked from the appication.`,
+                        message: `Warning from coordinator - you have reached count of ${count} ${status} already. Please reply to this warning asap or else you will be blocked from the appication.`,
                         date: new Date(),
                     },
                 },

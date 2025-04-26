@@ -30,6 +30,7 @@ enum ApiEndpoints {
     CHAT = "/communication/chat",
     MESSAGE = "/communication/message",
     MEET = "/communication/meet",
+    NOTIFICATION = "/communication/notification",
 
     // Review APIs - instructor service
     REVIEW = "/instructor/review",
