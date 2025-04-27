@@ -7,7 +7,7 @@ import {
     eachDayOfInterval,
     isSameMonth,
     // isSameDay,
-    isToday,
+    // isToday,
 } from "date-fns";
 import { motion } from "framer-motion";
 import {
@@ -123,7 +123,7 @@ function Calendar({ currentDate, onDateClick, attendanceData }: Propstype) {
                                                     dateTime={format(day, "yyyy-MM-dd")}
                                                     className={cn(
                                                         "mb-1 text-center text-sm sm:text-base font-bold",
-                                                        isToday(day) && attendance?.status === "pending"
+                                                        attendance?.status === "pending"
                                                             ? "text-yellow-600"
                                                             : attendance?.status === "absent"
                                                                 ? "text-red-600"

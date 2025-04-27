@@ -22,7 +22,6 @@ import {
 } from "lucide-react";
 import avatar_boy from "@/assets/images/avatar_boy.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
-import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { IThemeContext, ThemeContext } from "@/context/theme-context";
@@ -102,7 +101,10 @@ const Navbar = () => {
         const fetchNotifications = async () => {
             try {
                 // Send request
-                const resp = await fetchData(ApiEndpoints.NOTIFICATION, role);
+                const resp = await fetchData(
+                    ApiEndpoints.NOTIFICATION + `?receiverId=${user?._id}`,
+                    role
+                );
 
                 // Success response
                 if (resp && resp.status === 200) {
@@ -120,12 +122,7 @@ const Navbar = () => {
     }, []);
 
     return (
-        <div
-            className={cn(
-                "sticky top-0 left-0 w-full z-40 flex justify-between items-center p-5",
-                pathname.split("/")[2] === "meet" && "pr-[19px]"
-            )}
-        >
+        <div className="sticky top-0 left-0 w-full z-40 flex justify-between items-center p-5">
             <div className="flex items-center gap-2">
                 {/* Go back */}
                 {pathname.split("/")[2] === "meet" && (
@@ -260,10 +257,7 @@ const Navbar = () => {
                     <div className="overflow-hidden h-10 w-10 rounded-full group-hover:animate-bounce">
                         <img className="h-full w-full" src={avatar_boy} alt="User Avatar" />
                     </div>
-                    <p
-                        className={`flex-1 text-center text-foreground font-bold truncate ${pathname.split("/")[2] === "meet" && "relative -left-[0.5px]"
-                            }`}
-                    >
+                    <p className="flex-1 text-center text-foreground font-bold truncate">
                         {(() => {
                             const [first, second] = (user?.name as string).split(" ");
                             return second

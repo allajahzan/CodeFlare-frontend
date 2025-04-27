@@ -56,10 +56,7 @@ function FilterOptions({
     setSelectedCategory, // Optional
 }: Propstype) {
     return (
-        <div
-            style={{ willChange: "transform" }}
-            className="sticky top-0 z-30 rounded-b-xl"
-        >
+        <div className="sticky top-0 z-30 rounded-b-xl will-change-transform">
             <div className="flex items-center justify-between p-0">
                 {/* Buttons */}
                 <div className="flex gap-2 w-full">

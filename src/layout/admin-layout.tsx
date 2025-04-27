@@ -102,10 +102,7 @@ function AdminLayout({ isDrawerOpen }: PropsType) {
                 )}
             >
                 <Navbar />
-                <div
-                    style={{ willChange: "transform" }}
-                    className="h-full overflow-auto no-scrollbar"
-                >
+                <div className="h-full overflow-auto no-scrollbar will-change-transform">
                     <Outlet />
                 </div>
             </div>

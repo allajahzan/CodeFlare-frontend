@@ -3,6 +3,8 @@ import React, { createContext, useState, useEffect, ReactNode } from "react";
 import { toast } from "@/hooks/use-toast";
 import { reciveSnapshotMessage } from "@/socket/communication/notification";
 import { socket } from "@/socket/communication/socket";
+import { useSelector } from "react-redux";
+import { stateType } from "@/redux/store";
 
 export interface ISnapshotContext {
     snapshotMessage: string;
@@ -14,64 +16,73 @@ const SnapshotContext = createContext<ISnapshotContext | null>(null);
 
 // Snapshot context provider
 const SnapshotContextProvider = ({ children }: { children: ReactNode }) => {
+    // Redux
+    const isCheckedIn = useSelector((state: stateType) => state.isCheckedIn);
+
     // Snapshot message
     const [snapshotMessage, setSnapshotMessage] = useState<string>("");
 
     // Check if snapshot message is expired
     useEffect(() => {
-        setSnapshotMessage(getItemWithExpiry("snapshotMessage"));
+        setSnapshotMessage(getSnapShotMessageWithExpiry("snapshotMessage"));
     }, []);
 
-    // Alaram
+    // Alaram for new snapshot message
     useEffect(() => {
         if (snapshotMessage) {
-            // const audio = new Audio(warningAlarm);
-            // audio.load();
-            // audio.play();
+            // Create button
+            // const button = document.createElement("button");
+
+            // Set onclick attribute
+            // button.onclick = () => {
+            //     const audio = new Audio(warningAlarm);
+            //     audio.load();
+            //     audio.play();
+            // };
+
+            // // Append to DOM
+            // document.body.appendChild(button);
+
+            // // Trigger click
+            // button.click();
+
+            // // Remove after click to clean up
+            // document.body.removeChild(button);
 
             toast({ title: snapshotMessage });
         }
     }, [snapshotMessage]);
 
-    // Listen for snapshot messages
+    // Listen for new snapshot message
     useEffect(() => {
-        reciveSnapshotMessage((data) => {
-            // Update state and localstorage
-            setSnapshotMessage(data.message);
+        // Only if student is checkedIn
+        if (isCheckedIn) {
+            reciveSnapshotMessage((data: { message: string }) => {
+                // Update state
+                setSnapshotMessage(data.message);
 
-            const now = new Date();
+                // Set expiry to 10 minutes from now
+                const now = Date.now();
+                const expiry = now + 10 * 60 * 1000;
 
-            const item = {
-                value: data.message,
-                expiry: now.getTime() + 10 * 60 * 1000,
-            };
+                const item = {
+                    value: data.message,
+                    expiry,
+                };
 
-            // Update localstorage with expiry time of 10 minutes
-            localStorage.setItem("snapshotMessage", JSON.stringify(item));
-        });
+                // Save to localStorage
+                localStorage.setItem("snapshotMessage", JSON.stringify(item));
+            });
+        }
 
-        // Clean up
+        // Cleanup on unmount
         return () => {
             socket.off("reciveSnapshotMessage");
         };
-    }, []);
-
-    // Get warning from coordinator
-    useEffect(() => {
-        socket.on("receiveWarning", (data) => {
-            console.log(data);
-
-            toast({ title: data.message });
-        });
-
-        // Clean up
-        return () => {
-            socket.off("receiveWarning");
-        };
-    }, []);
+    }, [isCheckedIn]);
 
     // Get snapshot message from localstorage
-    function getItemWithExpiry(key: string): string {
+    function getSnapShotMessageWithExpiry(key: string): string {
         const itemStr = localStorage.getItem(key);
         if (!itemStr) return "";
 
@@ -89,7 +100,7 @@ const SnapshotContextProvider = ({ children }: { children: ReactNode }) => {
 
             return item.value;
         } catch (err) {
-            console.error("Failed to parse snapshotMessage:", err);
+            console.log("Failed to parse snapshotMessage:", err);
             return "";
         }
     }

@@ -199,7 +199,7 @@ function AttendenceDetails({
 
                 toast({
                     title: `${selectedAttendence?.user.name}'s ${activity === "checkIn" ? "check-in" : "check-out"
-                        } was recorded.`,
+                        } is recorded.`,
                 });
             }
         } catch (err: unknown) {

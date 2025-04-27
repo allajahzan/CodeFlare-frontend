@@ -202,11 +202,12 @@ function Attendence() {
                     </div>
 
                     {/* Snapshot Message */}
-                    {snapshotMessage && isCheckedIn && (
+                    {snapshotMessage && (
                         <ToolTip
+                            side="bottom"
                             text={snapshotMessage}
                             action={() => setOpenWebCamModal(true)}
-                            MainClassName="w-full"
+                            MainClassName="w-full cursor-pointer"
                             children={
                                 <div className="w-full">
                                     <div className="h-11 px-3 flex items-center justify-between rounded-lg bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border border-red-200 dark:border-red-800">

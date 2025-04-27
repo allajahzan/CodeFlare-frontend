@@ -75,6 +75,7 @@ function Insights({ view, setView }: Propstype) {
             try {
                 setFetching(true);
                 setFlaggedStudents([]);
+                setAttendences([]);
 
                 // Send request
                 const resp = await fetchData(
@@ -118,6 +119,7 @@ function Insights({ view, setView }: Propstype) {
             try {
                 setFetching(true);
                 setAttendences([]);
+                setFlaggedStudents([]);
 
                 // Send request
                 const resp = await fetchData(
@@ -201,7 +203,7 @@ function Insights({ view, setView }: Propstype) {
                                 {insightView === "monthly-overview"
                                     ? "Monthly overview"
                                     : "Flagged students"}{" "}
-                                ({attendences.length})
+                                ({attendences.length || flaggedStudents.length})
                             </span>
                             <ChevronDown className="h-4 w-4" />
                         </DropdownMenuTrigger>
