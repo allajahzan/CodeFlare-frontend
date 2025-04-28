@@ -19,10 +19,17 @@ import { NotFoundOrbit } from "@/components/animation/fallbacks";
 interface Propstype {
     attendences: IAttendence[] | [];
     fetching: boolean;
+    divRef: React.RefObject<HTMLDivElement>;
+    handleInfiniteScroll: () => Promise<void>;
 }
 
 // Monthly overview Component
-function MontlyOverview({ attendences, fetching }: Propstype) {
+function MontlyOverview({
+    attendences,
+    fetching,
+    divRef,
+    handleInfiniteScroll,
+}: Propstype) {
     // Toggle state
     const [expandedRow, setExpandedRow] = useState<string | null>(null);
 
@@ -47,13 +54,17 @@ function MontlyOverview({ attendences, fetching }: Propstype) {
                     </div>
 
                     {/* Table Rows */}
-                    <div className="h-full flex flex-col gap-2 text-[14.5px] font-medium text-foreground overflow-auto no-scrollbar">
+                    <div
+                        onScroll={handleInfiniteScroll}
+                        ref={divRef}
+                        className="h-full flex flex-col gap-2 text-[14.5px] font-medium text-foreground overflow-auto no-scrollbar"
+                    >
                         {attendences.map((attendence, index) => (
                             <motion.div
                                 key={index}
                                 initial={{ opacity: 0, y: -20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.2 + index * 0.1 }}
+                                transition={{ delay: 0.2 + (index % 10) * 0.1 }}
                                 className="rounded-lg border border-border dark:border-transparent dark:bg-sidebar 
                                 hover:bg-muted/60 dark:hover:bg-sidebar-backgroundDark shadow-sm"
                             >

@@ -41,6 +41,8 @@ interface Propstype {
     fetching: boolean;
     month: string;
     year: number;
+    divRef: React.RefObject<HTMLDivElement>;
+    handleInfiniteScroll: () => Promise<void>;
 }
 
 // Attendence defaulters Component
@@ -49,6 +51,8 @@ function AttendenceDefaulters({
     fetching,
     month,
     year,
+    divRef,
+    handleInfiniteScroll
 }: Propstype) {
     // Expand states
     const [expanded, setExpanded] = useState<string | null>(null);
@@ -57,13 +61,16 @@ function AttendenceDefaulters({
     return (
         <>
             {defaulters.length > 0 && (
-                <div className="flex flex-col gap-2 overflow-auto no-scrollbar text-foreground">
+                <div 
+                ref={divRef}
+                onScroll={handleInfiniteScroll}
+                className="flex flex-col gap-2 overflow-auto no-scrollbar text-foreground">
                     {defaulters.map((attendence, index) => (
                         <motion.div
                             key={attendence.userId}
                             initial={{ opacity: 0, y: -20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 + index * 0.1 }}
+                            transition={{ delay: 0.2 + (index % 10) * 0.1 }}
                             className="rounded-lg border border-border dark:border-transparent dark:bg-sidebar 
                             hover:bg-muted/60 dark:hover:bg-sidebar-backgroundDark shadow-sm"
                         >

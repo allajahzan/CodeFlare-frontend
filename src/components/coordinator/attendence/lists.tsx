@@ -145,8 +145,8 @@ function Lists({ view, setView }: Propstype) {
 
                 // Send request
                 const resp = await fetchData(
-                    ApiEndpoints.ATTENDENCE +
-                    `/search?batchIds=${selectedBatch
+                    ApiEndpoints.ATTENDENCE_SEARCH +
+                    `?batchIds=${selectedBatch
                         ? selectedBatch._id
                         : user?.batches?.map((batch) => batch._id).join(",")
                     }&userId=${selectedStudent}&date=${selectedDate}&filter=${selectedStatus === "All" ? "" : selectedStatus

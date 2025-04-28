@@ -32,6 +32,42 @@ import ValidationError from "@/components/ui/validation-error";
 import { IWarning } from "@/types/warning";
 import { Skeleton } from "@/components/ui/skeleton";
 
+// Skeloton - Warning card Component
+function WarningCardSkeleton() {
+    return (
+        <Card className="border-l-4 border-l-red-800 shadow-sm bg-background dark:bg-sidebar">
+            <CardHeader className="flex flex-row items-start gap-4 pb-2">
+                <Skeleton className="w-10 h-10 rounded-full" />
+                <div className="flex flex-col gap-2">
+                    <Skeleton className="h-4 w-24" /> {/* Name skeleton */}
+                    <Skeleton className="h-3 w-16" /> {/* Date skeleton */}
+                </div>
+            </CardHeader>
+
+            <CardContent className="pl-20 space-y-2">
+                <Skeleton className="h-4 w-[80%]" /> {/* Warning message line */}
+                <Skeleton className="h-4 w-[60%]" />
+            </CardContent>
+
+            <CardFooter className="flex flex-col items-start pt-0 pb-5 w-full">
+                <div className="w-full pl-6 space-y-4">
+                    {[...Array(1)].map((_, idx) => (
+                        <div key={idx} className="flex items-start gap-3">
+                            <Skeleton className="h-8 w-8 rounded-full" />
+                            <div className="flex flex-col gap-2 w-full">
+                                <Skeleton className="h-4 w-28" /> {/* Student name */}
+                                <Skeleton className="h-3 w-20" /> {/* Reply date */}
+                                <Skeleton className="h-4 w-[70%]" /> {/* Reply message */}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </CardFooter>
+        </Card>
+    );
+}
+
+
 // Format date to display
 const formatDate = (date: Date) => {
     return format(date, "MMM d, yyyy 'at' h:mm a");
@@ -219,16 +255,16 @@ function WarningsListsModal({ children, student, month, year }: Propstype) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>{children}</DialogTrigger>
-            <DialogContent className="flex flex-col gap-10 dark:bg-sidebar-background max-h-[95vh] max-w-6xl overflow-auto no-scrollbar">
+            <DialogContent className="flex flex-col gap-10 dark:bg-sidebar-background max-h-[93vh] max-w-5xl overflow-auto no-scrollbar">
                 <DialogHeader>
                     <DialogTitle className="text-start text-foreground flex items-center gap-3">
                         <div className="p-2 bg-muted rounded-full">
                             <FileSpreadsheetIcon className="w-4 h-4" />
                         </div>
-                        <span>Warnings and replies</span>
+                        <span>Warnings & replies - {student.name}</span>
                     </DialogTitle>
                     <DialogDescription className="text-muted-foreground font-medium">
-                        List of warnings and replies of this student in this month
+                        Warnings and replies of this student in this month.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -247,11 +283,9 @@ function WarningsListsModal({ children, student, month, year }: Propstype) {
                         </div>
                     )}
 
-                    {/* <Separator className="my-10" /> */}
-
                     <form
                         onSubmit={handleSubmit}
-                        className="space-y-3 w-full bg-background"
+                        className="space-y-3 w-full"
                     >
                         <div className="space-y-2">
                             <p className="font-medium text-sm text-foreground">
@@ -293,41 +327,6 @@ function WarningsListsModal({ children, student, month, year }: Propstype) {
                 </div>
             </DialogContent>
         </Dialog>
-    );
-}
-
-// Skeloton - Warning card Component
-function WarningCardSkeleton() {
-    return (
-        <Card className="border-l-4 border-l-red-800 shadow-sm bg-background dark:bg-sidebar">
-            <CardHeader className="flex flex-row items-start gap-4 pb-2">
-                <Skeleton className="w-10 h-10 rounded-full" />
-                <div className="flex flex-col gap-2">
-                    <Skeleton className="h-4 w-24" /> {/* Name skeleton */}
-                    <Skeleton className="h-3 w-16" /> {/* Date skeleton */}
-                </div>
-            </CardHeader>
-
-            <CardContent className="pl-20 space-y-2">
-                <Skeleton className="h-4 w-[80%]" /> {/* Warning message line */}
-                <Skeleton className="h-4 w-[60%]" />
-            </CardContent>
-
-            <CardFooter className="flex flex-col items-start pt-0 pb-5 w-full">
-                <div className="w-full pl-6 space-y-4">
-                    {[...Array(1)].map((_, idx) => (
-                        <div key={idx} className="flex items-start gap-3">
-                            <Skeleton className="h-8 w-8 rounded-full" />
-                            <div className="flex flex-col gap-2 w-full">
-                                <Skeleton className="h-4 w-28" /> {/* Student name */}
-                                <Skeleton className="h-3 w-20" /> {/* Reply date */}
-                                <Skeleton className="h-4 w-[70%]" /> {/* Reply message */}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </CardFooter>
-        </Card>
     );
 }
 

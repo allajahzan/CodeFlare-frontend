@@ -39,10 +39,11 @@ enum ApiEndpoints {
 
     // Attendence APIs - student service
     ATTENDENCE = "/student/attendence",
-    ATTENDENCE_STATUS = "/student/attendence/status",
-    CHECK_IN_OUT = "/student/attendence/check-in-out",
-    SNAP_SHOT = "/student/attendence/snapshot",
-    MONTHLY_ATTENDENCE = "/student/attendence/monthly-attendence",
+    ATTENDENCE_SEARCH = `${ATTENDENCE}/search`,
+    ATTENDENCE_STATUS = `${ATTENDENCE}/status`,
+    CHECK_IN_OUT = `${ATTENDENCE}/check-in-out`,
+    SNAP_SHOT = `${ATTENDENCE}/snapshot`,
+    MONTHLY_ATTENDENCE = `${ATTENDENCE}/monthly-attendence`,
 
     // Warning APIs - student service
     WARNING = "/student/warning",

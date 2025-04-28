@@ -1,5 +1,5 @@
 import type React from "react";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ChevronDown, Download } from "lucide-react";
 import { IBatch } from "@/types/batch";
 import { IStudent } from "@/types/student";
@@ -36,11 +36,11 @@ function Insights({ view, setView }: Propstype) {
 
     // Attendence states
     const [attendences, setAttendences] = useState<IAttendence[] | []>([]);
-    const [defaulters, setDefaulters] = useState<
-        IDefaulters[] | []
-    >([]);
+    const [defaulters, setDefaulters] = useState<IDefaulters[] | []>([]);
     const [fetching, setFetching] = useState<boolean>(false);
+    const [scrollFetching, setScrollFetching] = useState<boolean>(false);
 
+    // Current date month and year
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const currentMonth = currentDate.toLocaleString("default", { month: "long" });
@@ -63,11 +63,90 @@ function Insights({ view, setView }: Propstype) {
     // Filter category
     const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
+    // Scroling div
+    const divRef = useRef<HTMLDivElement>(null);
+
     // Redux
     const role = useSelector((state: stateType) => state.role);
 
     // User context
     const { user } = useContext(UserContext) as IUserContext;
+
+    // Handle infinite scroll
+    const handleInfiniteScroll = async () => {
+        try {
+            if (divRef.current) {
+                const { scrollTop, scrollHeight, clientHeight } = divRef.current;
+
+                if (scrollTop + clientHeight >= scrollHeight - 5) {
+                    if (scrollFetching) return;
+
+                    setScrollFetching(true);
+
+                    // Disable scrolling
+                    divRef.current.style.overflow = "hidden";
+
+                    if (insightView === "monthly-overview") {
+                        // Send request
+                        const resp = await fetchData(
+                            ApiEndpoints.MONTHLY_ATTENDENCE +
+                            `?type=${insightView}&batchIds=${selectedBatch
+                                ? selectedBatch._id
+                                : user?.batches?.map((batch) => batch._id).join(",")
+                            }&userId=${selectedStudent}&month=${selectedMonth}&year=${selectedYear}&filter=${selectedStatus === "All" ? "" : selectedStatus
+                            }&skip=${attendences.length}&limit=10`,
+                            role
+                        );
+
+                        // Success response
+                        if (resp && resp.status === 200) {
+                            const data = resp.data?.data;
+
+                            // Update attendence
+                            setAttendences((prev: IAttendence[]) => {
+                                return [...prev, ...data];
+                            });
+
+                            // Enable scrolling
+                            divRef.current.style.overflow = "auto";
+                            setScrollFetching(false);
+                        }
+                    } else {
+                        // Send request
+                        const resp = await fetchData(
+                            ApiEndpoints.MONTHLY_ATTENDENCE +
+                            `?type=${insightView}&batchIds=${selectedBatch
+                                ? selectedBatch._id
+                                : user?.batches?.map((batch) => batch._id).join(",")
+                            }&userId=${selectedStudent}&month=${selectedMonth}&year=${selectedYear}&filter=${selectedCategory === "All" ? "" : selectedCategory
+                            }&skip=${defaulters.length}&limit=10`,
+                            role
+                        );
+
+                        // Success response
+                        if (resp && resp.status === 200) {
+                            const data = resp.data?.data;
+
+                            // Update defaulters
+                            setDefaulters((prev: IDefaulters[]) => {
+                                return [...prev, ...data];
+                            });
+
+                            // Enable scrolling
+                            divRef.current.style.overflow = "auto";
+                            setScrollFetching(false);
+                        }
+                    }
+                }
+            }
+        } catch (err: unknown) {
+            // Enable scrolling
+            if (divRef.current) {
+                divRef.current.style.overflow = "auto";
+            }
+            handleCustomError(err);
+        }
+    };
 
     // Fetch defaulters
     useEffect(() => {
@@ -84,15 +163,13 @@ function Insights({ view, setView }: Propstype) {
                         ? selectedBatch._id
                         : user?.batches?.map((batch) => batch._id).join(",")
                     }&userId=${selectedStudent}&month=${selectedMonth}&year=${selectedYear}&filter=${selectedCategory === "All" ? "" : selectedCategory
-                    }`,
+                    }&skip=${defaulters.length}&limit=10`,
                     role
                 );
 
                 // Success response
                 if (resp && resp.status === 200) {
                     const data = resp.data?.data;
-
-                    console.log(data);
 
                     // Update attendence
                     setTimeout(() => {
@@ -130,7 +207,7 @@ function Insights({ view, setView }: Propstype) {
                         ? selectedBatch._id
                         : user?.batches?.map((batch) => batch._id).join(",")
                     }&userId=${selectedStudent}&month=${selectedMonth}&year=${selectedYear}&filter=${selectedStatus === "All" ? "" : selectedStatus
-                    }`,
+                    }&skip=${attendences.length}&limit=10`,
                     role
                 );
 
@@ -204,7 +281,7 @@ function Insights({ view, setView }: Propstype) {
                             <span>
                                 {insightView === "monthly-overview"
                                     ? "Monthly overview"
-                                    : "Attendence Defaulters"}
+                                    : "Attendance defaulters"}
                                 ({attendences.length || defaulters.length})
                             </span>
                             <ChevronDown className="h-4 w-4" />
@@ -221,7 +298,7 @@ function Insights({ view, setView }: Propstype) {
                                     setInsightView("attendence-defaulters");
                                 }}
                             >
-                                Attendence defaulters
+                                Attendance defaulters
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -262,13 +339,20 @@ function Insights({ view, setView }: Propstype) {
 
                 {/* Toggle views */}
                 {insightView === "monthly-overview" ? (
-                    <MontlyOverview attendences={attendences} fetching={fetching} />
+                    <MontlyOverview
+                        attendences={attendences}
+                        fetching={fetching}
+                        divRef={divRef}
+                        handleInfiniteScroll={handleInfiniteScroll}
+                    />
                 ) : (
                     <AttendenceDefaulters
                         defaulters={defaulters}
                         fetching={fetching}
                         month={selectedMonth}
                         year={selectedYear}
+                        divRef={divRef}
+                        handleInfiniteScroll={handleInfiniteScroll}
                     />
                 )}
             </div>
