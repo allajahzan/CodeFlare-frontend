@@ -40,7 +40,7 @@ function ReasonsListModal({ status, records, children }: Propstype) {
                     {records.map((record, index) => (
                         <div
                             key={index}
-                            className="relative p-5 px-3 rounded-lg bg-background border dark:bg-sidebar dark:border-transparent hover:bg-muted dark:hover:bg-sidebar-backgroundDark"
+                            className="relative p-5 px-3 rounded-lg bg-background border dark:bg-sidebar dark:border-transparent hover:bg-muted/50 dark:hover:bg-sidebar-backgroundDark"
                         >
                             {/* Date */}
                             <p className="absolute left-3 top-3 text-muted-foreground font-medium text-sm">

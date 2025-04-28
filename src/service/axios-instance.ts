@@ -69,7 +69,8 @@ axiosInstance.interceptors.response.use(
                 console.log(err);
                 
                 toast({ title: err.status === 401 ? err.response.data.errors.message : "Token expired. Please login again!" });
-                localStorage.clear();
+                localStorage.removeItem("accessToken");
+                localStorage.removeItem("user");
                 return;
             }
         }

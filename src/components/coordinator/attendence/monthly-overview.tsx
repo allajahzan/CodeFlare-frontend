@@ -55,7 +55,7 @@ function MontlyOverview({ attendences, fetching }: Propstype) {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 + index * 0.1 }}
                                 className="rounded-lg border border-border dark:border-transparent dark:bg-sidebar 
-                                hover:bg-muted/50 dark:hover:bg-sidebar-backgroundDark shadow-sm"
+                                hover:bg-muted/60 dark:hover:bg-sidebar-backgroundDark shadow-sm"
                             >
                                 {/* Mobile/Desktop Row */}
                                 <div

@@ -15,7 +15,7 @@ interface Propstype {
     view: "lists-view" | "insights-view";
     setView: React.Dispatch<React.SetStateAction<"lists-view" | "insights-view">>;
 
-    insightView?: "monthly-overview" | "flagged-students";
+    insightView?: "monthly-overview" | "attendence-defaulters";
 
     selectedBatch: IBatch | null;
     setSelectedBatch: React.Dispatch<React.SetStateAction<IBatch | null>>;
@@ -92,7 +92,7 @@ function FilterOptions({
                     )}
 
                     {/* Filter for flagged students */}
-                    {insightView && insightView === "flagged-students" && (
+                    {insightView && insightView === "attendence-defaulters" && (
                         <Filter
                             title="Status"
                             filter={selectedCategory as string}

@@ -11,7 +11,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import MontlyOverview from "./monthly-overview";
-import FlaggedStudents, { IFlaggedStudent } from "./flagged-student";
+import AttendenceDefaulters, { IDefaulters } from "./attendence-defaulters";
 import FilterOptions from "./filter-options";
 import { fetchData } from "@/service/api-service";
 import ApiEndpoints from "@/constants/api-endpoints";
@@ -31,13 +31,13 @@ interface Propstype {
 function Insights({ view, setView }: Propstype) {
     // View
     const [insightView, setInsightView] = useState<
-        "monthly-overview" | "flagged-students"
+        "monthly-overview" | "attendence-defaulters"
     >("monthly-overview");
 
     // Attendence states
     const [attendences, setAttendences] = useState<IAttendence[] | []>([]);
-    const [flaggedStudents, setFlaggedStudents] = useState<
-        IFlaggedStudent[] | []
+    const [defaulters, setDefaulters] = useState<
+        IDefaulters[] | []
     >([]);
     const [fetching, setFetching] = useState<boolean>(false);
 
@@ -69,12 +69,12 @@ function Insights({ view, setView }: Propstype) {
     // User context
     const { user } = useContext(UserContext) as IUserContext;
 
-    // Fetch flagged users
+    // Fetch defaulters
     useEffect(() => {
-        const fetchFlaggedUsers = async () => {
+        const fetchDefaulters = async () => {
             try {
                 setFetching(true);
-                setFlaggedStudents([]);
+                setDefaulters([]);
                 setAttendences([]);
 
                 // Send request
@@ -92,9 +92,11 @@ function Insights({ view, setView }: Propstype) {
                 if (resp && resp.status === 200) {
                     const data = resp.data?.data;
 
+                    console.log(data);
+
                     // Update attendence
                     setTimeout(() => {
-                        setFlaggedStudents(data);
+                        setDefaulters(data);
                         setFetching(false);
                     }, 1000);
                 }
@@ -103,7 +105,7 @@ function Insights({ view, setView }: Propstype) {
             }
         };
 
-        insightView === "flagged-students" && fetchFlaggedUsers();
+        insightView === "attendence-defaulters" && fetchDefaulters();
     }, [
         selectedMonth,
         selectedYear,
@@ -119,7 +121,7 @@ function Insights({ view, setView }: Propstype) {
             try {
                 setFetching(true);
                 setAttendences([]);
-                setFlaggedStudents([]);
+                setDefaulters([]);
 
                 // Send request
                 const resp = await fetchData(
@@ -202,8 +204,8 @@ function Insights({ view, setView }: Propstype) {
                             <span>
                                 {insightView === "monthly-overview"
                                     ? "Monthly overview"
-                                    : "Flagged students"}{" "}
-                                ({attendences.length || flaggedStudents.length})
+                                    : "Attendence Defaulters"}
+                                ({attendences.length || defaulters.length})
                             </span>
                             <ChevronDown className="h-4 w-4" />
                         </DropdownMenuTrigger>
@@ -216,10 +218,10 @@ function Insights({ view, setView }: Propstype) {
                             <DropdownMenuItem
                                 onClick={() => {
                                     setAttendences([]);
-                                    setInsightView("flagged-students");
+                                    setInsightView("attendence-defaulters");
                                 }}
                             >
-                                Flagged students
+                                Attendence defaulters
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -262,9 +264,11 @@ function Insights({ view, setView }: Propstype) {
                 {insightView === "monthly-overview" ? (
                     <MontlyOverview attendences={attendences} fetching={fetching} />
                 ) : (
-                    <FlaggedStudents
-                        flaggedStudents={flaggedStudents}
+                    <AttendenceDefaulters
+                        defaulters={defaulters}
                         fetching={fetching}
+                        month={selectedMonth}
+                        year={selectedYear}
                     />
                 )}
             </div>

@@ -318,7 +318,7 @@ function Lists({ view, setView }: Propstype) {
                                     transition={{ delay: 0.2 + index * 0.1 }}
                                     onClick={() => setSelectedAttendence(item)}
                                     className={cn(
-                                        "group p-2 px-3 w-full flex flex-col rounded-xl cursor-pointer border dark:border-transparent bg-background dark:bg-sidebar hover:bg-muted dark:hover:bg-sidebar-backgroundDark shadow-sm",
+                                        "group p-2 px-3 w-full flex flex-col rounded-xl cursor-pointer border dark:border-transparent bg-background dark:bg-sidebar hover:bg-muted/60 dark:hover:bg-sidebar-backgroundDark shadow-sm",
                                         selectedAttendence?._id === item._id
                                             ? "bg-muted dark:bg-sidebar-backgroundDark"
                                             : ""

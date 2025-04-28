@@ -8,24 +8,18 @@ import {
     UserRound,
 } from "lucide-react";
 import profile from "@/assets/images/no-profile.svg";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { IAttendence, IUser } from "@/types/attendence";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { IBatch } from "@/types/batch";
 import { NotFoundOrbit } from "@/components/animation/fallbacks";
-import { handleCustomError } from "@/utils/error";
-import { postData } from "@/service/api-service";
-import ApiEndpoints from "@/constants/api-endpoints";
-import { IUserContext, UserContext } from "@/context/user-context";
-import { useSelector } from "react-redux";
-import { stateType } from "@/redux/store";
 import ViewAllReasonsModal from "./reasons-list-modal";
 import { Button } from "@/components/ui/button";
 import WarningsListsModal from "./warnings-list-modal";
 
 // Interface for flagged student
-export interface IFlaggedStudent {
+export interface IDefaulters {
     userId: string;
     user: IUser;
     batch: IBatch;
@@ -36,7 +30,7 @@ export interface IFlaggedStudent {
 
 // Interface for Props
 interface Propstype {
-    flaggedStudents: {
+    defaulters: {
         userId: string;
         user: IUser;
         batch: IBatch;
@@ -45,63 +39,33 @@ interface Propstype {
         records: IAttendence[];
     }[];
     fetching: boolean;
+    month: string;
+    year: number;
 }
 
-function FlaggedStudents({ flaggedStudents, fetching }: Propstype) {
+// Attendence defaulters Component
+function AttendenceDefaulters({
+    defaulters,
+    fetching,
+    month,
+    year,
+}: Propstype) {
     // Expand states
     const [expanded, setExpanded] = useState<string | null>(null);
     const toggle = (id: string) => setExpanded(expanded === id ? null : id);
 
-    // Redux
-    const role = useSelector((state: stateType) => state.role);
-
-    // User context
-    const { user } = useContext(UserContext) as IUserContext;
-
-    // Handle warning
-    const handleWarning = async (
-        studentId: string,
-        count: number,
-        status: string
-    ) => {
-        try {
-            // Send request
-            const resp = await postData(
-                ApiEndpoints.WARNING,
-                {
-                    warning: {
-                        studentId,
-                        coordinatorId: user?._id,
-                        message: `Warning from coordinator - you have reached count of ${count} ${status} already. Please reply to this warning asap or else you will be blocked from the appication.`,
-                        date: new Date(),
-                    },
-                },
-                role
-            );
-
-            // Success response
-            if (resp && resp.status === 200) {
-                const data = resp.data?.data;
-
-                console.log(data);
-            }
-        } catch (err: unknown) {
-            handleCustomError(err);
-        }
-    };
-
     return (
         <>
-            {flaggedStudents.length > 0 && (
+            {defaulters.length > 0 && (
                 <div className="flex flex-col gap-2 overflow-auto no-scrollbar text-foreground">
-                    {flaggedStudents.map((attendence, index) => (
+                    {defaulters.map((attendence, index) => (
                         <motion.div
                             key={attendence.userId}
                             initial={{ opacity: 0, y: -20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 + index * 0.1 }}
                             className="rounded-lg border border-border dark:border-transparent dark:bg-sidebar 
-                            hover:bg-muted/50 dark:hover:bg-sidebar-backgroundDark shadow-sm"
+                            hover:bg-muted/60 dark:hover:bg-sidebar-backgroundDark shadow-sm"
                         >
                             <div
                                 className="flex items-center gap-2 p-4 py-2 cursor-pointer"
@@ -134,7 +98,7 @@ function FlaggedStudents({ flaggedStudents, fetching }: Propstype) {
                                         status={attendence.status}
                                         records={attendence.records}
                                         children={
-                                            <div className="text-sm flex items-center gap-2 text-muted-foreground cursor-pointer flex-shrink-0">
+                                            <div className="text-sm flex items-center gap-2 text-foreground font-medium cursor-pointer flex-shrink-0">
                                                 <span className="whitespace-nowrap">
                                                     {attendence.count}x
                                                 </span>
@@ -160,17 +124,11 @@ function FlaggedStudents({ flaggedStudents, fetching }: Propstype) {
                             {expanded === attendence.userId && (
                                 <div className="p-5 border-t relative">
                                     <WarningsListsModal
-                                        user={attendence.user}
-                                        warnings={[]}
+                                        student={attendence.user}
+                                        month={month}
+                                        year={year}
                                         children={
                                             <Button
-                                                onClick={() =>
-                                                    handleWarning(
-                                                        attendence.userId,
-                                                        attendence.count,
-                                                        attendence.status
-                                                    )
-                                                }
                                                 variant="outline"
                                                 size="sm"
                                                 className="duration-0 text-sm flex items-center gap-2 font-medium shadow-sm
@@ -190,17 +148,17 @@ function FlaggedStudents({ flaggedStudents, fetching }: Propstype) {
                 </div>
             )}
 
-            {/* If no flaggedstudents */}
-            {flaggedStudents.length === 0 && (
+            {/* If no defaulters */}
+            {defaulters.length === 0 && (
                 <NotFoundOrbit
                     MainIcon={UserRound}
                     SubIcon={fetching ? Search : CalendarCogIcon}
                     message={
                         fetching
                             ? "Please wait a moment"
-                            : "No flagged students in this month"
+                            : "No attendence defaulters in this month"
                     }
-                    text={fetching ? "Fetching..." : "No flagged students"}
+                    text={fetching ? "Fetching..." : "No defaulters"}
                     className="w-full h-full"
                 />
             )}
@@ -208,4 +166,4 @@ function FlaggedStudents({ flaggedStudents, fetching }: Propstype) {
     );
 }
 
-export default FlaggedStudents;
+export default AttendenceDefaulters;

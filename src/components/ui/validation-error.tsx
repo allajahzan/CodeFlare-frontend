@@ -5,7 +5,7 @@ interface PropsType {
 
 // Validation error Component
 function ValidationError({ message }: PropsType) {
-    return <p className="text-xs text-red-600 font-semibold">{message}</p>;
+    return <p className="text-xs text-red-800 font-semibold">{message}</p>;
 }
 
 export default ValidationError;
