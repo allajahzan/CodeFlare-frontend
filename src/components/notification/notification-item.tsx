@@ -14,13 +14,13 @@ import { useEffect, useState } from "react";
 import IconButton from "../ui/icon-button";
 import { IUser } from "@codeflare/common";
 import profile from "@/assets/images/no-profile.svg";
-// import { getRelativeTime } from "@/utils/relative-time";
 import { handleCustomError } from "@/utils/error";
 import { formatDistanceToNow } from "date-fns";
 
 // Define notification types
 type NotificationType = "warning" | "review" | "info" | "success" | "fail";
 
+// Inteface for Props
 export interface INotificationProps {
     _id: string;
     sender: IUser;
@@ -30,6 +30,7 @@ export interface INotificationProps {
     date: string;
 }
 
+// Notification Item Component
 function NotificationItem({
     notification,
 }: {

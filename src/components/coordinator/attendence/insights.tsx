@@ -84,7 +84,7 @@ function Insights({ view, setView }: Propstype) {
                     setScrollFetching(true);
 
                     // Disable scrolling
-                    divRef.current.style.overflow = "hidden";
+                    divRef.current.style.pointerEvents = "none";
 
                     if (insightView === "monthly-overview") {
                         // Send request
@@ -108,7 +108,7 @@ function Insights({ view, setView }: Propstype) {
                             });
 
                             // Enable scrolling
-                            divRef.current.style.overflow = "auto";
+                            divRef.current.style.pointerEvents = "auto";
                             setScrollFetching(false);
                         }
                     } else {
@@ -133,7 +133,7 @@ function Insights({ view, setView }: Propstype) {
                             });
 
                             // Enable scrolling
-                            divRef.current.style.overflow = "auto";
+                            divRef.current.style.pointerEvents = "auto";
                             setScrollFetching(false);
                         }
                     }
@@ -142,7 +142,7 @@ function Insights({ view, setView }: Propstype) {
         } catch (err: unknown) {
             // Enable scrolling
             if (divRef.current) {
-                divRef.current.style.overflow = "auto";
+                divRef.current.style.pointerEvents = "auto";
             }
             handleCustomError(err);
         }
@@ -163,7 +163,7 @@ function Insights({ view, setView }: Propstype) {
                         ? selectedBatch._id
                         : user?.batches?.map((batch) => batch._id).join(",")
                     }&userId=${selectedStudent}&month=${selectedMonth}&year=${selectedYear}&filter=${selectedCategory === "All" ? "" : selectedCategory
-                    }&skip=${defaulters.length}&limit=10`,
+                    }&skip=0&limit=10`,
                     role
                 );
 
@@ -207,7 +207,7 @@ function Insights({ view, setView }: Propstype) {
                         ? selectedBatch._id
                         : user?.batches?.map((batch) => batch._id).join(",")
                     }&userId=${selectedStudent}&month=${selectedMonth}&year=${selectedYear}&filter=${selectedStatus === "All" ? "" : selectedStatus
-                    }&skip=${attendences.length}&limit=10`,
+                    }&skip=0&limit=10`,
                     role
                 );
 

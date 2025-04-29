@@ -171,23 +171,27 @@ function MontlyOverview({
                                     <div className="p-4 border-t border-border">
                                         {/* For Mobile view only */}
                                         <div className="grid grid-cols-2 gap-4 md:hidden">
-                                            <div className="col-span-1">
-                                                <p className="text-sm font-medium">Batch</p>
+                                            <div className="col-span-2">
+                                                <p className="text-sm text-muted-foreground font-semibold">
+                                                    Batch
+                                                </p>
                                                 <p>{attendence.batch.name}</p>
                                             </div>
                                             <div className="col-span-1">
-                                                <p className="text-sm font-medium">Check In</p>
+                                                <p className="text-sm text-muted-foreground font-semibold">
+                                                    Check In
+                                                </p>
                                                 <p>
-                                                    {" "}
                                                     {attendence.checkIn
                                                         ? convertTo12HourFormat(attendence.checkIn)
                                                         : "--:--"}
                                                 </p>
                                             </div>
                                             <div className="col-span-1">
-                                                <p className="text-sm font-medium">Check Out</p>
+                                                <p className="text-sm text-muted-foreground font-medium">
+                                                    Check Out
+                                                </p>
                                                 <p>
-                                                    {" "}
                                                     {attendence.checkOut
                                                         ? convertTo12HourFormat(attendence.checkOut)
                                                         : "--:--"}
@@ -196,10 +200,12 @@ function MontlyOverview({
                                         </div>
 
                                         {/* Common for both views */}
-                                        <div className="flex items-center justify-between gap-3">
+                                        <div className="flex items-center justify-between gap-3 mt-4">
                                             <div className="flex flex-col">
-                                                <h4 className="text-sm font-medium">Reason</h4>
-                                                <p className="text-sm text-muted-foreground">
+                                                <h4 className="text-sm text-muted-foreground font-medium">
+                                                    Reason
+                                                </h4>
+                                                <p className="text-sm">
                                                     {attendence.reason.description
                                                         ? attendence.reason.description
                                                         : "NILL"}

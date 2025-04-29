@@ -19,6 +19,8 @@ import {
     ChevronDown,
     Dot,
     ChevronLeft,
+    BellOff,
+    ChevronRight,
 } from "lucide-react";
 import avatar_boy from "@/assets/images/avatar_boy.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -32,18 +34,22 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import NotificationItem, {
-    INotificationProps,
-} from "@/components/notification/notification-item";
 import { handleCustomError } from "@/utils/error";
 import { fetchData } from "@/service/api-service";
 import ApiEndpoints from "@/constants/api-endpoints";
+import NotificationItem, {
+    INotificationProps,
+} from "@/components/notification/notification-item";
+// import NotificationSkeloton from "@/components/notification/skeleton-notification-item";
+import IconButton from "@/components/ui/icon-button";
 
 // Navbar Component
 const Navbar = () => {
+    // Notifications state
     const [notifications, setNotifications] = useState<INotificationProps[] | []>(
         []
     );
+    // const [loading, setLoading] = useState<boolean>(false);
 
     //Redux
     const isSideBarVisible = useSelector(
@@ -102,7 +108,8 @@ const Navbar = () => {
             try {
                 // Send request
                 const resp = await fetchData(
-                    ApiEndpoints.NOTIFICATION + `?receiverId=${user?._id}`,
+                    ApiEndpoints.NOTIFICATION +
+                    `?receiverId=${user?._id}&limit=${5}&skip=${0}`,
                     role
                 );
 
@@ -111,22 +118,29 @@ const Navbar = () => {
                     const data = resp.data?.data;
 
                     // Update notifications state
-                    setNotifications(data);
+                    setTimeout(() => {
+                        setNotifications(data);
+                        // setLoading(false);
+                    }, 1000);
                 }
             } catch (err: unknown) {
+                // setLoading(false);
                 handleCustomError(err);
             }
         };
 
         fetchNotifications();
-    }, []);
+    }, [role, user]);
 
     return (
         <div className="sticky top-0 left-0 w-full z-40 flex justify-between items-center p-5">
             <div className="flex items-center gap-2">
                 {/* Go back */}
                 {pathname.split("/")[2] === "meet" && (
-                    <button onClick={() => navigate(-1)} className="p-2">
+                    <button
+                        onClick={() => navigate(`/${role}/dashboard`)}
+                        className="p-2"
+                    >
                         <ChevronLeft className="w-5 h-5 text-foreground" />
                     </button>
                 )}
@@ -198,52 +212,85 @@ const Navbar = () => {
 
                 {/* Navbar Items */}
                 {pathname.split("/")[2] !== "meet" && (
-                    <>
-                        {/* Community */}
-                        <NavbarItem text="Community" Image={Globe} />
-
-                        {/* Notifications */}
-                        <ToolTip
-                            side="left"
-                            text="Notifications"
-                            MainClassName="cursor-pointer"
-                        >
-                            <DropdownMenu>
-                                <DropdownMenuTrigger
-                                    asChild
-                                    className="h-[44px] w-[44px] flex items-center justify-center rounded-full bg-muted"
-                                >
-                                    <div>
-                                        <Bell className="w-5 h-5 text-foreground" />
-                                    </div>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent
-                                    align="end"
-                                    className={`px-5 bg-transparent border-none shadow-none ${notifications.length >= 5 ? "h-[450px]" : "h-fit"
-                                        } w-screen sm:w-[500px] overflow-hidden`}
-                                >
-                                    {/* You can map notifications here */}
-                                    <div className="h-full w-full bg-background dark:bg-sidebar-background border rounded-lg shadow-md overflow-auto no-scrollbar">
-                                        <h3 className="text-lg font-semibold sticky z-30 top-0 bg-background dark:bg-sidebar-background p-5">
-                                            Notifications
-                                        </h3>
-                                        <div className="px-5 flex flex-col gap-3">
-                                            {notifications.map((notification) => (
-                                                <NotificationItem
-                                                    key={notification._id}
-                                                    notification={notification}
-                                                />
-                                            ))}
-                                        </div>
-                                        <h3 className="text-sm text-center font-semibold bg-sidebar-background p-4">
-                                            See more
-                                        </h3>
-                                    </div>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </ToolTip>
-                    </>
+                    <NavbarItem text="Community" Image={Globe} />
                 )}
+
+                {/* Notifications */}
+                <DropdownMenu>
+                    <ToolTip
+                        text="Notifications"
+                        side="left"
+                        children={
+                            <DropdownMenuTrigger
+                                asChild
+                                className="h-[44px] w-[44px] flex items-center justify-center rounded-full bg-muted cursor-pointer"
+                            >
+                                <div>
+                                    <Bell className="w-5 h-5 text-foreground" />
+                                </div>
+                            </DropdownMenuTrigger>
+                        }
+                    />
+                    <DropdownMenuContent
+                        onMouseEnter={(e) => e.stopPropagation()}
+                        align="end"
+                        className={`px-5 bg-transparent border-none shadow-none ${notifications.length >= 5 ? "h-[450px]" : "h-fit"
+                            } w-screen sm:w-[525px] overflow-hidden`}
+                    >
+                        {/* You can map notifications here */}
+                        <div className="h-full w-full bg-background dark:bg-sidebar-background border rounded-lg shadow-md overflow-auto no-scrollbar">
+                            <div className="sticky z-30 top-0 bg-background dark:bg-sidebar-background p-5 flex items-center justify-between">
+                                <h1 className="text-lg font-semibold">Notifications</h1>
+                                <IconButton
+                                    Icon={ChevronRight}
+                                    iconClassName="w-4 h-4"
+                                    className="p-2 border-none rounded-full bg-transparent hover:dark:bg-muted cursor-pointer"
+                                />
+                            </div>
+                            {/* Skeleton */}
+                            {/* {loading && (
+                                <div className="px-5 pb-[11px] flex flex-col gap-3">
+                                    <NotificationSkeloton />
+                                </div>
+                            )} */}
+                            {notifications.length > 0 && (
+                                <>
+                                    <div className="px-5 flex flex-col gap-3">
+                                        {notifications.map((notification) => (
+                                            <NotificationItem
+                                                key={notification._id}
+                                                notification={notification}
+                                            />
+                                        ))}
+                                    </div>
+                                    <h3 className="text-sm text-center font-semibold bg-sidebar-background p-4">
+                                        See more
+                                    </h3>
+                                </>
+                            )}
+                            {notifications.length === 0 && (
+                                <div className="flex flex-col items-center justify-center gap-2 text-muted-foreground font-medium pb-5">
+                                    <motion.span
+                                        initial={{ opacity: 0, scale: 0.5 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        transition={{ delay: 0.1 }}
+                                        className="p-2 border-2 border-dashed rounded-full"
+                                    >
+                                        <BellOff className="w-4 h-4 animate-pulse" />
+                                    </motion.span>
+                                    <motion.p
+                                        initial={{ opacity: 0, y: -20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.1 }}
+                                        className="text-sm font-semibold"
+                                    >
+                                        You have no notifications
+                                    </motion.p>
+                                </div>
+                            )}
+                        </div>
+                    </DropdownMenuContent>
+                </DropdownMenu>
 
                 {/* Theme */}
                 <NavbarItem text={themeText} action={handleTheme} Image={themeIcon} />
