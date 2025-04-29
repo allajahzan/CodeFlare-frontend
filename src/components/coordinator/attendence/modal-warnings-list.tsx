@@ -1,4 +1,4 @@
-import { Fragment, ReactNode, useContext, useEffect, useState } from "react";
+import { Fragment, ReactNode, useContext } from "react";
 import {
     Dialog,
     DialogTrigger,
@@ -7,9 +7,7 @@ import {
     DialogTitle,
     DialogDescription,
 } from "@/components/ui/dialog";
-import { FileSpreadsheetIcon, Loader2, Send } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { FileSpreadsheetIcon, TriangleAlert } from "lucide-react";
 import {
     Card,
     CardContent,
@@ -22,18 +20,13 @@ import { format } from "date-fns";
 import { IUser } from "@codeflare/common";
 import { IUserContext, UserContext } from "@/context/user-context";
 import profile from "@/assets/images/no-profile.svg";
-import { useSelector } from "react-redux";
-import { stateType } from "@/redux/store";
-import { fetchData, postData } from "@/service/api-service";
-import ApiEndpoints from "@/constants/api-endpoints";
-import { handleCustomError } from "@/utils/error";
 import { cn } from "@/lib/utils";
-import ValidationError from "@/components/ui/validation-error";
 import { IWarning } from "@/types/warning";
 import { Skeleton } from "@/components/ui/skeleton";
+import { NotFoundYet } from "@/components/animation/fallbacks";
 
 // Skeloton - Warning card Component
-function WarningCardSkeleton() {
+export function WarningCardSkeleton() {
     return (
         <Card className="border-l-4 border-l-red-800 shadow-sm bg-background dark:bg-sidebar">
             <CardHeader className="flex flex-row items-start gap-4 pb-2">
@@ -66,7 +59,6 @@ function WarningCardSkeleton() {
         </Card>
     );
 }
-
 
 // Format date to display
 const formatDate = (date: Date) => {
@@ -140,120 +132,13 @@ const WarningCard = ({
 interface Propstype {
     children: ReactNode;
     student: IUser;
-    month: string;
-    year: number;
+    warnings: IWarning[];
 }
 
 // Warnings lists modal Component
-function WarningsListsModal({ children, student, month, year }: Propstype) {
-    // Modal states
-    const [open, setOpen] = useState<boolean>(false);
-
-    // Warnings states
-    const [warnings, setWarnings] = useState<IWarning[] | []>([]);
-    const [fetching, setFetching] = useState<boolean>(true);
-
-    // Form states
-    const [newWarning, setNewWarning] = useState<string>("");
-    const [submiting, setSubmiting] = useState<boolean>(false);
-    const [error, setError] = useState<boolean>(false);
-
-    // Redux
-    const role = useSelector((state: stateType) => state.role);
-
-    // User context
-    const { user } = useContext(UserContext) as IUserContext;
-
-    // Handle submit
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        if (newWarning.trim().length === 0) return setError(true);
-
-        setError(false);
-        setSubmiting(true);
-
-        try {
-            // Send request
-            const resp = await postData(
-                ApiEndpoints.WARNING,
-                {
-                    warning: {
-                        studentId: student._id,
-                        coordinatorId: user?._id,
-                        message: newWarning,
-                        date: new Date(),
-                    },
-                },
-                role
-            );
-
-            // Success response
-            if (resp && resp.status === 200) {
-                const data = resp.data?.data;
-
-                // Update warnings list
-                setWarnings((prev: IWarning[]) => {
-                    return [
-                        {
-                            _id: data._id,
-                            message: data.message,
-                            date: data.date,
-                            reply: [],
-                        },
-                        ...prev,
-                    ];
-                });
-
-                setNewWarning("");
-                setSubmiting(false);
-            }
-        } catch (err: unknown) {
-            setSubmiting(false);
-            handleCustomError(err);
-        }
-    };
-
-    // Fetch warnings
-    useEffect(() => {
-        const fetchWarnings = async () => {
-            setFetching(true);
-
-            try {
-                // Send response
-                const resp = await fetchData(
-                    ApiEndpoints.WARNING +
-                    `?userId=${student._id}&month=${month}&year=${year}`,
-                    role
-                );
-
-                // Success response
-                if (resp && resp.status === 200) {
-                    const data = resp.data?.data;
-
-                    setTimeout(() => {
-                        setWarnings(data);
-                        setFetching(false);
-                    }, 1000);
-                }
-            } catch (err: unknown) {
-                setFetching(false);
-                handleCustomError(err);
-            }
-        };
-
-        open && fetchWarnings();
-    }, [open]);
-
-    // Reset on close and open
-    useEffect(() => {
-        setNewWarning("");
-        setSubmiting(false);
-        setError(false);
-    }, [open]);
-
+function WarningsListsModal({ children, student, warnings }: Propstype) {
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog>
             <DialogTrigger asChild>{children}</DialogTrigger>
             <DialogContent className="flex flex-col gap-10 dark:bg-sidebar-background max-h-[88vh] max-w-5xl overflow-auto no-scrollbar">
                 <DialogHeader>
@@ -269,9 +154,17 @@ function WarningsListsModal({ children, student, month, year }: Propstype) {
                 </DialogHeader>
 
                 <div className="flex flex-col gap-5 overflow-hidden w-full">
-                    {fetching && <WarningCardSkeleton />}
+                    {/* If not warnings */}
+                    {!warnings && (
+                        <NotFoundYet
+                            MainIcon={TriangleAlert}
+                            text="No warnings & replies yet"
+                            IconClassName="w-5 h-5"
+                        />
+                    )}
 
-                    {!fetching && warnings && warnings.length > 0 && (
+                    {/* If warnings are there */}
+                    {warnings && warnings.length > 0 && (
                         <div className="pb-1 flex flex-col gap-3 overflow-auto no-scrollbar">
                             {warnings.map((warning: IWarning) => (
                                 <WarningCard
@@ -282,48 +175,6 @@ function WarningsListsModal({ children, student, month, year }: Propstype) {
                             ))}
                         </div>
                     )}
-
-                    <form
-                        onSubmit={handleSubmit}
-                        className="space-y-3 w-full"
-                    >
-                        <div className="space-y-2">
-                            <p className="font-medium text-sm text-foreground">
-                                Send a new warning
-                            </p>
-                            <Textarea
-                                required
-                                placeholder="Type warning message here..."
-                                className="min-h-[100px] text-[14.5px] text-foreground resize-none"
-                                value={newWarning}
-                                onChange={(e) => setNewWarning(e.target.value)}
-                            />
-                            {error && (
-                                <ValidationError message="Warning message is required" />
-                            )}
-                        </div>
-
-                        {/* Custom file input */}
-                        <div className="flex justify-end">
-                            <Button
-                                type="submit"
-                                disabled={submiting}
-                                className="h-11 w-[140px] transition-all duration-200 disabled:cursor-not-allowed"
-                            >
-                                {submiting ? (
-                                    <div className="flex items-center gap-2">
-                                        <Loader2 className="h-4 w-4 animate-spin" />
-                                        Processing...
-                                    </div>
-                                ) : (
-                                    <>
-                                        <Send className="h-4 w-4" />
-                                        Send Warning
-                                    </>
-                                )}
-                            </Button>
-                        </div>
-                    </form>
                 </div>
             </DialogContent>
         </Dialog>

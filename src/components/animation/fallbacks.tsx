@@ -62,12 +62,18 @@ function OrbitingIcon({ delay, rotation, SubIcon }: PropsType) {
 }
 
 // NotFoundOrbit Component
-function NotFoundOrbit({ MainIcon, SubIcon, message, text, className }: PropsType) {
+function NotFoundOrbit({
+    MainIcon,
+    SubIcon,
+    message,
+    text,
+    className,
+}: PropsType) {
     return (
         <div
             className={cn(
                 "relative h-full p-5 flex flex-col gap-7 items-center justify-center rounded-2xl overflow-hidden border border-border shadow-sm",
-                className,
+                className
             )}
         >
             <div className="relative w-[185px] h-[185px]">
@@ -150,4 +156,34 @@ function NotSelected({
     );
 }
 
-export { NotFoundOrbit, NotSelected };
+import React from "react";
+
+// NotFoundYet Component
+function NotFoundYet({ MainIcon, text, className, IconClassName }: PropsType) {
+    return (
+        <div
+            className={cn(
+                "flex flex-col items-center justify-center gap-2 text-muted-foreground font-medium",
+                className
+            )}
+        >
+            <motion.span
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.1 }}
+            >
+                {MainIcon && <MainIcon className={cn("w-4 h-4", IconClassName)} />}
+            </motion.span>
+            <motion.p
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="text-center"
+            >
+                {text}
+            </motion.p>
+        </div>
+    );
+}
+
+export { NotFoundOrbit, NotSelected, NotFoundYet };

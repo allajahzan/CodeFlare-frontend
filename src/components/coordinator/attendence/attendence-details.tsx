@@ -16,7 +16,7 @@ import {
     LogOut,
     LucideCheckCircle2,
 } from "lucide-react";
-import SnapshotsModal from "./snapshots-modal";
+import SnapshotsModal from "./modal-snapshots";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
@@ -34,8 +34,8 @@ import { stateType } from "@/redux/store";
 import { useSelector } from "react-redux";
 import { toast } from "@/hooks/use-toast";
 import { useEffect, useState } from "react";
-import ViewReasonModal from "./view-reason-modal";
-import SubmitReasonModal from "./submit-reason-modal";
+import ViewReasonModal from "./modal-view-reason";
+import SubmitReasonModal from "./modal-submit-reason";
 import { Button } from "@/components/ui/button";
 import { NotSelected } from "@/components/animation/fallbacks";
 

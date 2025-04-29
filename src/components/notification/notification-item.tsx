@@ -18,11 +18,7 @@ import { formatDistanceToNow } from "date-fns";
 import { INotification } from "@/types/notification";
 
 // Notification Item Component
-function NotificationItem({
-    notification,
-}: {
-    notification: INotification;
-}) {
+function NotificationItem({ notification }: { notification: INotification }) {
     const { type, message, path, sender, date } = notification;
 
     // Define styles based on notification type
@@ -31,8 +27,8 @@ function NotificationItem({
             case "warning":
                 return {
                     containerClass:
-                        "border-orange-400 bg-orange-50 dark:bg-orange-950/20",
-                    icon: <AlertCircle className="h-5 w-5 text-orange-500" />,
+                        "bg-muted/80 hover:bg-muted dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark",
+                    icon: <AlertCircle className="h-5 w-5 text-orange-600" />,
                 };
             case "review":
                 return {
@@ -117,7 +113,7 @@ function NotificationItem({
             {/* Swipeable card */}
             <motion.div
                 className={cn(
-                    "relative z-20 p-4 rounded-md shadow-sm bg-white dark:bg-muted cursor-pointer",
+                    "relative z-20 p-4 rounded-lg shadow-sm bg-white dark:bg-muted cursor-pointer",
                     containerClass
                 )}
                 drag="x"

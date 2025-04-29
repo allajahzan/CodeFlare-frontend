@@ -5,7 +5,7 @@ import {
     SelectItem,
     SelectTrigger,
 } from "@/components/ui/select";
-import SelectBatchStudent from "./select-batch-student";
+import SelectBatchStudent from "./filter-batch-student";
 import { IStudent } from "@/types/student";
 import { IBatch } from "@/types/batch";
 import Filter from "@/components/common/data-card/filter";
@@ -15,7 +15,7 @@ interface Propstype {
     view: "lists-view" | "insights-view";
     setView: React.Dispatch<React.SetStateAction<"lists-view" | "insights-view">>;
 
-    insightView?: "monthly-overview" | "attendence-defaulters";
+    insightView?: "monthly-overview" | "monthly-defaulters";
 
     selectedBatch: IBatch | null;
     setSelectedBatch: React.Dispatch<React.SetStateAction<IBatch | null>>;
@@ -92,7 +92,7 @@ function FilterOptions({
                     )}
 
                     {/* Filter for flagged students */}
-                    {insightView && insightView === "attendence-defaulters" && (
+                    {insightView && insightView === "monthly-defaulters" && (
                         <Filter
                             title="Status"
                             filter={selectedCategory as string}

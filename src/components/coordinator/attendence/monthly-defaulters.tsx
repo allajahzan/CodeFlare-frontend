@@ -14,9 +14,11 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { IBatch } from "@/types/batch";
 import { NotFoundOrbit } from "@/components/animation/fallbacks";
-import ViewAllReasonsModal from "./reasons-list-modal";
+import ViewAllReasonsModal from "./modal-reasons-list";
 import { Button } from "@/components/ui/button";
-import WarningsListsModal from "./warnings-list-modal";
+import WarningsListsModal from "./modal-warnings-list";
+import SendWarningModal from "./modal-send-warning";
+import { IWarning } from "@/types/warning";
 
 // Interface for flagged student
 export interface IDefaulters {
@@ -26,45 +28,40 @@ export interface IDefaulters {
     status: string;
     count: number;
     records: IAttendence[];
+    warnings: IWarning[];
 }
 
 // Interface for Props
 interface Propstype {
-    defaulters: {
-        userId: string;
-        user: IUser;
-        batch: IBatch;
-        status: string;
-        count: number;
-        records: IAttendence[];
-    }[];
+    defaulters: IDefaulters[];
+    setDefaulters: React.Dispatch<React.SetStateAction<[] | IDefaulters[]>>;
     fetching: boolean;
-    month: string;
-    year: number;
     divRef: React.RefObject<HTMLDivElement>;
     handleInfiniteScroll: () => Promise<void>;
 }
 
-// Attendence defaulters Component
-function AttendenceDefaulters({
+// monthly defaulters Component
+function MonthlyDefaulters({
     defaulters,
+    setDefaulters,
     fetching,
-    month,
-    year,
     divRef,
-    handleInfiniteScroll
+    handleInfiniteScroll,
 }: Propstype) {
     // Expand states
     const [expanded, setExpanded] = useState<string | null>(null);
+
+    // Handle toggle
     const toggle = (id: string) => setExpanded(expanded === id ? null : id);
 
     return (
         <>
             {defaulters.length > 0 && (
-                <div 
-                ref={divRef}
-                onScroll={handleInfiniteScroll}
-                className="flex flex-col gap-2 overflow-auto no-scrollbar text-foreground">
+                <div
+                    ref={divRef}
+                    onScroll={handleInfiniteScroll}
+                    className="flex flex-col gap-2 overflow-auto no-scrollbar text-foreground"
+                >
                     {defaulters.map((attendence, index) => (
                         <motion.div
                             key={attendence.userId}
@@ -129,21 +126,37 @@ function AttendenceDefaulters({
                             </div>
 
                             {expanded === attendence.userId && (
-                                <div className="p-5 border-t relative">
+                                <div className="p-5 border-t relative flex items-center gap-2">
                                     <WarningsListsModal
                                         student={attendence.user}
-                                        month={month}
-                                        year={year}
+                                        warnings={attendence.warnings}
+                                        children={
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                className="min-w-0 duration-0 text-sm flex items-center gap-2 font-medium shadow-sm bg-sidebar-backgroundDark
+                                               "
+                                            >
+                                                <TriangleAlert className="h-5 w-5 text-foreground" />
+                                                <span className="text-sm font-medium text-foreground truncate">
+                                                    Warnings & replies
+                                                </span>
+                                            </Button>
+                                        }
+                                    />
+                                    <SendWarningModal
+                                        student={attendence.user}
+                                        setDefaulters={setDefaulters}
                                         children={
                                             <Button
                                                 variant="outline"
                                                 size="sm"
                                                 className="duration-0 text-sm flex items-center gap-2 font-medium shadow-sm
-                                                bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border border-red-200 dark:border-red-800"
+                                             bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border border-red-200 dark:border-red-800"
                                             >
                                                 <TriangleAlert className="h-5 w-5 text-red-800 dark:text-red-600" />
                                                 <span className="text-sm font-medium text-red-800 dark:text-red-600">
-                                                    Warnings & Replies
+                                                    Warn
                                                 </span>
                                             </Button>
                                         }
@@ -173,4 +186,4 @@ function AttendenceDefaulters({
     );
 }
 
-export default AttendenceDefaulters;
+export default MonthlyDefaulters;

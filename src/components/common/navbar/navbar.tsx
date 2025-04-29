@@ -19,7 +19,6 @@ import {
     ChevronDown,
     Dot,
     ChevronLeft,
-    BellOff,
     ChevronRight,
 } from "lucide-react";
 import avatar_boy from "@/assets/images/avatar_boy.jpg";
@@ -41,6 +40,7 @@ import NotificationItem from "@/components/notification/notification-item";
 // import NotificationSkeloton from "@/components/notification/skeleton-notification-item";
 import IconButton from "@/components/ui/icon-button";
 import { useNotification } from "@/context/notification-context";
+import { NotFoundYet } from "@/components/animation/fallbacks";
 
 // Navbar Component
 const Navbar = () => {
@@ -266,24 +266,7 @@ const Navbar = () => {
                                 </>
                             )}
                             {notifications.length === 0 && (
-                                <div className="flex flex-col items-center justify-center gap-2 text-muted-foreground font-medium pb-5">
-                                    <motion.span
-                                        initial={{ opacity: 0, scale: 0.5 }}
-                                        animate={{ opacity: 1, scale: 1 }}
-                                        transition={{ delay: 0.1 }}
-                                        className="p-2 border-2 border-dashed rounded-full"
-                                    >
-                                        <BellOff className="w-4 h-4 animate-pulse" />
-                                    </motion.span>
-                                    <motion.p
-                                        initial={{ opacity: 0, y: -20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: 0.1 }}
-                                        className="text-sm text-center font-semibold"
-                                    >
-                                        No notifications yet
-                                    </motion.p>
-                                </div>
+                                <NotFoundYet MainIcon={Bell}  className="pb-5" text="No notifications yet" IconClassName="w-5 h-5"/>
                             )}
                         </div>
                     </DropdownMenuContent>

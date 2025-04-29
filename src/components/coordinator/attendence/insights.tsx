@@ -11,7 +11,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import MontlyOverview from "./monthly-overview";
-import AttendenceDefaulters, { IDefaulters } from "./attendence-defaulters";
+import MonthlyDefaulters, { IDefaulters } from "./monthly-defaulters";
 import FilterOptions from "./filter-options";
 import { fetchData } from "@/service/api-service";
 import ApiEndpoints from "@/constants/api-endpoints";
@@ -31,7 +31,7 @@ interface Propstype {
 function Insights({ view, setView }: Propstype) {
     // View
     const [insightView, setInsightView] = useState<
-        "monthly-overview" | "attendence-defaulters"
+        "monthly-overview" | "monthly-defaulters"
     >("monthly-overview");
 
     // Attendence states
@@ -182,7 +182,7 @@ function Insights({ view, setView }: Propstype) {
             }
         };
 
-        insightView === "attendence-defaulters" && fetchDefaulters();
+        insightView === "monthly-defaulters" && fetchDefaulters();
     }, [
         selectedMonth,
         selectedYear,
@@ -281,7 +281,7 @@ function Insights({ view, setView }: Propstype) {
                             <span>
                                 {insightView === "monthly-overview"
                                     ? "Monthly overview"
-                                    : "Attendance defaulters"}
+                                    : "Monthly defaulters"}
                                 ({attendences.length || defaulters.length})
                             </span>
                             <ChevronDown className="h-4 w-4" />
@@ -295,10 +295,10 @@ function Insights({ view, setView }: Propstype) {
                             <DropdownMenuItem
                                 onClick={() => {
                                     setAttendences([]);
-                                    setInsightView("attendence-defaulters");
+                                    setInsightView("monthly-defaulters");
                                 }}
                             >
-                                Attendance defaulters
+                                Monthly defaulters
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
@@ -346,11 +346,10 @@ function Insights({ view, setView }: Propstype) {
                         handleInfiniteScroll={handleInfiniteScroll}
                     />
                 ) : (
-                    <AttendenceDefaulters
+                    <MonthlyDefaulters
                         defaulters={defaulters}
+                        setDefaulters={setDefaulters}
                         fetching={fetching}
-                        month={selectedMonth}
-                        year={selectedYear}
                         divRef={divRef}
                         handleInfiniteScroll={handleInfiniteScroll}
                     />
