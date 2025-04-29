@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, ReactNode } from "react";
-// import warningAlarm from "@/assets/music/warning-alarm.mp3";
+import warningAlarm from "@/assets/music/warning-alarm.mp3";
 import { toast } from "@/hooks/use-toast";
 import { reciveSnapshotMessage } from "@/socket/communication/notification";
 import { socket } from "@/socket/communication/socket";
@@ -31,23 +31,23 @@ const SnapshotContextProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         if (snapshotMessage) {
             // Create button
-            // const button = document.createElement("button");
+            const button = document.createElement("button");
 
             // Set onclick attribute
-            // button.onclick = () => {
-            //     const audio = new Audio(warningAlarm);
-            //     audio.load();
-            //     audio.play();
-            // };
+            button.onclick = () => {
+                const audio = new Audio(warningAlarm);
+                audio.load();
+                audio.play();
+            };
 
-            // // Append to DOM
-            // document.body.appendChild(button);
+            // Append to DOM
+            document.body.appendChild(button);
 
-            // // Trigger click
-            // button.click();
+            // Trigger click
+            button.click();
 
-            // // Remove after click to clean up
-            // document.body.removeChild(button);
+            // Remove after click to clean up
+            document.body.removeChild(button);
 
             toast({ title: snapshotMessage });
         }

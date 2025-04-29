@@ -49,7 +49,7 @@ function WarningCardSkeleton() {
                 <Skeleton className="h-4 w-[60%]" />
             </CardContent>
 
-            <CardFooter className="flex flex-col items-start pt-0 pb-5 w-full">
+            <CardFooter className="flex flex-col items-start pt-0 w-full">
                 <div className="w-full pl-6 space-y-4">
                     {[...Array(1)].map((_, idx) => (
                         <div key={idx} className="flex items-start gap-3">

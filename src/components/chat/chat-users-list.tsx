@@ -15,6 +15,7 @@ import UserCard from "./user-card";
 import { Chat } from "./chat";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import { getRelativeTime } from "@/utils/relative-time";
 
 // Interface for Props
 interface PropsType {
@@ -147,7 +148,7 @@ function UsersListOfChat({
                                 <div className="w-[60px] flex flex-col justify-center items-end gap-1">
                                     {/* Time or date */}
                                     <p className="w-full text-end text-xs text-foreground font-medium">
-                                        {user.updatedAt.toString()}
+                                        {getRelativeTime(user.updatedAt)}
                                     </p>
 
                                     <div className="w-5 h-5" />

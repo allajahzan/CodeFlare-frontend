@@ -12,29 +12,16 @@ import { useNavigate } from "react-router-dom";
 import { animate, motion, useMotionValue } from "framer-motion";
 import { useEffect, useState } from "react";
 import IconButton from "../ui/icon-button";
-import { IUser } from "@codeflare/common";
 import profile from "@/assets/images/no-profile.svg";
 import { handleCustomError } from "@/utils/error";
 import { formatDistanceToNow } from "date-fns";
-
-// Define notification types
-type NotificationType = "warning" | "review" | "info" | "success" | "fail";
-
-// Inteface for Props
-export interface INotificationProps {
-    _id: string;
-    sender: IUser;
-    type: NotificationType;
-    path: string;
-    message: string;
-    date: string;
-}
+import { INotification } from "@/types/notification";
 
 // Notification Item Component
 function NotificationItem({
     notification,
 }: {
-    notification: INotificationProps;
+    notification: INotification;
 }) {
     const { type, message, path, sender, date } = notification;
 
@@ -152,7 +139,7 @@ function NotificationItem({
 
                 <div className="flex items-start gap-3">
                     <div className="mt-0.5">{icon}</div>
-                    <div className="flex-1">
+                    <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium truncate">{message}</p>
                         <span className="text-xs text-muted-foreground font-medium mt-1">
                             {formatDistanceToNow(new Date(date), { addSuffix: true })}

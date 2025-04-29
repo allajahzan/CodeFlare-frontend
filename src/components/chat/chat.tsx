@@ -22,7 +22,7 @@ export interface Message {
     content: "text" | "image" | "file";
     status: "sent" | "seen" | "delivered" | "received";
     message: string;
-    createdAt: String;
+    createdAt: string;
 }
 
 export interface Chat {
@@ -106,11 +106,7 @@ function Chat() {
                                         : chat.sender.profilePic,
                                 content: chat.content,
                                 lastMessage: chat.lastMessage,
-                                updatedAt: new Date(chat.updatedAt).toLocaleTimeString([], {
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                    hour12: true,
-                                }),
+                                updatedAt: chat.updatedAt,
                             };
                         });
 
@@ -205,11 +201,7 @@ function Chat() {
                 profilePic: message.sender.profilePic as string,
                 content: message.content,
                 lastMessage: message.message,
-                updatedAt: new Date().toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true,
-                }),
+                updatedAt: new Date().toString(),
             };
 
             // Update users with formatted user chat
@@ -266,11 +258,7 @@ function Chat() {
             profilePic: selectedUser?.profilePic as string,
             content: "text",
             lastMessage: message,
-            updatedAt: new Date().toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true,
-            }),
+            updatedAt: new Date().toString(),
         };
 
         // Update users with formatted user chat

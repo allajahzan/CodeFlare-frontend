@@ -37,18 +37,15 @@ import {
 import { handleCustomError } from "@/utils/error";
 import { fetchData } from "@/service/api-service";
 import ApiEndpoints from "@/constants/api-endpoints";
-import NotificationItem, {
-    INotificationProps,
-} from "@/components/notification/notification-item";
+import NotificationItem from "@/components/notification/notification-item";
 // import NotificationSkeloton from "@/components/notification/skeleton-notification-item";
 import IconButton from "@/components/ui/icon-button";
+import { useNotification } from "@/context/notification-context";
 
 // Navbar Component
 const Navbar = () => {
     // Notifications state
-    const [notifications, setNotifications] = useState<INotificationProps[] | []>(
-        []
-    );
+    const { notifications, setNotifications } = useNotification();
     // const [loading, setLoading] = useState<boolean>(false);
 
     //Redux
@@ -282,9 +279,9 @@ const Navbar = () => {
                                         initial={{ opacity: 0, y: -20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: 0.1 }}
-                                        className="text-sm font-semibold"
+                                        className="text-sm text-center font-semibold"
                                     >
-                                        You have no notifications
+                                        No notifications yet
                                     </motion.p>
                                 </div>
                             )}

@@ -84,7 +84,7 @@ function Insights({ view, setView }: Propstype) {
                     setScrollFetching(true);
 
                     // Disable scrolling
-                    divRef.current.style.pointerEvents = "none";
+                    // divRef.current.style.pointerEvents = "none";
 
                     if (insightView === "monthly-overview") {
                         // Send request
@@ -108,7 +108,7 @@ function Insights({ view, setView }: Propstype) {
                             });
 
                             // Enable scrolling
-                            divRef.current.style.pointerEvents = "auto";
+                            // divRef.current.style.pointerEvents = "auto";
                             setScrollFetching(false);
                         }
                     } else {
@@ -133,7 +133,7 @@ function Insights({ view, setView }: Propstype) {
                             });
 
                             // Enable scrolling
-                            divRef.current.style.pointerEvents = "auto";
+                            // divRef.current.style.pointerEvents = "auto";
                             setScrollFetching(false);
                         }
                     }
