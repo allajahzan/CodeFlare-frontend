@@ -17,8 +17,15 @@ import { handleCustomError } from "@/utils/error";
 import { formatDistanceToNow } from "date-fns";
 import { INotification } from "@/types/notification";
 
+// Interface for Props
+interface PropsType {
+    notification: INotification;
+    index: number;
+    id: string;
+}
+
 // Notification Item Component
-function NotificationItem({ notification }: { notification: INotification }) {
+function NotificationItem({ notification, index, id }: PropsType) {
     const { type, message, path, sender, date } = notification;
 
     // Define styles based on notification type
@@ -98,7 +105,13 @@ function NotificationItem({ notification }: { notification: INotification }) {
     }, []);
 
     return (
-        <div className="relative w-full">
+        <motion.div
+            key={id}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 + index * 0.1 }}
+            className="relative w-full"
+        >
             {/* Delete background layer */}
             {showDelete && (
                 <div className="absolute inset-0 flex justify-end items-center rounded-md cursor-pointer">
@@ -151,7 +164,7 @@ function NotificationItem({ notification }: { notification: INotification }) {
                     )}
                 </div>
             </motion.div>
-        </div>
+        </motion.div>
     );
 }
 

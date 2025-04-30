@@ -1,7 +1,6 @@
 import {
     useCallback,
     useContext,
-    useEffect,
     useLayoutEffect,
     useMemo,
     useState,
@@ -33,11 +32,7 @@ import {
     DropdownMenuContent,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { handleCustomError } from "@/utils/error";
-import { fetchData } from "@/service/api-service";
-import ApiEndpoints from "@/constants/api-endpoints";
 import NotificationItem from "@/components/notification/notification-item";
-// import NotificationSkeloton from "@/components/notification/skeleton-notification-item";
 import IconButton from "@/components/ui/icon-button";
 import { useNotification } from "@/context/notification-context";
 import { NotFoundYet } from "@/components/animation/fallbacks";
@@ -45,8 +40,7 @@ import { NotFoundYet } from "@/components/animation/fallbacks";
 // Navbar Component
 const Navbar = () => {
     // Notifications state
-    const { notifications, setNotifications } = useNotification();
-    // const [loading, setLoading] = useState<boolean>(false);
+    const { notifications } = useNotification();
 
     //Redux
     const isSideBarVisible = useSelector(
@@ -98,36 +92,6 @@ const Navbar = () => {
         () => (theme === "light" ? "Light" : "Dark"),
         [theme]
     );
-
-    // Fetch notifications
-    useEffect(() => {
-        const fetchNotifications = async () => {
-            try {
-                // Send request
-                const resp = await fetchData(
-                    ApiEndpoints.NOTIFICATION +
-                    `?receiverId=${user?._id}&limit=${5}&skip=${0}`,
-                    role
-                );
-
-                // Success response
-                if (resp && resp.status === 200) {
-                    const data = resp.data?.data;
-
-                    // Update notifications state
-                    setTimeout(() => {
-                        setNotifications(data);
-                        // setLoading(false);
-                    }, 1000);
-                }
-            } catch (err: unknown) {
-                // setLoading(false);
-                handleCustomError(err);
-            }
-        };
-
-        fetchNotifications();
-    }, [role, user]);
 
     return (
         <div className="sticky top-0 left-0 w-full z-40 flex justify-between items-center p-5">
@@ -222,8 +186,16 @@ const Navbar = () => {
                                 asChild
                                 className="h-[44px] w-[44px] flex items-center justify-center rounded-full bg-muted cursor-pointer"
                             >
-                                <div>
+                                <div className="relative">
                                     <Bell className="w-5 h-5 text-foreground" />
+                                    {/* Count */}
+                                    {notifications &&
+                                        notifications?.filter((item) => !item.isRead).length >
+                                        0 && (
+                                            <div className="absolute top-0 right-0 flex items-center justify-center w-4 h-4 text-xs font-semibold text-white bg-red-800 rounded-full">
+                                                {notifications?.length}
+                                            </div>
+                                        )}
                                 </div>
                             </DropdownMenuTrigger>
                         }
@@ -244,19 +216,15 @@ const Navbar = () => {
                                     className="p-2 border-none rounded-full bg-transparent hover:dark:bg-muted cursor-pointer"
                                 />
                             </div>
-                            {/* Skeleton */}
-                            {/* {loading && (
-                                <div className="px-5 pb-[11px] flex flex-col gap-3">
-                                    <NotificationSkeloton />
-                                </div>
-                            )} */}
                             {notifications.length > 0 && (
                                 <>
                                     <div className="px-5 flex flex-col gap-3">
-                                        {notifications.map((notification) => (
+                                        {notifications.map((notification, index) => (
                                             <NotificationItem
                                                 key={notification._id}
                                                 notification={notification}
+                                                index={index}
+                                                id={notification._id}
                                             />
                                         ))}
                                     </div>
@@ -266,7 +234,12 @@ const Navbar = () => {
                                 </>
                             )}
                             {notifications.length === 0 && (
-                                <NotFoundYet MainIcon={Bell}  className="pb-5" text="No notifications yet" IconClassName="w-5 h-5"/>
+                                <NotFoundYet
+                                    MainIcon={Bell}
+                                    className="pb-5"
+                                    text="No notifications yet"
+                                    IconClassName="w-5 h-5"
+                                />
                             )}
                         </div>
                     </DropdownMenuContent>

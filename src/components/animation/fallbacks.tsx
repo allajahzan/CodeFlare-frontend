@@ -163,21 +163,22 @@ function NotFoundYet({ MainIcon, text, className, IconClassName }: PropsType) {
     return (
         <div
             className={cn(
-                "flex flex-col items-center justify-center gap-2 text-muted-foreground font-medium",
+                "flex flex-col  gap-2 text-muted-foreground font-medium",
                 className
             )}
         >
             <motion.span
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.1 }}
+                transition={{ delay: 0 }}
+                className="hidden"
             >
                 {MainIcon && <MainIcon className={cn("w-4 h-4", IconClassName)} />}
             </motion.span>
             <motion.p
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
+                transition={{ delay: 0 }}
                 className="text-center"
             >
                 {text}

@@ -7,4 +7,5 @@ export interface INotification {
     path: string;
     message: string;
     date: string;
+    isRead: boolean;
 }

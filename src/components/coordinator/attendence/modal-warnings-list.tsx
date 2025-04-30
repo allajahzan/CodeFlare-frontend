@@ -146,7 +146,7 @@ function WarningsListsModal({ children, student, warnings }: Propstype) {
                         <div className="p-2 bg-muted rounded-full">
                             <FileSpreadsheetIcon className="w-4 h-4" />
                         </div>
-                        <span>Warnings & replies - {student.name}</span>
+                        <span>Warnings & replies - {student.name} ({warnings ? warnings.length : 0})</span>
                     </DialogTitle>
                     <DialogDescription className="text-muted-foreground font-medium">
                         Warnings and replies of this student in this month.
