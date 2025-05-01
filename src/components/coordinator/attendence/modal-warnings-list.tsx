@@ -22,43 +22,7 @@ import { IUserContext, UserContext } from "@/context/user-context";
 import profile from "@/assets/images/no-profile.svg";
 import { cn } from "@/lib/utils";
 import { IWarning } from "@/types/warning";
-import { Skeleton } from "@/components/ui/skeleton";
 import { NotFoundYet } from "@/components/animation/fallbacks";
-
-// Skeloton - Warning card Component
-export function WarningCardSkeleton() {
-    return (
-        <Card className="border-l-4 border-l-red-800 shadow-sm bg-background dark:bg-sidebar">
-            <CardHeader className="flex flex-row items-start gap-4 pb-2">
-                <Skeleton className="w-10 h-10 rounded-full" />
-                <div className="flex flex-col gap-2">
-                    <Skeleton className="h-4 w-24" /> {/* Name skeleton */}
-                    <Skeleton className="h-3 w-16" /> {/* Date skeleton */}
-                </div>
-            </CardHeader>
-
-            <CardContent className="pl-20 space-y-2">
-                <Skeleton className="h-4 w-[80%]" /> {/* Warning message line */}
-                <Skeleton className="h-4 w-[60%]" />
-            </CardContent>
-
-            <CardFooter className="flex flex-col items-start pt-0 w-full">
-                <div className="w-full pl-6 space-y-4">
-                    {[...Array(1)].map((_, idx) => (
-                        <div key={idx} className="flex items-start gap-3">
-                            <Skeleton className="h-8 w-8 rounded-full" />
-                            <div className="flex flex-col gap-2 w-full">
-                                <Skeleton className="h-4 w-28" /> {/* Student name */}
-                                <Skeleton className="h-3 w-20" /> {/* Reply date */}
-                                <Skeleton className="h-4 w-[70%]" /> {/* Reply message */}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </CardFooter>
-        </Card>
-    );
-}
 
 // Format date to display
 const formatDate = (date: Date) => {

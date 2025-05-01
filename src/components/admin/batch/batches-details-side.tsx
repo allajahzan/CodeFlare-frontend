@@ -1,7 +1,7 @@
 import { NotFoundOrbit, NotSelected } from "@/components/animation/fallbacks";
 import SearchFilterSort from "@/components/common/data-card/search-filter-sort";
 import CountCard from "@/components/common/other-cards/count-card";
-import UserList from "@/components/common/user/user-list-card";
+import UserListCard from "@/components/common/user/user-list-card";
 import { stateType } from "@/redux/store";
 import {
     DropdownMenu,
@@ -246,7 +246,7 @@ function BatchesDetailsSide({ selectedBatch }: Propstype) {
                             {users.length > 0 &&
                                 users.map((user, index) => {
                                     return (
-                                        <UserList
+                                        <UserListCard
                                             key={index}
                                             index={index}
                                             user={user}

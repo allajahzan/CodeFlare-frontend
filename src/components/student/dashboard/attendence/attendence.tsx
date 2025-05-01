@@ -1,19 +1,19 @@
 import { useContext, useEffect, useState } from "react";
 import { CalendarClock, Info, Loader2, TriangleAlert } from "lucide-react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { checkedInAction, stateType } from "@/redux/store";
-import CheckedInOutModal from "./check-in-out-modal";
+import CheckInOutModal from "./modal-check-in-out";
 import { Button } from "@/components/ui/button";
-import AttendenceGuidlinesModal from "./guidlines-modal";
+import AttendenceGuidlinesModal from "./modal-guidlines";
 import { handleCustomError } from "@/utils/error";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { fetchData } from "@/service/api-service";
 import { IUserContext, UserContext } from "@/context/user-context";
 import ToolTip from "@/components/common/tooltip/tooltip";
 import { ISnapshotContext, SnapshotContext } from "@/context/snapshot-context";
-import WebCamModal from "./web-cam-modal";
+import WebCamModal from "./modal-web-cam";
 import { Badge } from "@/components/ui/badge";
 
 // Attendence Component
@@ -111,6 +111,12 @@ function Attendence() {
     const hours = formatNumber(((time.getHours() + 11) % 12) + 1);
     const minutes = formatNumber(time.getMinutes());
 
+    const flipVariants = {
+        initial: { rotateX: 90, opacity: 0 },
+        animate: { rotateX: 0, opacity: 1, transition: { duration: 0.3 } },
+        exit: { rotateX: -90, opacity: 0, transition: { duration: 0.3 } },
+    };
+
     return (
         <div className="relative p-5 flex flex-col rounded-2xl w-full h-[400px] bg-background dark:bg-sidebar-background border shadow-sm">
             {/* Header */}
@@ -148,46 +154,44 @@ function Attendence() {
 
             <div className="relative flex-1 h-full flex flex-col pt-14 gap-3">
                 {/* Date top-left */}
-                <p className="text-base text-foreground font-semibold">
+                <i className="text-sm text-foreground font-semibold">
                     {new Date().toLocaleDateString("en-GB", {
                         day: "2-digit",
                         month: "long",
                         year: "numeric",
                     })}
-                </p>
+                </i>
 
                 {/* Time Flipper */}
                 <div className="h-full flex flex-col justify-between items-center">
-                    <div className="flex justify-center items-center text-foreground text-6xl font-bold">
+                    <div className="flex justify-center items-center gap-1 text-foreground text-6xl font-bold">
                         {[hours[0], hours[1], "", minutes[0], minutes[1]].map(
                             (item, index) =>
                                 item ? (
-                                    <div key={index} className="relative">
-                                        {/* Old Number */}
-                                        <motion.div
-                                            key={`old-${item}`}
-                                            className="absolute p-5 m-0.5 w-[92px] h-[92px] flex items-center justify-center bg-gradient-to-tr from-zinc-950 via-zinc-900 to-zinc-800 dark:bg-background border text-white shadow-md rounded-lg"
-                                        >
-                                            {item}
-                                        </motion.div>
-
-                                        {/* New Number */}
-                                        <div className="relative">
+                                    <div key={index} className="relative w-[92px] h-[92px]">
+                                        {/* AnimatePresence triggers flip on change */}
+                                        <AnimatePresence mode="wait" initial={false}>
                                             <motion.div
-                                                key={`new-${item}`}
-                                                className="p-5 m-0.5 w-[92px] h-[92px] flex items-center justify-center bg-gradient-to-tr from-zinc-950 via-zinc-900 to-zinc-800 dark:bg-background border text-white shadow-md rounded-lg"
+                                                key={`${index}-${item}`} // key must change when digit changes
+                                                className="absolute top-0 left-0 w-full h-full flex items-center justify-center p-5 bg-gradient-to-tr from-zinc-950 via-zinc-900 to-zinc-800 dark:bg-background border border-zinc-700 text-white shadow-md rounded-lg"
+                                                variants={flipVariants}
+                                                initial="initial"
+                                                animate="animate"
+                                                exit="exit"
                                             >
                                                 {item}
                                             </motion.div>
-                                            {index === 0 && (
-                                                <motion.p
-                                                    className={`absolute z-30 ${meridian === "AM" ? "top-2" : "bottom-2"
-                                                        } left-2 text-white text-[10px] font-semibold`}
-                                                >
-                                                    {meridian}
-                                                </motion.p>
-                                            )}
-                                        </div>
+                                        </AnimatePresence>
+
+                                        {/* AM/PM indicator */}
+                                        {index === 0 && (
+                                            <motion.p
+                                                className={`absolute z-30 ${meridian === "AM" ? "top-2" : "bottom-2"
+                                                    } left-2 text-white text-[10px] font-semibold`}
+                                            >
+                                                {meridian}
+                                            </motion.p>
+                                        )}
                                     </div>
                                 ) : (
                                     <span
@@ -231,7 +235,7 @@ function Attendence() {
                 <div className="mt-auto w-full flex gap-3 items-center justify-end">
                     <div className="relative w-full">
                         {!loading && (
-                            <CheckedInOutModal
+                            <CheckInOutModal
                                 children={
                                     <div className="w-full bg-background rounded-lg">
                                         <Button

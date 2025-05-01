@@ -22,8 +22,8 @@ interface PropsType {
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-// Meet info Modal
-function ModalMeetInfo({ open, setOpen }: PropsType) {
+// Meet ID Modal
+function ModalMeetId({ open, setOpen }: PropsType) {
     const [roomId, setRoomId] = useState<string>("");
     const [fetching, setFetching] = useState<boolean | null>(true);
 
@@ -67,7 +67,7 @@ function ModalMeetInfo({ open, setOpen }: PropsType) {
 
                     // Update roomId
                     setTimeout(() => {
-                        setRoomId("http://localhost:5173/instructor/meet/" + data.roomId);
+                        setRoomId(`${window.location.origin}/instructor/meet/` + data.roomId);
                         setFetching(false);
                     }, 500);
                 }
@@ -140,4 +140,4 @@ function ModalMeetInfo({ open, setOpen }: PropsType) {
     );
 }
 
-export default ModalMeetInfo;
+export default ModalMeetId;

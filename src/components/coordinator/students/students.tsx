@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/select";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { NotFoundOrbit } from "@/components/animation/fallbacks";
-import UserList from "@/components/common/user/user-list-card";
+import UserListCard from "@/components/common/user/user-list-card";
 import CardHeader from "@/components/common/data-card/header";
 import SearchFilterSort from "@/components/common/data-card/search-filter-sort";
 import { useMediaQuery } from "usehooks-ts";
@@ -354,7 +354,7 @@ function Students({ setDrawerOpen }: PropsType) {
                         {students.length > 0 &&
                             students.map((student, index) => {
                                 return (
-                                    <UserList
+                                    <UserListCard
                                         key={index}
                                         index={index}
                                         action={() => handleSelect(index)}

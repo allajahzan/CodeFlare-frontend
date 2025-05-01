@@ -22,8 +22,8 @@ interface propsType {
     fetchingStudents: boolean;
 }
 
-// Selects batch student Component
-function SelectBatchStudent({
+// Filter batch student Component
+function FilterBatchStudent({
     selectedBatch,
     setSelectedBatch,
     selectedStudent,
@@ -140,4 +140,4 @@ function SelectBatchStudent({
     );
 }
 
-export default SelectBatchStudent;
+export default FilterBatchStudent;

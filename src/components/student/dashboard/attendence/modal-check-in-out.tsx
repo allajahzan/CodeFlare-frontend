@@ -26,7 +26,7 @@ interface Propstype {
 }
 
 // Checked In Out Modal Component
-function CheckedInOutModal({ children }: Propstype) {
+function CheckInOutModal({ children }: Propstype) {
     // Modal state
     const [open, setOpen] = useState<boolean>(false);
 
@@ -170,4 +170,4 @@ function CheckedInOutModal({ children }: Propstype) {
     );
 }
 
-export default CheckedInOutModal;
+export default CheckInOutModal;

@@ -5,7 +5,7 @@ import {
     SelectItem,
     SelectTrigger,
 } from "@/components/ui/select";
-import SelectBatchStudent from "./filter-batch-student";
+import FilterBatchStudent from "./filter-batch-student";
 import { IStudent } from "@/types/student";
 import { IBatch } from "@/types/batch";
 import Filter from "@/components/common/data-card/filter";
@@ -69,7 +69,7 @@ function FilterOptions({
                             <Search className="w-4 h-4 text-foreground" />
                         </SelectTrigger>
                         <SelectContent className="w-[220px]" align="end">
-                            <SelectBatchStudent
+                            <FilterBatchStudent
                                 selectedBatch={selectedBatch}
                                 setSelectedBatch={setSelectedBatch}
                                 selectedStudent={selectedStudent}

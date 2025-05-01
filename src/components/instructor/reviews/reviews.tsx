@@ -13,7 +13,7 @@ import { stateType } from "@/redux/store";
 import Sort from "@/components/common/data-card/sort";
 import Filter from "@/components/common/data-card/filter";
 import Search from "@/components/common/data-card/search";
-import UserList from "@/components/common/user/user-list-card";
+import UserListCard from "@/components/common/user/user-list-card";
 import IconButton from "@/components/ui/icon-button";
 import DatePicker from "./date-picker";
 import {
@@ -237,7 +237,7 @@ function Reviews() {
                         className="h-full w-full flex flex-col gap-[9px] overflow-auto bg-transparent no-scrollbar"
                     >
                         {reviews.map((review, index) => (
-                            <UserList
+                            <UserListCard
                                 key={review._id}
                                 index={index}
                                 user={{

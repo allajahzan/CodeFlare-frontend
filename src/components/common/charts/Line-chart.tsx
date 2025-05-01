@@ -26,7 +26,7 @@ const LineCharts = ({ data, text, className, pieChart }: PropsType) => {
     return (
         <div className="h-full w-full flex flex-col gap-3">
             <div className="flex items-center gap-3 w-full">
-                <p className="flex-1 text-base text-foreground font-semibold truncate">
+                <p className="flex-1 text-lg text-foreground font-semibold truncate">
                     {text}
                 </p>
                 <div className="p-2 bg-muted rounded-full cursor-pointer">

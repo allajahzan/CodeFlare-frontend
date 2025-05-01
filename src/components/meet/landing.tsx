@@ -23,7 +23,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import ModalMeetInfo from "./modal-meet-info";
+import ModalMeetId from "./modal-meet-id";
 import { useNavigate } from "react-router-dom";
 
 // import image1 from "@/assets/images/meet-image.png";
@@ -50,7 +50,7 @@ function MeetLanding() {
         <div className="h-screen dotted-b">
             <div className="flex flex-col h-full relative transition-all ">
                 {/* Meet info modal */}
-                <ModalMeetInfo open={open} setOpen={setOpen} />
+                <ModalMeetId open={open} setOpen={setOpen} />
 
                 {/* Navbar */}
                 <Navbar />

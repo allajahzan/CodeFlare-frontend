@@ -18,7 +18,7 @@ interface PropsType {
 }
 
 // UsersList Component
-function UserList({
+function UserListCard({
     index,
     action,
     user,
@@ -64,4 +64,4 @@ function UserList({
     );
 }
 
-export default UserList;
+export default UserListCard;

@@ -12,7 +12,7 @@ interface PropsType {
     radius?: number;
 }
 
-const PieCharts = ({ data, text, className, radius }: PropsType) => {
+function PieCharts({ data, text, className, radius }: PropsType){
     // Theme context
     const { theme } = useContext(ThemeContext) as IThemeContext;
 

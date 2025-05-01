@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChangeEvent, useEffect, useState } from "react";
 import { NotFoundOrbit } from "@/components/animation/fallbacks";
-import UserList from "@/components/common/user/user-list-card";
+import UserListCard from "@/components/common/user/user-list-card";
 import CardHeader from "@/components/common/data-card/header";
 import SearchFilterSort from "@/components/common/data-card/search-filter-sort";
 import { cn } from "@/lib/utils";
@@ -373,7 +373,7 @@ function Users({ setDrawerOpen }: PropsType) {
                         {users.length > 0 &&
                             users.map((user, index) => {
                                 return (
-                                    <UserList
+                                    <UserListCard
                                         key={index}
                                         index={index}
                                         action={handleSelect}
