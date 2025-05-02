@@ -1,6 +1,6 @@
 // Interface for Props
 interface PropsType {
-    count: number;
+    count?: number;
     heading: string;
     children?: React.ReactNode;
 }
@@ -11,7 +11,7 @@ function CardHeader({ count, heading, children }: PropsType) {
         <div className="w-full flex items-center justify-between">
             <div className="flex gap-2">
                 <p className="text-lg text-foreground font-semibold">
-                    {heading} {`(${count})`}
+                    {heading} {count !== undefined &&`(${count})`}
                 </p>
             </div>
             {children}

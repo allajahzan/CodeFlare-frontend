@@ -4,8 +4,6 @@ import { useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import { IBatch } from "@/types/batch";
 
-
-
 // Interface for Props
 interface PropsType {
     setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;

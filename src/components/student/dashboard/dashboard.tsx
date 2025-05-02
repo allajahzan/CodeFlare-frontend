@@ -1,7 +1,7 @@
 import LineCharts from "@/components/common/charts/Line-chart";
 import Attendence from "@/components/student/dashboard/attendence/attendence";
-import OverallInformation from "./overall-infomation/overall-information";
-import RatioChart from "@/components/common/charts/ration-chart";
+import OverallInformation from "@/components/student/dashboard/overall-infomation/overall-information";
+import RadialChart from "@/components/common/charts/radial-chart";
 
 // Student Dashboard Component
 function Dashboard() {
@@ -35,11 +35,15 @@ function Dashboard() {
                 <div className="h-full p-5 bg-muted dark:bg-sidebar-background rounded-2xl "></div>
             </div>
 
-            <RatioChart
-                title="Course completion ratio"
-                data={[{ visitors: "80%", fill: "black" }]}
-            />
-
+            <div className="h-[400px] bg-background dark:bg-sidebar-background border border-border rounded-2xl shadow-sm flex flex-col p-5">
+                <RadialChart
+                    title="Course completion ratio"
+                    subTitle="January 2024 - May 2025"
+                    percentage={20}
+                    footer="Up by 5.2% compared to last month"
+                    subFooter="Overall course completion progress"
+                />
+            </div>
             <div className="w-full h-[400px] p-5 bg-background dark:bg-sidebar-background border border-border rounded-2xl shadow-sm"></div>
         </div>
     );

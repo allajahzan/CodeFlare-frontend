@@ -15,7 +15,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { NotSelected } from "@/components/animation/fallbacks";
+import NotSelected from "@/components/common/fallback/not-selected";
 import { cn } from "@/lib/utils";
 import { Fragment } from "react/jsx-runtime";
 import EditUserSheet from "@/components/admin/users/sheet-edit-user";
@@ -248,7 +248,7 @@ function UserDetails({
             {/* No user selected */}
             {!selectedUser && (
                 <NotSelected
-                    MainIcon={User2}
+                    Icon={User2}
                     message={`Select a ${role} from the list to view their details`}
                     text={`No ${role} selected`}
                     className="h-[434px] lg:h-[273.3px]"

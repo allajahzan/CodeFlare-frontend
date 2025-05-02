@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import profile from "@/assets/images/no-profile.svg";
-import CardHeader from "@/components/common/data-card/header";
+import CardHeader from "@/components/common/data-toolbar/header";
 import FilterOptions from "./filter-options";
 import PieCharts from "@/components/common/charts/pie-chart";
 import { useContext, useEffect, useState } from "react";
@@ -23,7 +23,8 @@ import { IUserContext, UserContext } from "@/context/user-context";
 import { IStudent } from "@/types/student";
 import { IBatch } from "@/types/batch";
 import { IAttendence } from "@/types/attendence";
-import { NotFoundOrbit, NotSelected } from "@/components/animation/fallbacks";
+import NotFoundOrbit from "@/components/common/fallback/not-found-orbit";
+import NotSelected from "@/components/common/fallback/not-selected";
 import AttendenceDetails from "./attendence-details";
 import { motion } from "framer-motion";
 import {
@@ -439,7 +440,7 @@ function Lists({ view, setView }: Propstype) {
                     {pieChartData.length === 0 && (
                         <div className="w-full h-[305.6px] bg-background dark:bg-sidebar-background text-start p-5 border rounded-2xl">
                             <NotSelected
-                                MainIcon={PieChart}
+                                Icon={PieChart}
                                 message="No attendance lists for pie chart"
                                 text="No attendance founds"
                                 className="h-full p-0 border-none"

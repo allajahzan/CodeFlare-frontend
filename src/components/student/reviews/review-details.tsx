@@ -19,10 +19,10 @@ import LineCharts from "@/components/common/charts/Line-chart";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "@/hooks/use-toast";
 import UserNameCard from "@/components/common/user/user-name-card";
-import InfoCard from "@/components/common/other-cards/info-card";
+import InfoCard from "@/components/common/other-card/info-card";
 import { IReview } from "@/types/review";
 import { convertTo12HourFormat } from "@/utils/time-converter";
-import { NotSelected } from "@/components/animation/fallbacks";
+import NotSelected from "@/components/common/fallback/not-selected";
 import { Input } from "@/components/ui/input";
 // import PieCharts from "@/components/common/charts/pie-chart";
 
@@ -255,7 +255,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
             {!selectedReview && (
                 <NotSelected
                     className="h-[309.95px]"
-                    MainIcon={CalendarIcon}
+                    Icon={CalendarIcon}
                     text="No review selected"
                     message="Select a review to view details"
                 />
@@ -369,7 +369,7 @@ function PendingsAndChart({ selectedReview, reviews, fetching }: PropsType) {
                 {!selectedReview && (
                     <NotSelected
                         className="h-[214px] sm:h-[250px] border-none shadow-none"
-                        MainIcon={CalendarIcon}
+                        Icon={CalendarIcon}
                         text="No review selected"
                         message="Select a review to view pendings"
                     />

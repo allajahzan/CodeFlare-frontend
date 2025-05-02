@@ -1,6 +1,6 @@
 import MeetLanding from "@/components/meet/landing"
 
-// Meet page Component
+// Meet Landing page Component
 function MeetLandingPage() {
   return <MeetLanding/>
 }

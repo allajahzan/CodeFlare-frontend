@@ -22,7 +22,7 @@ import { IUserContext, UserContext } from "@/context/user-context";
 import profile from "@/assets/images/no-profile.svg";
 import { cn } from "@/lib/utils";
 import { IWarning } from "@/types/warning";
-import { NotFoundYet } from "@/components/animation/fallbacks";
+import NotFoundYet from "@/components/common/fallback/not-found-text"
 
 // Format date to display
 const formatDate = (date: Date) => {

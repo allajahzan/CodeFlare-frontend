@@ -1,4 +1,4 @@
-import InfoCard from "@/components/common/other-cards/info-card";
+import InfoCard from "@/components/common/other-card/info-card";
 import UserNameCard from "@/components/common/user/user-name-card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -37,7 +37,7 @@ import { useEffect, useState } from "react";
 import ViewReasonModal from "./modal-view-reason";
 import SubmitReasonModal from "./modal-submit-reason";
 import { Button } from "@/components/ui/button";
-import { NotSelected } from "@/components/animation/fallbacks";
+import NotSelected from "@/components/common/fallback/not-selected";
 
 // Interface for Props
 interface PropsType {
@@ -505,7 +505,7 @@ function AttendenceDetails({
             {/* No attendence selected */}
             {!selectedAttendence && (
                 <NotSelected
-                    MainIcon={CalendarClock}
+                    Icon={CalendarClock}
                     message="Select an attendance to view it's details"
                     text="No attendance selected"
                     className="h-[547.65px]"

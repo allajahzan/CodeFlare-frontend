@@ -1,6 +1,7 @@
-import { NotFoundOrbit, NotSelected } from "@/components/animation/fallbacks";
-import SearchFilterSort from "@/components/common/data-card/search-filter-sort";
-import CountCard from "@/components/common/other-cards/count-card";
+import NotFoundOrbit from "@/components/common/fallback/not-found-orbit";
+import NotSelected from "@/components/common/fallback/not-selected";
+import SearchFilterSort from "@/components/common/data-toolbar/search-filter-sort";
+import CountCard from "@/components/common/other-card/count-card";
 import UserListCard from "@/components/common/user/user-list-card";
 import { stateType } from "@/redux/store";
 import {
@@ -281,7 +282,7 @@ function BatchesDetailsSide({ selectedBatch }: Propstype) {
 
             {!selectedBatch && (
                 <NotSelected
-                    MainIcon={School}
+                    Icon={School}
                     message={`Select a batch to see it's details`}
                     text={`No batch selected`}
                     className="hidden md:flex cols-span-1 lg:col-span-2"

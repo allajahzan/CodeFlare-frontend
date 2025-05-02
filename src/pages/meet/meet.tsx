@@ -1,6 +1,6 @@
 import Meet from "@/components/meet/meet"
 
-// Join-Meet Page Component
+// Meet Page Component
 function MeetPage() {
   return <Meet/>
 }

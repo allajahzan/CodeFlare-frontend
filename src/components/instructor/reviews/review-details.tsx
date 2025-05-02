@@ -1,5 +1,5 @@
-import { NotSelected } from "@/components/animation/fallbacks";
-import InfoCard from "@/components/common/other-cards/info-card";
+import NotSelected from "@/components/common/fallback/not-selected";
+import InfoCard from "@/components/common/other-card/info-card";
 import UserNameCard from "@/components/common/user/user-name-card";
 import { Input } from "@/components/ui/input";
 import { AnimatePresence, motion } from "framer-motion";
@@ -484,7 +484,7 @@ function ReviewDetails({
             {/* No user selected */}
             {!selectedReview && (
                 <NotSelected
-                    MainIcon={CalendarDays}
+                    Icon={CalendarDays}
                     message={`Select a review from the list to view their details`}
                     text={`No review selected`}
                     className="h-[313.95px]"

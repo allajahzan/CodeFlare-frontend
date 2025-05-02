@@ -11,16 +11,16 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PendingsAndChart, ReviewDetails } from "./review-details";
-import CardHeader from "@/components/common/data-card/header";
+import CardHeader from "@/components/common/data-toolbar/header";
 import { IReview } from "@/types/review";
 import { handleCustomError } from "@/utils/error";
 import { fetchData } from "@/service/api-service";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
-import { NotFoundOrbit } from "@/components/animation/fallbacks";
+import NotFoundOrbit from "@/components/common/fallback/not-found-orbit";
 import { IUserContext, UserContext } from "@/context/user-context";
-import Search from "@/components/common/data-card/search";
+import Search from "@/components/common/data-toolbar/search";
 
 // Interface for Review
 

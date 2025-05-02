@@ -20,7 +20,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { NotFoundOrbit } from "@/components/animation/fallbacks";
+import NotFoundOrbit from "@/components/common/fallback/not-found-orbit";
 import UserDetails from "@/components/common/user/user-details";
 import profile from "@/assets/images/no-profile.svg";
 import { toast } from "@/hooks/use-toast";

@@ -29,10 +29,10 @@ import {
     SelectTrigger,
 } from "@/components/ui/select";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
-import { NotFoundOrbit } from "@/components/animation/fallbacks";
+import NotFoundOrbit from "@/components/common/fallback/not-found-orbit";
 import UserListCard from "@/components/common/user/user-list-card";
-import CardHeader from "@/components/common/data-card/header";
-import SearchFilterSort from "@/components/common/data-card/search-filter-sort";
+import CardHeader from "@/components/common/data-toolbar/header";
+import SearchFilterSort from "@/components/common/data-toolbar/search-filter-sort";
 import { useMediaQuery } from "usehooks-ts";
 import { cn } from "@/lib/utils";
 import DrawerUsersList from "@/components/common/user/drawer-users-list";

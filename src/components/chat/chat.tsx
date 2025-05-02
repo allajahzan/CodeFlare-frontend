@@ -1,6 +1,6 @@
 import { MessageCircle } from "lucide-react";
 import { useContext, useEffect, useLayoutEffect, useState } from "react";
-import { NotSelected } from "@/components/animation/fallbacks";
+import NotSelected from "@/components/common/fallback/not-selected";
 import UsersListOfChat from "./chat-users-list";
 import MessageSideOfChat from "./chat-message-side";
 import { IUserChat } from "./user-contact-sheet";
@@ -314,7 +314,7 @@ function Chat() {
                     {/* <img className="w-80" src={chatImage} alt="" /> */}
                     <NotSelected
                         className="h-fixed rounded-none bg-transparent dark:bg-transparent border-none shadow-none"
-                        MainIcon={MessageCircle}
+                        Icon={MessageCircle}
                         IconClassName="w-5 h-5 text-foreground"
                         text="No chat selected"
                         message="Select a chat to start messaging"

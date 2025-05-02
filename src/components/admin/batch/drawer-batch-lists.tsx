@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Edit, MoreHorizontal, Plus, Search, UsersRound } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { NotFoundOrbit } from "@/components/animation/fallbacks";
+import NotFoundOrbit from "@/components/common/fallback/not-found-orbit";
 import BatchesDetailsSide from "./batches-details-side";
 import { motion } from "framer-motion";
 import { IBatch } from "@/types/batch";

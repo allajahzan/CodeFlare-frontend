@@ -7,7 +7,7 @@ interface PropsType {
     Icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>
 }
 
-// CountCard Component
+// Count card Component
 function CountCard({ count, heading, Icon }: PropsType) {
     return (
         <div

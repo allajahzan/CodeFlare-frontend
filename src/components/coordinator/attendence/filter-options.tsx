@@ -8,7 +8,7 @@ import {
 import FilterBatchStudent from "./filter-batch-student";
 import { IStudent } from "@/types/student";
 import { IBatch } from "@/types/batch";
-import Filter from "@/components/common/data-card/filter";
+import Filter from "@/components/common/data-toolbar/filter";
 
 // Interface for Props
 interface Propstype {

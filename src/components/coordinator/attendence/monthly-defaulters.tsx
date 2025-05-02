@@ -13,7 +13,7 @@ import { IAttendence, IUser } from "@/types/attendence";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { IBatch } from "@/types/batch";
-import { NotFoundOrbit } from "@/components/animation/fallbacks";
+import NotFoundOrbit from "@/components/common/fallback/not-found-orbit";
 import ViewAllReasonsModal from "./modal-reasons-list";
 import { Button } from "@/components/ui/button";
 import WarningsListsModal from "./modal-warnings-list";

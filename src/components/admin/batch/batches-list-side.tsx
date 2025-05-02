@@ -19,13 +19,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import { NotFoundOrbit } from "@/components/animation/fallbacks";
+import NotFoundOrbit from "@/components/common/fallback/not-found-orbit";
 import EditBatchModal from "./modal-edit-batch";
-import CardHeader from "@/components/common/data-card/header";
+import CardHeader from "@/components/common/data-toolbar/header";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
-import ListCard from "@/components/common/other-cards/list-card";
+import ListCard from "@/components/common/other-card/list-card";
 import { handleCustomError } from "@/utils/error";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { fetchData } from "@/service/api-service";
