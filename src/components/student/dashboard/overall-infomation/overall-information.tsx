@@ -1,3 +1,5 @@
+import CardHeader from "@/components/common/data-toolbar/header";
+import ToolTip from "@/components/common/tooltip/tooltip";
 import { motion } from "framer-motion";
 import {
     Briefcase,
@@ -8,7 +10,6 @@ import {
     Medal,
     Share2,
 } from "lucide-react";
-// import student from "@/assets/images/student.png";
 
 // Over all information
 function OverallInformation() {
@@ -30,22 +31,35 @@ function OverallInformation() {
 
     return (
         <div className="relative w-full h-[400px] p-5 bg-background dark:bg-sidebar-background border rounded-2xl shadow-sm flex flex-col justify-between">
-            {/* <div className="absolute bottom-0 left-0 z-10 opacity">
-                <img className="h-full w-40 object-contain" src={student} />
-            </div> */}
-
             {/* Header */}
-            <div className="w-full flex items-center gap-3">
-                <p className="flex-1 text-lg text-foreground font-semibold">
-                    Overall Information
-                </p>
-                <div className="p-2 bg-muted rounded-full cursor-pointer">
-                    <Share2 className="w-4 h-4 text-foreground" />
-                </div>
-                <div className="p-2 bg-muted rounded-full cursor-pointer">
-                    <EllipsisVertical className="w-4 h-4 text-foreground" />
-                </div>
-            </div>
+            <CardHeader
+                heading="Overall Information"
+                children={
+                    <div className="flex items-center gap-3">
+                        {/* Dowload Icon */}
+                        <ToolTip
+                            text="Share"
+                            side="left"
+                            children={
+                                <div className="p-2 bg-muted rounded-full cursor-pointer">
+                                    <Share2 className="w-4 h-4 text-foreground" />
+                                </div>
+                            }
+                        />
+
+                        {/* Menu Icon */}
+                        <ToolTip
+                            text="Menu"
+                            side="left"
+                            children={
+                                <div className="p-2 bg-muted rounded-full cursor-pointer">
+                                    <EllipsisVertical className="w-4 h-4 text-foreground" />
+                                </div>
+                            }
+                        />
+                    </div>
+                }
+            />
 
             {/* Week and batch */}
             <div className="flex items-center justify-between mb-5">
@@ -66,7 +80,7 @@ function OverallInformation() {
                     <motion.div
                         initial={{ opacity: 0, scale: 0.5 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.2 }}
+                        transition={{ delay: 0.2, duration: 0.3 }}
                         className="p-5 rounded-full bg-muted shadow"
                     >
                         <ListCheck className="text-foreground" />
@@ -74,7 +88,7 @@ function OverallInformation() {
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2 }}
+                        transition={{ delay: 0.2, duration: 0.3 }}
                     >
                         <p className="text-3xl font-bold text-foreground">{2 * 3}</p>
                         <i className="text-sm text-start text-muted-foreground font-medium">
@@ -90,7 +104,7 @@ function OverallInformation() {
                     <motion.div
                         initial={{ opacity: 0, scale: 0.5 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.2 }}
+                        transition={{ delay: 0.2, duration: 0.3 }}
                         className="p-5 rounded-full bg-muted shadow"
                     >
                         <Briefcase className="text-foreground" />
@@ -98,7 +112,7 @@ function OverallInformation() {
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2 }}
+                        transition={{ delay: 0.2, duration: 0.3 }}
                     >
                         <p className="text-3xl font-bold text-foreground">0</p>
                         <i className="text-sm text-start text-muted-foreground font-medium">
@@ -112,7 +126,7 @@ function OverallInformation() {
             <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: "80px" }}
-                transition={{ delay: 0.1 }}
+                transition={{ delay: 0.2, duration: 0.3 }}
                 className="self-center h-[5px] bg-muted my-4 rounded-full"
             />
 
@@ -122,7 +136,7 @@ function OverallInformation() {
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 0.2 }}
+                    transition={{ delay: 0.2, duration: 0.3 }}
                     className="bg-muted dark:bg-sidebar p-4 rounded-xl flex flex-col items-center justify-center gap-1"
                 >
                     <GraduationCap className="w-5 h-5 text-foreground" />
@@ -136,7 +150,7 @@ function OverallInformation() {
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 0.2 }}
+                    transition={{ delay: 0.2, duration: 0.3 }}
                     className="bg-muted dark:bg-sidebar p-4 rounded-xl flex flex-col items-center justify-center gap-1"
                 >
                     <ChartNoAxesColumn className="w-5 h-5 text-foreground" />
@@ -150,7 +164,7 @@ function OverallInformation() {
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ delay: 0.2 }}
+                    transition={{ delay: 0.2, duration: 0.3 }}
                     className="bg-muted dark:bg-sidebar p-4 rounded-xl flex flex-col items-center justify-center gap-1"
                 >
                     <Medal className="w-5 h-5 text-foreground" />

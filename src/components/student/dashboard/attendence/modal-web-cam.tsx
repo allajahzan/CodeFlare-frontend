@@ -16,6 +16,8 @@ import {
     uploadImageToCloudinary,
 } from "@/service/cloudinary";
 import { handleCustomError } from "@/utils/error";
+import { getLatitudeAndLongitude } from "@/utils/latitude-longitude";
+import { getReadableLocation } from "@/utils/readable-location";
 import { Camera, Loader2 } from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -123,44 +125,6 @@ function WebCamModal({
         } catch (err: unknown) {
             handleCustomError(err);
         }
-    };
-
-    // Get latitude and longitude
-    const getLatitudeAndLongitude = (): Promise<{
-        latitude: number;
-        longitude: number;
-    }> => {
-        return new Promise((resolve, reject) => {
-            if (!navigator.geolocation) {
-                reject(new Error("Geolocation is not supported by this browser."));
-            }
-
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const { latitude, longitude } = position.coords;
-                    resolve({ latitude, longitude });
-                },
-                () => {
-                    reject(new Error("Failed to get user location."));
-                }
-            );
-        });
-    };
-
-    // Get readable location
-    const getReadableLocation = async (
-        latitude: number,
-        longitude: number
-    ): Promise<string> => {
-        const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
-        );
-
-        if (!response.ok) throw new Error("Failed to fetch location data.");
-
-        const data = await response.json();
-
-        return data.display_name;
     };
 
     // Send snapshot

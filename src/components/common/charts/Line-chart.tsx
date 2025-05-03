@@ -1,6 +1,6 @@
 import { IThemeContext, ThemeContext } from "@/context/theme-context";
 import { cn } from "@/lib/utils";
-import { ChartPie, Download } from "lucide-react";
+import { Download, PieChart } from "lucide-react";
 import { useContext } from "react";
 import {
     LineChart,
@@ -9,6 +9,8 @@ import {
     Tooltip,
     CartesianGrid,
 } from "recharts";
+import ToolTip from "@/components/common/tooltip/tooltip";
+import CardHeader from "@/components/common/data-toolbar/header";
 
 // Interface for Props
 interface PropsType {
@@ -25,17 +27,39 @@ const LineCharts = ({ data, text, className, pieChart }: PropsType) => {
 
     return (
         <div className="h-full w-full flex flex-col gap-3">
-            <div className="flex items-center gap-3 w-full">
-                <p className="flex-1 text-lg text-foreground font-semibold truncate">
-                    {text}
-                </p>
-                <div className="p-2 bg-muted rounded-full cursor-pointer">
-                    <Download className="w-4 h-4 text-foreground" />
-                </div>
-                {pieChart && <div className="p-2 bg-muted rounded-full cursor-pointer">
-                    <ChartPie className="w-4 h-4 text-foreground" />
-                </div>}
-            </div>
+            {/* Header */}
+            <CardHeader
+                heading={text}
+                children={
+                    <div className="flex items-center gap-3">
+                        {/* Dowload icon*/}
+                        <ToolTip
+                            text="Dowload report"
+                            side="left"
+                            children={
+                                <div className="p-2 bg-muted rounded-full cursor-pointer">
+                                    <Download className="w-4 h-4 text-foreground" />
+                                </div>
+                            }
+                        />
+
+                        {/* Pie chart icon */}
+                        {pieChart && (
+                            <ToolTip
+                                text="Pie chart"
+                                side="left"
+                                children={
+                                    <div className="p-2 bg-muted rounded-full cursor-pointer">
+                                        <PieChart className="w-4 h-4 text-foreground" />
+                                    </div>
+                                }
+                            />
+                        )}
+                    </div>
+                }
+            />
+
+            {/* Content */}
             <div className={cn(className)}>
                 <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={data}>
@@ -60,7 +84,7 @@ const LineCharts = ({ data, text, className, pieChart }: PropsType) => {
 
                         {/* Line configuration */}
                         <Line
-                            animationDuration={1000}
+                            animationDuration={1050}
                             type="monotone"
                             dataKey="score"
                             stroke={theme === "dark" ? "#f5f5f5" : "#18181b"}

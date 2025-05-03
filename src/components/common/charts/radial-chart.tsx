@@ -25,7 +25,7 @@ function RadialChart({ title, subTitle, percentage, footer, subFooter }: PropsTy
     return (
         <div className="flex flex-col items-center h-full">
             <h2 className="text-lg font-semibold mb-1 text-foreground">{title}</h2>
-            <p className="text-gray-500 mb-8">{subTitle}</p>
+            <p className="text-gray-500 mb-8 font-medium">{subTitle}</p>
 
             <div className="relative flex-1 w-full flex items-center justify-center mb-8">
                 {/* Background circle */}
@@ -60,16 +60,16 @@ function RadialChart({ title, subTitle, percentage, footer, subFooter }: PropsTy
 
                 {/* Center content */}
                 <div className="flex flex-col items-center justify-center z-10">
-                    <span className="text-2xl font-bold">{percentage} %</span>
+                    <span className="text-2xl font-bold text-foreground">{percentage} %</span>
                     <span className="text-gray-500 text-sm font-medium">Completed</span>
                 </div>
             </div>
 
-            <div className="flex items-center text-base font-medium mb-2">
+            <div className="flex items-center text-base font-medium mb-2 text-foreground">
                 {footer}
                 <ArrowUpRight className="ml-1 h-5 w-5" />
             </div>
-            <p className="text-gray-500">{subFooter}</p>
+            <p className="text-gray-500 font-medium">{subFooter}</p>
         </div>
     );
 }

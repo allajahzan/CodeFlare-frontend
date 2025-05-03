@@ -9,8 +9,8 @@ interface PropsType {
 function CardHeader({ count, heading, children }: PropsType) {
     return (
         <div className="w-full flex items-center justify-between">
-            <div className="flex gap-2">
-                <p className="text-lg text-foreground font-semibold">
+            <div className="flex gap-2 min-w-0">
+                <p className="text-lg text-foreground font-semibold truncate">
                     {heading} {count !== undefined &&`(${count})`}
                 </p>
             </div>
