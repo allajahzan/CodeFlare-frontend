@@ -6,7 +6,7 @@ import DashboardCard from "@/components/common/other-card/dashboard-card";
 import student from "@/assets/images/student.png";
 import CardHeader from "@/components/common/data-toolbar/header";
 import DateAndTime from "@/components/common/other-card/date-time-card";
-import WeatherCard from "@/components/common/other-card/weather-card";
+import WeatherCard from "@/components/common/other-card/weather-card";  
 
 // Student Dashboard Component
 function Dashboard() {
@@ -35,7 +35,7 @@ function Dashboard() {
                 {/* Second row */}
                 <div className="h-full grid grid-cols-2 gap-5">
                     {/* Timer */}
-                    <div className="relative h-full p-5 bg-muted dark:bg-sidebar-backgroundDark rounded-2xl ">
+                    <div className="relative h-full p-5 bg-muted dark:bg-sidebar-backgroundDark rounded-2xl">
                         <WeatherCard />
                     </div>
                     {/* Attendence */}
