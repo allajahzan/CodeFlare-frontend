@@ -1,5 +1,6 @@
 import CardHeader from "@/components/common/data-toolbar/header";
 import ToolTip from "@/components/common/tooltip/tooltip";
+import SmallIconButton from "@/components/ui/icon-button-small";
 import { motion } from "framer-motion";
 import {
     Briefcase,
@@ -41,9 +42,7 @@ function OverallInformation() {
                             text="Share"
                             side="left"
                             children={
-                                <div className="p-2 bg-muted rounded-full cursor-pointer">
-                                    <Share2 className="w-4 h-4 text-foreground" />
-                                </div>
+                                <SmallIconButton Icon={Share2}/>
                             }
                         />
 
@@ -52,9 +51,7 @@ function OverallInformation() {
                             text="Menu"
                             side="left"
                             children={
-                                <div className="p-2 bg-muted rounded-full cursor-pointer">
-                                    <EllipsisVertical className="w-4 h-4 text-foreground" />
-                                </div>
+                                <SmallIconButton Icon={EllipsisVertical}/>
                             }
                         />
                     </div>
@@ -134,8 +131,8 @@ function OverallInformation() {
             <div className="grid grid-cols-3 gap-3">
                 {/* Projects */}
                 <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2, duration: 0.3 }}
                     className="bg-muted dark:bg-sidebar p-4 rounded-xl flex flex-col items-center justify-center gap-1"
                 >
@@ -148,8 +145,8 @@ function OverallInformation() {
 
                 {/* In Progress */}
                 <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2, duration: 0.3 }}
                     className="bg-muted dark:bg-sidebar p-4 rounded-xl flex flex-col items-center justify-center gap-1"
                 >
@@ -162,8 +159,8 @@ function OverallInformation() {
 
                 {/* Completed */}
                 <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2, duration: 0.3 }}
                     className="bg-muted dark:bg-sidebar p-4 rounded-xl flex flex-col items-center justify-center gap-1"
                 >

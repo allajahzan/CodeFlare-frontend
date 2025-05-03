@@ -16,6 +16,7 @@ import { ISnapshotContext, SnapshotContext } from "@/context/snapshot-context";
 import WebCamModal from "./modal-web-cam";
 import { Badge } from "@/components/ui/badge";
 import CardHeader from "@/components/common/data-toolbar/header";
+import SmallIconButton from "@/components/ui/icon-button-small";
 
 // Attendence Component
 function Attendence() {
@@ -96,9 +97,7 @@ function Attendence() {
                             text="Guidlines"
                             side="left"
                             children={
-                                <div className="p-2 bg-muted rounded-full cursor-pointer">
-                                    <Info className="w-4 h-4 text-foreground" />
-                                </div>
+                                <SmallIconButton Icon={Info} className="bg-zinc-200 dark:bg-muted"/>
                             }
                             action={() => setOpenGuidlinesModal(true)}
                         />
@@ -183,7 +182,7 @@ function Attendence() {
                                     variant="default"
                                     type="submit"
                                     disabled={loading}
-                                    className="h-11 w-full shadow-md disabled:cursor-not-allowed"
+                                    className="w-full shadow-md disabled:cursor-not-allowed"
                                 >
                                     {fetching ? (
                                         <div className="flex items-center gap-2">

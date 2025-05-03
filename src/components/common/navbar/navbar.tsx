@@ -67,7 +67,7 @@ function Navbar() {
     // Set page heading
     useLayoutEffect(() => {
         pathname.split("/")[2] === "dashboard"
-            ? setPath(`Hi, ${user?.name as string}!`)
+            ? setPath(`Hi, Good Morning!`)
             : pathname.split("/")[2] === "meet"
                 ? setPath("Meet")
                 : setPath(

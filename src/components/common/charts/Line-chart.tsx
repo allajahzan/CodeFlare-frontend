@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import ToolTip from "@/components/common/tooltip/tooltip";
 import CardHeader from "@/components/common/data-toolbar/header";
+import SmallIconButton from "@/components/ui/icon-button-small";
 
 // Interface for Props
 interface PropsType {
@@ -37,9 +38,7 @@ const LineCharts = ({ data, text, className, pieChart }: PropsType) => {
                             text="Dowload report"
                             side="left"
                             children={
-                                <div className="p-2 bg-muted rounded-full cursor-pointer">
-                                    <Download className="w-4 h-4 text-foreground" />
-                                </div>
+                                <SmallIconButton Icon={Download}/>
                             }
                         />
 
@@ -49,9 +48,7 @@ const LineCharts = ({ data, text, className, pieChart }: PropsType) => {
                                 text="Pie chart"
                                 side="left"
                                 children={
-                                    <div className="p-2 bg-muted rounded-full cursor-pointer">
-                                        <PieChart className="w-4 h-4 text-foreground" />
-                                    </div>
+                                    <SmallIconButton Icon={PieChart}/>
                                 }
                             />
                         )}

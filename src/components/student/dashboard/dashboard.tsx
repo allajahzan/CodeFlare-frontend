@@ -3,10 +3,13 @@ import Attendence from "@/components/student/dashboard/attendence/attendence";
 import OverallInformation from "@/components/student/dashboard/overall-infomation/overall-information";
 import RadialChart from "@/components/common/charts/radial-chart";
 import DashboardCard from "@/components/common/other-card/dashboard-card";
+import DateAndTime from "@/components/common/other-card/date-time-card";
+import WeatherCard from "@/components/common/other-card/weather-card";
+import UpcomingReview from "./upcoming/review";
 import student from "@/assets/images/student.png";
 import CardHeader from "@/components/common/data-toolbar/header";
-import DateAndTime from "@/components/common/other-card/date-time-card";
-import WeatherCard from "@/components/common/other-card/weather-card";  
+import SmallIconButton from "@/components/ui/icon-button-small";
+import { ArrowUpRight } from "lucide-react";
 
 // Student Dashboard Component
 function Dashboard() {
@@ -19,7 +22,7 @@ function Dashboard() {
                 {/* First row */}
                 <div className="h-full grid grid-cols-2 gap-5">
                     {/* Image */}
-                    <div className="bg-muted dark:bg-sidebar-backgroundDark rounded-2xl overflow-hidden">
+                    <div className="bg-muted dark:bg-sidebar rounded-2xl overflow-hidden">
                         <img
                             className="w-full h-full object-contain"
                             src={student}
@@ -27,19 +30,29 @@ function Dashboard() {
                         />
                     </div>
 
-                    <div className="bg-transparent rounded-2xl h-full p-5 border">
-                        <CardHeader heading="Mern Stack" />
+                    {/* Weather */}
+                    <div className="relative h-full p-5 bg-muted dark:bg-sidebar rounded-2xl">
+                        <WeatherCard />
                     </div>
                 </div>
 
                 {/* Second row */}
                 <div className="h-full grid grid-cols-2 gap-5">
-                    {/* Timer */}
-                    <div className="relative h-full p-5 bg-muted dark:bg-sidebar-backgroundDark rounded-2xl">
-                        <WeatherCard />
+                    {/* Tasks */}
+                    <div className="bg-muted dark:bg-sidebar rounded-2xl h-full p-5">
+                        <CardHeader
+                            heading="Weekly Tasks"
+                            children={
+                                <SmallIconButton
+                                    Icon={ArrowUpRight}
+                                    className="bg-zinc-200 dark:bg-muted"
+                                />
+                            }
+                        />
                     </div>
+
                     {/* Attendence */}
-                    <div className="h-full p-5 bg-background border dark:bg-sidebar-background rounded-2xl ">
+                    <div className="h-full p-5 bg-muted dark:bg-sidebar rounded-2xl">
                         <Attendence />
                     </div>
                 </div>
@@ -48,8 +61,13 @@ function Dashboard() {
             {/* Date and time */}
             <DateAndTime />
 
-            {/* Upcoming reviews  */}
-            <DashboardCard content={<></>} className="col-span-2" />
+            {/* Upcomings  */}
+            <div className="w-full h-[400px] grid grid-rows-[auto_1fr] gap-5">
+                {/* Review */}
+                <UpcomingReview />
+
+                <div className="w-full h-full"></div>
+            </div>
 
             {/* Monthly performance */}
             <DashboardCard

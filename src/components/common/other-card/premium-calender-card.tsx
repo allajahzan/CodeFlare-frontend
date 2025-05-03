@@ -126,7 +126,7 @@ function PremiumCalendarCard() {
                                 className={cn(
                                     "flex items-center justify-center w-12 h-12 rounded-full mb-2 text-lg font-medium shadow",
                                     isToday(date)
-                                        ? "bg-blue-500 text-white"
+                                        ? "bg-gradient-to-tr from-zinc-950 via-zinc-900 to-zinc-800 dark:bg-background border border-zinc-700 text-white"
                                         : "bg-gray-100 text-gray-800 hover:bg-gray-200"
                                 )}
                             >

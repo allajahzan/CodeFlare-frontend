@@ -68,7 +68,7 @@ function WeatherCard() {
                         <sup className="text-xl font-medium">°C</sup>
                     </p>
                     <p className="font-semibold text-sm capitalize text-foreground">
-                        {weather.text}
+                        {weather.text.split(" ").filter((_,i)=>i<=1).join(" ")}
                     </p>
                 </div>
             </div>
