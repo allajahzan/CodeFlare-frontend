@@ -145,8 +145,6 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                 if (resp && resp.status === 200) {
                     const data = resp.data.data;
 
-                    console.log(data);
-
                     // Set batches
                     setBatches(data);
                 }
@@ -155,8 +153,8 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
             }
         };
 
-        fetchBatches();
-    }, []);
+        open && fetchBatches();
+    }, [open]);
 
     // Clear fields when sheet closes
     useEffect(() => {

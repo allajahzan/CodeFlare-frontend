@@ -76,7 +76,7 @@ function Students({ setDrawerOpen }: PropsType) {
     // Sort
     const [sort, setSort] = useState<{ key: string; order: number }>({
         key: "createdAt",
-        order: 1,
+        order: -1,
     });
 
     // User details

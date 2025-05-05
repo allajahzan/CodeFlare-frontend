@@ -162,8 +162,8 @@ function EditUserSheet({
             }
         };
 
-        fetchBatches();
-    }, []);
+       open && fetchBatches();
+    }, [open]);
 
     // Reset form values
     useLayoutEffect(() => {

@@ -30,30 +30,40 @@ function MultiSelectorContent({
                     transition={{ duration: 0.1 }}
                     className="absolute z-10 max-h-[108px] top-[46px] w-full bg-popover p-1 border rounded-md shadow-md overflow-y-auto"
                 >
-                    {values?.map((value, index) => {
-                        const isSelected = selectedBatches.some(
-                            (batch) => batch._id === value._id
-                        );
+                    {values.length > 0 &&
+                        values?.map((value, index) => {
+                            const isSelected = selectedBatches.some(
+                                (batch) => batch._id === value._id
+                            );
 
-                        return (
-                            // Lists
-                            <div key={value._id || index} className="relative cursor-pointer">
-                                <p
-                                    onClick={(event) => {
-                                        event.stopPropagation();
-                                        handleSelect?.(value);
-                                    }}
-                                    className="p-2 py-[5.5px] text-popover-foreground font-medium hover:bg-muted rounded-sm"
+                            return (
+                                // Lists
+                                <div
+                                    key={value._id || index}
+                                    className="relative cursor-pointer"
                                 >
-                                    {value.name}
-                                </p>
-                                {/* Tick */}
-                                {isSelected && (
-                                    <Check className="absolute right-1 top-1 w-4 h-4 text-foreground" />
-                                )}
-                            </div>
-                        );
-                    })}
+                                    <p
+                                        onClick={(event) => {
+                                            event.stopPropagation();
+                                            handleSelect?.(value);
+                                        }}
+                                        className="p-2 py-[5.5px] text-popover-foreground font-medium hover:bg-muted rounded-sm"
+                                    >
+                                        {value.name}
+                                    </p>
+                                    {/* Tick */}
+                                    {isSelected && (
+                                        <Check className="absolute right-1 top-1 w-4 h-4 text-foreground" />
+                                    )}
+                                </div>
+                            );
+                        })}
+
+                    {values.length === 0 && (
+                        <p className="p-2 py-[5.5px] text-sm text-foreground font-medium">
+                            No available batches
+                        </p>
+                    )}
                 </motion.div>
             )}
         </div>

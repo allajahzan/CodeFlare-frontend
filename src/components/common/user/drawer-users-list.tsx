@@ -141,10 +141,9 @@ function DrawerUsersList({
                             <DrawerTrigger
                                 asChild
                                 onClick={() => setDrawerOpen(true)}
-                                key={index}
+                                key={user._id}
                             >
                                 <motion.div
-                                    key={index}
                                     initial={{ opacity: 0, y: -30 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.2 + index * 0.1 }}
