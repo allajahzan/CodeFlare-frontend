@@ -6,14 +6,14 @@ import React, {
     useRef,
     useState,
 } from "react";
-import { IUser } from "@/types/IAttendence";
 import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { IUserContext, UserContext } from "@/context/user-context";
+import { IUserBasic } from "@codeflare/common";
 
 // Interface for Props
 interface PropsType {
-    peer?: IUser;
+    peer?: IUserBasic;
     media: MediaStream | null;
     isVideoMute: boolean;
     className?: string;

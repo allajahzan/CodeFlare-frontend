@@ -1,7 +1,7 @@
-import { IUser } from "@/types/IAttendence";
 import { socket } from "./socket";
 import * as mediasoupClient from "mediasoup-client";
 import { handleCustomError } from "@/utils/error";
+import { IStudent, IUser } from "@codeflare/common";
 
 /**
  * Emits a "joinRoom" event to the server and triggers the provided callback
@@ -84,7 +84,7 @@ export const onNewProducer = (
         producerId: string;
         appData: any;
         socketId: string;
-        user: IUser;
+        user: IUser | IStudent;
     }) => void
 ) => {
     try {

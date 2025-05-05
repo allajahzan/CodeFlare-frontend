@@ -1,5 +1,4 @@
 import React, { Fragment, useContext, useRef } from "react";
-import { IUser } from "@/types/IAttendence";
 import VideoElement from "./video-element";
 import { cn } from "@/lib/utils";
 import { Crown, Hand, Mic, MicOff, Pin, PinOff } from "lucide-react";
@@ -8,12 +7,13 @@ import { motion } from "framer-motion";
 import ToolTip from "../common/tooltip/tooltip";
 import { socket } from "@/socket/communication/socket";
 import { IUserContext, UserContext } from "@/context/user-context";
-import { IMeet } from "./meeting-join";
+import { IMeet } from "@/types/IMeet";
+import { IUserBasic } from "@codeflare/common";
 
 // Interface for Props
 interface PropsType {
     socketId: string;
-    peer?: IUser;
+    peer?: IUserBasic;
     media: MediaStream | null;
     screen?: MediaStream | undefined;
     isVideoMute: boolean;

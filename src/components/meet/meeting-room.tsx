@@ -16,14 +16,14 @@ import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import PeerVideo from "./peer-video";
 import { IUserContext, UserContext } from "@/context/user-context";
-import { IUser } from "@/types/IAttendence";
 import { cn } from "@/lib/utils";
-import { IMeet } from "./meeting-join";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import profile from "@/assets/images/no-profile.svg";
 import { Separator } from "../ui/separator";
 import { Input } from "../ui/input";
 import IconButton from "../ui/icon-button";
+import { IUserBasic } from "@codeflare/common";
+import { IMeet } from "@/types/IMeet";
 
 // Interface for Props
 interface PropsType {
@@ -35,7 +35,7 @@ interface PropsType {
     handleAudio: () => void;
     peers: {
         [socketId: string]: {
-            user: IUser;
+            user: IUserBasic;
             media: MediaStream;
             screen?: MediaStream;
             isVideoMute: boolean;
@@ -149,7 +149,7 @@ function MeetingRoom({
     }, [isHandRaised]);
 
     // Chat related states
-    const [isChatOpen, setIsChatOpen] = useState(false);
+    const [isChatOpen, _setIsChatOpen] = useState(false);
 
     const chatMessages = [
         {
@@ -229,7 +229,7 @@ function MeetingRoom({
                 {/* Main videos */}
                 <div
                     className={cn(
-                        "h-full w-full relative p-5 dotted-bg bg-background dark:bg-sidebar-background",
+                        "h-full w-full relative p-5 bg-muted dark:bg-sidebar-background",
                         "transition-all duration-300 ease-in-out",
                         // isPeersListOpen ? "ml-[300px]" : "ml-0"
                     )}
@@ -274,7 +274,7 @@ function MeetingRoom({
                                     <PeerVideo
                                         key={socket.id}
                                         socketId={socket.id as string}
-                                        peer={user as unknown as IUser}
+                                        peer={user as unknown as IUserBasic}
                                         media={streamRef.current}
                                         screen={undefined}
                                         isVideoMute={isVideoMute}

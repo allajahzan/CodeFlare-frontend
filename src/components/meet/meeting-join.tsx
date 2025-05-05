@@ -10,25 +10,8 @@ import ApiEndpoints from "@/constants/api-endpoints";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import { Link, useLocation } from "react-router-dom";
-import { IUser } from "@/types/IAttendence";
 import profile from "@/assets/images/no-profile.svg";
-
-// Interface for Message
-export interface IMessage {
-    userId: string;
-    message: string;
-    createdAt: Date;
-}
-
-// Interface for Meet
-export interface IMeet {
-    _id: string;
-    roomId: string;
-    hostId: string;
-    host: IUser;
-    invitedUsers: IUser[];
-    messages: IMessage[];
-}
+import { IMeet } from "@/types/IMeet";
 
 // Interface for Props
 interface PropsType {
