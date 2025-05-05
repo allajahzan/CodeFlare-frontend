@@ -121,7 +121,7 @@ function UsersListOfChat({
                             setMessage={setMessage}
                             setIsOpen={setIsOpen}
                             setUsersListSideOpen={setUsersListSideOpen}
-                            className={`${selectedUser?._id === user._id ? "bg-muted dark:bg-sidebar" : ""
+                            className={`cursor-pointer ${selectedUser?._id === user._id ? "bg-muted dark:bg-sidebar" : ""
                                 }`}
                             children1={(() => {
                                 const lastMessage = user.lastMessage; // Get the last message

@@ -169,11 +169,7 @@ function Chat() {
                 content: message.content,
                 status: "received",
                 message: message.message,
-                createdAt: new Date().toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true,
-                }),
+                createdAt: new Date().toString(),
             };
 
             // Update chat with received messages
@@ -233,11 +229,7 @@ function Chat() {
             content: "text",
             status: "sent",
             message: message,
-            createdAt: new Date().toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true,
-            }),
+            createdAt: new Date().toString(),
         };
 
         // Update chat with new messages

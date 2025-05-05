@@ -51,11 +51,7 @@ function PaperClip({ setUser, selectedUser, setSelectedChat }: PropsType) {
                         content: "image",
                         status: "sent",
                         message: imageUrl,
-                        createdAt: new Date().toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: true,
-                        }),
+                        createdAt: new Date().toString(),
                     };
 
                     // Update chat messages
@@ -74,11 +70,7 @@ function PaperClip({ setUser, selectedUser, setSelectedChat }: PropsType) {
                         profilePic: selectedUser?.profilePic as string,
                         content: "image",
                         lastMessage: "image",
-                        updatedAt: new Date().toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: true,
-                        }),
+                        updatedAt: new Date().toString()
                     };
 
                     // Get image url

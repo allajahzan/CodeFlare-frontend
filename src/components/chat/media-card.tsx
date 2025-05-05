@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { Message } from "./chat";
 import { CheckCheck, ChevronDown, Loader2 } from "lucide-react";
 import { useState, useRef } from "react";
+import { getRelativeTime } from "@/utils/relative-time";
 
 // Interface for Props
 interface PropsType {
@@ -68,7 +69,7 @@ function MediaCard({ msg, className }: PropsType) {
             {/* Time and Status (after image loaded) */}
             {!loading && (
                 <small className="w-full absolute p-2 px-3 right-0 bottom-0 flex items-center justify-end gap-1 text-[10px] text-white font-semibold">
-                    {msg.createdAt}
+                    {getRelativeTime(msg.createdAt)}
                     {msg.status === "sent" && (
                         <CheckCheck className="w-4 h-4 text-blue-400" />
                     )}

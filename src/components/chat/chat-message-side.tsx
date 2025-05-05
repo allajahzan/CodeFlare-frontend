@@ -127,11 +127,7 @@ function MessageSideOfChat({
                             content: msg.content,
                             status: user?._id === msg.senderId ? "sent" : "received",
                             message: msg.message,
-                            createdAt: new Date(msg.createdAt).toLocaleTimeString([], {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                hour12: true,
-                            }),
+                            createdAt: msg.createdAt
                         }));
 
                         // Update chat with messages
@@ -199,11 +195,7 @@ function MessageSideOfChat({
                     content: msg.content,
                     status: user?._id === msg.senderId ? "sent" : "received",
                     message: msg.message,
-                    createdAt: new Date(msg.createdAt).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: true,
-                    }),
+                    createdAt: msg.createdAt
                 }));
 
                 // Update chat with new messages

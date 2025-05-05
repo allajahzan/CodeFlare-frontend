@@ -1,6 +1,7 @@
 import { CheckCheck, ChevronDown } from "lucide-react";
 import { Message } from "./chat";
 import { cn } from "@/lib/utils"
+import { getRelativeTime } from "@/utils/relative-time";
 
 // Interface for Props
 interface PropsType {
@@ -22,7 +23,7 @@ function TextCard({ msg, className }: PropsType) {
 
             {/* Time */}
             <small className="absolute right-2 bottom-0.5 flex items-center gap-1 text-[10px] text-muted-foreground font-medium">
-                {msg.createdAt}
+                {getRelativeTime(msg.createdAt)}
                 {msg.status === "sent" && (
                     // <Check className="w-4 h-4 text-muted-foreground" />
                     <CheckCheck className="w-4 h-4 text-blue-400" />
