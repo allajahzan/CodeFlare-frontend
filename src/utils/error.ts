@@ -11,15 +11,15 @@ export const throwCustomError = (err: any) => {
         const { status, data } = err.response;
         throw {
             status,
-            message: data?.errors?.message || data?.message || "An error occurred",
+            message: data?.errors?.message || data?.message || "An unexpected error occurred!",
         };
     } else if (err.request) {
         // no response
-        throw { status: 0, message: "Network error. Please try again later." };
+        throw { status: 0, message: "Network error. Please try again later!" };
     } else {
         throw {
             status: -1,
-            message: err?.message || "An unexpected error occurred",
+            message: err?.message || "An unexpected error occurred!",
         };
     }
 };
@@ -41,11 +41,11 @@ export const handleCustomError = (err: any) => {
     // 401: Unauthorized
     else if (err.status === 401) toast({ title: data?.errors?.message || err?.message });
 
-    // 403: Forbidden
-    else if (err.status === 403)
-        toast({
-            title: data?.errors?.message || err?.message,
-        });
+    // // 403: Forbidden
+    // else if (err.status === 403)
+    //     toast({
+    //         title: data?.errors?.message || err?.message,
+    //     });
 
     // 404: Not Found
     else if (err.status === 404)
@@ -59,25 +59,25 @@ export const handleCustomError = (err: any) => {
             title: data?.errors?.message || err?.message,
         });
 
-    // 410: Gone
+    // 410: Gone or Expired
     else if (err.status === 410) toast({ title: data?.errors?.message });
 
     // 500: Internal Server Error
     else if (err.status === 500)
         toast({
-            title: data?.errors?.message || err?.message || "Internal server error",
+            title: data?.errors?.message || err?.message || "Internal server error!",
         });
 
     // 501: Not Implemented
     else if (err.status === 501)
         toast({
-            title: "An unexpected error occurred",
+            title: "An unexpected error occurred!",
         });
 
     // 504: Gateway Timeout
     else if (err.status === 504)
         toast({
-            title: "An unexpected error occurred",
+            title: "An unexpected error occurred!",
         });
 
     // 0: Network Error

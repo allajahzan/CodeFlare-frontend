@@ -39,7 +39,7 @@ import { patchData } from "@/service/api-service";
 import { handleCustomError } from "@/utils/error";
 import { toast } from "@/hooks/use-toast";
 import { IUserContext, UserContext } from "@/context/user-context";
-import { IReview } from "@/types/review";
+import { IReview } from "@/types/IReview";
 
 // Interface for Props
 interface PropsType {

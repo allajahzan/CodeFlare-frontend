@@ -1,14 +1,5 @@
-import { IBatch } from "./batch";
-
-// Interface for user
-export interface IUser {
-    _id: string;
-    name: string;
-    email: string;
-    role: string;
-    profilePic: string;
-    batch: string;
-}
+import { IBatch } from "./IBatch";
+import { IStudent } from "./IStudent";
 
 // Interface for selfie
 export interface ISelfie {
@@ -35,6 +26,6 @@ export interface IAttendence {
         description: string;
     };
     selfies: ISelfie[];
-    user: IUser;
+    user: IStudent;
     batch: IBatch;
 }

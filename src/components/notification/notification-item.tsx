@@ -15,7 +15,7 @@ import IconButton from "../ui/icon-button";
 import profile from "@/assets/images/no-profile.svg";
 import { handleCustomError } from "@/utils/error";
 import { formatDistanceToNow } from "date-fns";
-import { INotification } from "@/types/notification";
+import { INotification } from "@/types/INotification";
 
 // Interface for Props
 interface PropsType {

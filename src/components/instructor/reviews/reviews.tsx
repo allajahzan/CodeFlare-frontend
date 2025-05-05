@@ -21,7 +21,7 @@ import {
     loadReviews,
     socket,
 } from "@/socket/instructor/instructor-socket";
-import { IReview } from "@/types/review";
+import { IReview } from "@/types/IReview";
 import { Textarea } from "@/components/ui/textarea";
 
 // Reviews Component

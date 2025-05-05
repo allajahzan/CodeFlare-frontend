@@ -21,7 +21,7 @@ import { IUser } from "@codeflare/common";
 import { IUserContext, UserContext } from "@/context/user-context";
 import profile from "@/assets/images/no-profile.svg";
 import { cn } from "@/lib/utils";
-import { IWarning } from "@/types/warning";
+import { IWarning } from "@/types/IWarning";
 import NotFoundYet from "@/components/common/fallback/not-found-text"
 
 // Format date to display
@@ -122,7 +122,7 @@ function WarningsListsModal({ children, student, warnings }: Propstype) {
                     {!warnings && (
                         <NotFoundYet
                             MainIcon={TriangleAlert}
-                            text="No warnings & replies yet"
+                            text="No warnings & replies"
                             IconClassName="w-5 h-5"
                         />
                     )}

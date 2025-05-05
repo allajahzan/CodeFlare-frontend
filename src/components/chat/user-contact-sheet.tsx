@@ -10,8 +10,8 @@ import { stateType } from "@/redux/store";
 import { handleCustomError } from "@/utils/error";
 import UserCard from "./user-card";
 import { Chat } from "./chat";
-import { IUser } from "@/types/user";
-import { IStudent } from "@/types/student";
+import { IUser } from "@/types/IUser";
+import { IStudent } from "@/types/IStudent";
 
 // Interface for Contact User
 export interface IUserChat {

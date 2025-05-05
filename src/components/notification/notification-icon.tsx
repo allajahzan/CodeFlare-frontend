@@ -7,7 +7,7 @@ import ToolTip from "@/components/common/tooltip/tooltip";
 import { Bell, ChevronRight } from "lucide-react";
 import IconButton from "@/components/ui/icon-button";
 import NotFoundYet from "@/components/common/fallback/not-found-text";
-import { INotification } from "@/types/notification";
+import { INotification } from "@/types/INotification";
 import CardHeader from "@/components/common/data-toolbar/header";
 import NotificationItem from "./notification-item";
 
@@ -85,7 +85,7 @@ function NotificationIcon({ notifications }: PropsType) {
                         <NotFoundYet
                             MainIcon={Bell}
                             className="pb-5"
-                            text="No notifications yet"
+                            text="No notifications"
                             IconClassName="w-5 h-5"
                         />
                     )}

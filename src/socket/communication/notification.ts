@@ -1,5 +1,5 @@
 import { socket } from "./socket";
-import { INotification } from "@/types/notification";
+import { INotification } from "@/types/INotification";
 
 /**
  * Listens for "reciveSnapshotMessage" events from the notification socket server and triggers the provided callback when a message is received.

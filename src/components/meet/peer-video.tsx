@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useRef } from "react";
-import { IUser } from "@/types/attendence";
+import { IUser } from "@/types/IAttendence";
 import VideoElement from "./video-element";
 import { cn } from "@/lib/utils";
 import { Crown, Hand, Mic, MicOff, Pin, PinOff } from "lucide-react";

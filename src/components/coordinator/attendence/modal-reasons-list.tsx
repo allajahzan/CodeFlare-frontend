@@ -6,7 +6,7 @@ import {
     DialogTitle,
     DialogDescription,
 } from "@/components/ui/dialog";
-import { IAttendence } from "@/types/attendence";
+import { IAttendence } from "@/types/IAttendence";
 import { FileSpreadsheetIcon } from "lucide-react";
 import { ReactNode } from "react";
 

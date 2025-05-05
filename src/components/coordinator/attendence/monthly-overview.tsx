@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { Fragment, useState } from "react";
 import profile from "@/assets/images/no-profile.svg";
-import { IAttendence } from "@/types/attendence";
+import { IAttendence } from "@/types/IAttendence";
 import { convertTo12HourFormat } from "@/utils/time-converter";
 import { motion } from "framer-motion";
 import NotFoundOrbit from "@/components/common/fallback/not-found-orbit";

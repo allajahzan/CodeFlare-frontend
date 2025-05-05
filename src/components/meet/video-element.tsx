@@ -6,7 +6,7 @@ import React, {
     useRef,
     useState,
 } from "react";
-import { IUser } from "@/types/attendence";
+import { IUser } from "@/types/IAttendence";
 import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { IUserContext, UserContext } from "@/context/user-context";

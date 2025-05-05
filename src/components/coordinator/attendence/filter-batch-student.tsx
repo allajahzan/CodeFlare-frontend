@@ -8,8 +8,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { IStudent } from "@/types/student";
-import { IBatch } from "@/types/batch";
+import { IStudent } from "@/types/IStudent";
+import { IBatch } from "@/types/IBatch";
 
 // Interface for Props
 interface propsType {

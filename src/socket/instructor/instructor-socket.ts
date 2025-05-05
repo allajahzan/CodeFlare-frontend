@@ -1,4 +1,4 @@
-import { IReview } from "@/types/review";
+import { IReview } from "@/types/IReview";
 import { io } from "socket.io-client";
 
 export const socket = io(import.meta.env.VITE_INSTRUCTOR_SERVICE_URL);

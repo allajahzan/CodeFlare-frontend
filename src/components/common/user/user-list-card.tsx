@@ -3,8 +3,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import React from "react";
 import profile from "@/assets/images/no-profile.svg";
-import { IStudent } from "@/types/student";
-import { IUser } from "@/types/user";
+import { IStudent } from "@/types/IStudent";
+import { IUser } from "@/types/IUser";
 
 // Interface for Props
 interface PropsType {

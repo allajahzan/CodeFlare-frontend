@@ -1,22 +1,19 @@
 import {
     EyeIcon,
-    Filter,
-    Search,
+    SearchIcon,
     MoreHorizontal,
     Plus,
-    SortAsc,
     User2,
     UserRoundCheck,
     UserRoundMinus,
     Send,
     Loader2,
-    Check,
+    FilterIcon,
 } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -24,7 +21,6 @@ import { ChangeEvent, useEffect, useState } from "react";
 import NotFoundOrbit from "@/components/common/fallback/not-found-orbit";
 import UserListCard from "@/components/common/user/user-list-card";
 import CardHeader from "@/components/common/data-toolbar/header";
-import SearchFilterSort from "@/components/common/data-toolbar/search-filter-sort";
 import { cn } from "@/lib/utils";
 import DrawerUsersList from "@/components/common/user/drawer-users-list";
 import UserDetails from "@/components/common/user/user-details";
@@ -36,10 +32,12 @@ import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import { toast } from "@/hooks/use-toast";
 import { useMediaQuery } from "usehooks-ts";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { IUser } from "@/types/user";
-import { IStudent } from "@/types/student";
+import { IUser } from "@/types/IUser";
+import { IStudent } from "@/types/IStudent";
+import Search from "@/components/common/data-toolbar/search";
+import ToolTip from "@/components/common/tooltip/tooltip";
+import Filter from "@/components/common/data-toolbar/filter";
+import Sort from "@/components/common/data-toolbar/sort";
 
 // Interface for Props
 interface PropsType {
@@ -52,7 +50,9 @@ function Users({ setDrawerOpen }: PropsType) {
     // Users related states
     const [newUser, setNewUser] = useState<IUser | null>(null);
     const [users, setUsers] = useState<IUser[] | []>([]);
-    const [selectedUser, setSelectedUser] = useState<IUser | IStudent | null>(null);
+    const [selectedUser, setSelectedUser] = useState<IUser | IStudent | null>(
+        null
+    );
 
     const [fetching, setFetching] = useState<boolean>(false);
 
@@ -66,11 +66,11 @@ function Users({ setDrawerOpen }: PropsType) {
     // Sort
     const [sort, setSort] = useState<{ key: string; order: number }>({
         key: "createdAt",
-        order: 1,
+        order: -1,
     });
 
-    // Category
-    const [category, setCategory] = useState<string>("");
+    // RoleWise filter
+    const [roleWise, setRoleWise] = useState<string>("");
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
@@ -84,7 +84,7 @@ function Users({ setDrawerOpen }: PropsType) {
     };
 
     // Handle search
-    const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleSearch = async (event: ChangeEvent<HTMLInputElement>) => {
         setSearch(event.target.value);
     };
 
@@ -112,7 +112,7 @@ function Users({ setDrawerOpen }: PropsType) {
                 setUsers((prevUsers: IUser[]) => {
                     return prevUsers.map((u) => {
                         if (u._id === user._id) {
-                            return { ...u, isblock: !u.isblock };
+                            return { ...u, isBlock: !u.isBlock };
                         }
                         return u;
                     });
@@ -121,7 +121,7 @@ function Users({ setDrawerOpen }: PropsType) {
                 // Update user in selected user, if selected
                 setSelectedUser((prevUser: IUser | IStudent | null) => {
                     if (prevUser?._id === user._id) {
-                        return { ...prevUser, isblock: !prevUser.isblock };
+                        return { ...prevUser, isBlock: !prevUser.isBlock };
                     }
                     return prevUser;
                 });
@@ -132,9 +132,9 @@ function Users({ setDrawerOpen }: PropsType) {
                 });
 
                 toast({
-                    title: user.isblock
-                        ? "You have unblocked this user."
-                        : "You have blocked this user.",
+                    title: user.isBlock
+                        ? `You have unblocked ${user.role} ${user.name}.`
+                        : `You have blocked ${user.role} ${user.name}.`,
                 });
 
                 setChangingStatus(false);
@@ -165,7 +165,8 @@ function Users({ setDrawerOpen }: PropsType) {
                 // Send request
                 const resp = await fetchData(
                     ApiEndpoints.SEARCH_USER +
-                    `?keyword=${search.trim()}&isBlocked=${isBlocked}&sort=${sort.key}&order=${sort.order}&category=${category}`,
+                    `?keyword=${search.trim()}&isBlock=${isBlocked}&sort=${sort.key
+                    }&order=${sort.order}&roleWise=${roleWise}`,
                     role
                 );
 
@@ -185,7 +186,7 @@ function Users({ setDrawerOpen }: PropsType) {
             }
         };
         fetchUsers();
-    }, [isBlocked, search, sort, category]);
+    }, [isBlocked, search, sort, roleWise]);
 
     // Close drawer on screen size change
     useEffect(() => {
@@ -218,140 +219,46 @@ function Users({ setDrawerOpen }: PropsType) {
                     }
                 />
 
-                {/* Search filter sort  */}
-                <SearchFilterSort
-                    search={search}
-                    isBlocked={isBlocked}
-                    handleSearch={handleSearch}
-                    hanldeStatus={handleStatus}
-                    children1={
-                        <DropdownMenu>
-                            <DropdownMenuTrigger
-                                className="p-3 rounded-lg border dark:hover:border-customBorder-dark bg-background hover:bg-muted dark:hover:bg-sidebar
-                             shadow-sm"
-                            >
-                                <Filter className="h-4 w-4 text-foreground" />
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent
-                                align={"end"}
-                                onClick={(event) => event.stopPropagation()}
-                            >
-                                <DropdownMenuLabel>Role</DropdownMenuLabel>
-                                <DropdownMenuItem
-                                    onClick={() => setCategory("")}
-                                    onSelect={(e) => e.preventDefault()}
-                                    className="flex justify-between"
-                                >
-                                    <span>All</span>
-                                    {category === "" && (
-                                        <Check className="w-4 h-4 text-foreground" />
-                                    )}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    onClick={() => setCategory("coordinator")}
-                                    onSelect={(e) => e.preventDefault()}
-                                    className="flex justify-between"
-                                >
-                                    <span>Coordinator</span>
-                                    {category === "coordinator" && (
-                                        <Check className="w-4 h-4 text-foreground" />
-                                    )}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    onClick={() => setCategory("instructor")}
-                                    onSelect={(e) => e.preventDefault()}
-                                    className="flex justify-between"
-                                >
-                                    <span>Instructor</span>
-                                    {category === "instructor" && (
-                                        <Check className="w-4 h-4 text-foreground" />
-                                    )}
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    }
-                    children2={
-                        <DropdownMenu>
-                            <DropdownMenuTrigger
-                                className="flex items-center justify-center w-[41.6px] rounded-lg
-                                    border dark:hover:border-customBorder-dark bg-background hover:bg-muted dark:hover:bg-sidebar 
-                                    shadow-sm "
-                            >
-                                <SortAsc className="h-4 w-4 text-foreground" />
-                            </DropdownMenuTrigger>
+                {/* Search */}
+                <div className="flex items-center gap-2 w-full">
+                    <Search search={search} handleSearch={handleSearch} />
 
-                            <DropdownMenuContent
-                                align="end"
-                                onClick={(event) => event.stopPropagation()}
+                    {/* Status */}
+                    <ToolTip
+                        action={handleStatus}
+                        text={isBlocked ? "Blocked Users" : "Active Users"}
+                        className=""
+                        children={
+                            <div
+                                onClick={handleStatus}
+                                className="p-3 rounded-lg border dark:hover:border-customBorder-dark bg-background hover:bg-muted dark:hover:bg-sidebar 
+                                shadow-sm cursor-pointer"
                             >
-                                <DropdownMenuLabel>Sort</DropdownMenuLabel>
+                                {isBlocked ? (
+                                    <UserRoundMinus className="h-4 w-4 text-foreground" />
+                                ) : (
+                                    <UserRoundCheck className="h-4 w-4 text-foreground" />
+                                )}
+                            </div>
+                        }
+                    />
 
-                                {/* Checkbox for sorting order */}
-                                <div className="flex items-center gap-2 py-1.5 pl-2 cursor-pointer">
-                                    <Checkbox
-                                        checked={sort.order === 1}
-                                        onCheckedChange={() => {
-                                            setSort((prev) => ({
-                                                ...prev,
-                                                order: prev.order === 1 ? -1 : 1,
-                                            }));
-                                        }}
-                                        id="ascending"
-                                        className="border-border"
-                                    />
-                                    <Label
-                                        htmlFor="ascending"
-                                        className="text-sm font-medium cursor-pointer w-full"
-                                    >
-                                        Ascending
-                                    </Label>
-                                </div>
+                    {/* Filter */}
+                    <Filter
+                        title="Role"
+                        Icon={FilterIcon}
+                        filter={roleWise}
+                        setFilter={setRoleWise}
+                        fitlerData={["all", "coordinator", "instructor"]}
+                    />
 
-                                <DropdownMenuSeparator />
-
-                                {/* Sorting options */}
-                                <DropdownMenuItem
-                                    textValue="name"
-                                    onClick={() =>
-                                        setSort((prev) =>
-                                            prev.key !== "name"
-                                                ? { key: "name", order: prev.order }
-                                                : prev
-                                        )
-                                    }
-                                    onSelect={(e) => e.preventDefault()}
-                                    className="flex justify-between"
-                                >
-                                    <span>Name</span>
-                                    <span>
-                                        {sort.key === "name" && (
-                                            <Check className="w-4 h-4 text-foreground" />
-                                        )}
-                                    </span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    textValue="createdAt"
-                                    onClick={() =>
-                                        setSort((prev) =>
-                                            prev.key !== "createdAt"
-                                                ? { key: "createdAt", order: prev.order }
-                                                : prev
-                                        )
-                                    }
-                                    onSelect={(e) => e.preventDefault()}
-                                    className="flex justify-between"
-                                >
-                                    <span>Date</span>
-                                    <span>
-                                        {sort.key === "createdAt" && (
-                                            <Check className="w-4 h-4 text-foreground" />
-                                        )}
-                                    </span>
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    }
-                />
+                    {/* Sort */}
+                    <Sort
+                        sort={sort}
+                        setSort={setSort}
+                        sortData={["name", "createdAt"]}
+                    />
+                </div>
 
                 {/* Users lists in small screen */}
                 {isSmall && (
@@ -374,7 +281,7 @@ function Users({ setDrawerOpen }: PropsType) {
                             users.map((user, index) => {
                                 return (
                                     <UserListCard
-                                        key={index}
+                                        key={user._id}
                                         index={index}
                                         action={handleSelect}
                                         user={user}
@@ -416,7 +323,7 @@ function Users({ setDrawerOpen }: PropsType) {
                                                         onSelect={(e) => e.preventDefault()}
                                                         className="text-center"
                                                     >
-                                                        {user.isblock ? (
+                                                        {user.isBlock ? (
                                                             changingStatus ? (
                                                                 <Loader2 className="w-4 h-4 text-foreground animate-spin" />
                                                             ) : (
@@ -427,7 +334,7 @@ function Users({ setDrawerOpen }: PropsType) {
                                                         ) : (
                                                             <UserRoundMinus />
                                                         )}
-                                                        {user.isblock
+                                                        {user.isBlock
                                                             ? changingStatus
                                                                 ? "Unblocking..."
                                                                 : "Unblock"
@@ -446,7 +353,7 @@ function Users({ setDrawerOpen }: PropsType) {
                         {users.length === 0 && (
                             <NotFoundOrbit
                                 MainIcon={User2}
-                                SubIcon={fetching ? Search : Plus}
+                                SubIcon={fetching ? SearchIcon : Plus}
                                 message={
                                     fetching
                                         ? "Please wait a moment"

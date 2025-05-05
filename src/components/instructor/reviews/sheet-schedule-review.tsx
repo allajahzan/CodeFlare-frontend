@@ -39,9 +39,9 @@ import DatePicker from "./date-picker";
 import { formSchema, FormType } from "@/validations/instructor/schedule-review";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { convertTo12HourFormat } from "@/utils/time-converter";
-import { IStudent } from "@/types/student";
-import { IReview } from "@/types/review";
-import { IBatch } from "@/types/batch";
+import { IStudent } from "@/types/IStudent";
+import { IReview } from "@/types/IReview";
+import { IBatch } from "@/types/IBatch";
 
 // Interface for Props
 interface PropsType {

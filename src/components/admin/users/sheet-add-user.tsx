@@ -41,8 +41,8 @@ import {
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import ValidationError from "@/components/ui/validation-error";
-import { IUser } from "@/types/user";
-import { IBatch } from "@/types/batch";
+import { IUser } from "@/types/IUser";
+import { IBatch } from "@/types/IBatch";
 
 // Interface for Props
 interface PropsType {
@@ -63,6 +63,11 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
     const [dropDownOpen, setDropDownOpen] = useState<boolean>(false);
 
     const [batches, setBatches] = useState<IBatch[]>([]);
+
+    // Selected Role
+    const [selectedRole, setSelectedRole] = useState<
+        "instructor" | "coordinator" | ""
+    >("");
 
     // Inputs
     const [selectedBatches, setSelectedBatches] = useState<IBatch[]>([]);
@@ -96,7 +101,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
             const user = resp?.data.data;
 
             // Success response
-            if (resp && resp.status === 200) {
+            if (resp && resp.status === 201) {
                 setOpen(false);
                 setSubmiting(false);
                 reset();
@@ -138,6 +143,8 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                 if (resp && resp.status === 200) {
                     const data = resp.data.data;
 
+                    console.log(data);
+
                     // Set batches
                     setBatches(data);
                 }
@@ -155,6 +162,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
             reset();
             setDropDownOpen(false);
             setSelectedBatches([]);
+            setSelectedRole("");
         }
     }, [open]);
 
@@ -291,9 +299,10 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                             <Select
                                 key="role"
                                 required
-                                onValueChange={(value: string) =>
-                                    setValue("role", value, { shouldValidate: true })
-                                }
+                                onValueChange={(value: "coordinator" | "instructor") => {
+                                    setValue("role", value, { shouldValidate: true });
+                                    setSelectedRole(value);
+                                }}
                             >
                                 <SelectTrigger
                                     id="role"
@@ -313,48 +322,50 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                         <ValidationError message={errors.role?.message as string} />
                     </motion.div>
 
-                    {/* Input for batches */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.7 }}
-                        className="space-y-2"
-                    >
-                        <Label
-                            htmlFor="batches"
-                            className="text-sm text-foreground font-medium"
+                    {/* Input for batches - only for coordinator */}
+                    {selectedRole === "coordinator" && (
+                        <motion.div
+                            // initial={{ opacity: 1, y: 0 }}
+                            // animate={{ opacity: 1, y: 0 }}
+                            // transition={{ delay: 0 }}
+                            className="space-y-2"
                         >
-                            Batches
-                        </Label>
-                        <MultiSelector
-                            triggerMultiSelector={
-                                <TriggerMultiSelector
-                                    fieldName="batches"
-                                    setDropDownOpen={setDropDownOpen}
-                                    dropDownOpen={dropDownOpen}
-                                    Icon={UsersRound}
-                                    register={register}
-                                />
-                            }
-                            multiSelectorContent={
-                                <MultiSelectorContent
-                                    dropDownOpen={dropDownOpen}
-                                    handleSelect={handleSelectBatches}
-                                    values={batches}
-                                    selectedBatches={selectedBatches}
-                                />
-                            }
-                        />
+                            <Label
+                                htmlFor="batches"
+                                className="text-sm text-foreground font-medium"
+                            >
+                                Batches
+                            </Label>
+                            <MultiSelector
+                                triggerMultiSelector={
+                                    <TriggerMultiSelector
+                                        fieldName="batches"
+                                        setDropDownOpen={setDropDownOpen}
+                                        dropDownOpen={dropDownOpen}
+                                        Icon={UsersRound}
+                                        register={register}
+                                    />
+                                }
+                                multiSelectorContent={
+                                    <MultiSelectorContent
+                                        dropDownOpen={dropDownOpen}
+                                        handleSelect={handleSelectBatches}
+                                        values={batches}
+                                        selectedBatches={selectedBatches}
+                                    />
+                                }
+                            />
 
-                        {/* Batches error message */}
-                        <ValidationError message={errors.batches?.message as string} />
-                    </motion.div>
+                            {/* Batches error message */}
+                            <ValidationError message={errors.batches?.message as string} />
+                        </motion.div>
+                    )}
 
                     {/* Input fot message */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.8 }}
+                        transition={{ delay: 0.7 }}
                         className="space-y-2"
                     >
                         <Label
@@ -379,7 +390,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.9 }}
+                        transition={{ delay: 0.8 }}
                         className="pt-4"
                     >
                         <Button

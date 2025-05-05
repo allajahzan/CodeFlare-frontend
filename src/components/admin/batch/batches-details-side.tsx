@@ -31,9 +31,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { handleCustomError } from "@/utils/error";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { fetchData } from "@/service/api-service";
-import { IStudent } from "@/types/student";
-import { IUser } from "@/types/user";
-import { IBatch } from "@/types/batch";
+import { IStudent } from "@/types/IStudent";
+import { IUser } from "@/types/IUser";
+import { IBatch } from "@/types/IBatch";
 
 // Interface for Props
 interface Propstype {

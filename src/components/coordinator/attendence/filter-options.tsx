@@ -6,8 +6,8 @@ import {
     SelectTrigger,
 } from "@/components/ui/select";
 import FilterBatchStudent from "./filter-batch-student";
-import { IStudent } from "@/types/student";
-import { IBatch } from "@/types/batch";
+import { IStudent } from "@/types/IStudent";
+import { IBatch } from "@/types/IBatch";
 import Filter from "@/components/common/data-toolbar/filter";
 
 // Interface for Props

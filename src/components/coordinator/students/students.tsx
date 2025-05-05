@@ -46,8 +46,8 @@ import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import { toast } from "@/hooks/use-toast";
 import { Checkbox } from "@/components/ui/checkbox";
-import { IStudent } from "@/types/student";
-import { IUser } from "@/types/user";
+import { IStudent } from "@/types/IStudent";
+import { IUser } from "@/types/IUser";
 
 // Interface for Props
 interface PropsType {
@@ -122,7 +122,7 @@ function Students({ setDrawerOpen }: PropsType) {
                 setStudents((prevUsers: IStudent[]) => {
                     return prevUsers.map((u) => {
                         if (u._id === user._id) {
-                            return { ...u, isblock: !u.isblock };
+                            return { ...u, isBlock: !u.isBlock };
                         }
                         return u;
                     });
@@ -131,7 +131,7 @@ function Students({ setDrawerOpen }: PropsType) {
                 // Update student in selected student, if selected
                 setSelectedStudent((prevUser: IUser | IStudent | null) => {
                     if (prevUser?._id === user._id) {
-                        return { ...prevUser, isblock: !prevUser.isblock };
+                        return { ...prevUser, isBlock: !prevUser.isBlock };
                     }
                     return prevUser;
                 });
@@ -142,9 +142,9 @@ function Students({ setDrawerOpen }: PropsType) {
                 });
 
                 toast({
-                    title: user.isblock
-                        ? "You have unblocked this student."
-                        : "You have blocked this student.",
+                    title: user.isBlock
+                        ? `You have unblocked ${user.role} ${user.name}.`
+                        : `You have blocked ${user.role} ${user.name}.`,
                 });
 
                 setChangingStatus(false);
@@ -175,7 +175,7 @@ function Students({ setDrawerOpen }: PropsType) {
                 // Send request
                 const resp = await fetchData(
                     ApiEndpoints.SEARCH_USER +
-                    `?keyword=${search}&isBlocked=${isBlocked}&sort=${sort.key}&order=${sort.order}`,
+                    `?keyword=${search}&isBlock=${isBlocked}&sort=${sort.key}&order=${sort.order}`,
                     role
                 );
 
@@ -397,7 +397,7 @@ function Students({ setDrawerOpen }: PropsType) {
                                                         onSelect={(e) => e.preventDefault()}
                                                         className="text-center"
                                                     >
-                                                        {student.isblock ? (
+                                                        {student.isBlock ? (
                                                             changingStatus ? (
                                                                 <Loader2 className="w-4 h-4 text-foreground animate-spin" />
                                                             ) : (
@@ -408,7 +408,7 @@ function Students({ setDrawerOpen }: PropsType) {
                                                         ) : (
                                                             <UserRoundMinus />
                                                         )}
-                                                        {student.isblock
+                                                        {student.isBlock
                                                             ? changingStatus
                                                                 ? "Unblocking..."
                                                                 : "Unblock"

@@ -20,7 +20,7 @@ import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { toast } from "@/hooks/use-toast";
-import { IBatch } from "@/types/batch";
+import { IBatch } from "@/types/IBatch";
 
 // Interface for Props
 interface PropsType {

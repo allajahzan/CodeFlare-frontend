@@ -41,8 +41,8 @@ import {
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import ValidationError from "@/components/ui/validation-error";
-import { IUser } from "@/types/user";
-import { IBatch } from "@/types/batch";
+import { IUser } from "@/types/IUser";
+import { IBatch } from "@/types/IBatch";
 
 // Interface for Props
 interface PropsType {

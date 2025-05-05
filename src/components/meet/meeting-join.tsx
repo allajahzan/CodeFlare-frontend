@@ -10,7 +10,7 @@ import ApiEndpoints from "@/constants/api-endpoints";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import { Link, useLocation } from "react-router-dom";
-import { IUser } from "@/types/attendence";
+import { IUser } from "@/types/IAttendence";
 import profile from "@/assets/images/no-profile.svg";
 
 // Interface for Message

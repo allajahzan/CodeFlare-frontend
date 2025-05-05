@@ -3,7 +3,7 @@ import { Check, LucideProps } from "lucide-react";
 import { Input } from "./input";
 import { UseFormRegister } from "react-hook-form";
 import { ReactNode } from "react";
-import { IBatch } from "@/types/batch";
+import { IBatch } from "@/types/IBatch";
 
 // Interface for MultiSelectorContent
 interface PropsMultiSelectorContent {
@@ -28,7 +28,7 @@ function MultiSelectorContent({
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -2 }}
                     transition={{ duration: 0.1 }}
-                    className="absolute z-10 max-h-[174px] top-[46px] w-full bg-popover p-1 border rounded-md shadow-md overflow-y-auto no-scrollbar"
+                    className="absolute z-10 max-h-[120px] top-[46px] w-full bg-popover p-1 border rounded-md shadow-md overflow-y-auto"
                 >
                     {values?.map((value, index) => {
                         const isSelected = selectedBatches.some(

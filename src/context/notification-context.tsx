@@ -1,7 +1,7 @@
 import { toast } from "@/hooks/use-toast";
 import { fetchData } from "@/service/api-service";
 import { receiveNotification } from "@/socket/communication/notification";
-import { INotification } from "@/types/notification";
+import { INotification } from "@/types/INotification";
 import {
     createContext,
     useContext,

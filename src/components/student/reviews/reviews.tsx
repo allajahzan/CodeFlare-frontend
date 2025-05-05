@@ -12,7 +12,7 @@ import {
 import { cn } from "@/lib/utils";
 import { PendingsAndChart, ReviewDetails } from "./review-details";
 import CardHeader from "@/components/common/data-toolbar/header";
-import { IReview } from "@/types/review";
+import { IReview } from "@/types/IReview";
 import { handleCustomError } from "@/utils/error";
 import { fetchData } from "@/service/api-service";
 import ApiEndpoints from "@/constants/api-endpoints";

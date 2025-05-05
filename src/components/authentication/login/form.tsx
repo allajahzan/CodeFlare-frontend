@@ -82,7 +82,7 @@ function Form() {
                     // Store accesstoken in localstorage
                     localStorage.setItem("accessToken", data.accessToken);
 
-                    toast({ title: "Successfully Logged In" });
+                    toast({ title: "Successfully Logged In." });
                 }, 1000);
                 // set role in redux
                 dispatch(roleAction(data.role));

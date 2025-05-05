@@ -29,15 +29,17 @@ import { patchData } from "@/service/api-service";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
-import { IUser } from "@/types/user";
-import { IStudent } from "@/types/student";
+import { IUser } from "@/types/IUser";
+import { IStudent } from "@/types/IStudent";
 
 // Interface for Props
 interface PropsType {
     fetching: boolean;
     setUsers: React.Dispatch<React.SetStateAction<[] | IUser[] | IStudent[]>>;
     users: IUser[] | IStudent[];
-    setSelectedUser: React.Dispatch<React.SetStateAction<IUser | IStudent | null>>;
+    setSelectedUser: React.Dispatch<
+        React.SetStateAction<IUser | IStudent | null>
+    >;
     selectedUser: IUser | IStudent;
     action: (index: number) => void;
     setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -148,7 +150,7 @@ function DrawerUsersList({
                                     transition={{ delay: 0.2 + index * 0.1 }}
                                     onClick={() => action(index)}
                                     className={cn(
-                                        "group p-2 px-3 w-full rounded-xl cursor-pointer border border-border hover:bg-muted dark:hover:bg-sidebar",
+                                        "group p-2 px-3 w-full rounded-xl cursor-pointer border dark:border-transparent bg-background dark:bg-sidebar hover:bg-muted dark:hover:bg-sidebar-backgroundDark",
                                         selectedUser?._id === user._id
                                             ? "bg-muted dark:bg-sidebar"
                                             : ""

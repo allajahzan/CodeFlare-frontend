@@ -15,7 +15,7 @@ import {
     onPeerMuteChange,
 } from "@/socket/communication/videocall";
 import MeetingRoom from "./meeting-room";
-import { IUser } from "@/types/attendence";
+import { IUser } from "@/types/IAttendence";
 import { IUserContext, UserContext } from "@/context/user-context";
 
 // mediasoup track params

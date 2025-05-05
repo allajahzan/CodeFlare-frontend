@@ -16,7 +16,7 @@ import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import PeerVideo from "./peer-video";
 import { IUserContext, UserContext } from "@/context/user-context";
-import { IUser } from "@/types/attendence";
+import { IUser } from "@/types/IAttendence";
 import { cn } from "@/lib/utils";
 import { IMeet } from "./meeting-join";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";

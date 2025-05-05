@@ -25,9 +25,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { formSchema, Formtype } from "@/validations/profile/account";
 import { IUser, IUserContext, UserContext } from "@/context/user-context";
 import ValidationError from "../ui/validation-error";
-import { IProfile } from "@/types/profile";
+import { IProfile } from "@/types/IProfile";
 import { toast } from "@/hooks/use-toast";
-import { IBatch } from "@/types/batch";
+import { IBatch } from "@/types/IBatch";
 
 // Interface for Props
 interface PropsType {

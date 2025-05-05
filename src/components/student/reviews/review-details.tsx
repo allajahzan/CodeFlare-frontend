@@ -20,7 +20,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "@/hooks/use-toast";
 import UserNameCard from "@/components/common/user/user-name-card";
 import InfoCard from "@/components/common/other-card/info-card";
-import { IReview } from "@/types/review";
+import { IReview } from "@/types/IReview";
 import { convertTo12HourFormat } from "@/utils/time-converter";
 import NotSelected from "@/components/common/fallback/not-selected";
 import { Input } from "@/components/ui/input";

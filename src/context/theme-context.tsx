@@ -17,10 +17,11 @@ const ThemeContextProvider = ({ children }: { children: ReactNode }) => {
     // Theme state
     const [theme, setTheme] = useState<Theme>(() => {
         const storedTheme = localStorage.getItem("theme") as Theme | null;
-        const prefersDark = window.matchMedia(
-            "(prefers-color-scheme: dark)"
-        ).matches;
-        return storedTheme ?? (prefersDark ? "dark" : "light");
+        // const prefersDark = window.matchMedia(
+        //     "(prefers-color-scheme: dark)"
+        // ).matches;
+        // return storedTheme ?? (prefersDark ? "dark" : "light");
+        return storedTheme ?? "light";
     });
 
     useEffect(() => {

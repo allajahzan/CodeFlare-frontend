@@ -1,4 +1,4 @@
-import { IUser } from "@/types/attendence";
+import { IUser } from "@/types/IAttendence";
 import { socket } from "./socket";
 import * as mediasoupClient from "mediasoup-client";
 import { handleCustomError } from "@/utils/error";

@@ -23,9 +23,9 @@ import EditStudentSheet from "@/components/coordinator/students/sheet-edit-stude
 import { useContext } from "react";
 import { IUserContext, UserContext } from "@/context/user-context";
 import UserNameCard from "./user-name-card";
-import { IBatch } from "@/types/batch";
-import { IStudent } from "@/types/student";
-import { IUser } from "@/types/user";
+import { IBatch } from "@/types/IBatch";
+import { IStudent } from "@/types/IStudent";
+import { IUser } from "@/types/IUser";
 
 // Interface for Props
 interface PropsType {
@@ -134,9 +134,8 @@ function UserDetails({
                                     value:
                                         selectedUser.role !== "student"
                                             ? selectedUser.lastActive || "Not recently"
-                                            : (selectedUser as IStudent).week?.[0].toUpperCase() +
-                                            (selectedUser as IStudent).week?.slice(1) ||
-                                            "Fumigation",
+                                            : (selectedUser as IStudent).week?.name ||
+                                            (selectedUser as IStudent).category,
                                     iconDivClassName:
                                         "bg-green-400/20 group-hover:bg-green-400/30",
                                     iconClassName: "text-green-600",
@@ -251,7 +250,7 @@ function UserDetails({
                     Icon={User2}
                     message={`Select a ${role} from the list to view their details`}
                     text={`No ${role} selected`}
-                    className="h-[434px] lg:h-[273.3px]"
+                    className="h-[434px] lg:h-[273.3px] shadow-sm"
                 />
             )}
         </AnimatePresence>

@@ -2,7 +2,7 @@ import InfoCard from "@/components/common/other-card/info-card";
 import UserNameCard from "@/components/common/user/user-name-card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { IAttendence } from "@/types/attendence";
+import { IAttendence } from "@/types/IAttendence";
 import { convertTo12HourFormat } from "@/utils/time-converter";
 import {
     CalendarClock,

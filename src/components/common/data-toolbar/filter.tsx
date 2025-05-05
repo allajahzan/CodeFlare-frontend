@@ -45,7 +45,7 @@ function Filter({ title, fitlerData, filter, setFilter, Icon }: PropsType) {
                             onSelect={(e) => e.preventDefault()}
                             className="flex justify-between"
                         >
-                            <span>{data === "" ? "All" : data}</span>
+                            <span>{data === "" ? "All" : data[0].toUpperCase() + data.slice(1)}</span>
                             {data === filter && <Check className="w-4 h-4 text-foreground" />}
                         </DropdownMenuItem>
                     );

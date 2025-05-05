@@ -14,7 +14,7 @@ import ApiEndpoints from "@/constants/api-endpoints";
 import { toast } from "@/hooks/use-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ValidationError from "../ui/validation-error";
-import { IProfile } from "@/types/profile";
+import { IProfile } from "@/types/IProfile";
 
 // Interface for Props
 interface PropsType {

@@ -12,7 +12,7 @@ import ApiEndpoints from "@/constants/api-endpoints";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import { handleCustomError } from "@/utils/error";
-import { IProfile } from "@/types/profile";
+import { IProfile } from "@/types/IProfile";
 
 // Profile Componet
 function Profile() {

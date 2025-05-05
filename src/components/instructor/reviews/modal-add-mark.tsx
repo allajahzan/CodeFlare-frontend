@@ -23,7 +23,7 @@ import { useSelector } from "react-redux";
 import { toast } from "@/hooks/use-toast";
 import { formSchema, FormType } from "@/validations/instructor/update-score";
 import { IUserContext, UserContext } from "@/context/user-context";
-import { IReview } from "@/types/review";
+import { IReview } from "@/types/IReview";
 
 // Interface for Props
 interface Propstype {

@@ -37,7 +37,7 @@ import {
 import AddMarkModal from "./modal-add-mark";
 import { toast } from "@/hooks/use-toast";
 import { IUserContext, UserContext } from "@/context/user-context";
-import { IReview } from "@/types/review";
+import { IReview } from "@/types/IReview";
 
 // Interface for Props
 interface PropsType {

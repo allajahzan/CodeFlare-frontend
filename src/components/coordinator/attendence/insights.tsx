@@ -1,8 +1,8 @@
 import type React from "react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { ChevronDown, Download } from "lucide-react";
-import { IBatch } from "@/types/batch";
-import { IStudent } from "@/types/student";
+import { IBatch } from "@/types/IBatch";
+import { IStudent } from "@/types/IStudent";
 import SelectMonthYear from "@/components/common/select/month-year-selector";
 import {
     DropdownMenu,
@@ -18,7 +18,7 @@ import ApiEndpoints from "@/constants/api-endpoints";
 import { handleCustomError } from "@/utils/error";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
-import { IAttendence } from "@/types/attendence";
+import { IAttendence } from "@/types/IAttendence";
 import { IUserContext, UserContext } from "@/context/user-context";
 
 // Interface for Props

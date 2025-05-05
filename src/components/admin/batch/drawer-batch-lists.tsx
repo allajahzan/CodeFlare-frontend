@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import NotFoundOrbit from "@/components/common/fallback/not-found-orbit";
 import BatchesDetailsSide from "./batches-details-side";
 import { motion } from "framer-motion";
-import { IBatch } from "@/types/batch";
+import { IBatch } from "@/types/IBatch";
 
 // Interface for Props
 interface PropsType {

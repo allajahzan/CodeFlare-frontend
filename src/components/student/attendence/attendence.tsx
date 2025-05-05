@@ -9,7 +9,7 @@ import ApiEndpoints from "@/constants/api-endpoints";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import { IUserContext, UserContext } from "@/context/user-context";
-import { IAttendence } from "@/types/attendence";
+import { IAttendence } from "@/types/IAttendence";
 
 // Interface for Event
 export interface IEvent {
