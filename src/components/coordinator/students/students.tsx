@@ -1,38 +1,25 @@
 import {
     EyeIcon,
-    Filter,
-    Search,
+    SearchIcon,
     MoreHorizontal,
     Plus,
-    SortAsc,
     User2,
     UserRoundCheck,
     UserRoundMinus,
     Loader2,
     Send,
-    Check,
 } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-} from "@/components/ui/select";
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 import NotFoundOrbit from "@/components/common/fallback/not-found-orbit";
 import UserListCard from "@/components/common/user/user-list-card";
 import CardHeader from "@/components/common/data-toolbar/header";
-import SearchFilterSort from "@/components/common/data-toolbar/search-filter-sort";
 import { useMediaQuery } from "usehooks-ts";
 import { cn } from "@/lib/utils";
 import DrawerUsersList from "@/components/common/user/drawer-users-list";
@@ -45,9 +32,12 @@ import { IUserContext, UserContext } from "@/context/user-context";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import { toast } from "@/hooks/use-toast";
-import { Checkbox } from "@/components/ui/checkbox";
 import { IStudent } from "@/types/IStudent";
 import { IUser } from "@/types/IUser";
+import Search from "@/components/common/data-toolbar/search";
+import Sort from "@/components/common/data-toolbar/sort";
+import Filter from "@/components/common/data-toolbar/filter";
+import ToolTip from "@/components/common/tooltip/tooltip";
 
 // Interface for Props
 interface PropsType {
@@ -72,6 +62,9 @@ function Students({ setDrawerOpen }: PropsType) {
 
     // Search
     const [search, setSearch] = useState<string>("");
+
+    // Filter
+    const [category, setCategory] = useState<string>("Ongoing");
 
     // Sort
     const [sort, setSort] = useState<{ key: string; order: number }>({
@@ -175,7 +168,7 @@ function Students({ setDrawerOpen }: PropsType) {
                 // Send request
                 const resp = await fetchData(
                     ApiEndpoints.SEARCH_USER +
-                    `?keyword=${search}&isBlock=${isBlocked}&sort=${sort.key}&order=${sort.order}`,
+                    `?keyword=${search}&isBlock=${isBlocked}&sort=${sort.key}&order=${sort.order}&category=${category}`,
                     role
                 );
 
@@ -195,7 +188,7 @@ function Students({ setDrawerOpen }: PropsType) {
             }
         };
         fetchStudents();
-    }, [isBlocked, search, sort]);
+    }, [isBlocked, search, sort, category]);
 
     // Close drawer on screen size change
     useEffect(() => {
@@ -226,113 +219,52 @@ function Students({ setDrawerOpen }: PropsType) {
                     }
                 />
 
-                {/* Search filter sort  */}
-                <SearchFilterSort
-                    search={search}
-                    isBlocked={isBlocked}
-                    handleSearch={handleSearch}
-                    hanldeStatus={handleStatus}
-                    children1={
-                        <Select>
-                            <SelectTrigger
-                                className="w-[41.6px] h-[41.6px] flex justify-center p-0 py-5 
-                                   border dark:hover:border-customBorder-dark bg-background hover:bg-muted dark:hover:bg-sidebar shadow-sm"
+                <div className="flex items-center gap-2 w-full">
+                    {/* Search */}
+                    <Search search={search} handleSearch={handleSearch} />
+
+                    {/* Status */}
+                    <ToolTip
+                        action={handleStatus}
+                        text={isBlocked ? "Blocked Users" : "Active Users"}
+                        children={
+                            <div
+                                onClick={handleStatus}
+                                className="p-3 rounded-lg border dark:hover:border-customBorder-dark bg-background hover:bg-muted dark:hover:bg-sidebar
+                                         shadow-sm cursor-pointer"
                             >
-                                <Filter className="h-4 w-4 text-foreground" />
-                            </SelectTrigger>
-                            <SelectContent align={"end"}>
-                                <SelectGroup>
-                                    <SelectLabel>Category</SelectLabel>
-                                    <SelectItem value="all">All</SelectItem>
-                                    <SelectItem value="ongoing">OnGoing</SelectItem>
-                                    <SelectItem value="held">Held</SelectItem>
-                                    <SelectItem value="placement">Placement</SelectItem>
-                                    <SelectItem value="critical">Critical</SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-                    }
-                    children2={
-                        <DropdownMenu>
-                            <DropdownMenuTrigger
-                                className="flex items-center justify-center w-[41.6px] rounded-lg
-                                    border dark:hover:border-customBorder-dark bg-background hover:bg-muted dark:hover:bg-sidebar shadow-sm"
-                            >
-                                <SortAsc className="h-4 w-4 text-foreground" />
-                            </DropdownMenuTrigger>
+                                {isBlocked ? (
+                                    <UserRoundMinus className="h-4 w-4 text-foreground" />
+                                ) : (
+                                    <UserRoundCheck className="h-4 w-4 text-foreground" />
+                                )}
+                            </div>
+                        }
+                    />
 
-                            <DropdownMenuContent
-                                align="end"
-                                onClick={(event) => event.stopPropagation()}
-                            >
-                                <DropdownMenuLabel>Sort</DropdownMenuLabel>
+                    {/* Filter */}
+                    <Filter
+                        title="Category"
+                        filter={category}
+                        setFilter={setCategory}
+                        fitlerData={[
+                            "Foundation",
+                            "Ongoing",
+                            "Held",
+                            "Critical",
+                            "Terminated",
+                            "Placement",
+                            "Placed",
+                        ]}
+                    />
 
-                                {/* Checkbox for sorting order */}
-                                <div className="flex items-center gap-2 py-1.5 pl-2 cursor-pointer">
-                                    <Checkbox
-                                        checked={sort.order === 1}
-                                        onCheckedChange={() => {
-                                            setSort((prev) => ({
-                                                ...prev,
-                                                order: prev.order === 1 ? -1 : 1,
-                                            }));
-                                        }}
-                                        id="ascending"
-                                        className="border-border"
-                                    />
-                                    <label
-                                        htmlFor="ascending"
-                                        className="text-sm font-medium cursor-pointer"
-                                    >
-                                        Ascending
-                                    </label>
-                                </div>
-
-                                <DropdownMenuSeparator />
-
-                                {/* Sorting options */}
-                                <DropdownMenuItem
-                                    textValue="name"
-                                    onClick={() =>
-                                        setSort((prev) =>
-                                            prev.key !== "name"
-                                                ? { key: "name", order: prev.order }
-                                                : prev
-                                        )
-                                    }
-                                    onSelect={(e) => e.preventDefault()}
-                                    className="flex justify-between"
-                                >
-                                    <span>Name</span>
-                                    <span>
-                                        {sort.key === "name" && (
-                                            <Check className="w-4 h-4 text-foreground" />
-                                        )}
-                                    </span>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    textValue="createdAt"
-                                    onClick={() =>
-                                        setSort((prev) =>
-                                            prev.key !== "createdAt"
-                                                ? { key: "createdAt", order: prev.order }
-                                                : prev
-                                        )
-                                    }
-                                    onSelect={(e) => e.preventDefault()}
-                                    className="flex justify-between"
-                                >
-                                    <span>Date</span>
-                                    <span>
-                                        {sort.key === "createdAt" && (
-                                            <Check className="w-4 h-4 text-foreground" />
-                                        )}
-                                    </span>
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    }
-                />
+                    {/* Sort */}
+                    <Sort
+                        sort={sort}
+                        setSort={setSort}
+                        sortData={["name", "createdAt"]}
+                    />
+                </div>
 
                 {/* Users lists in small screen */}
                 {isSmall && (
@@ -427,7 +359,7 @@ function Students({ setDrawerOpen }: PropsType) {
                         {students.length === 0 && (
                             <NotFoundOrbit
                                 MainIcon={User2}
-                                SubIcon={fetching ? Search : Plus}
+                                SubIcon={fetching ? SearchIcon : Plus}
                                 message={
                                     fetching
                                         ? "Please wait a moment"

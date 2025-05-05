@@ -154,22 +154,24 @@ function UserDetails({
                                         : null,
 
                                 // Date Joined for everyone
-                                {
-                                    icon: LucideCalendar1,
-                                    label: "Date Joined",
-                                    value:
-                                        new Date(selectedUser.createdAt).toLocaleDateString(
-                                            "en-GB",
-                                            {
-                                                day: "numeric",
-                                                month: "short",
-                                                year: "numeric",
-                                            }
-                                        ) || "Unknown",
-                                    iconDivClassName:
-                                        "bg-orange-400/20 group-hover:bg-orange-400/30",
-                                    iconClassName: "text-orange-600",
-                                },
+                                selectedUser.role !== "student"
+                                    ? {
+                                        icon: LucideCalendar1,
+                                        label: "Date Joined",
+                                        value:
+                                            new Date(selectedUser.createdAt).toLocaleDateString(
+                                                "en-GB",
+                                                {
+                                                    day: "numeric",
+                                                    month: "short",
+                                                    year: "numeric",
+                                                }
+                                            ) || "Unknown",
+                                        iconDivClassName:
+                                            "bg-orange-400/20 group-hover:bg-orange-400/30",
+                                        iconClassName: "text-orange-600",
+                                    }
+                                    : null,
 
                                 // Domain for instructor or student
                                 selectedUser.role === "instructor" ||

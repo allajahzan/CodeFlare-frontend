@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import IconButton from "@/components/ui/icon-button";
 import { Check, SortAsc } from "lucide-react";
+import ToolTip from "../tooltip/tooltip";
 
 // Interface for Props
 interface PropsType {
@@ -28,8 +29,8 @@ interface PropsType {
 function Sort({ sort, setSort, sortData }: PropsType) {
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger title="Sort">
-                <IconButton Icon={SortAsc} />
+            <DropdownMenuTrigger>
+                <ToolTip text="Sort" children={<IconButton Icon={SortAsc} />} />
             </DropdownMenuTrigger>
 
             <DropdownMenuContent

@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import IconButton from "@/components/ui/icon-button";
 import { Check, FilterIcon, LucideProps } from "lucide-react";
+import ToolTip from "../tooltip/tooltip";
 
 // Inteface for Props
 interface PropsType {
@@ -24,8 +25,11 @@ interface PropsType {
 function Filter({ title, fitlerData, filter, setFilter, Icon }: PropsType) {
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger title="Filter">
-                <IconButton Icon={Icon || FilterIcon} />
+            <DropdownMenuTrigger>
+                <ToolTip
+                    text="Filter"
+                    children={<IconButton Icon={Icon || FilterIcon} />}
+                />
             </DropdownMenuTrigger>
 
             <DropdownMenuContent
@@ -45,7 +49,9 @@ function Filter({ title, fitlerData, filter, setFilter, Icon }: PropsType) {
                             onSelect={(e) => e.preventDefault()}
                             className="flex justify-between"
                         >
-                            <span>{data === "" ? "All" : data[0].toUpperCase() + data.slice(1)}</span>
+                            <span>
+                                {data === "" ? "All" : data[0].toUpperCase() + data.slice(1)}
+                            </span>
                             {data === filter && <Check className="w-4 h-4 text-foreground" />}
                         </DropdownMenuItem>
                     );
