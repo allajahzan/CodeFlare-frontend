@@ -60,9 +60,9 @@ function Students({ setDrawerOpen }: PropsType) {
     // Students related states
     const [newStudent, setNewStudent] = useState<IStudent | null>(null);
     const [students, setStudents] = useState<IStudent[] | []>([]);
-    const [selectedStudent, setSelectedStudent] = useState<IStudent | IUser | null>(
-        null
-    );
+    const [selectedStudent, setSelectedStudent] = useState<
+        IStudent | IUser | null
+    >(null);
 
     const [fetching, setFetching] = useState<boolean>(false);
 
@@ -159,7 +159,7 @@ function Students({ setDrawerOpen }: PropsType) {
     useEffect(() => {
         if (newStudent) {
             setStudents((prevStudents: IStudent[]) => {
-                return [...prevStudents, newStudent];
+                return [newStudent, ...prevStudents];
             });
             setNewStudent(null);
         }
@@ -355,7 +355,7 @@ function Students({ setDrawerOpen }: PropsType) {
                             students.map((student, index) => {
                                 return (
                                     <UserListCard
-                                        key={index}
+                                        key={student._id}
                                         index={index}
                                         action={() => handleSelect(index)}
                                         user={student}

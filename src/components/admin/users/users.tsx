@@ -149,7 +149,7 @@ function Users({ setDrawerOpen }: PropsType) {
     useEffect(() => {
         if (newUser) {
             setUsers((prevUsers: IUser[]) => {
-                return [...prevUsers, newUser];
+                return [newUser, ...prevUsers];
             });
             setNewUser(null);
         }

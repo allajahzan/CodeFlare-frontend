@@ -1,7 +1,6 @@
 import { emailRegex, nameRegex } from "@/constants/regex";
 import z from "zod";
 
-// User form validation schema
 export const formSchema = z
     .object({
         name: z
@@ -15,15 +14,26 @@ export const formSchema = z
             .email("Invalid email address !")
             .regex(emailRegex.validEmail, "Enter a valid email !")
             .nonempty("Email is required !"),
-        confirmEmail: z.string().nonempty("confirm Email is required !"),
+        confirmEmail: z.string().nonempty("Confirm Email is required !"),
         role: z.string().nonempty("Role is required !"),
-        batches: z.string().nonempty("Batches are required !"),
+        batches: z.string().optional(), 
         message: z.string().optional(),
     })
-    .refine((formData) => formData.email === formData.confirmEmail, {
+    .refine((data) => data.email === data.confirmEmail, {
         path: ["confirmEmail"],
         message: "Email address do not match !",
+    })
+    .superRefine((data, ctx) => {
+        if (
+            data.role === "coordinator" &&
+            (!data.batches || data.batches.trim() === "")
+        ) {
+            ctx.addIssue({
+                path: ["batches"],
+                code: z.ZodIssueCode.custom,
+                message: "Batches are required for coordinators!",
+            });
+        }
     });
 
-// Form type based on schema
 export type FormType = z.infer<typeof formSchema>;

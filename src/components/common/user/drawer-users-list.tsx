@@ -83,7 +83,7 @@ function DrawerUsersList({
                     setUsers((prevUsers: any) => {
                         return prevUsers.map((u: any) => {
                             if (u._id === user._id) {
-                                return { ...u, isblock: !u.isblock };
+                                return { ...u, isBlock: !u.isBlock };
                             }
                             return u;
                         });
@@ -92,7 +92,7 @@ function DrawerUsersList({
                     // Update user in selected user, if selected
                     setSelectedUser((prevUser: IUser | IStudent | null) => {
                         if (prevUser?._id === user._id) {
-                            return { ...prevUser, isblock: !prevUser.isblock };
+                            return { ...prevUser, isBlock: !prevUser.isBlock };
                         }
                         return prevUser;
                     });
@@ -103,7 +103,7 @@ function DrawerUsersList({
                     });
 
                     toast({
-                        title: user.isblock
+                        title: user.isBlock
                             ? "You have unblocked this user"
                             : "You have blocked this user",
                     });
@@ -196,15 +196,6 @@ function DrawerUsersList({
                                                     <Send />
                                                     Send Invitation
                                                 </DropdownMenuItem>
-                                                {/* <DropdownMenuItem
-                                                    onClick={() => {
-                                                        setDrawerOpen(true);
-                                                        setSelectedUser(user);
-                                                    }}
-                                                >
-                                                    <EyeIcon />
-                                                    View Profile
-                                                </DropdownMenuItem> */}
                                                 <DropdownMenuSeparator />
                                                 <DropdownMenuItem
                                                     disabled={changingStatus}
@@ -212,7 +203,7 @@ function DrawerUsersList({
                                                     onSelect={(e) => e.preventDefault()}
                                                     className="text-center"
                                                 >
-                                                    {user.isblock ? (
+                                                    {user.isBlock ? (
                                                         changingStatus ? (
                                                             <Loader2 className="w-4 h-5 text-foreground animate-spin" />
                                                         ) : (
@@ -223,7 +214,7 @@ function DrawerUsersList({
                                                     ) : (
                                                         <UserRoundMinus />
                                                     )}
-                                                    {user.isblock
+                                                    {user.isBlock
                                                         ? changingStatus
                                                             ? "Unblocking..."
                                                             : "Unblock"

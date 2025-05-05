@@ -1,9 +1,11 @@
 import { AnimatePresence, motion } from "framer-motion";
 import {
-    CalendarDaysIcon,
+    CalendarRangeIcon,
     Clock,
     Edit2,
+    GraduationCap,
     Home,
+    LucideCalendar1,
     PersonStanding,
     User2,
     UserRoundCheck,
@@ -112,50 +114,79 @@ function UserDetails({
                         {/* More details - cards */}
                         <div className="grid grid-cols-1 lg:grid-cols-2 col-auto gap-[13px]">
                             {[
-                                // Active or blocked status
+                                // Active or Blocked status
                                 {
-                                    icon: selectedUser.isblock ? UserRoundMinus : UserRoundCheck,
-                                    label: "Role Status",
-                                    value: selectedUser.isblock ? "Blocked" : "Active",
-                                    iconDivClassName: selectedUser.isblock
+                                    icon: selectedUser.isBlock ? UserRoundMinus : UserRoundCheck,
+                                    label: "Status",
+                                    value: selectedUser.isBlock ? "Blocked" : "Active",
+                                    iconDivClassName: selectedUser.isBlock
                                         ? "bg-red-400/20 group-hover:bg-red-400/30"
                                         : "bg-blue-400/20 group-hover:bg-blue-400/30",
-                                    iconClassName: selectedUser.isblock
+                                    iconClassName: selectedUser.isBlock
                                         ? "text-red-600"
                                         : "text-blue-600",
                                 },
 
-                                // Last active or week depends on role
-                                {
-                                    icon:
-                                        selectedUser.role !== "student" ? Clock : CalendarDaysIcon,
-                                    label:
-                                        selectedUser.role !== "student" ? "Last Active" : "Week",
-                                    value:
-                                        selectedUser.role !== "student"
-                                            ? selectedUser.lastActive || "Not recently"
-                                            : (selectedUser as IStudent).week?.name ||
-                                            (selectedUser as IStudent).category,
-                                    iconDivClassName:
-                                        "bg-green-400/20 group-hover:bg-green-400/30",
-                                    iconClassName: "text-green-600",
-                                },
+                                // Last Active for coordinator/instructor OR Week and category for student
+                                selectedUser.role === "coordinator" ||
+                                    selectedUser.role === "instructor"
+                                    ? {
+                                        icon: Clock,
+                                        label: "Last Active",
+                                        value: selectedUser.lastActive || "Not recently",
+                                        iconDivClassName:
+                                            "bg-green-400/20 group-hover:bg-green-400/30",
+                                        iconClassName: "text-green-600",
+                                    }
+                                    : selectedUser.role === "student"
+                                        ? {
+                                            icon: CalendarRangeIcon,
+                                            label: "Week & Category",
+                                            value:
+                                                (selectedUser as IStudent).week?.name ||
+                                                "Not assigned" +
+                                                " - " +
+                                                (selectedUser as IStudent).category,
+                                            iconDivClassName:
+                                                "bg-green-400/20 group-hover:bg-green-400/30",
+                                            iconClassName: "text-green-600",
+                                        }
+                                        : null,
 
-                                // Date joined
+                                // Date Joined for everyone
                                 {
-                                    icon: CalendarDaysIcon,
+                                    icon: LucideCalendar1,
                                     label: "Date Joined",
                                     value:
                                         new Date(selectedUser.createdAt).toLocaleDateString(
                                             "en-GB",
-                                            { day: "numeric", month: "short", year: "numeric" }
-                                        ) || "20th Jan 2025",
+                                            {
+                                                day: "numeric",
+                                                month: "short",
+                                                year: "numeric",
+                                            }
+                                        ) || "Unknown",
                                     iconDivClassName:
                                         "bg-orange-400/20 group-hover:bg-orange-400/30",
                                     iconClassName: "text-orange-600",
                                 },
 
-                                // Batch - only for student
+                                // Domain for instructor or student
+                                selectedUser.role === "instructor" ||
+                                    selectedUser.role === "student"
+                                    ? {
+                                        icon: GraduationCap,
+                                        label: "Domain",
+                                        value:
+                                            (selectedUser as IStudent).domain?.name ||
+                                            "Not selected",
+                                        iconDivClassName:
+                                            "bg-pink-400/20 group-hover:bg-pink-400/30",
+                                        iconClassName: "text-pink-600",
+                                    }
+                                    : null,
+
+                                // Batch only for student
                                 selectedUser.role === "student"
                                     ? {
                                         icon: Home,
@@ -192,7 +223,7 @@ function UserDetails({
                                                     <div>
                                                         <p className="text-sm text-muted-foreground font-medium">
                                                             {item.label}{" "}
-                                                            {item.label === "Role Status" && (
+                                                            {item.label === "Status" && (
                                                                 <span className="inline-block lg:hidden text-foreground">
                                                                     (
                                                                     {selectedUser.role[0].toUpperCase() +
@@ -212,7 +243,7 @@ function UserDetails({
                                 ))}
 
                             {/* Assigned batches lists for instructors and coordinators*/}
-                            {selectedUser.role !== "student" && (
+                            {(selectedUser as IUser).role === "coordinator" && (
                                 <DropdownMenu>
                                     <DropdownMenuTrigger className="group flex items-center gap-3 text-start rounded-lg cursor-pointer bg-background dark:bg-sidebar p-3 border dark:border-transparent shadow-sm">
                                         <div className="p-2 rounded-lg bg-purple-400/20 group-hover:bg-purple-400/30">

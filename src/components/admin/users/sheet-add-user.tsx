@@ -93,7 +93,9 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                     name: formData.name,
                     email: formData.email,
                     role: formData.role,
-                    batches: selectedBatches.map((b) => b._id),
+                    ...(formData.role === "coordinator" && {
+                        batches: selectedBatches.map((b) => b._id),
+                    }),
                 },
                 role
             );
@@ -301,7 +303,8 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                                 required
                                 onValueChange={(value: "coordinator" | "instructor") => {
                                     setValue("role", value, { shouldValidate: true });
-                                    setSelectedRole(value);
+                                    setSelectedRole(value); // Selected role
+                                    setSelectedBatches([]); // Clear selected batches
                                 }}
                             >
                                 <SelectTrigger

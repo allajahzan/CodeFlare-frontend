@@ -95,7 +95,9 @@ function EditUserSheet({
                     name: formData.name,
                     email: formData.email,
                     role: formData.role,
-                    batches: selectedBatches.map((b) => b._id),
+                    ...(formData.role === "coordinator" && {
+                        batches: selectedBatches.map((b) => b._id),
+                    }),
                 },
                 role
             );
@@ -170,7 +172,9 @@ function EditUserSheet({
                 name: selectedUser.name || "",
                 email: selectedUser.email || "",
                 role: selectedUser.role || "",
-                batches: selectedUser.batches.map((b) => b.name).join(", ") || "",
+                ...(selectedUser.role === "coordinator" && {
+                    batches: selectedUser.batches?.map((b) => b.name).join(", ") || "",
+                }),
             });
             // Set selected batches
             setSelectedBatches(selectedUser.batches);
@@ -342,42 +346,44 @@ function EditUserSheet({
                     </motion.div>
 
                     {/* Input for batches */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.7 }}
-                        className="space-y-2"
-                    >
-                        <Label
-                            htmlFor="batches"
-                            className="text-sm text-foreground font-medium"
-                            onClick={(event) => event.stopPropagation()}
+                    {selectedUser.role === "coordinator" && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.7 }}
+                            className="space-y-2"
                         >
-                            Batches
-                        </Label>
-                        <MultiSelector
-                            triggerMultiSelector={
-                                <TriggerMultiSelector
-                                    fieldName="batches"
-                                    setDropDownOpen={setDropDownOpen}
-                                    dropDownOpen={dropDownOpen}
-                                    Icon={UsersRound}
-                                    register={register}
-                                />
-                            }
-                            multiSelectorContent={
-                                <MultiSelectorContent
-                                    dropDownOpen={dropDownOpen}
-                                    handleSelect={handleSelectBatches}
-                                    values={batches}
-                                    selectedBatches={selectedBatches}
-                                />
-                            }
-                        />
+                            <Label
+                                htmlFor="batches"
+                                className="text-sm text-foreground font-medium"
+                                onClick={(event) => event.stopPropagation()}
+                            >
+                                Batches
+                            </Label>
+                            <MultiSelector
+                                triggerMultiSelector={
+                                    <TriggerMultiSelector
+                                        fieldName="batches"
+                                        setDropDownOpen={setDropDownOpen}
+                                        dropDownOpen={dropDownOpen}
+                                        Icon={UsersRound}
+                                        register={register}
+                                    />
+                                }
+                                multiSelectorContent={
+                                    <MultiSelectorContent
+                                        dropDownOpen={dropDownOpen}
+                                        handleSelect={handleSelectBatches}
+                                        values={batches}
+                                        selectedBatches={selectedBatches}
+                                    />
+                                }
+                            />
 
-                        {/* Batches error message */}
-                        <ValidationError message={errors.batches?.message as string} />
-                    </motion.div>
+                            {/* Batches error message */}
+                            <ValidationError message={errors.batches?.message as string} />
+                        </motion.div>
+                    )}
 
                     {/* Submit button */}
                     <motion.div
