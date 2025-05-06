@@ -1,5 +1,4 @@
-import { IBatch } from "@/types/IBatch";
-import { IDomain } from "./IDomain";
+import { IBatch, IDomain } from "@codeflare/common";
 
 // Interface for User
 export interface IUser {

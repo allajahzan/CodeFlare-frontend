@@ -25,9 +25,9 @@ import EditStudentSheet from "@/components/coordinator/students/sheet-edit-stude
 import { useContext } from "react";
 import { IUserContext, UserContext } from "@/context/user-context";
 import UserNameCard from "./user-name-card";
-import { IBatch } from "@/types/IBatch";
 import { IStudent } from "@/types/IStudent";
 import { IUser } from "@/types/IUser";
+import { IBatch } from "@codeflare/common";
 
 // Interface for Props
 interface PropsType {

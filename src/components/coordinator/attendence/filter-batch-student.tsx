@@ -9,7 +9,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { IStudent } from "@/types/IStudent";
-import { IBatch } from "@/types/IBatch";
+import { IBatch } from "@codeflare/common";
 
 // Interface for Props
 interface propsType {

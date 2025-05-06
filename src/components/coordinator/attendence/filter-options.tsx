@@ -7,8 +7,8 @@ import {
 } from "@/components/ui/select";
 import FilterBatchStudent from "./filter-batch-student";
 import { IStudent } from "@/types/IStudent";
-import { IBatch } from "@/types/IBatch";
 import Filter from "@/components/common/data-toolbar/filter";
+import { IBatch } from "@codeflare/common";
 
 // Interface for Props
 interface Propstype {

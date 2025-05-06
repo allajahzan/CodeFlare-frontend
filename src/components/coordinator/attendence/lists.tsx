@@ -21,7 +21,6 @@ import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import { IUserContext, UserContext } from "@/context/user-context";
 import { IStudent } from "@/types/IStudent";
-import { IBatch } from "@/types/IBatch";
 import { IAttendence } from "@/types/IAttendence";
 import NotFoundOrbit from "@/components/common/fallback/not-found-orbit";
 import NotSelected from "@/components/common/fallback/not-selected";
@@ -41,6 +40,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import DatePicker from "@/components/instructor/reviews/date-picker";
+import { IBatch } from "@codeflare/common";
 
 // Interface for Props
 interface Propstype {

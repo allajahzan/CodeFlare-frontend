@@ -41,7 +41,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { convertTo12HourFormat } from "@/utils/time-converter";
 import { IStudent } from "@/types/IStudent";
 import { IReview } from "@/types/IReview";
-import { IBatch } from "@/types/IBatch";
+import { IBatch } from "@codeflare/common";
 
 // Interface for Props
 interface PropsType {

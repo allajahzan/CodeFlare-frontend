@@ -1,7 +1,4 @@
-import { IBatch } from "@/types/IBatch";
-import { IStudentCategory } from "@codeflare/common";
-import { IDomain } from "./IDomain";
-import { IWeek } from "./IWeek";
+import { IBatch, IDomain, IStudentCategory, IWeek } from "@codeflare/common";
 
 // Interface for Student
 export interface IStudent {

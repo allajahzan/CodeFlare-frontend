@@ -32,7 +32,7 @@ import { fetchData } from "@/service/api-service";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useMediaQuery } from "usehooks-ts";
 import DrawerBatchLists from "./drawer-batch-lists";
-import { IBatch } from "@/types/IBatch";
+import { IBatch } from "@codeflare/common";
 
 // Interface for Props
 interface PropsType {

@@ -9,21 +9,21 @@ import {
 } from "lucide-react";
 import profile from "@/assets/images/no-profile.svg";
 import { useState } from "react";
-import { IAttendence, IUser } from "@/types/IAttendence";
+import { IAttendence } from "@/types/IAttendence";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { IBatch } from "@/types/IBatch";
 import NotFoundOrbit from "@/components/common/fallback/not-found-orbit";
 import ViewAllReasonsModal from "./modal-reasons-list";
 import { Button } from "@/components/ui/button";
 import WarningsListsModal from "./modal-warnings-list";
 import SendWarningModal from "./modal-send-warning";
 import { IWarning } from "@/types/IWarning";
+import { IBatch, IStudent } from "@codeflare/common";
 
 // Interface for flagged student
 export interface IDefaulters {
     userId: string;
-    user: IUser;
+    user: IStudent;
     batch: IBatch;
     status: string;
     count: number;

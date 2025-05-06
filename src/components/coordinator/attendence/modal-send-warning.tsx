@@ -13,7 +13,7 @@ import { IUserContext, UserContext } from "@/context/user-context";
 import { stateType } from "@/redux/store";
 import { postData } from "@/service/api-service";
 import { handleCustomError } from "@/utils/error";
-import { IUser } from "@codeflare/common";
+import { IStudent } from "@codeflare/common";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { FileSpreadsheetIcon, Loader2 } from "lucide-react";
 import { ReactNode, useContext, useEffect, useState } from "react";
@@ -23,7 +23,7 @@ import { IDefaulters } from "./monthly-defaulters";
 // Interface for Props
 interface Propstype {
     children: ReactNode;
-    student: IUser;
+    student: IStudent;
     setDefaulters: React.Dispatch<React.SetStateAction<[] | IDefaulters[]>>;
 }
 

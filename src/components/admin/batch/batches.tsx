@@ -2,7 +2,7 @@ import BatchesListSide from "./batches-list-side";
 import BatchesDetailsSide from "./batches-details-side";
 import { useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
-import { IBatch } from "@/types/IBatch";
+import { IBatch } from "@codeflare/common";
 
 // Interface for Props
 interface PropsType {

@@ -17,7 +17,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
-import { IUser } from "@codeflare/common";
+import { IStudent } from "@codeflare/common";
 import { IUserContext, UserContext } from "@/context/user-context";
 import profile from "@/assets/images/no-profile.svg";
 import { cn } from "@/lib/utils";
@@ -35,7 +35,7 @@ const WarningCard = ({
     student,
 }: {
     warning: IWarning;
-    student: IUser;
+    student: IStudent;
 }) => {
     // User context
     const { user } = useContext(UserContext) as IUserContext;
@@ -95,7 +95,7 @@ const WarningCard = ({
 // Interface for Props
 interface Propstype {
     children: ReactNode;
-    student: IUser;
+    student: IStudent;
     warnings: IWarning[];
 }
 

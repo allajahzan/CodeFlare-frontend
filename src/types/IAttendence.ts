@@ -1,4 +1,4 @@
-import { IBatch } from "./IBatch";
+import { IBatch } from "@codeflare/common";
 import { IStudent } from "./IStudent";
 
 // Interface for selfie

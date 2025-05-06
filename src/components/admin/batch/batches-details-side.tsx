@@ -33,7 +33,7 @@ import ApiEndpoints from "@/constants/api-endpoints";
 import { fetchData } from "@/service/api-service";
 import { IStudent } from "@/types/IStudent";
 import { IUser } from "@/types/IUser";
-import { IBatch } from "@/types/IBatch";
+import { IBatch } from "@codeflare/common";
 
 // Interface for Props
 interface Propstype {

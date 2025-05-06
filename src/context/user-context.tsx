@@ -4,8 +4,8 @@ import { sideBarVisibilityAction, stateType } from "@/redux/store";
 import { fetchData } from "@/service/api-service";
 import axiosInstance from "@/service/axios-instance";
 import { registerUser } from "@/socket/communication/chat";
-import { IBatch } from "@/types/IBatch";
 import { handleCustomError } from "@/utils/error";
+import { IBatch } from "@codeflare/common";
 import { createContext, ReactNode, useState, useLayoutEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
