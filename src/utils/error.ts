@@ -81,11 +81,11 @@ export const handleCustomError = (err: any) => {
         });
 
     // 0: Network Error
-    else if (err.status === 0) toast({ title: err?.message });
+    else if (err.status === 0) toast({ title: "asdf"  });
 
     // -1: Unexpected Error
     else
         toast({
-            title: data?.message || err?.message,
+            title: "Network error. Please try again later!",
         });
 };

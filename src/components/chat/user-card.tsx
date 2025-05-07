@@ -101,7 +101,7 @@ function UserCard({
         <div
             onClick={() => handleSelectUserChat(userData)}
             className={cn(
-                "px-5 dark:bg-transparent hover:bg-muted dark:hover:bg-sidebar",
+                "px-5 dark:bg-transparent hover:bg-muted dark:hover:bg-sidebar cursor-pointer",
                 className
             )}
         >

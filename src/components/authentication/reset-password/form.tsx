@@ -72,19 +72,13 @@ function Form() {
 
             // Success response
             if (resp && resp.status === 200) {
-                setTimeout(() => {
-                    setSubmiting(false);
-
-                    toast({ title: "Your password has been successfully reset." });
-
-                    reset();
-                }, 1000);
+                setSubmiting(false);
+                toast({ title: "Your password has been successfully reset." });
+                reset();
             }
         } catch (err: unknown) {
-            setTimeout(() => {
-                setSubmiting(false);
-                handleCustomError(err);
-            }, 1000);
+            setSubmiting(false);
+            handleCustomError(err);
         }
     };
 

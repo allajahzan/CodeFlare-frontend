@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
-import { ArrowLeft, Loader2,  Mail } from "lucide-react";
+import { ArrowLeft, Loader2, Mail } from "lucide-react";
 import { useContext, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import bgImage from "@/assets/images/verifyEmail.jpg";
@@ -54,19 +54,15 @@ function Form() {
 
             // Success response
             if (resp && resp.status === 200) {
-                setTimeout(() => {
-                    setSubmiting(false);
+                setSubmiting(false);
 
-                    toast({ title: "Password reset link has been sent to your email." });
+                toast({ title: "Password reset link has been sent to your email." });
 
-                    reset();
-                }, 1000);
+                reset();
             }
         } catch (err: unknown) {
-            setTimeout(() => {
-                setSubmiting(false);
-                handleCustomError(err);
-            }, 1000);
+            setSubmiting(false);
+            handleCustomError(err);
         }
     };
 
@@ -113,7 +109,9 @@ function Form() {
                             transition={{ delay: 0.3 }}
                             className="text-center space-y-5"
                         >
-                            <h1 className="text-2xl text-foreground font-semibold">Forgot Password?</h1>
+                            <h1 className="text-2xl text-foreground font-semibold">
+                                Forgot Password?
+                            </h1>
                             <p className="text-foreground font-medium">
                                 We will send a reset link to your email.
                             </p>

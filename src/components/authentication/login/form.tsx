@@ -72,26 +72,22 @@ function Form() {
 
             // Success response
             if (resp && resp.status === 200) {
-                setTimeout(() => {
-                    setSubmiting(false);
+                setSubmiting(false);
 
-                    // Set isAuth
-                    localStorage.setItem("isAuth", "1");
-                    setIsAuth(true);
+                // Set isAuth
+                localStorage.setItem("isAuth", "1");
+                setIsAuth(true);
 
-                    // Store accesstoken in localstorage
-                    localStorage.setItem("accessToken", data.accessToken);
+                // Store accesstoken in localstorage
+                localStorage.setItem("accessToken", data.accessToken);
 
-                    toast({ title: "Successfully Logged In." });
-                }, 1000);
+                toast({ title: "Successfully Logged In." });
                 // set role in redux
                 dispatch(roleAction(data.role));
             }
         } catch (err: unknown) {
-            setTimeout(() => {
-                setSubmiting(false);
-                handleCustomError(err);
-            }, 1000);
+            setSubmiting(false);
+            handleCustomError(err);
         }
     };
 
