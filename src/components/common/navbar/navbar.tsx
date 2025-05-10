@@ -66,13 +66,13 @@ function Navbar() {
 
     // Set page heading
     useLayoutEffect(() => {
-        pathname.split("/")[2] === "dashboard"
+        pathname.split("/")[(pathname.split("/").length - 1)] === "dashboard"
             ? setPath(`Hi, ${user?.name as string}!`)
             : pathname.split("/")[2] === "meet"
                 ? setPath("Meet")
                 : setPath(
-                    pathname.split("/")[2][0].toUpperCase() +
-                    pathname.split("/")[2].slice(1)
+                    pathname.split("/")[(pathname.split("/").length - 1)][0].toUpperCase() +
+                    pathname.split("/")[(pathname.split("/").length - 1)].slice(1)
                 );
     }, [location]);
 

@@ -6,12 +6,14 @@ import {
     stateType,
 } from "@/redux/store";
 import {
-    CalendarDaysIcon,
+    // CalendarDaysIcon,
     // CreditCard,
     Globe,
+    // GraduationCap,
+    // Home,
+    LayersIcon,
     LayoutDashboard,
     MessageCircleMore,
-    School,
     UsersRound,
     Video,
 } from "lucide-react";
@@ -55,8 +57,10 @@ function AdminLayout({ isDrawerOpen }: PropsType) {
         () => [
             { path: AppRoutes.DASHBOARD, icon: LayoutDashboard, label: "Dashboard" },
             { path: AppRoutes.ADMIN_USERS, icon: UsersRound, label: "Users" },
-            { path: AppRoutes.ADMIN_BATCHES, icon: School, label: "Batches" },
-            { path: AppRoutes.ADMIN_WEEKS, icon: CalendarDaysIcon, label: "Weeks" },
+            { path: AppRoutes.ADMIN_CURRICULUM + '/' + AppRoutes.ADMIN_BATCHES, icon: LayersIcon, label: "Curriculum" },
+            // { path: AppRoutes.ADMIN_BATCHES, icon: Home, label: "Batches" },
+            // { path: AppRoutes.ADMIN_WEEKS, icon: CalendarDaysIcon, label: "Weeks" },
+            // { path: AppRoutes.ADMIN_DOMAINS, icon: GraduationCap, label: "Domains" },
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
             { path: AppRoutes.MEET, icon: Video, label: "Meet" },
             // { path: AppRoutes.ADMIN_INVOICES, icon: CreditCard, label: "Invoices" },

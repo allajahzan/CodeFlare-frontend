@@ -87,7 +87,7 @@ function FilterOptions({
                             title="Status"
                             filter={selectedStatus}
                             setFilter={setSelectedStatus}
-                            fitlerData={["All", "Pending", "Present", "Absent", "Late"]}
+                            filterData={["All", "Pending", "Present", "Absent", "Late"]}
                         />
                     )}
 
@@ -101,7 +101,7 @@ function FilterOptions({
                                     React.SetStateAction<string>
                                 >
                             }
-                            fitlerData={["All", "Absent", "Late"]}
+                            filterData={["All", "Absent", "Late"]}
                         />
                     )}
 

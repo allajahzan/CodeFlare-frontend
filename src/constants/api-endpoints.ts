@@ -25,6 +25,10 @@ enum ApiEndpoints {
     ADMIN = "/admin",
     BATCH = "/admin/batch",
     SEARCH_BATCH = "/admin/batch/search",
+    WEEK = "/admin/week",
+    SEARCH_WEEK = "/admin/week/search",
+    DOMAIN = "/admin/domain",
+    SEARCH_DOMAIN = "/admin/domain/search",
 
     // Chat APIs - communication service
     CHAT = "/communication/chat",

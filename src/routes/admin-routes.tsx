@@ -12,7 +12,7 @@ import ResetPassword from "@/pages/authentication/reset-password";
 import AppRoutes from "@/constants/app-routes";
 import Chat from "@/pages/chat/chat";
 import Profile from "@/pages/profile/profile";
-import Batches from "@/pages/admin/batches";
+import CurriculumsPage from "@/pages/admin/curriculums";
 import MeetLanding from "@/components/meet/landing";
 import Meet from "@/components/meet/meet";
 
@@ -39,7 +39,9 @@ function AdminRoutes() {
                 <Route element={<AdminLayout isDrawerOpen={isDrawerOpen} />}>
                     <Route path={AppRoutes.DASHBOARD} element={<Dashboard />} />
                     <Route path={AppRoutes.ADMIN_USERS} element={<Users isDrawerOpen={isDrawerOpen} setDrawerOpen={setDrawerOpen} />} />
-                    <Route path={AppRoutes.ADMIN_BATCHES} element={<Batches setDrawerOpen={setDrawerOpen} />} />
+                    <Route path={AppRoutes.ADMIN_CURRICULUM + '/' + AppRoutes.ADMIN_BATCHES} element={<CurriculumsPage setDrawerOpen={setDrawerOpen} />} />
+                    <Route path={AppRoutes.ADMIN_CURRICULUM + '/' + AppRoutes.ADMIN_WEEKS} element={<CurriculumsPage setDrawerOpen={setDrawerOpen} />} />
+                    <Route path={AppRoutes.ADMIN_CURRICULUM + '/' + AppRoutes.ADMIN_DOMAINS} element={<CurriculumsPage setDrawerOpen={setDrawerOpen} />} />
                     <Route path={AppRoutes.PROFILE} element={<Profile />} />
                 </Route>
             </Route>

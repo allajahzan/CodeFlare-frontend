@@ -5,46 +5,65 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import ValidationError from "@/components/ui/validation-error";
 import ApiEndpoints from "@/constants/api-endpoints";
-import { cn } from "@/lib/utils";
 import { stateType } from "@/redux/store";
-import { postData } from "@/service/api-service";
+import { updateData } from "@/service/api-service";
 import { handleCustomError } from "@/utils/error";
-import { formSchema, FormType } from "@/validations/admin/batch";
+import { formSchemaBatch, FormTypeBatch } from "@/validations/admin/batch";
+import { formSchemaWeek, FormTypeWeek } from "@/validations/admin/week";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, UsersRound, Loader2, ScanFace } from "lucide-react";
+import { UsersRound, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { toast } from "@/hooks/use-toast";
-import { IBatch } from "@codeflare/common";
+import { IBatch, IDomain, IWeek } from "@codeflare/common";
+import { useLocation } from "react-router-dom";
 
 // Interface for Props
-interface Propstype {
-    setNewBatch: React.Dispatch<React.SetStateAction<IBatch | null>>;
+interface PropsType {
+    itemToEdit: IBatch | IWeek | IDomain;
+    open: boolean;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setItems: React.Dispatch<React.SetStateAction<IBatch[] | IWeek[] | IDomain[]>>;
+    setSelectedItem: React.Dispatch<React.SetStateAction<IBatch | IWeek | IDomain | null>>;
 }
 
-// Add batch modal
-function AddBatchModal({ setNewBatch }: Propstype) {
+// Edit curriculum modal
+function EditCurriculumModal({
+    itemToEdit,
+    open,
+    setOpen,
+    setItems,
+    setSelectedItem,
+}: PropsType) {
     // Modal state
-    const [open, setOpen] = useState<boolean>(false);
     const [submiting, setSubmiting] = useState<boolean>(false);
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
 
+    // Pathname
+    const pathname = useLocation().pathname;
+    const path = pathname.split("/")[pathname.split("/").length - 1];
+
     // Form validator
+    const isBatches = path === "batches";
+
+    type FormType = typeof path extends "batches" ? FormTypeBatch : FormTypeWeek;
+
     const {
         register,
         handleSubmit,
         reset,
         formState: { errors },
-    } = useForm<FormType>({ resolver: zodResolver(formSchema) });
+    } = useForm<FormType>({
+        resolver: zodResolver(isBatches ? formSchemaBatch : formSchemaWeek),
+    });
 
     // Onsubmit
     const OnSubmit: SubmitHandler<FormType> = async (formData) => {
@@ -52,21 +71,45 @@ function AddBatchModal({ setNewBatch }: Propstype) {
 
         try {
             // Send request
-            const resp = await postData(ApiEndpoints.BATCH, formData, role);
+            const resp = await updateData(
+                (isBatches ? ApiEndpoints.BATCH : ApiEndpoints.WEEK) +
+                `/${itemToEdit._id}`,
+                formData,
+                role
+            );
 
             // Success response
             if (resp && resp.status === 200) {
-                const data = resp.data.data;
-
-                // Set new batch
-                setNewBatch(() => {
-                    return {
-                        _id: data._id,
-                        name: data.name,
-                    };
+                // Set batches
+                setItems((prevBatches: IBatch[]) => {
+                    return prevBatches.map((batch) => {
+                        if (batch._id === itemToEdit._id) {
+                            return {
+                                ...batch,
+                                name: formData.name,
+                            };
+                        }
+                        return batch;
+                    });
                 });
 
-                toast({ title: "Batch added successfully." });
+                // Update the selected batch if its selected
+                setSelectedItem((batch: IBatch | null) => {
+                    if (batch && batch._id === itemToEdit._id) {
+                        return {
+                            ...batch,
+                            name: formData.name,
+                        };
+                    }
+                    return batch;
+                });
+
+                toast({
+                    title: `${isBatches
+                            ? "Batch name udpated successfully."
+                            : "Week name udpated successfully."
+                        }`,
+                });
 
                 // Clear
                 setSubmiting(false);
@@ -79,31 +122,25 @@ function AddBatchModal({ setNewBatch }: Propstype) {
         }
     };
 
-    // Clear form
     useEffect(() => {
-        !open ? reset() : null;
-    }, [open]);
+        reset({
+            name: itemToEdit?.name || "",
+        });
+    }, [itemToEdit, reset]);
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger>
-                <div
-                    className="p-2 rounded-full bg-foreground dark:bg-muted hover:bg-zinc-800 dark:hover:bg-zinc-700 
-        text-white shadow-md cursor-pointer"
-                >
-                    <Plus className={cn("h-4 w-4 transition-transform duration-0")} />
-                </div>
-            </DialogTrigger>
             <DialogContent className="flex flex-col gap-10">
                 <DialogHeader>
                     <DialogTitle className="text-foreground flex items-center gap-3">
                         <div className="p-2 bg-muted rounded-full">
-                            <ScanFace className="w-4 h-4" />
+                            <UsersRound className="w-4 h-4" />
                         </div>
-                        <span>Add new batch</span>
+                        <span>Update {isBatches ? "batch" : "week"}</span>
                     </DialogTitle>
                     <DialogDescription className="text-muted-foreground font-medium">
-                        Ensure secure check-ins and check-outs with facial recognition.
+                        Update the information below to edit the{" "}
+                        {isBatches ? "batch" : "week"}.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -114,12 +151,12 @@ function AddBatchModal({ setNewBatch }: Propstype) {
                             htmlFor="name"
                             className="text-sm text-foreground font-medium"
                         >
-                            Batch Name
+                            {isBatches ? "Batch" : "Week"} Name
                         </Label>
                         <div className="relative">
                             <Input
                                 id="name"
-                                placeholder="Enter batch's name"
+                                placeholder={`Enter ${isBatches ? "batch" : "week"}'s name`}
                                 required
                                 autoComplete="off"
                                 {...register("name")}
@@ -144,7 +181,7 @@ function AddBatchModal({ setNewBatch }: Propstype) {
                                     Processing...
                                 </div>
                             ) : (
-                                "Add"
+                                "Update"
                             )}
                         </Button>
                     </div>
@@ -154,4 +191,4 @@ function AddBatchModal({ setNewBatch }: Propstype) {
     );
 }
 
-export default AddBatchModal;
+export default EditCurriculumModal;

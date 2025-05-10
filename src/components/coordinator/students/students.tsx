@@ -247,7 +247,7 @@ function Students({ setDrawerOpen }: PropsType) {
                         title="Category"
                         filter={category}
                         setFilter={setCategory}
-                        fitlerData={[
+                        filterData={[
                             "Foundation",
                             "Ongoing",
                             "Held",
