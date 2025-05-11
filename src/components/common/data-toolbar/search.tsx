@@ -4,17 +4,18 @@ import { ChangeEvent } from "react";
 
 // Interface for Props
 interface PropsType {
+    id?: string;
     search: string;
     handleSearch: (event: ChangeEvent<HTMLInputElement>) => Promise<void>;
 }
 
 // Search Component
-function Search({ search, handleSearch }: PropsType) {
+function Search({ id, search, handleSearch }: PropsType) {
     return (
         <div className="relative flex-1">
             <SearchIcon className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
-                id="search"
+                id={id}
                 type="text"
                 placeholder="Search"
                 autoComplete="off"

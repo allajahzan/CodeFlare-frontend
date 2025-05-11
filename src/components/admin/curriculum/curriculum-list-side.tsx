@@ -1,9 +1,10 @@
 import {
     Activity,
     CalendarRange,
-    Edit,
+    Eye,
     GraduationCap,
     Home,
+    ListMinus,
     MoreHorizontal,
     Plus,
     Search,
@@ -18,7 +19,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import NotFoundOrbit from "@/components/common/fallback/not-found-orbit";
-import EditCurriculumModal from "./modal-edit-curriculum";
 import CardHeader from "@/components/common/data-toolbar/header";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -32,6 +32,7 @@ import DrawerBatchLists from "./drawer-curriculum-lists";
 import { IBatch, IDomain, IWeek } from "@codeflare/common";
 import Sort from "@/components/common/data-toolbar/sort";
 import { useLocation, useNavigate } from "react-router-dom";
+import AddDomainModal from "./modal-add-domain";
 
 // Interface for Props
 interface PropsType {
@@ -40,6 +41,10 @@ interface PropsType {
     >;
     selectedItem: IBatch | null;
     setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    items: IBatch[] | IWeek[] | IDomain[] | [];
+    setItems: React.Dispatch<
+        React.SetStateAction<[] | IBatch[] | IWeek[] | IDomain[]>
+    >;
 }
 
 // Batches list side Component
@@ -47,16 +52,14 @@ function CurriculumListSide({
     setSelectedItem,
     selectedItem,
     setDrawerOpen,
+    items,
+    setItems,
 }: PropsType) {
     // Batch / Weeks / Domain related states
-    const [items, setItems] = useState<IBatch[] | IWeek[] | IDomain[] | []>([]);
     const [newItem, setNewItem] = useState<IBatch | IWeek | IDomain | null>(null);
 
     // Edit modal
     const [open, setOpen] = useState<boolean>(false);
-    const [itemToEdit, setItemNameToEdit] = useState<
-        IBatch | IWeek | IDomain | null
-    >(null);
 
     const [fetching, setFetching] = useState<boolean>(true);
 
@@ -159,9 +162,11 @@ function CurriculumListSide({
                         <p
                             key={index}
                             onClick={() => {
-                                handleTabs(text.toLowerCase());
-                                setItems([]);
-                                setSelectedItem(null);
+                                if (!fetching) {
+                                    setItems([]);
+                                    setSelectedItem(null);
+                                    handleTabs(text.toLowerCase());
+                                }
                             }}
                             className={cn(
                                 "w-full p-0.5 py-1 px-3 rounded-md cursor-pointer",
@@ -184,7 +189,13 @@ function CurriculumListSide({
                     <CardHeader
                         heading={`Manage ${path}`}
                         count={items.length}
-                        children={<AddCurriculumModal setNewItem={setNewItem} />}
+                        children={
+                            path !== "domains" ? (
+                                <AddCurriculumModal setNewItem={setNewItem} />
+                            ) : (
+                                <AddDomainModal setNewItem={setNewItem} />
+                            )
+                        }
                     />
                 </div>
 
@@ -245,7 +256,7 @@ function CurriculumListSide({
                                                     align={isSmall ? "end" : "start"}
                                                     onClick={(event) => {
                                                         event.stopPropagation();
-                                                        setOpen(true);
+                                                        // setOpen(true);
                                                     }}
                                                     className={cn(
                                                         "relative",
@@ -255,10 +266,13 @@ function CurriculumListSide({
                                                     <DropdownMenuItem
                                                         onClick={(e) => {
                                                             e.preventDefault();
-                                                            setItemNameToEdit(item);
+                                                            setSelectedItem(item);
                                                         }}
                                                     >
-                                                        <Edit /> Edit
+                                                        <Eye /> View
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem>
+                                                        <ListMinus /> UnList
                                                     </DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
@@ -292,24 +306,15 @@ function CurriculumListSide({
                 {isSmall && (
                     <DrawerBatchLists
                         items={items}
+                        setItems={setItems}
                         selectedItem={selectedItem}
                         setSelectedItem={setSelectedItem}
                         setOpen={setOpen}
-                        setItemNameToEdit={setItemNameToEdit}
                         fetching={fetching}
                         isSmall={isSmall}
                         setDrawerOpen={setDrawerOpen}
                     />
                 )}
-
-                {/* Edit modal */}
-                <EditCurriculumModal
-                    itemToEdit={itemToEdit as IBatch}
-                    open={open}
-                    setOpen={setOpen}
-                    setItems={setItems}
-                    setSelectedItem={setSelectedItem}
-                />
             </div>
         </div>
     );

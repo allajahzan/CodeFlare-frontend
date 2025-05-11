@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@codeflare/common": "^1.0.76",
+    "@codeflare/common": "^1.0.78",
     "@emoji-mart/data": "^1.2.1",
     "@emoji-mart/react": "^1.1.1",
     "@fullcalendar/daygrid": "^6.1.15",

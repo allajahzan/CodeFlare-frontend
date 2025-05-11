@@ -33,14 +33,26 @@ import NotSelected from "@/components/common/fallback/not-selected";
 import { useMediaQuery } from "usehooks-ts";
 import { cn } from "@/lib/utils";
 import { useLocation } from "react-router-dom";
+import EditCurriculumModal from "./modal-edit-curriculum";
+import EditDomainModal from "./modal-edit-domain";
 
 // Interface for Props
 interface Propstype {
     selectedItem: IBatch | IWeek | IDomain | null;
+    setSelectedItem: React.Dispatch<
+        React.SetStateAction<IBatch | IWeek | IDomain | null>
+    >;
+    setItems: React.Dispatch<
+        React.SetStateAction<IBatch[] | IWeek[] | IDomain[]>
+    >;
 }
 
 // Batches details side Component
-function CurriculumDetailsSide({ selectedItem }: Propstype) {
+function CurriculumDetailsSide({
+    selectedItem,
+    setItems,
+    setSelectedItem,
+}: Propstype) {
     // User related states
     const [users, setUsers] = useState<IStudent[] | IUser[] | []>([]);
 
@@ -139,19 +151,37 @@ function CurriculumDetailsSide({ selectedItem }: Propstype) {
                 >
                     <div
                         className={cn(
-                            "flex flex-col gap-3 dark:bg-sidebar-background md:rounded-2xl md:border p-5",
+                            "flex flex-col gap-3 dark:bg-sidebar-background md:rounded-2xl md:border p-5 shadow-sm",
                             isSmall && "border-none dark:bg-transparent"
                         )}
                     >
                         {/* Heading */}
                         <div className="flex flex-col gap-2">
-                            <div className="flex items-center gap-3">
-                                <div className="text-lg font-semibold text-foreground">
-                                    {selectedItem.name}
+                            <div className="flex items-center justify-between">
+                                {/* Name and status */}
+                                <div className="flex items-center gap-3">
+                                    <div className="text-lg font-semibold text-foreground">
+                                        {selectedItem.name}
+                                    </div>
+                                    <Badge className="relative text-xs text-green-600 font-semibold bg-green-600/20 hover:bg-green-600/20 duration-0 rounded-full overflow-hidden">
+                                        Active
+                                    </Badge>
                                 </div>
-                                <Badge className="relative text-xs text-green-600 font-semibold bg-green-600/20 hover:bg-green-600/20 duration-0 rounded-full overflow-hidden">
-                                    Active
-                                </Badge>
+
+                                {/* Edit button */}
+                                {path !== "domains" ? (
+                                    <EditCurriculumModal
+                                        itemToEdit={selectedItem}
+                                        setItems={setItems}
+                                        setSelectedItem={setSelectedItem}
+                                    />
+                                ) : (
+                                    <EditDomainModal
+                                        itemToEdit={selectedItem}
+                                        setItems={setItems}
+                                        setSelectedItem={setSelectedItem}
+                                    />
+                                )}
                             </div>
                             <p className="text-muted-foreground font-medium text-sm">
                                 List of{" "}
@@ -160,7 +190,13 @@ function CurriculumDetailsSide({ selectedItem }: Propstype) {
                                     : path === "weeks"
                                         ? ""
                                         : "instructors and"}{" "}
-                                students in this batch. View and manage details for each.
+                                students in this{" "}
+                                {path === "batches"
+                                    ? "batch"
+                                    : path === "weeks"
+                                        ? "week"
+                                        : "domain"}
+                                . View and manage details for each.
                             </p>
                         </div>
                         {/* Batch details */}
@@ -183,12 +219,16 @@ function CurriculumDetailsSide({ selectedItem }: Propstype) {
                     <div
                         defaultValue="coordinator"
                         className={cn(
-                            "h-full flex flex-col gap-3 p-5 border rounded-2xl dark:bg-sidebar-background",
+                            "h-full flex flex-col gap-3 p-5 border rounded-2xl dark:bg-sidebar-background shadow-sm",
                             isSmall && "border-none dark:bg-transparent"
                         )}
                     >
                         <div className="flex items-center gap-2">
-                            <Search search={search} handleSearch={handleSearch} />
+                            <Search
+                                id={selectedItem._id}
+                                search={search}
+                                handleSearch={handleSearch}
+                            />
 
                             {/* Status */}
                             <ToolTip

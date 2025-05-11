@@ -11,7 +11,10 @@ interface PropsType {
 
 // Batches Component
 function Curriculums({ setDrawerOpen }: PropsType) {
-    const [selectedItem, setSelectedItem] = useState<IBatch | IWeek | IDomain | null>(null);
+    const [items, setItems] = useState<IBatch[] | IWeek[] | IDomain[] | []>([]);
+    const [selectedItem, setSelectedItem] = useState<
+        IBatch | IWeek | IDomain | null
+    >(null);
 
     // Small screen
     const isSmall = useMediaQuery("(max-width: 767.20px)");
@@ -23,12 +26,16 @@ function Curriculums({ setDrawerOpen }: PropsType) {
                 setSelectedItem={setSelectedItem}
                 selectedItem={selectedItem}
                 setDrawerOpen={setDrawerOpen}
+                items={items}
+                setItems={setItems}
             />
 
             {/* Right side */}
             {!isSmall && (
                 <CurriculumDetailsSide
                     selectedItem={selectedItem}
+                    setSelectedItem={setSelectedItem}
+                    setItems={setItems}
                 />
             )}
         </div>

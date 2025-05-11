@@ -5,6 +5,7 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
+    DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,7 +17,7 @@ import { handleCustomError } from "@/utils/error";
 import { formSchemaBatch, FormTypeBatch } from "@/validations/admin/batch";
 import { formSchemaWeek, FormTypeWeek } from "@/validations/admin/week";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UsersRound, Loader2 } from "lucide-react";
+import { UsersRound, Loader2, CalendarRange, Home, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
@@ -27,21 +28,22 @@ import { useLocation } from "react-router-dom";
 // Interface for Props
 interface PropsType {
     itemToEdit: IBatch | IWeek | IDomain;
-    open: boolean;
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setItems: React.Dispatch<React.SetStateAction<IBatch[] | IWeek[] | IDomain[]>>;
-    setSelectedItem: React.Dispatch<React.SetStateAction<IBatch | IWeek | IDomain | null>>;
+    setItems: React.Dispatch<
+        React.SetStateAction<IBatch[] | IWeek[] | IDomain[]>
+    >;
+    setSelectedItem: React.Dispatch<
+        React.SetStateAction<IBatch | IWeek | IDomain | null>
+    >;
 }
 
 // Edit curriculum modal
 function EditCurriculumModal({
     itemToEdit,
-    open,
-    setOpen,
     setItems,
     setSelectedItem,
 }: PropsType) {
     // Modal state
+    const [open, setOpen] = useState<boolean>(false);
     const [submiting, setSubmiting] = useState<boolean>(false);
 
     // Redux
@@ -80,28 +82,28 @@ function EditCurriculumModal({
 
             // Success response
             if (resp && resp.status === 200) {
-                // Set batches
-                setItems((prevBatches: IBatch[]) => {
-                    return prevBatches.map((batch) => {
-                        if (batch._id === itemToEdit._id) {
+                // Set Items
+                setItems((prevItems: IBatch[] | IWeek[]) => {
+                    return prevItems.map((item) => {
+                        if (item._id === itemToEdit._id) {
                             return {
-                                ...batch,
+                                ...item,
                                 name: formData.name,
                             };
                         }
-                        return batch;
+                        return item;
                     });
                 });
 
-                // Update the selected batch if its selected
-                setSelectedItem((batch: IBatch | null) => {
-                    if (batch && batch._id === itemToEdit._id) {
+                // Update the selected item if its selected
+                setSelectedItem((item: IBatch | IWeek | null) => {
+                    if (item && item._id === itemToEdit._id) {
                         return {
-                            ...batch,
+                            ...item,
                             name: formData.name,
                         };
                     }
-                    return batch;
+                    return item;
                 });
 
                 toast({
@@ -130,6 +132,11 @@ function EditCurriculumModal({
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
+            <DialogTrigger>
+                <div className="p-2 rounded-full bg-foreground dark:bg-muted hover:bg-zinc-800 dark:hover:bg-zinc-700 text-white shadow-md cursor-pointer">
+                    <Pencil className="h-4 w-4" />
+                </div>
+            </DialogTrigger>
             <DialogContent className="flex flex-col gap-10">
                 <DialogHeader>
                     <DialogTitle className="text-foreground flex items-center gap-3">
@@ -156,13 +163,18 @@ function EditCurriculumModal({
                         <div className="relative">
                             <Input
                                 id="name"
+                                tabIndex={-1}
                                 placeholder={`Enter ${isBatches ? "batch" : "week"}'s name`}
                                 required
                                 autoComplete="off"
                                 {...register("name")}
                                 className="text-foreground font-medium p-5 pl-9"
                             />
-                            <UsersRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                            {isBatches ? (
+                                <Home className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                            ) : (
+                                <CalendarRange className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                            )}
                         </div>
 
                         {/* Name error message */}

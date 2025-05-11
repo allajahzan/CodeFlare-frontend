@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import {
+    Drawer,
+    DrawerContent,
+    DrawerTitle,
+    DrawerTrigger,
+} from "@/components/ui/drawer";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -126,14 +131,6 @@ function DrawerUsersList({
             }}
         >
             <div className="h-full w-full flex flex-col gap-[9px] overflow-auto no-scrollbar">
-                {/* Hidden Title and Description for Accessibility */}
-                <div id="drawerTitle" style={{ display: "none" }}>
-                    Users List Drawer
-                </div>
-                <div id="drawerDescription" style={{ display: "none" }}>
-                    View and manage users in the drawer interface.
-                </div>
-
                 {/* Users list */}
                 {users.length > 0 &&
                     users.map((user, index) => {
@@ -253,7 +250,8 @@ function DrawerUsersList({
             </div>
 
             {/* Selected user details */}
-            <DrawerContent className="will-change-auto bg-background dark:bg-sidebar-background ">
+            <DrawerContent aria-describedby={undefined} className="will-change-auto bg-background dark:bg-sidebar-background inset-x-0">
+                <DrawerTitle className="hidden"></DrawerTitle>
                 <UserDetails
                     setUsers={setUsers}
                     setSelectedUser={setSelectedUser}

@@ -1,4 +1,9 @@
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
+import {
+    Drawer,
+    DrawerContent,
+    DrawerTitle,
+    DrawerTrigger,
+} from "@/components/ui/drawer";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -7,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
     Activity,
-    Edit,
+    ListMinus,
     MoreHorizontal,
     Plus,
     Search,
@@ -23,10 +28,14 @@ import { useLocation } from "react-router-dom";
 // Interface for Props
 interface PropsType {
     items: IBatch[] | IWeek[] | IDomain[] | [];
+    setItems: React.Dispatch<
+        React.SetStateAction<IBatch[] | IWeek[] | IDomain[]>
+    >;
     fetching: boolean;
     selectedItem: IBatch | IWeek | IDomain | null;
-    setSelectedItem: React.Dispatch<React.SetStateAction<IBatch | IWeek | IDomain | null>>;
-    setItemNameToEdit: (batch: IBatch | IWeek | IDomain) => void;
+    setSelectedItem: React.Dispatch<
+        React.SetStateAction<IBatch | IWeek | IDomain | null>
+    >;
     setOpen: (open: boolean) => void;
     isSmall: boolean;
     setDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -34,10 +43,10 @@ interface PropsType {
 // Drawer batch lists Component
 function DrawerBatchLists({
     items,
+    setItems,
     fetching,
     selectedItem,
     setSelectedItem,
-    setItemNameToEdit,
     setOpen,
     isSmall,
     setDrawerOpen,
@@ -57,7 +66,7 @@ function DrawerBatchLists({
                     items.map((item, index) => {
                         return (
                             <DrawerTrigger
-                                key={index}
+                                key={item._id}
                                 asChild
                                 onClick={() => setDrawerOpen(true)}
                             >
@@ -104,10 +113,10 @@ function DrawerBatchLists({
                                                     <DropdownMenuItem
                                                         onClick={(e) => {
                                                             e.preventDefault();
-                                                            setItemNameToEdit(item);
+                                                            setSelectedItem(item);
                                                         }}
                                                     >
-                                                        <Edit /> Edit
+                                                        <ListMinus /> Unlist
                                                     </DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>
@@ -131,8 +140,13 @@ function DrawerBatchLists({
                 )}
             </div>
 
-            <DrawerContent className="mt-5">
-                <CurriculumDetailsSide selectedItem={selectedItem} />
+            <DrawerContent aria-describedby={undefined} className="mt-5 inset-0">
+                <DrawerTitle className="hidden"></DrawerTitle>
+                <CurriculumDetailsSide
+                    selectedItem={selectedItem}
+                    setItems={setItems}
+                    setSelectedItem={setSelectedItem}
+                />
             </DrawerContent>
         </Drawer>
     );

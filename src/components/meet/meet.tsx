@@ -2,7 +2,7 @@ import Navbar from "../common/navbar/navbar";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import * as mediasoupClient from "mediasoup-client";
 import { socket } from "@/socket/communication/socket";
-import MeetingJoin, { IMeet } from "./meeting-join";
+import MeetingJoin from "./meeting-join";
 import { useLocation } from "react-router-dom";
 import MeetingLeft from "./meeting-left";
 import {
@@ -16,6 +16,8 @@ import {
 } from "@/socket/communication/videocall";
 import MeetingRoom from "./meeting-room";
 import { IUserContext, UserContext } from "@/context/user-context";
+import { IMeet } from "@/types/IMeet";
+import { IUserBasic } from "@codeflare/common";
 
 // mediasoup track params
 let trackParams = {
@@ -273,7 +275,7 @@ function Meet() {
     // Peers
     const [peers, setPeers] = useState<{
         [socketId: string]: {
-            user: IUser;
+            user: IUserBasic;
             media: MediaStream;
             screen?: MediaStream;
             isVideoMute: boolean;
@@ -367,7 +369,7 @@ function Meet() {
             kind: mediasoupClient.types.MediaKind;
             appData: any;
             socketId: string;
-            user: IUser;
+            user: IUserBasic;
         }[]
     ) => {
         // console.log("Consuming existing producers: ", existingProducers);
@@ -575,7 +577,7 @@ function Meet() {
         appData: any,
         socketId: string,
         recvTransport: mediasoupClient.types.Transport,
-        user: IUser
+        user: IUserBasic
     ) => {
         try {
             const device = deviceRef.current;

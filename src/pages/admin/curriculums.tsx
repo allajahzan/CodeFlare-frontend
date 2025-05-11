@@ -1,4 +1,4 @@
-import Curriculums from "@/components/admin/batch/curriculums";
+import Curriculums from "@/components/admin/curriculum/curriculums";
 
 // Inteface for Props
 interface PropsType {

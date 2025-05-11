@@ -9,7 +9,7 @@ import {
     Send,
     Loader2,
     FilterIcon,
-    Activity,
+    UserRound,
 } from "lucide-react";
 import {
     DropdownMenu,
@@ -290,8 +290,10 @@ function Users({ setDrawerOpen }: PropsType) {
                                         className="dark:border-transparent bg-background dark:bg-sidebar hover:bg-muted dark:hover:bg-sidebar-backgroundDark"
                                         children1={
                                             <div className=" text-muted-foreground flex items-center gap-1 truncate">
-                                                 <Activity className="w-4 h-4 "/>
-                                                <p className="text-sm font-medium">{user.isBlock? "Blocked" : "Active"}</p>
+                                                <UserRound className="w-4 h-4 " />
+                                                <p className="text-sm font-medium">
+                                                    {user.role[0].toUpperCase() + user.role.slice(1)}
+                                                </p>
                                             </div>
                                         }
                                         children2={

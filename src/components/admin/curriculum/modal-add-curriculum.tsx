@@ -18,13 +18,7 @@ import { handleCustomError } from "@/utils/error";
 import { formSchemaBatch, FormTypeBatch } from "@/validations/admin/batch";
 import { formSchemaWeek, FormTypeWeek } from "@/validations/admin/week";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-    Plus,
-    UsersRound,
-    Loader2,
-    Home,
-    CalendarRangeIcon,
-} from "lucide-react";
+import { Plus, Loader2, Home, CalendarRange } from "lucide-react";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
@@ -34,7 +28,9 @@ import { useLocation } from "react-router-dom";
 
 // Interface for Props
 interface Propstype {
-    setNewItem: React.Dispatch<React.SetStateAction<IBatch | IWeek | IDomain | null>>;
+    setNewItem: React.Dispatch<
+        React.SetStateAction<IBatch | IWeek | IDomain | null>
+    >;
 }
 
 // Add curriculum modal
@@ -80,7 +76,7 @@ function AddCurriculumModal({ setNewItem }: Propstype) {
             if (resp && resp.status === 200) {
                 const data = resp.data.data;
 
-                // Set new batch
+                // Set new item
                 setNewItem(() => {
                     return {
                         _id: data._id,
@@ -126,7 +122,7 @@ function AddCurriculumModal({ setNewItem }: Propstype) {
                             {isBatches ? (
                                 <Home className="w-4 h-4" />
                             ) : (
-                                <CalendarRangeIcon className="w-4 h-4" />
+                                <CalendarRange className="w-4 h-4" />
                             )}
                         </div>
                         <span>{isBatches ? "Add new batch" : "Add new week"}</span>
@@ -154,7 +150,11 @@ function AddCurriculumModal({ setNewItem }: Propstype) {
                                 {...register("name")}
                                 className="text-foreground font-medium p-5 pl-9"
                             />
-                            <UsersRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                            {isBatches ? (
+                                <Home className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                            ) : (
+                                <CalendarRange className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                            )}
                         </div>
 
                         {/* Name error message */}
