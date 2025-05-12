@@ -6,14 +6,23 @@ import { ReactNode } from "react";
 interface PropsType {
     index: number;
     text: string;
-    children: ReactNode;
+    children1?: ReactNode;
+    children2?: ReactNode;
     action: any;
     selectedItem: any;
     className?: string;
 }
 
 // List card Component
-function ListCard({ index, text, children, action, selectedItem, className }: PropsType) {    
+function ListCard({
+    index,
+    text,
+    children1,
+    children2,
+    action,
+    selectedItem,
+    className,
+}: PropsType) {
     return (
         <motion.div
             key={1}
@@ -22,7 +31,7 @@ function ListCard({ index, text, children, action, selectedItem, className }: Pr
             transition={{ delay: 0.2 + index * 0.1 }}
             onClick={action}
             className={cn(
-               "group p-2 px-3 w-full flex flex-col rounded-xl cursor-pointer border border-border hover:bg-muted dark:hover:bg-sidebar",
+                "group p-2 px-4 pr-2 py-[11.15px] w-full flex flex-col rounded-lg cursor-pointer border border-border hover:bg-muted dark:hover:bg-sidebar",
                 selectedItem?.name === text ? "bg-muted dark:bg-sidebar" : "",
                 className
             )}
@@ -30,8 +39,11 @@ function ListCard({ index, text, children, action, selectedItem, className }: Pr
             <div className="flex items-center">
                 {/* Name and other details */}
                 <div className="w-full flex items-center justify-between gap-2">
-                    <p className="font-semibold text-foreground truncate">{text}</p>
-                    {children}
+                    <div className="flex flex-col">
+                        <p className="font-semibold text-foreground truncate">{text}</p>
+                        {children1}
+                    </div>
+                    {children2}
                 </div>
             </div>
         </motion.div>

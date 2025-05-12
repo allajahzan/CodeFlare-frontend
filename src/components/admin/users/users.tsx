@@ -9,6 +9,7 @@ import {
     Send,
     Loader2,
     FilterIcon,
+    UserRound,
 } from "lucide-react";
 import {
     DropdownMenu,
@@ -249,7 +250,7 @@ function Users({ setDrawerOpen }: PropsType) {
                         Icon={FilterIcon}
                         filter={roleWise}
                         setFilter={setRoleWise}
-                        fitlerData={["all", "coordinator", "instructor"]}
+                        filterData={["", "coordinator", "instructor"]}
                     />
 
                     {/* Sort */}
@@ -288,9 +289,12 @@ function Users({ setDrawerOpen }: PropsType) {
                                         selectedUser={selectedUser}
                                         className="dark:border-transparent bg-background dark:bg-sidebar hover:bg-muted dark:hover:bg-sidebar-backgroundDark"
                                         children1={
-                                            <p className="text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
-                                                {user.role[0].toUpperCase() + user.role.slice(1)}
-                                            </p>
+                                            <div className=" text-muted-foreground flex items-center gap-1 truncate">
+                                                <UserRound className="w-4 h-4 " />
+                                                <p className="text-sm font-medium">
+                                                    {user.role[0].toUpperCase() + user.role.slice(1)}
+                                                </p>
+                                            </div>
                                         }
                                         children2={
                                             <DropdownMenu>

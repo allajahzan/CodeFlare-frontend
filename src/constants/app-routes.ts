@@ -1,23 +1,25 @@
 // App Routes
 enum AppRoutes {
     // Authenticaion Routes
-    LOGIN = 'login',
-    RESET_PASSWORD = 'reset-password',
-    FORGOT_PASSWORD = 'forgot-password',
+    LOGIN = "login",
+    RESET_PASSWORD = "reset-password",
+    FORGOT_PASSWORD = "forgot-password",
 
     // Common Routes
-    DASHBOARD = 'dashboard',
-    CHATS = 'chats',
-    PROFILE = 'profile',
-    COMMUNITY = 'community',
-    ATTENDENCE = 'attendance',
+    DASHBOARD = "dashboard",
+    CHATS = "chats",
+    PROFILE = "profile",
+    COMMUNITY = "community",
+    ATTENDENCE = "attendance",
     MEET = "meet",
 
     // Admin Routes
     ADMIN = "admin",
     ADMIN_USERS = "users",
     ADMIN_BATCHES = "batches",
-    ADMIN_WEEKS = 'weeks',
+    ADMIN_WEEKS = "weeks",
+    ADMIN_DOMAINS = "domains",
+    ADMIN_CURRICULUM = "curriculum",
     ADMIN_INVOICES = "invoices",
 
     // Coordinator Routes

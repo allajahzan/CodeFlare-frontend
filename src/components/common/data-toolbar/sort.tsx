@@ -39,6 +39,8 @@ function Sort({ sort, setSort, sortData }: PropsType) {
             >
                 <DropdownMenuLabel>Sort</DropdownMenuLabel>
 
+                <DropdownMenuSeparator/>
+
                 {/* Checkbox for sorting order */}
                 <div className="flex items-center gap-2 py-1.5 pl-2 cursor-pointer">
                     <Checkbox

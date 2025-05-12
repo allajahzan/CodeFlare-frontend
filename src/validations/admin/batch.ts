@@ -2,7 +2,7 @@ import { batch } from "@/constants/regex";
 import z from "zod";
 
 // Batch form validation schema
-export const formSchema = z.object({
+export const formSchemaBatch = z.object({
     name: z
         .string()
         .regex(batch.capitalLetter, "First letter should be capiital !")
@@ -10,4 +10,4 @@ export const formSchema = z.object({
 });
 
 // Form type based on schema
-export type FormType = z.infer<typeof formSchema>;
+export type FormTypeBatch = z.infer<typeof formSchemaBatch>;

@@ -13,6 +13,7 @@ enum ApiEndpoints {
     GET_USERS = "/user/users",
     CHANGE_USER_STATUS = "/user/status",
     SEARCH_USER = "/user/search",
+    USER_COUNT = "/user/count",
 
     DELETE_IMAGE = "user/delete-image",
 
@@ -25,6 +26,10 @@ enum ApiEndpoints {
     ADMIN = "/admin",
     BATCH = "/admin/batch",
     SEARCH_BATCH = "/admin/batch/search",
+    WEEK = "/admin/week",
+    SEARCH_WEEK = "/admin/week/search",
+    DOMAIN = "/admin/domain",
+    SEARCH_DOMAIN = "/admin/domain/search",
 
     // Chat APIs - communication service
     CHAT = "/communication/chat",

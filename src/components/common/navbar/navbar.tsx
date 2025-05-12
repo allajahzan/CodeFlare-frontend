@@ -1,6 +1,7 @@
 import {
     useCallback,
     useContext,
+    useEffect,
     useLayoutEffect,
     useMemo,
     useState,
@@ -32,6 +33,9 @@ function Navbar() {
     // Notifications state
     const { notifications } = useNotification();
 
+    // Time
+    const [time, setTime] = useState<Date>(new Date());
+
     //Redux
     const isSideBarVisible = useSelector(
         (state: stateType) => state.isSideBarVisible
@@ -54,6 +58,13 @@ function Navbar() {
     const location = useLocation();
     const pathname = location.pathname;
 
+    // Determine theme icon and text
+    const themeIcon = useMemo(() => (theme === "light" ? Sun : Moon), [theme]);
+    const themeText = useMemo(
+        () => (theme === "light" ? "Light" : "Dark"),
+        [theme]
+    );
+
     // Handle theme
     const handleTheme = useCallback(() => {
         setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
@@ -66,22 +77,26 @@ function Navbar() {
 
     // Set page heading
     useLayoutEffect(() => {
-        pathname.split("/")[2] === "dashboard"
+        pathname.split("/")[pathname.split("/").length - 1] === "dashboard"
             ? setPath(`Hi, ${user?.name as string}!`)
             : pathname.split("/")[2] === "meet"
                 ? setPath("Meet")
                 : setPath(
-                    pathname.split("/")[2][0].toUpperCase() +
-                    pathname.split("/")[2].slice(1)
+                    pathname.split("/")[pathname.split("/").length - 1][0].toUpperCase() +
+                    pathname.split("/")[pathname.split("/").length - 1].slice(1)
                 );
     }, [location]);
 
-    // Determine theme icon and text
-    const themeIcon = useMemo(() => (theme === "light" ? Sun : Moon), [theme]);
-    const themeText = useMemo(
-        () => (theme === "light" ? "Light" : "Dark"),
-        [theme]
-    );
+    // Update time every minute in meet landing page
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+        if (path === "Meet") {
+            interval = setInterval(() => {
+                setTime(new Date());
+            }, 60 * 1000); // every minute
+        }
+        return () => clearInterval(interval);
+    }, [path]);
 
     return (
         <div className="sticky top-0 left-0 w-full z-40 flex justify-between items-center p-5">
@@ -146,7 +161,7 @@ function Navbar() {
                 {pathname.split("/")[2] === "meet" && (
                     <div className="px-5 hidden md:block">
                         <p className="flex items-center text-muted-foreground font-medium text-lg">
-                            {new Date().toLocaleTimeString("en-US", {
+                            {new Date(time).toLocaleTimeString("en-US", {
                                 hour: "2-digit",
                                 minute: "2-digit",
                                 hour12: true,

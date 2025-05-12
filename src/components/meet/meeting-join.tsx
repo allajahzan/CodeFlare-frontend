@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Ellipsis, Mic, MicOff, Video, VideoOff } from "lucide-react";
+import { Ellipsis, Loader2, Mic, MicOff, Video, VideoOff } from "lucide-react";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Fragment, useContext, useEffect, useState } from "react";
@@ -21,7 +21,7 @@ interface PropsType {
     setJoined: React.Dispatch<React.SetStateAction<boolean | null>>;
     handleVideo: () => void;
     handleAudio: () => void;
-    startWebcam : ()=>void;
+    startWebcam: () => void;
     streamRef: React.MutableRefObject<MediaStream | null>;
     meet: IMeet;
     setMeet: React.Dispatch<React.SetStateAction<IMeet | null>>;
@@ -43,6 +43,9 @@ function MeetingJoin({
     // Meet
     const [isVerified, setVerified] = useState<boolean | null>(null);
 
+    // Video loading
+    const [isLoading, setIsLoading] = useState(true);
+
     // Redux
     const role = useSelector((state: stateType) => state.role);
 
@@ -59,8 +62,8 @@ function MeetingJoin({
         localStorage.setItem("isVideoMute", "0");
         localStorage.setItem("isAudioMute", "0");
 
-        if(isVerified){
-            console.log("starting camera")
+        if (isVerified) {
+            console.log("starting camera");
             startWebcam();
         }
     }, [isVerified]);
@@ -116,6 +119,12 @@ function MeetingJoin({
                             className="relative aspect-video flex items-center justify-center w-full h-full
                             bg-zinc-200 dark:bg-sidebar-backgroundDark rounded-xl overflow-hidden"
                         >
+                            {isLoading && (
+                                <div className="absolute bg-muted dark:bg-sidebar-backgroundDark inset-0 flex items-center justify-center">
+                                    <Loader2 className="w-6 h-6 text-foreground animate-spin" />
+                                </div>
+                            )}
+
                             {/* Unmuted */}
                             {!isVideoMute && (
                                 <div className="relative w-full h-full">
@@ -124,6 +133,7 @@ function MeetingJoin({
                                         ref={videoRef}
                                         autoPlay
                                         playsInline
+                                        onLoadedMetadata={() => setIsLoading(false)}
                                         muted
                                         className={`w-full h-full object-cover transform scale-x-[-1]`}
                                     />

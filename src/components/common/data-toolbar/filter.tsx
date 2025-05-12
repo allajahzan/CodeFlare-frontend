@@ -15,14 +15,14 @@ interface PropsType {
     title: string;
     filter: string;
     setFilter: React.Dispatch<React.SetStateAction<string>>;
-    fitlerData: string[];
+    filterData: string[];
     Icon?: React.ForwardRefExoticComponent<
         Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>
     >;
 }
 
 // Filter Component
-function Filter({ title, fitlerData, filter, setFilter, Icon }: PropsType) {
+function Filter({ title, filterData, filter, setFilter, Icon }: PropsType) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger>
@@ -41,7 +41,7 @@ function Filter({ title, fitlerData, filter, setFilter, Icon }: PropsType) {
                 <DropdownMenuSeparator />
 
                 {/* Sorting options */}
-                {fitlerData.map((data, index) => {
+                {filterData.map((data, index) => {
                     return (
                         <DropdownMenuItem
                             key={index}
