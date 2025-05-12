@@ -12,7 +12,7 @@ interface PropsType {
 // Count card Component
 function CountCard({ count, heading, Icon }: PropsType) {
     return (
-        <div className="group relative flex items-center gap-3 p-3 bg-muted dark:bg-sidebar rounded-lg overflow-hidden shadow-sm">
+        <div className="group relative flex items-center gap-3 p-3 bg-muted dark:bg-sidebar-backgroundDark rounded-lg overflow-hidden shadow-sm">
             {/* bg-gradient-to-br from-zinc-50 to-zinc-100 dark:from-zinc-900/20 dark:to-zinc-800/20 border border-zinc-200 dark:border-zinc-800 */}
             <div className="absolute top-0 right-0 w-16 h-16 bg-zinc-200 dark:bg-zinc-700/20 rounded-bl-full opacity-50"></div>
             <div className="p-2 rounded-md lg:rounded-lg group-hover:border-white bg-zinc-400/20 group-hover:bg-zinc-400/30">

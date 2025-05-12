@@ -28,7 +28,6 @@ import Search from "@/components/common/data-toolbar/search";
 import ToolTip from "@/components/common/tooltip/tooltip";
 import Sort from "@/components/common/data-toolbar/sort";
 import { Badge } from "@/components/ui/badge";
-import Filter from "@/components/common/data-toolbar/filter";
 import NotSelected from "@/components/common/fallback/not-selected";
 import { useMediaQuery } from "usehooks-ts";
 import { cn } from "@/lib/utils";
@@ -71,7 +70,14 @@ function CurriculumDetailsSide({
     });
 
     // Category
-    const [category, setCategory] = useState<string>("coordinator");
+    const [category, setCategory] = useState<string | null>(null);
+
+    // Users conunt
+    const [usersCount, setUsersCount] = useState<{
+        students: number;
+        coordinators: number;
+        instructors: number;
+    }>({ students: 0, coordinators: 0, instructors: 0 });
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
@@ -140,89 +146,166 @@ function CurriculumDetailsSide({
         selectedItem && fetchUsers();
     }, [isBlocked, search, sort, category, selectedItem?._id]);
 
+    // Fetch users count
+    useEffect(() => {
+        // Reset users count
+        setUsersCount({ students: 0, coordinators: 0, instructors: 0 });
+
+        const fetchUsersCount = async () => {
+            try {
+                // Send request
+                const resp = await fetchData(
+                    ApiEndpoints.USER_COUNT +
+                    `?${path === "batches"
+                        ? `batchId=${selectedItem?._id}`
+                        : path === "domains"
+                            ? `domainId=${(selectedItem as IDomain)._id}`
+                            : `weekId=${selectedItem?._id}`
+                    }`,
+                    role
+                );
+
+                // Success response
+                if (resp && resp.status === 200) {
+                    const data = resp?.data.data;
+
+                    // Set users count
+                    setUsersCount(data);
+                }
+            } catch (err: unknown) {
+                handleCustomError(err);
+            }
+        };
+
+        selectedItem && fetchUsersCount();
+    }, [selectedItem]);
+
+    // Reset category
+    useEffect(() => {
+        setCategory(() => {
+            return path === "batches"
+                ? "coordinator"
+                : path === "domains"
+                    ? "instructor"
+                    : "student";
+        });
+    }, [selectedItem, path]);
+
     return (
         <>
             {selectedItem && (
                 <div
                     className={cn(
-                        "relative z-20 h-[calc(100vh-20px)] md:h-[calc(100vh-108px)] flex flex-col gap-5 p-0 cols-span-1 lg:col-span-2",
+                        "relative z-20 h-full flex flex-col gap-5 dark:bg-sidebar-background md:rounded-2xl md:border p-5 md:shadow-sm cols-span-1 lg:col-span-2",
                         isSmall && "gap-0"
                     )}
                 >
-                    <div
-                        className={cn(
-                            "flex flex-col gap-3 dark:bg-sidebar-background md:rounded-2xl md:border p-5 shadow-sm",
-                            isSmall && "border-none dark:bg-transparent"
-                        )}
-                    >
-                        {/* Heading */}
-                        <div className="flex flex-col gap-2">
-                            <div className="flex items-center justify-between">
-                                {/* Name and status */}
-                                <div className="flex items-center gap-3">
-                                    <div className="text-lg font-semibold text-foreground">
-                                        {selectedItem.name}
-                                    </div>
-                                    <Badge className="relative text-xs text-green-600 font-semibold bg-green-600/20 hover:bg-green-600/20 duration-0 rounded-full overflow-hidden">
-                                        Active
-                                    </Badge>
+                    {/* Heading */}
+                    <div className="flex flex-col gap-2">
+                        <div className="flex items-center justify-between">
+                            {/* Name and status */}
+                            <div className="flex items-center gap-3">
+                                <div className="text-lg font-semibold text-foreground">
+                                    {selectedItem.name}
                                 </div>
-
-                                {/* Edit button */}
-                                {path !== "domains" ? (
-                                    <EditCurriculumModal
-                                        itemToEdit={selectedItem}
-                                        setItems={setItems}
-                                        setSelectedItem={setSelectedItem}
-                                    />
-                                ) : (
-                                    <EditDomainModal
-                                        itemToEdit={selectedItem}
-                                        setItems={setItems}
-                                        setSelectedItem={setSelectedItem}
-                                    />
-                                )}
+                                <Badge className="relative text-xs text-green-600 font-semibold bg-green-600/20 hover:bg-green-600/20 duration-0 rounded-full overflow-hidden">
+                                    Active
+                                </Badge>
                             </div>
-                            <p className="text-muted-foreground font-medium text-sm">
-                                List of{" "}
-                                {path === "batches"
-                                    ? "coordinators and"
-                                    : path === "weeks"
-                                        ? ""
-                                        : "instructors and"}{" "}
-                                students in this{" "}
-                                {path === "batches"
-                                    ? "batch"
-                                    : path === "weeks"
-                                        ? "week"
-                                        : "domain"}
-                                . View and manage details for each.
-                            </p>
+
+                            {/* Edit button */}
+                            {path !== "domains" ? (
+                                <EditCurriculumModal
+                                    itemToEdit={selectedItem}
+                                    setItems={setItems}
+                                    setSelectedItem={setSelectedItem}
+                                />
+                            ) : (
+                                <EditDomainModal
+                                    itemToEdit={selectedItem}
+                                    setItems={setItems}
+                                    setSelectedItem={setSelectedItem}
+                                />
+                            )}
                         </div>
-                        {/* Batch details */}
+
+                        {/* Description */}
+                        <p className="text-muted-foreground font-medium text-sm">
+                            List of{" "}
+                            {path === "batches"
+                                ? "coordinators and"
+                                : path === "weeks"
+                                    ? ""
+                                    : "instructors and"}{" "}
+                            students in this{" "}
+                            {path === "batches"
+                                ? "batch"
+                                : path === "weeks"
+                                    ? "week"
+                                    : "domain"}
+                            . View and manage details for each.
+                        </p>
+
+                        {/* Users count */}
                         <div
                             className={`grid ${path === "weeks" ? "grid-cols-1" : "grid-cols-2"
                                 } gap-3`}
                         >
                             {path !== "weeks" && (
                                 <CountCard
-                                    count={1}
+                                    count={
+                                        path === "batches"
+                                            ? usersCount.coordinators || 0
+                                            : usersCount.instructors || 0
+                                    }
                                     heading={path === "batches" ? "Coordinaotrs" : "Instructors"}
                                     Icon={UsersRound}
                                 />
                             )}
-                            <CountCard count={25} heading="Students" Icon={UsersRound} />
+                            <CountCard
+                                count={usersCount.students || 0}
+                                heading="Students"
+                                Icon={UsersRound}
+                            />
+                        </div>
+
+                        {/* Tabs */}
+                        <div className="flex items-center gap-2 border-b">
+                            {[
+                                path === "batches"
+                                    ? "Coordinator"
+                                    : path === "domains"
+                                        ? "Instructor"
+                                        : "",
+                                "Student",
+                            ]
+                                .filter((item) => item)
+                                .map((item, index) => {
+                                    return (
+                                        <p
+                                            key={index}
+                                            onClick={() => setCategory(item.toLowerCase())}
+                                            className={cn(
+                                                "p-2 font-medium text-muted-foreground cursor-pointer",
+                                                category === item.toLowerCase() &&
+                                                "border-b-2 border-foreground text-foreground"
+                                            )}
+                                        >
+                                            {item}
+                                        </p>
+                                    );
+                                })}
                         </div>
                     </div>
 
-                    {/* Tabs */}
+                    {/* List of users */}
                     <div
-                        defaultValue="coordinator"
                         className={cn(
-                            "h-full flex flex-col gap-3 p-5 border rounded-2xl dark:bg-sidebar-background shadow-sm",
+                            "h-full flex flex-col gap-3",
                             isSmall && "border-none dark:bg-transparent"
                         )}
                     >
+                        {/* tool-bar */}
                         <div className="flex items-center gap-2">
                             <Search
                                 id={selectedItem._id}
@@ -250,20 +333,6 @@ function CurriculumDetailsSide({
                                 }
                             />
 
-                            {/* Filter */}
-                            {path !== "weeks" && (
-                                <Filter
-                                    filter={category}
-                                    setFilter={setCategory}
-                                    filterData={
-                                        path === "batches"
-                                            ? ["coordinator", "student"]
-                                            : ["instructor", "student"]
-                                    }
-                                    title="Role"
-                                />
-                            )}
-
                             {/* Sort */}
                             <Sort
                                 sort={sort}
@@ -272,7 +341,7 @@ function CurriculumDetailsSide({
                             />
                         </div>
 
-                        <div className="h-full w-full flex flex-col gap-[9px] overflow-auto bg-transparent no-scrollbar">
+                        <div className="h-full flex flex-col gap-[9px] overflow-auto bg-transparent no-scrollbar">
                             {users.length > 0 &&
                                 users.map((user, index) => {
                                     return (
@@ -312,7 +381,6 @@ function CurriculumDetailsSide({
                                             }`
                                     }
                                     text={fetching ? "Fetching..." : "No users found"}
-                                    className="h-full"
                                 />
                             )}
                         </div>

@@ -154,7 +154,7 @@ function CurriculumListSide({
     }, [isSmall]);
 
     return (
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-5 h-[calc(100vh-108px)] sticky top-0 will-change-transform">
             {/* Tabs */}
             <div className="w-full flex items-center gap-1 text-center text-sm text-foreground font-medium dark:bg-sidebar-background p-1 border shadow-sm rounded-lg">
                 {["Batches", "Weeks", "Domains"].map((text, index) => {
@@ -181,8 +181,8 @@ function CurriculumListSide({
 
             {/* Batches list */}
             <div
-                className="p-5 sticky z-0 top-0 w-full h-[calc(100vh-166px)] flex flex-col gap-5 items-center rounded-2xl
-                bg-background dark:bg-sidebar-background border shadow-sm"
+                className="p-5 h-[calc(100vh-166px)] w-full flex flex-col gap-5 items-center rounded-2xl
+                bg-background dark:bg-sidebar-background border shadow-sm will-change-transform"
             >
                 {/* Heading */}
                 <div className="flex flex-col gap-5 w-full">
@@ -225,7 +225,7 @@ function CurriculumListSide({
 
                 {/* Batches list */}
                 {!isSmall && (
-                    <div className="h-full w-full flex flex-col gap-[9px] overflow-auto bg-transparent no-scrollbar pb-0.5">
+                    <div className="h-full w-full flex flex-col gap-[9px] overflow-auto bg-transparent no-scrollbar pb-0.5 will-change-transform">
                         {items.length > 0 &&
                             items.map((item, index) => {
                                 return (
@@ -264,8 +264,7 @@ function CurriculumListSide({
                                                     )}
                                                 >
                                                     <DropdownMenuItem
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
+                                                        onClick={() => {
                                                             setSelectedItem(item);
                                                         }}
                                                     >
