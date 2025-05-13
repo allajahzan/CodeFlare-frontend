@@ -148,9 +148,6 @@ function CurriculumDetailsSide({
 
     // Fetch users count
     useEffect(() => {
-        // Reset users count
-        setUsersCount({ students: 0, coordinators: 0, instructors: 0 });
-
         const fetchUsersCount = async () => {
             try {
                 // Send request
@@ -182,6 +179,9 @@ function CurriculumDetailsSide({
 
     // Reset category
     useEffect(() => {
+        // Reset users count
+        setUsersCount({ students: 0, coordinators: 0, instructors: 0 });
+
         setCategory(() => {
             return path === "batches"
                 ? "coordinator"
@@ -260,12 +260,14 @@ function CurriculumDetailsSide({
                                     }
                                     heading={path === "batches" ? "Coordinaotrs" : "Instructors"}
                                     Icon={UsersRound}
+                                    fetching={fetching}
                                 />
                             )}
                             <CountCard
                                 count={usersCount.students || 0}
                                 heading="Students"
                                 Icon={UsersRound}
+                                fetching={fetching}
                             />
                         </div>
 
