@@ -14,6 +14,7 @@ import Profile from "@/pages/profile/profile";
 import Reviews from "@/pages/instructor/reviews";
 import MeetLanding from "@/pages/meet/landing";
 import Meet from "@/pages/meet/meet";
+import DomainContextProvider from "@/context/domain-context";
 
 // Instructor Routes
 function InstructorRoutes() {
@@ -31,7 +32,7 @@ function InstructorRoutes() {
             </Route>
 
             {/* Protected Routes */}
-            <Route element={<ProtectedRoutes allowedRole={AppRoutes.INSTRUCTOR} />}>
+            <Route element={<DomainContextProvider><ProtectedRoutes allowedRole={AppRoutes.INSTRUCTOR} /></DomainContextProvider>}>
             <Route path={AppRoutes.CHATS} element={<Chat />} />
             <Route path={AppRoutes.MEET} element={<MeetLanding />} />
             <Route path={AppRoutes.MEET+ '/:id'} element={<Meet />} />

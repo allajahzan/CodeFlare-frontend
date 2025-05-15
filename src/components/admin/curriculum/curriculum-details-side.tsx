@@ -72,12 +72,14 @@ function CurriculumDetailsSide({
     // Category
     const [category, setCategory] = useState<string | null>(null);
 
-    // Users conunt
+    // Users count
     const [usersCount, setUsersCount] = useState<{
         students: number;
         coordinators: number;
         instructors: number;
     }>({ students: 0, coordinators: 0, instructors: 0 });
+
+    const [countFetching, setCountFetching] = useState<boolean>(false);
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
@@ -149,6 +151,9 @@ function CurriculumDetailsSide({
     // Fetch users count
     useEffect(() => {
         const fetchUsersCount = async () => {
+            setUsersCount({ students: 0, coordinators: 0, instructors: 0 });
+            setCountFetching(true);
+
             try {
                 // Send request
                 const resp = await fetchData(
@@ -168,8 +173,11 @@ function CurriculumDetailsSide({
 
                     // Set users count
                     setUsersCount(data);
+
+                    setCountFetching(false)
                 }
             } catch (err: unknown) {
+                setCountFetching(false)
                 handleCustomError(err);
             }
         };
@@ -179,9 +187,6 @@ function CurriculumDetailsSide({
 
     // Reset category
     useEffect(() => {
-        // Reset users count
-        setUsersCount({ students: 0, coordinators: 0, instructors: 0 });
-
         setCategory(() => {
             return path === "batches"
                 ? "coordinator"
@@ -189,7 +194,7 @@ function CurriculumDetailsSide({
                     ? "instructor"
                     : "student";
         });
-    }, [selectedItem, path]);
+    }, [path]);
 
     return (
         <>
@@ -260,14 +265,14 @@ function CurriculumDetailsSide({
                                     }
                                     heading={path === "batches" ? "Coordinaotrs" : "Instructors"}
                                     Icon={UsersRound}
-                                    fetching={fetching}
+                                    fetching={countFetching}
                                 />
                             )}
                             <CountCard
                                 count={usersCount.students || 0}
                                 heading="Students"
                                 Icon={UsersRound}
-                                fetching={fetching}
+                                fetching={countFetching}
                             />
                         </div>
 

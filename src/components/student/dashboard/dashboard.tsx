@@ -3,7 +3,7 @@ import Attendence from "@/components/student/dashboard/attendence/attendence";
 import OverallInformation from "@/components/student/dashboard/overall-infomation/overall-information";
 import RadialChart from "@/components/common/charts/radial-chart";
 import DashboardCard from "@/components/common/other-card/dashboard-card";
-import DateAndTime from "@/components/common/other-card/date-time-card";
+import DateAndTimeCard from "@/components/common/other-card/date-time-card";
 import WeatherCard from "@/components/common/other-card/weather-card";
 import UpcomingReview from "./upcoming/review";
 import student from "@/assets/images/student.png";
@@ -59,7 +59,7 @@ function Dashboard() {
             </div>
 
             {/* Date and time */}
-            <DateAndTime />
+            <DateAndTimeCard />
 
             {/* Upcomings  */}
             <div className="w-full h-[400px] grid grid-rows-[auto_1fr] gap-5">

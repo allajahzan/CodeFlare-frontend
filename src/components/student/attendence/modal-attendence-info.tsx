@@ -27,8 +27,8 @@ interface PropsType {
     selectedAttendence: IEvent;
 }
 
-// Details modal Component
-function DetailsModal({
+// Attendece info Component
+function AttendenceInfoModal({
     isModalOpen,
     setIsModalOpen,
     selectedAttendence,
@@ -161,4 +161,4 @@ function DetailsModal({
     );
 }
 
-export default DetailsModal;
+export default AttendenceInfoModal;

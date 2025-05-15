@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { addMonths, format, subMonths } from "date-fns";
 import Calendar from "./calender";
-import DetailsModal from "./details-modal";
+import DetailsModal from "./modal-attendence-info";
 import CalenderHeader from "./header";
 import { handleCustomError } from "@/utils/error";
 import { fetchData } from "@/service/api-service";

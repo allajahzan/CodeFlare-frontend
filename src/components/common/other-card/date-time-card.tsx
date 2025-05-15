@@ -5,7 +5,7 @@ import DashboardCard from "./dashboard-card";
 import CardHeader from "../data-toolbar/header";
 
 // Date and Time Component
-function DateAndTime() {
+function DateAndTimeCard() {
     // Time related states
     const [time, setTime] = useState(new Date());
     const [meridian, setMeridian] = useState(
@@ -96,4 +96,4 @@ function DateAndTime() {
     );
 }
 
-export default DateAndTime;
+export default DateAndTimeCard;

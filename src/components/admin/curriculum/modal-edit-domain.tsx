@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
     Dialog,
     DialogContent,
@@ -118,6 +118,7 @@ function EditDomainModal({ itemToEdit, setItems, setSelectedItem }: PropsType) {
         } else {
             updated[index][field] = JSON.parse(value as string) as IWeek;
         }
+
         setDomainWeeks(updated);
     };
 
@@ -162,7 +163,7 @@ function EditDomainModal({ itemToEdit, setItems, setSelectedItem }: PropsType) {
                     }
                 });
 
-                setOpen(false);
+                // setOpen(false);
 
                 toast({ title: "Domain updated successfully." });
             }
@@ -174,7 +175,7 @@ function EditDomainModal({ itemToEdit, setItems, setSelectedItem }: PropsType) {
     };
 
     // Reset domains weeks
-    useEffect(() => {
+    useLayoutEffect(() => {
         setDomainWeeks((itemToEdit as IDomain).domainsWeeks);
         setDomainName((itemToEdit as IDomain).name);
     }, [itemToEdit]);
@@ -333,7 +334,11 @@ function EditDomainModal({ itemToEdit, setItems, setSelectedItem }: PropsType) {
 
                     {/* Submit Button */}
                     <div className="pt-4">
-                        <Button type="submit" disabled={submitting} className="w-full h-11">
+                        <Button
+                            type="submit"
+                            disabled={submitting}
+                            className="w-full h-11 transition-all duration-200 disabled:cursor-not-allowed"
+                        >
                             {submitting ? (
                                 <div className="flex items-center gap-2">
                                     <Loader2 className="h-4 w-4 animate-spin" />

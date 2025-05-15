@@ -18,7 +18,7 @@ function NotFoundYet({ MainIcon, IconClassName, text, className, delay }: PropsT
     return (
         <div
             className={cn(
-                "flex flex-col  gap-2 text-muted-foreground font-medium",
+                "flex flex-col items-center gap-2 text-muted-foreground font-medium",
                 className
             )}
         >
@@ -26,7 +26,7 @@ function NotFoundYet({ MainIcon, IconClassName, text, className, delay }: PropsT
                 initial={{ opacity: 0, scale: 0.5 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0 }}
-                className="hidden"
+                className=""
             >
                 {MainIcon && <MainIcon className={cn("w-4 h-4", IconClassName)} />}
             </motion.span>

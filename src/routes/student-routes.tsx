@@ -18,6 +18,7 @@ import Attendence from "@/pages/student/attendence";
 import MeetLanding from "@/components/meet/landing";
 import Meet from "@/components/meet/meet";
 import { SnapshotContextProvider } from "@/context/snapshot-context";
+import DomainContextProvider from "@/context/domain-context";
 
 // Student Routes
 function StudentRoutes() {
@@ -35,7 +36,7 @@ function StudentRoutes() {
             </Route>
 
             {/* Protected Routes */}
-            <Route element={<SnapshotContextProvider><ProtectedRoutes allowedRole={AppRoutes.STUDENT} /></SnapshotContextProvider>}>
+            <Route element={<SnapshotContextProvider><DomainContextProvider><ProtectedRoutes allowedRole={AppRoutes.STUDENT} /></DomainContextProvider></SnapshotContextProvider>}>
                 <Route path={`${AppRoutes.STUDENT}/${AppRoutes.CHATS}`} element={<Chat />} />
                 <Route path={`${AppRoutes.STUDENT}/${AppRoutes.MEET}`} element={<MeetLanding />} />
                 <Route path={`${AppRoutes.STUDENT}/${AppRoutes.MEET}` + '/:id'} element={<Meet />} />

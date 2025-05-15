@@ -307,7 +307,11 @@ function AddDomainModal({ setNewItem }: Propstype) {
 
                     {/* Submit Button */}
                     <div className="pt-4">
-                        <Button type="submit" disabled={submitting} className="w-full h-11">
+                        <Button
+                            type="submit"
+                            disabled={submitting}
+                            className="w-full h-11 transition-all duration-200 disabled:cursor-not-allowed"
+                        >
                             {submitting ? (
                                 <div className="flex items-center gap-2">
                                     <Loader2 className="h-4 w-4 animate-spin" />

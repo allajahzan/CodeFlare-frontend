@@ -5,8 +5,19 @@ import { fetchData } from "@/service/api-service";
 import axiosInstance from "@/service/axios-instance";
 import { registerUser } from "@/socket/communication/chat";
 import { handleCustomError } from "@/utils/error";
-import { IBatch } from "@codeflare/common";
-import { createContext, ReactNode, useState, useLayoutEffect } from "react";
+import {
+    IBatch,
+    IDomain,
+    IRole,
+    IStudentCategory,
+    IWeek,
+} from "@codeflare/common";
+import {
+    createContext,
+    ReactNode,
+    useState,
+    useLayoutEffect,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // Interface for User
@@ -14,14 +25,17 @@ export interface IUser {
     _id: string;
     name: string;
     email: string;
-    phoneNumber: string;
+    phoneNo: string;
     profilePic: string;
-    role: string;
+    role: IRole;
+    week?: IWeek;
+    domain?: IDomain;
     batch?: IBatch;
     batches?: IBatch[];
+    category?: IStudentCategory;
+    lastActive?: string;
     createdAt?: string;
-    updatedAt?: string;
-    qrCode?: string;
+    isBlock?: string;
 }
 
 // Interface for User Context
@@ -77,7 +91,7 @@ const UserContextProvider = ({ children }: { children: ReactNode }) => {
         };
 
         isAuth ? getUserData() : null;
-    }, [isAuth]); // Trigger effect when isAuth changes
+    }, [isAuth]);
 
     // Logout user
     const logout = async () => {
