@@ -190,7 +190,7 @@ function Navbar() {
                 {/* Profile Section */}
                 <div
                     onClick={() => navigate(`/${role}/profile`)}
-                    className="group relative p-2 w-[120px] h-12 flex items-center rounded-full bg-muted"
+                    className="group relative p-2 w-[120px] h-12 flex items-center rounded-full bg-muted cursor-pointer"
                     aria-label="Profile Dropdown"
                 >
                     <div className="overflow-hidden h-10 w-10 rounded-full group-hover:animate-bounce">

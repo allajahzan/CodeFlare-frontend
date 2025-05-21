@@ -1,6 +1,7 @@
 import CardHeader from "@/components/common/data-toolbar/header";
 import ToolTip from "@/components/common/tooltip/tooltip";
 import SmallIconButton from "@/components/ui/icon-button-small";
+import { IUserContext, UserContext } from "@/context/user-context";
 import { motion } from "framer-motion";
 import {
     Briefcase,
@@ -11,10 +12,14 @@ import {
     Medal,
     Share2,
 } from "lucide-react";
+import { useContext } from "react";
 
 // Over all information
 function OverallInformation() {
-    // Get week suffix
+    // User context
+    const { user } = useContext(UserContext) as IUserContext;
+
+    // Get week and rank suffix
     const getSuffix = (week: number) => {
         if (week % 100 >= 11 && week % 100 <= 13) return week + "th";
 
@@ -62,11 +67,11 @@ function OverallInformation() {
             <div className="flex items-center justify-between mb-5">
                 <div>
                     <p className="text-sm text-muted-foreground font-medium">Batch</p>
-                    <p className="text-lg font-bold text-foreground">Batch 1</p>
+                    <p className="text-lg font-bold text-foreground">{user?.batch?.name || "-"}</p>
                 </div>
                 <div className="text-right">
                     <p className="text-sm text-muted-foreground font-medium">Week</p>
-                    <p className="text-lg font-bold text-foreground">{getSuffix(2)}</p>
+                    <p className="text-lg font-bold text-foreground">{user?.week?.name ? getSuffix(Number(user.week.name.split(" ")[1])) : "-"}</p>
                 </div>
             </div>
 
@@ -87,7 +92,7 @@ function OverallInformation() {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.2, duration: 0.3 }}
                     >
-                        <p className="text-3xl font-bold text-foreground">{2 * 3}</p>
+                        <p className="text-3xl font-bold text-foreground">{0}</p>
                         <i className="text-sm text-start text-muted-foreground font-medium">
                             Tasks completed
                         </i>
@@ -138,9 +143,9 @@ function OverallInformation() {
                 >
                     <GraduationCap className="w-5 h-5 text-foreground" />
                     <div className="flex items-center justify-center text-foreground text-base font-bold">
-                        Mern
+                        {user?.domain?.name?.split(" ")[0] || "-" }
                     </div>
-                    <i className="text-sm text-muted-foreground font-medium">Stack</i>
+                    <i className="text-sm text-muted-foreground font-medium">{user?.domain?.name?.split(" ")[1] || "" }</i>
                 </motion.div>
 
                 {/* In Progress */}

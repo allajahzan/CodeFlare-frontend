@@ -5,6 +5,7 @@ import {
     Book,
     Briefcase,
     Building,
+    CalendarRange,
     Info,
     Loader2,
     Mail,
@@ -128,20 +129,19 @@ function Account({ profile, setProfile }: PropsType) {
         >
             {/* Full name */}
             <motion.div
-                className="space-y-2 relative"
-                key={1}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
+                className="space-y-2 relative"
             >
                 <Label htmlFor="name" className="text-sm text-foreground font-medium">
-                    Full Name
+                    Name
                 </Label>
                 <div className="relative">
                     <Input
                         id="name"
                         type="text"
-                        placeholder="Full Name"
+                        placeholder="Name"
                         autoComplete="off"
                         required
                         {...register("name")}
@@ -156,11 +156,10 @@ function Account({ profile, setProfile }: PropsType) {
 
             {/* Email */}
             <motion.div
-                className="space-y-2 relative"
-                key={2}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
+                className="space-y-2 relative"
             >
                 <Label htmlFor="email" className="text-sm text-foreground font-medium">
                     Email
@@ -181,11 +180,10 @@ function Account({ profile, setProfile }: PropsType) {
 
             {/* Phone number */}
             <motion.div
-                className="space-y-2 relative"
-                key={3}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
+                className="space-y-2 relative"
             >
                 <Label
                     htmlFor="phoneNo"
@@ -211,11 +209,10 @@ function Account({ profile, setProfile }: PropsType) {
 
             {/* Role */}
             <motion.div
-                className="space-y-2 relative"
-                key={4}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
+                className="space-y-2 relative"
             >
                 <Label htmlFor="role" className="text-sm text-foreground font-medium">
                     Role
@@ -234,14 +231,13 @@ function Account({ profile, setProfile }: PropsType) {
                 </div>
             </motion.div>
 
-            {/* Batch / Batches - if not admin */}
+            {/* Batch / Batches - (Student or Coordinator) */}
             {role !== "admin" && (
                 <motion.div
-                    className="space-y-2 relative"
-                    key={5}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6 }}
+                    className="space-y-2 relative"
                 >
                     <Label
                         htmlFor="batch"
@@ -267,13 +263,67 @@ function Account({ profile, setProfile }: PropsType) {
                 </motion.div>
             )}
 
+            {/* Week - (student) */}
+            {user?.role === "student" && (
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.7 }}
+                    className="space-y-2 relative"
+                >
+                    <Label htmlFor="week" className="text-sm text-foreground font-medium">
+                        Week
+                    </Label>
+                    <div className="relative">
+                        <Input
+                            id="week"
+                            type="text"
+                            placeholder="Week"
+                            autoComplete="off"
+                            disabled
+                            defaultValue={user.week?.name || "-"}
+                            className="p-5 pl-9 text-foreground font-medium"
+                        />
+                        <CalendarRange className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                    </div>
+                </motion.div>
+            )}
+
+            {/* Domain - (student or instructor) */}
+            {(user?.role === "student" || user?.role === "instructor") && (
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.8 }}
+                    className="space-y-2 relative"
+                >
+                    <Label
+                        htmlFor="domain"
+                        className="text-sm text-foreground font-medium"
+                    >
+                        Domain
+                    </Label>
+                    <div className="relative">
+                        <Input
+                            id="domain"
+                            type="text"
+                            placeholder="Domain"
+                            autoComplete="off"
+                            disabled
+                            defaultValue={user.domain?.name || "-"}
+                            className="p-5 pl-9 text-foreground font-medium"
+                        />
+                        <CalendarRange className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                    </div>
+                </motion.div>
+            )}
+
             {/* Bio */}
             <motion.div
-                className="space-y-2 relative"
-                key={6}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.7 }}
+                transition={{ delay: 0.9 }}
+                className="space-y-2 relative"
             >
                 <Label htmlFor="bio" className="text-sm text-foreground font-medium">
                     Bio
@@ -296,11 +346,10 @@ function Account({ profile, setProfile }: PropsType) {
 
             {/* About me */}
             <motion.div
-                className="space-y-2 relative"
-                key={7}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.8 }}
+                transition={{ delay: 1 }}
+                className="space-y-2 relative"
             >
                 <Label htmlFor="about" className="text-sm text-foreground font-medium">
                     About
@@ -316,13 +365,12 @@ function Account({ profile, setProfile }: PropsType) {
                 </div>
             </motion.div>
 
-            {/* Skills */}
+            {/* Soft skills */}
             <motion.div
-                className="space-y-2 relative"
-                key={8}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.9 }}
+                transition={{ delay: 1.1 }}
+                className="space-y-2 relative"
             >
                 <Label
                     htmlFor="softskills"
@@ -345,11 +393,10 @@ function Account({ profile, setProfile }: PropsType) {
 
             {/* Tech skills */}
             <motion.div
-                className="space-y-2 relative"
-                key={9}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1 }}
+                transition={{ delay: 1.2 }}
+                className="space-y-2 relative"
             >
                 <Label
                     htmlFor="techskills"
@@ -372,11 +419,10 @@ function Account({ profile, setProfile }: PropsType) {
 
             {/* Education */}
             <motion.div
-                className="space-y-2 relative"
-                key={10}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.1 }}
+                transition={{ delay: 1.3 }}
+                className="space-y-2 relative"
             >
                 <Label
                     htmlFor="education"
@@ -399,11 +445,10 @@ function Account({ profile, setProfile }: PropsType) {
 
             {/* Work */}
             <motion.div
-                className="space-y-2 relative"
-                key={11}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.2 }}
+                transition={{ delay: 1.4 }}
+                className="space-y-2 relative"
             >
                 <Label htmlFor="work" className="text-sm text-foreground font-medium">
                     Work
@@ -423,10 +468,9 @@ function Account({ profile, setProfile }: PropsType) {
 
             {/* Button */}
             <motion.div
-                key={12}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.3 }}
+                transition={{ delay: 1.5 }}
                 className="pt-2 w-full"
             >
                 <Button
