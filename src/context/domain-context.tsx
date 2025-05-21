@@ -23,7 +23,7 @@ import {
 } from "react";
 import { IUserContext, UserContext } from "./user-context";
 import { handleCustomError } from "@/utils/error";
-import { fetchData } from "@/service/api-service";
+import { fetchData, patchData } from "@/service/api-service";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
@@ -35,10 +35,12 @@ import IconButton from "@/components/ui/icon-button";
 import CardHeader from "@/components/common/data-toolbar/header";
 import { Button } from "@/components/ui/button";
 import NotFoundOrbit from "@/components/common/fallback/not-found-orbit";
+import { toast } from "@/hooks/use-toast";
 
 // Domain Context
 const DomainContext = createContext({});
 
+// Domain context Provider
 const DomainContextProvider = ({ children }: { children: ReactNode }) => {
     // Set domain modal
     const [open, setOpen] = useState<boolean>(false);
@@ -50,6 +52,8 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
     const [selectedWeek, setSelectedWeek] = useState<IDomainsWeek | null>(null);
     const [description, setDescrption] = useState<string>("");
     const [fetchingDescription, setFetchingDescription] = useState<boolean>(true);
+
+    const [submitting, setSubmitting] = useState<boolean>(false);
 
     // User Context
     const { user } = useContext(UserContext) as IUserContext;
@@ -97,21 +101,29 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
         fetchDomains();
     }, []);
 
-    // Gemini
+    // Gemini api for description
     useEffect(() => {
         const fetchDescription = async () => {
             setFetchingDescription(true);
             setDescrption("");
 
-            const specialPattern = /(first|second|badge|boarding|toi)/i;
+            const badgeWeek = /(badge|boarding|toi)/i;
+            const planningWeek = /(First|Second|Project|Planning)/i;
 
-            const isSpecialTitle = specialPattern.test(selectedWeek?.title ?? "");
+            const isBadgeWeek = badgeWeek.test(selectedWeek?.title ?? "");
+            const isPlanningWeek = planningWeek.test(selectedWeek?.title ?? "");
 
             try {
                 // Send request
-                if (isSpecialTitle) {
+                if (isBadgeWeek) {
                     setDescrption(
-                        "Cover everything which you will be learning in your stack, both practical and theory"
+                        "Cover everything which you have learned in your stack, both practical and theory."
+                    );
+
+                    setFetchingDescription(false);
+                } else if (isPlanningWeek) {
+                    setDescrption(
+                        "Plan your project. And make figma design, database diagram, API documentation and module listing with proper timeline."
                     );
 
                     setFetchingDescription(false);
@@ -135,14 +147,11 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
                             }),
                         }
                     );
-
                     const data = await resp.json();
-
                     // Success response
                     if (resp && resp.status === 200) {
                         // Set description
                         setDescrption(data?.candidates[0]?.content?.parts[0]?.text);
-
                         setFetchingDescription(false);
                     }
                 }
@@ -152,7 +161,6 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
                 handleCustomError(err);
             }
         };
-
         selectedWeek && fetchDescription();
     }, [selectedWeek]);
 
@@ -162,11 +170,30 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
             (selectedDomain?.domainsWeeks?.[0] as IDomainsWeek) || null
         );
     }, [selectedDomain]);
-
+    // Select domain
+    const handleSelectDomain = async (domain: IDomain) => {
+        try {
+            setSubmitting(true);
+            // Send request
+            const resp = await patchData(
+                ApiEndpoints.SELECT_DOMAIN,
+                { domainId: domain._id },
+                role
+            );
+            // Success response
+            if (resp && resp.status === 200) {
+                toast({ title: "Domain selected successfully." });
+                setSubmitting(false);
+                setOpen(false);
+            }
+        } catch (err: unknown) {
+            setSubmitting(false);
+            handleCustomError(err);
+        }
+    };
     return (
         <DomainContext.Provider value={{}}>
             {children}
-
             {/* Domain Modal */}
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent className="flex flex-col gap-10 max-w-xl h-[90vh]">
@@ -182,9 +209,8 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
                             change it later.
                         </DialogDescription>
                     </DialogHeader>
-
                     {/* Domains List */}
-                    <div className="flex justify-center h-full">
+                    <div className="flex justify-center h-full overflow-hidden">
                         {domains.length > 0 ? (
                             selectedDomain ? (
                                 <div className="w-full flex flex-col gap-3">
@@ -200,11 +226,10 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
                                         />
                                         <CardHeader heading={selectedDomain.name} />
                                     </div>
-
                                     {/* List */}
-                                    <div className="w-full h-full grid grid-cols-3">
+                                    <div className="w-full h-full grid grid-cols-3 overflow-hidden">
                                         {/* Left side */}
-                                        <div className="flex flex-col col-span-1 border rounded-lg shadow-custom overflow-auto no-scrollbar">
+                                        <div className="h-full flex flex-col col-span-1 border rounded-lg shadow-custom overflow-auto">
                                             {selectedDomain.domainsWeeks.map((week, index) => (
                                                 <div
                                                     key={index}
@@ -214,9 +239,12 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
                                                         }
                                                     }}
                                                     className={cn(
-                                                        "flex items-center gap-2 p-3 cursor-pointer",
+                                                        "flex items-center gap-2 p-3",
                                                         selectedWeek?.week._id === week.week._id &&
-                                                        "bg-blue-600/10 border-l-4 border-l-blue-600"
+                                                        "bg-blue-600/10 border-l-4 border-l-blue-600",
+                                                        fetchingDescription
+                                                            ? "cursor-not-allowed"
+                                                            : "cursor-pointer"
                                                     )}
                                                 >
                                                     <p className="h-6 w-6 text-xs rounded-full bg-blue-600/40 text-white flex items-center justify-center">
@@ -233,7 +261,6 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
                                                 </div>
                                             ))}
                                         </div>
-
                                         {/* Right side */}
                                         <div className="col-span-2 p-3 pt-0 ">
                                             {selectedWeek ? (
@@ -241,7 +268,6 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
                                                     <h2 className="font-bold text-lg mb-2 text-foreground">
                                                         {selectedWeek?.week.name} - {selectedWeek.title}
                                                     </h2>
-
                                                     {description ? (
                                                         <p className="text-foreground font-medium">
                                                             {description}
@@ -263,15 +289,18 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
                                             )}
                                         </div>
                                     </div>
-
                                     {/* Button */}
-                                    <div>
+                                    <div
+                                        onClick={() => {
+                                            handleSelectDomain(selectedDomain);
+                                        }}
+                                    >
                                         <Button
                                             type="submit"
-                                            disabled={false}
+                                            disabled={submitting}
                                             className="w-full h-11 transition-all duration-200 disabled:cursor-not-allowed"
                                         >
-                                            {false ? (
+                                            {submitting ? (
                                                 <div className="flex items-center gap-2">
                                                     <Loader2 className="h-4 w-4 animate-spin" />
                                                     Processing...
@@ -294,7 +323,7 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
                                                 onClick={() => {
                                                     setSelectedDomain(domain);
                                                 }}
-                                                className="w-full h-20 flex flex-col gap-1 items-center justify-center bg-muted dark:bg-sidebar rounded-lg cursor-pointer"
+                                                className="w-full h-20 flex flex-col gap-1 items-center justify-center bg-muted/80 hover:bg-muted dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark rounded-lg cursor-pointer"
                                             >
                                                 <GraduationCap className="w-5 h-5 text-foreground" />
                                                 <p className="font-semibold text-foreground">
@@ -309,8 +338,12 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
                             <NotFoundOrbit
                                 MainIcon={GraduationCap}
                                 SubIcon={fetching ? Search : Plus}
-                                text="No domains found"
-                                message="No domains are added by admin"
+                                text={fetching ? "Fetching" : "No domains found"}
+                                message={
+                                    fetching
+                                        ? "Please wait a moment"
+                                        : " o domains are added by admin"
+                                }
                                 className="w-full"
                             />
                         )}
@@ -320,5 +353,4 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
         </DomainContext.Provider>
     );
 };
-
 export default DomainContextProvider;

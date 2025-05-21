@@ -14,6 +14,7 @@ enum ApiEndpoints {
     CHANGE_USER_STATUS = "/user/status",
     SEARCH_USER = "/user/search",
     USER_COUNT = "/user/count",
+    SELECT_DOMAIN = "/user/select-domain",
 
     DELETE_IMAGE = "user/delete-image",
 

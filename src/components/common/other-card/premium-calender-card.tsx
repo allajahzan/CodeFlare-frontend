@@ -113,11 +113,8 @@ function PremiumCalendarCard() {
             {/* Scrollable dates */}
             <div ref={scrollContainerRef} className="flex overflow-x-auto pb-5">
                 <div className="flex space-x-4 min-w-max px-1">
-                    {dates.map((date, index) => (
+                    {dates.map((date, _index) => (
                         <motion.div
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.2 + index * 0.1 }}
                             key={date.toString()}
                             className="flex flex-col items-center"
                             data-today={isToday(date) ? "true" : "false"}
