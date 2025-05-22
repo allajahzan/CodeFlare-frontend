@@ -1,12 +1,14 @@
 import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
+    Ban,
     Calendar1,
     CalendarDays,
     CheckCircle,
     ChevronRight,
     CircleDashed,
     SearchIcon,
+    X,
     XCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -78,7 +80,7 @@ function Reviews() {
             border border-border shadow-sm"
             >
                 {/* Card header */}
-                <CardHeader count={reviews.length} heading="All Reviews" />
+                <CardHeader count={reviews.length} heading="Reviews lists" />
 
                 {/* Search filter sort */}
                 <div className="w-full flex relative">
@@ -98,7 +100,7 @@ function Reviews() {
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.2 + index * 0.1 }}
                                     className={cn(
-                                        "p-2 px-3 flex items-center gap-4 cursor-pointer rounded-full  bg-background dark:bg-sidebar hover:bg-muted dark:hover:bg-sidebar-backgroundDark",
+                                        "p-2 px-3 flex items-center gap-4 cursor-pointer rounded-full border dark:border-transparent bg-background dark:bg-sidebar hover:bg-muted dark:hover:bg-sidebar-backgroundDark",
                                         selectedReview?._id === review._id
                                             ? "bg-muted dark:bg-sidebar"
                                             : ""
@@ -107,28 +109,44 @@ function Reviews() {
                                 >
                                     {/* Icon circle */}
                                     <div className="h-12 w-12 rounded-full flex items-center justify-center bg-background border-2 border-white dark:border-border shadow-md">
-                                        {review.result === "Pass" ? (
-                                            <CheckCircle size={24} className="text-green-700" />
-                                        ) : review.result === "Fail" ? (
-                                            <XCircle size={24} className="text-red-700" />
+                                        {review.status === "Completed" ? (
+                                            review.result === "Pass" ? (
+                                                <CheckCircle size={24} className="text-green-700" />
+                                            ) : review.result === "Fail" ? (
+                                                <XCircle size={24} className="text-red-700" />
+                                            ) : (
+                                                <CircleDashed size={24} className="text-yellow-700" />
+                                            )
+                                        ) : review.status === "Pending" ? (
+                                            <CircleDashed size={24} className="text-yellow-700" />
+                                        ) : review.status === "Absent" ? (
+                                            <X size={24} className="text-red-700" />
+                                        ) : review.status === "Cancelled" ? (
+                                            <Ban size={24} className="text-purple-700" />
                                         ) : (
-                                            <XCircle size={24} className="text-yellow-700" />
+                                            <CircleDashed size={24} className="text-yellow-700" />
                                         )}
                                     </div>
 
                                     {/* Week and date */}
                                     <div className="flex flex-col gap-1">
                                         <p className="text-foreground font-semibold">
-                                            {review.week[0].toUpperCase() + review.week.slice(1)}
+                                            {review.week?.name || "Foundation"}
                                         </p>
-                                        <p className="flex gap-1 items-center text-sm text-muted-foreground font-medium truncate">
-                                            <Calendar1 className="w-3 h-3" />
-                                            {new Date(review?.date).toLocaleDateString("en-GB", {
-                                                day: "2-digit",
-                                                month: "short",
-                                                year: "numeric",
-                                            })}
-                                        </p>
+                                        <div className="flex items-center gap-2 relative overflow-auto no-scrollbar">
+                                            <p className="relative text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
+                                                <CalendarDays className="w-3 h-3" />
+                                                {review.title}
+                                            </p>
+                                            <p className="flex gap-1 items-center text-sm text-muted-foreground font-medium truncate">
+                                                <Calendar1 className="w-3 h-3" />
+                                                {new Date(review?.date).toLocaleDateString("en-GB", {
+                                                    day: "2-digit",
+                                                    month: "short",
+                                                    year: "numeric",
+                                                })}
+                                            </p>
+                                        </div>
                                     </div>
                                     <ChevronRight className="ml-auto w-4 h-4 text-foreground" />
                                 </motion.div>

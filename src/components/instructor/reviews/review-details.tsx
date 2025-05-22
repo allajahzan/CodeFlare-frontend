@@ -17,7 +17,13 @@ import {
     LucideProps,
     Trophy,
 } from "lucide-react";
-import { useContext, useEffect, useRef, useState } from "react";
+import {
+    useContext,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from "react";
 import { convertTo12HourFormat } from "@/utils/time-converter";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -54,7 +60,6 @@ function ReviewDetails({
 }: PropsType) {
     // Feedback
     const [feedback, setFeedback] = useState<string>("");
-    const [debouncedFeedback, setDebouncedFeedback] = useState<string>("");
 
     // Status related states
     const [status, setStatus] = useState<string>(selectedReview?.status || "");
@@ -80,72 +85,59 @@ function ReviewDetails({
         (cardsListsRef.current as HTMLDivElement).scrollLeft += event.deltaY;
     };
 
-    // useEffect(() => {
-    //     cardsListsRef.current?.addEventListener("wheel", onwheel);
-    // }, []);
-
     // Reset feedback
-    useEffect(() => {
+    useLayoutEffect(() => {
         setFeedback(selectedReview?.feedback || "");
-    }, [selectedReview]);
-
-    // Debounce feedback
-    useEffect(() => {
-        if (feedback === selectedReview?.feedback) return;
-
-        const handler = setTimeout(() => {
-            setDebouncedFeedback(feedback);
-        }, 500);
-
-        return () => clearTimeout(handler);
-    }, [feedback]);
+    }, [selectedReview?._id]);
 
     // Update feedback
-    useEffect(() => {
-        const updateFeedback = async () => {
-            // Check if instructor is authorized
-            if (selectedReview?.instructor._id !== user?._id) {
-                toast({
-                    title: "You are restricted to update this feedback !",
-                });
-                return;
-            }
+    const updateFeedback = async (updatedFeedback: string) => {
+        setFeedback(updatedFeedback);
 
-            try {
-                // Send request
-                const resp = await patchData(
-                    ApiEndpoints.REVIEW + `/${selectedReview?._id}`,
-                    {
-                        feedback: debouncedFeedback,
-                    },
-                    role
+        if (
+            selectedReview?.feedback.toLowerCase() === updatedFeedback.toLowerCase()
+        ) {
+            return;
+        }
+
+        // Check if instructor is authorized
+        if (selectedReview?.instructor._id !== user?._id) {
+            toast({
+                title: "You are restricted to update this feedback !",
+            });
+            return;
+        }
+
+        try {
+            // Send request
+            const resp = await patchData(
+                ApiEndpoints.REVIEW + `/${selectedReview?._id}`,
+                {
+                    feedback: updatedFeedback,
+                },
+                role
+            );
+
+            // Success response
+            if (resp && resp.status === 200) {
+                // Update selected review
+                setSelectedReview((prevReview: IReview | null) =>
+                    prevReview ? { ...prevReview, feedback: updatedFeedback } : null
                 );
 
-                // Success response
-                if (resp && resp.status === 200) {
-                    // Update selected review
-                    setSelectedReview((prevReview: IReview | null) =>
-                        prevReview ? { ...prevReview, feedback: debouncedFeedback } : null
+                // Update the reviews list
+                setReviews((prevReviews: IReview[]) => {
+                    return prevReviews.map((review) =>
+                        review._id === selectedReview?._id
+                            ? { ...review, feedback: updatedFeedback }
+                            : { ...review }
                     );
-
-                    // Update the reviews list
-                    setReviews((prevReviews: IReview[]) => {
-                        return prevReviews.map((review) =>
-                            review._id === selectedReview?._id
-                                ? { ...review, feedback: debouncedFeedback }
-                                : { ...review }
-                        );
-                    });
-                }
-            } catch (err: unknown) {
-                handleCustomError(err);
+                });
             }
-        };
-
-        selectedReview &&
-            selectedReview.feedback !== debouncedFeedback &&
-            updateFeedback();
-    }, [debouncedFeedback]);
+        } catch (err: unknown) {
+            handleCustomError(err);
+        }
+    };
 
     // Update status
     const updateStatus = async (status: string) => {
@@ -237,7 +229,7 @@ function ReviewDetails({
             {selectedReview && (
                 <div
                     className={
-                        "realtive h-full p-5 rounded-2xl overflow-hidden border border-border bg-background dark:bg-sidebar-background shadow-sm"
+                        "realtive h-fit p-5 rounded-2xl overflow-hidden border border-border bg-background dark:bg-sidebar-background shadow-sm"
                     }
                 >
                     {/* Overlay to restrict action */}
@@ -245,15 +237,17 @@ function ReviewDetails({
                         <div className="absolute z-50 inset-0 top-0 left-0 cursor-not-allowed bg-white/30 dark:bg-black/50"></div>
                     )}
 
-                    <div key={selectedReview._id} className="space-y-5">
+                    <div key={selectedReview._id} className="space-y-5 h-full">
                         {/* Heading */}
                         <div className="flex items-center justify-between gap-3">
                             <div className="flex items-center gap-3">
                                 <div className="text-lg text-foreground font-semibold">
-                                    {selectedReview.week[0].toUpperCase() +
-                                        selectedReview.week.slice(1) +
-                                        " " +
-                                        `(${selectedReview.title.toUpperCase()})`}
+                                    {selectedReview.week
+                                        ? `${selectedReview.week.name
+                                        } (${selectedReview.title[0].toUpperCase()}${selectedReview.title.slice(
+                                            1
+                                        )})`
+                                        : "Foundation Period"}
                                 </div>
                             </div>
 
@@ -291,10 +285,10 @@ function ReviewDetails({
                             {/* Name */}
                             <UserNameCard
                                 data={{
-                                    name: selectedReview.user.name,
-                                    email: selectedReview.user.email,
-                                    role: selectedReview.user.role,
-                                    profilePic: selectedReview.user.profilePic || "",
+                                    name: selectedReview.student.name,
+                                    email: selectedReview.student.email,
+                                    role: selectedReview.student.role,
+                                    profilePic: selectedReview.student.profilePic || "",
                                 }}
                             />
 
@@ -315,8 +309,8 @@ function ReviewDetails({
                             >
                                 <Input
                                     value={feedback}
-                                    onChange={(event) => setFeedback(event.target.value)}
-                                    className="border-none shadow-none p-3 py-[22.9px] text-foreground dark:bg-sidebar"
+                                    onChange={(e) => updateFeedback(e.target.value)}
+                                    className="border-none shadow-none p-3 py-[22.9px] pr-20 text-foreground dark:bg-sidebar"
                                     placeholder="Enter your feedback for this student"
                                 />
                             </motion.div>
@@ -326,7 +320,7 @@ function ReviewDetails({
                         <div
                             ref={cardsListsRef}
                             onWheel={onwheel}
-                            className="flex gap-[13px] relative -top-1 w-full overflow-scroll overflow-y-hidden no-scrollbar whitespace-nowrap scrollbar-hide"
+                            className="flex gap-[13px] relative w-full overflow-scroll overflow-y-hidden no-scrollbar whitespace-nowrap scrollbar-hide"
                         >
                             {/* Status */}
                             <DropdownMenu>

@@ -26,7 +26,7 @@ import ApiEndpoints from "@/constants/api-endpoints";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import { handleCustomError } from "@/utils/error";
-import { socket } from "@/socket/communication/socket";
+import { socket } from "@/socket/communication/connection";
 import {
     listenUserTyping,
     loadedMessages,

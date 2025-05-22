@@ -98,7 +98,7 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
             }
         };
 
-        fetchDomains();
+        !user?.domain && fetchDomains();
     }, []);
 
     // Gemini api for description

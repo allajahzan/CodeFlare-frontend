@@ -1,9 +1,15 @@
-import { Calendar1, CalendarDays, Plus, SearchIcon } from "lucide-react";
-import { ChangeEvent, useContext, useEffect, useRef, useState } from "react";
+import {
+    Calendar1,
+    CalendarDays,
+    Info,
+    Plus,
+    Search,
+    SearchIcon,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import ReviewDetails from "./review-details";
 import CardHeader from "@/components/common/data-toolbar/header";
 import ScheduleReviewSheet from "./sheet-schedule-review";
-import { IUserContext, UserContext } from "@/context/user-context";
 import NotFoundOrbit from "@/components/common/fallback/not-found-orbit";
 import { handleCustomError } from "@/utils/error";
 import { fetchData } from "@/service/api-service";
@@ -12,17 +18,22 @@ import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import Sort from "@/components/common/data-toolbar/sort";
 import Filter from "@/components/common/data-toolbar/filter";
-import Search from "@/components/common/data-toolbar/search";
 import UserListCard from "@/components/common/user/user-list-card";
 import IconButton from "@/components/ui/icon-button";
 import DatePicker from "./date-picker";
-import {
-    loadedReviews,
-    loadReviews,
-    socket,
-} from "@/socket/instructor/instructor-socket";
 import { IReview } from "@/types/IReview";
-import { Textarea } from "@/components/ui/textarea";
+import FilterBatchStudent from "./filter-batch-student";
+import { IBatch } from "@codeflare/common";
+import { IStudent } from "@/types/IStudent";
+import { Select, SelectContent, SelectTrigger } from "@/components/ui/select";
+import ToolTip from "@/components/common/tooltip/tooltip";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 // Reviews Component
 function Reviews() {
@@ -33,10 +44,6 @@ function Reviews() {
 
     const [fetching, setFetching] = useState<boolean>(true);
 
-    // Search
-    const [search, setSearch] = useState<string>("");
-    const [debouncedSearch, setDebouncedSearch] = useState<string>("");
-
     // Sort
     const [sort, setSort] = useState<{ key: string; order: number }>({
         key: "createdAt",
@@ -46,12 +53,17 @@ function Reviews() {
     // Filter
     const [filter, setFilter] = useState<string>("");
 
-    // Date
-    const [isDatePickerOpen, setDatePickerOpen] = useState<boolean>(false);
-    const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+    // Filter batch and students
+    const [students, setStudents] = useState<[] | IStudent[]>([]);
+    const [selectedStudent, setSelectedStudent] = useState<string | "">("");
+    const [batches, setBatches] = useState<IBatch[] | []>([]);
+    const [selectedBatch, setSelectedBatch] = useState<IBatch | null>(null);
+    const [fetchingStudents, setFetchingStudents] = useState<boolean>(false);
 
-    // User context
-    const { user } = useContext(UserContext) as IUserContext;
+    // Date
+    const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+        new Date()
+    );
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
@@ -59,63 +71,54 @@ function Reviews() {
     // Div ref
     const divRef = useRef<HTMLDivElement>(null);
 
-    // Handle search
-    const handleSearch = async (event: ChangeEvent<HTMLInputElement>) => {
-        setSearch(event.target.value);
-    };
-
-    // Emmit Load reviews event when scroll to bottom - socket
-    const handleScroll = () => {
-        const divCurrent = divRef.current;
-
-        if (divCurrent) {
-            const isBottom =
-                divCurrent.scrollHeight - divCurrent.scrollTop <=
-                divCurrent.clientHeight + 1;
-
-            if (isBottom) {
-                // Disable scrolling
-                divCurrent.style.overflow = "hidden";
-
-                loadReviews(
-                    debouncedSearch,
-                    sort.key,
-                    sort.order,
-                    selectedDate?.toDateString() || "",
-                    filter,
-                    user?.batches?.map((b) => b._id) as string[],
-                    reviews.length
-                );
-            }
-        }
-    };
-
-    // Listen loaded reviews event when scroll to bottom - socket
+    // Fetch batch
     useEffect(() => {
-        loadedReviews((data: IReview[]) => {
-            setReviews((prevReviews) => [...prevReviews, ...data]);
+        const fetchBatch = async () => {
+            try {
+                // Send request
+                const resp = await fetchData(ApiEndpoints.BATCH + "?type=list", role);
 
-            // Enable scrolling
-            const divCurrent = divRef.current;
+                // Success response
+                if (resp && resp.status === 200) {
+                    const data = resp.data?.data;
 
-            if (divCurrent) {
-                divCurrent.style.overflow = "auto";
+                    setBatches(data);
+                }
+            } catch (err: unknown) {
+                handleCustomError(err);
             }
-        });
-
-        return () => {
-            socket.off("loadedReviews");
         };
+
+        fetchBatch();
     }, []);
 
-    // Debounce search
+    // Fetch students based on batch - when batch selected
     useEffect(() => {
-        const handler = setTimeout(() => {
-            setDebouncedSearch(search);
-        }, 500);
+        const fetchUsers = async () => {
+            try {
+                setFetchingStudents(true);
+                setStudents([]);
+                setSelectedStudent("");
 
-        return () => clearTimeout(handler);
-    }, [search]);
+                // Fetch data
+                const resp = await fetchData(
+                    ApiEndpoints.SEARCH_USER +
+                    `?roleWise=student&batchId=${selectedBatch?._id}`,
+                    role
+                );
+
+                if (resp?.status === 200) {
+                    setStudents(resp.data.data); // Update students list
+                }
+            } catch (err) {
+                handleCustomError(err);
+            } finally {
+                setFetchingStudents(false); // Always set fetching to false after request
+            }
+        };
+
+        if (selectedBatch) fetchUsers();
+    }, [selectedBatch]);
 
     // Add new review
     useEffect(() => {
@@ -137,9 +140,10 @@ function Reviews() {
                 // Send request
                 const resp = await fetchData(
                     ApiEndpoints.REVIEW +
-                    `/search?keyword=${debouncedSearch}&sort=${sort.key}&order=${sort.order
-                    }&status=${filter}&date=${selectedDate?.toDateString() || ""
-                    }&batchIds=${user?.batches?.map((b) => b._id)}&skip=${0}`,
+                    `/search?batchId=${selectedBatch?._id || ""
+                    }&studentId=${selectedStudent}&domainId=${""}&weekId=${""}&sort=${sort.key
+                    }&order=${sort.order}&status=${filter}&date=${selectedDate?.toDateString() || ""
+                    }&category=${""}&skip=${0}`,
                     role
                 );
 
@@ -160,7 +164,7 @@ function Reviews() {
         };
 
         fetchReviews();
-    }, [debouncedSearch, sort, filter, selectedDate]);
+    }, [sort, filter, selectedDate, selectedBatch, selectedStudent]);
 
     return (
         <div className="p-5 pt-0 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -175,49 +179,110 @@ function Reviews() {
                     heading="Schedule reviews"
                     count={reviews.length}
                     children={
-                        <ScheduleReviewSheet
-                            button={
-                                <div className="shadow-md bg-zinc-900 hover:bg-zinc-800 text-white rounded-full p-2">
-                                    <Plus className="h-4 w-4" />
-                                </div>
-                            }
-                            setNewReview={setNewReview}
-                            batches={(user as any).batches}
-                        />
+                        <div className="flex items-center gap-2">
+                            {/* Review status info */}
+                            <DropdownMenu>
+                                <DropdownMenuTrigger>
+                                    <ToolTip
+                                        text="Color Info"
+                                        side="top"
+                                        children={
+                                            <div className="bg-muted dark:bg-zinc-900 dark:hover:bg-muted text-foreground rounded-full p-2">
+                                                <Info className="h-4 w-4" />
+                                            </div>
+                                        }
+                                    />
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                    <DropdownMenuLabel>Color Info</DropdownMenuLabel>
+                                    <DropdownMenuItem>
+                                        <div className="p-1 rounded-full bg-red-400/40 group-hover:bg-red-400/50"></div>
+                                        Absent
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                        <div className="p-1 rounded-full bg-yellow-400/40 group-hover:bg-yellow-400/50"></div>
+                                        Pending
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                        <div className="p-1 rounded-full bg-purple-400/40 group-hover:bg-purple-400/50"></div>
+                                        Cancelled
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                        <div className="p-1 rounded-full bg-green-400/40 group-hover:bg-green-400/50"></div>
+                                        Completed
+                                    </DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+
+                            {/* Add review sheet */}
+                            <ScheduleReviewSheet
+                                button={
+                                    <ToolTip
+                                        text="Add Review"
+                                        children={
+                                            <div className="shadow-md bg-zinc-900 hover:bg-zinc-800 text-white rounded-full p-2">
+                                                <Plus className="h-4 w-4" />
+                                            </div>
+                                        }
+                                    />
+                                }
+                                setNewReview={setNewReview}
+                            />
+                        </div>
                     }
                 />
 
                 {/* Search sort filter */}
                 <div className="w-full flex gap-2 relative">
                     {/* Search reviews */}
-                    <Search search={search} handleSearch={handleSearch} />
+                    <Select>
+                        <SelectTrigger className="h-[41.6px] min-w-0 bg-background dark:hover:border-customBorder-dark dark:hover:bg-sidebar rounded-lg shadow-none">
+                            <div className="w-full flex items-center gap-2">
+                                <Search className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                                <p className="text-muted-foreground mt-0.5 truncate">
+                                    Batch and student
+                                </p>
+                            </div>
+                        </SelectTrigger>
+                        <SelectContent className="w-[220px]" align="end">
+                            <FilterBatchStudent
+                                batches={batches}
+                                selectedBatch={selectedBatch}
+                                setSelectedBatch={setSelectedBatch}
+                                selectedStudent={selectedStudent}
+                                setSelectedStudent={setSelectedStudent}
+                                students={students}
+                                setStudents={setStudents}
+                                fetchingStudents={fetchingStudents}
+                            />
+                        </SelectContent>
+                    </Select>
 
-                    {/* Filter by date */}
-                    <IconButton
-                        Icon={CalendarDays}
-                        action={() => {
-                            // e.stopPropagation();
-                            setDatePickerOpen(!isDatePickerOpen);
-                        }}
-                        className="bg-background dark:hover:bg-sidebar dark:hover:border-customBorder-dark cursor-pointer"
-                    />
-                    <DatePicker
-                        isDatePickerOpen={isDatePickerOpen}
-                        selectedDate={selectedDate}
-                        setSelectedDate={(date) => {
-                            setSelectedDate(date);
-                            setTimeout(() => {
-                                setDatePickerOpen(false);
-                            }, 0);
-                        }}
-                        className="absolute z-20 bg-background top-[45.5px] border rounded-lg"
-                    />
+                    {/* Calendar */}
+                    <Select>
+                        <SelectTrigger className="w-fit border-none h-fit p-0">
+                            <ToolTip
+                                text="Calendar"
+                                side="top"
+                                children={<IconButton Icon={CalendarDays} />}
+                            />
+                        </SelectTrigger>
+                        <SelectContent align="end" className="p-0 shadow">
+                            <DatePicker
+                                selectedDate={selectedDate}
+                                setSelectedDate={(date) => {
+                                    setSelectedDate(date);
+                                }}
+                                className="shadow-none"
+                            />
+                        </SelectContent>
+                    </Select>
 
                     {/* Sort */}
                     <Sort
                         sort={sort}
                         setSort={setSort}
-                        sortData={["name", "week", "createdAt"]}
+                        sortData={["name", "createdAt"]}
                     />
 
                     {/* Filter */}
@@ -233,7 +298,7 @@ function Reviews() {
                 {reviews.length > 0 && (
                     <div
                         ref={divRef}
-                        onScroll={handleScroll}
+                        // onScroll={handleScroll}
                         className="h-full w-full flex flex-col gap-[9px] overflow-auto bg-transparent no-scrollbar"
                     >
                         {reviews.map((review, index) => (
@@ -242,19 +307,19 @@ function Reviews() {
                                 index={index}
                                 user={{
                                     _id: review._id,
-                                    name: review.user.name,
-                                    profilePic: review.user.profilePic,
+                                    name: review.student.name,
+                                    profilePic: review.student.profilePic,
                                 }}
                                 action={() => setSelectedReview(review)}
                                 selectedUser={selectedReview}
                                 className="dark:border-transparent bg-background dark:bg-sidebar hover:bg-muted dark:hover:bg-sidebar-backgroundDark"
                                 children1={
-                                    <div className="flex items-center relative overflow-auto no-scrollbar">
+                                    <div className="flex items-center gap-2 relative overflow-auto no-scrollbar">
                                         <p className="relative text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
-                                            <CalendarDays className="w-3 h-3" />{" "}
-                                            {review.week[0].toUpperCase() + review.week.slice(1)}
+                                            <CalendarDays className="w-3 h-3" />
+                                            {review.week?.name || "Foundation"}
                                         </p>
-                                        <p className="flex gap-1 items-center absolute left-20 text-sm text-muted-foreground font-medium truncate">
+                                        <p className="flex gap-1 items-center text-sm text-muted-foreground font-medium truncate">
                                             <Calendar1 className="w-3 h-3" />
                                             {new Date(review?.date).toLocaleDateString("en-GB", {
                                                 day: "2-digit",
@@ -318,19 +383,6 @@ function Reviews() {
                     selectedReview={selectedReview}
                     setSelectedReview={setSelectedReview}
                 />
-
-                {/* Add pendings */}
-                {selectedReview && (
-                    <div className="h-full p-5 rounded-2xl overflow-hidden border border-border bg-background dark:bg-sidebar-background shadow-sm flex flex-col">
-                        <p>Add Pendings</p>
-                        <form className="flex-1 flex flex-col">
-                            <Textarea
-                                placeholder="Closure, event loops,..."
-                                className="resize-none flex-1 w-full"
-                            />
-                        </form>
-                    </div>
-                )}
             </div>
         </div>
     );

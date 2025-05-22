@@ -1,4 +1,4 @@
-import { socket } from "@/socket/communication/socket";
+import { socket } from "@/socket/communication/connection";
 import { handRaise, leaveMeet } from "@/socket/communication/videocall";
 import { motion } from "framer-motion";
 import {

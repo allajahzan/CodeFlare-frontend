@@ -4,7 +4,7 @@ import NotSelected from "@/components/common/fallback/not-selected";
 import UsersListOfChat from "./chat-users-list";
 import MessageSideOfChat from "./chat-message-side";
 import { IUserChat } from "./user-contact-sheet";
-import { socket } from "@/socket/communication/socket";
+import { socket } from "@/socket/communication/connection";
 import {
     chatInfo,
     listenUserOnline,

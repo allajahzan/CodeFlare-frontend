@@ -1,14 +1,9 @@
-import { nameRegex } from "@/constants/regex";
+// import { nameRegex } from "@/constants/regex";
 import z from "zod";
 
 // Schedule review form validation schema
 export const formSchema = z.object({
-    title: z
-        .string()
-        .trim()
-        .regex(nameRegex.alphabet, "Title should contain only alphabets !")
-        .nonempty("Title is required !"),
-    week: z.string().nonempty("Week is required !"),
+    category: z.string().nonempty("Category is required !"),
     batch: z
         .string({
             required_error: "Batch is required!",
@@ -19,6 +14,9 @@ export const formSchema = z.object({
             required_error: "Student is required!",
         })
         .min(1, "Student is required !"),
+    domain: z.string().optional(),
+    week: z.string().optional(),
+    title: z.string().optional(),
     date: z
         .any()
         .refine((val) => val instanceof Date && !isNaN(val.getTime()), {

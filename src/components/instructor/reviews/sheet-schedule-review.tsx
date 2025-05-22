@@ -6,7 +6,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet";
-import { Fragment, ReactNode, useEffect, useState } from "react";
+import { Fragment, ReactNode, useContext, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -18,11 +18,12 @@ import {
 } from "@/components/ui/select";
 import { motion } from "framer-motion";
 import {
-    Calendar1,
     CalendarCheck2,
+    CalendarDays,
     CalendarRange,
     Clock,
     FolderPen,
+    ListFilter,
     Loader2,
     UsersRound,
 } from "lucide-react";
@@ -41,17 +42,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { convertTo12HourFormat } from "@/utils/time-converter";
 import { IStudent } from "@/types/IStudent";
 import { IReview } from "@/types/IReview";
-import { IBatch } from "@codeflare/common";
+import { IBatch, IDomainsWeek } from "@codeflare/common";
+import { IUserContext, UserContext } from "@/context/user-context";
 
 // Interface for Props
 interface PropsType {
     button: ReactNode;
     setNewReview: React.Dispatch<React.SetStateAction<IReview | null>>;
-    batches: IBatch[];
 }
 
 // Add user sheet
-function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
+function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
     // Sheet state
     const [open, setOpen] = useState<boolean | undefined>(undefined);
     const [submiting, setSubmiting] = useState(false);
@@ -62,19 +63,22 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
     const [fetchingStudents, setFetchingStudents] = useState(false);
 
     // Batches
+    const [batches, setBatches] = useState<IBatch[]>([]);
     const [batch, setBatch] = useState<IBatch | null>(null);
 
     // Week
     const [fetchingWeek, setFetchingWeek] = useState<boolean>(false);
 
     // Date
-    const [isDatePickerOpen, setDatePickerOpen] = useState<boolean>(false);
     const [selectedDate, setSelectedDate] = useState<Date | undefined>(
         new Date()
     );
 
     // Time
     const [selectedTime, setselectedTime] = useState<string>("");
+
+    // User context
+    const { user } = useContext(UserContext) as IUserContext;
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
@@ -93,10 +97,12 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
         setSubmiting(true);
 
         const data = {
-            userId: formData.student,
+            category: formData.category,
             batchId: formData.batch,
+            studentId: formData.student,
+            domainId: formData.domain,
+            weekId: formData.week,
             title: formData.title,
-            week: formData.week.toLowerCase(),
             date: formData.date,
             time: formData.time,
         };
@@ -121,7 +127,28 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
         }
     };
 
-    // Fetch users based on the batch
+    // Fetch batch
+    useEffect(() => {
+        const fetchBatch = async () => {
+            try {
+                // Send request
+                const resp = await fetchData(ApiEndpoints.BATCH + "?type=list", role);
+
+                // Success response
+                if (resp && resp.status === 200) {
+                    const data = resp.data?.data;
+
+                    setBatches(data);
+                }
+            } catch (err: unknown) {
+                handleCustomError(err);
+            }
+        };
+
+        fetchBatch();
+    }, []);
+
+    // Fetch users based on the batch and domain
     useEffect(() => {
         const fetchUsers = async () => {
             try {
@@ -132,7 +159,8 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
 
                 // Fetch data
                 const resp = await fetchData(
-                    ApiEndpoints.SEARCH_USER + `?category=student&batchId=${batch?._id}`,
+                    ApiEndpoints.SEARCH_USER +
+                    `?roleWise=student&batchId=${batch?._id}&domainId=${user?.domain?._id}`,
                     role
                 );
 
@@ -149,12 +177,13 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
         if (batch) fetchUsers();
     }, [batch]);
 
-    // Fetch week based on the  batch and student
+    // Fetch week and domain based on the student
     useEffect(() => {
         const fetchStudentWeek = async () => {
             try {
                 setFetchingWeek(true);
                 setValue("week", "");
+                setValue("title", "");
 
                 // Send request
                 const resp = await fetchData(
@@ -166,12 +195,22 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                 if (resp && resp.status === 200) {
                     const data = resp?.data.data;
 
-                    // Update week
-                    setValue(
-                        "week",
-                        (data.week && data.week[0].toUpperCase() + data.week.slice(1)) ||
-                        "Week 1"
+                    // Set week
+                    setValue("week", data.week?.name || "");
+
+                    // Set domain
+                    setValue("domain", data.domain?._id || "");
+
+                    // Set title
+                    const week = data.domain?.domainsWeeks.find(
+                        (week: IDomainsWeek) => week.week._id === data.week?._id
                     );
+
+                    if (week) {
+                        setValue("title", week.title);
+                    } else {
+                        setValue("title", "Foundation Period");
+                    }
 
                     setFetchingWeek(false);
                 }
@@ -192,17 +231,13 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
             setBatch(null);
             setStudents([]);
             setSelectedStudent("");
-            setDatePickerOpen(false)
         }
     }, [open]);
 
     return (
         <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger>{button}</SheetTrigger>
-            <SheetContent
-                onClick={() => setDatePickerOpen(false)}
-                className="p-0 flex flex-col gap-0"
-            >
+            <SheetContent className="p-0 flex flex-col gap-0">
                 {/* Header */}
                 <SheetHeader className="p-5 bg-zinc-0">
                     <SheetTitle className="flex items-center gap-3 text-foreground">
@@ -224,7 +259,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                     onSubmit={handleSubmit(OnSubmit)}
                     className="space-y-3 p-5 overflow-auto"
                 >
-                    {/* Input for title */}
+                    {/* Select for category */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -232,25 +267,40 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                         className="space-y-2"
                     >
                         <Label
-                            htmlFor="title"
+                            htmlFor="role"
                             className="text-sm text-foreground font-medium"
                         >
-                            Title
+                            Review Category
                         </Label>
                         <div className="relative">
-                            <Input
-                                id="title"
-                                placeholder="Enter title"
+                            <Select
+                                key={"category"}
                                 required
-                                autoComplete="off"
-                                {...register("title")}
-                                className="text-foreground font-medium p-5 pl-9"
-                            />
-                            <FolderPen className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                                onValueChange={(value) => {
+                                    setValue("category", value);
+                                }}
+                            >
+                                <SelectTrigger
+                                    id="category"
+                                    className="text-foreground font-medium p-5 pl-9 relative"
+                                >
+                                    <SelectValue
+                                        placeholder="Select review category"
+                                        className="relative transition-opacity duration-200"
+                                    />
+                                </SelectTrigger>
+                                <SelectContent className="max-h-[200px]">
+                                    {["Foundation", "Weekly", "QA", "InTake"].map(
+                                        (cate, index) => (
+                                            <SelectItem key={index} value={cate}>
+                                                {cate}
+                                            </SelectItem>
+                                        )
+                                    )}
+                                </SelectContent>
+                            </Select>
+                            <ListFilter className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
-
-                        {/* Title error message */}
-                        <ValidationError message={errors.title?.message as string} />
                     </motion.div>
 
                     {/* Input for batches */}
@@ -385,7 +435,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                         <div className="relative">
                             <Input
                                 id="week"
-                                placeholder={fetchingWeek ? "Finding week" : "Week 1"}
+                                placeholder={fetchingWeek ? "Finding week" : "Week"}
                                 required
                                 disabled
                                 autoComplete="off"
@@ -408,7 +458,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                         <ValidationError message={errors.week?.message as string} />
                     </motion.div>
 
-                    {/* Date picker */}
+                    {/* Input for title */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -416,44 +466,78 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                         className="space-y-2"
                     >
                         <Label
-                            onClick={(event) => {
-                                event.stopPropagation();
-                                setDatePickerOpen(!isDatePickerOpen);
-                            }}
+                            htmlFor="title"
+                            className="text-sm text-foreground font-medium"
+                        >
+                            Title
+                        </Label>
+                        <div className="relative">
+                            <Input
+                                id="title"
+                                placeholder="Title"
+                                required
+                                autoComplete="off"
+                                disabled
+                                {...register("title")}
+                                className="text-foreground font-medium p-5 pl-9"
+                            />
+
+                            {/* Loader icon */}
+                            {fetchingWeek && (
+                                <Loader2 className="w-4 h-4 absolute left-3 top-[13px] text-foreground animate-spin" />
+                            )}
+
+                            {/* Default icon */}
+                            {!fetchingWeek && (
+                                <FolderPen className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                            )}
+                        </div>
+
+                        {/* Title error message */}
+                        <ValidationError message={errors.title?.message as string} />
+                    </motion.div>
+
+                    {/* Date picker */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.8 }}
+                        className="space-y-2"
+                    >
+                        <Label
+                            htmlFor="date"
                             className="text-sm text-foreground font-medium"
                         >
                             Date
                         </Label>
-                        <div
-                            onClick={(event) => {
-                                event.stopPropagation();
-                                setDatePickerOpen(!isDatePickerOpen);
-                            }}
-                            className="relative border p-[9.2px] pl-9 rounded-lg cursor-pointer"
-                        >
-                            <DatePicker
-                                isDatePickerOpen={isDatePickerOpen}
-                                selectedDate={selectedDate}
-                                setSelectedDate={(date) => {
-                                    setValue("date", date);
-                                    setSelectedDate(date);
-                                }}
-                                className="absolute z-20 bottom-11 -left-0.5 bg-background"
-                            />
-                            <p className="text-foreground font-medium">
-                                {selectedDate ? (
-                                    selectedDate.toLocaleDateString("en-GB", {
-                                        day: "2-digit",
-                                        month: "short",
-                                        year: "numeric",
-                                    })
-                                ) : (
-                                    <span>Pick a date</span>
-                                )}
-                            </p>
-
-                            <Calendar1 className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
-                        </div>
+                        <Select>
+                            <SelectTrigger
+                                key="date"
+                                className="h-[41.6px] bg-background dark:hover:border-customBorder-dark dark:hover:bg-sidebar rounded-lg shadow-none"
+                            >
+                                <div className="w-full flex items-center gap-2">
+                                    <CalendarDays className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                                    <p className="text-foreground mt-0.5 truncate">
+                                        {selectedDate
+                                            ? selectedDate.toDateString()
+                                            : "Select a date"}
+                                    </p>
+                                </div>
+                            </SelectTrigger>
+                            <SelectContent
+                                align="end"
+                                className="border-none shadow-none bg-transparent"
+                            >
+                                <DatePicker
+                                    selectedDate={selectedDate}
+                                    setSelectedDate={(date) => {
+                                        setValue("date", date);
+                                        setSelectedDate(date);
+                                    }}
+                                    className="w-fit bg-background dark:bg-sidebar-background border shadow rounded-lg"
+                                />
+                            </SelectContent>
+                        </Select>
 
                         {/* Date error message */}
                         <ValidationError message={errors.date?.message as string} />
@@ -463,20 +547,18 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.8 }}
+                        transition={{ delay: 0.9 }}
                         className="space-y-2"
                     >
                         <Label
-                            onClick={(event) => {
-                                event.stopPropagation();
-                                setDatePickerOpen(!isDatePickerOpen);
-                            }}
+                            htmlFor="time"
                             className="text-sm text-foreground font-medium"
                         >
                             Time
                         </Label>
                         <div className="relative">
                             <Select
+                                key="time"
                                 onValueChange={(value) => {
                                     setselectedTime(value);
                                     setValue("time", value);
@@ -520,7 +602,7 @@ function ScheduleReviewSheet({ button, setNewReview, batches }: PropsType) {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.9 }}
+                        transition={{ delay: 1 }}
                         className="pt-4"
                     >
                         <Button

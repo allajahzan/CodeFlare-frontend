@@ -282,7 +282,6 @@ function Lists({ view, setView }: Propstype) {
                                 align="end"
                             >
                                 <DatePicker
-                                    isDatePickerOpen={true}
                                     selectedDate={selectedDate}
                                     setSelectedDate={setSelectedDate}
                                     className="w-[252px] bg-background rounded-lg shadow-lg border"

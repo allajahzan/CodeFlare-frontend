@@ -1,16 +1,17 @@
-import { IUser } from "@/context/user-context";
+import { IReveiewCategory, IWeek } from "@codeflare/common";
+import { IStudent } from "./IStudent";
+import { IUser } from "./IUser";
 
 // Interface for Review
 export interface IReview {
     _id: string;
     instructor: IUser;
-    user: IUser;
-    batchId: string;
+    student: IStudent;
+    week: IWeek;
     title: string;
-    week: string;
     date: Date;
     time: string;
-    rating: number;
+    category: IReveiewCategory;
     feedback: string;
     pendings: string[];
     score: {
@@ -19,6 +20,7 @@ export interface IReview {
     } | null;
     status: string;
     result: string | null;
+    rating: number;
     updatedAt: Date,
     createdAt: Date;
 }

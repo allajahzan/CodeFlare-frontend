@@ -1,4 +1,4 @@
-import { socket } from "./socket";
+import { socket } from "./connection";
 
 /**
  * Emits a "registerUser" event to the socket server with the provided userId.

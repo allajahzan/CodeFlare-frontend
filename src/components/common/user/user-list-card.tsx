@@ -35,8 +35,8 @@ function UserListCard({
             onClick={() => action(index)}
             className={cn(
                 "group p-2 px-3 w-full flex flex-col rounded-xl cursor-pointer border border-border hover:bg-muted dark:hover:bg-sidebar shadow-sm",
-                selectedUser?._id === user._id ? "bg-muted dark:bg-sidebar" : "",
-                className
+                className,
+                selectedUser?._id === user._id ? "bg-muted dark:bg-sidebar" : ""
             )}
         >
             <div className="flex items-center gap-3">

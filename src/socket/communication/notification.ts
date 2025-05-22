@@ -1,4 +1,4 @@
-import { socket } from "./socket";
+import { socket } from "./connection";
 import { INotification } from "@/types/INotification";
 
 /**

@@ -139,7 +139,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                 setBatches([]);
 
                 // Send request
-                const resp = await fetchData(ApiEndpoints.BATCH, role);
+                const resp = await fetchData(ApiEndpoints.BATCH + "?type=unassigned", role);
 
                 // Success response
                 if (resp && resp.status === 200) {

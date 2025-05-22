@@ -81,10 +81,15 @@ function ReviewDetails({ selectedReview }: PropsType) {
                         <div className="flex items-center justify-between gap-3">
                             <div className="flex items-center gap-3">
                                 <div className="text-lg text-foreground font-semibold">
-                                    {selectedReview.week[0].toUpperCase() +
-                                        selectedReview.week.slice(1)}
+                                    {selectedReview.week
+                                        ? `${selectedReview.week.name
+                                        } (${selectedReview.title[0].toUpperCase()}${selectedReview.title.slice(
+                                            1
+                                        )})`
+                                        : "Foundation Period"}
                                 </div>
                             </div>
+                            
                             <Badge
                                 className={cn(
                                     "text-sm font-semibold self-start rounded-full duration-0",
@@ -95,7 +100,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                             : "text-yellow-600 bg-yellow-400/20 hover:bg-yellow-400/30"
                                 )}
                             >
-                                {selectedReview.result}
+                               {selectedReview.result || "Pending"}
                             </Badge>
                         </div>
 
@@ -300,7 +305,7 @@ function PendingsAndChart({ selectedReview, reviews, fetching }: PropsType) {
             })
             .filter((_, index) => index < 5);
 
-        setMonthlyData(data as IWeekData[]);
+        setMonthlyData(data as unknown as IWeekData[]);
     }, [reviews]);
 
     return (
@@ -321,9 +326,9 @@ function PendingsAndChart({ selectedReview, reviews, fetching }: PropsType) {
                                 initial={{ opacity: 0, y: -20 }}
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ delay: 0.2 }}
-                                className="text-base text-foreground font-medium truncate"
+                                className="text-lg text-foreground font-semibold truncate"
                             >
-                                Pendings ({selectedReview.title.toUpperCase()})
+                                Pendings ({selectedReview.title[0].toUpperCase() + selectedReview.title.slice(1)})
                             </motion.p>
                             {selectedReview.pendings.length > 0 && (
                                 <div
@@ -339,7 +344,7 @@ function PendingsAndChart({ selectedReview, reviews, fetching }: PropsType) {
                         {/* Pendings */}
                         {selectedReview.pendings.length > 0 ? (
                             <AnimatePresence mode="wait">
-                                <div className="h-[170px] sm:h-[206px] flex flex-col gap-1 overflow-x-hidden overflow-auto no-scrolbar">
+                                <div className="h-[170px] sm:h-[204px] flex flex-col gap-1 overflow-x-hidden overflow-auto no-scrolbar">
                                     <ul className="space-y-2.5">
                                         {["Event looop", "Js engine"].map((pending, index) => (
                                             <motion.p
@@ -356,7 +361,7 @@ function PendingsAndChart({ selectedReview, reviews, fetching }: PropsType) {
                                 </div>
                             </AnimatePresence>
                         ) : (
-                            <div className="flex items-center justify-center h-[170px] sm:h-[206px]">
+                            <div className="flex items-center justify-center h-[170px] sm:h-[202px]">
                                 <p className="text-foreground text-sm font-semibold">
                                     No pendings are added
                                 </p>
@@ -387,16 +392,6 @@ function PendingsAndChart({ selectedReview, reviews, fetching }: PropsType) {
                         text="Overall Performance"
                         className="h-[170px] sm:h-[206px]"
                     />
-                    //  <PieCharts
-                    //                             data={[
-                    //                                 { name: "Present", value: 50 },
-                    //                                 { name: "Absent", value: 20 },
-                    //                                 { name: "Pending", value: 15 },
-                    //                             ]}
-                    //                             text="Today's overview"
-                    //                             className="h-[170px] sm:h-[206px]"
-                    //                             radius={70}
-                    //                         />
                 )}
 
                 {/* If no reviews */}

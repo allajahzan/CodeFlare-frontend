@@ -1,4 +1,4 @@
-import { socket } from "./socket";
+import { socket } from "./connection";
 import * as mediasoupClient from "mediasoup-client";
 import { handleCustomError } from "@/utils/error";
 import { IStudent, IUser } from "@codeflare/common";

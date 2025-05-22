@@ -39,7 +39,7 @@ function Sort({ sort, setSort, sortData }: PropsType) {
             >
                 <DropdownMenuLabel>Sort</DropdownMenuLabel>
 
-                <DropdownMenuSeparator/>
+                <DropdownMenuSeparator />
 
                 {/* Checkbox for sorting order */}
                 <div className="flex items-center gap-2 py-1.5 pl-2 cursor-pointer">
@@ -62,7 +62,7 @@ function Sort({ sort, setSort, sortData }: PropsType) {
                     </label>
                 </div>
 
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator className="h-[0.5px]" />
 
                 {/* Sorting options */}
                 {sortData.map((data, index) => {

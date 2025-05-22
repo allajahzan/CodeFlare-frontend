@@ -2,7 +2,7 @@ import React, { createContext, useState, useEffect, ReactNode } from "react";
 import warningAlarm from "@/assets/music/warning-alarm.mp3";
 import { toast } from "@/hooks/use-toast";
 import { reciveSnapshotMessage } from "@/socket/communication/notification";
-import { socket } from "@/socket/communication/socket";
+import { socket } from "@/socket/communication/connection";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 

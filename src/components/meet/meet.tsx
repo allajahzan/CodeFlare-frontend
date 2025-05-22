@@ -1,7 +1,7 @@
 import Navbar from "../common/navbar/navbar";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import * as mediasoupClient from "mediasoup-client";
-import { socket } from "@/socket/communication/socket";
+import { socket } from "@/socket/communication/connection";
 import MeetingJoin from "./meeting-join";
 import { useLocation } from "react-router-dom";
 import MeetingLeft from "./meeting-left";
