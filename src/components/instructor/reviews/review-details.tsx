@@ -95,7 +95,7 @@ function ReviewDetails({
         setFeedback(updatedFeedback);
 
         if (
-            selectedReview?.feedback.toLowerCase() === updatedFeedback.toLowerCase()
+            selectedReview?.feedback?.toLowerCase() === updatedFeedback.toLowerCase()
         ) {
             return;
         }
@@ -415,7 +415,7 @@ function ReviewDetails({
                                 <InfoCard
                                     Icon={CalendarDays}
                                     label="Sheduled Date"
-                                    text={new Date(selectedReview.updatedAt).toLocaleDateString(
+                                    text={new Date(selectedReview.createdAt).toLocaleDateString(
                                         "en-GB",
                                         {
                                             day: "2-digit",

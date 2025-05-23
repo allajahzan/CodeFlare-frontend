@@ -4,12 +4,13 @@ import {
     Ban,
     Calendar1,
     CalendarDays,
-    CheckCircle,
+    Check,
+    CheckCheck,
     ChevronRight,
     CircleDashed,
+    Info,
     SearchIcon,
     X,
-    XCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PendingsAndChart, ReviewDetails } from "./review-details";
@@ -23,6 +24,14 @@ import { stateType } from "@/redux/store";
 import NotFoundOrbit from "@/components/common/fallback/not-found-orbit";
 import { IUserContext, UserContext } from "@/context/user-context";
 import Search from "@/components/common/data-toolbar/search";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import ToolTip from "@/components/common/tooltip/tooltip";
 
 // Interface for Review
 
@@ -80,7 +89,52 @@ function Reviews() {
             border border-border shadow-sm"
             >
                 {/* Card header */}
-                <CardHeader count={reviews.length} heading="Reviews lists" />
+                <CardHeader
+                    count={reviews.length}
+                    heading="Reviews lists"
+                    children={
+                        <DropdownMenu>
+                            <DropdownMenuTrigger>
+                                <ToolTip
+                                    text="Color Info"
+                                    side="top"
+                                    children={
+                                        <div className="bg-muted dark:bg-zinc-900 dark:hover:bg-muted text-foreground rounded-full p-2">
+                                            <Info className="h-4 w-4" />
+                                        </div>
+                                    }
+                                />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>Color Info</DropdownMenuLabel>
+                                <DropdownMenuItem>
+                                    <X size={10} className="text-red-600" />
+                                    Absent
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <CircleDashed size={10} className="text-yellow-600" />
+                                    Pending
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <Ban size={10} className="text-purple-600" />
+                                    Cancelled
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <Check size={10} className="text-green-600" />
+                                    Completed
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <CheckCheck size={10} className="text-green-600" />
+                                    Pass
+                                </DropdownMenuItem>
+                                <DropdownMenuItem>
+                                    <CheckCheck size={10} className="text-red-600" />
+                                    Fail
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    }
+                />
 
                 {/* Search filter sort */}
                 <div className="w-full flex relative">
@@ -93,45 +147,63 @@ function Reviews() {
                 {reviews.length > 0 && (
                     <div className="flex flex-col gap-3 overflow-auto no-scrollbar ">
                         {reviews.map((review, index) => (
-                            <div key={review._id} className="relative rounded-lg">
+                            <div key={review._id} className="relative">
                                 {/* One list */}
                                 <motion.div
                                     initial={{ opacity: 0, y: -20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: 0.2 + index * 0.1 }}
                                     className={cn(
-                                        "p-2 px-3 flex items-center gap-4 cursor-pointer rounded-full border dark:border-transparent bg-background dark:bg-sidebar hover:bg-muted dark:hover:bg-sidebar-backgroundDark",
+                                        "p-2 px-3 flex items-center gap-4 cursor-pointer rounded-full hover:bg-muted dark:hover:bg-sidebar-backgroundDark",
                                         selectedReview?._id === review._id
-                                            ? "bg-muted dark:bg-sidebar"
+                                            ? "bg-muted dark:bg-sidebar-backgroundDark"
                                             : ""
                                     )}
                                     onClick={() => setSelectedReview(review)}
                                 >
                                     {/* Icon circle */}
-                                    <div className="h-12 w-12 rounded-full flex items-center justify-center bg-background border-2 border-white dark:border-border shadow-md">
+                                    <div
+                                        className={cn(
+                                            "h-10 w-10 flex-shrink-0 rounded-full flex items-center justify-center shadow",
+                                            review.status === "Completed"
+                                                ? review.result === "Pass"
+                                                    ? "bg-green-600/20"
+                                                    : review.result === "Fail"
+                                                        ? "bg-red-600/20"
+                                                        : "bg-yellow-600/20"
+                                                : review.status === "Pending"
+                                                    ? "bg-yellow-600/20"
+                                                    : review.status === "Absent"
+                                                        ? "bg-red-600/20"
+                                                        : review.status === "Cancelled"
+                                                            ? "bg-purple-600/20"
+                                                            : "bg-yellow-600/20"
+                                        )}
+                                    >
                                         {review.status === "Completed" ? (
                                             review.result === "Pass" ? (
-                                                <CheckCircle size={24} className="text-green-700" />
+                                                <CheckCheck size={20} className="text-green-600" />
                                             ) : review.result === "Fail" ? (
-                                                <XCircle size={24} className="text-red-700" />
+                                                <CheckCheck size={20} className="text-red-600" />
                                             ) : (
-                                                <CircleDashed size={24} className="text-yellow-700" />
+                                                <Check size={20} className="text-green-600" />
                                             )
                                         ) : review.status === "Pending" ? (
-                                            <CircleDashed size={24} className="text-yellow-700" />
+                                            <CircleDashed size={20} className="text-yellow-600" />
                                         ) : review.status === "Absent" ? (
-                                            <X size={24} className="text-red-700" />
+                                            <X size={20} className="text-red-600" />
                                         ) : review.status === "Cancelled" ? (
-                                            <Ban size={24} className="text-purple-700" />
+                                            <Ban size={20} className="text-purple-600" />
                                         ) : (
-                                            <CircleDashed size={24} className="text-yellow-700" />
+                                            <CircleDashed size={20} className="text-yellow-600" />
                                         )}
                                     </div>
 
                                     {/* Week and date */}
                                     <div className="flex flex-col gap-1">
-                                        <p className="text-foreground font-semibold">
-                                            {review.week?.name || "Foundation"}
+                                        <p className="text-foreground font-semibold truncate">
+                                            {review.week?.name || "Foundation"}{" "}
+                                            {review.week?._id && `(${review.title})`}
                                         </p>
                                         <div className="flex items-center gap-2 relative overflow-auto no-scrollbar">
                                             {/* <p className="relative text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
@@ -155,14 +227,24 @@ function Reviews() {
                                 {index < reviews.length - 1 && (
                                     <motion.div
                                         initial={{ height: 0 }}
-                                        animate={{ height: 28 }}
+                                        animate={{ height: 34 }}
                                         transition={{ delay: 0.2 + index * 0.1 }}
-                                        style={{ top: "56px" }}
+                                        style={{ top: "51px" }}
                                         className={cn(
-                                            "absolute z-50 left-[37px] w-0.5 -translate-x-1/2 rounded-full",
-                                            reviews[index + 1].status === "Pass"
-                                                ? "bg-green-700"
-                                                : "bg-red-700"
+                                            "absolute z-50 left-[33px] w-0.5 -translate-x-1/2 rounded-full",
+                                            reviews[index + 1]?.status === "Completed"
+                                                ? reviews[index + 1]?.result === "Pass"
+                                                    ? "bg-green-700"
+                                                    : reviews[index + 1]?.result === "Fail"
+                                                        ? "bg-red-700"
+                                                        : "bg-yellow-700"
+                                                : reviews[index + 1]?.status === "Pending"
+                                                    ? "bg-yellow-700"
+                                                    : reviews[index + 1]?.status === "Absent"
+                                                        ? "bg-red-700"
+                                                        : reviews[index + 1]?.status === "Cancelled"
+                                                            ? "bg-purple-700"
+                                                            : "bg-yellow-700"
                                         )}
                                     />
                                 )}

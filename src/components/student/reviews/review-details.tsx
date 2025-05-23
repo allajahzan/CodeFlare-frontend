@@ -89,7 +89,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                         : "Foundation Period"}
                                 </div>
                             </div>
-                            
+
                             <Badge
                                 className={cn(
                                     "text-sm font-semibold self-start rounded-full duration-0",
@@ -100,7 +100,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                             : "text-yellow-600 bg-yellow-400/20 hover:bg-yellow-400/30"
                                 )}
                             >
-                               {selectedReview.result || "Pending"}
+                                {selectedReview.result || "Pending"}
                             </Badge>
                         </div>
 
@@ -296,14 +296,15 @@ function PendingsAndChart({ selectedReview, reviews, fetching }: PropsType) {
     useEffect(() => {
         let data = reviews
             .map((review: IReview) => {
-                if (review.score) {
-                    return {
-                        week: review.week,
-                        score: review.score && review.score.practical + review.score.theory,
-                    };
-                }
+                return {
+                    week: review.week,
+                    score: review.score
+                        ? review.score.practical + review.score.theory
+                        : 0,
+                };
             })
-            .filter((_, index) => index < 5);
+            .filter((_, index) => index < 5)
+            .reverse();
 
         setMonthlyData(data as unknown as IWeekData[]);
     }, [reviews]);
@@ -328,7 +329,10 @@ function PendingsAndChart({ selectedReview, reviews, fetching }: PropsType) {
                                 transition={{ delay: 0.2 }}
                                 className="text-lg text-foreground font-semibold truncate"
                             >
-                                Pendings ({selectedReview.title[0].toUpperCase() + selectedReview.title.slice(1)})
+                                Pendings (
+                                {selectedReview.title[0].toUpperCase() +
+                                    selectedReview.title.slice(1)}
+                                )
                             </motion.p>
                             {selectedReview.pendings.length > 0 && (
                                 <div

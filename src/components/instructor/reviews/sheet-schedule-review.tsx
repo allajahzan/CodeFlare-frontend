@@ -68,6 +68,7 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
 
     // Week
     const [fetchingWeek, setFetchingWeek] = useState<boolean>(false);
+    const [weekName, setWeekName] = useState<string>("");
 
     // Date
     const [selectedDate, setSelectedDate] = useState<Date | undefined>(
@@ -177,11 +178,12 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
         if (batch) fetchUsers();
     }, [batch]);
 
-    // Fetch week and domain based on the student
+    // Fetch week domain and title based on the student
     useEffect(() => {
         const fetchStudentWeek = async () => {
             try {
                 setFetchingWeek(true);
+                setWeekName("");
                 setValue("week", "");
                 setValue("title", "");
 
@@ -195,8 +197,11 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                 if (resp && resp.status === 200) {
                     const data = resp?.data.data;
 
+                    // Set week name
+                    setWeekName(data.week?.name || "");
+
                     // Set week
-                    setValue("week", data.week?.name || "");
+                    setValue("week", data.week?._id || "");
 
                     // Set domain
                     setValue("domain", data.domain?._id || "");
@@ -215,6 +220,7 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                     setFetchingWeek(false);
                 }
             } catch (err: unknown) {
+                setFetchingWeek(false);
                 handleCustomError(err);
             }
         };
@@ -231,6 +237,7 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
             setBatch(null);
             setStudents([]);
             setSelectedStudent("");
+            setWeekName("");
         }
     }, [open]);
 
@@ -439,7 +446,7 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                                 required
                                 disabled
                                 autoComplete="off"
-                                {...register("week")}
+                                value={weekName}
                                 className="text-foreground font-medium p-5 pl-9"
                             />
 
@@ -453,9 +460,6 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                                 <CalendarRange className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                             )}
                         </div>
-
-                        {/* week error message */}
-                        <ValidationError message={errors.week?.message as string} />
                     </motion.div>
 
                     {/* Input for title */}
@@ -492,9 +496,6 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                                 <FolderPen className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                             )}
                         </div>
-
-                        {/* Title error message */}
-                        <ValidationError message={errors.title?.message as string} />
                     </motion.div>
 
                     {/* Date picker */}
