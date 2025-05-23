@@ -37,7 +37,7 @@ function WeatherCard() {
                     });
                 }
             } catch (error) {
-                console.error("Weather fetch error:", error);
+                console.log("Weather fetch error:", error);
             }
         };
 

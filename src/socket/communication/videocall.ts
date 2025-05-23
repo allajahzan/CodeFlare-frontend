@@ -35,7 +35,7 @@ export const joinRoom = (
             }
         );
     } catch (err: unknown) {
-        console.error(err);
+        console.log(err);
     }
 };
 
@@ -57,14 +57,14 @@ export const createTransport = (
             { sender, roomId },
             ({ params }: any) => {
                 if (params?.err) {
-                    console.error("Transport creation error:", params.err);
+                    console.log("Transport creation error:", params.err);
                     return;
                 }
                 callback(params);
             }
         );
     } catch (err) {
-        console.error(err);
+        console.log(err);
     }
 };
 

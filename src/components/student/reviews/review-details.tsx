@@ -286,7 +286,7 @@ function PendingsAndChart({ selectedReview, reviews, fetching }: PropsType) {
                 await navigator.clipboard.writeText(texts.toString());
                 toast({ title: "Pendings are copied to clipboard" });
             } catch (error) {
-                console.error("Failed to copy to clipboard:", error);
+                console.log("Failed to copy to clipboard:", error);
                 toast({ title: "Failed to copy to clipboard" });
             }
         },

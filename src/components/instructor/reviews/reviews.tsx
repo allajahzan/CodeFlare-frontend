@@ -34,6 +34,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
 
 // Reviews Component
 function Reviews() {
@@ -236,14 +237,13 @@ function Reviews() {
                 <div className="w-full flex gap-2 relative">
                     {/* Search reviews */}
                     <Select>
-                        <SelectTrigger className="h-[41.6px] min-w-0 bg-background dark:hover:border-customBorder-dark dark:hover:bg-sidebar rounded-lg shadow-none">
-                            <div className="w-full flex items-center gap-2">
+                        <SelectTrigger className="h-[41.6px] bg-background dark:hover:border-customBorder-dark dark:hover:bg-sidebar rounded-lg shadow-none cursor-pointer">
+                            <div className="flex items-center gap-2">
                                 <Search className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                                <p className="text-muted-foreground mt-0.5 truncate">
-                                    Batch and student
-                                </p>
+                                <Input placeholder="Batch and student" className="border-none shadow-none p-0 cursor-pointer"/>
                             </div>
                         </SelectTrigger>
+
                         <SelectContent className="w-[220px]" align="end">
                             <FilterBatchStudent
                                 batches={batches}
@@ -314,7 +314,7 @@ function Reviews() {
                                 selectedUser={selectedReview}
                                 className="dark:border-transparent bg-background dark:bg-sidebar hover:bg-muted dark:hover:bg-sidebar-backgroundDark"
                                 children1={
-                                    <div className="flex items-center gap-2 relative overflow-auto no-scrollbar">
+                                    <div className="min-w-0 flex items-center gap-2 relative">
                                         <p className="relative text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
                                             <CalendarDays className="w-3 h-3" />
                                             {review.week?.name || "Foundation"}

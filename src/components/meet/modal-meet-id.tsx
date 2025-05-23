@@ -40,7 +40,7 @@ function ModalMeetId({ open, setOpen }: PropsType) {
                 await navigator.clipboard.writeText(roomId);
                 toast({ title: "Link copied to clipboard" });
             } catch (error) {
-                console.error("Failed to copy to clipboard:", error);
+                console.log("Failed to copy to clipboard:", error);
                 toast({ title: "Failed to copy to clipboard" });
             }
         },

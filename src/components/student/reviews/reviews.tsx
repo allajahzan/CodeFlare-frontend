@@ -134,10 +134,10 @@ function Reviews() {
                                             {review.week?.name || "Foundation"}
                                         </p>
                                         <div className="flex items-center gap-2 relative overflow-auto no-scrollbar">
-                                            <p className="relative text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
+                                            {/* <p className="relative text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
                                                 <CalendarDays className="w-3 h-3" />
                                                 {review.title}
-                                            </p>
+                                            </p> */}
                                             <p className="flex gap-1 items-center text-sm text-muted-foreground font-medium truncate">
                                                 <Calendar1 className="w-3 h-3" />
                                                 {new Date(review?.date).toLocaleDateString("en-GB", {
