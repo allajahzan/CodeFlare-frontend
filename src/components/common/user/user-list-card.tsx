@@ -36,7 +36,7 @@ function UserListCard({
             className={cn(
                 "group p-2 px-3 w-full flex flex-col rounded-xl cursor-pointer border border-border hover:bg-muted dark:hover:bg-sidebar shadow-sm",
                 className,
-                selectedUser?._id === user._id ? "bg-muted dark:bg-sidebar" : ""
+                selectedUser?._id === user._id ? "bg-muted dark:bg-sidebar-backgroundDark" : ""
             )}
         >
             <div className="flex items-center gap-3">

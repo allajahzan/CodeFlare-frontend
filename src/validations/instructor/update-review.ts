@@ -1,14 +1,10 @@
-import { nameRegex } from "@/constants/regex";
 import z from "zod";
 
 // Update review form validation schema
 export const formSchema = z.object({
-    title: z
-        .string()
-        .trim()
-        .regex(nameRegex.alphabet, "Title should contain only alphabets !")
-        .nonempty("Title is required !"),
-    week: z.string().nonempty("Week is required !"),
+    category: z.string().nonempty("Category is required !"),
+    week: z.string().optional(),
+    title: z.string().nonempty("Title is required !"),
     date: z
         .any()
         .refine((val) => val instanceof Date && !isNaN(val.getTime()), {

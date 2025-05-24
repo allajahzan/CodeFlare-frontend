@@ -19,11 +19,12 @@ import {
 import ValidationError from "@/components/ui/validation-error";
 import { motion } from "framer-motion";
 import {
-    Calendar1,
     CalendarCheck2,
+    CalendarDays,
     CalendarRange,
     Clock,
     FolderPen,
+    ListFilter,
     Loader2,
 } from "lucide-react";
 import { Fragment, ReactNode, useContext, useEffect, useState } from "react";
@@ -40,6 +41,7 @@ import { handleCustomError } from "@/utils/error";
 import { toast } from "@/hooks/use-toast";
 import { IUserContext, UserContext } from "@/context/user-context";
 import { IReview } from "@/types/IReview";
+import { IReveiewCategory } from "@codeflare/common";
 
 // Interface for Props
 interface PropsType {
@@ -61,11 +63,13 @@ function UpdateReviewsheet({
     const [submiting, setSubmiting] = useState(false);
 
     // Date
-    const [isDatePickerOpen, setDatePickerOpen] = useState<boolean>(false);
     const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
 
     // Time
     const [selectedTime, setselectedTime] = useState<string>("");
+
+    // Category
+    const [category, setCategory] = useState<IReveiewCategory | null>(null);
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
@@ -99,7 +103,12 @@ function UpdateReviewsheet({
             // Send request
             const resp = await patchData(
                 ApiEndpoints.REVIEW + `/${selectedReview?._id}`,
-                formData,
+                {
+                    category: formData.category,
+                    title: formData.title,
+                    time: formData.time,
+                    date: formData.date,
+                },
                 role
             );
 
@@ -112,7 +121,10 @@ function UpdateReviewsheet({
                     prevReview
                         ? {
                             ...prevReview,
-                            ...formData,
+                            category: data.category,
+                            title: data.title,
+                            time: data.time,
+                            date: data.date,
                             updatedAt: data.updatedAt,
                         }
                         : null
@@ -122,7 +134,14 @@ function UpdateReviewsheet({
                 setReviews((prevReviews: IReview[]) => {
                     return prevReviews.map((review) =>
                         review._id === selectedReview?._id
-                            ? { ...review, ...formData }
+                            ? {
+                                ...review,
+                                category: data.category,
+                                title: data.title,
+                                time: data.time,
+                                date: data.date,
+                                updatedAt: data.updatedAt,
+                            }
                             : { ...review }
                     );
                 });
@@ -141,25 +160,23 @@ function UpdateReviewsheet({
     // Reset form fields
     useEffect(() => {
         reset({
+            category: selectedReview.category,
+            week: selectedReview.week?.name || "",
             title: selectedReview.title,
-            week: selectedReview.week,
             date: new Date(selectedReview.date),
             time: selectedReview.time,
         });
 
+        setCategory(selectedReview.category);
         setSelectedDate(new Date(selectedReview.date));
         setselectedTime(selectedReview.time);
         setSubmiting(false);
-        setDatePickerOpen(false);
     }, [open, reset, selectedReview]);
 
     return (
         <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger>{button}</SheetTrigger>
-            <SheetContent
-                onClick={() => setDatePickerOpen(false)}
-                className="p-0 flex flex-col gap-0"
-            >
+            <SheetContent className="p-0 flex flex-col gap-0">
                 {/* Header */}
                 <SheetHeader className="p-5 bg-zinc-0">
                     <SheetTitle className="flex items-center gap-3 text-foreground">
@@ -180,11 +197,84 @@ function UpdateReviewsheet({
                     onSubmit={handleSubmit(OnSubmit)}
                     className="h-full space-y-3 p-5 overflow-auto"
                 >
-                    {/* Input for title */}
+                    {/* Select for category */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
+                        className="space-y-2"
+                    >
+                        <Label
+                            htmlFor="role"
+                            className="text-sm text-foreground font-medium"
+                        >
+                            Review Category
+                        </Label>
+                        <div className="relative">
+                            <Select
+                                key={"category"}
+                                required
+                                defaultValue={category || ""}
+                                onValueChange={(value) => {
+                                    setValue("category", value);
+                                }}
+                            >
+                                <SelectTrigger
+                                    id="category"
+                                    className="text-foreground font-medium p-5 pl-9 relative"
+                                >
+                                    <SelectValue
+                                        placeholder="Select review category"
+                                        className="relative transition-opacity duration-200"
+                                    />
+                                </SelectTrigger>
+                                <SelectContent className="max-h-[200px]">
+                                    {["Foundation", "Weekly", "QA", "InTake"].map(
+                                        (cate, index) => (
+                                            <SelectItem key={index} value={cate}>
+                                                {cate}
+                                            </SelectItem>
+                                        )
+                                    )}
+                                </SelectContent>
+                            </Select>
+                            <ListFilter className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                        </div>
+                    </motion.div>
+
+                    {/* Input for Week */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 }}
+                        className="space-y-2"
+                    >
+                        <Label
+                            htmlFor="week"
+                            className="text-sm text-foreground font-medium"
+                        >
+                            Week
+                        </Label>
+                        <div className="relative">
+                            <Input
+                                id="week"
+                                placeholder="Week"
+                                required
+                                disabled
+                                autoComplete="off"
+                                {...register("week")}
+                                className="text-foreground font-medium p-5 pl-9"
+                            />
+
+                            <CalendarRange className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                        </div>
+                    </motion.div>
+
+                    {/* Input for title */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5 }}
                         className="space-y-2"
                     >
                         <Label
@@ -209,82 +299,47 @@ function UpdateReviewsheet({
                         <ValidationError message={errors.title?.message as string} />
                     </motion.div>
 
-                    {/* Week */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
-                        className="space-y-2"
-                    >
-                        <Label
-                            htmlFor="week"
-                            className="text-sm text-foreground font-medium"
-                        >
-                            Week
-                        </Label>
-                        <div className="relative">
-                            <Input
-                                id="week"
-                                required
-                                disabled
-                                autoComplete="off"
-                                {...register("week")}
-                                className="text-foreground font-medium p-5 pl-9"
-                            />
-
-                            <CalendarRange className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
-                        </div>
-
-                        {/* week error message */}
-                        <ValidationError message={errors.week?.message as string} />
-                    </motion.div>
-
                     {/* Date picker */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5 }}
+                        transition={{ delay: 0.6 }}
                         className="space-y-2"
                     >
                         <Label
-                            onClick={(event) => {
-                                event.stopPropagation();
-                                setDatePickerOpen(!isDatePickerOpen);
-                            }}
+                            htmlFor="date"
                             className="text-sm text-foreground font-medium"
                         >
                             Date
                         </Label>
-                        <div
-                            onClick={(event) => {
-                                event.stopPropagation();
-                                setDatePickerOpen(!isDatePickerOpen);
-                            }}
-                            className="relative border p-[9.2px] pl-9 rounded-lg cursor-pointer"
-                        >
-                            <DatePicker
-                                isDatePickerOpen={isDatePickerOpen}
-                                selectedDate={selectedDate}
-                                setSelectedDate={(date) => {
-                                    setValue("date", date);
-                                    setSelectedDate(date);
-                                }}
-                                className="absolute z-20 top-11 -left-0.5 bg-background"
-                            />
-                            <p className="text-foreground font-medium">
-                                {selectedDate ? (
-                                    selectedDate.toLocaleDateString("en-GB", {
-                                        day: "2-digit",
-                                        month: "short",
-                                        year: "numeric",
-                                    })
-                                ) : (
-                                    <span>Pick a date</span>
-                                )}
-                            </p>
-
-                            <Calendar1 className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
-                        </div>
+                        <Select>
+                            <SelectTrigger
+                                key="date"
+                                className="h-[41.6px] bg-background dark:hover:border-customBorder-dark dark:hover:bg-sidebar rounded-lg shadow-none"
+                            >
+                                <div className="w-full flex items-center gap-2">
+                                    <CalendarDays className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                                    <p className="text-foreground mt-0.5 truncate">
+                                        {selectedDate
+                                            ? selectedDate.toDateString()
+                                            : "Select a date"}
+                                    </p>
+                                </div>
+                            </SelectTrigger>
+                            <SelectContent
+                                align="end"
+                                className="border-none shadow-none bg-transparent"
+                            >
+                                <DatePicker
+                                    selectedDate={selectedDate}
+                                    setSelectedDate={(date) => {
+                                        setValue("date", date);
+                                        setSelectedDate(date);
+                                    }}
+                                    className="w-fit bg-background dark:bg-sidebar-background border shadow rounded-lg"
+                                />
+                            </SelectContent>
+                        </Select>
 
                         {/* Date error message */}
                         <ValidationError message={errors.date?.message as string} />
@@ -294,18 +349,10 @@ function UpdateReviewsheet({
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6 }}
+                        transition={{ delay: 0.7 }}
                         className="space-y-2"
                     >
-                        <Label
-                            onClick={(event) => {
-                                event.stopPropagation();
-                                setDatePickerOpen(!isDatePickerOpen);
-                            }}
-                            className="text-sm text-foreground font-medium"
-                        >
-                            Time
-                        </Label>
+                        <Label className="text-sm text-foreground font-medium">Time</Label>
                         <div className="relative">
                             <Select
                                 onValueChange={(value) => {
@@ -345,14 +392,14 @@ function UpdateReviewsheet({
                         </div>
 
                         {/* Time error message */}
-                        {/* <ValidationError message={errors.time?.message as string} /> */}
+                        <ValidationError message={errors.time?.message as string} />
                     </motion.div>
 
                     {/* Submit button */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.7 }}
+                        transition={{ delay: 0.8 }}
                         className="pt-4"
                     >
                         <Button

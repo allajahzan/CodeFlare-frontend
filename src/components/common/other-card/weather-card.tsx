@@ -62,20 +62,20 @@ function WeatherCard() {
             <div className="flex items-start gap-2">
                 <img className="self-start w-16 h-16 object-contain" src={weatherImg} />
 
-                <div className="h-full flex flex-col justify-between">
+                <div className="h-full flex flex-col justify-between min-w-0">
                     <p className="font-bold text-3xl text-foreground">
                         {weather.celcius}
                         <sup className="text-xl font-medium">°C</sup>
                     </p>
-                    <p className="font-semibold text-sm capitalize text-foreground">
-                        {weather.text.split(" ").filter((_,i)=>i<=1).join(" ")}
+                    <p className="font-semibold text-xs capitalize text-foreground">
+                        {weather.text}
                     </p>
                 </div>
             </div>
 
             <div className="flex items-center gap-1">
                 <MapPin className="w-4 h-4 flex-shrink-0 text-foreground" />
-                <p className="font-medium text-foreground">{weather.location}</p>
+                <p className="font-medium text-foreground mt-0.5">{weather.location}</p>
             </div>
         </motion.div>
     );

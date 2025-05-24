@@ -310,7 +310,7 @@ function ReviewDetails({
                                 <Input
                                     value={feedback}
                                     onChange={(e) => updateFeedback(e.target.value)}
-                                    className="border-none shadow-none p-3 py-[22.9px] pr-20 text-foreground dark:bg-sidebar"
+                                    className="border-none shadow-none p-3 py-[22.9px] text-foreground dark:bg-sidebar"
                                     placeholder="Enter your feedback for this student"
                                 />
                             </motion.div>

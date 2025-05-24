@@ -18,7 +18,23 @@ function TextCard({ msg, className }: PropsType) {
             )}
         >
             {/* Text */}
-            <p className="text-foreground font-medium">{msg.message}</p>
+            <p className="text-foreground font-medium">
+                {msg.message.split(/(https?:\/\/[^\s]+)/g).map((part, index) =>
+                    part.match(/https?:\/\/[^\s]+/) ? (
+                        <a
+                            key={index}
+                            href={part}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 underline break-all"
+                        >
+                            {part}
+                        </a>
+                    ) : (
+                        part
+                    )
+                )}
+            </p>
 
             {/* Time */}
             <small className="absolute right-2 bottom-0.5 flex items-center gap-1 text-[10px] text-muted-foreground font-medium">

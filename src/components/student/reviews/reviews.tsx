@@ -145,7 +145,7 @@ function Reviews() {
                 </div>
 
                 {reviews.length > 0 && (
-                    <div className="flex flex-col gap-3 overflow-auto no-scrollbar ">
+                    <div className="flex flex-col gap-5 overflow-auto no-scrollbar ">
                         {reviews.map((review, index) => (
                             <div key={review._id} className="relative">
                                 {/* One list */}
@@ -164,7 +164,7 @@ function Reviews() {
                                     {/* Icon circle */}
                                     <div
                                         className={cn(
-                                            "h-10 w-10 flex-shrink-0 rounded-full flex items-center justify-center shadow",
+                                            "h-10 w-10 flex-shrink-0 border-2 border-white dark:border-muted rounded-full flex items-center justify-center shadow-md",
                                             review.status === "Completed"
                                                 ? review.result === "Pass"
                                                     ? "bg-green-600/20"
@@ -227,7 +227,7 @@ function Reviews() {
                                 {index < reviews.length - 1 && (
                                     <motion.div
                                         initial={{ height: 0 }}
-                                        animate={{ height: 34 }}
+                                        animate={{ height: 42 }}
                                         transition={{ delay: 0.2 + index * 0.1 }}
                                         style={{ top: "51px" }}
                                         className={cn(

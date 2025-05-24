@@ -163,6 +163,7 @@ function AddMarkModal({
                                 id="theory"
                                 placeholder="Enter theory's score"
                                 type="number"
+                                tabIndex={-1}
                                 required
                                 autoComplete="off"
                                 {...register("practical")}
@@ -188,6 +189,7 @@ function AddMarkModal({
                                 id="practical"
                                 placeholder="Enter practical's score"
                                 type="number"
+                                tabIndex={-1}
                                 required
                                 autoComplete="off"
                                 {...register("theory")}
