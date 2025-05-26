@@ -166,6 +166,8 @@ function ReviewDetails({
 
             // Success response
             if (resp && resp.status === 200) {
+                const data = resp.data?.data;
+
                 // Update selected review
                 setSelectedReview((prevReview: IReview | null) => {
                     return prevReview
@@ -195,6 +197,13 @@ function ReviewDetails({
                             : { ...review }
                     );
                 });
+
+                // If status is not completed - Delete newly scheduled next review of the student
+                if (status !== "Completed" && data?._id) {
+                    setReviews((prevReviews: IReview[]) => {
+                        return prevReviews.filter((review) => review._id !== data._id);
+                    });
+                }
 
                 setChangingStatus(false);
 
@@ -434,14 +443,18 @@ function ReviewDetails({
                                 <InfoCard
                                     Icon={CalendarDays}
                                     label="Reveiw Date"
-                                    text={new Date(selectedReview.date).toLocaleDateString(
-                                        "en-GB",
-                                        {
-                                            day: "2-digit",
-                                            month: "short",
-                                            year: "numeric",
-                                        }
-                                    )}
+                                    text={
+                                        selectedReview?.date
+                                            ? new Date(selectedReview.date).toLocaleDateString(
+                                                "en-GB",
+                                                {
+                                                    day: "2-digit",
+                                                    month: "short",
+                                                    year: "numeric",
+                                                }
+                                            )
+                                            : "--/--/--"
+                                    }
                                     iconDivClassName="bg-orange-400/20 group-hover:bg-orange-400/30"
                                     iconClassName="text-orange-600"
                                 />
@@ -453,7 +466,11 @@ function ReviewDetails({
                                 <InfoCard
                                     Icon={Clock}
                                     label="Time"
-                                    text={convertTo12HourFormat(selectedReview.time)}
+                                    text={
+                                        selectedReview.time
+                                            ? convertTo12HourFormat(selectedReview.time)
+                                            : "--:--"
+                                    }
                                     iconDivClassName="bg-green-400/20 group-hover:bg-green-400/30"
                                     iconClassName="text-green-600"
                                 />

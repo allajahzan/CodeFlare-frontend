@@ -80,6 +80,8 @@ function AddMarkModal({
 
             // Success response
             if (resp && resp.status === 200) {
+                const data = resp.data?.data;
+
                 // Formate score
                 const score = {
                     practical: Number(formData.practical),
@@ -96,13 +98,24 @@ function AddMarkModal({
                         : null;
                 });
 
-                // Update reviews list
+                // Update selected review in reviews list
                 setReviews((prevReviews: IReview[]) => {
                     return prevReviews.map((review) =>
                         review._id === selectedReview._id
                             ? { ...review, score, result: flag ? "Pass" : "Fail" }
                             : review
                     );
+                });
+
+                // Set newly scheduled review to reviews list
+                setReviews((prevReviews: IReview[]) => {
+                    return prevReviews.map((review) => {
+                        if (review._id === data?._id) {
+                            return data;
+                        } else {
+                            return review;
+                        }
+                    });
                 });
 
                 toast({ title: "Score updated successfully." });

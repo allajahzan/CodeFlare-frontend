@@ -105,7 +105,6 @@ function UpdateReviewsheet({
                 ApiEndpoints.REVIEW + `/${selectedReview?._id}`,
                 {
                     category: formData.category,
-                    title: formData.title,
                     time: formData.time,
                     date: formData.date,
                 },
@@ -122,7 +121,6 @@ function UpdateReviewsheet({
                         ? {
                             ...prevReview,
                             category: data.category,
-                            title: data.title,
                             time: data.time,
                             date: data.date,
                             updatedAt: data.updatedAt,
@@ -137,7 +135,6 @@ function UpdateReviewsheet({
                             ? {
                                 ...review,
                                 category: data.category,
-                                title: data.title,
                                 time: data.time,
                                 date: data.date,
                                 updatedAt: data.updatedAt,
@@ -163,8 +160,8 @@ function UpdateReviewsheet({
             category: selectedReview.category,
             week: selectedReview.week?.name || "",
             title: selectedReview.title,
-            date: new Date(selectedReview.date),
-            time: selectedReview.time,
+            date: selectedReview.date ? new Date(selectedReview.date) : "",
+            time: selectedReview.time ?  selectedReview.time : "",
         });
 
         setCategory(selectedReview.category);
@@ -288,6 +285,7 @@ function UpdateReviewsheet({
                                 id="title"
                                 placeholder="Enter title"
                                 required
+                                disabled
                                 autoComplete="off"
                                 {...register("title")}
                                 className="text-foreground font-medium p-5 pl-9"

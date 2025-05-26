@@ -110,7 +110,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
                             <UserNameCard
                                 data={{
                                     name: selectedReview.instructor.name,
-                                    email: selectedReview.instructor.name,
+                                    email: selectedReview.instructor.email,
                                     role: "Instructor",
                                     profilePic: selectedReview.instructor.profilePic,
                                 }}
@@ -303,8 +303,7 @@ function PendingsAndChart({ selectedReview, reviews, fetching }: PropsType) {
                         : 0,
                 };
             })
-            .filter((_, index) => index < 5)
-            .reverse();
+            .filter((_, index) => index < 4);
 
         setMonthlyData(data as unknown as IWeekData[]);
     }, [reviews]);
@@ -350,7 +349,7 @@ function PendingsAndChart({ selectedReview, reviews, fetching }: PropsType) {
                             <AnimatePresence mode="wait">
                                 <div className="h-[170px] sm:h-[204px] flex flex-col gap-1 overflow-x-hidden overflow-auto no-scrolbar">
                                     <ul className="space-y-2.5">
-                                        {["Event looop", "Js engine"].map((pending, index) => (
+                                        {selectedReview.pendings.map((pending, index) => (
                                             <motion.p
                                                 key={index}
                                                 initial={{ opacity: 0, y: -20 }}
@@ -393,7 +392,7 @@ function PendingsAndChart({ selectedReview, reviews, fetching }: PropsType) {
                 {reviews.length > 0 && (
                     <LineCharts
                         data={monthlyData}
-                        text="Overall Performance"
+                        text="Last 4 week's performance"
                         className="h-[170px] sm:h-[206px]"
                     />
                 )}
