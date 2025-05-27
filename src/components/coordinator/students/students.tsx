@@ -209,9 +209,11 @@ function Students({ setDrawerOpen }: PropsType) {
                     children={
                         <AddStudentSheet
                             button={
-                                <div className="shadow-md bg-zinc-900 hover:bg-zinc-800 text-white rounded-full p-2">
+                                <ToolTip text="Add Student" side="left" children={
+                                    <div className="shadow-md bg-zinc-900 hover:bg-zinc-800 text-white rounded-full p-2">
                                     <Plus className="h-4 w-4" />
                                 </div>
+                                }/>
                             }
                             setNewStudent={setNewStudent}
                             batches={(user as any).batches}

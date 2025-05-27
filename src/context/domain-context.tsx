@@ -23,7 +23,7 @@ import {
 } from "react";
 import { IUserContext, UserContext } from "./user-context";
 import { handleCustomError } from "@/utils/error";
-import { fetchData, patchData } from "@/service/api-service";
+import { fetchData, patchData, postData } from "@/service/api-service";
 import ApiEndpoints from "@/constants/api-endpoints";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
@@ -170,18 +170,36 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
             (selectedDomain?.domainsWeeks?.[0] as IDomainsWeek) || null
         );
     }, [selectedDomain]);
+
     // Select domain
     const handleSelectDomain = async (domain: IDomain) => {
         try {
             setSubmitting(true);
-            // Send request
-            const resp = await patchData(
+
+            // Send request to schedule foundation review
+            const foundationReviewPromise = await postData(
+                ApiEndpoints.REVIEW + "/foundation",
+                {
+                    domainId: domain._id,
+                    batchId: user?.batch?._id,
+                },
+                role
+            );
+
+            // Send request to select domain
+            const selectDomainPromise = await patchData(
                 ApiEndpoints.SELECT_DOMAIN,
                 { domainId: domain._id },
                 role
             );
+
+            const [resp1, resp2] = await Promise.all([
+                foundationReviewPromise,
+                selectDomainPromise,
+            ]);
+
             // Success response
-            if (resp && resp.status === 200) {
+            if (resp1 && resp2 && resp1.status === 200 && resp2.status === 200) {
                 toast({ title: "Domain selected successfully." });
                 setSubmitting(false);
                 setOpen(false);

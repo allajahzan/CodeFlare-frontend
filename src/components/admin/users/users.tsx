@@ -208,12 +208,18 @@ function Users({ setDrawerOpen }: PropsType) {
                     children={
                         <AddUserSheet
                             button={
-                                <div
-                                    className="p-2 rounded-full bg-foreground dark:bg-muted hover:bg-zinc-800 dark:hover:bg-zinc-700 
+                                <ToolTip
+                                    text="Add User"
+                                    side="left"
+                                    children={
+                                        <div
+                                            className="p-2 rounded-full bg-foreground dark:bg-muted hover:bg-zinc-800 dark:hover:bg-zinc-700 
                                 text-white shadow-md"
-                                >
-                                    <Plus className="h-4 w-4" />
-                                </div>
+                                        >
+                                            <Plus className="h-4 w-4" />
+                                        </div>
+                                    }
+                                />
                             }
                             setNewUser={setNewUser}
                         />

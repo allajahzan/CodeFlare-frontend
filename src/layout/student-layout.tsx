@@ -9,7 +9,6 @@ import {
 import {
     CalendarClock,
     CalendarDays,
-    CreditCard,
     Globe,
     LayoutDashboard,
     ListTodo,
@@ -61,7 +60,6 @@ function StudentLayout({ isDrawerOpen }: PropsType) {
                 label: "Reviews",
             },
             { path: AppRoutes.ATTENDENCE, icon: CalendarClock, label: "Attendance" },
-            { path: AppRoutes.STUDENT_INVOICES, icon: CreditCard, label: "Invoices" },
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
             { path: AppRoutes.MEET, icon: Video, label: "Meet" },
             ...(isSmall

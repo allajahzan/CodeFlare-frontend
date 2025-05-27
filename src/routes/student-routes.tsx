@@ -2,7 +2,6 @@ import StudentLayout from "@/layout/student-layout";
 import Login from "@/pages/authentication/login";
 import Dashboard from "@/pages/student/dashboard";
 import Chat from '@/components/chat/chat';
-import Invoice from "@/pages/student/invoice";
 import Leave from "@/pages/student/attendence";
 import Reviews from "@/pages/student/reviews";
 import { Navigate, Route, Routes } from "react-router-dom";
@@ -43,7 +42,6 @@ function StudentRoutes() {
                 <Route path={AppRoutes.STUDENT} element={<StudentLayout isDrawerOpen={isDrawerOpen} />}>
                     <Route path={AppRoutes.DASHBOARD} element={<Dashboard />} />
                     <Route path={AppRoutes.STUDENT_REVIEWS} element={<Reviews />} />
-                    <Route path={AppRoutes.STUDENT_INVOICES} element={<Invoice />} />
                     <Route path={AppRoutes.ATTENDENCE} element={<Attendence />} />
                     <Route path={AppRoutes.STUDENT_LEAVES} element={<Leave />} />
                     <Route path={AppRoutes.PROFILE} element={<Profile />} />

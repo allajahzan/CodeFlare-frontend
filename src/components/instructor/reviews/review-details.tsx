@@ -198,7 +198,7 @@ function ReviewDetails({
                     );
                 });
 
-                // If status is not completed - Delete newly scheduled next review of the student
+                // If status is not completed - Delete newly scheduled, next review of the student
                 if (status !== "Completed" && data?._id) {
                     setReviews((prevReviews: IReview[]) => {
                         return prevReviews.filter((review) => review._id !== data._id);
@@ -251,12 +251,13 @@ function ReviewDetails({
                         <div className="flex items-center justify-between gap-3">
                             <div className="flex items-center gap-3">
                                 <div className="text-lg text-foreground font-semibold">
-                                    {selectedReview.week
-                                        ? `${selectedReview.week.name
-                                        } (${selectedReview.title[0].toUpperCase()}${selectedReview.title.slice(
-                                            1
-                                        )})`
-                                        : "Foundation Period"}
+                                    {selectedReview.category === "Weekly" ||
+                                        selectedReview.category === "Foundation"
+                                        ? selectedReview.week
+                                            ? `${selectedReview.week.name} (${selectedReview.title[0]
+                                                .toUpperCase()}${selectedReview.title.slice(1)})`
+                                            : "Foundation Period"
+                                        : selectedReview.category}
                                 </div>
                             </div>
 

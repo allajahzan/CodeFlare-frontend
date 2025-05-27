@@ -85,7 +85,7 @@ function UserProfileSheet({ button, selectedUser, selectedChat }: PropsType) {
                         </p>
                     </div>
 
-                    <div className="w-full p-5 self-start flex flex-col items-start gap-3 bg-white dark:bg-sidebar shadow-sm">
+                    {/* <div className="w-full p-5 self-start flex flex-col items-start gap-3 bg-white dark:bg-sidebar shadow-sm">
                         <small className="text-foreground font-bold">Media</small>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-5 w-full max-h-[210px] overflow-auto no-scrollbar">
                             {selectedChat?.messages
@@ -103,7 +103,7 @@ function UserProfileSheet({ button, selectedUser, selectedChat }: PropsType) {
                                     </div>
                                 ))}
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className="w-full py-3 flex flex-col gap-2 bg-white dark:bg-sidebar shadow-sm">
                         <div className="w-full p-5 h-11 flex items-center justify-start hover:bg-muted">

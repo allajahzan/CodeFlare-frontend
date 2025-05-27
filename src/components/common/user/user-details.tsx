@@ -28,6 +28,7 @@ import UserNameCard from "./user-name-card";
 import { IStudent } from "@/types/IStudent";
 import { IUser } from "@/types/IUser";
 import { IBatch } from "@codeflare/common";
+import ToolTip from "../tooltip/tooltip";
 
 // Interface for Props
 interface PropsType {
@@ -80,12 +81,18 @@ function UserDetails({
                                     // Edit user
                                     <EditUserSheet
                                         button={
-                                            <div
-                                                className="shadow-md bg-zinc-900 dark:bg-muted hover:bg-zinc-800 dark:hover:bg-zinc-700 
+                                            <ToolTip
+                                                text="Update User"
+                                                side="left"
+                                                children={
+                                                    <div
+                                                        className="shadow-md bg-zinc-900 dark:bg-muted hover:bg-zinc-800 dark:hover:bg-zinc-700 
                                             text-white rounded-full p-2"
-                                            >
-                                                <Edit2 className="h-4 w-4" />
-                                            </div>
+                                                    >
+                                                        <Edit2 className="h-4 w-4" />
+                                                    </div>
+                                                }
+                                            />
                                         }
                                         setUsers={setUsers as any}
                                         setSelectedUser={setSelectedUser as any}
@@ -95,12 +102,18 @@ function UserDetails({
                                     // Edit student
                                     <EditStudentSheet
                                         button={
-                                            <div
-                                                className="shadow-md bg-zinc-900 dark:bg-muted hover:bg-zinc-800 dark:hover:bg-zinc-700
+                                            <ToolTip
+                                                text="Update Student"
+                                                side="left"
+                                                children={
+                                                    <div
+                                                        className="shadow-md bg-zinc-900 dark:bg-muted hover:bg-zinc-800 dark:hover:bg-zinc-700
                                              text-white rounded-full p-2"
-                                            >
-                                                <Edit2 className="h-4 w-4" />
-                                            </div>
+                                                    >
+                                                        <Edit2 className="h-4 w-4" />
+                                                    </div>
+                                                }
+                                            />
                                         }
                                         setStudents={setUsers as any}
                                         setSelectedStudent={setSelectedUser as any}
@@ -141,10 +154,10 @@ function UserDetails({
                                     : selectedUser.role === "student"
                                         ? {
                                             icon: CalendarRangeIcon,
-                                            label: "Week & Category",
+                                            label: "Week - Category",
                                             value:
-                                                (selectedUser as IStudent).week?.name ||
-                                                "Not assigned" +
+                                                ((selectedUser as IStudent).week?.name ||
+                                                    "Not assigned") +
                                                 " - " +
                                                 (selectedUser as IStudent).category,
                                             iconDivClassName:
@@ -153,7 +166,7 @@ function UserDetails({
                                         }
                                         : null,
 
-                                // Date Joined for everyone
+                                // Date Joined coordinatorinstructor
                                 selectedUser.role !== "student"
                                     ? {
                                         icon: LucideCalendar1,

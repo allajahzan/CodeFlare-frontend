@@ -202,14 +202,13 @@ function Reviews() {
                                     {/* Week and date */}
                                     <div className="flex flex-col gap-1">
                                         <p className="text-foreground font-semibold truncate">
-                                            {review.week?.name || "Foundation"}{" "}
-                                            {review.week?._id && `(${review.title})`}
+                                            {review.category === "Weekly" ||
+                                                review.category === "Foundation"
+                                                ? `${review.week?.name || "Foundation"}${review.week?._id ? ` (${review.title})` : ""
+                                                }`
+                                                : review.category}
                                         </p>
                                         <div className="flex items-center gap-2 relative overflow-auto no-scrollbar">
-                                            {/* <p className="relative text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
-                                                <CalendarDays className="w-3 h-3" />
-                                                {review.title}
-                                            </p> */}
                                             <p className="flex gap-1 items-center text-sm text-muted-foreground font-medium truncate">
                                                 <Calendar1 className="w-3 h-3" />
                                                 {new Date(review?.date).toLocaleDateString("en-GB", {

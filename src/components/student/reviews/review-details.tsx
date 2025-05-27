@@ -81,12 +81,15 @@ function ReviewDetails({ selectedReview }: PropsType) {
                         <div className="flex items-center justify-between gap-3">
                             <div className="flex items-center gap-3">
                                 <div className="text-lg text-foreground font-semibold">
-                                    {selectedReview.week
-                                        ? `${selectedReview.week.name
-                                        } (${selectedReview.title[0].toUpperCase()}${selectedReview.title.slice(
-                                            1
-                                        )})`
-                                        : "Foundation Period"}
+                                    {selectedReview.category === "Weekly" ||
+                                        selectedReview.category === "Foundation"
+                                        ? selectedReview.week
+                                            ? `${selectedReview.week.name
+                                            } (${selectedReview.title[0].toUpperCase()}${selectedReview.title.slice(
+                                                1
+                                            )})`
+                                            : "Foundation Period"
+                                        : selectedReview.category}
                                 </div>
                             </div>
 
@@ -234,7 +237,11 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                 <InfoCard
                                     Icon={Clock}
                                     label="Time"
-                                    text={convertTo12HourFormat(selectedReview.time)}
+                                    text={
+                                        selectedReview.time
+                                            ? convertTo12HourFormat(selectedReview.time)
+                                            : "--:--"
+                                    }
                                     iconDivClassName="bg-green-400/20 group-hover:bg-green-400/30"
                                     iconClassName="text-green-600"
                                 />
@@ -303,7 +310,7 @@ function PendingsAndChart({ selectedReview, reviews, fetching }: PropsType) {
                         : 0,
                 };
             })
-            .filter((_, index) => index < 4);
+            .filter((_, index) => index < 4).reverse();
 
         setMonthlyData(data as unknown as IWeekData[]);
     }, [reviews]);
@@ -329,8 +336,11 @@ function PendingsAndChart({ selectedReview, reviews, fetching }: PropsType) {
                                 className="text-lg text-foreground font-semibold truncate"
                             >
                                 Pendings (
-                                {selectedReview.title[0].toUpperCase() +
-                                    selectedReview.title.slice(1)}
+                                {selectedReview.category === "Weekly" ||
+                                    selectedReview.category === "Foundation"
+                                    ? selectedReview.title[0].toUpperCase() +
+                                    selectedReview.title.slice(1)
+                                    : selectedReview.category}
                                 )
                             </motion.p>
                             {selectedReview.pendings.length > 0 && (
