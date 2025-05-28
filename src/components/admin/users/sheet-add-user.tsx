@@ -298,6 +298,7 @@ function AddUserSheet({ button, setNewUser }: PropsType) {
                         <div className="relative">
                             <Select
                                 key="role"
+                                name="role"
                                 required
                                 onValueChange={(value: "coordinator" | "instructor") => {
                                     setValue("role", value, { shouldValidate: true });

@@ -1,7 +1,9 @@
 import CardHeader from "@/components/common/data-toolbar/header";
 import ToolTip from "@/components/common/tooltip/tooltip";
 import SmallIconButton from "@/components/ui/icon-button-small";
+import { useDomain } from "@/context/domain-context";
 import { IUserContext, UserContext } from "@/context/user-context";
+import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import {
     Briefcase,
@@ -18,6 +20,9 @@ import { useContext } from "react";
 function OverallInformation() {
     // User context
     const { user } = useContext(UserContext) as IUserContext;
+
+    // Domain context
+    const { setOpen } = useDomain();
 
     // Get week and rank suffix
     const getSuffix = (week: number) => {
@@ -46,18 +51,14 @@ function OverallInformation() {
                         <ToolTip
                             text="Share"
                             side="left"
-                            children={
-                                <SmallIconButton Icon={Share2}/>
-                            }
+                            children={<SmallIconButton Icon={Share2} />}
                         />
 
                         {/* Menu Icon */}
                         <ToolTip
                             text="Menu"
                             side="left"
-                            children={
-                                <SmallIconButton Icon={EllipsisVertical}/>
-                            }
+                            children={<SmallIconButton Icon={EllipsisVertical} />}
                         />
                     </div>
                 }
@@ -67,11 +68,17 @@ function OverallInformation() {
             <div className="flex items-center justify-between mb-5">
                 <div>
                     <p className="text-sm text-muted-foreground font-medium">Batch</p>
-                    <p className="text-lg font-bold text-foreground">{user?.batch?.name || "-"}</p>
+                    <p className="text-lg font-bold text-foreground">
+                        {user?.batch?.name || "-"}
+                    </p>
                 </div>
                 <div className="text-right">
                     <p className="text-sm text-muted-foreground font-medium">Week</p>
-                    <p className="text-lg font-bold text-foreground">{user?.week?.name ? getSuffix(Number(user.week.name.split(" ")[1])) : "-"}</p>
+                    <p className="text-lg font-bold text-foreground">
+                        {user?.week?.name
+                            ? getSuffix(Number(user.week.name.split(" ")[1]))
+                            : "-"}
+                    </p>
                 </div>
             </div>
 
@@ -139,13 +146,32 @@ function OverallInformation() {
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2, duration: 0.3 }}
-                    className="bg-muted dark:bg-sidebar p-4 rounded-xl flex flex-col items-center justify-center gap-1"
+                    className={cn(
+                        "bg-muted dark:bg-sidebar p-4 rounded-xl flex flex-col items-center justify-center gap-1",
+                        !user?.domain && "cursor-pointer"
+                    )}
+                    onClick={!user?.domain ? () => setOpen(true) : undefined}
                 >
                     <GraduationCap className="w-5 h-5 text-foreground" />
-                    <div className="flex items-center justify-center text-foreground text-base font-bold">
-                        {user?.domain?.name?.split(" ")[0] || "-" }
-                    </div>
-                    <i className="text-sm text-muted-foreground font-medium">{user?.domain?.name?.split(" ")[1] || "" }</i>
+                    {user?.domain ? (
+                        <div>
+                            <div className="flex items-center justify-center text-foreground text-base font-bold">
+                                {user?.domain?.name?.split(" ")[0] || "-"}
+                            </div>
+                            <i className="text-sm text-muted-foreground font-medium">
+                                {user?.domain?.name?.split(" ")[1] || ""}
+                            </i>
+                        </div>
+                    ) : (
+                        <div>
+                            <div className="flex items-center justify-center text-foreground text-base font-bold">
+                                Select
+                            </div>
+                            <i className="text-sm text-muted-foreground font-medium">
+                                Domain
+                            </i>
+                        </div>
+                    )}
                 </motion.div>
 
                 {/* In Progress */}

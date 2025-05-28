@@ -177,9 +177,9 @@ function Navbar() {
                 )}
 
                 {/* Navbar Items */}
-                {pathname.split("/")[2] !== "meet" && (
+                {/* {pathname.split("/")[2] !== "meet" && (
                     <NavbarItem text="Community" Image={Globe} />
-                )}
+                )} */}
 
                 {/* Notifications */}
                 <NotificationIcon notifications={notifications} />

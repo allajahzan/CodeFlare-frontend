@@ -100,7 +100,7 @@ function CheckInOutModal({ children }: Propstype) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>{children}</DialogTrigger>
-            <DialogContent className="flex flex-col gap-10 bg-background dark:bg-sidebar-background">
+            <DialogContent aria-describedby={undefined} className="flex flex-col gap-10 bg-background dark:bg-sidebar-background">
                 <DialogHeader>
                     <DialogTitle className="text-foreground flex items-center gap-3">
                         <div className="p-2 bg-muted rounded-full">

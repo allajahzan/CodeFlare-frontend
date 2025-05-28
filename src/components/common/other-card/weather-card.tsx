@@ -67,8 +67,8 @@ function WeatherCard() {
                         {weather.celcius}
                         <sup className="text-xl font-medium">°C</sup>
                     </p>
-                    <p className="font-semibold text-xs capitalize text-foreground">
-                        {weather.text}
+                    <p className="font-semibold text-sm capitalize text-foreground">
+                        {weather.text.split(" ").filter((_,i)=>i < 1).join(" ")}
                     </p>
                 </div>
             </div>

@@ -8,7 +8,7 @@ import {
 } from "@/redux/store";
 import {
     CalendarClockIcon,
-    Globe,
+    // Globe,
     //   CalendarDays,
     //   CreditCard,
     //   FileUser,
@@ -72,9 +72,9 @@ function CoordinatorLayout({ isDrawerOpen }: PropsType) {
             },
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
             { path: AppRoutes.MEET, icon: Video, label: "Meet" },
-            ...(isSmall
-                ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
-                : []),
+            // ...(isSmall
+            //     ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
+            //     : []),
         ],
         [isSmall]
     );

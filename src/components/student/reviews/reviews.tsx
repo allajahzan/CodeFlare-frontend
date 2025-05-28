@@ -96,7 +96,7 @@ function Reviews() {
                         <DropdownMenu>
                             <DropdownMenuTrigger>
                                 <ToolTip
-                                    text="Color Info"
+                                    text="Icon Info"
                                     side="top"
                                     children={
                                         <div className="bg-muted dark:bg-zinc-900 dark:hover:bg-muted text-foreground rounded-full p-2">
@@ -106,7 +106,7 @@ function Reviews() {
                                 />
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                                <DropdownMenuLabel>Color Info</DropdownMenuLabel>
+                                <DropdownMenuLabel>Icon Info</DropdownMenuLabel>
                                 <DropdownMenuItem>
                                     <X size={10} className="text-red-600" />
                                     Absent
@@ -204,7 +204,7 @@ function Reviews() {
                                         <p className="text-foreground font-semibold truncate">
                                             {review.category === "Weekly" ||
                                                 review.category === "Foundation"
-                                                ? `${review.week?.name || "Foundation"}${review.week?._id ? ` (${review.title})` : ""
+                                                ? `${review.week?.name}${review.week?._id ? ` (${review.title})` : ""
                                                 }`
                                                 : review.category}
                                         </p>

@@ -104,7 +104,7 @@ function WarningsListsModal({ children, student, warnings }: Propstype) {
     return (
         <Dialog>
             <DialogTrigger asChild>{children}</DialogTrigger>
-            <DialogContent className="flex flex-col gap-10 dark:bg-sidebar-background max-h-[88vh] max-w-5xl overflow-auto no-scrollbar">
+            <DialogContent aria-describedby={undefined} className="flex flex-col gap-10 dark:bg-sidebar-background max-h-[88vh] max-w-5xl overflow-auto no-scrollbar">
                 <DialogHeader>
                     <DialogTitle className="text-start text-foreground flex items-center gap-3">
                         <div className="p-2 bg-muted rounded-full">

@@ -232,7 +232,7 @@ function Account({ profile, setProfile }: PropsType) {
             </motion.div>
 
             {/* Batch / Batches - (Student or Coordinator) */}
-            {role !== "admin" && (
+            {role !== "admin" && role !== "instructor" && (
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}

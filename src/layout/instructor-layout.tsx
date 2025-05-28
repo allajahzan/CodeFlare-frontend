@@ -8,7 +8,7 @@ import {
 } from "@/redux/store";
 import {
     CalendarDays,
-    Globe,
+    // Globe,
     //   CalendarDays,
     //   CreditCard,
     //   FileUser,
@@ -65,9 +65,9 @@ function InstructorLayout({ isDrawerOpen }: PropsType) {
             { path: AppRoutes.STUDENT_REVIEWS, icon: CalendarDays, label: "Reviews" },
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
             { path: AppRoutes.MEET, icon: Video, label: "Meet" },
-            ...(isSmall
-                ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
-                : []),
+            // ...(isSmall
+            //     ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
+            //     : []),
         ],
         [isSmall]
     );

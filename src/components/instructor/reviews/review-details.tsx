@@ -253,10 +253,8 @@ function ReviewDetails({
                                 <div className="text-lg text-foreground font-semibold">
                                     {selectedReview.category === "Weekly" ||
                                         selectedReview.category === "Foundation"
-                                        ? selectedReview.week
-                                            ? `${selectedReview.week.name} (${selectedReview.title[0]
+                                        ? `${selectedReview.week.name} (${selectedReview.title[0]
                                                 .toUpperCase()}${selectedReview.title.slice(1)})`
-                                            : "Foundation Period"
                                         : selectedReview.category}
                                 </div>
                             </div>
@@ -318,6 +316,7 @@ function ReviewDetails({
                             before:border-l-2 before:border-t-2 before:border-border before:border-dashed border-2 border-border border-dashed"
                             >
                                 <Input
+                                id="feedback"
                                     value={feedback}
                                     onChange={(e) => updateFeedback(e.target.value)}
                                     className="border-none shadow-none p-3 py-[22.9px] text-foreground dark:bg-sidebar"

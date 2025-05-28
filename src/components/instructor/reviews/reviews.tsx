@@ -240,7 +240,7 @@ function Reviews() {
                         <SelectTrigger className="h-[41.6px] bg-background dark:hover:border-customBorder-dark dark:hover:bg-sidebar rounded-lg shadow-none cursor-pointer">
                             <div className="flex items-center gap-2">
                                 <Search className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                                <Input placeholder="Batch and student" className="border-none shadow-none p-0 cursor-pointer"/>
+                                <Input id="search" placeholder="Batch and student" className="border-none shadow-none p-0 cursor-pointer"/>
                             </div>
                         </SelectTrigger>
 

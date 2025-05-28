@@ -29,7 +29,7 @@ function SnapshotsModal({ children, selectedAttedence }: Propstype) {
     return (
         <Dialog>
             <DialogTrigger>{children}</DialogTrigger>
-            <DialogContent className="flex flex-col gap-10 dark:bg-sidebar-background max-h-[calc(100vh-10vh)]">
+            <DialogContent aria-describedby={undefined} className="flex flex-col gap-10 dark:bg-sidebar-background max-h-[calc(100vh-10vh)]">
                 <DialogHeader>
                     <DialogTitle className="text-foreground flex items-center gap-3">
                         <div className="p-2 bg-muted rounded-full">

@@ -127,7 +127,7 @@ function MessageSideOfChat({
                             content: msg.content,
                             status: user?._id === msg.senderId ? "sent" : "received",
                             message: msg.message,
-                            createdAt: msg.createdAt
+                            createdAt: msg.createdAt,
                         }));
 
                         // Update chat with messages
@@ -195,7 +195,7 @@ function MessageSideOfChat({
                     content: msg.content,
                     status: user?._id === msg.senderId ? "sent" : "received",
                     message: msg.message,
-                    createdAt: msg.createdAt
+                    createdAt: msg.createdAt,
                 }));
 
                 // Update chat with new messages
@@ -449,6 +449,7 @@ function MessageSideOfChat({
                         className="absolute left-2.5 top-2.5 h-5 w-5 text-muted-foreground cursor-pointer"
                     />
                     <Input
+                        id="message"
                         type="text"
                         placeholder="Type a message"
                         value={message}
@@ -458,7 +459,11 @@ function MessageSideOfChat({
                 </div>
 
                 {/* Button */}
-                <IconButton Icon={message ? Send : Mic} className="bg-background dark:hover:bg-sidebar dark:hover:border-customBorder-dark" />
+                <IconButton
+                    Icon={message ? Send : Mic}
+                    action={message ? () => sendMessage() : undefined}
+                    className="bg-background dark:hover:bg-sidebar dark:hover:border-customBorder-dark cursor-pointer"
+                />
             </form>
 
             {/* Emoji picker */}

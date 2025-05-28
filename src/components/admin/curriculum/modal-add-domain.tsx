@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
     Dialog,
     DialogContent,
@@ -61,7 +61,7 @@ function AddDomainModal({ setNewItem }: Propstype) {
             const lastItem = prev[prev.length - 1];
 
             // Check if last field is filled
-            if (!lastItem?.week || !lastItem?.title) {
+            if (!lastItem?.week._id || !lastItem?.title) {
                 toast({
                     title: "Please fill all the fields before adding another week!",
                 });
@@ -98,7 +98,8 @@ function AddDomainModal({ setNewItem }: Propstype) {
             );
         } else {
             // Check if title is already added
-            isAlreadyExists = domainWeeks.some((item) => item.title === value);
+            isAlreadyExists =
+                value && domainWeeks.some((item) => item.title === value);
         }
 
         // If true
@@ -168,7 +169,7 @@ function AddDomainModal({ setNewItem }: Propstype) {
     }, []);
 
     // Clear
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (open) {
             setDomainWeeks([{ week: { _id: "", name: "" }, title: "" }]);
             setDomainName("");
@@ -182,7 +183,10 @@ function AddDomainModal({ setNewItem }: Propstype) {
                     <Plus className="h-4 w-4" />
                 </div>
             </DialogTrigger>
-            <DialogContent className="flex flex-col gap-10 max-h-[90vh] overflow-hidden">
+            <DialogContent
+                aria-describedby={undefined}
+                className="flex flex-col gap-10 max-h-[90vh] overflow-hidden"
+            >
                 <DialogHeader>
                     <DialogTitle className="text-foreground flex items-center gap-3">
                         <div className="p-2 bg-muted rounded-full">
@@ -220,12 +224,18 @@ function AddDomainModal({ setNewItem }: Propstype) {
 
                     {/* Week List */}
                     <div className="space-y-2">
-                        <Label className="text-sm text-foreground font-medium">
+                        <Label
+                            htmlFor="weeks"
+                            className="text-sm text-foreground font-medium"
+                        >
                             Weeks for this domain
                         </Label>
 
+                        <input id="weeks" type="text" className="hidden" />
+
                         {/* Scrollable Week Fields */}
                         <div
+                            id="weeks"
                             ref={scrollRef}
                             className="max-h-[200px] overflow-y-auto no-scrollbar space-y-2"
                         >
@@ -233,6 +243,8 @@ function AddDomainModal({ setNewItem }: Propstype) {
                                 <div key={index} className="flex gap-2 items-center">
                                     {/* Week Dropdown */}
                                     <Select
+                                        key={`week-${index}`}
+                                        name={`week-${index}`}
                                         value={JSON.stringify(item.week)}
                                         onValueChange={(value) =>
                                             handleChange(index, "week", value)
@@ -267,6 +279,8 @@ function AddDomainModal({ setNewItem }: Propstype) {
                                     {/* Week Title Input */}
                                     <div className="relative">
                                         <Input
+                                            key={`title-${index}`}
+                                            id={`title-${index}`}
                                             type="text"
                                             placeholder="Enter title"
                                             value={item.title}

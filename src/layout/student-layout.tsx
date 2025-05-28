@@ -9,7 +9,7 @@ import {
 import {
     CalendarClock,
     CalendarDays,
-    Globe,
+    // Globe,
     LayoutDashboard,
     ListTodo,
     MessageCircleMore,
@@ -62,9 +62,9 @@ function StudentLayout({ isDrawerOpen }: PropsType) {
             { path: AppRoutes.ATTENDENCE, icon: CalendarClock, label: "Attendance" },
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
             { path: AppRoutes.MEET, icon: Video, label: "Meet" },
-            ...(isSmall
-                ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
-                : []),
+            // ...(isSmall
+            //     ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
+            //     : []),
         ],
         [isSmall]
     );

@@ -315,7 +315,7 @@ function CurriculumDetailsSide({
                         {/* tool-bar */}
                         <div className="flex items-center gap-2">
                             <Search
-                                id={selectedItem._id}
+                                id="search-user"
                                 search={search}
                                 handleSearch={handleSearch}
                             />

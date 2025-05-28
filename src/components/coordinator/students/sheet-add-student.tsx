@@ -261,7 +261,7 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                         className="space-y-2"
                     >
                         <Label
-                            htmlFor="role"
+                            htmlFor="batches"
                             className="text-sm text-foreground font-medium"
                         >
                             Batches
@@ -269,6 +269,7 @@ function AddStudentSheet({ button, setNewStudent, batches }: PropsType) {
                         <div className="relative">
                             <Select
                                 key={"batches"}
+                                name="batches"
                                 required
                                 onValueChange={(value) => {
                                     setValue("batch", value);

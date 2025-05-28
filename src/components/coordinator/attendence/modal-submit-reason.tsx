@@ -65,6 +65,7 @@ function SubmitReasonModal({
     return (
         <Dialog open={open} onOpenChange={(val) => !val && onClose()}>
             <DialogContent
+                aria-describedby={undefined}
                 className={cn(
                     "flex flex-col gap-10 dark:bg-sidebar-background max-h-[calc(100vh-10vh)]"
                 )}

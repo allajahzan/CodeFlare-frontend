@@ -274,7 +274,7 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                         className="space-y-2"
                     >
                         <Label
-                            htmlFor="role"
+                            htmlFor="category"
                             className="text-sm text-foreground font-medium"
                         >
                             Review Category
@@ -282,6 +282,7 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                         <div className="relative">
                             <Select
                                 key={"category"}
+                                name="category"
                                 required
                                 onValueChange={(value) => {
                                     setValue("category", value);
@@ -318,7 +319,7 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                         className="space-y-2"
                     >
                         <Label
-                            htmlFor="role"
+                            htmlFor="batches"
                             className="text-sm text-foreground font-medium"
                         >
                             Batches
@@ -326,6 +327,7 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                         <div className="relative">
                             <Select
                                 key={"batches"}
+                                name="batches"
                                 required
                                 onValueChange={(value) => {
                                     setValue("batch", value);
@@ -374,6 +376,7 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                         <div className="relative">
                             <Select
                                 key="students"
+                                name="students"
                                 required
                                 disabled={!students.length || fetchingStudents}
                                 value={selectedStudent}
@@ -505,15 +508,17 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                         transition={{ delay: 0.8 }}
                         className="space-y-2"
                     >
-                        <Label
+                        <Label 
                             htmlFor="date"
                             className="text-sm text-foreground font-medium"
                         >
                             Date
                         </Label>
-                        <Select>
+
+                        <Select 
+                        key="date" name="date">
                             <SelectTrigger
-                                key="date"
+                               id="date"
                                 className="h-[41.6px] bg-background dark:hover:border-customBorder-dark dark:hover:bg-sidebar rounded-lg shadow-none"
                             >
                                 <div className="w-full flex items-center gap-2">
@@ -539,7 +544,7 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                                 />
                             </SelectContent>
                         </Select>
-
+                    
                         {/* Date error message */}
                         <ValidationError message={errors.date?.message as string} />
                     </motion.div>
@@ -560,12 +565,13 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                         <div className="relative">
                             <Select
                                 key="time"
+                                name="time"
                                 onValueChange={(value) => {
                                     setselectedTime(value);
                                     setValue("time", value);
                                 }}
                             >
-                                <SelectTrigger className="w-full p-3 pl-9 py-5 text-foreground">
+                                <SelectTrigger id="time" className="w-full p-3 pl-9 py-5 text-foreground">
                                     <SelectValue placeholder="Pick a time">
                                         {convertTo12HourFormat(selectedTime)}
                                     </SelectValue>

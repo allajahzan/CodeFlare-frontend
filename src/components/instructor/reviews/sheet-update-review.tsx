@@ -161,7 +161,7 @@ function UpdateReviewsheet({
             week: selectedReview.week?.name || "",
             title: selectedReview.title,
             date: selectedReview.date ? new Date(selectedReview.date) : "",
-            time: selectedReview.time ?  selectedReview.time : "",
+            time: selectedReview.time ? selectedReview.time : "",
         });
 
         setCategory(selectedReview.category);
@@ -202,7 +202,7 @@ function UpdateReviewsheet({
                         className="space-y-2"
                     >
                         <Label
-                            htmlFor="role"
+                            htmlFor="category"
                             className="text-sm text-foreground font-medium"
                         >
                             Review Category
@@ -210,6 +210,7 @@ function UpdateReviewsheet({
                         <div className="relative">
                             <Select
                                 key={"category"}
+                                name="category"
                                 required
                                 defaultValue={category || ""}
                                 onValueChange={(value) => {
@@ -310,9 +311,9 @@ function UpdateReviewsheet({
                         >
                             Date
                         </Label>
-                        <Select>
+                        <Select key={"date"} name="date">
                             <SelectTrigger
-                                key="date"
+                                id="date"
                                 className="h-[41.6px] bg-background dark:hover:border-customBorder-dark dark:hover:bg-sidebar rounded-lg shadow-none"
                             >
                                 <div className="w-full flex items-center gap-2">
@@ -350,16 +351,26 @@ function UpdateReviewsheet({
                         transition={{ delay: 0.7 }}
                         className="space-y-2"
                     >
-                        <Label className="text-sm text-foreground font-medium">Time</Label>
+                        <Label
+                            htmlFor="time"
+                            className="text-sm text-foreground font-medium"
+                        >
+                            Time
+                        </Label>
                         <div className="relative">
                             <Select
+                                key={"time"}
+                                name="time"
                                 onValueChange={(value) => {
                                     setselectedTime(value);
                                     setValue("time", value);
                                 }}
                                 defaultValue={selectedTime}
                             >
-                                <SelectTrigger className="w-full p-3 pl-9 py-5 text-foreground">
+                                <SelectTrigger
+                                    id="time"
+                                    className="w-full p-3 pl-9 py-5 text-foreground"
+                                >
                                     <SelectValue placeholder="Pick a time">
                                         {convertTo12HourFormat(selectedTime)}
                                     </SelectValue>

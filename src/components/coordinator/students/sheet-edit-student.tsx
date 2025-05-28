@@ -285,7 +285,7 @@ function EditStudentSheet({
                         className="space-y-2"
                     >
                         <Label
-                            htmlFor="role"
+                            htmlFor="batches"
                             className="text-sm text-foreground font-medium"
                         >
                             Batches
@@ -293,6 +293,7 @@ function EditStudentSheet({
                         <div className="relative">
                             <Select
                                 key={"batches"}
+                                name="batches"
                                 required
                                 value={selectedBatch?._id || ""} // Ensure a valid value is set
                                 onValueChange={(value) => {

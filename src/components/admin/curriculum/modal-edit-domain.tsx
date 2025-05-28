@@ -208,7 +208,7 @@ function EditDomainModal({ itemToEdit, setItems, setSelectedItem }: PropsType) {
                     <Pencil className="h-4 w-4" />
                 </div>
             </DialogTrigger>
-            <DialogContent className="flex flex-col gap-10 max-h-[90vh] overflow-hidden">
+            <DialogContent aria-describedby={undefined} className="flex flex-col gap-10 max-h-[90vh] overflow-hidden">
                 <DialogHeader>
                     <DialogTitle className="text-foreground flex items-center gap-3">
                         <div className="p-2 bg-muted rounded-full">
@@ -247,9 +247,11 @@ function EditDomainModal({ itemToEdit, setItems, setSelectedItem }: PropsType) {
 
                     {/* Week List */}
                     <div className="space-y-2">
-                        <Label className="text-sm text-foreground font-medium">
+                        <Label htmlFor="weeks" className="text-sm text-foreground font-medium">
                             Weeks for this domain
                         </Label>
+
+                        <input type="text" id="weeks" className="hidden" />
 
                         {/* Scrollable Week Fields */}
                         <div
@@ -260,6 +262,8 @@ function EditDomainModal({ itemToEdit, setItems, setSelectedItem }: PropsType) {
                                 <div key={index} className="flex gap-2 items-center">
                                     {/* Week Dropdown */}
                                     <Select
+                                        key={`week-${index}`}
+                                        name={`week-${index}`}
                                         value={JSON.stringify(item.week)}
                                         onValueChange={(value) =>
                                             handleChange(index, "week", value)
@@ -293,6 +297,8 @@ function EditDomainModal({ itemToEdit, setItems, setSelectedItem }: PropsType) {
                                     {/* Week Title Input */}
                                     <div className="relative">
                                         <Input
+                                            key={`title-${index}`}
+                                            id={`title-${index}`}
                                             type="text"
                                             placeholder="Enter title"
                                             value={item.title}

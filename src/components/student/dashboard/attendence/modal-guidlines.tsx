@@ -23,7 +23,7 @@ interface PropsType {
 function AttendenceGuidlinesModal({ open, setOpen }: PropsType) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent className="flex flex-col gap-5 dark:bg-sidebar-background max-h-screen">
+            <DialogContent aria-describedby={undefined} className="flex flex-col gap-5 dark:bg-sidebar-background max-h-screen">
                 <DialogHeader>
                     <DialogTitle className="text-foreground flex items-center gap-3">
                         <div className="p-2 bg-muted rounded-full">

@@ -90,6 +90,7 @@ function ModalMeetId({ open, setOpen }: PropsType) {
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent
                 style={{ height: "199.6px" }}
+                aria-describedby={undefined}
                 className="flex flex-col gap-10 bg-background dark:bg-sidebar-background"
             >
                 <DialogHeader>

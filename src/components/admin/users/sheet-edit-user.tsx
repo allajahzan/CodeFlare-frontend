@@ -320,6 +320,7 @@ function EditUserSheet({
                         <div className="relative">
                             <Select
                                 key="role"
+                                name="role"
                                 required
                                 value={selectedUser.role || ""}
                                 disabled

@@ -21,7 +21,7 @@ import {
     useLayoutEffect,
     useState,
 } from "react";
-import { IUserContext, UserContext } from "./user-context";
+import { IUser, IUserContext, UserContext } from "./user-context";
 import { handleCustomError } from "@/utils/error";
 import { fetchData, patchData, postData } from "@/service/api-service";
 import ApiEndpoints from "@/constants/api-endpoints";
@@ -37,14 +37,33 @@ import { Button } from "@/components/ui/button";
 import NotFoundOrbit from "@/components/common/fallback/not-found-orbit";
 import { toast } from "@/hooks/use-toast";
 
+// Interface for Domain Context
+interface IDomainContext {
+    open: boolean;
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 // Domain Context
-const DomainContext = createContext({});
+const DomainContext = createContext<IDomainContext | null>(null);
+
+// Custom domain hook
+export const useDomain = () => {
+    const context = useContext(DomainContext);
+    if (!context)
+        throw new Error("useDomain should be used within DomainProvider");
+
+    return context;
+};
 
 // Domain context Provider
 const DomainContextProvider = ({ children }: { children: ReactNode }) => {
     // Set domain modal
     const [open, setOpen] = useState<boolean>(false);
     const [fetching, setFetching] = useState<Boolean>(true);
+
+    // Confirmation modal
+    const [openConfirmation, setOpenConfirmation] = useState<boolean>(false);
+    const [submiting, setSubmiting] = useState<boolean>(false);
 
     // Domains
     const [domains, setDomains] = useState<IDomain[]>([]);
@@ -53,10 +72,8 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
     const [description, setDescrption] = useState<string>("");
     const [fetchingDescription, setFetchingDescription] = useState<boolean>(true);
 
-    const [submitting, setSubmitting] = useState<boolean>(false);
-
     // User Context
-    const { user } = useContext(UserContext) as IUserContext;
+    const { user, setUser } = useContext(UserContext) as IUserContext;
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
@@ -109,9 +126,11 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
 
             const badgeWeek = /(badge|boarding|toi)/i;
             const planningWeek = /(First|Second|Project|Planning)/i;
+            const foundation = /(foundation)/i;
 
             const isBadgeWeek = badgeWeek.test(selectedWeek?.title ?? "");
             const isPlanningWeek = planningWeek.test(selectedWeek?.title ?? "");
+            const isFoundation = foundation.test(selectedWeek?.title ?? "");
 
             try {
                 // Send request
@@ -124,6 +143,12 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
                 } else if (isPlanningWeek) {
                     setDescrption(
                         "Plan your project. And make figma design, database diagram, API documentation and module listing with proper timeline."
+                    );
+
+                    setFetchingDescription(false);
+                } else if (isFoundation) {
+                    setDescrption(
+                        "In foundation week, you have to cover Html, Css and the basics of your stack."
                     );
 
                     setFetchingDescription(false);
@@ -174,7 +199,7 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
     // Select domain
     const handleSelectDomain = async (domain: IDomain) => {
         try {
-            setSubmitting(true);
+            setSubmiting(true);
 
             // Send request to schedule foundation review
             const foundationReviewPromise = await postData(
@@ -182,6 +207,7 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
                 {
                     domainId: domain._id,
                     batchId: user?.batch?._id,
+                    weekId: domain.domainsWeeks[0].week._id,
                 },
                 role
             );
@@ -200,21 +226,47 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
 
             // Success response
             if (resp1 && resp2 && resp1.status === 200 && resp2.status === 200) {
+                // Update user in context
+                setUser((prevUser: IUser | null) => {
+                    if (!prevUser) return null;
+                    return {
+                        ...prevUser,
+                        ...(prevUser.role === "student" && {
+                            week: domain.domainsWeeks[0].week,
+                        }),
+                        domain,
+                    };
+                });
+
+                // Local storage
+                const userData = JSON.parse(localStorage.getItem("user") as string);
+                localStorage.setItem(
+                    "user",
+                    JSON.stringify({
+                        ...userData,
+                        ...(userData.role === "student" && {
+                            week: domain.domainsWeeks[0].week,
+                        }),
+                        domain,
+                    })
+                );
+
                 toast({ title: "Domain selected successfully." });
-                setSubmitting(false);
+                setSubmiting(false);
+                setOpenConfirmation(false);
                 setOpen(false);
             }
         } catch (err: unknown) {
-            setSubmitting(false);
+            setSubmiting(false);
             handleCustomError(err);
         }
     };
     return (
-        <DomainContext.Provider value={{}}>
+        <DomainContext.Provider value={{ open, setOpen }}>
             {children}
             {/* Domain Modal */}
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent className="flex flex-col gap-10 max-w-xl h-[90vh]">
+                <DialogContent aria-describedby={undefined} className="flex flex-col gap-10 max-w-xl h-[90vh]">
                     <DialogHeader>
                         <DialogTitle className="text-foreground flex items-center gap-3">
                             <div className="p-2 bg-muted rounded-full">
@@ -286,7 +338,7 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
                                                     <h2 className="font-bold text-lg mb-2 text-foreground">
                                                         {selectedWeek?.week.name} - {selectedWeek.title}
                                                     </h2>
-                                                    {description ? (
+                                                    {!fetchingDescription ? (
                                                         <p className="text-foreground font-medium">
                                                             {description}
                                                         </p>
@@ -308,24 +360,12 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
                                         </div>
                                     </div>
                                     {/* Button */}
-                                    <div
-                                        onClick={() => {
-                                            handleSelectDomain(selectedDomain);
-                                        }}
-                                    >
+                                    <div onClick={() => setOpenConfirmation(true)}>
                                         <Button
-                                            type="submit"
-                                            disabled={submitting}
+                                            type="button"
                                             className="w-full h-11 transition-all duration-200 disabled:cursor-not-allowed"
                                         >
-                                            {submitting ? (
-                                                <div className="flex items-center gap-2">
-                                                    <Loader2 className="h-4 w-4 animate-spin" />
-                                                    Processing...
-                                                </div>
-                                            ) : (
-                                                "Select"
-                                            )}
+                                            Select
                                         </Button>
                                     </div>
                                 </div>
@@ -360,15 +400,59 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
                                 message={
                                     fetching
                                         ? "Please wait a moment"
-                                        : " o domains are added by admin"
+                                        : "No domains are added by admin"
                                 }
                                 className="w-full"
                             />
                         )}
                     </div>
+
+                    {/* Confirmation Modal */}
+                    <Dialog open={openConfirmation} onOpenChange={setOpenConfirmation}>
+                        <DialogContent className="flex flex-col gap-10 bg-background dark:bg-sidebar-background">
+                            <DialogHeader>
+                                <DialogTitle className="text-foreground flex items-center gap-3">
+                                    <div className="p-2 bg-muted rounded-full">
+                                        <GraduationCap className="w-4 h-4 text-foreground" />
+                                    </div>
+                                    <span>Are you sure you want {selectedDomain?.name} ?</span>
+                                </DialogTitle>
+                                <DialogDescription className="text-muted-foreground font-medium">
+                                    This operation can't be undone, So think before you confirm.
+                                </DialogDescription>
+                            </DialogHeader>
+
+                            <div className="w-full flex items-center justify-end gap-2">
+                                <Button
+                                    onClick={() => setOpenConfirmation(false)}
+                                    type="button"
+                                    className="h-11 w-full transition-all duration-200 disabled:cursor-not-allowed"
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    onClick={() => {
+                                        handleSelectDomain(selectedDomain as IDomain);
+                                    }}
+                                    disabled={submiting}
+                                    className="h-11 w-full transition-all duration-200 disabled:cursor-not-allowed"
+                                >
+                                    {submiting ? (
+                                        <div className="flex items-center gap-2">
+                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                            Processing...
+                                        </div>
+                                    ) : (
+                                        "Yes"
+                                    )}
+                                </Button>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
                 </DialogContent>
             </Dialog>
         </DomainContext.Provider>
     );
 };
+
 export default DomainContextProvider;

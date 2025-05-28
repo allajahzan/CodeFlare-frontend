@@ -8,7 +8,7 @@ import {
 import {
     // CalendarDaysIcon,
     // CreditCard,
-    Globe,
+    // Globe,
     // GraduationCap,
     // Home,
     LayersIcon,
@@ -64,9 +64,9 @@ function AdminLayout({ isDrawerOpen }: PropsType) {
             { path: AppRoutes.CHATS, icon: MessageCircleMore, label: "Chats" },
             { path: AppRoutes.MEET, icon: Video, label: "Meet" },
             // { path: AppRoutes.ADMIN_INVOICES, icon: CreditCard, label: "Invoices" },
-            ...(isSmall
-                ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
-                : []),
+            // ...(isSmall
+            //     ? [{ path: AppRoutes.COMMUNITY, icon: Globe, label: "Community" }]
+            //     : []),
         ],
         [isSmall]
     );

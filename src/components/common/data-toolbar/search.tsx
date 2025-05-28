@@ -15,7 +15,7 @@ function Search({ id, search, handleSearch }: PropsType) {
         <div className="relative flex-1">
             <SearchIcon className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
-                id={id}
+                id={id || "search"}
                 type="text"
                 placeholder="Search"
                 autoComplete="off"

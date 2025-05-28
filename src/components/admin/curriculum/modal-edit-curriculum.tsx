@@ -137,7 +137,7 @@ function EditCurriculumModal({
                     <Pencil className="h-4 w-4" />
                 </div>
             </DialogTrigger>
-            <DialogContent className="flex flex-col gap-10">
+            <DialogContent aria-describedby={undefined} className="flex flex-col gap-10">
                 <DialogHeader>
                     <DialogTitle className="text-foreground flex items-center gap-3">
                         <div className="p-2 bg-muted rounded-full">
