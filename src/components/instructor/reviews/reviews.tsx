@@ -317,7 +317,7 @@ function Reviews() {
                                     <div className="min-w-0 flex items-center gap-2 relative">
                                         <p className="relative text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
                                             <CalendarDays className="w-3 h-3" />
-                                            {review.week?.name || "Foundation"}
+                                            {(review.category === "Weekly" || review.category === "Foundation") ? review.week.name : review.category}
                                         </p>
                                         <p className="flex gap-1 items-center text-sm text-muted-foreground font-medium truncate">
                                             <Calendar1 className="w-3 h-3" />

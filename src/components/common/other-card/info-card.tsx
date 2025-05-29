@@ -16,7 +16,7 @@ interface PropsType {
 // Info card Component
 function InfoCard({ Icon, label, text, iconDivClassName, iconClassName, className }: PropsType) {
     return (
-        <div className={cn("group min-w-[250px] h-[] p-3 rounded-lg shadow-sm", className)}>
+        <div className={cn("group min-w-[250px] p-3 rounded-lg shadow-sm", className)}>
             <div className="flex items-center gap-3">
                 <div className={cn("p-2 rounded-lg bg-muted", iconDivClassName)}>
                     <Icon className={cn("w-5 h-5 text-foreground",iconClassName)} />

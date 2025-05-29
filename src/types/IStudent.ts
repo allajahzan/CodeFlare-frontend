@@ -1,4 +1,4 @@
-import { IBatch, IDomain, IStudentCategory, IWeek } from "@codeflare/common";
+import { IBatch, IDomain, IReviewCategory, IStudentCategory, IWeek } from "@codeflare/common";
 
 // Interface for Student
 export interface IStudent {
@@ -12,6 +12,7 @@ export interface IStudent {
     domain?: IDomain;
     batch: IBatch;
     category: IStudentCategory;
+    review: IReviewCategory;
     lastActive: string;
     createdAt: string;
     isBlock: boolean;

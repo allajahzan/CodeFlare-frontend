@@ -19,7 +19,6 @@ import {
 } from "lucide-react";
 import {
     useContext,
-    useEffect,
     useLayoutEffect,
     useRef,
     useState,
@@ -217,7 +216,7 @@ function ReviewDetails({
     };
 
     // Update status color
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (selectedReview?.status === "Pending") {
             setStatusColor("yellow");
             setStatusIcon(CircleDashed);
@@ -253,26 +252,30 @@ function ReviewDetails({
                                 <div className="text-lg text-foreground font-semibold">
                                     {selectedReview.category === "Weekly" ||
                                         selectedReview.category === "Foundation"
-                                        ? `${selectedReview.week.name} (${selectedReview.title[0]
-                                                .toUpperCase()}${selectedReview.title.slice(1)})`
+                                        ? `${selectedReview.week.name
+                                        } (${selectedReview.title[0].toUpperCase()}${selectedReview.title.slice(
+                                            1
+                                        )})`
                                         : selectedReview.category}
                                 </div>
                             </div>
 
                             <div className="flex items-center gap-3">
-                                {/* Role badge */}
-                                <Badge
-                                    className={cn(
-                                        "text-sm font-semibold rounded-full duration-0",
-                                        selectedReview.result === "Pass"
-                                            ? "text-green-600 bg-green-400/20 hover:bg-green-400/30"
-                                            : selectedReview.result === "Fail"
-                                                ? "text-red-600 bg-red-400/20 hover:bg-red-400/30"
-                                                : "text-yellow-600 bg-yellow-400/20 hover:bg-yellow-400/30"
-                                    )}
-                                >
-                                    {selectedReview.result || "Pending"}
-                                </Badge>
+                                {/* Role badge - Nor for normal review*/}
+                                {selectedReview.category !== "Normal" && (
+                                    <Badge
+                                        className={cn(
+                                            "text-sm font-semibold rounded-full duration-0",
+                                            selectedReview.result === "Pass"
+                                                ? "text-green-600 bg-green-400/20 hover:bg-green-400/30"
+                                                : selectedReview.result === "Fail"
+                                                    ? "text-red-600 bg-red-400/20 hover:bg-red-400/30"
+                                                    : "text-yellow-600 bg-yellow-400/20 hover:bg-yellow-400/30"
+                                        )}
+                                    >
+                                        {selectedReview.result || "Pending"}
+                                    </Badge>
+                                )}
 
                                 {/* Update review sheet */}
                                 <UpdateReviewsheet
@@ -316,7 +319,7 @@ function ReviewDetails({
                             before:border-l-2 before:border-t-2 before:border-border before:border-dashed border-2 border-border border-dashed"
                             >
                                 <Input
-                                id="feedback"
+                                    id="feedback"
                                     value={feedback}
                                     onChange={(e) => updateFeedback(e.target.value)}
                                     className="border-none shadow-none p-3 py-[22.9px] text-foreground dark:bg-sidebar"
@@ -329,16 +332,16 @@ function ReviewDetails({
                         <div
                             ref={cardsListsRef}
                             onWheel={onwheel}
-                            className="flex gap-[13px] relative w-full overflow-scroll overflow-y-hidden no-scrollbar whitespace-nowrap scrollbar-hide"
+                            className="flex gap-[13px] relative w-full overflow-scroll no-scrollbar"
                         >
                             {/* Status */}
                             <DropdownMenu>
                                 <DropdownMenuTrigger>
                                     <div
-                                        className={`relative rounded-lg bg-gradient-to-br from-${statusColor}-50 to-${statusColor}-100 dark:from-${statusColor}-900/20 dark:to-${statusColor}-800/20 border border-${statusColor}-200 dark:border-${statusColor}-800`}
+                                        className={`relative overflow-hidden rounded-lg bg-gradient-to-br from-${statusColor}-50 to-${statusColor}-100 dark:from-${statusColor}-900/20 dark:to-${statusColor}-800/20 border border-${statusColor}-200 dark:border-${statusColor}-800`}
                                     >
                                         <div
-                                            className={`absolute top-0 right-0 w-16 h-16 bg-${statusColor}-200 dark:bg-${statusColor}-700/20 rounded-bl-full opacity-50`}
+                                            className={`absolute z-10 top-0 right-0 w-16 h-16 bg-${statusColor}-200 dark:bg-${statusColor}-700/20 rounded-bl-full opacity-50`}
                                         ></div>
                                         <InfoCard
                                             Icon={statusIcon}
@@ -380,50 +383,52 @@ function ReviewDetails({
                                 </DropdownMenuContent>
                             </DropdownMenu>
 
-                            {/* Score */}
-                            <div>
-                                <div className="relative group min-w-[250px] p-3 rounded-lg shadow-sm bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900/20 dark:to-pink-800/20 border border-pink-200 dark:border-pink-800 ">
-                                    <div className="absolute top-0 right-0 w-16 h-16 bg-pink-200 dark:bg-pink-700/20 rounded-bl-full opacity-50"></div>
-                                    <div className="relative flex items-center gap-3">
-                                        <div className="p-2 rounded-lg bg-pink-400/20 group-hover:bg-pink-400/30">
-                                            <Trophy className="w-5 h-5 text-pink-600" />
-                                        </div>
+                            {/* Score - Not for normal review*/}
+                            {selectedReview.category !== "Normal" && (
+                                <div>
+                                    <div className="relative overflow-hidden group min-w-[250px] p-3 rounded-lg shadow-sm bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900/20 dark:to-pink-800/20 border border-pink-200 dark:border-pink-800 ">
+                                        <div className="absolute top-0 right-0 w-16 h-16 bg-pink-200 dark:bg-pink-700/20 rounded-bl-full opacity-50"></div>
+                                        <div className="relative flex items-center gap-3">
+                                            <div className="p-2 rounded-lg bg-pink-400/20 group-hover:bg-pink-400/30">
+                                                <Trophy className="w-5 h-5 text-pink-600" />
+                                            </div>
 
-                                        <div className="text-start w-full">
-                                            <p className="text-sm text-muted-foreground font-medium">
-                                                Score
-                                            </p>
-                                            {selectedReview.score ? (
-                                                <div className="flex-1 flex items-center gap-2">
-                                                    <p className="text-foreground font-semibold">
-                                                        Practical :
-                                                        {selectedReview?.score?.practical as number}
-                                                    </p>
-                                                    <p className="text-foreground font-semibold">
-                                                        Theory : {selectedReview?.score?.theory as number}
-                                                    </p>
-                                                </div>
-                                            ) : (
-                                                <p className="text-foreground font-semibold">NILL</p>
-                                            )}
-                                        </div>
+                                            <div className="text-start w-full">
+                                                <p className="text-sm text-muted-foreground font-medium">
+                                                    Score
+                                                </p>
+                                                {selectedReview.score ? (
+                                                    <div className="flex-1 flex items-center gap-2">
+                                                        <p className="text-foreground font-semibold">
+                                                            Practical :
+                                                            {selectedReview?.score?.practical as number}
+                                                        </p>
+                                                        <p className="text-foreground font-semibold">
+                                                            Theory : {selectedReview?.score?.theory as number}
+                                                        </p>
+                                                    </div>
+                                                ) : (
+                                                    <p className="text-foreground font-semibold">NILL</p>
+                                                )}
+                                            </div>
 
-                                        <AddMarkModal
-                                            className="absolute -top-3 -right-3"
-                                            selectedReview={selectedReview}
-                                            setSelectedReview={setSelectedReview}
-                                            setReviews={setReviews}
-                                        />
+                                            <AddMarkModal
+                                                className="absolute -top-3 -right-3"
+                                                selectedReview={selectedReview}
+                                                setSelectedReview={setSelectedReview}
+                                                setReviews={setReviews}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            )}
 
                             {/* Sheduled date */}
-                            <div className="relative rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border border-blue-200 dark:border-blue-800">
-                                <div className="absolute top-0 right-0 w-16 h-16 bg-blue-200 dark:bg-blue-700/20 rounded-bl-full opacity-50"></div>
+                            <div className="relative overflow-hidden group min-w-[250px] rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border border-blue-200 dark:border-blue-800">
+                                <div className="absolute top-0 right-0 w-16 h-16 bg-blue-200 dark:bg-blue-700/20 rounded-bl-full opacity-50" />
                                 <InfoCard
                                     Icon={CalendarDays}
-                                    label="Sheduled Date"
+                                    label="Scheduled Date"
                                     text={new Date(selectedReview.createdAt).toLocaleDateString(
                                         "en-GB",
                                         {
@@ -434,11 +439,12 @@ function ReviewDetails({
                                     )}
                                     iconDivClassName="bg-blue-400/20 group-hover:bg-blue-400/30"
                                     iconClassName="text-blue-600"
+                                    className="w-full"
                                 />
                             </div>
 
                             {/* Review date */}
-                            <div className="relative rounded-lg bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 border border-orange-200 dark:border-orange-800">
+                            <div className="relative overflow-hidden group min-w-[250px] rounded-lg bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 border border-orange-200 dark:border-orange-800">
                                 <div className="absolute top-0 right-0 w-16 h-16 bg-orange-200 dark:bg-orange-700/20 rounded-bl-full opacity-50"></div>
                                 <InfoCard
                                     Icon={CalendarDays}
@@ -461,7 +467,7 @@ function ReviewDetails({
                             </div>
 
                             {/* Time */}
-                            <div className="relative rounded-lg bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border border-green-200 dark:border-green-800">
+                            <div className="relative overflow-hidden group min-w-[250px] rounded-lg bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 border border-green-200 dark:border-green-800">
                                 <div className="absolute top-0 right-0 w-16 h-16 bg-green-200 dark:bg-green-700/20 rounded-bl-full opacity-50"></div>
                                 <InfoCard
                                     Icon={Clock}
@@ -477,8 +483,8 @@ function ReviewDetails({
                             </div>
 
                             {/* Duration */}
-                            <div className="relative rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border border-blue-200 dark:border-blue-800">
-                                <div className="absolute top-0 right-0 w-16 h-16 bg-blue-200 dark:bg-blue-700/20 rounded-bl-full opacity-50"></div>
+                            <div className="relative overflow-hidden group min-w-[250px] rounded-lg bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 border border-purple-200 dark:border-purple-800">
+                                <div className="absolute top-0 right-0 w-16 h-16 bg-purple-200 dark:bg-purple-700/20 rounded-bl-full opacity-50"></div>
                                 <InfoCard
                                     Icon={Hourglass}
                                     label="Duration"

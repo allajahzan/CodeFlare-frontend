@@ -23,6 +23,7 @@ import {
     CalendarRange,
     Clock,
     FolderPen,
+    Home,
     ListFilter,
     Loader2,
     UsersRound,
@@ -44,6 +45,7 @@ import { IStudent } from "@/types/IStudent";
 import { IReview } from "@/types/IReview";
 import { IBatch, IDomainsWeek } from "@codeflare/common";
 import { IUserContext, UserContext } from "@/context/user-context";
+import { cn } from "@/lib/utils";
 
 // Interface for Props
 interface PropsType {
@@ -68,7 +70,9 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
 
     // Week
     const [fetchingWeek, setFetchingWeek] = useState<boolean>(false);
-    const [weekName, setWeekName] = useState<string>("");
+
+    // Category
+    const [categorys, setCategorys] = useState<string[]>(["Normal"]);
 
     // Date
     const [selectedDate, setSelectedDate] = useState<Date | undefined>(
@@ -76,7 +80,7 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
     );
 
     // Time
-    const [selectedTime, setselectedTime] = useState<string>("");
+    // const [selectedTime, setselectedTime] = useState<string>("");
 
     // User context
     const { user } = useContext(UserContext) as IUserContext;
@@ -158,6 +162,10 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                 setValue("student", "");
                 setSelectedStudent("");
 
+                setValue("weekName", "");
+                setValue("title", "");
+                setCategorys(["Normal"]);
+
                 // Fetch data
                 const resp = await fetchData(
                     ApiEndpoints.SEARCH_USER +
@@ -178,14 +186,11 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
         if (batch) fetchUsers();
     }, [batch]);
 
-    // Fetch week domain and title based on the student
+    // Fetch week, domain, title, and category based on the student
     useEffect(() => {
         const fetchStudentWeek = async () => {
             try {
                 setFetchingWeek(true);
-                setWeekName("");
-                setValue("week", "");
-                setValue("title", "");
 
                 // Send request
                 const resp = await fetchData(
@@ -198,13 +203,22 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                     const data = resp?.data.data;
 
                     // Set week name
-                    setWeekName(data.week?.name || "");
+                    setValue("weekName", data.week?.name || "");
 
                     // Set week
                     setValue("week", data.week?._id || "");
 
                     // Set domain
                     setValue("domain", data.domain?._id || "");
+
+                    // Set category
+                    setCategorys((prevCats) => {
+                        if (data.review) {
+                            return [...new Set([...prevCats, data.review])];
+                        } else {
+                            return prevCats;
+                        }
+                    });
 
                     // Set title
                     const week = data.domain?.domainsWeeks.find(
@@ -232,12 +246,11 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
     useEffect(() => {
         if (!open) {
             reset();
-            setselectedTime("");
             setSelectedDate(undefined);
             setBatch(null);
             setStudents([]);
             setSelectedStudent("");
-            setWeekName("");
+            setCategorys(["Normal"]);
         }
     }, [open]);
 
@@ -266,56 +279,11 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                     onSubmit={handleSubmit(OnSubmit)}
                     className="space-y-3 p-5 overflow-auto"
                 >
-                    {/* Select for category */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
-                        className="space-y-2"
-                    >
-                        <Label
-                            htmlFor="category"
-                            className="text-sm text-foreground font-medium"
-                        >
-                            Review Category
-                        </Label>
-                        <div className="relative">
-                            <Select
-                                key={"category"}
-                                name="category"
-                                required
-                                onValueChange={(value) => {
-                                    setValue("category", value);
-                                }}
-                            >
-                                <SelectTrigger
-                                    id="category"
-                                    className="text-foreground font-medium p-5 pl-9 relative"
-                                >
-                                    <SelectValue
-                                        placeholder="Select review category"
-                                        className="relative transition-opacity duration-200"
-                                    />
-                                </SelectTrigger>
-                                <SelectContent className="max-h-[200px]">
-                                    {["Foundation", "Weekly", "QA", "InTake"].map(
-                                        (cate, index) => (
-                                            <SelectItem key={index} value={cate}>
-                                                {cate}
-                                            </SelectItem>
-                                        )
-                                    )}
-                                </SelectContent>
-                            </Select>
-                            <ListFilter className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
-                        </div>
-                    </motion.div>
-
                     {/* Input for batches */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
+                        transition={{ delay: 0.3 }}
                         className="space-y-2"
                     >
                         <Label
@@ -344,14 +312,20 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                                     />
                                 </SelectTrigger>
                                 <SelectContent className="max-h-[200px]">
-                                    {batches.map((batch, index) => (
-                                        <SelectItem key={index} value={batch._id}>
-                                            {batch.name}
+                                    {batches.map((btc, index) => (
+                                        <SelectItem
+                                            className={cn(
+                                                fetchingStudents && batch?._id !== btc._id && "hidden"
+                                            )}
+                                            key={index}
+                                            value={btc._id}
+                                        >
+                                            {btc.name}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
-                            <UsersRound className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                            <Home className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
 
                         {/* Batch error message */}
@@ -362,7 +336,7 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5 }}
+                        transition={{ delay: 0.4 }}
                         className="space-y-2"
                     >
                         {/* Label */}
@@ -433,7 +407,7 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6 }}
+                        transition={{ delay: 0.5 }}
                         className="space-y-2"
                     >
                         <Label
@@ -449,7 +423,7 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                                 required
                                 disabled
                                 autoComplete="off"
-                                value={weekName}
+                                {...register("weekName")}
                                 className="text-foreground font-medium p-5 pl-9"
                             />
 
@@ -463,13 +437,16 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                                 <CalendarRange className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                             )}
                         </div>
+
+                        {/* Error Message */}
+                        <ValidationError message={errors.week?.message as string} />
                     </motion.div>
 
                     {/* Input for title */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.7 }}
+                        transition={{ delay: 0.6 }}
                         className="space-y-2"
                     >
                         <Label
@@ -499,6 +476,52 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                                 <FolderPen className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                             )}
                         </div>
+
+                        {/* Error Message */}
+                        <ValidationError message={errors.title?.message as string} />
+                    </motion.div>
+
+                    {/* Select for category */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.7 }}
+                        className="space-y-2"
+                    >
+                        <Label
+                            htmlFor="category"
+                            className="text-sm text-foreground font-medium"
+                        >
+                            Review Category
+                        </Label>
+                        <div className="relative">
+                            <Select
+                                key={"category"}
+                                name="category"
+                                required
+                                onValueChange={(value) => {
+                                    setValue("category", value);
+                                }}
+                            >
+                                <SelectTrigger
+                                    id="category"
+                                    className="text-foreground font-medium p-5 pl-9 relative"
+                                >
+                                    <SelectValue
+                                        placeholder="Select review category"
+                                        className="relative transition-opacity duration-200"
+                                    />
+                                </SelectTrigger>
+                                <SelectContent className="max-h-[200px]">
+                                    {categorys.map((cate, index) => (
+                                        <SelectItem key={index} value={cate}>
+                                            {cate}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            <ListFilter className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                        </div>
                     </motion.div>
 
                     {/* Date picker */}
@@ -508,17 +531,16 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                         transition={{ delay: 0.8 }}
                         className="space-y-2"
                     >
-                        <Label 
+                        <Label
                             htmlFor="date"
                             className="text-sm text-foreground font-medium"
                         >
                             Date
                         </Label>
 
-                        <Select 
-                        key="date" name="date">
+                        <Select key="date" name="date">
                             <SelectTrigger
-                               id="date"
+                                id="date"
                                 className="h-[41.6px] bg-background dark:hover:border-customBorder-dark dark:hover:bg-sidebar rounded-lg shadow-none"
                             >
                                 <div className="w-full flex items-center gap-2">
@@ -544,7 +566,7 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                                 />
                             </SelectContent>
                         </Select>
-                    
+
                         {/* Date error message */}
                         <ValidationError message={errors.date?.message as string} />
                     </motion.div>
@@ -567,14 +589,14 @@ function ScheduleReviewSheet({ button, setNewReview }: PropsType) {
                                 key="time"
                                 name="time"
                                 onValueChange={(value) => {
-                                    setselectedTime(value);
                                     setValue("time", value);
                                 }}
                             >
-                                <SelectTrigger id="time" className="w-full p-3 pl-9 py-5 text-foreground">
-                                    <SelectValue placeholder="Pick a time">
-                                        {convertTo12HourFormat(selectedTime)}
-                                    </SelectValue>
+                                <SelectTrigger
+                                    id="time"
+                                    className="w-full p-3 pl-9 py-5 text-foreground"
+                                >
+                                    <SelectValue placeholder="Pick a time"></SelectValue>
                                 </SelectTrigger>
                                 <SelectContent className="h-[170px]">
                                     {Array.from({ length: 24 }, (_, hour) => (

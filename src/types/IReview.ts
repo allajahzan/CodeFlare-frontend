@@ -1,4 +1,4 @@
-import { IReveiewCategory, IWeek } from "@codeflare/common";
+import { IBatch, IReviewCategory, IWeek } from "@codeflare/common";
 import { IStudent } from "./IStudent";
 import { IUser } from "./IUser";
 
@@ -7,11 +7,12 @@ export interface IReview {
     _id: string;
     instructor: IUser;
     student: IStudent;
+    batch: IBatch;
     week: IWeek;
     title: string;
     date: Date;
     time: string;
-    category: IReveiewCategory;
+    category: IReviewCategory;
     feedback: string;
     pendings: string[];
     score: {

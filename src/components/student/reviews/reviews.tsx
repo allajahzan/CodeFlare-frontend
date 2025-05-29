@@ -170,7 +170,7 @@ function Reviews() {
                                                     ? "bg-green-600/20"
                                                     : review.result === "Fail"
                                                         ? "bg-red-600/20"
-                                                        : "bg-yellow-600/20"
+                                                        : "bg-green-600/20"
                                                 : review.status === "Pending"
                                                     ? "bg-yellow-600/20"
                                                     : review.status === "Absent"

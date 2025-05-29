@@ -16,7 +16,8 @@ export const formSchema = z.object({
         .min(1, "Student is required !"),
     domain: z.string().optional(),
     week: z.string().optional(),
-    title: z.string().optional(),
+    weekName: z.string().nonempty("Week is required !"),
+    title: z.string().nonempty("Title is required !"),
     date: z
         .any()
         .refine((val) => val instanceof Date && !isNaN(val.getTime()), {

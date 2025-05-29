@@ -27,7 +27,13 @@ import {
     ListFilter,
     Loader2,
 } from "lucide-react";
-import { Fragment, ReactNode, useContext, useEffect, useState } from "react";
+import {
+    Fragment,
+    ReactNode,
+    useContext,
+    useLayoutEffect,
+    useState,
+} from "react";
 import DatePicker from "./date-picker";
 import { convertTo12HourFormat } from "@/utils/time-converter";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -41,7 +47,6 @@ import { handleCustomError } from "@/utils/error";
 import { toast } from "@/hooks/use-toast";
 import { IUserContext, UserContext } from "@/context/user-context";
 import { IReview } from "@/types/IReview";
-import { IReveiewCategory } from "@codeflare/common";
 
 // Interface for Props
 interface PropsType {
@@ -67,9 +72,6 @@ function UpdateReviewsheet({
 
     // Time
     const [selectedTime, setselectedTime] = useState<string>("");
-
-    // Category
-    const [category, setCategory] = useState<IReveiewCategory | null>(null);
 
     // Redux
     const role = useSelector((state: stateType) => state.role);
@@ -143,7 +145,7 @@ function UpdateReviewsheet({
                     );
                 });
 
-                toast({ title: "Review updated successfully !" });
+                toast({ title: "Review updated successfully." });
 
                 setSubmiting(false);
                 setOpen(false);
@@ -155,7 +157,7 @@ function UpdateReviewsheet({
     };
 
     // Reset form fields
-    useEffect(() => {
+    useLayoutEffect(() => {
         reset({
             category: selectedReview.category,
             week: selectedReview.week?.name || "",
@@ -164,7 +166,6 @@ function UpdateReviewsheet({
             time: selectedReview.time ? selectedReview.time : "",
         });
 
-        setCategory(selectedReview.category);
         setSelectedDate(new Date(selectedReview.date));
         setselectedTime(selectedReview.time);
         setSubmiting(false);
@@ -194,57 +195,11 @@ function UpdateReviewsheet({
                     onSubmit={handleSubmit(OnSubmit)}
                     className="h-full space-y-3 p-5 overflow-auto"
                 >
-                    {/* Select for category */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 }}
-                        className="space-y-2"
-                    >
-                        <Label
-                            htmlFor="category"
-                            className="text-sm text-foreground font-medium"
-                        >
-                            Review Category
-                        </Label>
-                        <div className="relative">
-                            <Select
-                                key={"category"}
-                                name="category"
-                                required
-                                defaultValue={category || ""}
-                                onValueChange={(value) => {
-                                    setValue("category", value);
-                                }}
-                            >
-                                <SelectTrigger
-                                    id="category"
-                                    className="text-foreground font-medium p-5 pl-9 relative"
-                                >
-                                    <SelectValue
-                                        placeholder="Select review category"
-                                        className="relative transition-opacity duration-200"
-                                    />
-                                </SelectTrigger>
-                                <SelectContent className="max-h-[200px]">
-                                    {["Foundation", "Weekly", "QA", "InTake"].map(
-                                        (cate, index) => (
-                                            <SelectItem key={index} value={cate}>
-                                                {cate}
-                                            </SelectItem>
-                                        )
-                                    )}
-                                </SelectContent>
-                            </Select>
-                            <ListFilter className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
-                        </div>
-                    </motion.div>
-
                     {/* Input for Week */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.4 }}
+                        transition={{ delay: 0.3 }}
                         className="space-y-2"
                     >
                         <Label
@@ -272,7 +227,7 @@ function UpdateReviewsheet({
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5 }}
+                        transition={{ delay: 0.4 }}
                         className="space-y-2"
                     >
                         <Label
@@ -293,9 +248,34 @@ function UpdateReviewsheet({
                             />
                             <FolderPen className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>
+                    </motion.div>
 
-                        {/* Title error message */}
-                        <ValidationError message={errors.title?.message as string} />
+                    {/* Category */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5 }}
+                        className="space-y-2"
+                    >
+                        <Label
+                            htmlFor="category"
+                            className="text-sm text-foreground font-medium"
+                        >
+                            Review Category
+                        </Label>
+                        <div className="relative">
+                            <Input
+                                id="category"
+                                placeholder="Category"
+                                required
+                                disabled
+                                autoComplete="off"
+                                {...register("category")}
+                                className="text-foreground font-medium p-5 pl-9"
+                            />
+
+                            <ListFilter className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                        </div>
                     </motion.div>
 
                     {/* Date picker */}
@@ -371,9 +351,7 @@ function UpdateReviewsheet({
                                     id="time"
                                     className="w-full p-3 pl-9 py-5 text-foreground"
                                 >
-                                    <SelectValue placeholder="Pick a time">
-                                        {convertTo12HourFormat(selectedTime)}
-                                    </SelectValue>
+                                    <SelectValue placeholder="Pick a time"></SelectValue>
                                 </SelectTrigger>
                                 <SelectContent className="h-[170px]">
                                     {Array.from({ length: 24 }, (_, hour) => (

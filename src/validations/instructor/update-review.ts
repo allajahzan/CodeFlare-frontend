@@ -2,9 +2,9 @@ import z from "zod";
 
 // Update review form validation schema
 export const formSchema = z.object({
-    category: z.string().nonempty("Category is required !"),
+    category: z.string().optional(),
     week: z.string().optional(),
-    title: z.string().nonempty("Title is required !"),
+    title: z.string().optional(),
     date: z
         .any()
         .refine((val) => val instanceof Date && !isNaN(val.getTime()), {
