@@ -352,7 +352,7 @@ function ReviewDetails({
                                     onClick={(event) => event.stopPropagation()}
                                 >
                                     <DropdownMenuLabel>Status</DropdownMenuLabel>
-                                    {["Absent", "Pending", "Cancelled", "Completed"].map(
+                                    {["Pending", "Cancelled", "Absent", "Completed"].map(
                                         (item, index) => (
                                             <DropdownMenuItem
                                                 key={index}

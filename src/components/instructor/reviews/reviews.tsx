@@ -203,16 +203,16 @@ function Reviews() {
                                 <DropdownMenuContent align="end">
                                     <DropdownMenuLabel>Color Info</DropdownMenuLabel>
                                     <DropdownMenuItem>
-                                        <div className="p-1 rounded-full bg-red-400/40 group-hover:bg-red-400/50"></div>
-                                        Absent
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem>
                                         <div className="p-1 rounded-full bg-yellow-400/40 group-hover:bg-yellow-400/50"></div>
                                         Pending
                                     </DropdownMenuItem>
                                     <DropdownMenuItem>
                                         <div className="p-1 rounded-full bg-purple-400/40 group-hover:bg-purple-400/50"></div>
                                         Cancelled
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                        <div className="p-1 rounded-full bg-red-400/40 group-hover:bg-red-400/50"></div>
+                                        Absent
                                     </DropdownMenuItem>
                                     <DropdownMenuItem>
                                         <div className="p-1 rounded-full bg-green-400/40 group-hover:bg-green-400/50"></div>
@@ -303,7 +303,7 @@ function Reviews() {
                     {/* Filter */}
                     <Filter
                         title="Status"
-                        filterData={["", "Absent", "Pending", "Completed", "Cancelled"]}
+                        filterData={["", "Pending", "Cancelled", "Absent", "Completed"]}
                         filter={filter}
                         setFilter={setFilter}
                     />

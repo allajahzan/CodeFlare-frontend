@@ -27,7 +27,7 @@ function Filter({ title, filterData, filter, setFilter, Icon }: PropsType) {
         <DropdownMenu>
             <DropdownMenuTrigger>
                 <ToolTip
-                    text="Filter"
+                    text={title || "Filter"}
                     children={<IconButton Icon={Icon || FilterIcon} />}
                 />
             </DropdownMenuTrigger>

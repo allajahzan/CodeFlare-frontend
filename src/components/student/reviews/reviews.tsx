@@ -1,4 +1,4 @@
-import { ChangeEvent, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
     Ban,
@@ -9,7 +9,9 @@ import {
     ChevronRight,
     CircleDashed,
     Info,
+    Search,
     SearchIcon,
+    Trophy,
     X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -23,7 +25,6 @@ import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
 import NotFoundOrbit from "@/components/common/fallback/not-found-orbit";
 import { IUserContext, UserContext } from "@/context/user-context";
-import Search from "@/components/common/data-toolbar/search";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -32,6 +33,15 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import ToolTip from "@/components/common/tooltip/tooltip";
+import { IWeek } from "@codeflare/common";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import Filter from "@/components/common/data-toolbar/filter";
 
 // Interface for Review
 
@@ -43,8 +53,13 @@ function Reviews() {
 
     const [fetching, setFetching] = useState<boolean>(true);
 
-    // Search
-    const [search, _setSearch] = useState<string>("");
+    // week
+    const [weeks, setWeeks] = useState<IWeek[]>([]);
+    const [selectedWeek, setSelectedWeek] = useState<IWeek | null>(null);
+
+    // Filter
+    const [filter, setFilter] = useState<string>("");
+    const [result, setResult] = useState<string>("");
 
     // Role
     const role = useSelector((state: stateType) => state.role);
@@ -52,12 +67,45 @@ function Reviews() {
     // User context
     const { user } = useContext(UserContext) as IUserContext;
 
+    // Fetch weeks
     useEffect(() => {
+        const fetchWeeks = async () => {
+            try {
+                // Send request
+                const resp = await fetchData(ApiEndpoints.SEARCH_WEEK, role);
+
+                // Success response
+                if (resp && resp.status === 200) {
+                    const data = resp.data?.data;
+
+                    // Update weeks
+                    setWeeks(data);
+                }
+            } catch (err: unknown) {
+                handleCustomError(err);
+            }
+        };
+
+        fetchWeeks();
+    }, []);
+
+    // Clear result when select status
+    useEffect(()=>{
+        setResult("");
+    }, [filter]);
+
+    // Fetch reviews
+    useLayoutEffect(() => {
         const fetchReviews = async () => {
+            setReviews([]);
+            setFetching(true);
+
             try {
                 // Send request
                 const resp = await fetchData(
-                    ApiEndpoints.REVIEW + `?userId=${user?._id}`,
+                    ApiEndpoints.REVIEW +
+                    `?studentId=${user?._id}&weekId=${selectedWeek?._id || ""
+                    }&status=${filter}&result=${result}`,
                     role
                 );
 
@@ -78,7 +126,7 @@ function Reviews() {
         };
 
         fetchReviews();
-    }, []);
+    }, [selectedWeek, filter, result]);
 
     return (
         <div className="p-5 pt-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-0 md:gap-5">
@@ -136,16 +184,73 @@ function Reviews() {
                     }
                 />
 
-                {/* Search filter sort */}
-                <div className="w-full flex relative">
-                    <Search
-                        handleSearch={async (_event: ChangeEvent<HTMLInputElement>) => { }}
-                        search={search}
+                {/* Filter  */}
+                <div className="w-full flex gap-2 relative">
+                    {/* Week */}
+                    <Select
+                        value={selectedWeek ? JSON.stringify(selectedWeek) : ""}
+                        onValueChange={(value) => {
+                            setSelectedWeek(JSON.parse(value));
+                            setFilter("");
+                            setResult("");
+                        }}
+                    >
+                        <div className="relative w-full text-foreground">
+                            <SelectTrigger className="p-5 pl-9 pr-3">
+                            <SelectValue placeholder="Select week" />
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        </SelectTrigger>
+                        {selectedWeek && (
+                            <div
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setSelectedWeek(null);
+                                    setFilter("");
+                                    setResult("");
+                                }}
+                                className="absolute z-10 p-2 right-2 top-1/2 -translate-y-1/2 cursor-pointer"
+                            >
+                                <X className="w-4 h-4 text-foreground" />
+                            </div>
+                        )}
+                        </div>
+                        <SelectContent className="max-h-[200px]">
+                            {weeks.length > 0 &&
+                                weeks.map((week: IWeek) => {
+                                    return (
+                                        <SelectItem key={week._id} value={JSON.stringify(week)}>
+                                            {week.name}
+                                        </SelectItem>
+                                    );
+                                })}
+                            {weeks.length === 0 && (
+                                <p className="text-foreground font-medium text-sm">
+                                    No weeks are added yet
+                                </p>
+                            )}
+                        </SelectContent>
+                    </Select>
+
+                    {/* Status */}
+                    <Filter
+                        filter={filter}
+                        setFilter={setFilter}
+                        title="Status"
+                        filterData={["", "Pending", "Cancelled", "Absent", "Completed"]}
+                    />
+
+                    {/* Result */}
+                    <Filter
+                        Icon={Trophy}
+                        filter={result}
+                        setFilter={setResult}
+                        title="Result"
+                        filterData={["", "Pass", "Fail"]}
                     />
                 </div>
 
                 {reviews.length > 0 && (
-                    <div className="flex flex-col gap-5 overflow-auto no-scrollbar ">
+                    <div className="flex flex-col gap-[18px] overflow-auto no-scrollbar ">
                         {reviews.map((review, index) => (
                             <div key={review._id} className="relative">
                                 {/* One list */}
@@ -226,7 +331,7 @@ function Reviews() {
                                 {index < reviews.length - 1 && (
                                     <motion.div
                                         initial={{ height: 0 }}
-                                        animate={{ height: 42 }}
+                                        animate={{ height: 40 }}
                                         transition={{ delay: 0.2 + index * 0.1 }}
                                         style={{ top: "51px" }}
                                         className={cn(
