@@ -17,12 +17,7 @@ import {
     LucideProps,
     Trophy,
 } from "lucide-react";
-import {
-    useContext,
-    useLayoutEffect,
-    useRef,
-    useState,
-} from "react";
+import { useContext, useLayoutEffect, useRef, useState } from "react";
 import { convertTo12HourFormat } from "@/utils/time-converter";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";

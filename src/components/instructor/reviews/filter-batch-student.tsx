@@ -14,8 +14,10 @@ interface propsType {
     batches: IBatch[] | [];
     selectedBatch: IBatch | null;
     setSelectedBatch: React.Dispatch<React.SetStateAction<IBatch | null>>;
-    selectedStudent: string | "";
-    setSelectedStudent: React.Dispatch<React.SetStateAction<string | "">>;
+    selectedStudent: { _id: string; name: string };
+    setSelectedStudent: React.Dispatch<
+        React.SetStateAction<{ _id: string; name: string }>
+    >;
     students: IStudent[] | [];
     setStudents: React.Dispatch<React.SetStateAction<IStudent[] | []>>;
     fetchingStudents: boolean;
@@ -77,9 +79,9 @@ function FilterBatchStudent({
                     key="students"
                     required
                     disabled={!students.length || fetchingStudents}
-                    value={selectedStudent}
+                    value={selectedStudent._id ? JSON.stringify(selectedStudent) : ""}
                     onValueChange={(value) => {
-                        setSelectedStudent(value);
+                        setSelectedStudent(JSON.parse(value));
                     }}
                 >
                     {/* Select Trigger */}
@@ -103,7 +105,7 @@ function FilterBatchStudent({
                     {!fetchingStudents && students.length > 0 && (
                         <SelectContent className="max-h-[200px]">
                             {students.map((student) => (
-                                <SelectItem key={student._id} value={student._id}>
+                                <SelectItem key={student._id} value={JSON.stringify(student)}>
                                     {student.name}
                                 </SelectItem>
                             ))}
@@ -127,7 +129,7 @@ function FilterBatchStudent({
                 <div
                     onClick={() => {
                         setSelectedBatch(null);
-                        setSelectedStudent("");
+                        setSelectedStudent({ _id: "", name: "" });
                         setStudents([]);
                     }}
                     className="text-foreground font-medium p-2 pl-9 relative w-full bg-transparent shadow-none hover:bg-muted border-none rounded-lg"

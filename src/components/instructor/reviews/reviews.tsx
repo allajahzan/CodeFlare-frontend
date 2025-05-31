@@ -35,6 +35,9 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import NotSelected from "@/components/common/fallback/not-selected";
+import { AnimatePresence, motion } from "framer-motion";
+import AddPendingModal from "./modal-add-pending";
 
 // Reviews Component
 function Reviews() {
@@ -56,7 +59,10 @@ function Reviews() {
 
     // Filter batch and students
     const [students, setStudents] = useState<[] | IStudent[]>([]);
-    const [selectedStudent, setSelectedStudent] = useState<string | "">("");
+    const [selectedStudent, setSelectedStudent] = useState<{
+        _id: string;
+        name: string;
+    }>({ _id: "", name: "" });
     const [batches, setBatches] = useState<IBatch[] | []>([]);
     const [selectedBatch, setSelectedBatch] = useState<IBatch | null>(null);
     const [fetchingStudents, setFetchingStudents] = useState<boolean>(false);
@@ -99,7 +105,7 @@ function Reviews() {
             try {
                 setFetchingStudents(true);
                 setStudents([]);
-                setSelectedStudent("");
+                setSelectedStudent({ _id: "", name: "" });
 
                 // Fetch data
                 const resp = await fetchData(
@@ -141,9 +147,9 @@ function Reviews() {
                 // Send request
                 const resp = await fetchData(
                     ApiEndpoints.REVIEW +
-                    `/search?batchId=${selectedBatch?._id || ""
-                    }&studentId=${selectedStudent}&domainId=${""}&weekId=${""}&sort=${sort.key
-                    }&order=${sort.order}&status=${filter}&date=${selectedDate?.toDateString() || ""
+                    `/search?batchId=${selectedBatch?._id || ""}&studentId=${selectedStudent._id
+                    }&domainId=${""}&weekId=${""}&sort=${sort.key}&order=${sort.order
+                    }&status=${filter}&date=${selectedDate?.toDateString() || ""
                     }&category=${""}&skip=${0}`,
                     role
                 );
@@ -172,7 +178,7 @@ function Reviews() {
             {/* Left side */}
             <div
                 // onClick={() => setDatePickerOpen(false)}
-                className="p-5 sticky z-0 top-0 md:top-5 w-full h-[calc(100vh-108px)] flex flex-col gap-5 items-center rounded-2xl
+                className="p-5 sticky z-0 top-0 w-full h-[calc(100vh-108px)] flex flex-col gap-5 items-center rounded-2xl
             bg-background dark:bg-sidebar-background border border-border shadow-sm"
             >
                 {/* Card header */}
@@ -240,7 +246,16 @@ function Reviews() {
                         <SelectTrigger className="h-[41.6px] bg-background dark:hover:border-customBorder-dark dark:hover:bg-sidebar rounded-lg shadow-none cursor-pointer">
                             <div className="flex items-center gap-2">
                                 <Search className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                                <Input id="search" placeholder="Batch and student" className="border-none shadow-none p-0 cursor-pointer"/>
+                                <Input
+                                    id="search"
+                                    placeholder="Select batch and student"
+                                    value={
+                                        (selectedBatch?.name || "") +
+                                        (selectedStudent?._id ? " - " : "") +
+                                        (selectedStudent.name || "")
+                                    }
+                                    className="border-none shadow-none p-0 cursor-pointer"
+                                />
                             </div>
                         </SelectTrigger>
 
@@ -317,7 +332,10 @@ function Reviews() {
                                     <div className="min-w-0 flex items-center gap-2 relative">
                                         <p className="relative text-sm text-muted-foreground font-medium flex items-center gap-1 truncate">
                                             <CalendarDays className="w-3 h-3" />
-                                            {(review.category === "Weekly" || review.category === "Foundation") ? review.week.name : review.category}
+                                            {review.category === "Weekly" ||
+                                                review.category === "Foundation"
+                                                ? review.week.name
+                                                : review.category}
                                         </p>
                                         <p className="flex gap-1 items-center text-sm text-muted-foreground font-medium truncate">
                                             <Calendar1 className="w-3 h-3" />
@@ -376,13 +394,79 @@ function Reviews() {
             </div>
 
             {/* Right side */}
-            <div className="grid gap-5 col-auto lg:col-span-2 grid-rows-[auto_1fr] relative z-10">
+            <div className="grid gap-5 col-auto lg:col-span-2 grid-rows-[auto_1fr] relative bg-background rounded-2xl z-10">
                 {/* Review details */}
                 <ReviewDetails
                     setReviews={setReviews}
                     selectedReview={selectedReview}
                     setSelectedReview={setSelectedReview}
                 />
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+                    <div className="h-full w-full flex flex-col">
+                        {selectedReview ? (
+                            <div className="p-5 h-full bg-background dark:bg-sidebar-background border rounded-2xl flex flex-col gap-5">
+                                {/* Header */}
+                                <div className="flex items-start justify-between relative">
+                                    <motion.p
+                                        initial={{ opacity: 0, y: -20 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        transition={{ delay: 0.2 }}
+                                        className="text-lg text-foreground font-semibold truncate"
+                                    >
+                                        Pendings (
+                                        {selectedReview.category === "Weekly" ||
+                                            selectedReview.category === "Foundation"
+                                            ? selectedReview.title[0].toUpperCase() +
+                                            selectedReview.title.slice(1)
+                                            : selectedReview.category}
+                                        )
+                                    </motion.p>
+
+                                    {/* Add pending button */}
+                                    <AddPendingModal
+                                        setReview={setReviews}
+                                        setSelectedReview={setSelectedReview}
+                                        selectedReview={selectedReview}
+                                    />
+                                </div>
+
+                                {/* Pendings */}
+                                {selectedReview.pendings.length > 0 ? (
+                                    <AnimatePresence mode="wait">
+                                        <div className="h-[170px] sm:h-[194px] flex flex-col gap-1 overflow-x-hidden overflow-auto no-scrolbar">
+                                            <ul className="space-y-1">
+                                                {selectedReview.pendings.map((pending, index) => (
+                                                    <motion.p
+                                                        key={pending}
+                                                        initial={{ opacity: 0, x: -20 }}
+                                                        animate={{ opacity: 1, x: 0 }}
+                                                        transition={{ delay: 0.2 + index * 0.1 }}
+                                                        className="text-foreground font-medium"
+                                                    >
+                                                        {pending}
+                                                    </motion.p>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </AnimatePresence>
+                                ) : (
+                                    <div className="flex items-center justify-center h-[170px] sm:h-[194px]">
+                                        <p className="text-foreground text-sm font-semibold">
+                                            No pendings are added
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <NotSelected
+                                Icon={CalendarDays}
+                                message={`Select a review from the list to view their details`}
+                                text={`No review selected`}
+                                className="h-[287.6px]"
+                            />
+                        )}
+                    </div>
+                </div>
             </div>
         </div>
     );

@@ -16,7 +16,13 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import LineCharts from "@/components/common/charts/Line-chart";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+    useCallback,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from "react";
 import { toast } from "@/hooks/use-toast";
 import UserNameCard from "@/components/common/user/user-name-card";
 import InfoCard from "@/components/common/other-card/info-card";
@@ -56,7 +62,7 @@ function ReviewDetails({ selectedReview }: PropsType) {
     // }, []);
 
     // Update status color
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (selectedReview?.status === "Pending") {
             setStatusColor("yellow");
             setStatusIcon(CircleDashed);
@@ -84,9 +90,9 @@ function ReviewDetails({ selectedReview }: PropsType) {
                                     {selectedReview.category === "Weekly" ||
                                         selectedReview.category === "Foundation"
                                         ? `${selectedReview.week.name
-                                            } (${selectedReview.title[0].toUpperCase()}${selectedReview.title.slice(
-                                                1
-                                            )})`
+                                        } (${selectedReview.title[0].toUpperCase()}${selectedReview.title.slice(
+                                            1
+                                        )})`
                                         : selectedReview.category}
                                 </div>
                             </div>
@@ -164,33 +170,34 @@ function ReviewDetails({ selectedReview }: PropsType) {
                             </div>
 
                             {/* Score */}
-
-                            <div className="group relative min-w-[250px] p-3 rounded-lg bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900/20 dark:to-pink-800/20 border border-pink-200 dark:border-pink-800 shadow-sm overflow-hidden">
-                                <div className="absolute top-0 right-0 w-16 h-16 bg-pink-200 dark:bg-pink-700/20 rounded-bl-full opacity-50"></div>
-                                <div className="relative flex items-center gap-3">
-                                    <div className="p-2 rounded-lg bg-pink-400/20 group-hover:bg-pink-400/30">
-                                        <Trophy className="w-5 h-5 text-pink-600" />
-                                    </div>
-                                    <div className="text-start w-full">
-                                        <p className="text-sm text-muted-foreground font-medium">
-                                            Score
-                                        </p>
-                                        {selectedReview.score ? (
-                                            <div className="flex items-center gap-2">
-                                                <p className="text-foreground font-semibold">
-                                                    Practical :{" "}
-                                                    {selectedReview?.score?.practical as number}
-                                                </p>
-                                                <p className="text-foreground font-semibold">
-                                                    Theory : {selectedReview?.score?.theory as number}
-                                                </p>
-                                            </div>
-                                        ) : (
-                                            <p className="text-foreground font-semibold">NILL</p>
-                                        )}
+                            {selectedReview.category !== "Normal" && (
+                                <div className="group relative min-w-[250px] p-3 rounded-lg bg-gradient-to-br from-pink-50 to-pink-100 dark:from-pink-900/20 dark:to-pink-800/20 border border-pink-200 dark:border-pink-800 shadow-sm overflow-hidden">
+                                    <div className="absolute top-0 right-0 w-16 h-16 bg-pink-200 dark:bg-pink-700/20 rounded-bl-full opacity-50"></div>
+                                    <div className="relative flex items-center gap-3">
+                                        <div className="p-2 rounded-lg bg-pink-400/20 group-hover:bg-pink-400/30">
+                                            <Trophy className="w-5 h-5 text-pink-600" />
+                                        </div>
+                                        <div className="text-start w-full">
+                                            <p className="text-sm text-muted-foreground font-medium">
+                                                Score
+                                            </p>
+                                            {selectedReview.score ? (
+                                                <div className="flex items-center gap-2">
+                                                    <p className="text-foreground font-semibold">
+                                                        Practical :{" "}
+                                                        {selectedReview?.score?.practical as number}
+                                                    </p>
+                                                    <p className="text-foreground font-semibold">
+                                                        Theory : {selectedReview?.score?.theory as number}
+                                                    </p>
+                                                </div>
+                                            ) : (
+                                                <p className="text-foreground font-semibold">NILL</p>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            )}
 
                             {/* Sheduled date */}
                             <div className="min-w-min relative rounded-lg overflow-hidden bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border border-blue-200 dark:border-blue-800">
@@ -309,7 +316,8 @@ function PendingsAndChart({ selectedReview, reviews, fetching }: PropsType) {
                         : 0,
                 };
             })
-            .filter((_, index) => index < 4).reverse();
+            .filter((_, index) => index < 4)
+            .reverse();
 
         setMonthlyData(data as unknown as IWeekData[]);
     }, [reviews]);
@@ -356,13 +364,13 @@ function PendingsAndChart({ selectedReview, reviews, fetching }: PropsType) {
                         {/* Pendings */}
                         {selectedReview.pendings.length > 0 ? (
                             <AnimatePresence mode="wait">
-                                <div className="h-[170px] sm:h-[204px] flex flex-col gap-1 overflow-x-hidden overflow-auto no-scrolbar">
-                                    <ul className="space-y-2.5">
+                                <div className="h-[170px] sm:h-[202px] flex flex-col gap-1 overflow-x-hidden overflow-auto no-scrolbar">
+                                    <ul className="space-y-1">
                                         {selectedReview.pendings.map((pending, index) => (
                                             <motion.p
-                                                key={index}
-                                                initial={{ opacity: 0, y: -20 }}
-                                                animate={{ y: 1, x: 0 }}
+                                                key={pending}
+                                                initial={{ opacity: 0, x: -20 }}
+                                                animate={{ opacity: 1, x: 0 }}
                                                 transition={{ delay: 0.2 + index * 0.1 }}
                                                 className="text-foreground font-medium"
                                             >

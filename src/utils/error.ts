@@ -11,7 +11,10 @@ export const throwCustomError = (err: any) => {
         const { status, data } = err.response;
         throw {
             status,
-            message: data?.errors?.message || data?.message || "An unexpected error occurred!",
+            message:
+                data?.errors?.message ||
+                data?.message ||
+                "An unexpected error occurred!",
         };
     } else if (err.request) {
         // no response
@@ -33,56 +36,55 @@ export const handleCustomError = (err: any) => {
     console.log(err);
 
     let data;
-    if(err.response) data = err.response.data
+    if (err.response) data = err.response.data;
 
     // 400: Bad Request
-    if (err.status === 400) toast({ title: data?.errors?.message || err?.message });
-
+    if (err.status === 400)
+        toast({ title: data?.errors?.message || err?.message });
     // 401: Unauthorized
-    else if (err.status === 401) toast({ title: data?.errors?.message || err?.message });
-
+    else if (err.status === 401)
+        toast({ title: data?.errors?.message || err?.message });
     // // 403: Forbidden
     // else if (err.status === 403)
     //     toast({
     //         title: data?.errors?.message || err?.message,
     //     });
-
     // 404: Not Found
     else if (err.status === 404)
         toast({
             title: data?.errors?.message || err?.message,
         });
-
     // 409: Conflict
     else if (err.status === 409)
         toast({
             title: data?.errors?.message || err?.message,
         });
-
     // 410: Gone or Expired
     else if (err.status === 410) toast({ title: data?.errors?.message });
-
     // 500: Internal Server Error
     else if (err.status === 500)
         toast({
-            title: data?.errors?.message || err?.message || "Internal server error!",
+            title:
+                (data?.errors?.message === "jwt expired"
+                    ? "Refresh the application!"
+                    : data?.errors?.message) ||
+                (err?.message === "jwt expired"
+                    ? "Refresh the application!"
+                    : err?.message) ||
+                "Internal server error!",
         });
-
     // 501: Not Implemented
     else if (err.status === 501)
         toast({
             title: "An unexpected error occurred!",
         });
-
     // 504: Gateway Timeout
     else if (err.status === 504)
         toast({
             title: "An unexpected error occurred!",
         });
-
     // 0: Network Error
-    else if (err.status === 0) toast({ title: "asdf"  });
-
+    else if (err.status === 0) toast({ title: "An unexpected error occurred!" });
     // -1: Unexpected Error
     else
         toast({
