@@ -378,7 +378,7 @@ function Users({ setDrawerOpen }: PropsType) {
 
             {/* Right side */}
             {!isSmall && (
-                <div className="grid gap-5 col-auto lg:col-span-2 grid-rows-[auto_1fr] relative z-10">
+                <div className="grid gap-5 col-auto lg:col-span-2 grid-rows-[auto_1fr]">
                     {/* User details */}
                     <UserDetails
                         setUsers={setUsers as any}

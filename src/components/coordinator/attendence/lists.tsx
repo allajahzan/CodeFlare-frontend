@@ -248,7 +248,7 @@ function Lists({ view, setView }: Propstype) {
                 />
 
                 {/* Search filter */}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 w-full">
                     {/* Select Date */}
                     <div className="relative min-w-0 w-full sm:col-span-2 lg:col-span-1">
                         <Select

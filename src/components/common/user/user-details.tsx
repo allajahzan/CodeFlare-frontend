@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import {
     CalendarRangeIcon,
     Clock,
@@ -53,7 +53,7 @@ function UserDetails({
     const { user } = useContext(UserContext) as IUserContext;
 
     return (
-        <AnimatePresence mode="wait">
+        <Fragment>
             {selectedUser && (
                 // Animated div
                 <motion.div
@@ -63,7 +63,7 @@ function UserDetails({
                         x: 0,
                         opacity: 1,
                     }}
-                    className="h-full w-full min-w-0"
+                    className="h-[434px] lg:h-[273px] w-full min-w-0"
                 >
                     <div
                         className={cn(
@@ -296,10 +296,10 @@ function UserDetails({
                     Icon={User2}
                     message={`Select a ${role} from the list to view their details`}
                     text={`No ${role} selected`}
-                    className="h-[434px] lg:h-[273.3px] shadow-sm"
+                    className="h-[434px] lg:h-[273px] shadow-sm"
                 />
             )}
-        </AnimatePresence>
+        </Fragment>
     );
 }
 

@@ -2,7 +2,7 @@ import NotSelected from "@/components/common/fallback/not-selected";
 import InfoCard from "@/components/common/other-card/info-card";
 import UserNameCard from "@/components/common/user/user-name-card";
 import { Input } from "@/components/ui/input";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import {
     Ban,
     CalendarDays,
@@ -17,7 +17,7 @@ import {
     LucideProps,
     Trophy,
 } from "lucide-react";
-import { useContext, useLayoutEffect, useRef, useState } from "react";
+import { Fragment, useContext, useLayoutEffect, useRef, useState } from "react";
 import { convertTo12HourFormat } from "@/utils/time-converter";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
@@ -228,7 +228,7 @@ function ReviewDetails({
     }, [selectedReview?.status]);
 
     return (
-        <AnimatePresence mode="wait">
+        <Fragment>
             {selectedReview && (
                 <div
                     className={
@@ -502,7 +502,7 @@ function ReviewDetails({
                     className="h-[313.95px]"
                 />
             )}
-        </AnimatePresence>
+        </Fragment>
     );
 }
 
