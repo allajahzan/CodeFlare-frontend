@@ -431,11 +431,11 @@ function Reviews() {
                                 </div>
 
                                 {/* Pendings */}
-                                {selectedReview.pendings.length > 0 ? (
+                                {selectedReview?.pendings.length > 0 ? (
                                     <AnimatePresence mode="wait">
                                         <div className="h-[170px] sm:h-[194px] flex flex-col gap-1 overflow-x-hidden overflow-auto no-scrolbar">
                                             <ul className="space-y-1">
-                                                {selectedReview.pendings.map((pending, index) => (
+                                                {selectedReview?.pendings.map((pending, index) => (
                                                     <motion.p
                                                         key={pending}
                                                         initial={{ opacity: 0, x: -20 }}

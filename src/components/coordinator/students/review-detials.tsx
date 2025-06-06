@@ -45,6 +45,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import ToolTip from "@/components/common/tooltip/tooltip";
 import NotFoundOrbit from "@/components/common/fallback/not-found-orbit";
+import { motion } from "framer-motion";
 
 // Interface for props
 interface PropsTypes {
@@ -246,7 +247,12 @@ export default function ReviewDetails({ selectedStudent }: PropsTypes) {
                         <div className="flex flex-col gap-3 items-start space-x-0 h-full">
                             {reviews.length > 0 &&
                                 reviews.map((review, index) => (
-                                    <div key={index} className="flex h-fit w-full">
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.2 + index * 0.1 }}
+                                        key={index}
+                                        className="flex h-fit w-full">
                                         {/* Week Card */}
                                         <Card className="relative w-full bg-background dark:bg-sidebar border dark:border-transparent transition-shadow duration-300 overflow-hidden shadow-none">
                                             <div className={`text-foreground rounded-t-lg p-5 pb-0`}>
@@ -257,38 +263,50 @@ export default function ReviewDetails({ selectedStudent }: PropsTypes) {
                                                         </CardTitle>
                                                     </div>
 
-                                                    <div className="p-5 pr-3 pt-3 absolute top-0 right-0 bg-yellow-500/10 rounded-bl-full">
-                                                        {/* Status Icon */}
-                                                        {review.status === "Completed" ? (
-                                                            review.result === "Pass" ? (
+                                                    {/* Status Icon */}
+                                                    {review.status === "Completed" ? (
+                                                        review.result === "Pass" ? (
+                                                            <div className="p-5 pr-3 pt-3 absolute top-0 right-0 bg-green-600/20 rounded-bl-full">
                                                                 <CheckCheck
                                                                     size={20}
                                                                     className="text-green-600"
                                                                 />
-                                                            ) : review.result === "Fail" ? (
+                                                            </div>
+                                                        ) : review.result === "Fail" ? (
+                                                            <div className="p-5 pr-3 pt-3 absolute top-0 right-0 bg-red-600/20 rounded-bl-full">
                                                                 <CheckCheck
                                                                     size={20}
                                                                     className="text-red-600"
                                                                 />
-                                                            ) : (
-                                                                <Check size={20} className="text-green-600" />
-                                                            )
-                                                        ) : review.status === "Pending" ? (
-                                                            <CircleDashed
-                                                                size={20}
-                                                                className="text-yellow-600"
-                                                            />
-                                                        ) : review.status === "Absent" ? (
-                                                            <X size={20} className="text-red-600" />
-                                                        ) : review.status === "Cancelled" ? (
-                                                            <Ban size={20} className="text-purple-600" />
+                                                            </div>
                                                         ) : (
+                                                            <div className="p-5 pr-3 pt-3 absolute top-0 right-0 bg-green-600/20 rounded-bl-full">
+                                                                <Check size={20} className="text-green-600" />
+                                                            </div>
+                                                        )
+                                                    ) : review.status === "Pending" ? (
+                                                        <div className="p-5 pr-3 pt-3 absolute top-0 right-0 bg-yellow-600/20 rounded-bl-full">
                                                             <CircleDashed
                                                                 size={20}
                                                                 className="text-yellow-600"
                                                             />
-                                                        )}
-                                                    </div>
+                                                        </div>
+                                                    ) : review.status === "Absent" ? (
+                                                        <div className="p-5 pr-3 pt-3 absolute top-0 right-0 bg-red-600/20 rounded-bl-full">
+                                                            <X size={20} className="text-red-600" />
+                                                        </div>
+                                                    ) : review.status === "Cancelled" ? (
+                                                        <div className="p-5 pr-3 pt-3 absolute top-0 right-0 bg-purple-600/20 rounded-bl-full">
+                                                            <Ban size={20} className="text-purple-600" />
+                                                        </div>
+                                                    ) : (
+                                                        <div className="p-5 pr-3 pt-3 absolute top-0 right-0 bg-yellow-600/20 rounded-bl-full">
+                                                            <CircleDashed
+                                                                size={20}
+                                                                className="text-yellow-600"
+                                                            />
+                                                        </div>
+                                                    )}
                                                 </div>
 
                                                 {/* Title */}
@@ -351,11 +369,15 @@ export default function ReviewDetails({ selectedStudent }: PropsTypes) {
                                                                 </p>
                                                             </div>
                                                         </div>
+
+                                                        {/* Date and Time */}
                                                         <div className="flex items-center justify-between mt-2">
                                                             <p className="text-sm text-foreground font-medium mt-1">
                                                                 {review.status === "Completed"
-                                                                    ? "Reviewed on "
-                                                                    : "Review on "}
+                                                                    ? "Was reviewed on "
+                                                                    : new Date(review.date) < new Date() ?
+                                                                        "Was to be reviewed on "
+                                                                        : "Is to be reviewed on "}
                                                                 {new Date(review.date).toLocaleDateString(
                                                                     "en-GB",
                                                                     {
@@ -385,7 +407,7 @@ export default function ReviewDetails({ selectedStudent }: PropsTypes) {
                                                 </div>
                                             </CardContent>
                                         </Card>
-                                    </div>
+                                    </motion.div>
                                 ))}
 
                             {/* If no reviews */}

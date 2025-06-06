@@ -133,7 +133,7 @@ function AddPendingModal({
                 >
                     <Textarea
                         placeholder="Event loop..."
-                        defaultValue={selectedReview.pendings?.join("\n") || ""}
+                        defaultValue={selectedReview?.pendings?.join("\n") || ""}
                         required
                         className="resize-none flex-1 text-foreground"
                         rows={8}

@@ -8,6 +8,8 @@ import {
   UserRoundMinus,
   Loader2,
   Send,
+  ListFilter,
+  Check,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -39,6 +41,8 @@ import Sort from "@/components/common/data-toolbar/sort";
 import Filter from "@/components/common/data-toolbar/filter";
 import ToolTip from "@/components/common/tooltip/tooltip";
 import ReviewDetails from "./review-detials";
+import StatusConfirmModal from "./modal-status-confirm";
+import { IStudentCategory } from "@codeflare/common";
 
 // Interface for Props
 interface PropsType {
@@ -330,6 +334,56 @@ function Students({ setDrawerOpen }: PropsType) {
                             View Profile
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
+                          <DropdownMenuItem className="p-0">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger className="p-1.5 flex items-center gap-2 hover:bg-muted rounded-lg w-full">
+                                <ListFilter className="w-4 h-4" />
+                                Status
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                {[
+                                  "Foundation",
+                                  "Ongoing",
+                                  "Held",
+                                  "Critical",
+                                  "Terminated",
+                                  "Placement",
+                                  "Placed",
+                                ].map((status) => {
+                                  return (
+                                    <DropdownMenuItem
+                                      onClick={(e) => e.preventDefault()}
+                                      className="p-0"
+                                      key={status}
+                                    >
+                                      <StatusConfirmModal
+                                        studentId={student._id}
+                                        student={student}
+                                        setStudents={setStudents}
+                                        setSelectedStudent={
+                                          setSelectedStudent as any
+                                        }
+                                        category={category}
+                                        selectedCategory={
+                                          status as IStudentCategory
+                                        }
+                                        children={
+                                          <p className="w-full p-2 flex items-center justify-between font-medium text-foreground text-sm">
+                                            {status}
+                                            {student.category === status && (
+                                              <Check className="w-4 h-4 text-foreground" />
+                                            )}
+                                          </p>
+                                        }
+                                      />
+                                    </DropdownMenuItem>
+                                  );
+                                })}
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </DropdownMenuItem>
                           <DropdownMenuItem
                             disabled={changingStatus}
                             onClick={() => handleBlock(student as any)}
