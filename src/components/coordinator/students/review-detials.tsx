@@ -127,7 +127,7 @@ export default function ReviewDetails({ selectedStudent }: PropsTypes) {
         };
 
         fetchReviews();
-    }, [selectedStudent, selectedWeek, filter, result]);
+    }, [selectedStudent?._id, selectedWeek, filter, result]);
 
     return (
         <>
@@ -252,9 +252,10 @@ export default function ReviewDetails({ selectedStudent }: PropsTypes) {
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: 0.2 + index * 0.1 }}
                                         key={index}
-                                        className="flex h-fit w-full">
+                                        className="flex h-fit w-full"
+                                    >
                                         {/* Week Card */}
-                                        <Card className="relative w-full bg-background dark:bg-sidebar border dark:border-transparent transition-shadow duration-300 overflow-hidden shadow-none">
+                                        <Card className="group relative w-full bg-background dark:bg-sidebar border dark:border-transparent transition-shadow duration-300 overflow-hidden shadow-none">
                                             <div className={`text-foreground rounded-t-lg p-5 pb-0`}>
                                                 <div className="flex items-center justify-between">
                                                     <div>
@@ -266,41 +267,41 @@ export default function ReviewDetails({ selectedStudent }: PropsTypes) {
                                                     {/* Status Icon */}
                                                     {review.status === "Completed" ? (
                                                         review.result === "Pass" ? (
-                                                            <div className="p-5 pr-3 pt-3 absolute top-0 right-0 bg-green-600/20 rounded-bl-full">
+                                                            <div className="p-5 pr-3 pt-3 absolute top-0 right-0 bg-green-400/20 group-hover:bg-green-400/30 rounded-bl-full">
                                                                 <CheckCheck
                                                                     size={20}
                                                                     className="text-green-600"
                                                                 />
                                                             </div>
                                                         ) : review.result === "Fail" ? (
-                                                            <div className="p-5 pr-3 pt-3 absolute top-0 right-0 bg-red-600/20 rounded-bl-full">
+                                                            <div className="p-5 pr-3 pt-3 absolute top-0 right-0 bg-red-400/20 group-hover:bg-red-400/30 rounded-bl-full">
                                                                 <CheckCheck
                                                                     size={20}
                                                                     className="text-red-600"
                                                                 />
                                                             </div>
                                                         ) : (
-                                                            <div className="p-5 pr-3 pt-3 absolute top-0 right-0 bg-green-600/20 rounded-bl-full">
+                                                            <div className="p-5 pr-3 pt-3 absolute top-0 right-0 bg-green-400/20 group-hover:bg-green-400/30 rounded-bl-full">
                                                                 <Check size={20} className="text-green-600" />
                                                             </div>
                                                         )
                                                     ) : review.status === "Pending" ? (
-                                                        <div className="p-5 pr-3 pt-3 absolute top-0 right-0 bg-yellow-600/20 rounded-bl-full">
+                                                        <div className="p-5 pr-3 pt-3 absolute top-0 right-0 bg-yellow-400/20 group-hover:bg-yellow-400/30 rounded-bl-full">
                                                             <CircleDashed
                                                                 size={20}
                                                                 className="text-yellow-600"
                                                             />
                                                         </div>
                                                     ) : review.status === "Absent" ? (
-                                                        <div className="p-5 pr-3 pt-3 absolute top-0 right-0 bg-red-600/20 rounded-bl-full">
+                                                        <div className="p-5 pr-3 pt-3 absolute top-0 right-0 bg-red-400/20 group-hover:bg-red-400/30 rounded-bl-full">
                                                             <X size={20} className="text-red-600" />
                                                         </div>
                                                     ) : review.status === "Cancelled" ? (
-                                                        <div className="p-5 pr-3 pt-3 absolute top-0 right-0 bg-purple-600/20 rounded-bl-full">
+                                                        <div className="p-5 pr-3 pt-3 absolute top-0 right-0 bg-purple-400/20 group-hover:bg-purple-400/30 rounded-bl-full">
                                                             <Ban size={20} className="text-purple-600" />
                                                         </div>
                                                     ) : (
-                                                        <div className="p-5 pr-3 pt-3 absolute top-0 right-0 bg-yellow-600/20 rounded-bl-full">
+                                                        <div className="p-5 pr-3 pt-3 absolute top-0 right-0 bg-yellow-400/20 group-hover:bg-yellow-400/30 rounded-bl-full">
                                                             <CircleDashed
                                                                 size={20}
                                                                 className="text-yellow-600"
@@ -375,8 +376,15 @@ export default function ReviewDetails({ selectedStudent }: PropsTypes) {
                                                             <p className="text-sm text-foreground font-medium mt-1">
                                                                 {review.status === "Completed"
                                                                     ? "Was reviewed on "
-                                                                    : new Date(review.date) < new Date() ?
-                                                                        "Was to be reviewed on "
+                                                                    : new Date(
+                                                                        new Date(review.date).setHours(
+                                                                            Number(review.time.split(":")[0]),
+                                                                            Number(review.time.split(":")[1]),
+                                                                            0,
+                                                                            0
+                                                                        )
+                                                                    ) < new Date()
+                                                                        ? "Was to be reviewed on "
                                                                         : "Is to be reviewed on "}
                                                                 {new Date(review.date).toLocaleDateString(
                                                                     "en-GB",

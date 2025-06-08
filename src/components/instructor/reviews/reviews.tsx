@@ -149,7 +149,7 @@ function Reviews() {
                     ApiEndpoints.REVIEW +
                     `/search?batchId=${selectedBatch?._id || ""}&studentId=${selectedStudent._id
                     }&domainId=${""}&weekId=${""}&sort=${sort.key}&order=${sort.order
-                    }&status=${filter}&date=${selectedDate?.toDateString() || ""
+                    }&status=${filter}&date=${selectedDate || ""
                     }&category=${""}&skip=${0}`,
                     role
                 );
@@ -431,7 +431,7 @@ function Reviews() {
                                 </div>
 
                                 {/* Pendings */}
-                                {selectedReview?.pendings.length > 0 ? (
+                                {selectedReview?.pendings?.length > 0 ? (
                                     <AnimatePresence mode="wait">
                                         <div className="h-[170px] sm:h-[194px] flex flex-col gap-1 overflow-x-hidden overflow-auto no-scrolbar">
                                             <ul className="space-y-1">
