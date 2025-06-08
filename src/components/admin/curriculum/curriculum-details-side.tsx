@@ -145,6 +145,7 @@ function CurriculumDetailsSide({
                 handleCustomError(err);
             }
         };
+
         selectedItem && fetchUsers();
     }, [isBlocked, search, sort, category, selectedItem?._id]);
 
@@ -202,7 +203,6 @@ function CurriculumDetailsSide({
                 <div
                     className={cn(
                         "relative z-20 h-full flex flex-col gap-5 dark:bg-sidebar-background md:rounded-2xl md:border p-5 md:shadow-sm cols-span-1 lg:col-span-2",
-                        isSmall && "gap-0"
                     )}
                 >
                     {/* Heading */}

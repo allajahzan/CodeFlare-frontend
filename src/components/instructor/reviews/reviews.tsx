@@ -69,7 +69,7 @@ function Reviews() {
 
     // Date
     const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-        new Date()
+        new Date(new Date().setHours(0, 0, 0, 0))
     );
 
     // Redux

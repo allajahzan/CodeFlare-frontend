@@ -48,11 +48,14 @@ interface PropsType {
 function EditDomainModal({ itemToEdit, setItems, setSelectedItem }: PropsType) {
     const [open, setOpen] = useState(false);
     const [submitting, setSubmitting] = useState(false);
+
     const [weeksList, setWeeksList] = useState<IWeek[]>([]);
+
     const [domainName, setDomainName] = useState("");
     const [domainWeeks, setDomainWeeks] = useState<IDomainsWeek[]>([
         { week: { _id: "", name: "" }, title: "" },
     ]);
+    const [domainLastWeek, setDomainLastWeek] = useState<IWeek | null>(null);
 
     // Scroll ref
     const scrollRef = useRef<HTMLDivElement | null>(null);
@@ -127,10 +130,57 @@ function EditDomainModal({ itemToEdit, setItems, setSelectedItem }: PropsType) {
         e.preventDefault();
         setSubmitting(true);
 
+        if (!domainLastWeek) {
+            toast({ title: "Please select last week!" });
+            setSubmitting(false);
+            return;
+        }
+
+        // Check if last week is added in domainWeeks
+        const isLastWeekAddedInDomainWeek = domainWeeks.some(
+            (domainWeek) => domainWeek.week._id === domainLastWeek._id
+        );
+
+        if (!isLastWeekAddedInDomainWeek) {
+            toast({ title: "Last week is not added in domain's weeks!" });
+            setSubmitting(false);
+            return;
+        }
+
+        // Sort domainWeeks
+        domainWeeks.sort(
+            (a, b) =>
+                Number(a.week.name.split(" ")[1]) - Number(b.week.name.split(" ")[1])
+        );
+
+        // Week numbers
+        const weekNumbers = domainWeeks.map((dw) =>
+            Number(dw.week.name.split(" ")[1])
+        );
+
+        const maxWeek = Math.max(...weekNumbers);
+
+        // Check for missing weeks
+        for (let i = 1; i <= maxWeek; i++) {
+            if (!weekNumbers.includes(i)) {
+                toast({ title: `Week ${i} is missing in domain's weeks!` });
+                setSubmitting(false);
+                return;
+            }
+        }
+
+        // Check if last week is the last week in domainWeeks
+        if (domainWeeks[domainWeeks.length - 1].week._id !== domainLastWeek._id) {
+            toast({ title: `${domainLastWeek.name} can't be the last week!` });
+            setSubmitting(false);
+            return;
+        }
+
         try {
             const data = {
                 name: domainName,
                 weeks: domainWeeks,
+                lastWeek: domainLastWeek,
             };
 
             // Send request
@@ -178,6 +228,7 @@ function EditDomainModal({ itemToEdit, setItems, setSelectedItem }: PropsType) {
     useLayoutEffect(() => {
         setDomainWeeks((itemToEdit as IDomain).domainsWeeks);
         setDomainName((itemToEdit as IDomain).name);
+        setDomainLastWeek((itemToEdit as IDomain).lastWeek);
     }, [itemToEdit]);
 
     // Fetch weeks from backend
@@ -208,7 +259,10 @@ function EditDomainModal({ itemToEdit, setItems, setSelectedItem }: PropsType) {
                     <Pencil className="h-4 w-4" />
                 </div>
             </DialogTrigger>
-            <DialogContent aria-describedby={undefined} className="flex flex-col gap-10 max-h-[90vh] overflow-hidden">
+            <DialogContent
+                aria-describedby={undefined}
+                className="flex flex-col gap-10 max-h-[90vh] overflow-hidden"
+            >
                 <DialogHeader>
                     <DialogTitle className="text-foreground flex items-center gap-3">
                         <div className="p-2 bg-muted rounded-full">
@@ -247,7 +301,10 @@ function EditDomainModal({ itemToEdit, setItems, setSelectedItem }: PropsType) {
 
                     {/* Week List */}
                     <div className="space-y-2">
-                        <Label htmlFor="weeks" className="text-sm text-foreground font-medium">
+                        <Label
+                            htmlFor="weeks"
+                            className="text-sm text-foreground font-medium"
+                        >
                             Weeks for this domain
                         </Label>
 
@@ -256,7 +313,7 @@ function EditDomainModal({ itemToEdit, setItems, setSelectedItem }: PropsType) {
                         {/* Scrollable Week Fields */}
                         <div
                             ref={scrollRef}
-                            className="max-h-[220px] overflow-y-auto no-scrollbar space-y-2"
+                            className="max-h-[160px] overflow-y-auto no-scrollbar space-y-2"
                         >
                             {domainWeeks.map((item, index) => (
                                 <div key={index} className="flex gap-2 items-center">
@@ -287,7 +344,7 @@ function EditDomainModal({ itemToEdit, setItems, setSelectedItem }: PropsType) {
                                                     </SelectItem>
                                                 ))
                                             ) : (
-                                                <p className="p-3 text-center text-sm text-foreground">
+                                                <p className="p-2 text-center text-sm text-foreground font-medium">
                                                     No weeks found
                                                 </p>
                                             )}
@@ -336,6 +393,53 @@ function EditDomainModal({ itemToEdit, setItems, setSelectedItem }: PropsType) {
                             <Plus className="h-4 w-4 mr-2" />
                             Add Another Week
                         </Button>
+                    </div>
+
+                    {/* Last week */}
+                    <div className="space-y-2">
+                        <Label
+                            htmlFor="lastWeek"
+                            className="text-sm text-foreground font-medium"
+                        >
+                            Last week
+                        </Label>
+
+                        <input id="lastWeek" type="text" className="hidden" />
+
+                        <div id="lastWeek" className="space-y-2">
+                            <div className="flex gap-2 items-center">
+                                {/* Week Dropdown */}
+                                <Select
+                                    name="lastWeek"
+                                    defaultValue={JSON.stringify(domainLastWeek)}
+                                    onValueChange={(value) =>
+                                        setDomainLastWeek(JSON.parse(value))
+                                    }
+                                    required
+                                >
+                                    <SelectTrigger className="flex-1 relative border border-border p-5 pl-9 text-sm text-foreground bg-background">
+                                        <span className="text-left w-full truncate">
+                                            {domainLastWeek?.name || "Select last week"}
+                                        </span>
+
+                                        <CalendarRange className="w-4 h-4 absolute left-3 top-3 text-muted-foreground" />
+                                    </SelectTrigger>
+                                    <SelectContent className="max-h-[140px]">
+                                        {weeksList.length > 0 ? (
+                                            weeksList.map((week) => (
+                                                <SelectItem key={week._id} value={JSON.stringify(week)}>
+                                                    {week.name}
+                                                </SelectItem>
+                                            ))
+                                        ) : (
+                                            <p className="p-3 text-center text-sm font-medium text-foreground">
+                                                No weeks found
+                                            </p>
+                                        )}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Submit Button */}
