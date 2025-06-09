@@ -171,6 +171,7 @@ function ReviewDetails({
                             ...(status !== "Completed" && {
                                 score: null,
                                 result: null,
+                                pendings: [],
                             }),
                         }
                         : null;
@@ -186,6 +187,7 @@ function ReviewDetails({
                                 ...(status !== "Completed" && {
                                     score: null,
                                     result: null,
+                                    pendings: [],
                                 }),
                             }
                             : { ...review }
@@ -317,6 +319,7 @@ function ReviewDetails({
                                     id="feedback"
                                     value={feedback}
                                     onChange={(e) => updateFeedback(e.target.value)}
+                                    autoComplete="off"
                                     className="border-none shadow-none p-3 py-[22.9px] text-foreground dark:bg-sidebar"
                                     placeholder="Enter your feedback for this student"
                                 />

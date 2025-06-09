@@ -261,6 +261,16 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
             handleCustomError(err);
         }
     };
+
+    // Clear states
+    useLayoutEffect(()=>{
+        if(!open){
+            setSelectedDomain(null);
+            setSelectedWeek(null);
+            setDescrption('');
+        }
+    }, [open])
+
     return (
         <DomainContext.Provider value={{ open, setOpen }}>
             {children}
@@ -415,7 +425,7 @@ const DomainContextProvider = ({ children }: { children: ReactNode }) => {
                                     <div className="p-2 bg-muted rounded-full">
                                         <GraduationCap className="w-4 h-4 text-foreground" />
                                     </div>
-                                    <span>Are you sure you want {selectedDomain?.name} ?</span>
+                                    <span>Are you sure you wanna select {selectedDomain?.name} ?</span>
                                 </DialogTitle>
                                 <DialogDescription className="text-muted-foreground font-medium">
                                     This operation can't be undone, So think before you confirm.

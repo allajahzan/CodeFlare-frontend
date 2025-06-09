@@ -256,7 +256,7 @@ export default function ReviewDetails({ selectedStudent }: PropsTypes) {
                                     >
                                         {/* Week Card */}
                                         <Card className="group relative w-full bg-background dark:bg-sidebar border dark:border-transparent transition-shadow duration-300 overflow-hidden shadow-none">
-                                            <div className={`text-foreground rounded-t-lg p-5 pb-0`}>
+                                            <div className="text-foreground p-5 pb-0">
                                                 <div className="flex items-center justify-between">
                                                     <div>
                                                         <CardTitle className="text-base font-semibold">
@@ -372,10 +372,11 @@ export default function ReviewDetails({ selectedStudent }: PropsTypes) {
                                                         </div>
 
                                                         {/* Date and Time */}
-                                                        <div className="flex items-center justify-between mt-2">
-                                                            <p className="text-sm text-foreground font-medium mt-1">
+                                                        <div className="flex items-center justify-between mt-3 text-foreground font-medium">
+                                                            <p className="mt-1 text-sm flex items-center">
+                                                                {/* <CalendarDays className="w-4 h-4 mr-1" /> */}
                                                                 {review.status === "Completed"
-                                                                    ? "Was reviewed on "
+                                                                    ? "Reviewed on "
                                                                     : new Date(
                                                                         new Date(review.date).setHours(
                                                                             Number(review.time.split(":")[0]),
@@ -395,8 +396,8 @@ export default function ReviewDetails({ selectedStudent }: PropsTypes) {
                                                                     }
                                                                 )}
                                                             </p>
-                                                            <div className="flex items-center text-sm font-medium text-foreground">
-                                                                <Clock className="w-3 h-3 mr-1" />
+                                                            <div className="flex items-center text-sm">
+                                                                <Clock className="w-4 h-4 mr-1" />
                                                                 {review.time
                                                                     ? convertTo12HourFormat(review.time)
                                                                     : "Time didn't updated yet!"}
@@ -406,8 +407,8 @@ export default function ReviewDetails({ selectedStudent }: PropsTypes) {
 
                                                     {/* Feedback */}
                                                     {review.feedback && (
-                                                        <div className="bg-muted/60 dark:bg-sidebar-backgroundDark rounded-lg p-3 border-l-4 border-gray-200 dark:border-muted">
-                                                            <p className="text-foreground text-sm leading-relaxed italic">
+                                                        <div className="bg-muted dark:bg-sidebar-backgroundDark rounded-lg p-3 border-l-4 border-zinc-200 dark:border-muted">
+                                                            <p className="text-foreground text-sm font-medium leading-relaxed italic">
                                                                 "{review.feedback}"
                                                             </p>
                                                         </div>

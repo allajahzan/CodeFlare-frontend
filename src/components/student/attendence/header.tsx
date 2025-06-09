@@ -37,12 +37,12 @@ function CalenderHeader({
                         <IconButton
                             Icon={ChevronLeft}
                             action={onPreviousMonth}
-                            className="bg-background dark:hover:border-customBorder-dark hover:bg-muted dark:hover:bg-sidebar shadow-none dark:shadow-none"
+                            className="bg-background dark:hover:border-customBorder-dark hover:bg-muted dark:hover:bg-sidebar shadow-none dark:shadow-none cursor-pointer"
                         />
                         <IconButton
                             Icon={ChevronRight}
                             action={onNextMonth}
-                            className="bg-background dark:hover:border-customBorder-dark hover:bg-muted dark:hover:bg-sidebar shadow-none dark:shadow-none"
+                            className="bg-background dark:hover:border-customBorder-dark hover:bg-muted dark:hover:bg-sidebar shadow-none dark:shadow-none cursor-pointer"
                         />
                     </Fragment>
                 </div>

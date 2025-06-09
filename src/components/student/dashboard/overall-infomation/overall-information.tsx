@@ -154,8 +154,8 @@ function OverallInformation() {
                 >
                     <GraduationCap className="w-5 h-5 text-foreground" />
                     {user?.domain ? (
-                        <div>
-                            <div className="flex items-center justify-center text-foreground text-base font-bold">
+                        <div className="flex flex-col items-center justify-center">
+                            <div className="text-foreground text-base font-bold">
                                 {user?.domain?.name?.split(" ")[0] || "-"}
                             </div>
                             <i className="text-sm text-muted-foreground font-medium">
