@@ -187,7 +187,7 @@ function Lists({ view, setView }: Propstype) {
                 // Fetch data
                 const resp = await fetchData(
                     ApiEndpoints.SEARCH_USER +
-                    `?category=student&batchId=${selectedBatch?._id}`,
+                    `?roleWise=student&batchId=${selectedBatch?._id}`,
                     role
                 );
 

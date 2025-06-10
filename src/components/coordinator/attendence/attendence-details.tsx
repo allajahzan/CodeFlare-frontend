@@ -12,9 +12,7 @@ import {
     FileSpreadsheetIcon,
     Hourglass,
     Loader2,
-    LogIn,
     LogOut,
-    LucideCheckCircle2,
 } from "lucide-react";
 import SnapshotsModal from "./modal-snapshots";
 import { Label } from "@/components/ui/label";
@@ -38,6 +36,7 @@ import ViewReasonModal from "./modal-view-reason";
 import SubmitReasonModal from "./modal-submit-reason";
 import { Button } from "@/components/ui/button";
 import NotSelected from "@/components/common/fallback/not-selected";
+import ApprovalConfirmModal from "./modal-approval-confirm";
 
 // Interface for Props
 interface PropsType {
@@ -67,7 +66,6 @@ function AttendenceDetails({
     // Requesting states
     const [updating, setUpdating] = useState<boolean>(false);
     const [submiting, setSubmiting] = useState<boolean>(false);
-    const [marking, setMarking] = useState<boolean>(false);
 
     // Handle status change
     const handleStatusChange = (
@@ -149,65 +147,65 @@ function AttendenceDetails({
         }
     };
 
-    // Handle attendence (check-in or check-out)
-    const handleAttendence = async () => {
-        try {
-            // If already checked-in or checked-out
-            if (selectedAttendence?.checkIn && selectedAttendence?.checkOut) return;
+    // // Handle attendence (check-in or check-out)
+    // const handleAttendence = async () => {
+    //     try {
+    //         // If already checked-in or checked-out
+    //         if (selectedAttendence?.checkIn && selectedAttendence?.checkOut) return;
 
-            setMarking(true);
+    //         setMarking(true);
 
-            const activity = selectedAttendence?.checkIn ? "checkOut" : "checkIn";
+    //         const activity = selectedAttendence?.checkIn ? "checkOut" : "checkIn";
 
-            // Send request
-            const resp = await patchData(
-                ApiEndpoints.CHECK_IN_OUT +
-                `?attendanceId=${selectedAttendence?._id}&activity=${activity}`,
-                {},
-                role
-            );
+    //         // Send request
+    //         const resp = await patchData(
+    //             ApiEndpoints.CHECK_IN_OUT +
+    //             `?attendanceId=${selectedAttendence?._id}&activity=${activity}`,
+    //             {},
+    //             role
+    //         );
 
-            // Success response
-            if (resp && resp.status === 200) {
-                const data = resp.data?.data;
+    //         // Success response
+    //         if (resp && resp.status === 200) {
+    //             const data = resp.data?.data;
 
-                // Update selected attendence
-                setSelectedAttendence((prev: IAttendence | null) => {
-                    if (!prev) return null;
-                    return {
-                        ...prev,
-                        ...(activity === "checkIn"
-                            ? { checkIn: data.checkIn }
-                            : { checkOut: data.checkOut }),
-                    };
-                });
+    //             // Update selected attendence
+    //             setSelectedAttendence((prev: IAttendence | null) => {
+    //                 if (!prev) return null;
+    //                 return {
+    //                     ...prev,
+    //                     ...(activity === "checkIn"
+    //                         ? { checkIn: data.checkIn }
+    //                         : { checkOut: data.checkOut }),
+    //                 };
+    //             });
 
-                // Update selected attendence in attendence list
-                setAttendences((prev: IAttendence[]) => {
-                    return prev.map((attendence: IAttendence) => {
-                        if (attendence._id !== selectedAttendence?._id) {
-                            return attendence;
-                        }
-                        return {
-                            ...attendence,
-                            ...(activity === "checkIn"
-                                ? { checkIn: data.checkIn }
-                                : { checkOut: data.checkOut }),
-                        };
-                    });
-                });
+    //             // Update selected attendence in attendence list
+    //             setAttendences((prev: IAttendence[]) => {
+    //                 return prev.map((attendence: IAttendence) => {
+    //                     if (attendence._id !== selectedAttendence?._id) {
+    //                         return attendence;
+    //                     }
+    //                     return {
+    //                         ...attendence,
+    //                         ...(activity === "checkIn"
+    //                             ? { checkIn: data.checkIn }
+    //                             : { checkOut: data.checkOut }),
+    //                     };
+    //                 });
+    //             });
 
-                toast({
-                    title: `${selectedAttendence?.user.name}'s ${activity === "checkIn" ? "check-in" : "check-out"
-                        } is recorded.`,
-                });
-            }
-        } catch (err: unknown) {
-            handleCustomError(err);
-        } finally {
-            setMarking(false);
-        }
-    };
+    //             toast({
+    //                 title: `${selectedAttendence?.user.name}'s ${activity === "checkIn" ? "check-in" : "check-out"
+    //                     } is recorded.`,
+    //             });
+    //         }
+    //     } catch (err: unknown) {
+    //         handleCustomError(err);
+    //     } finally {
+    //         setMarking(false);
+    //     }
+    // };
 
     // Auto-update when status is not Absent
     useEffect(() => {
@@ -366,7 +364,7 @@ function AttendenceDetails({
                                 label={
                                     selectedAttendence?.status &&
                                         !["Present", "Pending"].includes(selectedAttendence.status)
-                                        ? "Didn't submit yet !"
+                                        ? "Didn't submit the reason!"
                                         : "Not needed"
                                 }
                                 text="Reason"
@@ -389,14 +387,13 @@ function AttendenceDetails({
                                 Attendence
                             </Label>
 
-                            <Button
+                            {/* <Button
                                 className={cn(
                                     "h-11 bg-muted dark:bg-sidebar hover:bg-muted dark:hover:bg-muted text-foreground",
                                     selectedAttendence.checkOut &&
                                     "cursor-not-allowed opacity-60 dark:hover:bg-sidebar"
                                 )}
                                 onClick={handleAttendence}
-                            // disabled={selectedAttendence.checkOut ? true : false}
                             >
                                 {marking ? (
                                     <div className="flex items-center gap-2">
@@ -421,7 +418,41 @@ function AttendenceDetails({
                                         <LogIn className="text-green-600" />
                                     </span>
                                 )}
-                            </Button>
+                            </Button> */}
+                            {!selectedAttendence.isApproved &&
+                                !selectedAttendence.checkIn &&
+                                new Date().toDateString() ===
+                                new Date(selectedAttendence.date).toDateString() &&
+                                new Date().getHours() >= 14 &&
+                                new Date().getMinutes() != 0 ? (
+                                <ApprovalConfirmModal
+                                    children={
+                                        <Button
+                                            className={cn(
+                                                "h-11 bg-muted hover:bg-muted dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark text-foreground"
+                                            )}
+                                        >
+                                            Approval for check-in
+                                        </Button>
+                                    }
+                                    setAttendences={setAttendences}
+                                    selectedAttendence={selectedAttendence}
+                                    setSelectedAttendence={setSelectedAttendence}
+                                />
+                            ) : (
+                                <Button
+                                    className={cn(
+                                        "h-11 bg-muted hover:bg-muted dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark text-foreground"
+                                    )}
+                                    disabled={true}
+                                >
+                                    <span className="flex gap-2 items-center">
+                                        {selectedAttendence.checkIn
+                                            ? "Approved check-in"
+                                            : "Approval not required"}
+                                    </span>
+                                </Button>
+                            )}
                         </div>
 
                         <div className="space-y-2 relative text-start w-full flex flex-col">

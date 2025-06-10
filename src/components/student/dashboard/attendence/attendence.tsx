@@ -1,7 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { CalendarClock, Info, Loader2, TriangleAlert } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { Info, Loader2, TriangleAlert } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { checkedInAction, stateType } from "@/redux/store";
 import CheckInOutModal from "./modal-check-in-out";
@@ -14,15 +12,11 @@ import { IUserContext, UserContext } from "@/context/user-context";
 import ToolTip from "@/components/common/tooltip/tooltip";
 import { ISnapshotContext, SnapshotContext } from "@/context/snapshot-context";
 import WebCamModal from "./modal-web-cam";
-import { Badge } from "@/components/ui/badge";
 import CardHeader from "@/components/common/data-toolbar/header";
 import SmallIconButton from "@/components/ui/icon-button-small";
 
 // Attendence Component
 function Attendence() {
-    // Navigate
-    const navigate = useNavigate();
-
     // Fetching
     const [fetching, setFetching] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(true);
@@ -62,7 +56,7 @@ function Attendence() {
                 if (resp && resp.status === 200) {
                     const data = resp.data?.data;
 
-                    // Update isCheckedIn
+                    // Update isCheckedIn state in redux
                     if (data.checkIn && !data.checkOut) {
                         dispatch(checkedInAction(true));
                         setLoading(false);
@@ -77,7 +71,6 @@ function Attendence() {
                 // Not on 404
                 if ((err as { status: number; msg: string }).status !== 404) {
                     handleCustomError(err);
-                    setLoading(false);
                 }
                 setFetching(false);
             }
@@ -157,15 +150,9 @@ function Attendence() {
                                         <Button
                                             variant="default"
                                             type="submit"
-                                            disabled={loading}
                                             className="w-full shadow-md disabled:cursor-not-allowed"
                                         >
-                                            {fetching ? (
-                                                <div className="flex items-center gap-2">
-                                                    <Loader2 className="h-4 w-4 animate-spin" />
-                                                    Loading...
-                                                </div>
-                                            ) : isCheckedIn ? (
+                                            {isCheckedIn ? (
                                                 "Check-out"
                                             ) : (
                                                 "Check-in"

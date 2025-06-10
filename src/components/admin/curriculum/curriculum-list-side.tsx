@@ -105,10 +105,10 @@ function CurriculumListSide({
                 // Send request
                 const baseUrl =
                     path === "batches"
-                        ? ApiEndpoints.SEARCH_BATCH
+                        ? ApiEndpoints.BATCH_SEARCH
                         : path === "weeks"
-                            ? ApiEndpoints.SEARCH_WEEK
-                            : ApiEndpoints.SEARCH_DOMAIN;
+                            ? ApiEndpoints.WEEK_SEARCH
+                            : ApiEndpoints.DOMAIN_SEARCH;
 
                 const queryParams = `?keyword=${search.trim()}&sort=${sort.key}&order=${sort.order
                     }`;

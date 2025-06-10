@@ -452,6 +452,7 @@ function MessageSideOfChat({
                         id="message"
                         type="text"
                         placeholder="Type a message"
+                        autoComplete="off"
                         value={message}
                         onChange={(event) => setMessage(event.target.value)}
                         className="p-5 pl-9 text-foreground font-medium rounded-lg shadow-sm"

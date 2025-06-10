@@ -96,7 +96,7 @@ function AttendenceGuidlinesModal({ open, setOpen }: PropsType) {
                             <AccordionContent className="font-medium text-foreground">
                                 <p className="py-2 flex items-center">
                                     <Dot className="flex-shrink-0 self-start" />
-                                    Tea Break – 11:00 AM.
+                                    Morning Break – 11:00 AM.
                                 </p>
                                 <p className="py-2 flex items-center">
                                     <Dot className="flex-shrink-0 self-start" />

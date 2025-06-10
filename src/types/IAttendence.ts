@@ -19,8 +19,7 @@ export interface IAttendence {
     checkIn: string | null;
     checkOut: string | null;
     status: "Pending" | "Present" | "Absent" | "Late";
-    isApproved: boolean;
-    isPartial: boolean;
+    isApproved: boolean | null;
     reason: {
         time: string;
         description: string;

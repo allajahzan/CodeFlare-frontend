@@ -26,11 +26,11 @@ enum ApiEndpoints {
     // Admin urls - admin service
     ADMIN = "/admin",
     BATCH = "/admin/batch",
-    SEARCH_BATCH = "/admin/batch/search",
+    BATCH_SEARCH = "/admin/batch/search",
     WEEK = "/admin/week",
-    SEARCH_WEEK = "/admin/week/search",
+    WEEK_SEARCH = "/admin/week/search",
     DOMAIN = "/admin/domain",
-    SEARCH_DOMAIN = "/admin/domain/search",
+    DOMAIN_SEARCH = "/admin/domain/search",
 
     // Chat urls - communication service
     CHAT = "/communication/chat",
@@ -47,6 +47,7 @@ enum ApiEndpoints {
     ATTENDENCE = "/student/attendence",
     ATTENDENCE_SEARCH = `${ATTENDENCE}/search`,
     ATTENDENCE_STATUS = `${ATTENDENCE}/status`,
+    ATTENDENCE_APPROVAL = `${ATTENDENCE}/approval`,
     CHECK_IN_OUT = `${ATTENDENCE}/check-in-out`,
     SNAP_SHOT = `${ATTENDENCE}/snapshot`,
     MONTHLY_ATTENDENCE = `${ATTENDENCE}/monthly-attendence`,

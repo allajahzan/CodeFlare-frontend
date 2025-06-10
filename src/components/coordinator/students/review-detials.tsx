@@ -73,7 +73,7 @@ export default function ReviewDetails({ selectedStudent }: PropsTypes) {
         const fetchWeeks = async () => {
             try {
                 // Send request
-                const resp = await fetchData(ApiEndpoints.SEARCH_WEEK, role);
+                const resp = await fetchData(ApiEndpoints.WEEK_SEARCH, role);
 
                 // Success response
                 if (resp && resp.status === 200) {

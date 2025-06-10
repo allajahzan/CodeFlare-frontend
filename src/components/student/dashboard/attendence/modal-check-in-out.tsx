@@ -109,7 +109,7 @@ function CheckInOutModal({ children }: Propstype) {
                         <span>Confirm {isCheckedIn ? "check-out" : "check-in"}</span>
                     </DialogTitle>
                     <DialogDescription className="text-muted-foreground font-medium">
-                        This operation can't be undone, So think before you confirm.
+                        This operation can't be undone, so think before you confirm.
                     </DialogDescription>
                 </DialogHeader>
 
