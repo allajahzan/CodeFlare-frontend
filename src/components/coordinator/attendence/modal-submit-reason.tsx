@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogContent,
@@ -7,94 +8,107 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button"; // Add this if you don’t already
-import { cn } from "@/lib/utils";
-import { FileSpreadsheetIcon, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
 import ValidationError from "@/components/ui/validation-error";
+import { IAttendence } from "@/types/IAttendence";
+import { FileSpreadsheetIcon, Loader2 } from "lucide-react";
+import { useLayoutEffect, useState } from "react";
 
 // Interface for Props
 interface PropsType {
-    onClose: () => void;
     open: boolean;
-    onSubmit: (
-        customStatus: "Pending" | "Present" | "Absent" | "Late" | "",
-        customReason: string | null
-    ) => Promise<void>;
-    status: "Pending" | "Present" | "Absent" | "Late" | "";
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    status: string;
+    selectedAttendence: IAttendence | null;
     submiting: boolean;
+    handleSubmit: (
+        status: "Pending" | "Present" | "Absent" | "Late" | "",
+        reason: string
+    ) => Promise<void>;
 }
 
-// Reason Modal Component
+// Status confirm modal Component
 function SubmitReasonModal({
-    onClose,
     open,
-    onSubmit,
+    setOpen,
     status,
+    selectedAttendence,
     submiting,
+    handleSubmit,
 }: PropsType) {
-    // Form state
-    const [reason, setReason] = useState("");
+    const [violationNote, setViolationNote] = useState<string>("");
     const [error, setError] = useState<boolean>(false);
 
-    // Handle submit
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    // Handle violation form submit
+    const handleViolationSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!reason.trim()) {
+        // Validate violation note
+        if (!violationNote.trim()) {
             setError(true);
             return;
         }
 
-        onSubmit(status, reason); // Send request
+        setError(false);
+
+        await handleSubmit(
+            status as "Pending" | "Present" | "Absent" | "Late" | "",
+            violationNote
+        );
+
+        // Reset violation form
+        setViolationNote("");
+        setOpen(false);
     };
 
-    // Set and reset pointer events of body
-    useEffect(() => {
-        setTimeout(() => {
-            document.body.style.pointerEvents = "none";
-        }, 0);
-
-        return () => {
-            setTimeout(() => {
-                document.body.style.pointerEvents = "auto";
-            }, 0);
-        };
-    }, [open, onClose]);
+    // Control modal
+    useLayoutEffect(() => {
+        if (open && selectedAttendence?.status === status) {
+            setOpen(false);
+        } else {
+            document.body.style.pointerEvents = "auto";
+        }
+    }, [open]);
 
     return (
-        <Dialog open={open} onOpenChange={(val) => !val && onClose()}>
-            <DialogContent
-                aria-describedby={undefined}
-                className={cn(
-                    "flex flex-col gap-10 dark:bg-sidebar-background max-h-[calc(100vh-10vh)]"
-                )}
-            >
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogContent className="flex flex-col gap-10 dark:bg-sidebar-background">
                 <DialogHeader>
                     <DialogTitle className="text-foreground flex items-center gap-3">
                         <div className="p-2 bg-muted rounded-full">
                             <FileSpreadsheetIcon className="w-4 h-4" />
                         </div>
-                        <span>Submit reason for absent/late</span>
+                        <span>Submit violation report for absent/late</span>
                     </DialogTitle>
                     <DialogDescription className="text-muted-foreground font-medium">
-                        This is the reason why the student is absent/late.
+                        This is the reason why attendence marked as absent/late.
                     </DialogDescription>
                 </DialogHeader>
 
-                <form onSubmit={handleSubmit} className="space-y-2">
-                    {/* Reason Field */}
+                <form
+                    className="space-y-2 relative z-10"
+                    onSubmit={handleViolationSubmit}
+                >
                     <div className="space-y-2 relative text-start">
-                        <Label className="text-sm text-foreground font-medium">
-                            Reason
+                        <Label
+                            htmlFor="report"
+                            className="text-sm text-foreground font-medium"
+                        >
+                            Violation report
                         </Label>
                         <div className="relative">
                             <Textarea
-                                placeholder="Enter the reason"
+                                id="report"
+                                placeholder="Enter the report"
                                 rows={3}
-                                value={reason}
+                                value={violationNote}
                                 required
-                                onChange={(event) => setReason(event.target.value)}
+                                onChange={(e) => {
+                                    setViolationNote(e.target.value);
+                                    // Clear error when user starts typing
+                                    if (error) {
+                                        setError(false);
+                                    }
+                                }}
                                 className="p-2.5 pl-9 text-foreground font-medium border bg-background resize-none"
                             />
                             <FileSpreadsheetIcon className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
@@ -102,19 +116,20 @@ function SubmitReasonModal({
                         {error && <ValidationError message="Reason is required" />}
                     </div>
 
-                    {/* Actions */}
                     <div className="flex justify-end gap-2">
                         <Button
-                            className="w-full h-11 transition-all duration-200 disabled:cursor-not-allowed"
-                            onClick={onClose}
+                            type="button"
+                            onClick={() => {
+                                setOpen(false);
+                                setViolationNote("");
+                                setError(false);
+                            }}
+                            className="w-full h-11"
+                            disabled={submiting}
                         >
                             Cancel
                         </Button>
-                        <Button
-                            type="submit"
-                            disabled={submiting}
-                            className="w-full h-11 transition-all duration-200 disabled:cursor-not-allowed"
-                        >
+                        <Button type="submit" disabled={submiting} className="w-full h-11">
                             {submiting ? (
                                 <div className="flex items-center gap-2">
                                     <Loader2 className="h-4 w-4 animate-spin" />

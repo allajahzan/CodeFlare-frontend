@@ -103,7 +103,7 @@ function StatusConfirmModal({
     }
   };
 
-  // Controle modal
+  // Control modal
   useLayoutEffect(() => {
     if (open && selectedCategory === student.category) {
       setOpen(false);

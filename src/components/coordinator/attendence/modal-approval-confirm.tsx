@@ -80,7 +80,7 @@ function ApprovalConfirmModal({
                 });
 
                 toast({
-                    title: `Approved check-in for ${selectedAttendence.user.name}`,
+                    title: `Approved check-in for ${selectedAttendence.user.name}.`,
                 });
 
                 setSubmiting(false);
@@ -108,7 +108,7 @@ function ApprovalConfirmModal({
                         </span>
                     </DialogTitle>
                     <DialogDescription className="text-muted-foreground font-medium">
-                        Give approval for this student to check-in for this day.
+                        Give approval for this student to check-in on this day.
                     </DialogDescription>
                 </DialogHeader>
 

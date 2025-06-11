@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import InfoCard from "@/components/common/other-card/info-card";
 import UserNameCard from "@/components/common/user/user-name-card";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +12,6 @@ import {
     ChevronDown,
     FileSpreadsheetIcon,
     Hourglass,
-    Loader2,
     LogOut,
 } from "lucide-react";
 import SnapshotsModal from "./modal-snapshots";
@@ -25,18 +25,18 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { handleCustomError } from "@/utils/error";
-import { patchData } from "@/service/api-service";
-import ApiEndpoints from "@/constants/api-endpoints";
-import { stateType } from "@/redux/store";
-import { useSelector } from "react-redux";
-import { toast } from "@/hooks/use-toast";
-import { useEffect, useState } from "react";
 import ViewReasonModal from "./modal-view-reason";
-import SubmitReasonModal from "./modal-submit-reason";
 import { Button } from "@/components/ui/button";
 import NotSelected from "@/components/common/fallback/not-selected";
 import ApprovalConfirmModal from "./modal-approval-confirm";
+import StatusConfirmModal from "./modal-status-confirm";
+import { patchData } from "@/service/api-service";
+import { useSelector } from "react-redux";
+import { stateType } from "@/redux/store";
+import ApiEndpoints from "@/constants/api-endpoints";
+import { toast } from "@/hooks/use-toast";
+import { handleCustomError } from "@/utils/error";
+import SubmitReasonModal from "./modal-submit-reason";
 
 // Interface for Props
 interface PropsType {
@@ -52,65 +52,52 @@ function AttendenceDetails({
     selectedAttendence,
     setSelectedAttendence,
 }: PropsType) {
+    const [open, setOpen] = useState<boolean>(false);
+    const [submiting, setSubmiting] = useState<boolean>(false);
+    const [selectedStatus, setSelectedStatus] = useState<string>("");
+
+    // Violation modal state
+    const [openViolation, setOpenViolation] = useState<boolean>(false);
+
     // Redux
     const role = useSelector((state: stateType) => state.role);
 
-    // Status state
-    const [status, setStatus] = useState<
-        "Pending" | "Present" | "Absent" | "Late" | ""
-    >("");
-
-    // Reason submit modal states
-    const [open, setOpen] = useState<boolean>(false);
-
-    // Requesting states
-    const [updating, setUpdating] = useState<boolean>(false);
-    const [submiting, setSubmiting] = useState<boolean>(false);
-
     // Handle status change
-    const handleStatusChange = (
-        newStatus: "Pending" | "Present" | "Absent" | "Late"
-    ) => {
-        if (newStatus === "Absent" || newStatus === "Late") {
-            setOpen(true);
-            setStatus(newStatus);
+    const handleStatusChange = async (status: string) => {
+        if (status === "Late" || status === "Absent") {
+            setOpen(false);
+            setOpenViolation(true);
         } else {
-            setStatus(newStatus);
+            await handleSubmit(
+                status as "Pending" | "Present" | "Absent" | "Late",
+                ""
+            );
         }
     };
 
-    // Submit status update
-    const submitStatusUpdate = async (
+    // Handle submit
+    const handleSubmit = async (
         customStatus: "Pending" | "Present" | "Absent" | "Late" | "",
-        customReason: string | null
+        customReason: string
     ) => {
-        setUpdating(true);
         setSubmiting(true);
         try {
             // Send request
             const resp = await patchData(
                 ApiEndpoints.ATTENDENCE_STATUS + `/${selectedAttendence?._id}`,
-                { status: customStatus, reason: customReason },
+                { status: customStatus, violationReport: customReason },
                 role
             );
 
             // Success response
             if (resp && resp.status === 200) {
-                // Updated reason
-                const updatedReason = customReason
-                    ? {
-                        time: `${new Date().getHours()}:${new Date().getMinutes()}`,
-                        description: customReason,
-                    }
-                    : { time: "", description: "" };
-
                 // Update selected attendence
                 setSelectedAttendence((prev: IAttendence | null) => {
                     if (!prev) return null;
                     return {
                         ...prev,
                         status: customStatus || prev.status,
-                        reason: updatedReason,
+                        violationReport: customReason,
                     };
                 });
 
@@ -123,7 +110,7 @@ function AttendenceDetails({
                         return {
                             ...attendence,
                             status: customStatus || attendence.status,
-                            reason: updatedReason,
+                            violationReport: customReason,
                         };
                     });
                 });
@@ -137,89 +124,22 @@ function AttendenceDetails({
                 }
 
                 setOpen(false);
+                setOpenViolation(false);
+                setSelectedStatus("");
             }
         } catch (err) {
             handleCustomError(err);
         } finally {
-            setStatus("");
-            setUpdating(false);
             setSubmiting(false);
         }
     };
-
-    // // Handle attendence (check-in or check-out)
-    // const handleAttendence = async () => {
-    //     try {
-    //         // If already checked-in or checked-out
-    //         if (selectedAttendence?.checkIn && selectedAttendence?.checkOut) return;
-
-    //         setMarking(true);
-
-    //         const activity = selectedAttendence?.checkIn ? "checkOut" : "checkIn";
-
-    //         // Send request
-    //         const resp = await patchData(
-    //             ApiEndpoints.CHECK_IN_OUT +
-    //             `?attendanceId=${selectedAttendence?._id}&activity=${activity}`,
-    //             {},
-    //             role
-    //         );
-
-    //         // Success response
-    //         if (resp && resp.status === 200) {
-    //             const data = resp.data?.data;
-
-    //             // Update selected attendence
-    //             setSelectedAttendence((prev: IAttendence | null) => {
-    //                 if (!prev) return null;
-    //                 return {
-    //                     ...prev,
-    //                     ...(activity === "checkIn"
-    //                         ? { checkIn: data.checkIn }
-    //                         : { checkOut: data.checkOut }),
-    //                 };
-    //             });
-
-    //             // Update selected attendence in attendence list
-    //             setAttendences((prev: IAttendence[]) => {
-    //                 return prev.map((attendence: IAttendence) => {
-    //                     if (attendence._id !== selectedAttendence?._id) {
-    //                         return attendence;
-    //                     }
-    //                     return {
-    //                         ...attendence,
-    //                         ...(activity === "checkIn"
-    //                             ? { checkIn: data.checkIn }
-    //                             : { checkOut: data.checkOut }),
-    //                     };
-    //                 });
-    //             });
-
-    //             toast({
-    //                 title: `${selectedAttendence?.user.name}'s ${activity === "checkIn" ? "check-in" : "check-out"
-    //                     } is recorded.`,
-    //             });
-    //         }
-    //     } catch (err: unknown) {
-    //         handleCustomError(err);
-    //     } finally {
-    //         setMarking(false);
-    //     }
-    // };
-
-    // Auto-update when status is not Absent
-    useEffect(() => {
-        if (status && !["Absent", "Late"].includes(status)) {
-            submitStatusUpdate(status, null);
-        }
-    }, [status]);
 
     return (
         <>
             {selectedAttendence && (
                 <div className="w-full h-fit relative p-5 flex flex-col gap-3 border bg-background dark:bg-sidebar-background rounded-2xl shadow-sm overflow-hidden">
                     {/* Student info */}
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="relative flex items-center justify-between mb-2">
                         <UserNameCard
                             data={{
                                 name: selectedAttendence.user.name,
@@ -230,7 +150,7 @@ function AttendenceDetails({
                         />
                         <Badge
                             className={cn(
-                                "self-start text-sm font-semibold rounded-full duration-0",
+                                "absolute right-0 top-0 text-sm font-semibold rounded-full duration-0",
                                 selectedAttendence.status === "Present"
                                     ? "text-green-600 bg-green-400/20 hover:bg-green-400/30"
                                     : selectedAttendence.status === "Absent"
@@ -351,7 +271,7 @@ function AttendenceDetails({
                                     />
                                 }
                                 selectedAttendence={selectedAttendence}
-                                onSubmit={submitStatusUpdate}
+                            // onSubmit={submitStatusUpdate}
                             />
                         </>
                     ) : (
@@ -373,7 +293,7 @@ function AttendenceDetails({
                                 className={cn(
                                     "w-full shadow-sm border dark:border-transparent dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark",
                                     !selectedAttendence?.reason?.description &&
-                                    "opacity-80 cursor-not-allowed"
+                                    "cursor-not-allowed"
                                 )}
                             />
                         </>
@@ -387,43 +307,11 @@ function AttendenceDetails({
                                 Attendence
                             </Label>
 
-                            {/* <Button
-                                className={cn(
-                                    "h-11 bg-muted dark:bg-sidebar hover:bg-muted dark:hover:bg-muted text-foreground",
-                                    selectedAttendence.checkOut &&
-                                    "cursor-not-allowed opacity-60 dark:hover:bg-sidebar"
-                                )}
-                                onClick={handleAttendence}
-                            >
-                                {marking ? (
-                                    <div className="flex items-center gap-2">
-                                        <Loader2 className="h-4 w-4 animate-spin" />
-                                        Processing...
-                                    </div>
-                                ) : selectedAttendence.checkIn ? (
-                                    selectedAttendence.checkOut ? (
-                                        <span className="flex items-center gap-2">
-                                            Checked In & Out
-                                            <LucideCheckCircle2 className="text-purple-600" />
-                                        </span>
-                                    ) : (
-                                        <span className="flex items-center gap-2">
-                                            Check-out
-                                            <LogIn className="rotate-180 text-pink-600" />
-                                        </span>
-                                    )
-                                ) : (
-                                    <span className="flex items-center gap-2">
-                                        Check-in
-                                        <LogIn className="text-green-600" />
-                                    </span>
-                                )}
-                            </Button> */}
                             {!selectedAttendence.isApproved &&
                                 !selectedAttendence.checkIn &&
                                 new Date().toDateString() ===
                                 new Date(selectedAttendence.date).toDateString() &&
-                                new Date().getHours() >= 14 &&
+                                new Date().getHours() >= 10 &&
                                 new Date().getMinutes() != 0 ? (
                                 <ApprovalConfirmModal
                                     children={
@@ -442,12 +330,12 @@ function AttendenceDetails({
                             ) : (
                                 <Button
                                     className={cn(
-                                        "h-11 bg-muted hover:bg-muted dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark text-foreground"
+                                        "h-11 bg-muted hover:bg-muted dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark text-foreground",
+                                        selectedAttendence.isApproved ? "cursor-not-allowed" : ""
                                     )}
-                                    disabled={true}
                                 >
                                     <span className="flex gap-2 items-center">
-                                        {selectedAttendence.checkIn
+                                        {selectedAttendence.isApproved
                                             ? "Approved check-in"
                                             : "Approval not required"}
                                     </span>
@@ -476,40 +364,26 @@ function AttendenceDetails({
                                     />
                                     <ChevronDown className="absolute top-3 right-3 w-4 h-5 text-foreground" />
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent
-                                    align="start"
-                                    onClick={(e) => e.stopPropagation()}
-                                >
+                                <DropdownMenuContent onClick={(e) => e.stopPropagation()}>
                                     <DropdownMenuLabel>Status</DropdownMenuLabel>
                                     <DropdownMenuSeparator />
                                     {["Pending", "Present", "Absent", "Late"].map(
                                         (item, index) => (
                                             <DropdownMenuItem
                                                 key={index}
-                                                onClick={(event) => {
-                                                    // Prevent default only for pending and present
-                                                    if (!["Absent", "Late"].includes(item)) {
-                                                        event.preventDefault();
-                                                    }
-
-                                                    // If already selected
-                                                    if (item === selectedAttendence.status) return;
-
-                                                    // Set status
-                                                    handleStatusChange(
-                                                        item as "Pending" | "Present" | "Absent" | "Late"
-                                                    );
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    setSelectedStatus(item);
+                                                    setOpen(true);
                                                 }}
-                                                className="relative"
+                                                className="relative p-0"
                                             >
-                                                {status === item && updating && (
-                                                    <Loader2 className="w-4 h-5 text-foreground animate-spin" />
-                                                )}
-                                                {status === item && updating ? "Processing" : item}
-
-                                                {selectedAttendence.status === item && (
-                                                    <Check className="absolute right-2 w-4 h-4 text-foreground" />
-                                                )}
+                                                <p className="relative text-foreground font-medium text-sm w-full p-1.5">
+                                                    {item}
+                                                    {selectedAttendence.status === item && (
+                                                        <Check className="absolute z-10 right-2 top-2 w-4 h-4 " />
+                                                    )}
+                                                </p>
                                             </DropdownMenuItem>
                                         )
                                     )}
@@ -517,21 +391,28 @@ function AttendenceDetails({
                             </DropdownMenu>
                         </div>
                     </div>
-
-                    {/* Submit reason modal */}
-                    {open && (
-                        <SubmitReasonModal
-                            open={open}
-                            onClose={() => {
-                                setOpen(false);
-                            }}
-                            onSubmit={submitStatusUpdate}
-                            status={status}
-                            submiting={submiting}
-                        />
-                    )}
                 </div>
             )}
+
+            {/* Status confirm modal */}
+            <StatusConfirmModal
+                open={open}
+                setOpen={setOpen}
+                status={selectedStatus}
+                selectedAttendence={selectedAttendence}
+                submiting={submiting}
+                handleStatusChange={handleStatusChange}
+            />
+
+            {/* Violation modal */}
+            <SubmitReasonModal
+                open={openViolation}
+                setOpen={setOpenViolation}
+                status={selectedStatus}
+                selectedAttendence={selectedAttendence}
+                submiting={submiting}
+                handleSubmit={handleSubmit}
+            />
 
             {/* No attendence selected */}
             {!selectedAttendence && (

@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogContent,
@@ -11,28 +10,26 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { IAttendence } from "@/types/IAttendence";
-import { handleCustomError } from "@/utils/error";
 import { convertTo12HourFormat } from "@/utils/time-converter";
-import { motion } from "framer-motion";
-import { Clock, FileSpreadsheetIcon, Loader2 } from "lucide-react";
+import { Clock, FileSpreadsheetIcon } from "lucide-react";
 import { ReactNode, useEffect, useState } from "react";
 
 // Interface for Props
 interface PropsType {
     children: ReactNode;
     selectedAttendence: IAttendence;
-    onSubmit: (
-        customStatus: "Pending" | "Present" | "Absent" | "Late" | "",
-        customReason: string | null
-    ) => Promise<void>;
+    // onSubmit: (
+    //     customStatus: "Pending" | "Present" | "Absent" | "Late" | "",
+    //     customReason: string | null
+    // ) => Promise<void>;
 }
 
 // Reason modal Component
 function ViewReasonModal({
     children,
     selectedAttendence,
-    onSubmit,
-}: PropsType) {
+}: // onSubmit,
+    PropsType) {
     const [reason, setReason] = useState<string>("");
     const [updating, setUpdating] = useState<boolean>(false);
 
@@ -41,29 +38,32 @@ function ViewReasonModal({
         setReason(selectedAttendence.reason.description);
     }, [selectedAttendence]);
 
-    // Handle submit
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    // // Handle submit
+    // const handleSubmit = async (e: React.FormEvent) => {
+    //     e.preventDefault();
 
-        try {
-            if (selectedAttendence.reason.description === reason) return;
+    //     try {
+    //         if (selectedAttendence.reason.description === reason) return;
 
-            setUpdating(true);
+    //         setUpdating(true);
 
-            onSubmit("", reason); // Send request
-        } catch (err: unknown) {
-            handleCustomError(err);
-        } finally {
-            setUpdating(false);
-        }
-    };
+    //         onSubmit("", reason); // Send request
+    //     } catch (err: unknown) {
+    //         handleCustomError(err);
+    //     } finally {
+    //         setUpdating(false);
+    //     }
+    // };
 
     const reasonChanged = reason !== selectedAttendence.reason.description;
 
     return (
         <Dialog>
             <DialogTrigger>{children}</DialogTrigger>
-            <DialogContent aria-describedby={undefined} className="flex flex-col gap-10 dark:bg-sidebar-background max-h-[calc(100vh-10vh)]">
+            <DialogContent
+                aria-describedby={undefined}
+                className="flex flex-col gap-10 dark:bg-sidebar-background max-h-[calc(100vh-10vh)]"
+            >
                 <DialogHeader>
                     <DialogTitle className="text-foreground flex items-center gap-3">
                         <div className="p-2 bg-muted rounded-full">
@@ -76,7 +76,7 @@ function ViewReasonModal({
                     </DialogDescription>
                 </DialogHeader>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-4">
                     {/* Time Display */}
                     <div className="space-y-2 text-start">
                         <Label className="text-sm text-foreground font-medium">Time</Label>
@@ -110,7 +110,7 @@ function ViewReasonModal({
                     </div>
 
                     {/* Update Button */}
-                    {reasonChanged && (
+                    {/* {reasonChanged && (
                         <motion.div
                             initial={{ y: -20 }}
                             animate={{ y: 0 }}
@@ -131,8 +131,8 @@ function ViewReasonModal({
                                 )}
                             </Button>
                         </motion.div>
-                    )}
-                </form>
+                    )} */}
+                </div>
             </DialogContent>
         </Dialog>
     );

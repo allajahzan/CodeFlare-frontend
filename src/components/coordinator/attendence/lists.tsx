@@ -412,7 +412,6 @@ function Lists({ view, setView }: Propstype) {
             </div>
 
             {/* Right side */}
-
             <div className="w-full h-full bg-background border-0 shadow-none md:bg-transparent relative z-20 rounded-2xl grid grid-rows-[auto_1fr] md:col-span-1 lg:col-span-2 gap-5 overflow-auto no-scrollbar">
                 {/* Scroll container*/}
 

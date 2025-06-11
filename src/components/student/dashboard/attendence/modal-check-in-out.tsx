@@ -80,7 +80,7 @@ function CheckInOutModal({ children }: Propstype) {
                 setOpen(false);
             }
         } catch (err: unknown) {
-            if ((err as { status: number; msg: string }).status === 500) {
+            if ((err as { status: number; msg: string }).status === 410) {
                 setShowReason(true);
             }
 

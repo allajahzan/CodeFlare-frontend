@@ -19,6 +19,7 @@ export interface IEvent {
     checkIn: string | null;
     checkOut: string | null;
     reason: string | null;
+    violationReport: string;
 }
 
 // Attendence list Component
@@ -80,6 +81,7 @@ function Attendence() {
                 checkIn: entry.checkIn ? `${entry.checkIn}` : null,
                 checkOut: entry.checkOut ? `${entry.checkOut}` : null,
                 reason: entry.reason && entry.reason.description,
+                violationReport: entry.violationReport,
             };
         });
 

@@ -35,7 +35,10 @@ function AttendenceInfoModal({
 }: PropsType) {
     return (
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-            <DialogContent aria-describedby={undefined} className="flex flex-col gap-10">
+            <DialogContent
+                aria-describedby={undefined}
+                className="flex flex-col gap-10"
+            >
                 <DialogHeader>
                     <DialogTitle className="text-foreground flex items-center gap-3">
                         <div className="p-2 bg-muted rounded-full">
@@ -134,8 +137,9 @@ function AttendenceInfoModal({
                     </div>
 
                     {/* Reason */}
-                    {(selectedAttendence?.status === "absent" ||
-                        selectedAttendence?.status === "late") && (
+                    {selectedAttendence.reason &&
+                        (selectedAttendence?.status === "absent" ||
+                            selectedAttendence?.status === "late") && (
                             <div className="space-y-2">
                                 <Label className="text-sm text-foreground font-medium">
                                     Reason
@@ -146,9 +150,29 @@ function AttendenceInfoModal({
                                         readOnly
                                         disabled
                                         rows={3}
-                                        value={
-                                            selectedAttendence.reason ? selectedAttendence.reason : "NILL"
-                                        }
+                                        value={selectedAttendence.reason || "NILL"}
+                                        className="p-2.5 pl-9 text-foreground font-medium border bg-background resize-none disabled:cursor-default"
+                                    />
+                                    <FileSpreadsheet className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
+                                </div>
+                            </div>
+                        )}
+
+                    {/* Violation report */}
+                    {selectedAttendence.violationReport &&
+                        (selectedAttendence?.status === "absent" ||
+                            selectedAttendence?.status === "late") && (
+                            <div className="space-y-2">
+                                <Label className="text-sm text-foreground font-medium">
+                                    Violation Report (coordinator)
+                                </Label>
+                                <div className="relative">
+                                    <Textarea
+                                        placeholder="Violation Report"
+                                        readOnly
+                                        disabled
+                                        rows={3}
+                                        value={selectedAttendence.violationReport || "NILL"}
                                         className="p-2.5 pl-9 text-foreground font-medium border bg-background resize-none disabled:cursor-default"
                                     />
                                     <FileSpreadsheet className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />

@@ -24,6 +24,7 @@ export interface IAttendence {
         time: string;
         description: string;
     };
+    violationReport: string;
     selfies: ISelfie[];
     user: IStudent;
     batch: IBatch;
