@@ -18,6 +18,7 @@ import { ReactNode, useEffect, useState } from "react";
 interface PropsType {
     children: ReactNode;
     selectedAttendence: IAttendence;
+    isReason: boolean;
     // onSubmit: (
     //     customStatus: "Pending" | "Present" | "Absent" | "Late" | "",
     //     customReason: string | null
@@ -28,14 +29,19 @@ interface PropsType {
 function ViewReasonModal({
     children,
     selectedAttendence,
+    isReason,
 }: // onSubmit,
     PropsType) {
     const [reason, setReason] = useState<string>("");
-    const [updating, setUpdating] = useState<boolean>(false);
+    // const [updating, setUpdating] = useState<boolean>(false);
 
     // Reset reason
     useEffect(() => {
-        setReason(selectedAttendence.reason.description);
+        setReason(
+            isReason
+                ? selectedAttendence.reason.description
+                : selectedAttendence.report.description
+        );
     }, [selectedAttendence]);
 
     // // Handle submit
@@ -55,7 +61,7 @@ function ViewReasonModal({
     //     }
     // };
 
-    const reasonChanged = reason !== selectedAttendence.reason.description;
+    // const reasonChanged = reason !== selectedAttendence.reason.description;
 
     return (
         <Dialog>
@@ -69,10 +75,11 @@ function ViewReasonModal({
                         <div className="p-2 bg-muted rounded-full">
                             <FileSpreadsheetIcon className="w-4 h-4" />
                         </div>
-                        <span>Reason for absent/late</span>
+                        <span>{isReason ? "Reason" : "Report"} for absent/late</span>
                     </DialogTitle>
                     <DialogDescription className="text-muted-foreground font-medium">
-                        This is the reason why student is absent/late.
+                        This is the reason why student is {!isReason && " marked as "}{" "}
+                        absent/late.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -85,7 +92,11 @@ function ViewReasonModal({
                                 type="text"
                                 readOnly
                                 disabled
-                                value={convertTo12HourFormat(selectedAttendence.reason.time)}
+                                value={convertTo12HourFormat(
+                                    isReason
+                                        ? selectedAttendence.reason.time
+                                        : selectedAttendence.report.time
+                                )}
                                 className="text-foreground font-medium p-5 pl-9 border disabled:cursor-default"
                             />
                             <Clock className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
@@ -95,15 +106,16 @@ function ViewReasonModal({
                     {/* Reason Input */}
                     <div className="space-y-2 relative text-start">
                         <Label className="text-sm text-foreground font-medium">
-                            Reason
+                            {isReason ? "Reason" : "Report"}
                         </Label>
                         <div className="relative">
                             <Textarea
                                 placeholder="Enter the reason"
                                 rows={3}
                                 value={reason}
+                                readOnly
                                 onChange={(event) => setReason(event.target.value)}
-                                className="p-2.5 pl-9 text-foreground font-medium border bg-background resize-none"
+                                className="p-2.5 pl-9 text-foreground font-medium border bg-background resize-none cursor-default"
                             />
                             <FileSpreadsheetIcon className="w-4 h-4 absolute left-3 top-[13px] text-muted-foreground" />
                         </div>

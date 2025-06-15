@@ -49,7 +49,7 @@ function NotificationIcon({ notifications }: PropsType) {
             <DropdownMenuContent
                 onMouseEnter={(e) => e.stopPropagation()}
                 align="end"
-                className="px-5 bg-transparent border-none shadow-none h-[450px] w-screen sm:w-[525px] overflow-hidden"
+                className="px-5 bg-transparent border-none shadow-none h-[448px] w-screen sm:w-[525px] overflow-hidden"
             >
                 {/* You can map notifications here */}
                 <div className="h-full w-full bg-background dark:bg-sidebar-background border rounded-lg shadow-md overflow-auto no-scrollbar">
@@ -57,33 +57,31 @@ function NotificationIcon({ notifications }: PropsType) {
                         <CardHeader heading="Notifications" />
                     </div>
 
-                    <div className="h-full flex flex-col justify-center">
+                    {/* <div className="h-full"> */}
                         {notifications.length > 0 && (
-                            <>
-                                <div className="px-5 flex flex-col gap-3">
-                                    {notifications.map((notification, index) => (
-                                        <NotificationItem
-                                            key={notification._id}
-                                            notification={notification}
-                                            index={index}
-                                            id={notification._id}
-                                        />
-                                    ))}
-                                </div>
-                                <h3 className="text-sm text-center font-semibold bg-sidebar-background p-4">
-                                    See more
-                                </h3>
-                            </>
+                            <div className="px-5 pb-5 flex flex-col gap-3">
+                                {notifications.map((notification, index) => (
+                                    <NotificationItem
+                                        key={notification._id}
+                                        notification={notification}
+                                        index={index}
+                                        id={notification._id}
+                                    />
+                                ))}
+                            </div>
                         )}
+
+                        {/* If no notifications */}
                         {notifications.length === 0 && (
-                            <NotFoundYet
-                                MainIcon={Bell}
-                                className="mb-24"
-                                text="No notifications"
-                                IconClassName="w-5 h-5"
-                            />
+                            <div className="h-full flex flex-col justify-center">
+                                <NotFoundYet
+                                    MainIcon={Bell}
+                                    className="mb-24"
+                                    text="No notifications"
+                                />
+                            </div>
                         )}
-                    </div>
+                    {/* </div> */}
                 </div>
             </DropdownMenuContent>
         </DropdownMenu>

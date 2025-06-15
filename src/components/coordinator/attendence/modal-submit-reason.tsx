@@ -77,10 +77,10 @@ function SubmitReasonModal({
                         <div className="p-2 bg-muted rounded-full">
                             <FileSpreadsheetIcon className="w-4 h-4" />
                         </div>
-                        <span>Submit violation report for absent/late</span>
+                        <span>Submit report for absent/late</span>
                     </DialogTitle>
                     <DialogDescription className="text-muted-foreground font-medium">
-                        This is the reason why attendence marked as absent/late.
+                        This is the reason why student is marked as absent/late.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -93,7 +93,7 @@ function SubmitReasonModal({
                             htmlFor="report"
                             className="text-sm text-foreground font-medium"
                         >
-                            Violation report
+                            Report
                         </Label>
                         <div className="relative">
                             <Textarea

@@ -164,7 +164,7 @@ function AttendenceInfoModal({
                             selectedAttendence?.status === "late") && (
                             <div className="space-y-2">
                                 <Label className="text-sm text-foreground font-medium">
-                                    Violation Report (coordinator)
+                                    Report (coordinator)
                                 </Label>
                                 <div className="relative">
                                     <Textarea

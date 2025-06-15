@@ -29,15 +29,20 @@ function Dashboard() {
                             alt=""
                         />
                     </div>
-
-                    {/* Weather */}
-                    <div className="relative h-full p-5 bg-muted dark:bg-sidebar rounded-2xl">
-                        <WeatherCard />
+                    
+                    {/* Attendence */}
+                    <div className="h-full p-5 bg-muted dark:bg-sidebar rounded-2xl">
+                        <Attendence />
                     </div>
                 </div>
 
                 {/* Second row */}
                 <div className="h-full grid grid-cols-2 gap-5">
+                    {/* Weather */}
+                    <div className="relative h-full p-5 bg-muted dark:bg-sidebar rounded-2xl">
+                        <WeatherCard />
+                    </div>
+
                     {/* Tasks */}
                     <div className="bg-muted dark:bg-sidebar rounded-2xl h-full p-5">
                         <CardHeader
@@ -49,11 +54,6 @@ function Dashboard() {
                                 />
                             }
                         />
-                    </div>
-
-                    {/* Attendence */}
-                    <div className="h-full p-5 bg-muted dark:bg-sidebar rounded-2xl">
-                        <Attendence />
                     </div>
                 </div>
             </div>

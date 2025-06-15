@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Info, Loader2, TriangleAlert } from "lucide-react";
+import { Camera, Info, Loader2 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { checkedInAction, stateType } from "@/redux/store";
 import CheckInOutModal from "./modal-check-in-out";
@@ -10,10 +10,11 @@ import ApiEndpoints from "@/constants/api-endpoints";
 import { fetchData } from "@/service/api-service";
 import { IUserContext, UserContext } from "@/context/user-context";
 import ToolTip from "@/components/common/tooltip/tooltip";
-import { ISnapshotContext, SnapshotContext } from "@/context/snapshot-context";
 import WebCamModal from "./modal-web-cam";
 import CardHeader from "@/components/common/data-toolbar/header";
 import SmallIconButton from "@/components/ui/icon-button-small";
+import hourglass from "@/assets/images/hourglass.png";
+import { ISnapshotContext, useSnapshot } from "@/context/snapshot-context";
 
 // Attendence Component
 function Attendence() {
@@ -25,6 +26,9 @@ function Attendence() {
     const [openWebCamModal, setOpenWebCamModal] = useState<boolean>(false);
     const [openGuidlinesModal, setOpenGuidlinesModal] = useState<boolean>(false);
 
+    const [timeSinceCheckIn, setTimeSinceCheckIn] =
+        useState<string>("0h : 0m: 0s");
+
     // Redux
     const role = useSelector((state: stateType) => state.role);
     const isCheckedIn = useSelector((state: stateType) => state.isCheckedIn);
@@ -35,28 +39,44 @@ function Attendence() {
     const { user } = useContext(UserContext) as IUserContext;
 
     // Snapshot context
-    const { setSnapshotMessage, snapshotMessage } = useContext(
-        SnapshotContext
-    ) as ISnapshotContext;
+    const { snapshotMessage, setSnapshotMessage } =
+        useSnapshot() as ISnapshotContext;
 
-    // Check weather student checkedIn or not
+    // Timer
+    let interval: NodeJS.Timer | null = null;
+
+    const timer = (checkIn: string, date: Date) => {
+        console.log(checkIn, date);
+        const [hour, minute] = checkIn.split(":").map(Number);
+        const checkInTime = new Date(date);
+        checkInTime.setHours(hour, minute, 0, 0);
+
+        interval = setInterval(() => {
+            const now = new Date();
+            const diff = now.getTime() - checkInTime.getTime();
+
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff / (1000 * 60)) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            setTimeSinceCheckIn(`${hours}h : ${minutes}m : ${seconds}s`);
+        }, 1000);
+    };
+
     useEffect(() => {
         const checkCheckIn = async () => {
             try {
                 setFetching(true);
                 setLoading(true);
 
-                // Send request
                 const resp = await fetchData(
                     ApiEndpoints.ATTENDENCE + `?userId=${user?._id}`,
                     role
                 );
 
-                // Success response
                 if (resp && resp.status === 200) {
                     const data = resp.data?.data;
 
-                    // Update isCheckedIn state in redux
                     if (data.checkIn && !data.checkOut) {
                         dispatch(checkedInAction(true));
                         setLoading(false);
@@ -65,10 +85,14 @@ function Attendence() {
                         setLoading(false);
                     }
 
-                    setFetching(false);
+                    // Set time interval if checked-in
+                    if (data.checkIn) {
+                        timer(data.checkIn, data.date);
+                    }
                 }
+
+                setFetching(false);
             } catch (err: unknown) {
-                // Not on 404
                 if ((err as { status: number; msg: string }).status !== 404) {
                     handleCustomError(err);
                 }
@@ -77,130 +101,132 @@ function Attendence() {
         };
 
         checkCheckIn();
+
+        return () => {
+            if (interval) {
+                clearInterval(interval as any);
+            }
+        };
     }, []);
 
     return (
-        <div className="h-full flex flex-col">
+        <div className="relative h-full flex flex-col justify-between">
             <CardHeader
                 heading="Attendence"
                 children={
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center">
                         {/* Info about attedence */}
                         <ToolTip
                             text="Guidlines"
                             side="left"
                             children={
-                                <SmallIconButton Icon={Info} className="bg-zinc-200 dark:bg-muted"/>
+                                <SmallIconButton Icon={Info} className="dark:bg-transparent" />
                             }
                             action={() => setOpenGuidlinesModal(true)}
                         />
-
-                        {/* Attendence calender */}
-                        {/* <ToolTip
-                            text="Calender"
-                            side="left"
-                            children={
-                                <div
-                                    onClick={() => navigate(`/${role}/attendance`)}
-                                    className="p-2 bg-muted rounded-full cursor-pointer"
-                                >
-                                    <CalendarClock className="w-4 h-4 text-foreground" />
-                                </div>
-                            }
-                        /> */}
                     </div>
                 }
             />
 
             {/* <h1>You can mark your attendence heres</h1> */}
 
-            <div className="h-full relative flex flex-col justify-end gap-3">
-                {/* Snapshot Message */}
-                {snapshotMessage && (
-                    <ToolTip
-                        side="bottom"
-                        text={snapshotMessage}
-                        action={() => setOpenWebCamModal(true)}
-                        MainClassName="w-full cursor-pointer"
-                        children={
-                            <div className="w-full">
-                                <div className="px-3 flex items-center justify-between rounded-lg bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border border-red-200 dark:border-red-800">
-                                    <div className="flex items-center space-x-2">
-                                        <TriangleAlert className="h-5 w-5 text-red-800 dark:text-red-600" />
-                                        <span className="text-sm font-medium text-red-800 dark:text-red-600">
-                                            Send snapshot
-                                        </span>
+            {/* <div className="h-full flex flex-col"> */}
+            {/* Snapshot Message */}
+            <ToolTip
+                side="bottom"
+                text={snapshotMessage || "Time"}
+                action={() => setOpenWebCamModal(true)}
+                MainClassName="w-full cursor-pointer"
+                children={
+                    <div className="w-full flex flex-col gap-2">
+                        {/* <p className="font-medium text-sm text-foreground">
+                              Time since checked-in
+                            </p> */}
+                        <div className="flex items-center">
+                            <img className="w-16 z-10" src={hourglass} />
+                            <div className="w-full relative right-1 p-2 flex items-center justify-between rounded-r-lg bg-background">
+                                {snapshotMessage && (
+                                    <div className="absolute -top-1 -right-1">
+                                        {/* Ping animation */}
+                                        <span className="absolute h-5 w-5 rounded-full bg-red-800 opacity-75 animate-ping"></span>
+
+                                        {/* Notification count */}
+                                        <div className="relative flex items-center justify-center w-5 h-5 text-xs font-semibold text-white bg-red-800 rounded-full">
+                                            <Camera className="w-3 h-3" />
+                                        </div>
                                     </div>
-                                    {/* <Badge className="bg-red-600/20 text-red-800 dark:text-red-600 hover:bg-red-200 rounded-full shadow-none duration-0">
-                                        Required
-                                    </Badge> */}
+                                )}
+
+                                <div className="w-full flex items-center justify-center space-x-2 text-foreground">
+                                    {/* <Clock className="w-5 h-5"/> */}
+                                    <span className="text-sm font-semibold">
+                                        {timeSinceCheckIn}
+                                    </span>
                                 </div>
                             </div>
-                        }
-                    />
-                )}
-
-                {/* Sign your attendance - bottom right */}
-                <div className="w-full flex gap-3 items-center justify-end">
-                    <div className="relative w-full">
-                        {!loading && (
-                            <CheckInOutModal
-                                children={
-                                    <div className="w-full bg-background rounded-lg">
-                                        <Button
-                                            variant="default"
-                                            type="submit"
-                                            className="w-full shadow-md disabled:cursor-not-allowed"
-                                        >
-                                            {isCheckedIn ? (
-                                                "Check-out"
-                                            ) : (
-                                                "Check-in"
-                                            )}
-                                        </Button>
-                                    </div>
-                                }
-                            />
-                        )}
-
-                        {loading && (
-                            <div className="relative cursor-not-allowed">
-                                <Button
-                                    variant="default"
-                                    type="submit"
-                                    disabled={loading}
-                                    className="w-full shadow-md disabled:cursor-not-allowed"
-                                >
-                                    {fetching ? (
-                                        <div className="flex items-center gap-2">
-                                            <Loader2 className="h-4 w-4 animate-spin" />
-                                            Loading...
-                                        </div>
-                                    ) : (
-                                        "Checked In & Out"
-                                    )}
-                                </Button>
-                            </div>
-                        )}
+                        </div>
                     </div>
+                }
+            />
+
+            {/* Sign your attendance - bottom right */}
+            <div className="w-full flex gap-3 items-center justify-end">
+                <div className="relative w-full">
+                    {!loading && (
+                        <CheckInOutModal
+                            children={
+                                <div className="w-full bg-background rounded-lg">
+                                    <Button
+                                        variant="default"
+                                        type="submit"
+                                        className="w-full shadow-md disabled:cursor-not-allowed"
+                                    >
+                                        {isCheckedIn ? "Check-out" : "Check-in"}
+                                    </Button>
+                                </div>
+                            }
+                            timer={timer}
+                        />
+                    )}
+
+                    {loading && (
+                        <div className="relative cursor-not-allowed">
+                            <Button
+                                variant="default"
+                                type="submit"
+                                disabled={loading}
+                                className="w-full shadow-md disabled:cursor-not-allowed"
+                            >
+                                {fetching ? (
+                                    <div className="flex items-center gap-2">
+                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                        Loading...
+                                    </div>
+                                ) : (
+                                    "Checked In & Out"
+                                )}
+                            </Button>
+                        </div>
+                    )}
                 </div>
-
-                {/* Web cam */}
-                {snapshotMessage && (
-                    <WebCamModal
-                        open={openWebCamModal}
-                        setOpen={setOpenWebCamModal}
-                        message={snapshotMessage}
-                        setSnapshotMessage={setSnapshotMessage}
-                    />
-                )}
-
-                {/* Guidlines modal */}
-                <AttendenceGuidlinesModal
-                    open={openGuidlinesModal}
-                    setOpen={setOpenGuidlinesModal}
-                />
             </div>
+
+            {/* Web cam */}
+            {snapshotMessage && (
+                <WebCamModal
+                    open={openWebCamModal}
+                    setOpen={setOpenWebCamModal}
+                    message={snapshotMessage}
+                    setSnapshotMessage={setSnapshotMessage}
+                />
+            )}
+
+            {/* Guidlines modal */}
+            <AttendenceGuidlinesModal
+                open={openGuidlinesModal}
+                setOpen={setOpenGuidlinesModal}
+            />
+            {/* </div> */}
         </div>
     );
 }

@@ -91,13 +91,19 @@ function AttendenceDetails({
 
             // Success response
             if (resp && resp.status === 200) {
+                // Current time
+                const currentTime = new Date();
+                const hour = currentTime.getHours();
+                const minute = currentTime.getMinutes();
+
                 // Update selected attendence
                 setSelectedAttendence((prev: IAttendence | null) => {
                     if (!prev) return null;
                     return {
                         ...prev,
                         status: customStatus || prev.status,
-                        violationReport: customReason,
+                        reason: { description: "", time: "" },
+                        report: { description: customReason, time: `${hour}:${minute}` },
                     };
                 });
 
@@ -110,7 +116,8 @@ function AttendenceDetails({
                         return {
                             ...attendence,
                             status: customStatus || attendence.status,
-                            violationReport: customReason,
+                            reason: { description: "", time: "" },
+                            report: { description: customReason, time: `${hour}:${minute}` },
                         };
                     });
                 });
@@ -253,54 +260,69 @@ function AttendenceDetails({
                     />
 
                     {/* Reason */}
-                    {selectedAttendence?.reason?.description ? (
-                        <>
-                            <p className="text-start text-base text-foreground font-semibold w-full flex items-center gap-1">
-                                Reason
-                            </p>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 min-w-0">
+                        {["Reason", "Report"].map((type) => {
+                            const isReason = type === "Reason";
+                            const data = isReason
+                                ? selectedAttendence?.reason?.description
+                                : selectedAttendence?.report.description;
 
-                            <ViewReasonModal
-                                children={
-                                    <InfoCard
-                                        Icon={FileSpreadsheetIcon}
-                                        label="Absent / Late"
-                                        text="Reason"
-                                        iconClassName="text-orange-600"
-                                        iconDivClassName="bg-orange-400/20 group-hover:bg-orange-400/30"
-                                        className="w-full shadow-sm border dark:border-transparent dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark"
-                                    />
-                                }
-                                selectedAttendence={selectedAttendence}
-                            // onSubmit={submitStatusUpdate}
-                            />
-                        </>
-                    ) : (
-                        <>
-                            <p className="text-start text-base text-foreground font-semibold w-full flex items-center gap-1">
-                                Reason
-                            </p>
-                            <InfoCard
-                                Icon={FileSpreadsheetIcon}
-                                label={
-                                    selectedAttendence?.status &&
-                                        !["Present", "Pending"].includes(selectedAttendence.status)
-                                        ? "Didn't submit the reason!"
-                                        : "Not needed"
-                                }
-                                text="Reason"
-                                iconClassName="text-orange-600"
-                                iconDivClassName="bg-orange-400/20 group-hover:bg-orange-400/30"
-                                className={cn(
-                                    "w-full shadow-sm border dark:border-transparent dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark",
-                                    !selectedAttendence?.reason?.description &&
-                                    "cursor-not-allowed"
-                                )}
-                            />
-                        </>
-                    )}
+                            const label = isReason
+                                ? selectedAttendence?.status &&
+                                    !["Present", "Pending"].includes(selectedAttendence.status)
+                                    ? "No reason submitted!"
+                                    : "Not needed"
+                                : selectedAttendence?.status &&
+                                    !["Present", "Pending"].includes(selectedAttendence.status)
+                                    ? "No report submitted!"
+                                    : "Not needed";
+
+                            const iconColor = isReason ? "text-orange-600" : "text-blue-600";
+                            const iconBg = isReason
+                                ? "bg-orange-400/20 group-hover:bg-orange-400/30"
+                                : "bg-blue-400/20 group-hover:bg-blue-400/30";
+
+                            return (
+                                <div key={type} className="flex flex-col gap-1">
+                                    <p className="text-start text-base text-foreground font-semibold w-full flex items-center gap-1">
+                                        {type}
+                                    </p>
+
+                                    {data ? (
+                                        <ViewReasonModal
+                                            children={
+                                                <InfoCard
+                                                    Icon={FileSpreadsheetIcon}
+                                                    label={"Absent/Late"}
+                                                    text={type}
+                                                    iconClassName={iconColor}
+                                                    iconDivClassName={iconBg}
+                                                    className="w-full shadow-sm border dark:border-transparent dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark"
+                                                />
+                                            }
+                                            selectedAttendence={selectedAttendence}
+                                            isReason={isReason}
+                                        />
+                                    ) : (
+                                        <InfoCard
+                                            Icon={FileSpreadsheetIcon}
+                                            label={label}
+                                            text={type}
+                                            iconClassName={iconColor}
+                                            iconDivClassName={iconBg}
+                                            className={cn(
+                                                "w-full shadow-sm border dark:border-transparent dark:bg-sidebar dark:hover:bg-sidebar-backgroundDark",
+                                                !data && "cursor-not-allowed"
+                                            )}
+                                        />
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
 
                     {/* Actions */}
-                    <div className="w-full flex items-center gap-2">
+                    <div className="w-full flex items-center gap-3">
                         <div className="space-y-2 relative text-start w-full flex flex-col">
                             {/* Label */}
                             <Label className="text-base text-foreground font-semibold">
@@ -420,7 +442,7 @@ function AttendenceDetails({
                     Icon={CalendarClock}
                     message="Select an attendance to view it's details"
                     text="No attendance selected"
-                    className="h-[547.65px]"
+                    className="h-[540px]"
                 />
             )}
         </>

@@ -28,13 +28,13 @@ function NotFoundYet({ MainIcon, IconClassName, text, className, delay }: PropsT
                 transition={{ delay: 0 }}
                 className=""
             >
-                {MainIcon && <MainIcon className={cn("w-4 h-4", IconClassName)} />}
+                {MainIcon && <MainIcon className={cn("w-5 h-5", IconClassName)} />}
             </motion.span>
             <motion.p
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: delay || 0 }}
-                className="text-center"
+                className="text-center text-sm"
             >
                 {text}
             </motion.p>

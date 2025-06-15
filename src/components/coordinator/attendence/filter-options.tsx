@@ -9,6 +9,7 @@ import FilterBatchStudent from "./filter-batch-student";
 import { IStudent } from "@/types/IStudent";
 import Filter from "@/components/common/data-toolbar/filter";
 import { IBatch } from "@codeflare/common";
+import ToolTip from "@/components/common/tooltip/tooltip";
 
 // Interface for Props
 interface Propstype {
@@ -59,11 +60,16 @@ function FilterOptions({
         <div className="flex gap-2">
             {/* Select batch and student */}
             <Select>
-                <SelectTrigger
-                    title="Search"
-                    className="w-[41px] h-[41.6px] bg-background dark:hover:border-customBorder-dark hover:bg-muted dark:hover:bg-sidebar rounded-lg shadow-none"
-                >
-                    <Search className="w-4 h-4 text-foreground" />
+                <SelectTrigger className="relative w-[41px] h-[41.6px] bg-background dark:hover:border-customBorder-dark hover:bg-muted dark:hover:bg-sidebar rounded-lg shadow-none">
+                    <ToolTip
+                        text="Batch and student"
+                        children={
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <Search className="w-4 h-4 text-foreground" />
+                            </div>
+                        }
+                        className=""
+                    />
                 </SelectTrigger>
                 <SelectContent className="w-[220px]" align="end">
                     <FilterBatchStudent

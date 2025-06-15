@@ -64,15 +64,13 @@ function WebCamModal({
                 video: true,
             });
 
-            setTimeout(() => {
-                if (videoRef.current) {
-                    videoRef.current.srcObject = streamRef.current;
+            if (videoRef.current) {
+                videoRef.current.srcObject = streamRef.current;
 
-                    videoRef.current.onloadeddata = () => {
-                        setVideoLoading(false);
-                    };
-                }
-            }, 1000);
+                videoRef.current.onloadeddata = () => {
+                    setVideoLoading(false);
+                };
+            }
         } catch (err: unknown) {
             console.log(err);
             setVideoLoading(false);
@@ -173,7 +171,7 @@ function WebCamModal({
                     if (resp && resp.status === 200) {
                         setSnapshotMessage("");
 
-                        toast({ title: "Snapshot submitted successfully." });
+                        toast({ title: "Snapshot has been sent successfully." });
 
                         // Clear from localstorage
                         localStorage.removeItem("snapshotMessage");
@@ -220,7 +218,10 @@ function WebCamModal({
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent aria-describedby={undefined} className="flex flex-col gap-10">
+            <DialogContent
+                aria-describedby={undefined}
+                className="flex flex-col gap-10"
+            >
                 <DialogHeader>
                     <DialogTitle className="text-foreground flex items-center gap-3">
                         <div className="p-2 bg-muted rounded-full">

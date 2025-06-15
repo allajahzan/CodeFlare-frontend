@@ -159,6 +159,8 @@ function Lists({ view, setView }: Propstype) {
                 if (resp && resp.status === 200) {
                     const data = resp.data?.data;
 
+                    console.log(data);
+
                     // Update attendence
                     setTimeout(() => {
                         setAttendences(data);
@@ -263,7 +265,6 @@ function Lists({ view, setView }: Propstype) {
                             }
                         >
                             <SelectTrigger
-                                title="Date"
                                 className="w-full text-foreground font-medium p-5 pl-9 rounded-lg cursor-pointer bg-background dark:hover:bg-sidebar dark:hover:border-customBorder-dark"
                             >
                                 <SelectValue placeholder="Select date">
@@ -345,12 +346,12 @@ function Lists({ view, setView }: Propstype) {
                                             </div>
 
                                             {/* Batch and date */}
-                                            <div className="flex items-center gap-0">
+                                            <div className="flex items-center">
                                                 <p className="flex gap-1 items-center text-sm text-muted-foreground font-medium">
                                                     {/* <UsersRound className="w-3 h-3" /> */}
                                                     {item.batch.name}
                                                 </p>
-                                                <Dot className="p-0 text-muted-foreground flex-shrink-0" />
+                                                <Dot className="text-muted-foreground flex-shrink-0" />
                                                 <p className="flex gap-1 items-center text-sm text-muted-foreground font-medium">
                                                     {/* <Calendar1 className="w-3 h-3" /> */}
                                                     {new Date(item.date).toLocaleDateString("en-GB", {

@@ -1,7 +1,11 @@
-import React, { createContext, useState, useEffect, ReactNode } from "react";
-import warningAlarm from "@/assets/music/warning-alarm.mp3";
+import React, {
+    createContext,
+    useState,
+    useEffect,
+    ReactNode,
+    useContext,
+} from "react";
 import { toast } from "@/hooks/use-toast";
-import { reciveSnapshotMessage } from "@/socket/communication/notification";
 import { socket } from "@/socket/communication/connection";
 import { useSelector } from "react-redux";
 import { stateType } from "@/redux/store";
@@ -14,6 +18,9 @@ export interface ISnapshotContext {
 // Snapshot Context
 const SnapshotContext = createContext<ISnapshotContext | null>(null);
 
+// Custom hook
+const useSnapshot = () => useContext(SnapshotContext);
+
 // Snapshot context provider
 const SnapshotContextProvider = ({ children }: { children: ReactNode }) => {
     // Redux
@@ -22,88 +29,68 @@ const SnapshotContextProvider = ({ children }: { children: ReactNode }) => {
     // Snapshot message
     const [snapshotMessage, setSnapshotMessage] = useState<string>("");
 
-    // Check if snapshot message is expired
-    useEffect(() => {
-        setSnapshotMessage(getSnapShotMessageWithExpiry("snapshotMessage"));
-    }, []);
-
-    // Alaram for new snapshot message
+    // Alarm for new snapshot message
     useEffect(() => {
         if (snapshotMessage) {
-            // Create button
-            const button = document.createElement("button");
-
-            // Set onclick attribute
-            button.onclick = () => {
-                const audio = new Audio(warningAlarm);
-                audio.load();
-                audio.play();
-            };
-
-            // Append to DOM
-            document.body.appendChild(button);
-
-            // Trigger click
-            button.click();
-
-            // Remove after click to clean up
-            document.body.removeChild(button);
-
-            toast({ title: snapshotMessage });
+            toast({ title: snapshotMessage, description: "Break snapshot" });
         }
     }, [snapshotMessage]);
 
-    // Listen for new snapshot message
+    // Recieving snapshot messages
     useEffect(() => {
-        // Only if student is checkedIn
+        let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+        // Timeout
+        const setupTimeout = (expiry: number) => {
+            const remaining = expiry - Date.now();
+
+            if (remaining > 0) {
+                timeoutId = setTimeout(() => {
+                    setSnapshotMessage("");
+                    localStorage.removeItem("snapshotMessage");
+                }, remaining);
+            } else {
+                // Expired already
+                setSnapshotMessage("");
+                localStorage.removeItem("snapshotMessage");
+            }
+        };
+
         if (isCheckedIn) {
-            reciveSnapshotMessage((data: { message: string }) => {
-                // Update state
+            // Restore from localStorage on load
+            const saved = localStorage.getItem("snapshotMessage");
+            if (saved) {
+                const { value, expiry } = JSON.parse(saved);
+                if (expiry && value) {
+                    setSnapshotMessage(value);
+                    setupTimeout(expiry);
+                }
+            }
+
+            const handleSnapshot = (data: { message: string }) => {
                 setSnapshotMessage(data.message);
 
-                // Set expiry to 10 minutes from now
                 const now = Date.now();
                 const expiry = now + 10 * 60 * 1000;
 
-                const item = {
-                    value: data.message,
-                    expiry,
-                };
+                // Save to local storage
+                localStorage.setItem(
+                    "snapshotMessage",
+                    JSON.stringify({ value: data.message, expiry })
+                );
 
-                // Save to localStorage
-                localStorage.setItem("snapshotMessage", JSON.stringify(item));
-            });
+                if (timeoutId) clearTimeout(timeoutId);
+                setupTimeout(expiry);
+            };
+
+            socket.on("reciveSnapshotMessage", handleSnapshot);
+
+            return () => {
+                socket.off("reciveSnapshotMessage", handleSnapshot);
+                if (timeoutId) clearTimeout(timeoutId);
+            };
         }
-
-        // Cleanup on unmount
-        return () => {
-            socket.off("reciveSnapshotMessage");
-        };
     }, [isCheckedIn]);
-
-    // Get snapshot message from localstorage
-    function getSnapShotMessageWithExpiry(key: string): string {
-        const itemStr = localStorage.getItem(key);
-        if (!itemStr) return "";
-
-        try {
-            const item = JSON.parse(itemStr);
-            const now = new Date();
-
-            const expiry =
-                typeof item.expiry === "string" ? Number(item.expiry) : item.expiry;
-
-            if (now.getTime() > expiry) {
-                localStorage.removeItem(key);
-                return "";
-            }
-
-            return item.value;
-        } catch (err) {
-            console.log("Failed to parse snapshotMessage:", err);
-            return "";
-        }
-    }
 
     return (
         <SnapshotContext.Provider value={{ snapshotMessage, setSnapshotMessage }}>
@@ -112,4 +99,4 @@ const SnapshotContextProvider = ({ children }: { children: ReactNode }) => {
     );
 };
 
-export { SnapshotContext, SnapshotContextProvider };
+export { SnapshotContextProvider, useSnapshot };

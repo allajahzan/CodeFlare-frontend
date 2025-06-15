@@ -23,10 +23,11 @@ import { useDispatch, useSelector } from "react-redux";
 // Interface for Props
 interface Propstype {
     children: ReactNode;
+    timer: (checkIn: string, date: Date) => void;
 }
 
 // Checked In Out Modal Component
-function CheckInOutModal({ children }: Propstype) {
+function CheckInOutModal({ children, timer }: Propstype) {
     // Modal state
     const [open, setOpen] = useState<boolean>(false);
 
@@ -63,6 +64,10 @@ function CheckInOutModal({ children }: Propstype) {
 
             // Success Response
             if (resp && resp.status === 200) {
+                const data = resp.data?.data;
+
+                console.log(data);
+
                 setSubmiting(false);
 
                 // Update isCheckedIn
@@ -78,6 +83,9 @@ function CheckInOutModal({ children }: Propstype) {
                 });
 
                 setOpen(false);
+
+                // Set timer
+                timer(data.checkIn, data.date);
             }
         } catch (err: unknown) {
             if ((err as { status: number; msg: string }).status === 410) {
@@ -100,7 +108,10 @@ function CheckInOutModal({ children }: Propstype) {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>{children}</DialogTrigger>
-            <DialogContent aria-describedby={undefined} className="flex flex-col gap-10 bg-background dark:bg-sidebar-background">
+            <DialogContent
+                aria-describedby={undefined}
+                className="flex flex-col gap-10 bg-background dark:bg-sidebar-background"
+            >
                 <DialogHeader>
                     <DialogTitle className="text-foreground flex items-center gap-3">
                         <div className="p-2 bg-muted rounded-full">

@@ -7,7 +7,6 @@ export interface ISelfie {
     time: string;
     photo: string;
     location: string;
-    isVerified: boolean;
 }
 
 // Interface for Attendence
@@ -24,8 +23,12 @@ export interface IAttendence {
         time: string;
         description: string;
     };
-    violationReport: string;
-    selfies: ISelfie[];
+    report: {
+        time: string;
+        description: string;
+    };
+    selfies: boolean[];
+    snapshots: ISelfie[];
     user: IStudent;
     batch: IBatch;
 }

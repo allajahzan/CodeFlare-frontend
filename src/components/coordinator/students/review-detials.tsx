@@ -132,7 +132,7 @@ export default function ReviewDetails({ selectedStudent }: PropsTypes) {
     return (
         <>
             {selectedStudent && (
-                <div className="h-[620px] flex flex-col gap-5 p-5 rounded-2xl bg-background dark:bg-sidebar-background border shadow-sm overflow-hidden">
+                <div className="h-[621px] flex flex-col gap-5 p-5 rounded-2xl bg-background dark:bg-sidebar-background border shadow-sm overflow-hidden">
                     <CardHeader
                         heading="Review details"
                         children={
